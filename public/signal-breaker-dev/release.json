@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.46.1-workshop-motion",
-  "cacheName": "psi-signal-breaker-webpreview-v0.46.1-workshop-motion",
-  "fingerprint": "9c14954ccbfdc9812f16978b11715142cb0b88925edf50b6bde1b99b5c5f22f2",
+  "version": "0.47.0-signal-supply",
+  "cacheName": "psi-signal-breaker-webpreview-v0.47.0-signal-supply",
+  "fingerprint": "9ee950d50b0381befd630bfe8fd9f01cb93475751352fac0485e1d328da8b004",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -250,6 +250,11 @@
       "sha256": "a29926fc0f0aad5e3efb9d6691b55e58fad9f15bd22e90227985b1dd8e3f5e26"
     },
     {
+      "path": "/signal-breaker-dev/art/psi-supply-atlas-v1.webp",
+      "bytes": 650684,
+      "sha256": "1eb1b975e9dd537dbcaeee54b27e291be01a0f7d275fbcb556e931cbb88cb525"
+    },
+    {
       "path": "/signal-breaker-dev/art/released-hazards-v1.webp",
       "bytes": 559524,
       "sha256": "2d1159acdef9938e2dcc0b8349e1cc7007aa6b78bfba967e3efbcdccd8500d8e"
@@ -306,13 +311,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6124,
-      "sha256": "9b9c6f00e87fcd9432f0d7a16e72d8fdcd7edf826bacd9034d61a7b14918e7d2"
+      "bytes": 6155,
+      "sha256": "deb451ad3cd61fd8b2fd67df9530d36cdc2bfcbf396394206cd8df1e966bb619"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 101477,
-      "sha256": "0b856f8ce5c2f77279b9b114815b0e844c1ffbe244fedfcbf948018de37b583a"
+      "bytes": 102533,
+      "sha256": "2577034f42e541f9288c982b11c72cc5ef0fc6b5107656dc6cad9901e769e134"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -366,8 +371,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/episode-two.js",
-      "bytes": 3120,
-      "sha256": "869676d984d4ae39eb3c37a1e998a0da4034432acb8fab3ccddca887dcabff57"
+      "bytes": 3267,
+      "sha256": "61a8d09783de2e22c783a536cfe59e84d3d0c45ff5f3818035a3f8adbf5b1e0b"
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
@@ -386,8 +391,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 32472,
-      "sha256": "ae536953883e79808d39853d1a3da2354ed23da250a3d9aa801dcb7839195d5f"
+      "bytes": 32490,
+      "sha256": "3229578288c139db027688afc1dcbf5a391f7e54ec11ec852523dfbae63a1e7f"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -406,8 +411,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 47680,
-      "sha256": "cfce3204a52e811f016312dd23090e5166f4063bd2f70844e4099fc933c16633"
+      "bytes": 48324,
+      "sha256": "a4ed40e3e4e2df7b1ae3b6a8b234ceee029e3a9984de257af7e25da5f0f92203"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
@@ -416,8 +421,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.css",
-      "bytes": 6251,
-      "sha256": "1d33277f2d427542f96490c756507c5fbe6cb688ae2112a52f6eb82028618c6a"
+      "bytes": 7376,
+      "sha256": "f9da2c57990dbc328e2e9e038941ed71dddaf71c4a07c0f8cc37929898ca8c09"
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.js",
@@ -441,8 +446,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/style.css",
-      "bytes": 81468,
-      "sha256": "e23b02fdfe91f992dfed945f0ed2223e103419b91cf6d530c00f66603dc401a7"
+      "bytes": 81476,
+      "sha256": "e3eb7ce13586941e3ee8b6f6c0eb40b59e536a64911ca699aaafbfcb4c7fa1fa"
     }
   ]
 }

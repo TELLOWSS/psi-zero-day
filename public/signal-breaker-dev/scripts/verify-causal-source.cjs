@@ -232,11 +232,11 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.evaluate(()=>{SignalBreakerQA.controlMode('flow');SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.operation=false;g.cores=[];g.pendingCores=[];g.boss={phase:'sealed',exposure:0,x:785,y:199,nodes:[{x:686,y:154,hit:true},{x:882,y:162,hit:false},{x:787,y:296,hit:false}]};});
    await page.locator('#autoFireBtn').click();
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked);
-   await page.locator('#chainGuide').waitFor({state:'visible'});
-   a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
+   await page.locator('#assistHint').waitFor({state:'visible'});
+   a.ok((await page.locator('#assistHint').textContent()).includes('막힌 사선'));
    a.equal(await page.locator('#fireAction').textContent(),'발사','manual FIRE stays available while automatic targeting is blocked');a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'true');
-   const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
-   await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast'),guides=[document.getElementById('chainGuide'),toast.classList.contains('visible')?toast:null].filter(Boolean).map(el=>el.getBoundingClientRect()).filter(r=>r.width);return b&&guides.every(r=>b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
+   const hintBox=await page.locator('#assistHint').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
+   await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast'),guides=[document.getElementById('assistHint'),toast.classList.contains('visible')?toast:null].filter(Boolean).map(el=>el.getBoundingClientRect()).filter(r=>r.width);return b&&guides.every(r=>b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
    const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
    await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),blockedShots);
    await page.screenshot({path:path.join(out,`blocked-lane-${width}.png`)});
