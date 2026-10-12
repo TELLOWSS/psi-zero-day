@@ -147,15 +147,15 @@ class PremiumArt{
   c.restore();this.lastBossArt={identity:b.identity,source,width:w,height:h,ready:true,motion:{...motion}};return true;
  }
 
- projectile(c,s,time){
+ projectile(c,s,time,coat=null){
   const spec=root.SignalBreakerChapter?.WEAPONS[s.kind];if(!spec)return false;
-  if(s.element){const arc=s.element==='arc',color=arc?'#93edff':'#f3a1ff',trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
+  if(s.element){const arc=s.element==='arc',color=coat||(arc?'#93edff':'#f3a1ff'),trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
    if(trail.length>1){const end=trail.at(-1),first=trail[Math.max(0,trail.length-(arc?5:9))];c.globalAlpha=.75;
     if(arc){let x=first.x,y=first.y;const n=this.quality==='low'?3:6;for(let i=1;i<=n;i++){const t=i/n,xx=first.x+(end.x-first.x)*t+(i<n&&!this.reducedMotion?Math.sin(i*7+s.id)*5:0),yy=first.y+(end.y-first.y)*t;line(c,x,y,xx,yy,color,s.recipe?3:2);x=xx;y=yy;}}
     else{line(c,first.x,first.y,end.x,end.y,color,s.recipe?8:5);line(c,first.x,first.y,end.x,end.y,'#ffffff',2);}}
    c.globalAlpha=1;c.translate(s.x,s.y);c.rotate(angle);if(arc){disk(c,0,0,s.recipe?7:5,'#e5ffff',color,2);}else{line(c,-27,0,15,0,color,s.recipe?7:4);line(c,-24,0,14,0,'#fff8ff',2);}c.restore();return true;
   }
-  const color=spec.color,trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);
+  const color=coat||spec.color,trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);
   c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
   if(trail.length>1){for(let i=1;i<trail.length;i++){const a=i/trail.length;c.globalAlpha=a*.5;line(c,trail[i-1].x,trail[i-1].y,trail[i].x,trail[i].y,color,(s.kind==='net'?9:5)*a);}}
   c.globalAlpha=1;c.translate(s.x,s.y);c.rotate(angle);c.shadowColor=color;c.shadowBlur=this.quality==='low'?0:12;

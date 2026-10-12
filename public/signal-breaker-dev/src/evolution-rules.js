@@ -1,6 +1,7 @@
 /* Pure veteran combat rules. Hazard signals, never people, are the targets. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.SignalBreakerEvolution=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
+const EpisodeTwo=typeof module==='object'&&module.exports?require('./episode-two.js'):globalThis.SignalBreakerEpisodeTwo;
 const RECIPES=Object.freeze({
  storm:{frame:'arc',support:'mist',targets:3,color:'#93e9ff'},
  singularity:{frame:'arc',support:'magnet',targets:3,color:'#73ffdd'},
@@ -13,7 +14,7 @@ function armor(g,spec){return g.veteran&&!spec.echo?Math.round((18+stage(g)*6)*(
 function active(g){return g.veteran&&g.evolution.recipe&&g.loadout.includes(RECIPES[g.evolution.recipe]?.support)?RECIPES[g.evolution.recipe]:null;}
 function selectFrame(g,frame){if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null};return true;}
 function evolve(g,recipe){
- const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<5||!spec||g.evolution.recipe||g.config.gateStable&&!['mist','net'].includes(spec.support))return false;
+ const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<EpisodeTwo.requiredParts(g)||!spec||g.evolution.recipe||g.config.gateStable&&!['mist','net'].includes(spec.support))return false;
  g.evolution={frame:spec.frame,recipe};g.loadout=['pulse',spec.support];g.weapon='pulse';
  g.event('evolved',g.player.x,g.player.y,1,recipe);return true;
 }

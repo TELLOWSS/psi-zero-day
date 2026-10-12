@@ -14,7 +14,7 @@ permissions:
 jobs:
   source-flow:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 22
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,6 +59,7 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
+          node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
           node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
           node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
           node public/signal-breaker-dev/scripts/verify-ui-release.cjs
