@@ -56,8 +56,8 @@ test('housing opens gradually, pauses at identical simulation time and freezes w
  assert.equal(art.bossMotion(b,0).exposure,0);const halfway=art.bossMotion(b,.05).exposure;
  assert.ok(halfway>0&&halfway<1);assert.equal(art.bossMotion(b,.05).exposure,halfway);
  art.setReducedMotion(true);assert.equal(art.bossMotion(b,1).exposure,halfway);
- art.setReducedMotion(false);assert.ok(art.bossMotion(b,1.05).exposure>halfway);
- b.phase='sealed';const closing=art.bossMotion(b,1.1).exposure;assert.ok(closing>0&&closing<halfway+1);
+ art.setReducedMotion(false);const opened=art.bossMotion(b,1.05).exposure;assert.ok(opened>halfway);
+ b.phase='sealed';const closing=art.bossMotion(b,1.1).exposure;assert.ok(closing>0&&closing<opened);
 });
 test('securing a tension housing holds its actual offset without recentering or late warning jumps',()=>{
  const art=fixture(),b={...boss(),identity:'tension'};art.bossMotion(b,0);const at=art.bossMotion(b,.3).vibration;

@@ -34,3 +34,5 @@ body.breaker-focus .weapon-btn.selected{color:var(--psi-accent);background:#1544
 .shop-scroll{overflow:auto;min-height:0;overscroll-behavior:contain;scroll-padding:10px;padding:3px 4px 8px}
 .shop-scroll>p:first-child{margin-top:0}
 @media(max-height:500px){.psi-workshop header{padding:3px 0}.psi-workshop h2{margin:2px 0}.psi-workshop .shop-balance{font-size:13px!important;margin:4px 0}.psi-workshop #shopTabs{margin:2px 0 6px;gap:4px}.psi-workshop #shopTabs button{padding:5px 12px}.shop-scroll{padding-top:0}}
+
+.psi-workshop #shopModuleStatus{flex-shrink:0;margin:2px 0 8px;color:#bfe9df;font-size:11px}

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.46.1-workshop-motion",
   "cacheName": "psi-signal-breaker-webpreview-v0.46.1-workshop-motion",
-  "fingerprint": "441461d0a417af607d3e38931aa7aa1022313eb5a2babf61b9ea31219df34eb0",
+  "fingerprint": "9c14954ccbfdc9812f16978b11715142cb0b88925edf50b6bde1b99b5c5f22f2",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -297,7 +297,7 @@
     {
       "path": "/signal-breaker-dev/index.html",
       "bytes": 14839,
-      "sha256": "f22c22143a13f4d6d3b9cbb7ced1d115f722ed192d50213a6f55b923b6c7fae1"
+      "sha256": "619654378aca7abcb0abff1bab63d42a62c1622824ff7ec490949cbb058524b8"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -416,8 +416,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.css",
-      "bytes": 6157,
-      "sha256": "192340dedcaad9dadc0e7d78c83fff68c3333c3ec9be0fb31d9cb5663b401a9e"
+      "bytes": 6251,
+      "sha256": "1d33277f2d427542f96490c756507c5fbe6cb688ae2112a52f6eb82028618c6a"
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.js",
