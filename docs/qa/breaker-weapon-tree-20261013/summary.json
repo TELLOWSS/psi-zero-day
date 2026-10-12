@@ -1,0 +1,21 @@
+{
+  "legacy": {
+    "wrong": 1,
+    "matching": 9,
+    "evolved": 15,
+    "perMode": 15
+  },
+  "advanced": {
+    "spread": {
+      "wins": 15,
+      "runs": 15,
+      "final": 15
+    },
+    "focus": {
+      "wins": 14,
+      "runs": 15,
+      "final": 15
+    }
+  },
+  "humanWinRates": false
+}

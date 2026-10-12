@@ -9,20 +9,24 @@ const RECIPES=Object.freeze({
  plasma:{frame:'laser',support:'net',targets:2,color:'#ffc2a0'}
 });
 const stage=g=>Number(g.config.id.slice(-2));
-function reset(g){g.evolution={frame:'arc',recipe:null};}
+const BRANCHES=Object.freeze(['spread','focus']);
+function reset(g){g.evolution={frame:'arc',recipe:null,branch:null,capstone:false};}
+function canAdvance(g,id){const e=g.evolution;if(!g.veteran||g.state!=='intermission'||!e.recipe)return false;return BRANCHES.includes(id)?!e.branch&&g.wave>=2&&g.pickupCount>=9:id==='capstone'&&!!e.branch&&!e.capstone&&g.wave>=3&&g.pickupCount>=14;}
+function advance(g,id){if(!canAdvance(g,id))return false;if(id==='capstone')g.evolution.capstone=true;else g.evolution.branch=id;g.event('evolved',g.player.x,g.player.y,1,id);return true;}
+function restore(g,e){if(!e||!['arc','laser'].includes(e.frame)||e.recipe!==null&&(!RECIPES[e.recipe]||RECIPES[e.recipe].frame!==e.frame||g.pickupCount<EpisodeTwo.requiredParts(g)))return false;const branch=e.branch??null,capstone=e.capstone??false;if(branch!==null&&(!BRANCHES.includes(branch)||!e.recipe||g.wave<2||g.pickupCount<9)||typeof capstone!=='boolean'||capstone&&(!branch||g.wave<3||g.pickupCount<14))return false;g.evolution={frame:e.frame,recipe:e.recipe,branch,capstone};return true;}
 function armor(g,spec){return g.veteran&&!spec.echo?Math.round((18+stage(g)*6)*(spec.tier+1)*(1+(g.wave-1)*.35)):0;}
-function active(g){return g.veteran&&g.evolution.recipe&&g.loadout.includes(RECIPES[g.evolution.recipe]?.support)?RECIPES[g.evolution.recipe]:null;}
-function selectFrame(g,frame){if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null};return true;}
+function active(g){const e=g.evolution,spec=g.veteran&&e.recipe&&g.loadout.includes(RECIPES[e.recipe]?.support)?RECIPES[e.recipe]:null;return spec?{...spec,targets:Math.min(5,spec.targets+(e.branch==='spread'?1+(e.capstone?1:0):0))}:null;}
+function selectFrame(g,frame){if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null,branch:null,capstone:false};return true;}
 function evolve(g,recipe){
  const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<EpisodeTwo.requiredParts(g)||!spec||g.evolution.recipe||g.config.gateStable&&!['mist','net'].includes(spec.support))return false;
- g.evolution={frame:spec.frame,recipe};g.loadout=['pulse',spec.support];g.weapon='pulse';
+ g.evolution={frame:spec.frame,recipe,branch:null,capstone:false};g.loadout=['pulse',spec.support];g.weapon='pulse';
  g.event('evolved',g.player.x,g.player.y,1,recipe);return true;
 }
 function damage(g,s,target){
  if(!g.veteran)return 1;
  if(s.kind!=='pulse'||!['arc','laser'].includes(s.element))return 1;
  const favorable=s.element==='arc'?['dust','power'].includes(target.kind):['metal','load'].includes(target.kind);
- return (favorable?3:1)+(active(g)?4:0)+(s.bounces>0?1:0);
+ const evolved=active(g);return (favorable?3:1)+(evolved?4:0)+(s.bounces>0?1:0)+(evolved&&favorable?(g.evolution.branch==='focus'?3+(g.evolution.capstone?3:0):g.evolution.capstone?1:0):0);
 }
 function hit(g,s,c){
  if(!g.veteran||c.echo||!c.armor)return false;
@@ -36,9 +40,9 @@ function contact(g,s,c){
  if(spec){
   const dx=s.vx,dy=s.vy,len=Math.hypot(dx,dy)||1;
   const candidates=g.cores.filter(q=>q.id!==c.id&&!q.echo).filter(q=>{
-   if(g.evolution.frame==='arc')return Math.hypot(q.x-c.x,q.y-c.y)<(g.evolution.recipe==='singularity'?210:155);
+   if(g.evolution.frame==='arc')return Math.hypot(q.x-c.x,q.y-c.y)<((g.evolution.recipe==='singularity'?210:155)+(g.evolution.branch==='spread'?35:0));
    const x=q.x-c.x,y=q.y-c.y,along=(x*dx+y*dy)/len,side=Math.abs(x*dy-y*dx)/len;
-   return along>0&&along<260&&side<q.r+14;
+   return along>0&&along<260+(g.evolution.branch==='spread'?60:0)&&side<q.r+14;
   }).sort((a,b)=>Math.hypot(a.x-c.x,a.y-c.y)-Math.hypot(b.x-c.x,b.y-c.y));
   targets.push(...candidates.slice(0,spec.targets-1));
  }
@@ -50,5 +54,5 @@ function contact(g,s,c){
 }
 function limit(g){return 135-stage(g)*5-(g.wave-1)*10;}
 function step(g){if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
-return {RECIPES,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
+return {RECIPES,BRANCHES,canAdvance,advance,restore,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
 });

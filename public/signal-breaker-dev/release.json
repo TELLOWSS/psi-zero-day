@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.47.0-signal-supply",
-  "cacheName": "psi-signal-breaker-webpreview-v0.47.0-signal-supply",
-  "fingerprint": "9ee950d50b0381befd630bfe8fd9f01cb93475751352fac0485e1d328da8b004",
+  "version": "0.48.0-weapon-tree",
+  "cacheName": "psi-signal-breaker-webpreview-v0.48.0-weapon-tree",
+  "fingerprint": "451dbb64015f64a9545dc9a03cd8852b99d4b0e88324f785e8f5e5d3c0d71413",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -245,6 +245,11 @@
       "sha256": "37250d66a96e8faf532f4f47adbbfe872c14a756d54cd460cce6f1c817ab2bcd"
     },
     {
+      "path": "/signal-breaker-dev/art/psi-projectiles-atlas-v1.webp",
+      "bytes": 676966,
+      "sha256": "6c2a599ec6b7e409babd2baf87ec080b84e7cbf7924c770449fada2f9a733c33"
+    },
+    {
       "path": "/signal-breaker-dev/art/psi-shield-chip-v1.webp",
       "bytes": 61006,
       "sha256": "a29926fc0f0aad5e3efb9d6691b55e58fad9f15bd22e90227985b1dd8e3f5e26"
@@ -311,13 +316,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6155,
-      "sha256": "deb451ad3cd61fd8b2fd67df9530d36cdc2bfcbf396394206cd8df1e966bb619"
+      "bytes": 6191,
+      "sha256": "17b546001620839c44353f3f6a7bb522b6ed4ea806f944ac291f33abdf8ee659"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 102533,
-      "sha256": "2577034f42e541f9288c982b11c72cc5ef0fc6b5107656dc6cad9901e769e134"
+      "bytes": 105882,
+      "sha256": "2d90e55d7d0c8dfc1ff62aa4c0a5321186c6e449b85e7c7214333c5801845890"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -366,8 +371,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 62764,
-      "sha256": "25aa446d2ba969deaca411ed0dbe24cc4b4d8b84d326ccea5f62b3a284a88f1c"
+      "bytes": 62763,
+      "sha256": "b77baad335ad9a1369d8bdf95615b27006ffa52601b2630ce169cdd0060ec7d5"
     },
     {
       "path": "/signal-breaker-dev/src/episode-two.js",
@@ -376,8 +381,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 3367,
-      "sha256": "fd1c3d03a8b17dfd3d726000e85a144ade7e90d6a679630201c87b3b1ab69563"
+      "bytes": 4770,
+      "sha256": "01b4a54b415a82a92d39e47c6ee3dfef9b5daa241b8b6ca22f44651aa3372ec1"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -391,8 +396,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 32490,
-      "sha256": "3229578288c139db027688afc1dcbf5a391f7e54ec11ec852523dfbae63a1e7f"
+      "bytes": 33561,
+      "sha256": "c24824ebce3177c30a2cefc73589fe75b63b6f3a32eef7165f68be853ca30add"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -411,8 +416,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 48324,
-      "sha256": "a4ed40e3e4e2df7b1ae3b6a8b234ceee029e3a9984de257af7e25da5f0f92203"
+      "bytes": 49718,
+      "sha256": "05ebec31abec7caa6b9997c0e38ed253aa1b005c0119852687f89bb2839dd901"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
@@ -446,8 +451,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/style.css",
-      "bytes": 81476,
-      "sha256": "e3eb7ce13586941e3ee8b6f6c0eb40b59e536a64911ca699aaafbfcb4c7fa1fa"
+      "bytes": 82988,
+      "sha256": "7c5bb9becae60cec7a8e2ace0e331476c5ead5795217d482f9c37a372dde45bf"
     }
   ]
 }
