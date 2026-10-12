@@ -108,3 +108,14 @@ body.overview-open.breaker-focus .battle-radar{display:block}
  body.breaker-focus #fireBtn:active,body.twin-controls #fireBtn:active{transform:scale(.96)}
  body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 266px);bottom:auto;left:12px;transform:none;max-width:calc(100vw - 24px)}
 }
+
+/* Atlas cells are square: preserve native tool proportions at every viewport. */
+.gear-preview{width:90px;height:90px}
+body.breaker-focus .weapon-btn .weapon-icon{width:48px;height:48px}
+body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:78px}
+body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 208px)}
+@media(max-width:600px),(max-height:500px),(orientation:portrait){
+ body.breaker-focus .weapon-btn .weapon-icon{width:39px;height:39px}
+ body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:64px}
+ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 204px)}
+}

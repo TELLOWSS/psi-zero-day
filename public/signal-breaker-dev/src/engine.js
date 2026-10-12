@@ -38,7 +38,7 @@ class Game {
  tuningOptions(){const all=['bank','capture','focus','cadence','memory','field'].filter(id=>!this.hasTuning(id)&&(id!=='bank'||this.loadout.some(isPulseWeapon))&&(id!=='capture'||this.loadout.includes('net'))&&(id!=='field'||this.loadout.some(w=>['mist','magnet','scan','anchor'].includes(w))));const rng=createRng(this.seed+this.wave*7919);return all.map(id=>({id,order:rng()})).sort((a,b)=>a.order-b.order).slice(0,3).map(v=>v.id);}
  chooseTuning(id){if(this.state!=='intermission'||!this.draft.includes(id))return false;this.tunings.push(id);this.draft=[];this.beginNextWave();return true;}
  beginNextWave(){this.wave++;this.source=null;this.nextWaveAt=0;this.shots=[];this.fields=[];this.anchors=[];this.assistTargetId=null;this.accumulator=0;this.cooldown=0;this.state='playing';this.waveStart={time:this.time,shots:this.shotsFired,life:this.player.life};if(this.burstMode)Burst.spawnWave(this,this.wavePlans[this.wave-1]);else for(const spec of this.wavePlans[this.wave-1])this.addCore({...spec});if(this.wave===this.waveCount){if(this.config.relays)this.circuit=[{x:650,y:145,hit:false},{x:875,y:200,hit:false},{x:790,y:315,hit:false}];if(this.operation){this.boss=this.operationBoss();this.circuit=[];}else if(this.config.boss)this.boss={phase:'sealed',nodes:[{x:686,y:154,hit:false},{x:882,y:162,hit:false},{x:787,y:296,hit:false}],x:785,y:199,exposure:0};}this.event('wave',W/2,160,this.wave);}
- operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0,gatePhase:1,maxGatePhases:5,resetUntil:0,dischargeHalfWidth:58}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0,segment:1,maxSegments:5,transitionUntil:0,dangerLeft:340,dangerRight:860,encounterStart:this.time}:i===2?{identity:'extraction',nextPressureAt:this.time+2.9,warningUntil:0,mistUntil:0,pressureBursts:0,pressureVents:0,filterStage:1,maxFilterStages:4,purgeUntil:0,purgeMistBonus:false}:i===3?{identity:'tension',nextSnapAt:this.time+2.8,warningUntil:0,snaps:0,secured:0}:i===4?{identity:'grid',nextArcAt:this.time+2.8,warningUntil:0,warningStarted:0,band:0,arcs:0,isolations:0,scanAppliedAt:-1,scannedUntil:0,combatTier:1}:{})};}
+ operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0,gatePhase:1,maxGatePhases:5,resetUntil:0,dischargeHalfWidth:58}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0,segment:1,maxSegments:5,transitionUntil:0,dangerLeft:340,dangerRight:860,encounterStart:this.time}:i===2?{identity:'extraction',nextPressureAt:this.time+2.9,warningUntil:0,mistUntil:0,pressureBursts:0,pressureVents:0,filterStage:1,maxFilterStages:4,purgeUntil:0,purgeMistBonus:false}:i===3?{identity:'tension',nextSnapAt:this.time+2.8,warningUntil:0,snaps:0,secured:0,loadStage:1,maxLoadStages:4,calibrationUntil:0,anchorResetUsed:false,snapLeft:440,snapRight:885}:i===4?{identity:'grid',nextArcAt:this.time+2.8,warningUntil:0,warningStarted:0,band:0,arcs:0,isolations:0,scanAppliedAt:-1,scannedUntil:0,combatTier:1}:{})};}
  cycleSupport(){if(!this.operation||!['ready','playing','paused'].includes(this.state))return false;const index=CHAPTER.findIndex(c=>c.id===this.config.id),allowed=[...new Set(CHAPTER.slice(0,index+1).flatMap(c=>c.unlock))].filter(id=>id!=='pulse'&&(!this.config.gateStable||['mist','net'].includes(id)));if(!allowed.length)return false;this.loadout[1]=allowed[(allowed.indexOf(this.loadout[1])+1)%allowed.length];this.selectWeapon(this.loadout[1]);return true;}
  setPulseStyle(style){if(!this.operation||!['rapid','spread','precision'].includes(style))return false;this.pulseStyle=style;return true;}
  recordWave(){this.waveHistory.push({wave:this.wave,time:Number((this.time-this.waveStart.time).toFixed(2)),shots:this.shotsFired-this.waveStart.shots,damage:this.waveStart.life-this.player.life});}
@@ -160,14 +160,14 @@ class Game {
   if(this.time>=b.nextSnapAt){
    if(held){b.secured++;this.event('tensionsecured',b.x,GROUND-128,b.secured,'load');}
    else{
-    if(this.player.x>=440&&this.player.x<=885&&!this.lab&&this.player.invuln<=0){
+    if(this.player.x>=b.snapLeft&&this.player.x<=b.snapRight&&!this.lab&&this.player.invuln<=0){
      this.player.life--;this.player.invuln=1.8;this.shake=7;
      this.event('hurt',this.player.x,this.player.y,this.player.life);
      if(this.player.life<=0)this.finish(false);
     }
     b.snaps++;this.event('tensionsnap',b.x,GROUND-128,b.snaps,'load');
    }
-   b.warningUntil=0;b.nextSnapAt=this.time+7.9;
+   b.warningUntil=0;b.nextSnapAt=this.time+Math.max(5.3,7.9-(b.loadStage-1)*.7);
   }
  }
  gridArcLanes(){
@@ -204,6 +204,14 @@ class Game {
   if(this.boss?.identity==='delivery'&&this.boss.phase==='rearming'&&this.time>=this.boss.resetUntil){
    const b=this.boss;b.phase='sealed';b.exposure=0;
    this.event('gaterearm',b.x,b.y,b.gatePhase,'metal');
+  }
+  if(this.boss?.identity==='tension'&&this.boss.phase==='rebalancing'){
+   const b=this.boss;
+   if(!b.anchorResetUsed&&this.tensionLockUntil>this.time){
+    b.anchorResetUsed=true;b.calibrationUntil=Math.max(this.time+.85,b.calibrationUntil-1.4);
+    this.event('loadbalanced',b.x,b.y,b.loadStage,'load');
+   }
+   if(this.time>=b.calibrationUntil){b.phase='sealed';b.exposure=0;this.event('loadrearm',b.x,b.y,b.loadStage,'load');}
   }
   if(this.boss?.identity==='conveyor'&&this.boss.phase==='rebuilding'&&this.time>=this.boss.transitionUntil){
    const b=this.boss;b.phase='sealed';b.exposure=0;b.nextSurgeAt=this.time+Math.max(1.7,2.6-(b.segment-1)*.18);
@@ -264,7 +272,7 @@ class Game {
  bounceSegment(obj,v,r,rest){const seg=this.railSegment(v),q=closest(obj.x,obj.y,seg.ax,seg.ay,seg.bx,seg.by),dd=Math.hypot(obj.x-q.x,obj.y-q.y);if(dd>=obj.r+r)return false;let nx=dd>.0001?(obj.x-q.x)/dd:0,ny=dd>.0001?(obj.y-q.y)/dd:-1;obj.x=q.x+nx*(obj.r+r+.25);obj.y=q.y+ny*(obj.r+r+.25);const surface=this.railVelocity(v,q.x,q.y);let dot=(obj.vx-surface.x)*nx+(obj.vy-surface.y)*ny;if(dot<0){obj.vx-=(1+rest)*dot*nx;obj.vy-=(1+rest)*dot*ny;return true;}return false;}
  shotRail(s){for(const v of this.rail){if(this.bounceSegment(s,v,9,.98)){s.bounces++;this.bounces++;this.event('ricochet',s.x,s.y);if(s.bounces>4)s.life=-1;}}}
  shotBoss(s){const b=this.boss;if(!b||s.life<=0)return;
-  if(b.phase==='rearming'||b.phase==='rebuilding'||b.phase==='purging'&&s.kind!=='mist'){s.life=-1;return;}for(const n of b.nodes){if(n.hit||Math.hypot(s.x-n.x,s.y-n.y)>s.r+23+1e-5)continue;if(!isPulseWeapon(s.kind)){this.event('denied',n.x,n.y);s.life=-1;return;}if((this.config.orderedBoss||this.operation&&this.config.relays)&&b.nodes.find(v=>!v.hit)!==n){this.reason('relayorder',n.x,n.y);s.life=-1;return;}n.hit=true;s.life=-1;this.shotsHit++;if(!n.credited){this.score+=380;n.credited=true;}this.event('node',n.x,n.y);this.emitParticles(n.x,n.y,'#93faff',18);if(b.nodes.every(x=>x.hit)){b.phase='exposed';this.event('unseal',b.x,b.y);this.floaters.push({x:b.x,y:b.y-65,label:'방호 해제!',life:1.4,color:'#d4ffe7'});}return;}
+  if(b.phase==='rearming'||b.phase==='rebalancing'||b.phase==='rebuilding'||b.phase==='purging'&&s.kind!=='mist'){s.life=-1;return;}for(const n of b.nodes){if(n.hit||Math.hypot(s.x-n.x,s.y-n.y)>s.r+23+1e-5)continue;if(!isPulseWeapon(s.kind)){this.event('denied',n.x,n.y);s.life=-1;return;}if((this.config.orderedBoss||this.operation&&this.config.relays)&&b.nodes.find(v=>!v.hit)!==n){this.reason('relayorder',n.x,n.y);s.life=-1;return;}n.hit=true;s.life=-1;this.shotsHit++;if(!n.credited){this.score+=380;n.credited=true;}this.event('node',n.x,n.y);this.emitParticles(n.x,n.y,'#93faff',18);if(b.nodes.every(x=>x.hit)){b.phase='exposed';this.event('unseal',b.x,b.y);this.floaters.push({x:b.x,y:b.y-65,label:'방호 해제!',life:1.4,color:'#d4ffe7'});}return;}
   if(b.phase!=='resolved'&&Math.hypot(s.x-b.x,s.y-b.y)<=s.r+48+1e-5){
    if(b.identity==='extraction'&&s.kind==='mist'){
     s.life=-1;this.deployField('mist',b.x,b.y);b.mistUntil=this.time+4;
@@ -285,6 +293,16 @@ class Game {
     this.event('gatephase',b.x,b.y,b.gatePhase,'metal');
     this.emitParticles(b.x,b.y,'#ffe2a9',32);
     this.floaters.push({x:b.x,y:b.y-110,label:'차단문 재잠금 · '+b.gatePhase+'/'+b.maxGatePhases,life:1.4,color:'#ffebb8'});
+    return;
+   }
+   if(this.operation&&b.identity==='tension'&&b.loadStage<b.maxLoadStages){
+    b.loadStage++;b.phase='rebalancing';b.hp=b.maxHp;b.exposure=0;
+    b.nodes.forEach(n=>{n.hit=false;});b.calibrationUntil=this.time+3.4;b.anchorResetUsed=false;
+    b.snapLeft=440-(b.loadStage-1)*22;b.snapRight=885+(b.loadStage-1)*8;
+    b.nextSnapAt=Math.min(b.nextSnapAt,this.time+Math.max(3.5,5.5-(b.loadStage-1)*.3));
+    this.score+=430;this.shake=8;this.event('loadstage',b.x,b.y,b.loadStage,'load');
+    this.emitParticles(b.x,b.y,'#e9c58c',33);
+    this.floaters.push({x:b.x,y:b.y-105,label:'장력 재검증 · '+b.loadStage+'/'+b.maxLoadStages,life:1.4,color:'#ffe6bd'});
     return;
    }
    if(this.operation&&b.identity==='conveyor'&&b.segment<b.maxSegments){

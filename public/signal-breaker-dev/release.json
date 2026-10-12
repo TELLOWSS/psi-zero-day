@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.44.0-ui-sync",
   "cacheName": "psi-signal-breaker-webpreview-v0.44.0-ui-sync",
-  "fingerprint": "1920866a6444f28db5f6e23dfbddc96cc274c455189455fafb7af1602f54a893",
+  "fingerprint": "220417a751e6abca604dd07557698e8084406f3e097ea9d09fc731211681ec3e",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -281,8 +281,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 89131,
-      "sha256": "a2f5d28709db720256f78a10c8d885fc1cb26be1b5969769fb6b5f28241bf8e3"
+      "bytes": 89734,
+      "sha256": "802aa1a41a72a86555f18a7ef8bb27e3b82ef7638bc06ca18f808b544d6076b2"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -331,8 +331,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 57992,
-      "sha256": "1907560e03919b28a74bf77501f6e080c69acc5cfbca57c3bc2f6c74037ea49a"
+      "bytes": 59275,
+      "sha256": "b749252e82cb9cef1f2f6d034d46c4cba22bc462c26a5e6bc178692e6949c08a"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -346,8 +346,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 25532,
-      "sha256": "fb8b13b17f5e900e168c8eaff034f8907233be98bc78c5b1276f2bc048eb7377"
+      "bytes": 25765,
+      "sha256": "3a167b57de4ca1627f9a85f01a12d43a27506ed078aa2a88b7c841689b95bbce"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -366,18 +366,18 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 45724,
-      "sha256": "f2d547c5ff4ede3398fdb6c734ef9d218f448336b52db69e20eca40ea56b2648"
+      "bytes": 45950,
+      "sha256": "42df03aaa328bfb2150f4beaff931fc42939019f5b9a93f3b6e976b0cd89cfee"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
-      "bytes": 13115,
-      "sha256": "cfa9fdb3651de25d84b21e27be45ff7ed334a862a57886fef0d7a78018339a70"
+      "bytes": 13368,
+      "sha256": "fb1e6ec6eed769e288058842eead0c4bcf9cbfb524230f5c5a7bf28ea01a7462"
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
-      "bytes": 11275,
-      "sha256": "6e3c96790a3942c9c5f9a5cc16a5216543dc77a317bcfaf09d8c6de14a2b14da"
+      "bytes": 12016,
+      "sha256": "2419c23b6585c6c9ab0cd751b8af650a629b09b44fd8476ceedda8ce6f9df57d"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",
@@ -386,8 +386,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/stage-ending-content.js",
-      "bytes": 7284,
-      "sha256": "4a43363153f2f8431c51487449c8378cf4ab84ebe2119ef1d6bf3ea4065ee113"
+      "bytes": 7370,
+      "sha256": "ed9272728d7e4ee5067c37d3bcabf46c21bd120ae034dba969c343fdc02a35b1"
     },
     {
       "path": "/signal-breaker-dev/src/style.css",
