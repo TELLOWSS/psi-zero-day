@@ -1,0 +1,27 @@
+name: PSI RPG growth contract
+on:
+  pull_request:
+    paths:
+      - src/domain/psi-operator-profile.ts
+      - tests/psi-operator-profile.test.ts
+      - .github/workflows/verify-psi-rpg-profile.yml
+  push:
+    branches: [main]
+    paths:
+      - src/domain/psi-operator-profile.ts
+      - tests/psi-operator-profile.test.ts
+permissions:
+  contents: read
+jobs:
+  profile-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npx vitest run tests/psi-operator-profile.test.ts
+      - run: npm run typecheck
+      - run: npm run build
