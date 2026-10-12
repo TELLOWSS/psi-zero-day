@@ -27,6 +27,7 @@ html[lang="ko"] .survivors-container {
 
 .survivors-container .survivors-ready-dialog[data-preflight] {
   background: linear-gradient(90deg,#101e27f5,#101e27db),url('/signal-watch-loading/signal-watch-landscape-v2.webp') 70% center/cover;
+  background-color: var(--psi-surface);
   border-color: #627273;
 }
 .survivors-container .survivors-ready-dialog[data-preflight] :is(.survivors-ready-launch, .survivors-actions-row) {
