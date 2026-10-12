@@ -121,7 +121,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`operation-tension-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH04');
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.nextSnapAt-1.3;g.step(1/120);const r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
    a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine();return g.tensionLockUntil>g.time&&g.boss.secured>0;}),'CH04 rail anchor cancels predicted cable snap');
-   await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.tensionLockUntil=0;g.tensionReleased=true;});
+   await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});await page.evaluate(()=>{const g=SignalBreakerQA.engine();if(g.state==='playing')g.pause();g.shots=[];g.tensionLockUntil=0;g.tensionReleased=true;});
+   // Freeze ambient auto-fire while inspecting explicit load-cycle fixtures; physical anchor hits below still use engine collision.
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='rebalancing'&&b.loadStage===2;}),'CH04 must re-balance after first load, not instantly win');
    await page.waitForFunction(()=>document.getElementById('bossEncounterPhase').textContent.includes('2/4')&&document.getElementById('bossEncounterPhase').textContent.includes('재균형'));
