@@ -55,7 +55,73 @@ function drawCanvas(c,stage){
 }
 class PremiumArt{
  // Final raster bodies use the existing world origin; physics and relay nodes remain engine-owned.
- bossBody(c,b,time){
+ bossMotion(b,time,options={}){
+  const warning=b.warningUntil>time,exposed=b.phase==='exposed';
+  const stopped=this.reducedMotion||options.secured||b.phase==='defeated';
+  const speed=warning?1.7:exposed?.45:1;
+  const direction=options.direction===-1?-1:1,controlled=b.mistUntil>time;
+  this.bossClocks=this.bossClocks||new WeakMap();
+  let clock=this.bossClocks.get(b);
+  if(!clock||time<clock.time){clock={time,phase:0};this.bossClocks.set(b,clock);}
+  if(!stopped)clock.phase+=(time-clock.time)*speed*(b.identity==='conveyor'?direction:1)*(b.identity==='extraction'&&controlled?.22:1);
+  clock.time=time;
+  const phase=clock.phase;
+  const stages=b.maxGatePhases||b.maxSegments||b.maxFilterStages||1;
+  const stage=b.gatePhase||b.segment||b.filterStage||1;
+  const wear=sat(((stage-1)+(1-sat(b.maxHp?b.hp/b.maxHp:1)))/stages);
+  const impact=this.bossImpact?.identity===b.identity?Math.max(0,1-(this.clock-this.bossImpact.at)/.24):0;
+  return {phase,speed,warning,exposed,wear,impact:this.reducedMotion?0:impact,controlled,direction,stopped};
+ }
+ // Move only authored metal within measured component masks; the world footprint stays fixed.
+ bossJoints(c,image,b,w,h,m){
+  const left=b.x-w/2,top=b.y-h/2;
+  const rotor=(x,y,r,angle)=>{
+   const px=left+x*w,py=top+y*h,rr=r*Math.min(w,h);
+   c.save();c.beginPath();c.arc(px,py,rr,0,TAU);c.clip();
+   c.translate(px,py);c.rotate(angle);
+   c.drawImage(image,left-px,top-py,w,h);c.restore();
+  };
+  const slide=(x,y,rw,rh,dx,dy)=>{
+   const px=left+x*w,py=top+y*h;
+   c.save();c.beginPath();c.rect(px,py,rw*w,rh*h);c.clip();
+   c.fillStyle='#101b22';c.fillRect(px,py,rw*w,rh*h);
+   c.drawImage(image,left+dx,top+dy,w,h);c.restore();
+  };
+  const a=m.phase;
+  if(b.identity==='delivery'){
+   const travel=m.exposed?5:0,v=m.stopped?0:Math.sin(a*2.8)*.7;
+   slide(.23,.30,.19,.44,-travel,v);slide(.65,.37,.14,.39,travel,-v);
+   rotor(.533,.56,.041,a*.22);
+  }else if(b.identity==='conveyor'){
+   rotor(.117,.485,.049,-a*1.8);
+   rotor(.889,.48,.049,a*1.8);
+  }else if(b.identity==='extraction'){
+   rotor(.488,.642,.070,a*2.1);
+  }else if(b.identity==='tension'){
+   const v=m.stopped?0:Math.sin(a*3.1)*(m.warning?2.2:.65);
+   slide(.145,.58,.185,.19,0,v);slide(.64,.58,.17,.19,0,-v);
+   rotor(.232,.263,.021,a*.55);rotor(.768,.258,.021,-a*.55);
+  }else if(b.identity==='grid'){
+   const travel=m.exposed?3:0;
+   slide(.477,.456,.040,.177,0,-travel);
+   rotor(.128,.555,.040,a*.12);rotor(.883,.555,.040,-a*.12);
+  }
+ }
+ bossDamage(c,b,w,h,m){
+  if(m.wear<=0&&!m.impact)return;
+  c.save();
+  // Dark scoring and a metal rim stay on the housing, away from the live relay markers.
+  const marks=[[-.34,.20],[.33,.18],[-.29,-.12],[.29,-.15]];
+  for(let i=0;i<Math.ceil(m.wear*marks.length);i++){
+   const [dx,dy]=marks[i],x=b.x+dx*w,y=b.y+dy*h;
+   c.globalAlpha=.35+m.wear*.45;
+   line(c,x-7,y-3,x+6,y+3,'#0b151d',3.4);
+   line(c,x-6,y-4,x+5,y+2,'#c6a078',.8);
+  }
+  if(m.impact){c.globalAlpha=m.impact*.65;disk(c,b.x,b.y,26,null,'#fff3cf',2.5);}
+  c.restore();
+ }
+ bossBody(c,b,time,options={}){
   if(typeof Image==='undefined'||!root.PSIPresentationAssets)return false;
   const sizes={delivery:[252,184],conveyor:[280,188],extraction:[244,214],tension:[286,202],grid:[280,224]},size=sizes[b.identity];
   if(!size)return false;
@@ -68,6 +134,9 @@ class PremiumArt{
   // Shadow and light are local to the apparatus, never a second collision silhouette.
   glow(c,b.x,b.y,w*.52,exposed?'#f8c67429':warning?'#ef785924':'#65b7c511');
   c.drawImage(image,b.x-w/2,b.y-h/2,w,h);
+  const motion=this.bossMotion(b,time,options);
+  this.bossJoints(c,image,b,w,h,motion);
+  this.bossDamage(c,b,w,h,motion);
   const hp=b.maxHp?Math.max(0,b.hp)/b.maxHp:1;
   if(hp<1){c.globalAlpha=(1-hp)*.35;glow(c,b.x,b.y,42,'#f9ad6544');c.globalAlpha=1;}
   disk(c,b.x,b.y,exposed?22:14,exposed?'#fff0bdcc':'#122935bc',exposed?'#ffe6a5':'#83bec999',exposed?3:1.5);
@@ -75,7 +144,7 @@ class PremiumArt{
   const segments=b.maxGatePhases||b.maxSegments||b.maxFilterStages||0,phase=b.gatePhase||b.segment||b.filterStage||1;
   if(segments>1){for(let i=0;i<segments;i++)disk(c,b.x+(i-(segments-1)/2)*12,b.y+h/2-8,3.5,i<phase?'#ffd389':'#284854');}
   if(warning){const alpha=this.reducedMotion ? .75 : .55+.2*Math.sin(time*6);c.globalAlpha=alpha;disk(c,b.x-w*.38,b.y-h*.28,5,'#ffd390');disk(c,b.x+w*.38,b.y-h*.28,5,'#ffd390');}
-  c.restore();this.lastBossArt={identity:b.identity,source,width:w,height:h,ready:true};return true;
+  c.restore();this.lastBossArt={identity:b.identity,source,width:w,height:h,ready:true,motion:{...motion}};return true;
  }
 
  projectile(c,s,time){
@@ -155,7 +224,7 @@ class PremiumArt{
  // CH-02 dedicated moving conveyor controller: twin drive shafts, belt teeth,
  // variable rotation and outward opening core. Rendered procedurally for offline performance.
  conveyorBoss(c,b,time,direction){
-  if(this.bossBody(c,b,time))return true;
+  if(this.bossBody(c,b,time,{direction}))return true;
   const open=b.phase==='exposed',warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,146,shift?'#fdb57555':warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
@@ -216,7 +285,7 @@ class PremiumArt{
  }
  // CH04 distinct counterweight/tension-drum profile; independent of three preceding boss silhouettes.
  tensionBoss(c,b,time,secured){
-  if(this.bossBody(c,b,time))return true;
+  if(this.bossBody(c,b,time,{secured}))return true;
   const opened=b.phase==='exposed',warning=b.warningUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,154,secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
@@ -287,7 +356,7 @@ class PremiumArt{
   c.drawImage(image,left*sx,top*sy,width*sx,height*sy,-w/2,-h/2,w,h);c.restore();return true;
  }
  constructor(){this.canvas=null;this.cacheStage='';this.clock=0;this.fx=[];this.sparks=[];this.max=75;this.quality='high';this.reducedMotion=false;this.flash=0;this.hitFocus=0;this.lastEventId=0;this.recoil=0;this.recovery=[];this.scene=null;if(typeof Image!=='undefined'){this.scene=root.PSIPresentationAssets.image('art/sb01-delivery-bay-v1.webp');this.coreAtlas=root.PSIPresentationAssets.image('art/core-materials-v2.webp');this.operator=root.PSIPresentationAssets.image('art/operator-idle-v1.webp');}}
- reset(){this.fx=[];this.sparks=[];this.recovery=[];this.recoil=0;this.flash=0;}
+ reset(){this.fx=[];this.sparks=[];this.recovery=[];this.recoil=0;this.flash=0;this.bossImpact=null;this.bossClocks=new WeakMap();}
  setQuality(q){this.quality=['high','balanced','low'].includes(q)?q:'high';this.max=this.quality==='high'?150:this.quality==='balanced'?75:30;if(this.sparks.length>this.max)this.sparks=this.sparks.slice(-this.max);}
  setReducedMotion(v){this.reducedMotion=!!v;}
  setPortrait(value){this.portrait=!!value;}
@@ -300,6 +369,7 @@ class PremiumArt{
  for(let i=0;i<(this.quality==='high'?20:9);i++){const k=i*71.98;let xx=(k*13.9+t*(7+i%5))%W,yy=94+(k*9.9%430),r=1.1+(i%4)*.5;disk(c,xx,yy+Math.sin(t*.65+i)*4,r,i%3?'#9bddda32':'#f6ce7a20');}
  glow(c,710+Math.sin(t*.2)*55,240,250,'#78dacc0c');c.restore();}
  event(e,game){const weapon=root.SignalBreakerChapter?.WEAPONS[e.weapon];const col=e.kind==='fire'&&weapon?weapon.color:e.material&&e.kind!=='capture'?(palette[e.material]||palette.metal)[1]:e.kind==='capture'?'#8ffff2':e.kind==='split'?'#ffd292':e.kind==='ricochet'||e.kind==='corebounce'?'#f9d8a1':e.kind==='boss'||e.kind==='victory'?'#ffe7a6':e.kind==='hurt'?'#ff786d':e.kind==='node'||e.kind==='unseal'?'#d0b8ff':e.kind==='fire'?(e.n===2?'#80ffe6':'#ffe5aa'):'#8ae8f0';
+ if(e.kind==='bosshit'&&game.boss)this.bossImpact={identity:game.boss.identity,at:this.clock};
  const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,bossphase:44,bossrearm:27,gatephase:39,gaterearm:21,filterpurge:37,filterflush:22,filterrearm:17,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
  if(count){const n=Math.floor(count*(this.quality==='high'?1:this.quality==='balanced'?.58:.26));for(let i=0;i<n&&this.sparks.length<this.max;i++){
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
