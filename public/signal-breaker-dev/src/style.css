@@ -499,3 +499,18 @@ body.breaker-focus #pulseBtn,body.breaker-focus #netBtn{min-height:58px;padding:
 #veteranStatus{position:absolute;left:auto;right:14px;top:176px;max-width:180px;text-align:right;line-height:1.45;pointer-events:none}
 @media(orientation:portrait){.ending-prepared-art{object-position:var(--ending-focus-portrait,50%) 56%}}
 @media(max-height:500px){#veteranStatus{left:12px;right:auto;top:176px;max-width:185px;font-size:9px;white-space:nowrap}}
+
+/* Authored projectile art also identifies the actual cumulative weapon path. */
+.weapon-tree .tree-family{flex:1 1 260px;min-width:0;border:1px solid #8cddd344;border-radius:12px;padding:12px;background:linear-gradient(140deg,#123441,#071921)}
+.weapon-tree h3{font:inherit;font-weight:800;color:#c7fff1;margin:0 0 10px}
+.weapon-tree .tree-row{display:flex;gap:8px;position:relative}
+.weapon-tree .tree-connected{padding-top:25px;margin-top:5px}
+.weapon-tree .tree-connected:before{content:'';position:absolute;top:0;left:50%;height:22px;width:2px;background:#7fdfce}
+.weapon-tree .tree-node{position:relative;flex:1 1 0;min-width:0;overflow-wrap:anywhere;grid-template-columns:1fr;align-content:start}
+.weapon-tree .tree-node[aria-pressed=true]{opacity:1;border-color:#bcffdf;box-shadow:inset 0 0 18px #7fffe51c}
+.tree-projectile{display:block;width:64px;height:46px;background-image:url('../art/psi-projectiles-atlas-v1.webp');background-size:400% 400%;background-repeat:no-repeat;align-self:center}
+.weapon-tree>small{color:#d6ece8!important}
+@media(max-width:480px){.weapon-tree{padding:8px}.weapon-tree .tree-family{flex-basis:100%;padding:8px}.weapon-tree .tree-node{padding:9px;min-height:125px}.weapon-tree .tree-node small{font-size:11px}}
+body.breaker-focus .weapon-tree .tree-node{height:auto;min-height:145px;grid-auto-rows:max-content;line-height:1.5;gap:6px}
+body.breaker-focus .weapon-tree .tree-node:disabled{opacity:.72}
+body.breaker-focus .weapon-tree .tree-node[aria-pressed=true]{opacity:1}

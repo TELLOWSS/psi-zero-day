@@ -59,6 +59,7 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
+          node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
           node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
           node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
           node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
