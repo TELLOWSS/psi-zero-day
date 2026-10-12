@@ -1,0 +1,62 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+
+const root = fileURLToPath(new URL('../', import.meta.url));
+const require = createRequire(import.meta.url);
+const endings = require('../public/signal-breaker-dev/src/stage-ending-content.js');
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'content/signal-breaker-ending-voice-ep02-candidates.json'), 'utf8'));
+assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'public/assets/survivors/voice-ending-ep02-candidates/voice-manifest.json'), 'utf8')), manifest);
+assert.equal(manifest.runtimeIntegrated, false);
+assert.equal(manifest.finalListeningApproved, false);
+assert.equal(manifest.files.length, 10);
+const seen = new Set();
+let timingPasses = 0;
+for (const f of manifest.files) {
+  assert.match(f.filename, /^PSI_V_END_CH(06|07|08|09|10)_(LIM|YOON|KANG|PLAYER)_v0[12]\.wav$/);
+  assert.equal(f.candidateAssetPath, '/assets/survivors/voice-ending-ep02-candidates/' + f.filename);
+  assert.equal(seen.has(f.slot + f.variant), false);
+  seen.add(f.slot + f.variant);
+  assert.equal(f.runtimeIntegrated, false);
+  assert.equal(f.speakerId, null);
+  assert.equal(f.lineId, null);
+  assert.equal(f.approvalStatus, 'awaiting-listening-approval');
+  assert.equal(endings.definition(f.slot), null, 'New authored contract requires a separate runtime mapping review');
+  const bytes = fs.readFileSync(path.join(root, 'public', f.candidateAssetPath));
+  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), f.finalSha256);
+  assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
+  assert.equal(bytes.toString('ascii', 8, 12), 'WAVE');
+  assert.equal(bytes.readUInt32LE(4) + 8, bytes.length);
+  let fmt, data;
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const size = bytes.readUInt32LE(offset + 4), end = offset + 8 + size;
+    assert.ok(end <= bytes.length);
+    const id = bytes.toString('ascii', offset, offset + 4);
+    if (id === 'fmt ') fmt = bytes.subarray(offset + 8, end);
+    if (id === 'data') data = bytes.subarray(offset + 8, end);
+    offset = end + size % 2;
+  }
+  assert.ok(fmt && fmt.length >= 16 && data);
+  assert.equal(fmt.readUInt16LE(0), 1);
+  assert.equal(fmt.readUInt16LE(2), 1);
+  assert.equal(fmt.readUInt32LE(4), 24000);
+  assert.equal(fmt.readUInt32LE(8), 48000);
+  assert.equal(fmt.readUInt16LE(12), 2);
+  assert.equal(fmt.readUInt16LE(14), 16);
+  assert.equal(data.length % 2, 0);
+  const duration = data.length / 48000;
+  assert.equal(duration, f.decodedDurationSeconds);
+  assert.equal(f.timingPass, duration >= f.targetSeconds[0] && duration <= f.targetSeconds[1]);
+  assert.equal(f.timingExcessSeconds, Number(Math.max(0, duration - f.targetSeconds[1]).toFixed(3)));
+  let clipped = 0;
+  for (let i = 0; i < data.length; i += 2) if (Math.abs(data.readInt16LE(i)) >= 32767) clipped++;
+  assert.equal(clipped, f.fullScaleSamples);
+  assert.equal(clipped, 0);
+  assert.ok(Number.isFinite(f.truePeakDbtpMeasured) && f.truePeakDbtpMeasured < 0);
+  if (f.timingPass) timingPasses++;
+}
+for (let i = 6; i <= 10; i++) for (const variant of ['v01', 'v02']) assert.ok(seen.has('CH-' + String(i).padStart(2, '0') + variant));
+console.log(`PASS EP02 candidate integrity: 10 exact WAVs, PCM 24 kHz mono 16-bit, no sample clipping; timing ${timingPasses}/10. Runtime mapping and listening remain pending.`);

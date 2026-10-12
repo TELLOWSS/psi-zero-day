@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EP02 엔딩 음성 비교 청취</title>
+<style>
+body{max-width:960px;margin:40px auto;padding:0 20px;background:#101b21;color:#ecf4f4;font:16px/1.7 system-ui}h1{font-size:28px}section{margin:24px 0;padding:20px;background:#1b2c34;border-radius:12px}.variants{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}audio{width:100%}.pass{color:#96e4b6}.warn{color:#ffcd91}a{color:#9de6d0}p{margin:8px 0}button{background:#9de6d0;color:#101b21;border:0;border-radius:6px;padding:12px;font:inherit}@media(max-width:600px){.variants{grid-template-columns:1fr}}
+</style>
+<h1>EP02 엔딩 음성 비교 청취</h1>
+<p>CH-06~10 · v01 담백한 톤 / v02 조금 더 따뜻한 톤</p>
+<p>제공된 음성 후보를 원본 속도로 재생합니다. 최종 청취와 장면 연결은 미완료입니다.</p>
+<button id="stop" type="button">모두 정지</button>
+<p id="status" role="status">검증 기록을 불러오는 중…</p>
+<main id="list"></main>
+<script type="module">
+const status = document.querySelector('#status'), list = document.querySelector('#list');
+const stop = () => document.querySelectorAll('audio').forEach(a => a.pause());
+document.querySelector('#stop').addEventListener('click', stop);
+document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+try {
+  const response = await fetch('/assets/survivors/voice-ending-ep02-candidates/voice-manifest.json');
+  if (!response.ok) throw new Error('manifest unavailable');
+  const manifest = await response.json();
+  status.textContent = `10개 후보 · 목표 길이 통과 ${manifest.files.filter(f => f.timingPass).length}/10 · 실제 게임 미연결`;
+  const groups = new Map();
+  for (const f of manifest.files) { if (!groups.has(f.slot)) groups.set(f.slot, []); groups.get(f.slot).push(f); }
+  const text = (tag, value, parent) => { const node = document.createElement(tag); node.textContent = value; parent.append(node); return node; };
+  for (const [slot, files] of groups) {
+    const section = document.createElement('section'); list.append(section);
+    text('h2', `${slot} · ${files[0].speaker}`, section);
+    text('p', files[0].exactDialogue, section);
+    const variants = document.createElement('div'); variants.className = 'variants'; section.append(variants);
+    for (const f of files) {
+      const card = document.createElement('div'); variants.append(card);
+      text('h3', f.variant, card);
+      const result = text('p', `${f.decodedDurationSeconds.toFixed(2)}초 / 목표 ${f.targetSeconds.join('~')}초 · ${f.timingPass ? '통과' : `${f.timingExcessSeconds.toFixed(2)}초 초과`}`, card);
+      result.className = f.timingPass ? 'pass' : 'warn';
+      text('p', `실측 ${f.lufsIMeasured.toFixed(2)} LUFS · true peak ${f.truePeakDbtpMeasured.toFixed(2)} dBTP`, card);
+      const audio = document.createElement('audio'); audio.controls = true; audio.preload = 'none'; audio.src = f.candidateAssetPath; audio.setAttribute('aria-label', `${slot} ${f.speaker} ${f.variant}`);
+      audio.addEventListener('play', () => document.querySelectorAll('audio').forEach(other => { if (other !== audio) other.pause(); }));
+      audio.addEventListener('error', () => { status.textContent = `${slot} ${f.variant} 재생 실패. 새로고침 후 다시 시도하세요.`; });
+      card.append(audio);
+      const link = text('a', 'WAV 다운로드', card); link.href = f.candidateAssetPath; link.download = f.filename;
+    }
+  }
+} catch { status.textContent = '음성 목록을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.'; }
+</script>
+</html>
