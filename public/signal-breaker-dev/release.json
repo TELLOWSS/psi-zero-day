@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.46.0-ep02-workshop",
-  "cacheName": "psi-signal-breaker-webpreview-v0.46.0-ep02-workshop",
-  "fingerprint": "766b84b846709f7fce300d68a7b732008c0e7fffcfd02df043c6fe39cfd8d418",
+  "version": "0.46.1-workshop-motion",
+  "cacheName": "psi-signal-breaker-webpreview-v0.46.1-workshop-motion",
+  "fingerprint": "441461d0a417af607d3e38931aa7aa1022313eb5a2babf61b9ea31219df34eb0",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -296,8 +296,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 14792,
-      "sha256": "ff43e332a9047192f05ed86c3af08d21b9c3ebeb94d08499982eeef7a3447631"
+      "bytes": 14839,
+      "sha256": "f22c22143a13f4d6d3b9cbb7ced1d115f722ed192d50213a6f55b923b6c7fae1"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -306,13 +306,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6122,
-      "sha256": "451c1f20ea559d931e8e98dc1745441ae60183d052318d2b9a85da4784db03d3"
+      "bytes": 6124,
+      "sha256": "9b9c6f00e87fcd9432f0d7a16e72d8fdcd7edf826bacd9034d61a7b14918e7d2"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 101421,
-      "sha256": "f0410fea0bfc41d37f8fd014b219b18a8fd65ae7ab09cb6f00f41b536d1872b2"
+      "bytes": 101477,
+      "sha256": "0b856f8ce5c2f77279b9b114815b0e844c1ffbe244fedfcbf948018de37b583a"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -406,8 +406,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 47337,
-      "sha256": "dcd2d7d3133cdc50724f3bc42528d4f86cbd806161967d5c67ccf1367a0ba13f"
+      "bytes": 47680,
+      "sha256": "cfce3204a52e811f016312dd23090e5166f4063bd2f70844e4099fc933c16633"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
@@ -416,8 +416,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.css",
-      "bytes": 5379,
-      "sha256": "7df3d280af928bc95f304d15f4c77041ef6461fc2a96989c746904b874064628"
+      "bytes": 6157,
+      "sha256": "192340dedcaad9dadc0e7d78c83fff68c3333c3ec9be0fb31d9cb5663b401a9e"
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.js",

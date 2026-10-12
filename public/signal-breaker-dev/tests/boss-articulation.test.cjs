@@ -49,3 +49,20 @@ test('CH04 authored housing wear persists across all four restored load tests',(
  b.loadStage=4;b.phase='sealed';assert.equal(art.bossMotion(b,2).wear,.75);b.hp=0;b.phase='resolved';assert.equal(art.bossMotion(b,3).wear,1);
 });
 test('stopped conveyor holds its joint angle and resumes without a jump',()=>{const art=fixture(),b=boss();art.bossMotion(b,0,{direction:1});const at=art.bossMotion(b,1,{direction:1}).phase;assert.equal(art.bossMotion(b,1,{direction:0}).phase,at);assert.equal(art.bossMotion(b,8,{direction:0}).phase,at);assert.equal(art.bossMotion(b,8,{direction:-1}).phase,at);assert.ok(art.bossMotion(b,8.1,{direction:-1}).phase<at);});
+
+
+test('housing opens gradually, pauses at identical simulation time and freezes with reduced motion',()=>{
+ const art=fixture(),b={...boss(),identity:'delivery'};art.bossMotion(b,0);b.phase='exposed';
+ assert.equal(art.bossMotion(b,0).exposure,0);const halfway=art.bossMotion(b,.05).exposure;
+ assert.ok(halfway>0&&halfway<1);assert.equal(art.bossMotion(b,.05).exposure,halfway);
+ art.setReducedMotion(true);assert.equal(art.bossMotion(b,1).exposure,halfway);
+ art.setReducedMotion(false);assert.ok(art.bossMotion(b,1.05).exposure>halfway);
+ b.phase='sealed';const closing=art.bossMotion(b,1.1).exposure;assert.ok(closing>0&&closing<halfway+1);
+});
+test('securing a tension housing holds its actual offset without recentering or late warning jumps',()=>{
+ const art=fixture(),b={...boss(),identity:'tension'};art.bossMotion(b,0);const at=art.bossMotion(b,.3).vibration;
+ assert.notEqual(at,0);assert.equal(art.bossMotion(b,.3,{secured:true}).vibration,at);
+ b.warningUntil=20;assert.equal(art.bossMotion(b,8,{secured:true}).vibration,at);
+ assert.equal(art.bossMotion(b,8,{secured:false}).vibration,at);art.setReducedMotion(true);
+ assert.equal(art.bossMotion(b,9).vibration,0);
+});

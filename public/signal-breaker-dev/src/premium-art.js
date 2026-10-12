@@ -62,7 +62,10 @@ class PremiumArt{
   const direction=options.direction===-1?-1:1,controlled=b.mistUntil>time;
   this.bossClocks=this.bossClocks||new WeakMap();
   let clock=this.bossClocks.get(b);
-  if(!clock||time<clock.time){clock={time,phase:0};this.bossClocks.set(b,clock);}
+  if(!clock||time<clock.time){clock={time,phase:0,exposure:exposed?1:0,warningBlend:warning?1:0};this.bossClocks.set(b,clock);}
+  const dt=Math.max(0,time-clock.time),ease=1-Math.exp(-Math.min(dt,.1)*10);
+  if(!this.reducedMotion)clock.exposure+=((exposed?1:0)-clock.exposure)*ease;
+  if(!stopped)clock.warningBlend+=((warning?1:0)-clock.warningBlend)*ease;
   if(!stopped)clock.phase+=(time-clock.time)*speed*(b.identity==='conveyor'?direction:1)*(b.identity==='extraction'&&controlled?.22:1);
   clock.time=time;
   const phase=clock.phase;
@@ -70,7 +73,7 @@ class PremiumArt{
   const stage=b.gatePhase||b.segment||b.filterStage||b.loadStage||1;
   const wear=sat(((stage-1)+(1-sat(b.maxHp?b.hp/b.maxHp:1)))/stages);
   const impact=this.bossImpact?.identity===b.identity?Math.max(0,1-(this.clock-this.bossImpact.at)/.24):0;
-  return {phase,speed,warning,exposed,wear,impact:this.reducedMotion?0:impact,controlled,direction,stopped};
+  return {phase,speed,warning,exposed,exposure:clock.exposure,vibration:this.reducedMotion?0:Math.sin(phase*3.1)*(.65+clock.warningBlend*1.55),wear,impact:this.reducedMotion?0:impact,controlled,direction,stopped};
  }
  // Move only authored metal within measured component masks; the world footprint stays fixed.
  bossJoints(c,image,b,w,h,m){
@@ -89,7 +92,7 @@ class PremiumArt{
   };
   const a=m.phase;
   if(b.identity==='delivery'){
-   const travel=m.exposed?5:0,v=m.stopped?0:Math.sin(a*2.8)*.7;
+   const travel=m.exposure*5,v=m.stopped?0:Math.sin(a*2.8)*.7;
    slide(.23,.30,.19,.44,-travel,v);slide(.65,.37,.14,.39,travel,-v);
    rotor(.533,.56,.041,a*.22);
   }else if(b.identity==='conveyor'){
@@ -98,11 +101,11 @@ class PremiumArt{
   }else if(b.identity==='extraction'){
    rotor(.488,.642,.070,a*2.1);
   }else if(b.identity==='tension'){
-   const v=m.stopped?0:Math.sin(a*3.1)*(m.warning?2.2:.65);
+   const v=m.vibration;
    slide(.145,.58,.185,.19,0,v);slide(.64,.58,.17,.19,0,-v);
    rotor(.232,.263,.021,a*.55);rotor(.768,.258,.021,-a*.55);
   }else if(b.identity==='grid'){
-   const travel=m.exposed?3:0;
+   const travel=m.exposure*3;
    slide(.477,.456,.040,.177,0,-travel);
    rotor(.128,.555,.040,a*.12);rotor(.883,.555,.040,-a*.12);
   }
