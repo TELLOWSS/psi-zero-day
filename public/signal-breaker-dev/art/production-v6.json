@@ -1,0 +1,29 @@
+{
+  "version": 6,
+  "date": "2026-10-12",
+  "finalVisualLock": false,
+  "method": "image_gen replacement of existing six-tool atlas; WebP94 encoding only, native dimensions and alpha preserved",
+  "assets": [
+    {
+      "path": "breaker-six-tools-ui-v4.webp",
+      "nativeWidth": 1536,
+      "nativeHeight": 1024,
+      "bytes": 420770,
+      "sha256": "468a578794f4530befb6ca2d6bcf6e89ea5e5eb463244e1fe923ad89cf9cc2b5",
+      "format": "RGBA",
+      "grid": [
+        3,
+        2
+      ],
+      "status": "runtime-integrated-production-candidate",
+      "slots": [
+        "pulse",
+        "net",
+        "magnet",
+        "mist",
+        "anchor",
+        "scan"
+      ]
+    }
+  ]
+}

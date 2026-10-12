@@ -54,7 +54,7 @@ class Game {
  const key=[this.wave,this.cleared,this.cores.filter(c=>c.stable).length,this.circuit.filter(n=>n.hit).length,this.boss?.phase,this.boss?.nodes.filter(n=>n.hit).length].join(':');
  if(this.assistProgress.key!==key)this.assistProgress={key,at:this.time};
  const hint=blocked?'blocked':this.time-this.assistProgress.at>=6?'reposition':null;
- return {id:target.id??target.role,x,y,aligned:!blocked&&Math.abs(desired-angle)<.18,role:target.role||'core',blocked,hint};}
+ return {id:target.id??target.role,x,y,aligned:!blocked&&Math.abs(desired-angle)<.18,role:target.role||'core',blocked,hint,moveDirection:hint?(x>=p.x?1:-1):0};}
  addCore(spec){if(this.cores.length>=36)return false;const r=spec.tier===2?31:spec.tier===1?23:14;this.cores.push({id:++this.id,x:spec.x,y:spec.y,vx:spec.vx,vy:spec.vy,r,tier:spec.tier,kind:spec.kind,age:0,glow:0,stable:spec.stable||false,echo:spec.echo===true});return true;}
  event(kind,x=W/2,y=H/2,n=0,material=null){this.events.push({kind,x,y,n,material,t:this.time});if(this.events.length>70)this.events.shift();}
  // Read-only preview uses the same projectile edge/rail collision rules as play.
