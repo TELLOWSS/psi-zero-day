@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-import ts from 'typescript';
-const source=fs.readFileSync('src/domain/psi-operator-profile.ts','utf8');
-const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,newLine:ts.NewLineKind.LineFeed}}).outputText;
-const content='/* Generated from src/domain/psi-operator-profile.ts; run node scripts/build-signal-breaker-operator-profile.mjs --write */\n(function(root,factory){const api=factory();root.PSIOperatorProfile=api;if(typeof module===\"object\"&&module.exports)module.exports=api;})(typeof window!==\"undefined\"?window:globalThis,function(){const exports={};\n'+compiled+'\nreturn exports;});\n';
+import {build} from 'vite';
+const built=await build({configFile:false,publicDir:false,build:{write:false,emptyOutDir:false,outDir:'public/signal-breaker-dev/src',lib:{entry:'src/domain/psi-operator-profile.ts',name:'PSIOperatorProfile',formats:['iife'],fileName:()=> 'operator-profile.js'},minify:false}});
+const result=Array.isArray(built)?built[0]:built;
+const chunk=result.output.find(file=>file.type==='chunk');
+assert.ok(chunk,'Operator runtime build produced no JavaScript chunk');
+const content='/* Generated from src/domain/psi-operator-profile.ts; run node scripts/build-signal-breaker-operator-profile.mjs --write */\n'+chunk.code+'\n(function(root){root.PSIOperatorProfile=PSIOperatorProfile;if(typeof module===\"object\"&&module.exports)module.exports=PSIOperatorProfile;})(typeof window!==\"undefined\"?window:globalThis);\n';
 const target='public/signal-breaker-dev/src/operator-profile.js';
 if(process.argv.includes('--write'))fs.writeFileSync(target,content);
 assert.equal(fs.readFileSync(target,'utf8'),content,'Operator runtime bundle is stale');
