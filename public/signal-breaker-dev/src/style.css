@@ -496,6 +496,6 @@ body.breaker-focus #pulseBtn,body.breaker-focus #netBtn{min-height:58px;padding:
 
 .ending-prepared-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--ending-focus-landscape,50%) 58%;z-index:-2;transition:opacity .22s linear;will-change:opacity}.ending-player[data-motion=still] .ending-prepared-art{transition:none}
 .evolution-kit{display:flex;flex-wrap:wrap;gap:8px}.evolution-kit>p,.evolution-kit>small{flex-basis:100%}.evolution-kit button{flex:1 1 125px;display:grid;gap:5px;min-height:60px;text-align:left}.evolution-kit button small{font-size:10px;line-height:1.45}.evolution-kit button[aria-pressed=true]{background:#165966}.evolution-kit button:disabled{opacity:.45}
-#veteranStatus{position:absolute;right:14px;top:176px;max-width:180px;text-align:right;line-height:1.45;pointer-events:none}
+#veteranStatus{position:absolute;left:auto;right:14px;top:176px;max-width:180px;text-align:right;line-height:1.45;pointer-events:none}
 @media(orientation:portrait){.ending-prepared-art{object-position:var(--ending-focus-portrait,50%) 56%}}
 @media(max-height:500px){#veteranStatus{left:12px;right:auto;top:176px;max-width:185px;font-size:9px;white-space:nowrap}}

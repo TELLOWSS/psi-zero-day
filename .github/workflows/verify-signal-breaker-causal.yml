@@ -60,6 +60,7 @@ jobs:
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
           node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
+          node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
           node public/signal-breaker-dev/scripts/verify-ui-release.cjs
           node public/signal-breaker-dev/scripts/verify-boss-articulation.cjs
           node public/signal-breaker-dev/scripts/verify-causal-source.cjs
