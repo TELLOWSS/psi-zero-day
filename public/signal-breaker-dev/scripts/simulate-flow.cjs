@@ -14,6 +14,10 @@ function simulate(id,seed,profile='roam',limit=180){
    const direction=danger?(danger.x>=g.player.x?-1:1):(Math.sin(g.time*.35)>=0?1:-1);
    g.move(g.player.x<90?1:g.player.x>1010?-1:direction,DT,false,true);
   }
+  if(profile==='guided'&&assist?.hint){
+   const direction=assist.moveDirection;
+   g.move(g.player.x<90?1:g.player.x>1010?-1:direction,DT,false,true);
+  }
   g.update(DT);
   if(g.time>=nextAssist){assist=g.assistAim(true);nextAssist=g.time+.12;}
   if(assist?.aligned)g.fire();

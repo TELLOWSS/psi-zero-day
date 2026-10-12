@@ -21,3 +21,13 @@ test('quiet contact keeps reflection physics and suppresses decorative impact ev
  g.coreMotion(c,0);a.ok(c.vx<0);a.equal(g.events.filter(e=>e.kind==='bumper').length,0);
  c.x=b.x-b.r-13;c.vx=100;g.coreMotion(c,0);a.ok(c.vx<0);a.equal(g.events.filter(e=>e.kind==='bumper').length,1);
 });
+
+test('blocked/stalled guidance exposes a movement direction without moving, firing or resolving a target',()=>{
+ const g=new Game('CH-05');g.start();g.cores=[];g.boss.nodes[0].hit=true;
+ const playerX=g.player.x,shots=g.shotsFired,hits=g.boss.nodes.map(n=>n.hit);
+ let target;for(let i=0;i<10;i++)target=g.assistAim();
+ a.equal(target.hint,'blocked');a.equal(target.moveDirection,target.x>=playerX?1:-1);
+ a.equal(g.player.x,playerX);a.equal(g.shotsFired,shots);a.deepEqual(g.boss.nodes.map(n=>n.hit),hits);
+ g.player.x=1000;for(let i=0;i<10;i++)target=g.assistAim();a.equal(target.blocked,false);
+ g.pause();a.equal(g.assistAim(),null);
+});

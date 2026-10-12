@@ -583,63 +583,60 @@
       "id": "CH-04",
       "frame": "matching",
       "seed": 17,
-      "state": "won",
+      "state": "lost",
       "waves": 5,
-      "time": 198.35,
-      "cleared": 52,
+      "time": 225.08,
+      "cleared": 51,
       "maxUnits": 52,
-      "pickups": 26,
+      "pickups": 25,
       "recipe": null,
-      "life": 3,
-      "shots": 1102,
+      "life": 4,
+      "shots": 1233,
       "waveTimes": [
         42.19,
         50.02,
         24.54,
-        33.32,
-        48.27
+        33.32
       ]
     },
     {
       "id": "CH-04",
       "frame": "matching",
       "seed": 29,
-      "state": "won",
+      "state": "lost",
       "waves": 5,
-      "time": 202.65,
-      "cleared": 52,
+      "time": 224.72,
+      "cleared": 48,
       "maxUnits": 52,
-      "pickups": 26,
+      "pickups": 24,
       "recipe": null,
-      "life": 2,
-      "shots": 1122,
+      "life": 4,
+      "shots": 1222,
       "waveTimes": [
         42.19,
         49.86,
         24.8,
-        32.87,
-        52.93
+        32.87
       ]
     },
     {
       "id": "CH-04",
       "frame": "matching",
       "seed": 43,
-      "state": "won",
+      "state": "lost",
       "waves": 5,
-      "time": 209.52,
-      "cleared": 52,
+      "time": 218.16,
+      "cleared": 47,
       "maxUnits": 52,
-      "pickups": 26,
+      "pickups": 23,
       "recipe": null,
-      "life": 3,
-      "shots": 1133,
+      "life": 4,
+      "shots": 1145,
       "waveTimes": [
         42.19,
         42.19,
         23.23,
-        35.53,
-        66.37
+        35.53
       ]
     },
     {
@@ -648,19 +645,19 @@
       "seed": 17,
       "state": "won",
       "waves": 5,
-      "time": 165.23,
+      "time": 157.64,
       "cleared": 52,
       "maxUnits": 52,
       "pickups": 26,
       "recipe": "prism",
-      "life": 4,
-      "shots": 911,
+      "life": 5,
+      "shots": 831,
       "waveTimes": [
         42.19,
         50.02,
         15.05,
         15.75,
-        42.22
+        34.63
       ]
     },
     {
@@ -669,19 +666,19 @@
       "seed": 29,
       "state": "won",
       "waves": 5,
-      "time": 172.46,
+      "time": 183.73,
       "cleared": 52,
       "maxUnits": 52,
       "pickups": 26,
       "recipe": "prism",
-      "life": 5,
-      "shots": 969,
+      "life": 4,
+      "shots": 1011,
       "waveTimes": [
         42.19,
         49.86,
         13.11,
         20.03,
-        47.27
+        58.55
       ]
     },
     {
@@ -690,19 +687,19 @@
       "seed": 43,
       "state": "won",
       "waves": 5,
-      "time": 179.65,
+      "time": 180.62,
       "cleared": 52,
       "maxUnits": 52,
       "pickups": 26,
       "recipe": "prism",
-      "life": 4,
-      "shots": 950,
+      "life": 5,
+      "shots": 932,
       "waveTimes": [
         42.19,
         42.19,
         14.95,
         18.59,
-        61.72
+        62.69
       ]
     },
     {

@@ -13,8 +13,8 @@ test('online shell refreshes stale cached code; offline shell falls back within 
  w.stored.set('https://game.test/signal-breaker-dev/index.html',w.response('shell'));
  assert.equal((await w.get('https://game.test/signal-breaker-dev/?resume=1',{mode:'navigate'})).label,'shell');
 });
-test('shared complete images reuse cache; range media and unrelated app routes are untouched',async()=>{
- const w=worker(),url='https://game.test/assets/survivors/hero.webp';assert.equal((await w.get(url)).label,'fresh');w.offline();assert.equal((await w.get(url)).label,'fresh');assert.equal(w.requests.length,1);
+test('shared complete images revalidate online and remain available offline; range and unrelated routes are untouched',async()=>{
+ const w=worker(),url='https://game.test/assets/survivors/hero.webp';assert.equal((await w.get(url)).label,'fresh');w.stored.set(url,w.response('stale-art'));assert.equal((await w.get(url)).label,'fresh');w.offline();assert.equal((await w.get(url)).label,'fresh');assert.equal(w.requests.length,3);
  assert.equal(await w.get('https://game.test/assets/survivors/music.mp3',{range:true}),undefined);
  assert.equal(await w.get('https://game.test/another-mode/index.html'),undefined);
 });

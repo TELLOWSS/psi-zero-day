@@ -96,3 +96,26 @@ body.overview-open.breaker-focus .battle-radar{display:block}
 @media (pointer:fine) and (min-width:1000px) and (min-height:700px){
  body.breaker-focus .fire-controls,body.breaker-focus .utility-controls{opacity:.80}
 }
+
+/* Portrait thumb zones: preserve five controls without covering the right movement button. */
+@media(orientation:portrait){
+ body.breaker-focus .move-controls #joystick,body.twin-controls .move-controls #joystick{position:fixed;left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);width:56px;height:56px}
+ body.breaker-focus .move-controls #leftBtn,body.twin-controls .move-controls #leftBtn,body.breaker-focus .move-controls #rightBtn,body.twin-controls .move-controls #rightBtn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);width:44px;height:44px;min-width:44px;min-height:44px;transform:none}
+ body.breaker-focus .move-controls #leftBtn,body.twin-controls .move-controls #leftBtn{left:74px}
+ body.breaker-focus .move-controls #rightBtn,body.twin-controls .move-controls #rightBtn{left:124px}
+ body.breaker-focus #aimPad,body.twin-controls #aimPad{position:fixed;left:auto;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:64px;height:64px;transform:none}
+ body.breaker-focus #fireBtn,body.twin-controls #fireBtn{position:fixed;left:auto;right:82px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:64px;height:64px;transform:none}
+ body.breaker-focus #fireBtn:active,body.twin-controls #fireBtn:active{transform:scale(.96)}
+ body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 266px);bottom:auto;left:12px;transform:none;max-width:calc(100vw - 24px)}
+}
+
+/* Atlas cells are square: preserve native tool proportions at every viewport. */
+.gear-preview{width:90px;height:90px}
+body.breaker-focus .weapon-btn .weapon-icon{width:48px;height:48px}
+body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:78px}
+body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 208px)}
+@media(max-width:600px),(max-height:500px),(orientation:portrait){
+ body.breaker-focus .weapon-btn .weapon-icon{width:39px;height:39px}
+ body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:64px}
+ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 204px)}
+}

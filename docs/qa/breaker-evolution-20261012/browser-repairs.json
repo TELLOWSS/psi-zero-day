@@ -1,0 +1,40 @@
+[
+  {
+    "width": 1920,
+    "height": 1080,
+    "fontMatch": true,
+    "firstAndRepeatEndings": true,
+    "noDuplicateRewards": true,
+    "manualFrameAndEvolution": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "fontMatch": true,
+    "firstAndRepeatEndings": true,
+    "noDuplicateRewards": true,
+    "manualFrameAndEvolution": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "fontMatch": true,
+    "firstAndRepeatEndings": true,
+    "noDuplicateRewards": true,
+    "manualFrameAndEvolution": true
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "fontMatch": true,
+    "firstAndRepeatEndings": true,
+    "noDuplicateRewards": true,
+    "manualFrameAndEvolution": true
+  },
+  {
+    "finale": true,
+    "delayedDecodeFreezesClock": true,
+    "preparedImages": 5,
+    "recallSrcChanges": 0
+  }
+]

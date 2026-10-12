@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../public/',import.meta.url));
+const app=path.join(root,'signal-breaker-dev');
+const worker=fs.readFileSync(path.join(app,'service-worker.js'),'utf8');
+const cacheName=worker.match(/const CACHE = '([^']+)'/)[1];
+const assets=worker.match(/const ASSETS = \[([^\]]+)\]/)[1];
+const paths=new Set(['/signal-breaker-dev/index.html','/signal-breaker-dev/service-worker.js','/signal-breaker-dev/art/production-v6.json']);
+for(const match of assets.matchAll(/'([^']+)'/g))paths.add(new URL(match[1],'https://release.invalid/signal-breaker-dev/').pathname.replace(/\/$/,'/index.html'));
+const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+const files=[...paths].sort().map(url=>{const bytes=fs.readFileSync(path.join(root,url));return {path:url,bytes:bytes.length,sha256:sha(bytes)};});
+const expected={schemaVersion:1,version:'0.45.0-veteran-evolution',cacheName,fingerprint:sha(JSON.stringify(files)),files};
+const target=path.join(app,'release.json');
+if(process.argv.includes('--write'))fs.writeFileSync(target,JSON.stringify(expected,null,2)+'\n');
+assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),expected,'Release metadata is stale; run node scripts/check-signal-breaker-release.mjs --write');
+const remote=process.argv.indexOf('--remote');
+if(remote>=0){
+ const base=new URL(process.argv[remote+1]);
+ const response=await fetch(new URL('release.json',base));assert.equal(response.status,200);
+ const published=await response.json();assert.equal(published.fingerprint,expected.fingerprint,'Remote release differs from the local source snapshot');
+ const results=await Promise.allSettled(expected.files.map(async file=>{const response=await fetch(new URL(file.path,base),{cache:'no-cache'});assert.equal(response.status,200,file.path);assert.equal(sha(Buffer.from(await response.arrayBuffer())),file.sha256,file.path+' remote byte identity');}));
+ for(const result of results)if(result.status==='rejected')throw result.reason;
+ console.log('PASS remote release and all '+files.length+' exact asset hashes: '+base.origin);
+}else console.log('PASS local release '+expected.version+'; '+files.length+' asset hashes; '+expected.fingerprint.slice(0,12));
