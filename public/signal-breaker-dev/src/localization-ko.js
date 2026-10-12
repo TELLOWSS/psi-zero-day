@@ -1,5 +1,7 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+"breaker.veteran.name":"숙련 작전","breaker.veteran.enter":"숙련 작전 6~10 · 5 클리어 후 해금","breaker.veteran.back":"입문 작전 1~5로 돌아가기","breaker.evolution.status":"획득 부품","breaker.evolution.requirement":"부품 5개 확보 후 진화 선택 · 보조 장비도 함께 장착 · 아래 튜닝을 선택해 출발","breaker.evolution.frame.help":"전격: 분진·전력 상성 / 레이저: 금속·하중 상성 · 정비에서 조합 진화","breaker.evolution.arc.name":"전격 코일","breaker.evolution.laser.name":"정밀 레이저","breaker.evolution.storm.name":"폭풍 회로 · 전격+미스트","breaker.evolution.singularity.name":"특이점 코일 · 전격+자력","breaker.evolution.prism.name":"프리즘 관통 · 레이저+스캔","breaker.evolution.plasma.name":"플라즈마 회수 · 레이저+포획망","breaker.evolution.arc.desc":"전격 코일 · 숙련 위험체 장갑 해소","breaker.evolution.laser.desc":"정밀 레이저 · 숙련 위험체 장갑 해소","breaker.evolution.storm.desc":"폭풍 회로 · 전격+미스트 · 숙련 위험체 장갑 해소","breaker.evolution.singularity.desc":"특이점 코일 · 전격+자력 · 숙련 위험체 장갑 해소","breaker.evolution.prism.desc":"프리즘 관통 · 레이저+스캔 · 숙련 위험체 장갑 해소","breaker.evolution.plasma.desc":"플라즈마 회수 · 레이저+포획망 · 숙련 위험체 장갑 해소",
+
 'breaker.ending.signal.received':'SIGNAL RECEIVED · 신호를 받았습니다',
 'breaker.ending.finale.title':'오늘도 무사히.',
 'breaker.ending.ch01.speaker':'임준호 · 신입근로자',

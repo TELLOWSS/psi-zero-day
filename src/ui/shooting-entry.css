@@ -195,3 +195,7 @@
 
 /* Landscape entry art keeps the helmet visible in the shallow card. */
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .is-survivors-entry .commercial-title-action-art{object-position:70% 28%!important}
+
+/* Shared production typography for both live mode cards. */
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-copy .commercial-title-mode-title{font-family:'Pretendard',sans-serif!important;font-size:clamp(19px,2.5vw,29px)!important;font-weight:800!important;letter-spacing:-.035em!important;line-height:1.25!important;color:#effff8!important;display:block!important;margin:0!important}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-copy .breaker-brand-line{display:block;font-family:'Pretendard',sans-serif;font-style:normal;font-size:10px;font-weight:700;line-height:1.5;letter-spacing:.16em;color:#a9e9d5;margin-bottom:6px}

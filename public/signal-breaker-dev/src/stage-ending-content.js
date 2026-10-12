@@ -61,11 +61,11 @@
      intervention:{kind:counter,count:Number.isSafeInteger(game.boss[counter])&&game.boss[counter]>=0?game.boss[counter]:0}},
     indicators:{riskAwareness:'game-evidence',educationUnderstanding:'unmeasured',practicalParticipation:'game-evidence',ppeCompliance:'unmeasured',communicationReporting:'unmeasured',stopWorkSensitivity:'unmeasured'}};
   }
-  if(!game.source?.observed||!game.source?.controlled||!game.source?.verified)return null;
+  const source=game.source||game.sourceEvidence;if(!source?.observed||!source?.controlled||!source?.verified)return null;
   return {version:VERSION,id:VERSION+':CH-01:'+game.seed+':'+runSerial,stageId:'CH-01',
    origin:'game',measurementKind:'simulated',externalSync:false,
-   evidence:{observed:game.source.observed===true,controlled:game.source.controlled===true,
-    verified:game.source.verified===true,recurrences:game.source.emissions,
+   evidence:{observed:source.observed===true,controlled:source.controlled===true,
+    verified:source.verified===true,recurrences:source.emissions,
     bossResolved:true,residualSignals:0},
    indicators:{riskAwareness:'game-evidence',educationUnderstanding:'unmeasured',
     practicalParticipation:'game-evidence',ppeCompliance:'unmeasured',
