@@ -417,7 +417,13 @@ class PremiumArt{
   if(warning){c.setLineDash([5,6]);c.beginPath();c.arc(0,0,q.r+8,0,Math.PI*2);c.stroke();}
   c.restore();return true;
  }
- pickup(c,p,time){const type=p.type||'power',color=type==='watch'?'#b8d4ff':type==='charge'?'#ffdc89':'#a9f5d8';c.save();c.translate(p.x,p.y);if(!this.reducedMotion)c.translate(0,Math.sin(time*4+p.id)*2);c.shadowBlur=this.quality==='low'?0:12;c.shadowColor=color;const metal=c.createLinearGradient(-13,-13,13,13);metal.addColorStop(0,'#76908d');metal.addColorStop(.28,'#243b43');metal.addColorStop(.7,'#0c252e');metal.addColorStop(1,'#8da49a');path(c,[[-9,-13],[9,-13],[14,-8],[14,8],[9,13],[-9,13],[-14,8],[-14,-8]],metal,color,1.6);c.shadowBlur=0;disk(c,0,0,9,'#082128',color,1);c.fillStyle=color;c.font='800 12px system-ui';c.textAlign='center';c.fillText(type==='watch'?'W':type==='charge'?'C':'P',0,4);line(c,-6,-11,6,-11,'#eefaf1',1);c.restore();}
+ supplySprite(c,kind,x,y,size){
+  if(!this.supplyAtlas&&root.PSIPresentationAssets)this.supplyAtlas=root.PSIPresentationAssets.image('art/psi-supply-atlas-v1.webp');
+  const image=this.supplyAtlas,cell=['source','power','charge','watch'].indexOf(kind);
+  if(cell<0||!image?.complete||!image.naturalWidth)return false;
+  const w=image.naturalWidth/2,h=image.naturalHeight/2;c.drawImage(image,(cell%2)*w,Math.floor(cell/2)*h,w,h,x-size/2,y-size/2,size,size);this.supplyKinds=this.supplyKinds||new Set();this.supplyKinds.add(kind);return true;
+ }
+ pickup(c,p,time){const type=p.type||'power';if(this.supplySprite(c,type,p.x,p.y+(this.reducedMotion?0:Math.sin(time*4+p.id)*2),34))return;const color=type==='watch'?'#b8d4ff':type==='charge'?'#ffdc89':'#a9f5d8';c.save();c.translate(p.x,p.y);if(!this.reducedMotion)c.translate(0,Math.sin(time*4+p.id)*2);c.shadowBlur=this.quality==='low'?0:12;c.shadowColor=color;const metal=c.createLinearGradient(-13,-13,13,13);metal.addColorStop(0,'#76908d');metal.addColorStop(.28,'#243b43');metal.addColorStop(.7,'#0c252e');metal.addColorStop(1,'#8da49a');path(c,[[-9,-13],[9,-13],[14,-8],[14,8],[9,13],[-9,13],[-14,8],[-14,-8]],metal,color,1.6);c.shadowBlur=0;disk(c,0,0,9,'#082128',color,1);c.fillStyle=color;c.font='800 12px system-ui';c.textAlign='center';c.fillText(type==='watch'?'W':type==='charge'?'C':'P',0,4);line(c,-6,-11,6,-11,'#eefaf1',1);c.restore();}
 
  core(c,q,time){
  if(!this.coreAtlas?.complete||!this.coreAtlas.naturalWidth)return false;

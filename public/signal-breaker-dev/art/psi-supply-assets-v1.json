@@ -1,0 +1,18 @@
+{
+  "source": "public/signal-breaker-dev/art/psi-supply-atlas-v1.webp",
+  "tool": "built-in image_gen",
+  "status": "runtime-integrated-final-candidate-pending-director-review",
+  "width": 1254,
+  "height": 1254,
+  "grid": [
+    2,
+    2
+  ],
+  "slots": [
+    "source",
+    "power",
+    "charge",
+    "watch"
+  ],
+  "sha256": "1eb1b975e9dd537dbcaeee54b27e291be01a0f7d275fbcb556e931cbb88cb525"
+}
