@@ -1,0 +1,61 @@
+/* Final layout authority: HUD and controls occupy reserved rails, never live canvas pixels. */
+body.breaker-focus{--battle-top:48px;--battle-status:84px;--battle-bottom:184px}
+#battleTopRail,#battleStatusRail,#battleControlRail{position:fixed;left:0;right:0;z-index:9;box-sizing:border-box;background:#071c27}
+#battleTopRail{top:0;height:calc(var(--battle-top) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 6px 0;display:flex;align-items:center;gap:5px}
+#battleTopRail .hud-top{position:static!important;transform:none!important;flex:1;min-width:0;height:44px!important;min-height:44px;padding:3px 9px!important;gap:8px!important;border-radius:0;background:transparent}
+#battleTopRail .hud-top::before{border-image-width:6px}
+#battleTopRail .hud-block:has(#score),#battleTopRail .hud-divider{display:none}
+#battleTopRail .shield-hud{position:static!important;display:flex!important}
+#battleTopRail .health{gap:2px}#battleTopRail .health .heart{width:12px;height:16px}
+#battleTopRail #pauseBtn{position:static!important;width:44px;height:44px;min-height:44px!important;min-width:44px;margin:0 0 0 auto!important}
+#battleTopRail .hud-label{font-size:8px}#battleTopRail strong{font-size:12px}
+#battleTopRail #guideBtn,#battleTopRail #exitBtn{position:static!important;transform:none;flex-shrink:0;min-width:44px;min-height:44px;padding:4px 6px;font-size:10px;border:1px solid #68b6b585;border-radius:8px;background:#102e3a;color:#dcf9f0;display:grid;place-items:center;box-sizing:border-box}
+#battleStatusRail{top:calc(var(--battle-top) + env(safe-area-inset-top,0px));height:var(--battle-status);padding:3px 10px;border-bottom:1px solid #4e8e9270}
+#lessonProgress{margin:0;color:#c6e9dc;font-size:10px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#battleSummary{display:flex;align-items:center;gap:5px;height:24px;min-width:0;overflow:hidden}
+#battleSummary #bossEncounter,#battleSummary #veteranStatus,#battleSummary #signalObjective,#battleSummary #itemStatus,#battleSummary #hudBottom{position:static!important;transform:none!important;top:auto;left:auto;right:auto;bottom:auto;min-width:0;width:auto;max-width:none;height:auto;min-height:0;margin:0;padding:2px 4px;font-size:9px;line-height:14px;background:#102e3aa8;border-radius:3px;box-shadow:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+#battleSummary #bossEncounter::before{display:none}
+#battleSummary #bossEncounter .boss-encounter-title{font-size:9px;gap:4px}
+#battleSummary #bossEncounterName{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#battleSummary .boss-encounter-track{height:2px;margin-top:0}
+#battleSummary #hudBottom{flex:0 0 58px;font-size:9px;padding:1px;max-width:58px}
+#battleSummary #hudBottom .stage-time,#battleSummary #hudBottom .gate-meta{display:none}
+#battleSummary #itemStatus[hidden],#battleSummary #veteranStatus[hidden],#battleSummary #signalObjective[hidden]{display:none!important}
+#battleMessages{height:34px;overflow:hidden}
+#battleMessages #assistHint,#battleMessages #chainGuide,#battleMessages #toast,#battleMessages #radioLine{position:static!important;transform:none!important;top:auto;left:auto;right:auto;bottom:auto;width:auto;max-width:none;min-width:0;margin:0;padding:2px 0;font-size:11px;line-height:15px;text-align:left;background:transparent;border:0;border-radius:0;box-shadow:none;white-space:normal}
+#battleMessages #toast{display:none}#battleMessages #toast.visible{display:block}
+#battleMessages #assistHint[hidden],#battleMessages #radioLine[hidden]{display:none!important}
+body.breaker-focus .canvas-wrap{position:fixed!important;inset:calc(var(--battle-top) + var(--battle-status) + env(safe-area-inset-top,0px)) 0 calc(var(--battle-bottom) + env(safe-area-inset-bottom,0px))!important;width:auto!important;height:auto!important}
+#battleControlRail{bottom:0;height:calc(var(--battle-bottom) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px solid #4e8e9270}
+#battleControlRail .touch-controls{position:absolute;inset:0;pointer-events:none}
+#battleControlRail .utility-controls{position:absolute!important;left:50%!important;right:auto!important;bottom:calc(128px + env(safe-area-inset-bottom,0px))!important;top:auto;transform:translateX(-50%)!important;display:flex;flex-wrap:nowrap;width:max-content;max-width:calc(100vw - 18px);gap:4px;overflow-x:auto;pointer-events:auto}
+#battleControlRail .utility-controls button{min-height:44px!important;height:44px;min-width:48px;max-width:90px;font-size:10px;padding:3px 5px}
+#battleControlRail #conveyorBtn:disabled{display:none}
+#battleControlRail .fire-controls{position:absolute!important;left:50%!important;right:auto!important;bottom:calc(64px + env(safe-area-inset-bottom,0px))!important;transform:translateX(-50%)!important;gap:5px;padding:3px;max-width:calc(100vw - 20px);height:59px}
+#battleControlRail .fire-controls .weapon-btn{min-height:52px!important;height:52px!important;min-width:52px;width:58px!important;max-width:64px;flex:0 0 58px!important;font-size:10px}
+#battleControlRail .weapon-icon{width:30px!important;height:30px!important}
+#battleControlRail #joystick{position:fixed!important;left:10px!important;bottom:calc(14px + env(safe-area-inset-bottom,0px))!important;width:56px!important;height:56px!important}
+#battleControlRail #leftBtn,#battleControlRail #rightBtn{position:fixed!important;bottom:calc(20px + env(safe-area-inset-bottom,0px))!important;width:44px;height:44px;min-height:44px!important;min-width:44px;transform:none!important}
+#battleControlRail #leftBtn{left:74px!important}#battleControlRail #rightBtn{left:124px!important}
+#battleControlRail #fireBtn,#battleControlRail #aimPad{position:fixed!important;left:auto!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;width:64px!important;height:64px!important;min-height:64px!important;transform:none!important}
+#battleControlRail #fireBtn{right:82px!important}#battleControlRail #aimPad{right:10px!important}
+#battleControlRail #viewBtn{position:absolute!important;top:3px!important;left:8px;right:auto!important;bottom:auto!important;min-height:44px;font-size:9px;padding:4px;max-width:90px;display:none}
+#battleControlRail #boostBtn{position:absolute!important;top:3px!important;left:auto!important;right:8px!important;bottom:auto!important;min-height:44px;font-size:9px;max-width:90px}
+body.breaker-focus #overlay{position:fixed;inset:0;z-index:30}
+body.breaker-focus .overlay-inner{max-height:calc(100dvh - 20px);overflow:auto}
+.practice-entry{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}.practice-entry button{min-height:44px;padding:8px 14px;border:1px solid #89bfc0;border-radius:8px;background:#143d48;color:#e8fff5;font:inherit;cursor:pointer}.practice-entry p{width:100%;font-size:12px;margin:0;color:#b7d5d0}
+.operator-growth{font-size:13px;color:#bff1dd}.guide-dialog .shop-scroll{line-height:1.7}.guide-dialog .shop-scroll p{font-size:14px}
+@media(orientation:landscape){body.breaker-focus{--battle-top:44px;--battle-status:68px;--battle-bottom:84px}
+ #battleStatusRail #lessonProgress{line-height:15px;font-size:9px}#battleSummary{height:20px}#battleMessages{height:28px}
+ #battleMessages #assistHint,#battleMessages #chainGuide,#battleMessages #toast,#battleMessages #radioLine{font-size:10px;line-height:13px}
+ #battleControlRail .utility-controls{left:176px!important;right:320px!important;bottom:calc(18px + env(safe-area-inset-bottom,0px))!important;transform:none!important;width:auto;max-width:none;justify-content:flex-start}
+ #battleControlRail .utility-controls button{flex:0 0 auto;max-width:72px}
+ #battleControlRail .fire-controls{left:auto!important;right:154px!important;bottom:calc(12px + env(safe-area-inset-bottom,0px))!important;transform:none!important;height:58px}
+ #battleControlRail .fire-controls .weapon-btn{width:52px!important;flex-basis:52px!important;min-width:52px}
+ #battleControlRail #boostBtn{top:0!important;left:176px!important;right:auto!important;min-height:14px;height:16px;font-size:8px;padding:0 4px}
+}
+@media(min-width:1000px) and (min-height:700px){body.breaker-focus{--battle-bottom:100px;--battle-status:72px}#battleControlRail .fire-controls{bottom:18px!important}#battleControlRail .utility-controls{bottom:22px!important}}
+@media(max-width:350px){#battleTopRail .health .heart{width:8px;height:12px}#battleTopRail strong{font-size:10px}#battleTopRail .hud-top{gap:4px!important;padding:3px 4px!important}#battleTopRail .hud-label{font-size:7px}#battleTopRail #exitBtn{max-width:44px}#battleControlRail #boostBtn{max-width:64px;right:2px!important;font-size:8px}}
+@media(prefers-reduced-motion:reduce){#battleTopRail *,#battleStatusRail *{transition:none}}
+
+#battleTopRail #stageCode i{display:none}#battleTopRail .hud-block{min-width:0;flex-shrink:1}
