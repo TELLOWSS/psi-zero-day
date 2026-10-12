@@ -459,3 +459,22 @@ body.ending-open{overflow:hidden}
 @media(orientation:landscape) and (max-height:500px){.ending-actor{width:25vw;right:5%}.ending-player[data-actor=visible][data-shot=human] .ending-copy{max-width:62%}}
 
 .ending-player[data-shot=human] .ending-line{word-break:keep-all;overflow-wrap:break-word}
+
+/* Short landscape encounters reserve the left lane for information and keep relays unobstructed. */
+@media(orientation:landscape) and (max-height:600px){
+ body.breaker-focus[data-boss-framing="landscape"] .boss-encounter{left:12px;transform:none;width:min(260px,32vw)}
+ body.breaker-focus[data-boss-framing="landscape"] .burst-boost{top:88px}
+ body.breaker-focus[data-boss-framing="landscape"] #itemStatus{left:12px;top:138px;transform:none}
+ body.breaker-focus[data-boss-framing="landscape"] .chain-guide{left:12px;top:170px;transform:none;max-width:260px}
+ body.breaker-focus[data-boss-framing="landscape"] .radio-line{left:12px;top:202px;transform:none;max-width:260px}
+ body.breaker-focus[data-boss-framing="landscape"] .toast{left:12px;top:238px;transform:none;max-width:260px}
+}
+
+@media(orientation:portrait){
+ body.breaker-focus[data-boss-framing] .burst-boost{top:calc(env(safe-area-inset-top,0px) + 174px)}
+ body.breaker-focus[data-boss-framing] #itemStatus{left:12px;top:calc(env(safe-area-inset-top,0px) + 226px);transform:none;max-width:calc(100vw - 24px)}
+}
+@media(orientation:landscape) and (max-height:370px){
+ body.breaker-focus[data-boss-framing="landscape"] .radio-line{top:164px}
+ body.breaker-focus[data-boss-framing="landscape"] .toast{display:none}
+}

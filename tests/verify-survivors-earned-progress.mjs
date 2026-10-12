@@ -1,3 +1,4 @@
+import { openSurvivorsStagePreview } from '../scripts/survivors-stage-preview-qa.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -30,17 +31,17 @@ try {
     await page.goto(url);
     const enter = () => page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
     await enter();
-    const preview = page.locator('.survivors-stage-preview');
-    await preview.waitFor();
+    const preview = await openSurvivorsStagePreview(page);
     const expected = '/assets/survivors/excavation-ground-v3.webp';
     if (await preview.getAttribute('src') !== expected) throw new Error('Earned next stage was not prepared');
+    await page.getByRole('button', { name: '작전 준비', exact: true }).click();
     await page.getByRole('button', { name: copy.shopEntry, exact: true }).click();
     const balance = page.locator('.survivors-toolbar-wallet');
     if (!(await balance.textContent()).includes(`${wallet.credits.toLocaleString('en-US')} PSI`)) throw new Error('Earned wallet mismatch');
     await page.screenshot({ path: `${output}/${width}x${height}.png` });
     await page.reload();
     await enter();
-    await preview.waitFor();
+    await openSurvivorsStagePreview(page);
     if (await preview.getAttribute('src') !== expected) throw new Error('Reload lost next stage');
     const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('psi.survivors.store_wallet')));
     if (JSON.stringify(restored) !== JSON.stringify(wallet)) throw new Error('Reload changed earned wallet');

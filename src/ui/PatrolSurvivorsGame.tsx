@@ -2085,7 +2085,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       for(const marker of [tactics?.pendingSupport,tactics?.handoff])if(marker) {
         ctx.save();ctx.strokeStyle=marker===tactics?.handoff?'#86efac':'#7dd3fc';ctx.lineWidth=2;
         ctx.beginPath();ctx.ellipse(marker.x,marker.y,marker===tactics?.handoff?72:38,marker===tactics?.handoff?72:18,0,0,Math.PI*2);ctx.stroke();
-        ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2edf4';
+        ctx.font='bold 11px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2edf4';
         ctx.fillText(`${marker===tactics?.handoff?tacticsText.hold:tacticsText.support_wait} ${Math.ceil(marker.remaining)}s`,marker.x,marker.y-45);ctx.restore();
       }
 
@@ -2119,7 +2119,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.setLineDash([]);
 
       // Safety Walkway Stencil Markings
-      ctx.font = 'bold 13px sans-serif';
+      ctx.font = 'bold 13px Pretendard, sans-serif';
       ctx.fillStyle = 'rgba(34, 197, 94, 0.16)';
       ctx.textAlign = 'center';
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
@@ -2219,7 +2219,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.beginPath();ctx.ellipse(mark.x,mark.y,radius,radius*.4,0,0,Math.PI*2);ctx.stroke();
           ctx.beginPath();ctx.moveTo(mark.x-5,mark.y);ctx.lineTo(mark.x-1,mark.y+3);ctx.lineTo(mark.x+6,mark.y-4);ctx.stroke();
         }else{
-          ctx.font=mark.kind==='finish'?'bold 15px sans-serif':'13px sans-serif';ctx.textAlign='center';
+          ctx.font=mark.kind==='finish'?'bold 15px Pretendard, sans-serif':'13px sans-serif';ctx.textAlign='center';
           const label=mark.kind==='finish'?materialFeelText.cleared:pleasureText.group.replace('{count}',String(mark.count));
           const labelY=mark.y-(mark.kind==='finish'?70:44)-(reducedMotionRef.current?0:progress*8);
           ctx.globalAlpha=Math.min(1,(1-progress)*4);ctx.strokeStyle='#10251f';ctx.lineWidth=3;
@@ -2243,7 +2243,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if(marker){
           const crewArt=spritesRef.current.workerV2;
           if(crewArt?.naturalWidth){ctx.save();ctx.translate(marker.x+42,marker.y+28);drawGroundedSprite(ctx,crewArt,72,motions.sample(fieldCase,marker.x+42,marker.y+28,engine.state.gameTime));ctx.restore();}
-          ctx.save();ctx.strokeStyle='#f3c778';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(marker.x+42,marker.y+28,14,6,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#f3c778';ctx.font='13px sans-serif';ctx.textAlign='center';ctx.fillText(accountabilityText.worker,marker.x+42,marker.y-55);ctx.restore();}
+          ctx.save();ctx.strokeStyle='#f3c778';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(marker.x+42,marker.y+28,14,6,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#f3c778';ctx.font='13px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillText(accountabilityText.worker,marker.x+42,marker.y-55);ctx.restore();}
       }
       // Resolved workers leave the risk area along the safety corridor.
       for (const worker of engine.state.resolvedWorkers ?? []) {
@@ -2259,7 +2259,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
         }
         ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(worker.x, worker.y - 61, 7, Math.PI, 0); ctx.fill();
-        ctx.font = 'bold 10px sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
+        ctx.font = 'bold 10px Pretendard, sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
         ctx.fillText('안전통로 이동', worker.x, worker.y - 65); ctx.restore();
       }
 
@@ -2286,7 +2286,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fill();
 
           // APPROVED stamp text
-          ctx.font = 'bold 9px sans-serif';
+          ctx.font = 'bold 9px Pretendard, sans-serif';
           ctx.fillStyle = '#10b981';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -2370,7 +2370,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.arc(0, 0, 48, 0, Math.PI * 2);
         ctx.stroke();
         // Big "H" (Helicopter / Evacuation mark)
-        ctx.font = 'bold 36px sans-serif';
+        ctx.font = 'bold 36px Pretendard, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = inside ? '#10b981' : '#f59e0b';
@@ -2496,7 +2496,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawProp(ctx,spritesRef.current.itemsAtlas,7,h.x,h.y,48);
 
             // Zone tag
-            ctx.font = 'bold 10px sans-serif';
+            ctx.font = 'bold 10px Pretendard, sans-serif';
             ctx.fillStyle = '#fbbf24';
             ctx.textAlign = 'center';
             ctx.fillText(combatText.light_zone, h.x, h.y - 56);
@@ -2515,7 +2515,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.lineWidth = 3;
             ctx.stroke();
 
-            ctx.font = 'bold 10px sans-serif';
+            ctx.font = 'bold 10px Pretendard, sans-serif';
             ctx.fillStyle = '#d97706';
             ctx.textAlign = 'center';
             ctx.fillText(combatText.mud_zone, h.x, h.y);
@@ -2540,7 +2540,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.fill();
 
               ctx.setLineDash([]);
-              ctx.font = 'bold 12px sans-serif';
+              ctx.font = 'bold 12px Pretendard, sans-serif';
               ctx.fillStyle = '#ef4444';
               ctx.textAlign = 'center';
               ctx.fillText(`양중 경고 · 통제 필요 ${h.timer.toFixed(1)}s`, h.x, h.y);
@@ -2555,7 +2555,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.strokeStyle = '#ef4444';
               ctx.lineWidth = 3;
               ctx.strokeRect(h.x - 45, h.y - 30, 90, 60);
-              ctx.font = 'bold 11px sans-serif';
+              ctx.font = 'bold 11px Pretendard, sans-serif';
               ctx.fillStyle = '#f87171';
               ctx.textAlign = 'center';
               ctx.fillText('위험구역 접근 금지', h.x, h.y + 4);
@@ -2566,7 +2566,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.beginPath();
               ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
               ctx.stroke();
-              ctx.font = '9px sans-serif';
+              ctx.font = '9px Pretendard, sans-serif';
               ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
               ctx.textAlign = 'center';
               ctx.fillText(h.state === 'cooldown' ? '작업 정지·구역 통제' : '양중 작업반경', h.x, h.y);
@@ -2581,7 +2581,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             if (h.state === 'active') {
               ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 3; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 50, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-              ctx.font = 'bold 11px sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
+              ctx.font = 'bold 11px Pretendard, sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
               ctx.fillText('위험원 격리 완료', h.x, h.y - 58);
             } else if (h.state === 'warning') {
               const pulse = (Math.sin(time / 50) + 1) * 0.5;
@@ -2590,7 +2590,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.arc(h.x, h.y, h.radius + pulse * 4, 0, Math.PI * 2);
               ctx.stroke();
 
-              ctx.font = 'bold 11px sans-serif';
+              ctx.font = 'bold 11px Pretendard, sans-serif';
               ctx.fillStyle = '#ffffff';
               ctx.textAlign = 'center';
               ctx.fillText('격리·대피 진행', h.x, h.y - h.radius - 8);
@@ -2613,7 +2613,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             if (h.state === 'active') {
               ctx.strokeStyle = '#86efac'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 200, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-              ctx.font = 'bold 11px sans-serif'; ctx.fillStyle = '#86efac';
+              ctx.font = 'bold 11px Pretendard, sans-serif'; ctx.fillStyle = '#86efac';
               ctx.fillText('전원 차단 · 구역 격리', h.x, h.y - 36);
             }
             ctx.restore();
@@ -2703,7 +2703,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fillStyle='rgba(8,16,28,.7)';ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.fill();
           ctx.strokeStyle=meta?.color ?? (drop.isHeal?'#34d399':'#7dd3fc');ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.stroke();
           drawProp(ctx,spritesRef.current.itemsAtlas,meta?.atlasCell ?? (drop.isHeal?1:0),0,1,size);
-          if(drop.itemKind){ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
+          if(drop.itemKind){ctx.font='bold 10px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
           ctx.restore();
         } else if (item.kind === 'hazard') {
           const h = item.data;
@@ -2733,12 +2733,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
           }
           if (h.motion?.phase === 'warning' && h === closestWarning) {
-            ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+            ctx.font = 'bold 12px Pretendard, sans-serif'; ctx.textAlign = 'center';
             ctx.lineWidth = 4; ctx.strokeStyle = '#111827'; ctx.fillStyle = '#fef3c7';
             const warning = h.isStageBoss?bossText.warning[h.type]:h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
             const label=warningLabelLayout({x:h.x,y:h.y+h.radius+40},ctx.measureText(warning).width,
               {x:camX,y:camY,width:viewW,height:viewH,zoom:baseZoom});
-            ctx.font=`bold ${12*label.fontScale}px sans-serif`;
+            ctx.font=`bold ${12*label.fontScale}px Pretendard, sans-serif`;
             ctx.strokeText(warning,label.x-h.x,label.y-h.y);ctx.fillText(warning,label.x-h.x,label.y-h.y);
           }
           if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning' && h.motion.timer > .3) {
@@ -2793,7 +2793,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             // 3D Billboard Floating Alert Badge
             const alertPulse = Math.sin(time / 200) > 0;
-            ctx.font = 'bold 11px sans-serif';
+            ctx.font = 'bold 11px Pretendard, sans-serif';
             ctx.fillStyle = alertPulse ? '#ef4444' : '#f59e0b';
             ctx.textAlign = 'center';
             ctx.fillText('⚠ 안전모 미착용', 0, -88);
@@ -2915,11 +2915,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.restore();
 
             // Industrial Gas Warning Label
-            ctx.font = 'bold 11px sans-serif';
+            ctx.font = 'bold 11px Pretendard, sans-serif';
             ctx.fillStyle = '#fef08a';
             ctx.textAlign = 'center';
             ctx.fillText(combatText.gas_warning, 0, -h.radius * 0.5);
-            ctx.font = '9px sans-serif';
+            ctx.font = '9px Pretendard, sans-serif';
             ctx.fillStyle = '#86efac';
 
           } else if (h.type === 'CRANE_BOSS') {
@@ -2997,7 +2997,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
 
             // Boss Hazard Title Tag
-            ctx.font = 'bold 12px sans-serif';
+            ctx.font = 'bold 12px Pretendard, sans-serif';
             ctx.fillStyle = '#f87171';
             ctx.textAlign = 'center';
             if (h === closestCrane && (!h.isStageBoss || displayW > 900)) {
@@ -3011,7 +3011,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const materialBoss=!!(h.isStageBoss&&spritesRef.current.materialBosses?.[h.type as keyof MaterialBossImages]?.naturalWidth);
           const hazardPlacement=industrialHazardPlacement(h,h.type==='FALLING_DEBRIS'?debrisElevation(h.motion?.phase??'fall',h.motion?.timer??0):0,materialBoss);
           if(h.variant){
-            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle=h.variant==='pulse_gas'?'#a7f3d0':'#f8d477';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px Pretendard, sans-serif';ctx.fillStyle=h.variant==='pulse_gas'?'#a7f3d0':'#f8d477';ctx.strokeStyle='#111827';ctx.lineWidth=3;
             if(!h.isStageBoss||displayW>900){
               const labelY=hazardPlacement.y-hazardPlacement.size*.82-24;
               ctx.strokeText(challengeText.variants[h.variant],0,labelY);ctx.fillText(challengeText.variants[h.variant],0,labelY);
@@ -3022,12 +3022,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           const workfaceIdentity=workfaceAtlas?.naturalWidth?workfaceThreatAppearance(h,stage.stageNumber):undefined;
           if(workfaceIdentity&&(hazards.length<15||h===closestWarning)){
-            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#b4f3d9';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px Pretendard, sans-serif';ctx.fillStyle='#b4f3d9';ctx.strokeStyle='#111827';ctx.lineWidth=3;
             const text=workfaceThreatCopy(stage.stageNumber)!.name,labelY=hazardPlacement.y-hazardPlacement.size*.82-24-(h.behavior?16:0);
             ctx.strokeText(text,0,labelY);ctx.fillText(text,0,labelY);ctx.restore();
           }
           if(h.behavior){
-            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#a5f3fc';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px Pretendard, sans-serif';ctx.fillStyle='#a5f3fc';ctx.strokeStyle='#111827';ctx.lineWidth=3;
             const labelY=hazardPlacement.y-hazardPlacement.size*.82-24;
             ctx.strokeText(threatText.behaviors[h.behavior],0,labelY);ctx.fillText(threatText.behaviors[h.behavior],0,labelY);
             ctx.restore();
@@ -3063,7 +3063,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.moveTo(-rLen, 0); ctx.lineTo(rLen, 0);
             ctx.moveTo(0, -rLen); ctx.lineTo(0, rLen);
             ctx.stroke();
-            ctx.font = '900 11px sans-serif';
+            ctx.font = '900 11px Pretendard, sans-serif';
             ctx.textAlign = 'center';
             ctx.fillStyle = '#fde047';
             ctx.strokeStyle = '#000000';
@@ -3103,14 +3103,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (kit && kit.remaining > 0 && kit.charges > 0) {
             ctx.strokeStyle='#4ade80';ctx.lineWidth=3;ctx.setLineDash([8,5]);
             ctx.beginPath();ctx.ellipse(0,4,36,16,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
-            ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#86efac';
+            ctx.font='bold 11px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle='#86efac';
             ctx.fillText(`${itemText.kit_status} ${kit.charges} · ${Math.ceil(kit.remaining)}s`,0,38);
           }
           const buffs=[engine.state.fieldRecovery?`${itemText.recovery_status} · ${Math.ceil(engine.state.fieldRecovery.remaining)}s`:null,engine.state.routeLantern?`${itemText.route_status} · ${Math.ceil(engine.state.routeLantern.remaining)}s`:null].filter(Boolean);
-          if(buffs.length){ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2e8f0';ctx.strokeStyle='#111827';ctx.lineWidth=3;const text=buffs.join(' / ');ctx.strokeText(text,0,kit?54:38);ctx.fillText(text,0,kit?54:38);}
+          if(buffs.length){ctx.font='bold 10px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2e8f0';ctx.strokeStyle='#111827';ctx.lineWidth=3;const text=buffs.join(' / ');ctx.strokeText(text,0,kit?54:38);ctx.fillText(text,0,kit?54:38);}
           const notice = engine.state.itemNotice;
           if (notice) {
-            ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle=TACTICAL_ITEMS[notice.kind].color;
+            ctx.font='bold 12px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle=TACTICAL_ITEMS[notice.kind].color;
             ctx.strokeStyle='#111827';ctx.lineWidth=4;
             ctx.strokeText(itemText[notice.kind].name,0,-100);ctx.fillText(itemText[notice.kind].name,0,-100);
           }
@@ -3276,7 +3276,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (progress > 0.6) {
             const sparkleAlpha = (1 - progress) / 0.4;
             ctx.fillStyle = `rgba(254, 240, 138, ${sparkleAlpha})`;
-            ctx.font = '14px sans-serif';
+            ctx.font = '14px Pretendard, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('✨', 12, -4);
@@ -3303,7 +3303,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.save();
           const progress = 1 - (ft.life / ft.maxLife);
           const scale = ft.isCrit && !reducedMotionRef.current ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
-          ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
+          ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
           ctx.textBaseline='alphabetic';
           const metrics=ctx.measureText(ft.text);
           const placement=fitFeedbackToView(ft.x,metrics.width,scale,camX,camX+viewW);
@@ -3729,7 +3729,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
             {preflightTab==='stage'&&workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)&&<section className="survivors-mission-brief"><h3>{workfaceCopy.title}</h3><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.name}</p><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.hint}</p></section>}
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
-            <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
+
             <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
               <strong>SIGNATURE EVENTS · {signatureEventPlan(PATROL_STAGES[selectedStage])[0]?.workface}</strong>
               {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}<u>{signatureCounterplayProfile(event.id).condition}</u></small></span>)}
@@ -3791,6 +3791,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
 
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
+            {preflightTab==='stage'&&<img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>}
             <details open className="survivors-stage-select-section survivors-ready-details" hidden={preflightTab!=='stage'}>
               <summary>{combatText.stage_select}</summary>
               <SurvivorsPinballUnlockPreview completedStages={completedStages}/><span className="survivors-section-label">{growthText.stage_select}</span>

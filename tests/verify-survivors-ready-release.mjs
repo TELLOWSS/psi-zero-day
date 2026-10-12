@@ -1,3 +1,4 @@
+import { openSurvivorsStagePreview } from '../scripts/survivors-stage-preview-qa.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -19,7 +20,7 @@ try{
   });
   await page.goto(url,{waitUntil:'networkidle'});
   const enter=()=>page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await enter();
-  const preview=()=>page.locator('.survivors-stage-preview').getAttribute('src');const ready=await preview();
+  const preview=async()=>(await openSurvivorsStagePreview(page)).getAttribute('src');const ready=await preview();
   if(!ready.includes('29'))throw new Error('Completed save did not prepare stage29: '+ready);
   await page.getByRole('button',{name:'시그널 워치 시작',exact:true}).click();await page.locator('.survivors-tactical-actions button').first().waitFor();
   await page.waitForTimeout(700);

@@ -1,3 +1,4 @@
+import { openSurvivorsStagePreview } from '../scripts/survivors-stage-preview-qa.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -17,7 +18,7 @@ try{
   });
   await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5197',{waitUntil:'networkidle'});
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
-  const initial=await page.locator('.survivors-stage-preview').getAttribute('src');
+  const initial=await (await openSurvivorsStagePreview(page)).getAttribute('src');
   if(!initial.includes('28'))throw new Error('Uncleared stage not preserved');
   // Synthetic result/upgrade transitions exercise UI persistence, not natural-play victory.
   await page.evaluate(async()=>{
@@ -60,9 +61,9 @@ try{
   const saved=await page.evaluate(()=>localStorage.getItem('psi.survivors.last_played_stage'));
   await page.locator('.survivors-result-dialog').getByRole('button',{name:'현장 복귀',exact:true}).click();
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
-  const next=await page.locator('.survivors-stage-preview').getAttribute('src');
+  const next=await (await openSurvivorsStagePreview(page)).getAttribute('src');
   await page.reload({waitUntil:'networkidle'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
-  const reloaded=await page.locator('.survivors-stage-preview').getAttribute('src');
+  const reloaded=await (await openSurvivorsStagePreview(page)).getAttribute('src');
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
   const pass=actions.length===3&&actions.every(action=>action.inside&&action.width>=44&&action.height>=44)&&noticeLane===1&&options.length===3&&options.every(option=>option.visible&&option.rows<=2&&!option.nested)&&preserved&&saved==='stage_29'&&next.includes('29')&&reloaded.includes('29')&&!overflow&&!errors.length;
   rows.push({width,height,scope:'Real UI with explicitly synthetic notice/levelup/victory fixtures; not natural clear evidence.',actions,joystick,noticeLane,options,preserved,saved,next,reloaded,overflow,errors,pass});await page.close();

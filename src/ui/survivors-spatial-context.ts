@@ -20,7 +20,7 @@ export function drawStageSpatialContext(ctx: CanvasRenderingContext2D, hazards: 
       ctx.beginPath();ctx.moveTo(h.x + sx * (half - 12), h.y + sy * half);
       ctx.lineTo(h.x + sx * half, h.y + sy * half);ctx.lineTo(h.x + sx * half, h.y + sy * (half - 12));ctx.stroke();
     }
-    ctx.font = '700 13px sans-serif';
+    ctx.font = '700 13px Pretendard, sans-serif';
     ctx.fillStyle = resolved ? 'rgba(134,239,172,.5)' : 'rgba(226,232,240,.42)';
     ctx.fillText(resolved ? combatText.storage_isolated : label, h.x, h.y + half + 18);
   }

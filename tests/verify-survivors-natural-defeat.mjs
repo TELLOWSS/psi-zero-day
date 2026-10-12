@@ -1,3 +1,4 @@
+import { openSurvivorsStagePreview } from '../scripts/survivors-stage-preview-qa.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -35,12 +36,12 @@ try {
   if (reward !== `+${saved.credits.toLocaleString('en-US')} PSI`) throw new Error('Defeat reward and new wallet differ');
   await page.screenshot({ path: `${output}/defeat.png` });
   await defeat.getByRole('button', { name: copy.retry_ready, exact: true }).click();
-  const preview = page.locator('.survivors-stage-preview');
+  const preview = await openSurvivorsStagePreview(page);
   const expected = '/assets/survivors/stage-01-ground-v2.webp';
   if (await preview.getAttribute('src') !== expected) throw new Error('Retry did not prepare the failed stage');
   await page.reload();
   await enter();
-  await preview.waitFor();
+  await openSurvivorsStagePreview(page);
   const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('psi.survivors.store_wallet')));
   if (JSON.stringify(restored) !== JSON.stringify(saved) || await preview.getAttribute('src') !== expected) throw new Error('Reload changed credits or failed stage');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);

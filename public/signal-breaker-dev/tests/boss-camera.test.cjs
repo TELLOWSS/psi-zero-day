@@ -45,3 +45,15 @@ test('the camera makes no physics changes and does not operate on resolved encou
  a.equal(JSON.stringify(c),before);
  c.boss.phase='resolved';a.equal(frame(c),null);
 });
+
+test('short landscape contains full boss art, every relay ring and operator without changing physics',()=>{
+ const {landscapeFrame}=require('../src/boss-camera.js');
+ for(const [width,height]of [[844,390],[740,320],[1024,600]])for(let stage=1;stage<=5;stage++)for(const x of [45,165,1060]){
+  const input={width,height,player:{x,y:563},boss:{x:650+25*(stage-1),y:205,phase:'sealed',nodes:[{x:550+25*(stage-1),y:170},{x:750+25*(stage-1),y:170},{x:650+25*(stage-1),y:325}]}},before=JSON.stringify(input),v=landscapeFrame(input);
+  const pixelY=y=>(y-v.y)*v.scale,pixelX=x=>(x-v.x)*v.scale;
+  a.ok(pixelY(input.boss.y-120)>=49.99);a.ok(pixelY(input.player.y+31)<=height-23.99);
+  for(const n of input.boss.nodes){a.ok(pixelY(n.y-31)>=49.99);a.ok(pixelX(n.x-31)>=0&&pixelX(n.x+31)<=width);}
+  a.equal(JSON.stringify(input),before);
+ }
+ a.equal(landscapeFrame({width:390,height:844,player:{x:165,y:563},boss:{x:650,y:205,phase:'sealed'}}),null);
+});

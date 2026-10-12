@@ -26,7 +26,11 @@ describe('brand production slot audit contract', () => {
         expect(binary.length).toBeGreaterThan(5000);
         expect(binary.subarray(0, 4).toString()).toBe('RIFF');
         expect(binary.subarray(8, 12).toString()).toBe('WEBP');
-        expect(existsSync(slot.materializer!)).toBe(true);
+        expect('materializer' in slot).toBe(true);
+        if (!('materializer' in slot) || typeof slot.materializer !== 'string') {
+          throw new Error(`Generated slot ${slot.id} must declare its materializer`);
+        }
+        expect(existsSync(slot.materializer)).toBe(true);
         if (existsSync(delivery)) expect(readFileSync(delivery)).toEqual(binary);
       } else {
         expect(existsSync(delivery)).toBe(true);

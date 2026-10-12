@@ -1,9 +1,10 @@
+import { openSurvivorsStagePreview } from './survivors-stage-preview-qa.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES, 'playwright'));
-const output = path.resolve('artifacts/stage-resume');
+const output = path.resolve(process.env.PSI_QA_OUTPUT || 'artifacts/stage-resume');
 fs.mkdirSync(output, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_BIN });
 const results = [];
@@ -24,7 +25,7 @@ try {
     }, completed);
     await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196', { waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
-    await page.waitForSelector('.survivors-stage-preview');
+    await openSurvivorsStagePreview(page);
     const preview = await page.locator('.survivors-stage-preview').getAttribute('src');
     const uniqueMaps = JSON.parse(fs.readFileSync('content/design/survivors-stage-backgrounds-v1.json', 'utf8'));
     const expectedMap = completed ? '/assets/survivors/maps/scaffold-v1.png' : uniqueMaps.stage_14;
@@ -36,6 +37,7 @@ try {
     await page.keyboard.press('KeyP');
     await page.getByRole('button', { name: '메인으로 나가기', exact: true }).click();
     await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
+    await openSurvivorsStagePreview(page);
     if (await page.locator('.survivors-stage-preview').getAttribute('src') !== preview) throw new Error('Exit lost played map');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     results.push({ width, height, completed, scope: 'Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory', preview, overflow, errors, pass: !overflow && !errors.length });

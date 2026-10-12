@@ -12,7 +12,7 @@ export function drawTerrain(ctx:CanvasRenderingContext2D,objects:readonly Terrai
    ctx.globalAlpha=Math.hypot(player.x-(o.x+o.width/2),player.y-(o.y+o.height/2))<100?.65:1;
    ctx.drawImage(image,cell*sw,0,sw,sh,o.x-(w-o.width)/2,o.y+o.height-h,w,h);
   }
-  ctx.globalAlpha=1;ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle=o.kind==='rubble'?'#9af3cd':'#ffe09a';
+  ctx.globalAlpha=1;ctx.font='bold 11px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle=o.kind==='rubble'?'#9af3cd':'#ffe09a';
   ctx.fillText(copy[o.kind],o.x+o.width/2,o.y+o.height+17);
   if(o.kind==='rubble'){ctx.fillStyle='#172524';ctx.fillRect(o.x,o.y+o.height+23,o.width,4);ctx.fillStyle='#65dbaf';ctx.fillRect(o.x,o.y+o.height+23,o.width*o.hp/o.maxHp,4);}
   ctx.restore();

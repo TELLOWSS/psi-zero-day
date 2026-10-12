@@ -76,7 +76,7 @@ try {
       await page.locator('.survivors-ready-dialog').waitFor();
       const playableReady = await page.locator('.survivors-ready-launch .survivors-btn-primary').isVisible();
       rows.push({ width, height, reducedMotion, ...result, defenseLocked, storyLocked, playableReady, errors,
-        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/mode-previews/signal-watch.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
+        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/signal-watch-loading/signal-watch-landscape-v2.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
       await page.close();
     }
   }

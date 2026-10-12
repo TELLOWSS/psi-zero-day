@@ -192,3 +192,6 @@
 @media (orientation: landscape) and (max-height: 600px) {
   .commercial-mode-genre { display: none; }
 }
+
+/* Landscape entry art keeps the helmet visible in the shallow card. */
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .is-survivors-entry .commercial-title-action-art{object-position:70% 28%!important}
