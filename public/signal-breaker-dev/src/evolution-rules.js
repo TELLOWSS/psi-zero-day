@@ -9,11 +9,11 @@ const RECIPES=Object.freeze({
 });
 const stage=g=>Number(g.config.id.slice(-2));
 function reset(g){g.evolution={frame:'arc',recipe:null};}
-function armor(g,spec){return g.veteran&&!spec.echo?(6+stage(g)*2)*(spec.tier+1):0;}
+function armor(g,spec){return g.veteran&&!spec.echo?Math.round((18+stage(g)*6)*(spec.tier+1)*(1+(g.wave-1)*.35)):0;}
 function active(g){return g.veteran&&g.evolution.recipe&&g.loadout.includes(RECIPES[g.evolution.recipe]?.support)?RECIPES[g.evolution.recipe]:null;}
-function selectFrame(g,frame){if(!g.veteran||!['ready','paused'].includes(g.state)||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null};return true;}
+function selectFrame(g,frame){if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null};return true;}
 function evolve(g,recipe){
- const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<5||!spec||g.evolution.recipe)return false;
+ const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<5||!spec||g.evolution.recipe||g.config.gateStable&&!['mist','net'].includes(spec.support))return false;
  g.evolution={frame:spec.frame,recipe};g.loadout=['pulse',spec.support];g.weapon='pulse';
  g.event('evolved',g.player.x,g.player.y,1,recipe);return true;
 }
@@ -47,7 +47,7 @@ function contact(g,s,c){
  }
  return true;
 }
-function limit(g){return 100-stage(g)*4;}
-function step(g){if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.finish(false);}}
+function limit(g){return 135-stage(g)*5-(g.wave-1)*10;}
+function step(g){if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
 return {RECIPES,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
 });

@@ -42,3 +42,4 @@ test('boss hit response is local, bounded, freezes with zero dt and resets with 
  art.event({kind:'bosshit',x:b.x,y:b.y},{boss:b});art.setReducedMotion(true);assert.equal(art.bossMotion(b,0).impact,0);
  art.reset();art.setReducedMotion(false);assert.equal(art.bossMotion(b,0).impact,0);
 });
+test('stopped conveyor holds its joint angle and resumes without a jump',()=>{const art=fixture(),b=boss();art.bossMotion(b,0,{direction:1});const at=art.bossMotion(b,1,{direction:1}).phase;assert.equal(art.bossMotion(b,1,{direction:0}).phase,at);assert.equal(art.bossMotion(b,8,{direction:0}).phase,at);assert.equal(art.bossMotion(b,8,{direction:-1}).phase,at);assert.ok(art.bossMotion(b,8.1,{direction:-1}).phase<at);});
