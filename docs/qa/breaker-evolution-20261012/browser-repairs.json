@@ -5,7 +5,9 @@
     "fontMatch": true,
     "firstAndRepeatEndings": true,
     "noDuplicateRewards": true,
-    "manualFrameAndEvolution": true
+    "repeatedSaveRetry": true,
+    "manualFrameAndEvolution": true,
+    "freshRunFrameSelection": true
   },
   {
     "width": 844,
@@ -13,7 +15,9 @@
     "fontMatch": true,
     "firstAndRepeatEndings": true,
     "noDuplicateRewards": true,
-    "manualFrameAndEvolution": true
+    "repeatedSaveRetry": true,
+    "manualFrameAndEvolution": true,
+    "freshRunFrameSelection": true
   },
   {
     "width": 390,
@@ -21,7 +25,9 @@
     "fontMatch": true,
     "firstAndRepeatEndings": true,
     "noDuplicateRewards": true,
-    "manualFrameAndEvolution": true
+    "repeatedSaveRetry": true,
+    "manualFrameAndEvolution": true,
+    "freshRunFrameSelection": true
   },
   {
     "width": 768,
@@ -29,7 +35,9 @@
     "fontMatch": true,
     "firstAndRepeatEndings": true,
     "noDuplicateRewards": true,
-    "manualFrameAndEvolution": true
+    "repeatedSaveRetry": true,
+    "manualFrameAndEvolution": true,
+    "freshRunFrameSelection": true
   },
   {
     "finale": true,

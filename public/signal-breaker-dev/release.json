@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.45.0-veteran-evolution",
   "cacheName": "psi-signal-breaker-webpreview-v0.45.0-veteran-evolution",
-  "fingerprint": "886396e19bfb35a39a111824a376cc0204c80f00edc9d40bc53089ce4b506305",
+  "fingerprint": "d39371cc31425cbe22f5f18783d46ff8b557ab2437b5859bcf935a1980c1322b",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -281,8 +281,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 94397,
-      "sha256": "e38eba5837cce1242c3d81ed96e6c1c5f66d1945f5ed1080638b80fba833fcdc"
+      "bytes": 94399,
+      "sha256": "2f7d4cbfa2ea55a1bf83b66b3779469657b3911242b50f15548ab27dcc289e36"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
