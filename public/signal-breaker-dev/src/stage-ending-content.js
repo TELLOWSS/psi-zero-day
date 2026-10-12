@@ -54,6 +54,7 @@
    ||!game.boss.nodes.every(n=>n.hit))return null;
   if(d.stageId!=='CH-01'){
    if(d.stageId==='CH-02'&&game.boss.segment!==game.boss.maxSegments||d.stageId==='CH-03'&&game.boss.filterStage!==game.boss.maxFilterStages)return null;
+   if(d.stageId==='CH-04'&&game.boss.loadStage!==game.boss.maxLoadStages)return null;
    const counter={conveyor:'intercepts',extraction:'pressureVents',tension:'secured',grid:'isolations'}[d.bossIdentity];
    return {version:CAMPAIGN_VERSION,id:CAMPAIGN_VERSION+':'+d.stageId+':'+game.seed+':'+runSerial,stageId:d.stageId,bossIdentity:d.bossIdentity,
     origin:'game',measurementKind:'simulated',externalSync:false,

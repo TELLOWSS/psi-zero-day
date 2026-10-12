@@ -42,3 +42,9 @@ test('boss hit response is local, bounded, freezes with zero dt and resets with 
  art.event({kind:'bosshit',x:b.x,y:b.y},{boss:b});art.setReducedMotion(true);assert.equal(art.bossMotion(b,0).impact,0);
  art.reset();art.setReducedMotion(false);assert.equal(art.bossMotion(b,0).impact,0);
 });
+
+test('CH04 authored housing wear persists across all four restored load tests',()=>{
+ const art=fixture(),b={...boss(),identity:'tension',segment:undefined,maxSegments:undefined,loadStage:1,maxLoadStages:4,hp:6,maxHp:6};
+ assert.equal(art.bossMotion(b,0).wear,0);b.loadStage=2;b.phase='rebalancing';assert.equal(art.bossMotion(b,1).wear,.25);
+ b.loadStage=4;b.phase='sealed';assert.equal(art.bossMotion(b,2).wear,.75);b.hp=0;b.phase='resolved';assert.equal(art.bossMotion(b,3).wear,1);
+});

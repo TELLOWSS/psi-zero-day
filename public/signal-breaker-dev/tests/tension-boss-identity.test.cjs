@@ -47,6 +47,9 @@ test('CH04 relay nodes require order and stopping moving rail doubles exposed hi
  g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});
  assert.equal(b.hp,1);
  g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});
+ assert.equal(b.phase,'rebalancing');assert.equal(b.loadStage,2);
+ b.loadStage=b.maxLoadStages;b.phase='exposed';b.hp=1;
+ g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});
  assert.equal(b.phase,'resolved');
 });
 test('CH04 tension snap does not leak into CH01/02/03/05',()=>{

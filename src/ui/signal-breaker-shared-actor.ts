@@ -16,7 +16,7 @@ export const characters=[
 export const characterIdentity=identity;
 export function createActor(characterId='player'){
  const character=characters.find(c=>c.id===characterId)??characters[0];
- const cache=(window as Window & {PSIPresentationAssets?:{image:(url:string)=>HTMLImageElement}}).PSIPresentationAssets;const tools=cache?.image(new URL('art/breaker-six-tools-final-v3.webp',document.baseURI).href);
+ const cache=(window as Window & {PSIPresentationAssets?:{image:(url:string)=>HTMLImageElement}}).PSIPresentationAssets;const tools=cache?.image(new URL('art/breaker-six-tools-ui-v4.webp',document.baseURI).href);
  const tracker=new SpriteMotionTracker();const image=new Image();let ready=false,failed=false;
  image.onload=()=>{void loadDirectionalActor(image).then(value=>{ready=value;failed=!value;}).catch(()=>{failed=true;});};
  image.onerror=()=>{failed=true;};image.src=character.src;
