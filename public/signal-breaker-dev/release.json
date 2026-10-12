@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.44.0-ui-sync",
-  "cacheName": "psi-signal-breaker-webpreview-v0.44.0-ui-sync",
-  "fingerprint": "220417a751e6abca604dd07557698e8084406f3e097ea9d09fc731211681ec3e",
+  "version": "0.45.0-veteran-evolution",
+  "cacheName": "psi-signal-breaker-webpreview-v0.45.0-veteran-evolution",
+  "fingerprint": "d39371cc31425cbe22f5f18783d46ff8b557ab2437b5859bcf935a1980c1322b",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -266,8 +266,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 13445,
-      "sha256": "526481696aeb970f238640d1b119a515951ea2acaf58a034d57e43ffe8e99abc"
+      "bytes": 13646,
+      "sha256": "3cb7371fb5249bfdfa2d8740a8a2e0733f3bf67eeaa09d47b3d907ec4f65f115"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -276,13 +276,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 5836,
-      "sha256": "5f152bfc4a208b85b58314c9188e38276284b611594b1ecfa31831047c97929b"
+      "bytes": 5874,
+      "sha256": "68e487d66366f59111a91945f30c652cb6b39f0955947c4ef4715862a17cf6dc"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 89734,
-      "sha256": "802aa1a41a72a86555f18a7ef8bb27e3b82ef7638bc06ca18f808b544d6076b2"
+      "bytes": 94399,
+      "sha256": "2f7d4cbfa2ea55a1bf83b66b3779469657b3911242b50f15548ab27dcc289e36"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -316,8 +316,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/ending-player.js",
-      "bytes": 6745,
-      "sha256": "878087213ad38e2c5bfb0134ffef389332db189b328b60c7ac19440766afe9eb"
+      "bytes": 8497,
+      "sha256": "28fe933b7f7d17aabe51245a39c710c613d13cab0faa0a974ab5df8a0039301f"
     },
     {
       "path": "/signal-breaker-dev/src/ending-sound.js",
@@ -331,8 +331,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 59275,
-      "sha256": "b749252e82cb9cef1f2f6d034d46c4cba22bc462c26a5e6bc178692e6949c08a"
+      "bytes": 62149,
+      "sha256": "e75349b437ec39baac3dbeb02f5335d7cd4f117b6dfc1f85ad64c83b681c7982"
+    },
+    {
+      "path": "/signal-breaker-dev/src/evolution-rules.js",
+      "bytes": 3219,
+      "sha256": "6fdde206f41d910ef3e09971bcc838bfd06bb4f1432d65f827064de1cd90b78c"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -346,8 +351,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 25765,
-      "sha256": "3a167b57de4ca1627f9a85f01a12d43a27506ed078aa2a88b7c841689b95bbce"
+      "bytes": 27660,
+      "sha256": "831fe9d3712eb50a0867d08642dfa814096ad7edfc323def25f1c1b7bdcb100a"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -366,13 +371,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 45950,
-      "sha256": "42df03aaa328bfb2150f4beaff931fc42939019f5b9a93f3b6e976b0cd89cfee"
+      "bytes": 47313,
+      "sha256": "4aa88e6a5d69b3604ece6fa14f601d358aabbda949571c0837499223ebd5836e"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
-      "bytes": 13368,
-      "sha256": "fb1e6ec6eed769e288058842eead0c4bcf9cbfb524230f5c5a7bf28ea01a7462"
+      "bytes": 13881,
+      "sha256": "360642df2d6c2a543c7816fed6d493ea082a121ee1a672d7e5d02ee93582814c"
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
@@ -386,13 +391,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/stage-ending-content.js",
-      "bytes": 7370,
-      "sha256": "ed9272728d7e4ee5067c37d3bcabf46c21bd120ae034dba969c343fdc02a35b1"
+      "bytes": 7381,
+      "sha256": "0c554393f947e30aadf0c7aae11710cd6001df934689e23c75ad23b7d70602bd"
     },
     {
       "path": "/signal-breaker-dev/src/style.css",
-      "bytes": 79505,
-      "sha256": "b7bc7f97ed82018a5812f80581396566d7af1bbca6b007daba8b0fe731f6cac7"
+      "bytes": 81468,
+      "sha256": "e23b02fdfe91f992dfed945f0ed2223e103419b91cf6d530c00f66603dc401a7"
     }
   ]
 }

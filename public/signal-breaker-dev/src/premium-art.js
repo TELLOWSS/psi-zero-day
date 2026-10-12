@@ -57,7 +57,7 @@ class PremiumArt{
  // Final raster bodies use the existing world origin; physics and relay nodes remain engine-owned.
  bossMotion(b,time,options={}){
   const warning=b.warningUntil>time,exposed=b.phase==='exposed';
-  const stopped=this.reducedMotion||options.secured||b.phase==='defeated';
+  const stopped=this.reducedMotion||options.secured||options.direction===0||b.phase==='resolved'||b.phase==='defeated';
   const speed=warning?1.7:exposed?.45:1;
   const direction=options.direction===-1?-1:1,controlled=b.mistUntil>time;
   this.bossClocks=this.bossClocks||new WeakMap();
@@ -149,6 +149,12 @@ class PremiumArt{
 
  projectile(c,s,time){
   const spec=root.SignalBreakerChapter?.WEAPONS[s.kind];if(!spec)return false;
+  if(s.element){const arc=s.element==='arc',color=arc?'#93edff':'#f3a1ff',trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
+   if(trail.length>1){const end=trail.at(-1),first=trail[Math.max(0,trail.length-(arc?5:9))];c.globalAlpha=.75;
+    if(arc){let x=first.x,y=first.y;const n=this.quality==='low'?3:6;for(let i=1;i<=n;i++){const t=i/n,xx=first.x+(end.x-first.x)*t+(i<n&&!this.reducedMotion?Math.sin(i*7+s.id)*5:0),yy=first.y+(end.y-first.y)*t;line(c,x,y,xx,yy,color,s.recipe?3:2);x=xx;y=yy;}}
+    else{line(c,first.x,first.y,end.x,end.y,color,s.recipe?8:5);line(c,first.x,first.y,end.x,end.y,'#ffffff',2);}}
+   c.globalAlpha=1;c.translate(s.x,s.y);c.rotate(angle);if(arc){disk(c,0,0,s.recipe?7:5,'#e5ffff',color,2);}else{line(c,-27,0,15,0,color,s.recipe?7:4);line(c,-24,0,14,0,'#fff8ff',2);}c.restore();return true;
+  }
   const color=spec.color,trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);
   c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
   if(trail.length>1){for(let i=1;i<trail.length;i++){const a=i/trail.length;c.globalAlpha=a*.5;line(c,trail[i-1].x,trail[i-1].y,trail[i].x,trail[i].y,color,(s.kind==='net'?9:5)*a);}}
@@ -368,7 +374,7 @@ class PremiumArt{
  c.globalCompositeOperation='screen';
  for(let i=0;i<(this.quality==='high'?20:9);i++){const k=i*71.98;let xx=(k*13.9+t*(7+i%5))%W,yy=94+(k*9.9%430),r=1.1+(i%4)*.5;disk(c,xx,yy+Math.sin(t*.65+i)*4,r,i%3?'#9bddda32':'#f6ce7a20');}
  glow(c,710+Math.sin(t*.2)*55,240,250,'#78dacc0c');c.restore();}
- event(e,game){const weapon=root.SignalBreakerChapter?.WEAPONS[e.weapon];const col=e.kind==='fire'&&weapon?weapon.color:e.material&&e.kind!=='capture'?(palette[e.material]||palette.metal)[1]:e.kind==='capture'?'#8ffff2':e.kind==='split'?'#ffd292':e.kind==='ricochet'||e.kind==='corebounce'?'#f9d8a1':e.kind==='boss'||e.kind==='victory'?'#ffe7a6':e.kind==='hurt'?'#ff786d':e.kind==='node'||e.kind==='unseal'?'#d0b8ff':e.kind==='fire'?(e.n===2?'#80ffe6':'#ffe5aa'):'#8ae8f0';
+ event(e,game){if(['electrochain','laserline'].includes(e.kind)){this.fx.push({kind:e.kind,x:e.x,y:e.y,toX:e.toX,toY:e.toY,color:e.color||'#c8ffff',age:0,duration:.22,size:0});this.fx=this.fx.slice(-22);return;}const weapon=root.SignalBreakerChapter?.WEAPONS[e.weapon];const col=e.element?(e.element==='arc'?'#93edff':'#f3a1ff'):e.kind==='fire'&&weapon?weapon.color:e.material&&e.kind!=='capture'?(palette[e.material]||palette.metal)[1]:e.kind==='capture'?'#8ffff2':e.kind==='split'?'#ffd292':e.kind==='ricochet'||e.kind==='corebounce'?'#f9d8a1':e.kind==='boss'||e.kind==='victory'?'#ffe7a6':e.kind==='hurt'?'#ff786d':e.kind==='node'||e.kind==='unseal'?'#d0b8ff':e.kind==='fire'?(e.n===2?'#80ffe6':'#ffe5aa'):'#8ae8f0';
  if(e.kind==='bosshit'&&game.boss)this.bossImpact={identity:game.boss.identity,at:this.clock};
  const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,bossphase:44,bossrearm:27,gatephase:39,gaterearm:21,loadstage:38,loadbalanced:25,loadrearm:20,filterpurge:37,filterflush:22,filterrearm:17,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
  if(count){const n=Math.floor(count*(this.quality==='high'?1:this.quality==='balanced'?.58:.26));for(let i=0;i<n&&this.sparks.length<this.max;i++){
@@ -383,6 +389,7 @@ class PremiumArt{
  update(dt){dt=sat(dt,0,.05);this.clock+=dt;this.recoil=Math.max(0,this.recoil-dt);for(const q of this.recovery)q.age+=dt;this.recovery=this.recovery.filter(q=>q.age<.55);this.flash=Math.max(0,this.flash-dt*(this.reducedMotion?4:2.2));this.hitFocus=Math.max(0,this.hitFocus-dt);for(let i=this.fx.length-1;i>=0;i--){const q=this.fx[i];q.age+=dt;if(q.age>q.duration)this.fx.splice(i,1);}for(let i=this.sparks.length-1;i>=0;i--){const p=this.sparks[i];p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=1-dt*1.8;p.vy+=dt*100;if(p.life<=0)this.sparks.splice(i,1);}}
  effects(c){c.save();for(const q of this.recovery){const u=q.age/.55,t=u*u*(3-2*u);const x=q.x+(q.gate.x-q.x)*t,y=q.y+(q.gate.y-q.y)*t-Math.sin(t*PI)*60;c.globalAlpha=1-u;line(c,x,y,x-15,y+5,'#91ffe0',3);disk(c,x,y,4,'#effff4');}c.globalAlpha=1;c.globalCompositeOperation='lighter';for(const e of this.fx){const a=e.age/e.duration,opacity=Math.pow(1-a,1.7);c.globalAlpha=opacity;
  if(this.sharedVfx?.complete&&this.sharedVfx.naturalWidth&&['impact','split','capture'].includes(e.kind)){const image=this.sharedVfx,cw=image.naturalWidth/4,ch=image.naturalHeight/3,cell=e.kind==='capture'?9:e.kind==='split'?8:10,size=e.size*(1+a)*2;c.drawImage(image,cell%4*cw,Math.floor(cell/4)*ch,cw,ch,e.x-size/2,e.y-size/2,size,size);}
+ if(['electrochain','laserline'].includes(e.kind)){line(c,e.x,e.y,e.toX,e.toY,e.color,this.quality==='low'?2:4);if(this.quality!=='low')line(c,e.x,e.y,e.toX,e.toY,'#efffff',1);continue;}
  if(e.kind==='fire'){c.save();c.translate(e.x,e.y);c.rotate(e.angle);const reach=e.weapon==='pulse'?24:e.weapon==='net'?18:14;path(c,[[0,-3],[reach*(1-a),-8*(1-a)],[reach*1.4*(1-a),0],[reach*(1-a),8*(1-a)],[0,3]],e.color);c.restore();continue;}if(e.material==='power'&&e.kind==='impact'){for(let j=0;j<5;j++){const turn=j*TAU/5,r=e.size*(.4+a);path(c,[[e.x,e.y],[e.x+Math.cos(turn+.2)*r*.5,e.y+Math.sin(turn+.2)*r*.5],[e.x+Math.cos(turn)*r,e.y+Math.sin(turn)*r]],null,e.color,2);}}c.lineWidth=e.kind==='boss'?8:3.5;c.strokeStyle=e.color;c.beginPath();c.arc(e.x,e.y,e.size*(.24+a*2.1),0,TAU);c.stroke();if(this.quality!=='low'){c.globalAlpha=opacity*.3;c.lineWidth=1.7;c.beginPath();c.arc(e.x,e.y,e.size*(.1+a*2.8),0,TAU);c.stroke();}
  if(e.kind==='split'){for(let i=0;i<9;i++){let a2=i*TAU/9+e.age*.7;line(c,e.x+Math.cos(a2)*e.size*a*.5,e.y+Math.sin(a2)*e.size*a*.5,e.x+Math.cos(a2)*e.size*a*1.7,e.y+Math.sin(a2)*e.size*a*1.7,e.color,3*(1-a));}}
  }
@@ -446,7 +453,7 @@ class PremiumArt{
  // Draw a visible forward muzzle above rear-facing sprite occlusion; never change ballistic simulation.
  directionalMuzzle(c,launch,weapon,firing=false){
   if(!launch?.muzzle||!launch?.direction)return;
-  const spec=root.SignalBreakerChapter?.WEAPONS[weapon],color=spec?.color||launch.color||'#e2e6f3',d=launch.direction,m=launch.muzzle;
+  const spec=root.SignalBreakerChapter?.WEAPONS[weapon],color=launch.color||spec?.color||'#e2e6f3',d=launch.direction,m=launch.muzzle;
   c.save();c.translate(m.x,m.y);c.rotate(Math.atan2(d.y,d.x));c.lineCap='round';
   c.strokeStyle='#172d3d';c.lineWidth=8;c.beginPath();c.moveTo(-12,0);c.lineTo(1,0);c.stroke();
   c.lineWidth=3.5;c.strokeStyle=color;c.beginPath();c.moveTo(-11,0);c.lineTo(1,0);c.stroke();

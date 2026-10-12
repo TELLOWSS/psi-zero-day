@@ -1,5 +1,7 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+"breaker.evolution.frame.label":"전격·레이저 프레임","breaker.evolution.frame.locked":"출발 계열은 작전 중 유지됩니다. 다음 정비에서 진화 조합을 선택하세요.","breaker.evolution.recovery.wait":"회수 대기","breaker.veteran.timeout":"제한시간 안에 위험을 해소하지 못했습니다. 무기 상성과 아이템 진화를 바꿔 다시 도전하세요.","breaker.ending.prepare":"회복 장면을 준비하고 있습니다.","breaker.veteran.name":"숙련 작전","breaker.veteran.enter":"숙련 작전 6~10 · 5 클리어 후 해금","breaker.veteran.back":"입문 작전 1~5로 돌아가기","breaker.evolution.status":"획득 부품","breaker.evolution.requirement":"부품 5개 확보 후 진화 선택 · 보조 장비도 함께 장착 · 아래 튜닝을 선택해 출발","breaker.evolution.frame.help":"전격: 분진·전력 상성 / 레이저: 금속·하중 상성 · 정비에서 조합 진화","breaker.evolution.arc.name":"전격 코일","breaker.evolution.laser.name":"정밀 레이저","breaker.evolution.storm.name":"폭풍 회로 · 전격+미스트","breaker.evolution.singularity.name":"특이점 코일 · 전격+자력","breaker.evolution.prism.name":"프리즘 관통 · 레이저+스캔","breaker.evolution.plasma.name":"플라즈마 회수 · 레이저+포획망","breaker.evolution.arc.desc":"분진·전력 장갑에 3배 효율 · 빠른 전격","breaker.evolution.laser.desc":"금속·하중 장갑에 3배 효율 · 정밀 빔","breaker.evolution.storm.desc":"미스트 장착 · 근처 최대 3개 신호에 연쇄 손상","breaker.evolution.singularity.desc":"자력 장착 · 금속 집결 후 최대 3개에 연쇄 손상","breaker.evolution.prism.desc":"스캔 장착 · 사선 뒤 2개까지 추가 관통 손상","breaker.evolution.plasma.desc":"포획망 장착 · 사선 뒤 1개 추가 손상 후 회수",
+
 'breaker.ending.signal.received':'SIGNAL RECEIVED · 신호를 받았습니다',
 'breaker.ending.finale.title':'오늘도 무사히.',
 'breaker.ending.ch01.speaker':'임준호 · 신입근로자',

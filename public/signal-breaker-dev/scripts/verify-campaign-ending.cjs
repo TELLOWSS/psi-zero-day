@@ -16,7 +16,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    await page.clock.install({time:new Date('2026-10-12T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-12T00:00:01Z'));await page.goto(url);await page.clock.runFor(3000);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('[data-lobby-stage="'+id+'"]').click();await page.locator('#startOperation').click();
    // A browser clock runs the same animation frames without wall-clock idle time.
    await page.evaluate(terminal);await page.clock.runFor(100);
-   await page.locator('#stageEnding').waitFor({state:'visible'});await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.image==='ready');
+   await page.locator('#stageEnding').waitFor({state:'visible'});await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.prepared==='true');await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.image==='ready');
    const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1'))),credits=saved.credits,r=saved.records[id].endingMemory.record;
    a.equal(r.stageId,id);a.equal(r.evidence.sourceAssessment,'unmeasured');a.equal(r.evidence.observed,undefined);a.equal(r.evidence.residualSignals,0);a.equal(r.externalSync,false);a.equal(saved.records[id].endingMemory.seen,false);
    const frozen=await page.evaluate(()=>SignalBreakerQA.snapshot());
