@@ -9,11 +9,11 @@ const LESSONS=Object.freeze({
 });
 function lesson(g){if(g.practice)return {titleId:'breaker.practice.title',actionId:'breaker.practice.action',completed:0,total:1};if(g.veteran)return {titleId:'breaker.guide.ep02',actionId:g.evolution.recipe?'breaker.guide.ep02.branch':'breaker.guide.ep02.recipe',completed:g.evolution.capstone?3:g.evolution.branch?2:g.evolution.recipe?1:0,total:3};
 const spec=LESSONS[g.config.id]||LESSONS['CH-01'],done={
- 'breaker.guide.move':Math.abs(g.player.x-290)>40||g.shotsFired>4,
+ 'breaker.guide.move':g.movedDistance>=40,
  'breaker.guide.source':!!(g.source?.verified||g.sourceEvidence?.verified),
  'breaker.guide.fire':g.shotsFired>0,
  'breaker.guide.reflect':g.reflectedHits>0,
- 'breaker.guide.capture':g.captureUnits>0||g.cleared>0,
+ 'breaker.guide.capture':g.captureUnits>0,
  'breaker.guide.belt':g.conveyorDirection!==1,
  'breaker.guide.mist':g.usedWeapons.has('mist'),
  'breaker.guide.anchor':g.usedWeapons.has('anchor'),

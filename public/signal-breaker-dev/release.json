@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.48.1-psi-art",
-  "cacheName": "psi-signal-breaker-webpreview-v0.48.1-psi-art",
-  "fingerprint": "0e1b3bcd09354e70af0467dd920acf9d2261c84d313a33c4c25ef7f1ec170ffa",
+  "version": "0.49.0-guided-rehearsal",
+  "cacheName": "psi-signal-breaker-webpreview-v0.49.0-guided-rehearsal",
+  "fingerprint": "04cf92428e37983cfa6289336c8380910fd6e9a61771b368a784a4ae5c04cb89",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 14888,
-      "sha256": "45b7fff040f8c807f7a64b624ca5eb471d5d4ce7675bbb4be9653331a17fca2b"
+      "bytes": 16141,
+      "sha256": "c5405e81dc6c6690c9b4d7e96452124d81a48a2b35c67385a87c83f17124a16f"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,13 +336,23 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6327,
-      "sha256": "89d8dd81d692c9f9391e9ac82b149d4191e54311318771ac32e62b8595e159eb"
+      "bytes": 6468,
+      "sha256": "c521d15e128fb3bfab19f2aa233d69a926476639ee6aa7f2a595495636d7f55b"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 105906,
-      "sha256": "3518426344e99e6c09b0d8d5cf26b41ee0e23d3a444fad591ff1f0544f5e7a19"
+      "bytes": 112905,
+      "sha256": "d3f4768353a8ad84b2708adc2ca90cbeff4b06c156b9c8fb2a6defd70ca8f1ef"
+    },
+    {
+      "path": "/signal-breaker-dev/src/battle-rails.css",
+      "bytes": 8863,
+      "sha256": "9d8f3bab801562911facde0929d82062cfcb393c5eb8b1d03aa9b4f1228f9400"
+    },
+    {
+      "path": "/signal-breaker-dev/src/battle-viewport.js",
+      "bytes": 1188,
+      "sha256": "05b8d3d0d98dd4a75ea02dd07b14e298daf7043da244122a3400067893b699cb"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -391,8 +401,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 62763,
-      "sha256": "b77baad335ad9a1369d8bdf95615b27006ffa52601b2630ce169cdd0060ec7d5"
+      "bytes": 63580,
+      "sha256": "2677e040cffdf4f7a214eadccf8e167c3bad8b123d46b45b0e5a398c1a3ddbcf"
     },
     {
       "path": "/signal-breaker-dev/src/episode-two.js",
@@ -401,8 +411,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 4770,
-      "sha256": "01b4a54b415a82a92d39e47c6ee3dfef9b5daa241b8b6ca22f44651aa3372ec1"
+      "bytes": 4823,
+      "sha256": "27a088c4347073fb0b0d836652e06c8af3ad17c0817e8a31a2f3336b07f43481"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -416,8 +426,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 33561,
-      "sha256": "c24824ebce3177c30a2cefc73589fe75b63b6f3a32eef7165f68be853ca30add"
+      "bytes": 31326,
+      "sha256": "62347ed1670e68fd34a8b8b280e7c19d373d70744bcec3de25d82041219442f2"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -430,9 +440,19 @@
       "sha256": "509bf6076220a575a26603e873bdab7e488a7a653cbedf690e13dc26ca804387"
     },
     {
+      "path": "/signal-breaker-dev/src/operator-profile.js",
+      "bytes": 5031,
+      "sha256": "3d912bda4fbe8cda591ee657f62894137a7bd8eace24567f71954404dff21ef3"
+    },
+    {
       "path": "/signal-breaker-dev/src/portrait-camera.js",
       "bytes": 1356,
       "sha256": "ee7a6bb36b5f149187c4ff2a65c0435903a706110150d19cc7681f07420e7825"
+    },
+    {
+      "path": "/signal-breaker-dev/src/practice-rules.js",
+      "bytes": 2839,
+      "sha256": "38cf30ad3431d6391f5b7734f4e6ac1454c00137bf3cb0978f9dc675a59b90fa"
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
@@ -478,6 +498,11 @@
       "path": "/signal-breaker-dev/src/style.css",
       "bytes": 82988,
       "sha256": "7c5bb9becae60cec7a8e2ace0e331476c5ead5795217d482f9c37a372dde45bf"
+    },
+    {
+      "path": "/signal-breaker-dev/src/tutorial-rules.js",
+      "bytes": 2020,
+      "sha256": "30eda2d0717fe1c59d47ac596ef7387484ec9e83707e3de8716e0911da1c0c44"
     }
   ]
 }

@@ -14,7 +14,7 @@ test('ordinary snapshots and early wave budgets remain independent of practice',
  const g=new Game('CH-01',701,{operation:true,premiumRun:true,extended:true,burst:true,continuous:true});a.equal(g.snapshot().practice,undefined);a.equal(g.configurePracticeCharacter('player'),false);a.equal(g.evolution.capstone,false);a.ok(g.cores.length<28);
 });
 test('read-only chapter guide uses actual source, reflection and capture facts',()=>{
- const g=new Game('CH-01',17,{causal:true});const before=JSON.stringify(g.snapshot());a.equal(T.lesson(g).actionId,'breaker.guide.move');a.equal(JSON.stringify(g.snapshot()),before);g.player.x+=60;a.equal(T.lesson(g).actionId,'breaker.guide.source');g.source.verified=true;g.shotsFired=1;g.reflectedHits=1;g.captureUnits=1;a.equal(T.lesson(g).actionId,'breaker.guide.next');
+ const g=new Game('CH-01',17,{causal:true});const before=JSON.stringify(g.snapshot());a.equal(T.lesson(g).actionId,'breaker.guide.move');a.equal(JSON.stringify(g.snapshot()),before);g.start();for(let i=0;i<3;i++)g.move(1,.05);a.equal(T.lesson(g).actionId,'breaker.guide.source');g.source.verified=true;g.shotsFired=1;g.reflectedHits=1;g.captureUnits=1;a.equal(T.lesson(g).actionId,'breaker.guide.next');
 });
 test('veteran guide follows exclusive recipe, branch and final state',()=>{
  const g=new Game('CH-01',7,{operation:true,premiumRun:true,extended:true,veteran:true});a.equal(T.lesson(g).completed,0);g.evolution={frame:'laser',recipe:'prism',branch:'focus',capstone:true};a.equal(T.lesson(g).completed,3);

@@ -1,0 +1,39 @@
+/* Real browser checks for unobstructed HUD, rotation, pause-safe guide, isolated rehearsal and growth persistence. Completion fixtures are explicit QA only. */
+const {createRequire}=require('node:module'),{spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict');
+const {chromium}=(process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT?createRequire(path.join(process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT,'package.json'))('playwright'):require('playwright'));
+const root=path.resolve(__dirname,'../../..'),out=process.env.SIGNAL_BREAKER_QA_OUTPUT||'/tmp/guided-rehearsal-qa',url='http://127.0.0.1:5192/signal-breaker-dev/index.html';
+(async()=>{fs.mkdirSync(out,{recursive:true});const server=spawn('python3',['-m','http.server','5192','--bind','127.0.0.1','--directory',path.join(root,'public')],{stdio:'ignore'});let browser;
+try{for(let i=0;i<100;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}browser=await chromium.launch({args:['--no-sandbox','--disable-dev-shm-usage']});
+const results=[];
+const assertClear=async page=>{
+ const report=await page.evaluate(()=>{const field=document.querySelector('#arena').getBoundingClientRect();const ids=['battleTopRail','battleStatusRail','battleControlRail','pauseBtn','guideBtn','exitBtn','bossEncounter','veteranStatus','signalObjective','itemStatus','assistHint','chainGuide','joystick','leftBtn','rightBtn','fireBtn','aimPad','pulseBtn','netBtn','autoFireBtn','shieldBtn','sourceBtn','magnetBtn','boostBtn'];const hits=[];
+ for(const id of ids){const e=document.getElementById(id),r=e.getBoundingClientRect(),s=getComputedStyle(e);if(e.hidden||s.display==='none'||s.visibility==='hidden'||r.width<1||r.height<1)continue;const w=Math.max(0,Math.min(r.right,field.right)-Math.max(r.left,field.left)),h=Math.max(0,Math.min(r.bottom,field.bottom)-Math.max(r.top,field.top));if(w*h>.5)hits.push({id,area:w*h});}return {hits,field:{x:field.x,y:field.y,width:field.width,height:field.height},overflow:document.documentElement.scrollWidth>innerWidth};});
+ a.deepEqual(report.hits,[],'HUD/control pixels cannot cover live arena');a.equal(report.overflow,false);a.ok(report.field.height>=100);return report;
+};
+for(const [width,height] of [[390,844],[320,640],[844,390],[568,320],[768,1024],[1440,900]]){
+ const ctx=await browser.newContext({viewport:{width,height},serviceWorkers:'block'});await ctx.addInitScript(()=>localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({credits:400,records:{'CH-05':{won:true}},futureField:'retain',sound:false,settings:{controlMode:'flow',assistVersion:1,autoFire:true}})));
+ const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible',timeout:45000});
+ a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),0,'legacy win cannot fabricate XP');
+ const before=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1'));return {credits:s.credits,records:s.records,checkpoint:s.checkpoint};});
+ await page.locator('#practiceEntry').click();await page.locator('#actorSelect').selectOption('kang_taesik');a.equal(await page.evaluate(()=>SignalBreakerQA.engine().evolution.capstone),true);
+ await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready);const practice=await assertClear(page);
+ a.equal(await page.evaluate(()=>SignalBreakerQA.engine().practiceCharacter),'kang_taesik');a.equal(await page.evaluate(()=>new Set(SignalBreakerQA.engine().cores.map(c=>c.kind)).size),4);
+ await page.locator('#guideBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'paused');const time=await page.evaluate(()=>SignalBreakerQA.engine().time);await page.keyboard.press('KeyP');await page.waitForTimeout(100);a.equal(await page.evaluate(()=>SignalBreakerQA.engine().time),time);await page.keyboard.press('Escape');a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
+ await page.screenshot({path:out+'/practice-rails-'+width+'x'+height+'.png',fullPage:true});
+ await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=89.99;g.update(.04);});await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='won');
+ const after=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1'));return {credits:s.credits,records:s.records,checkpoint:s.checkpoint};});a.deepEqual(after,before);a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),0);
+ await page.locator('#overlayInner .secondary-btn').first().click();await page.locator('#startOperation').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='playing');await assertClear(page);
+ await page.locator('#guideBtn').click();a.ok((await page.locator('#guideContent').textContent()).includes('발생원'));await page.locator('#closeGuide').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
+ await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true,502);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];});await page.waitForFunction(()=>!document.querySelector('#bossEncounter').hidden);const boss=await assertClear(page);
+ await page.screenshot({path:out+'/boss-rails-'+width+'x'+height+'.png',fullPage:true});
+ await page.setViewportSize({width:height,height:width});await page.waitForTimeout(150);const rotated=await assertClear(page);await page.setViewportSize({width,height});
+ a.deepEqual(errors,[]);results.push({width,height,practice,boss,rotated,guidePause:true,rewardsIsolated:true,errors});await ctx.close();
+}
+const ctx=await browser.newContext({serviceWorkers:'allow'}),page=await ctx.newPage();await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible',timeout:45000});await page.locator('#startOperation').click();
+const finish=async()=>page.evaluate(()=>{const g=SignalBreakerQA.engine();g.source={...g.source,observed:true,requested:true,controlled:true,verified:true};g.sourceEvidence={observed:true,controlled:true,verified:true};g.waveHistory=Array.from({length:5},(_,i)=>({wave:i+1,time:1,shots:1,damage:0}));g.wave=5;g.cores=[];g.pendingCores=[];g.boss=null;g.finish(true);return g.seed;});
+const seed=await finish();await page.waitForFunction(()=>SignalBreakerQA.growth().profile.xp===130);await page.reload();await page.locator('#operationLobby').waitFor({state:'visible',timeout:45000});a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),130);a.ok((await page.locator('#operatorGrowth').textContent()).includes('Lv.2'));
+await page.evaluate(seed=>SignalBreakerQA.selectStage('CH-01',true,seed),seed);await finish();await page.waitForTimeout(100);a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),130,'same completion does not grant XP twice');
+await page.waitForFunction(()=>navigator.serviceWorker.controller,null,{timeout:60000});await ctx.setOffline(true);await page.reload();await page.locator('#operationLobby').waitFor({state:'visible',timeout:45000});await page.locator('#practiceEntry').click();await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.engine().practice&&SignalBreakerQA.actor()?.ready);
+a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),130);await assertClear(page);await page.screenshot({path:out+'/guided-offline.png',fullPage:true});await ctx.close();
+fs.writeFileSync(out+'/guided-rehearsal-results.json',JSON.stringify({results,growthSaved:true,growthIdempotent:true,offline:true},null,2));console.log(JSON.stringify({results,growthSaved:true,growthIdempotent:true,offline:true}));
+}finally{await browser?.close();server.kill();}})().catch(e=>{console.error(e);process.exitCode=1});

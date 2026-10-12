@@ -12,19 +12,6 @@ on:
 permissions:
   contents: read
 jobs:
-  release-metadata:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - run: npm ci --ignore-scripts
-      - name: Materialize operator runtime and exact release metadata
-        run: |
-          node scripts/build-signal-breaker-operator-profile.mjs --write
-          node scripts/check-signal-breaker-release.mjs --write
-          node -e "const fs=require('node:fs');console.log('PROFILE_BUNDLE_JSON='+JSON.stringify(fs.readFileSync('public/signal-breaker-dev/src/operator-profile.js','utf8')));console.log('RELEASE_JSON='+fs.readFileSync('public/signal-breaker-dev/release.json','utf8').replace(/\\n/g,''))"
   source-flow:
     runs-on: ubuntu-latest
     timeout-minutes: 22
@@ -73,6 +60,7 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
+          node public/signal-breaker-dev/scripts/verify-guided-rehearsal.cjs
           node public/signal-breaker-dev/scripts/verify-psi-rpg-art.cjs
           node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
           node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
