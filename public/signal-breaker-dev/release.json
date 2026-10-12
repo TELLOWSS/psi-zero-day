@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.46.1-workshop-motion",
-  "cacheName": "psi-signal-breaker-webpreview-v0.46.1-workshop-motion",
-  "fingerprint": "9c14954ccbfdc9812f16978b11715142cb0b88925edf50b6bde1b99b5c5f22f2",
+  "version": "0.46.2-guidance-cleanup",
+  "cacheName": "psi-signal-breaker-webpreview-v0.46.2-guidance-cleanup",
+  "fingerprint": "c467ae48a07a62ad9063881ed56a338e09faeb3162c7a12504ea52037a6083f0",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -306,13 +306,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6124,
-      "sha256": "9b9c6f00e87fcd9432f0d7a16e72d8fdcd7edf826bacd9034d61a7b14918e7d2"
+      "bytes": 6125,
+      "sha256": "3c7483f7f2eb8726eaee32f3e1e5c2cdc3ed0db47f603c2b3cfbdc4c0e0d7cfe"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 101477,
-      "sha256": "0b856f8ce5c2f77279b9b114815b0e844c1ffbe244fedfcbf948018de37b583a"
+      "bytes": 101901,
+      "sha256": "a79cc4571f868ea45fa2c0b3ad5d71887d999d49cff423c2a93e7e95e9cd4dcb"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -386,8 +386,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 32472,
-      "sha256": "ae536953883e79808d39853d1a3da2354ed23da250a3d9aa801dcb7839195d5f"
+      "bytes": 32406,
+      "sha256": "a7630fc6a04735d1e3649d7a9b695c85144ced3a32831720940ccc3b64322b02"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -416,8 +416,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.css",
-      "bytes": 6251,
-      "sha256": "1d33277f2d427542f96490c756507c5fbe6cb688ae2112a52f6eb82028618c6a"
+      "bytes": 7304,
+      "sha256": "b88dcebb8c02149d9c0d232b09d98f8186d41688b7051c3d47dc5890f2e9712d"
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.js",

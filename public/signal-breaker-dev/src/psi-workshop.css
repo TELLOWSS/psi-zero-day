@@ -36,3 +36,13 @@ body.breaker-focus .weapon-btn.selected{color:var(--psi-accent);background:#1544
 @media(max-height:500px){.psi-workshop header{padding:3px 0}.psi-workshop h2{margin:2px 0}.psi-workshop .shop-balance{font-size:13px!important;margin:4px 0}.psi-workshop #shopTabs{margin:2px 0 6px;gap:4px}.psi-workshop #shopTabs button{padding:5px 12px}.shop-scroll{padding-top:0}}
 
 .psi-workshop #shopModuleStatus{flex-shrink:0;margin:2px 0 8px;color:#bfe9df;font-size:11px}
+
+/* One action line near the HUD instead of stacked panels through the playfield. */
+body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 112px);bottom:auto;left:12px;right:95px;transform:none;width:auto;max-width:400px;font-size:11px;padding:6px 9px;text-align:left;box-shadow:none;background:#092633df}
+body.breaker-focus[data-guidance=action] .radio-line,body.breaker-focus[data-guidance=event] .radio-line{display:none}
+body.breaker-focus .move-controls::after{display:none}
+@media(orientation:portrait){body.breaker-focus .assist-hint{max-width:none;font-size:10px}}
+@media(orientation:landscape) and (max-height:500px){body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 56px);left:120px;right:100px;max-width:none;font-size:10px}}
+body.breaker-focus[data-boss-framing=landscape] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 170px);left:12px;right:auto;max-width:260px}
+
+@media(orientation:portrait){body.breaker-focus[data-boss-framing] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 262px)}}
