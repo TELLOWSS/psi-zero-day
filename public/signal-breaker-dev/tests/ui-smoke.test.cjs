@@ -5,7 +5,7 @@ const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]));
 const refs=[...src.matchAll(/\$\('([^']+)'\)/g)].map(x=>x[1]);for(const r of refs)assert.ok(ids.has(r),`missing HTML ID ${r}`);
 let queue=[], windowListeners={},documentListeners={},storage=new Map(),currentNow=0;
 class Element {
- constructor(tag='div'){this.tag=tag;this.dataset={};this.children=[];this.style={};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
+ constructor(tag='div'){this.tag=tag;this.dataset={};this.children=[];this.style={setProperty(k,v){this[k]=v}};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
  addEventListener(n,fn){(this.listeners[n]??=[]).push(fn)}
  append(...es){this.children.push(...es)}appendChild(el){this.children.push(el)}replaceChildren(...es){this.children=es}
  getBoundingClientRect(){return {left:0,top:0,width:1100,height:620}}getContext(){return proxyContext}
@@ -13,11 +13,11 @@ class Element {
  setPointerCapture(){}trigger(n,e={}){for(const cb of this.listeners[n]||[])cb(e)}
 }
 const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}})}, {get:(obj,key)=>key in obj?obj[key]:()=>{},set:(obj,key,v)=>(obj[key]=v,true)});
-const elements={};const document={querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
+const elements={};const document={baseURI:'https://game.test/signal-breaker-dev/index.html',querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
 for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
 global.location={search:'?entry=prepare'};
-global.window={SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
+global.window={PSIPresentationAssets:{image:url=>({src:url,complete:false,naturalWidth:0})},SignalBreakerEpisodeTwo:require('../src/episode-two.js'),SignalBreakerWorkshop:require('../src/psi-workshop.js'),SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/firing-pose.js'),'utf8'),{filename:'src/firing-pose.js'});

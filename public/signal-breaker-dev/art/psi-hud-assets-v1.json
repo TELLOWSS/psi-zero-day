@@ -1,0 +1,14 @@
+{
+  "source": "psi-hud-atlas-v1.webp",
+  "tool": "image_gen built-in",
+  "status": "final-candidate-pending-director-review",
+  "transparent": true,
+  "parts": [
+    "psi-hud-field-v1.webp",
+    "psi-hud-brass-v1.webp",
+    "psi-hud-grid-v1.webp",
+    "psi-fire-ring-v1.webp",
+    "psi-nav-ring-v1.webp",
+    "psi-shield-chip-v1.webp"
+  ]
+}
