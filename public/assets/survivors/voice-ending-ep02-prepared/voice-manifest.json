@@ -1,0 +1,243 @@
+{
+  "project": "오늘도 무사히 / SIGNAL BREAKER",
+  "assetSet": "Episode 02 timing-ready voice recommendations",
+  "status": "TIMING_READY_PENDING_AUTHORED_CONTRACT_AND_LISTENING",
+  "runtimeIntegrated": false,
+  "finalListeningApproved": false,
+  "originalFilesPreserved": true,
+  "targetLufsI": -24.0,
+  "maximumTempoFactor": 1.08,
+  "generator": "scripts/prepare-ending-ep02-voices.py",
+  "auditScope": "Original candidate SHA-256; conservative silence edits; pitch-preserving atempo only if needed; decoded duration, ffmpeg integrated loudness/true peak and PCM clipping. No transcript or listening certification.",
+  "files": [
+    {
+      "slot": "CH-06",
+      "speaker": "임준호",
+      "variant": "v01",
+      "exactDialogue": "우회 동선도 옆 팀에 전했습니다. 이번에는 놓치지 않았어요.",
+      "filename": "PSI_V_END_CH06_LIM_v01_timing_ready.wav",
+      "candidateAssetPath": "/assets/survivors/voice-ending-ep02-prepared/PSI_V_END_CH06_LIM_v01_timing_ready.wav",
+      "sourceFilename": "PSI_V_END_CH06_LIM_v01.wav",
+      "sourceSha256": "523650fcf6bfd8752e86abbcc58521c504efa2cc24a70894e37342c94370f29b",
+      "sha256": "9d9273dd5ee8ff3b6e8e78f85c08d8785e2760fdbd951c6ba6c7b70bd42e7019",
+      "selectionReason": "Shortest supplied recording per slot; minimal timing treatment before tonal listening review.",
+      "sourceDurationSeconds": 4.24,
+      "decodedDurationSeconds": 4.24,
+      "targetSeconds": [
+        3.6,
+        4.3
+      ],
+      "timingPass": true,
+      "removedSilenceFrames": 0,
+      "removedSilenceRanges": [],
+      "silenceThresholdDbfs": -45,
+      "edgePaddingSeconds": 0.1,
+      "minimumInternalPauseSeconds": 0.3,
+      "tempoFactor": 1.0,
+      "gainDb": 0.8399999999999999,
+      "lufsIMeasured": -24.01,
+      "truePeakDbtpMeasured": -5.91,
+      "fullScaleSamples": 0,
+      "codec": "pcm_s16le",
+      "sampleRateHz": 24000,
+      "channels": 1,
+      "bitsPerSample": 16,
+      "speakerId": null,
+      "lineId": null,
+      "runtimeIntegrated": false,
+      "approvalStatus": "awaiting-listening-approval"
+    },
+    {
+      "slot": "CH-07",
+      "speaker": "윤성호",
+      "variant": "v01",
+      "exactDialogue": "흐름을 되돌리니, 빠졌던 순서가 보입니다. 다음 팀에도 남기죠.",
+      "filename": "PSI_V_END_CH07_YOON_v01_timing_ready.wav",
+      "candidateAssetPath": "/assets/survivors/voice-ending-ep02-prepared/PSI_V_END_CH07_YOON_v01_timing_ready.wav",
+      "sourceFilename": "PSI_V_END_CH07_YOON_v01.wav",
+      "sourceSha256": "9fd0c46ce0999736140fdb7f157b395154ffd078933adc502a46b1865dc629a6",
+      "sha256": "a4469e0883fd20019fc47270471f72b232369a775217b876bd59dd4261fb8edb",
+      "selectionReason": "Shortest supplied recording per slot; minimal timing treatment before tonal listening review.",
+      "sourceDurationSeconds": 4.76,
+      "decodedDurationSeconds": 4.444541666666667,
+      "targetSeconds": [
+        3.8,
+        4.5
+      ],
+      "timingPass": true,
+      "removedSilenceFrames": 7571,
+      "removedSilenceRanges": [
+        {
+          "startFrame": 0,
+          "endFrame": 3152
+        },
+        {
+          "startFrame": 109821,
+          "endFrame": 114240
+        }
+      ],
+      "silenceThresholdDbfs": -45,
+      "edgePaddingSeconds": 0.1,
+      "minimumInternalPauseSeconds": 0.3,
+      "tempoFactor": 1.0,
+      "gainDb": -1.8500000000000014,
+      "lufsIMeasured": -24.0,
+      "truePeakDbtpMeasured": -7.75,
+      "fullScaleSamples": 0,
+      "codec": "pcm_s16le",
+      "sampleRateHz": 24000,
+      "channels": 1,
+      "bitsPerSample": 16,
+      "speakerId": null,
+      "lineId": null,
+      "runtimeIntegrated": false,
+      "approvalStatus": "awaiting-listening-approval"
+    },
+    {
+      "slot": "CH-08",
+      "speaker": "임준호",
+      "variant": "v01",
+      "exactDialogue": "맑아졌다고 끝난 건 아니네요. 남은 분진까지 확인했습니다.",
+      "filename": "PSI_V_END_CH08_LIM_v01_timing_ready.wav",
+      "candidateAssetPath": "/assets/survivors/voice-ending-ep02-prepared/PSI_V_END_CH08_LIM_v01_timing_ready.wav",
+      "sourceFilename": "PSI_V_END_CH08_LIM_v01.wav",
+      "sourceSha256": "903b5a4364e733fe89b02ebb671ab604f4bdfa01af381350e302e399bdb14a76",
+      "sha256": "a34438e9ea500d3a96ade23d581a4fc72d6388dc637995cfbd76000043303620",
+      "selectionReason": "Shortest supplied recording per slot; minimal timing treatment before tonal listening review.",
+      "sourceDurationSeconds": 4.4,
+      "decodedDurationSeconds": 4.063291666666666,
+      "targetSeconds": [
+        3.6,
+        4.3
+      ],
+      "timingPass": true,
+      "removedSilenceFrames": 8081,
+      "removedSilenceRanges": [
+        {
+          "startFrame": 0,
+          "endFrame": 3039
+        },
+        {
+          "startFrame": 100558,
+          "endFrame": 105600
+        }
+      ],
+      "silenceThresholdDbfs": -45,
+      "edgePaddingSeconds": 0.1,
+      "minimumInternalPauseSeconds": 0.3,
+      "tempoFactor": 1.0,
+      "gainDb": -0.4400000000000013,
+      "lufsIMeasured": -24.0,
+      "truePeakDbtpMeasured": -9.04,
+      "fullScaleSamples": 0,
+      "codec": "pcm_s16le",
+      "sampleRateHz": 24000,
+      "channels": 1,
+      "bitsPerSample": 16,
+      "speakerId": null,
+      "lineId": null,
+      "runtimeIntegrated": false,
+      "approvalStatus": "awaiting-listening-approval"
+    },
+    {
+      "slot": "CH-09",
+      "speaker": "강태식",
+      "variant": "v02",
+      "exactDialogue": "두 팀이 쓰는 선이면, 두 팀이 같이 확인해야지. 이제 전하자.",
+      "filename": "PSI_V_END_CH09_KANG_v02_timing_ready.wav",
+      "candidateAssetPath": "/assets/survivors/voice-ending-ep02-prepared/PSI_V_END_CH09_KANG_v02_timing_ready.wav",
+      "sourceFilename": "PSI_V_END_CH09_KANG_v02.wav",
+      "sourceSha256": "6fb67e85f64555cdd8e8527368a77fd8d0474714a5577fb92625046874dcd8b9",
+      "sha256": "b5f59aa7deb2f19e49727f6d4fec1a79b263ab6e7cd29e3b0a09c61d6c032191",
+      "selectionReason": "Shortest supplied recording per slot; minimal timing treatment before tonal listening review.",
+      "sourceDurationSeconds": 5.08,
+      "decodedDurationSeconds": 4.430916666666667,
+      "targetSeconds": [
+        3.8,
+        4.5
+      ],
+      "timingPass": true,
+      "removedSilenceFrames": 11966,
+      "removedSilenceRanges": [
+        {
+          "startFrame": 89583,
+          "endFrame": 96039
+        },
+        {
+          "startFrame": 116410,
+          "endFrame": 121920
+        }
+      ],
+      "silenceThresholdDbfs": -45,
+      "edgePaddingSeconds": 0.1,
+      "minimumInternalPauseSeconds": 0.3,
+      "tempoFactor": 1.0365196078431373,
+      "gainDb": -1.9400000000000013,
+      "lufsIMeasured": -24.12,
+      "truePeakDbtpMeasured": -7.83,
+      "fullScaleSamples": 0,
+      "codec": "pcm_s16le",
+      "sampleRateHz": 24000,
+      "channels": 1,
+      "bitsPerSample": 16,
+      "speakerId": null,
+      "lineId": null,
+      "runtimeIntegrated": false,
+      "approvalStatus": "awaiting-listening-approval"
+    },
+    {
+      "slot": "CH-10",
+      "speaker": "안전관리자",
+      "variant": "v01",
+      "exactDialogue": "오늘의 복구 기록을 넘깁니다. 다음 현장에서도, 오늘도 무사히.",
+      "filename": "PSI_V_END_CH10_PLAYER_v01_timing_ready.wav",
+      "candidateAssetPath": "/assets/survivors/voice-ending-ep02-prepared/PSI_V_END_CH10_PLAYER_v01_timing_ready.wav",
+      "sourceFilename": "PSI_V_END_CH10_PLAYER_v01.wav",
+      "sourceSha256": "fefbf72293660c571b32a6c05235263cae066dfd5111c0476c80db4b293fb325",
+      "sha256": "11b1bc94a7a7bba74d5000a8934c5ab825236187ca60bbb53b3c0fb2d4840b71",
+      "selectionReason": "Shortest supplied recording per slot; minimal timing treatment before tonal listening review.",
+      "sourceDurationSeconds": 5.72,
+      "decodedDurationSeconds": 4.732458333333334,
+      "targetSeconds": [
+        4.0,
+        4.8
+      ],
+      "timingPass": true,
+      "removedSilenceFrames": 23701,
+      "removedSilenceRanges": [
+        {
+          "startFrame": 0,
+          "endFrame": 6279
+        },
+        {
+          "startFrame": 57188,
+          "endFrame": 64615
+        },
+        {
+          "startFrame": 95781,
+          "endFrame": 100283
+        },
+        {
+          "startFrame": 131787,
+          "endFrame": 137280
+        }
+      ],
+      "silenceThresholdDbfs": -45,
+      "edgePaddingSeconds": 0.1,
+      "minimumInternalPauseSeconds": 0.3,
+      "tempoFactor": 1.0,
+      "gainDb": -4.300000000000001,
+      "lufsIMeasured": -24.0,
+      "truePeakDbtpMeasured": -8.22,
+      "fullScaleSamples": 0,
+      "codec": "pcm_s16le",
+      "sampleRateHz": 24000,
+      "channels": 1,
+      "bitsPerSample": 16,
+      "speakerId": null,
+      "lineId": null,
+      "runtimeIntegrated": false,
+      "approvalStatus": "awaiting-listening-approval"
+    }
+  ]
+}
