@@ -218,9 +218,12 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().support.phase),'holding');
    await page.waitForFunction(()=>document.getElementById('sourceBtn').hidden);
    await page.evaluate(clear);await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='intermission');
-   a.equal(await record.count(),0,'later wave has no first-wave verification claim');
+   a.equal(await record.count(),1,'later wave retains the already verified first-wave evidence');
+   a.equal(await page.evaluate(()=>SignalBreakerQA.engine().sourceEvidence?.verified),true);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.engine().source),null,'archived evidence does not respawn the source');
    await page.reload();await page.locator('#resumeRun').click();await page.locator('[data-tuning]').first().waitFor({state:'visible'});
-   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source),null);a.equal(await record.count(),0);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source),null);a.equal(await record.count(),1);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.engine().sourceEvidence?.verified),true,'verified evidence survives a later-wave checkpoint reload');
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().support.barrierProgress),1);
    await page.waitForFunction(()=>SignalBreakerQA.view().supportDrawn);
    await page.locator('[data-tuning]').first().click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),3);
