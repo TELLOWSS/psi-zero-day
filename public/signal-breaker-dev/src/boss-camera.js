@@ -26,6 +26,14 @@ function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,groun
  return {x,y,scale,visible,visibleHeight,targets:{left,right,player:player.x,boss:boss.x},
          zoomFit:fitScale,verticalCover:backgroundCover};
 }
-root.SignalBreakerBossCamera={frame};
+function landscapeFrame({width,height,worldWidth=1100,player,boss}){
+ if(!Number.isFinite(width)||!Number.isFinite(height)||!boss||!player||boss.phase==='resolved'||width<=height||height>600||height<140||!Number.isFinite(boss.y)||!Number.isFinite(player.y))return null;
+ // Show the complete authored body, its engine relay rings and operator feet below the compact HUD.
+ const top=Math.min(boss.y-120,...(boss.nodes||[]).map(n=>n.y-31)),bottom=player.y+31;
+ const safeTop=50,safeBottom=24,scale=Math.min(width/worldWidth,(height-safeTop-safeBottom)/Math.max(200,bottom-top));
+ if(scale<=0)return null;
+ return {scale,x:(worldWidth-width/scale)/2,y:top-safeTop/scale,targets:{top,bottom},safeTop,safeBottom};
+}
+root.SignalBreakerBossCamera={frame,landscapeFrame};
 if(typeof module==='object'&&module.exports)module.exports=root.SignalBreakerBossCamera;
 })(typeof window!=='undefined'?window:globalThis);

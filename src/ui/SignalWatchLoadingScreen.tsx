@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
 import './signal-watch-loading.css';
+import { SIGNAL_WATCH_KEY_ART } from './signal-watch-art';
+import { resumePatrolStage, parseSave, LAST_PATROL_STAGE_KEY } from '../app/survivors-save';
+import { stageGroundUri } from './survivors-equipment-art';
 
-const HERO = '/signal-watch-loading/signal-watch-a-v1.webp';
-const PRELOAD_ASSETS = [
-  HERO,
-  '/assets/survivors/sprite_player_yoon.webp',
-  '/assets/survivors/sprite_mob_worker.webp',
-  '/assets/survivors/stage-01-ground-v2.webp',
-] as const;
+const HERO = SIGNAL_WATCH_KEY_ART;
+function entryGround(): string {
+  try {
+    return stageGroundUri(resumePatrolStage(localStorage.getItem(LAST_PATROL_STAGE_KEY),
+      parseSave(localStorage.getItem('psi.survivors.unlocked_stages')),
+      parseSave(localStorage.getItem('psi.survivors.stage_stars'))));
+  } catch { return stageGroundUri('stage_01'); }
+}
 
-function preloadImage(uri: string): Promise<void> {
+function preloadImage(uri: string, attempt = 0): Promise<void> {
   return new Promise((resolve, reject) => {
     const image = new Image();
     const timeout = window.setTimeout(() => reject(new Error(`Asset loading timed out: ${uri}`)), 12000);
     image.onload = () => { window.clearTimeout(timeout); resolve(); };
     image.onerror = () => { window.clearTimeout(timeout); reject(new Error(`Asset loading failed: ${uri}`)); };
-    image.src = uri;
+    // A transient failed request may remain negatively cached by the browser.
+    image.src = attempt ? `${uri}${uri.includes('?') ? '&' : '?'}entryRetry=${attempt}` : uri;
   });
 }
 
@@ -33,21 +38,21 @@ export function SignalWatchLoadingScreen({ loadGame, onComplete, onExit }: {
     let completed = 0;
     let transition: number | undefined;
     let watchdog: number | undefined;
-    const started = performance.now();
+    const assetsToPrepare = [HERO, entryGround()];
     setProgress(0);
     setFailed(false);
 
     const markPrepared = () => {
       if (!cancelled) {
         completed += 1;
-        setProgress(Math.round((completed / (PRELOAD_ASSETS.length + 1)) * 96));
+        setProgress(Math.round((completed / (assetsToPrepare.length + 1)) * 96));
       }
     };
 
-    const assets = PRELOAD_ASSETS.map((uri, index) => preloadImage(uri)
+    const assets = assetsToPrepare.map((uri, index) => preloadImage(uri, attempt)
       .then(markPrepared)
       .catch(error => {
-        // The cinematic artwork is mandatory; missing auxiliary sprites should not lock the app.
+        // The cinematic artwork is mandatory; a missing selected map should not lock the app.
         if (index === 0) throw error;
         markPrepared();
       }));
@@ -61,7 +66,7 @@ export function SignalWatchLoadingScreen({ loadGame, onComplete, onExit }: {
         if (cancelled) return;
         window.clearTimeout(watchdog);
         setProgress(100);
-        transition = window.setTimeout(onComplete, Math.max(300, 1000 - (performance.now() - started)));
+        transition = window.setTimeout(onComplete, 180);
       })
       .catch(() => {
         if (cancelled) return;
@@ -79,20 +84,22 @@ export function SignalWatchLoadingScreen({ loadGame, onComplete, onExit }: {
   const status = failed
     ? '현장을 불러오지 못했습니다.'
     : progress === 100
-      ? '현장 진입 준비 완료'
+      ? '작전 선택 화면 준비 완료'
       : progress < 40
         ? '현장 환경과 장비를 확인하는 중'
         : progress < 80
           ? '작업자와 위험 신호를 연결하는 중'
           : '안전 신호 분석을 마무리하는 중';
 
+  const hero = attempt ? `${HERO}?entryRetry=${attempt}` : HERO;
+
   return <main className="signal-watch-loading" aria-label="시그널 워치 진입 준비">
-    <img className="signal-watch-loading-backdrop" src={HERO} alt="" aria-hidden="true" />
-    <div className="signal-watch-loading-atmosphere" aria-hidden="true" />
     <div className="signal-watch-loading-poster">
-      <img className="signal-watch-loading-art" src={HERO} alt="" aria-hidden="true" fetchPriority="high" />
-      <div className="signal-watch-loading-scan" aria-hidden="true" />
+      <img key={attempt} className="signal-watch-loading-art" src={hero} alt="" aria-hidden="true" fetchPriority="high" />
       <section className="signal-watch-loading-panel" aria-live="polite">
+        <span className="signal-watch-loading-brand">SIGNAL WATCH / NEW PSI</span>
+        <h1>시그널 워치</h1>
+        <p className="signal-watch-loading-tagline">사고 전 신호를 읽고, 현장을 바꿔라.</p>
         <div className="signal-watch-loading-progress-title">
           <strong>LOADING<span aria-hidden="true">...</span></strong>
           <b>{progress}%</b>

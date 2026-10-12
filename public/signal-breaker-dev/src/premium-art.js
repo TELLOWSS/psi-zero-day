@@ -54,6 +54,30 @@ function drawCanvas(c,stage){
  if(stage?.boss){glow(c,800,212,290,'#b686ff23');for(let i=0;i<7;i++){let a=i*.9;line(c,786,200,786+Math.cos(a)*180,200+Math.sin(a)*170,'#b892ff13',4);}}
 }
 class PremiumArt{
+ // Final raster bodies use the existing world origin; physics and relay nodes remain engine-owned.
+ bossBody(c,b,time){
+  if(typeof Image==='undefined'||!root.PSIPresentationAssets)return false;
+  const sizes={delivery:[252,184],conveyor:[280,188],extraction:[244,214],tension:[286,202],grid:[280,224]},size=sizes[b.identity];
+  if(!size)return false;
+  const source='art/boss-'+b.identity+'-final-v2.webp';
+  this.bossImages=this.bossImages||{};
+  const image=this.bossImages[source]||root.PSIPresentationAssets.image(source);this.bossImages[source]=image;
+  if(!image?.complete||!image.naturalWidth)return false;
+  const [w,maxH]=size,h=Math.min(maxH,w*image.naturalHeight/image.naturalWidth),exposed=b.phase==='exposed',warning=b.warningUntil>time;
+  c.save();
+  // Shadow and light are local to the apparatus, never a second collision silhouette.
+  glow(c,b.x,b.y,w*.52,exposed?'#f8c67429':warning?'#ef785924':'#65b7c511');
+  c.drawImage(image,b.x-w/2,b.y-h/2,w,h);
+  const hp=b.maxHp?Math.max(0,b.hp)/b.maxHp:1;
+  if(hp<1){c.globalAlpha=(1-hp)*.35;glow(c,b.x,b.y,42,'#f9ad6544');c.globalAlpha=1;}
+  disk(c,b.x,b.y,exposed?22:14,exposed?'#fff0bdcc':'#122935bc',exposed?'#ffe6a5':'#83bec999',exposed?3:1.5);
+  if(exposed){disk(c,b.x,b.y,31,null,'#ffdda366',2);}
+  const segments=b.maxGatePhases||b.maxSegments||b.maxFilterStages||0,phase=b.gatePhase||b.segment||b.filterStage||1;
+  if(segments>1){for(let i=0;i<segments;i++)disk(c,b.x+(i-(segments-1)/2)*12,b.y+h/2-8,3.5,i<phase?'#ffd389':'#284854');}
+  if(warning){const alpha=this.reducedMotion ? .75 : .55+.2*Math.sin(time*6);c.globalAlpha=alpha;disk(c,b.x-w*.38,b.y-h*.28,5,'#ffd390');disk(c,b.x+w*.38,b.y-h*.28,5,'#ffd390');}
+  c.restore();this.lastBossArt={identity:b.identity,source,width:w,height:h,ready:true};return true;
+ }
+
  projectile(c,s,time){
   const spec=root.SignalBreakerChapter?.WEAPONS[s.kind];if(!spec)return false;
   const color=spec.color,trail=s.trail||[],angle=Math.atan2(s.vy,s.vx);
@@ -108,6 +132,7 @@ class PremiumArt{
  // Stage 01 production-specific industrial boss vector. Unlike the shared equipment atlas,
  // the delivery conveyor controller has its own silhouette, moving blast doors and warning lamps.
  deliveryBoss(c,b,time){
+  if(this.bossBody(c,b,time))return true;
   const opened=b.phase==='exposed',rearming=b.phase==='rearming',gate=b.gatePhase||1,danger=b.warningUntil>time,beat=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);glow(c,0,0,142,rearming?'#fbb06a55':opened?'#ffda8e55':'#7dd7ea22');
   path(c,[[-114,-48],[-81,-84],[85,-84],[114,-45],[114,52],[80,79],[-82,79],[-114,52]],'#1a3443','#95b8c4',4);
@@ -130,6 +155,7 @@ class PremiumArt{
  // CH-02 dedicated moving conveyor controller: twin drive shafts, belt teeth,
  // variable rotation and outward opening core. Rendered procedurally for offline performance.
  conveyorBoss(c,b,time,direction){
+  if(this.bossBody(c,b,time))return true;
   const open=b.phase==='exposed',warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,146,shift?'#fdb57555':warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
@@ -163,6 +189,7 @@ class PremiumArt{
  // CH-03 distinct tall pressure extraction tower: cyclone duct, collector drum and fan.
  // Pure Canvas vector geometry, keeping responsive draw budget bounded.
  extractionBoss(c,b,time,gate){
+  if(this.bossBody(c,b,time))return true;
   const open=b.phase==='exposed',purging=b.phase==='purging',warning=b.warningUntil>time,controlled=b.mistUntil>time,filter=b.filterStage||1,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,163,purging?'#bbffca56':controlled?'#9cf1d848':warning?'#f7b57445':'#a3d7e42b');
@@ -189,6 +216,7 @@ class PremiumArt{
  }
  // CH04 distinct counterweight/tension-drum profile; independent of three preceding boss silhouettes.
  tensionBoss(c,b,time,secured){
+  if(this.bossBody(c,b,time))return true;
   const opened=b.phase==='exposed',warning=b.warningUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,154,secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
@@ -215,6 +243,7 @@ class PremiumArt{
  }
  // CH05 finale: multi-circuit command center with rotating armature and three live channels.
  gridBoss(c,b,time){
+  if(this.bossBody(c,b,time))return true;
   const open=b.phase==='exposed',critical=b.combatTier===2,warning=b.warningUntil>time,isolated=b.scannedUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,182,critical?'#fc78ae49':isolated?'#a8f6d54c':'#bdabfb38');

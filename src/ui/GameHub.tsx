@@ -17,6 +17,7 @@ import {
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
+import { SIGNAL_WATCH_KEY_ART } from './signal-watch-art';
 import { SignalWatchLoadingScreen } from './SignalWatchLoadingScreen';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { SiteProfileScreen } from './SiteProfileScreen';
@@ -41,7 +42,7 @@ const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: modu
 const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
 const OperationHandoffDossier = lazy(() => import('./OperationHandoffDossier').then(module => ({default:module.OperationHandoffDossier})));
 const MODE_PREVIEW_ART = {
-  signal: '/mode-previews/signal-watch.webp',
+  signal: SIGNAL_WATCH_KEY_ART,
   defense: '/mode-previews/defense-coming-soon-v2.webp',
   story: '/mode-previews/story-coming-soon-v2.webp',
 } as const;
@@ -329,9 +330,9 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
   const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
     story: episode01BackgroundUri(resolve),
-    missions: resolve('ep01.scene_element.suspended_load'),
+    missions: '/assets/survivors/stage-01-ground-v2.webp',
     people: characterPortraitUri('player', resolve),
-    tomorrow: resolve('ep01.scene_element.access_barrier'),
+    tomorrow: '/signal-breaker-dev/art/ending-ch01-restored-v1.webp',
   };
   useEffect(() => {
     const storedMotion = window.localStorage.getItem('psi.title.motion');
@@ -442,9 +443,9 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         </button>
       </div>
       <section className="commercial-triad-dashboard chapter-record-home" aria-label="챕터별 현장 기록">
-        <header><span>EPISODE 01 / FIELD ARCHIVE</span><h2>챕터 01 · 당신이 바꾼 현장</h2><button type="button" onClick={() => setPage('journal')}>전체 기록 ↗</button></header>
-        <div className="chapter-record-path">{journey.map((step,index)=><button key={step.id} type="button" data-status={step.status} aria-pressed={detail.id===step.id} onClick={()=>setSelectedStep(step.id)}><VisualImage uri={characterPortraitUri(step.character,resolve)} alt=""/><span><small>{String(index+1).padStart(2,'0')} · {t(`ui.hub.step.${step.status}`)}</small><strong>{t(step.title)}</strong></span></button>)}</div>
-        <div className="chapter-record-detail" aria-live="polite"><VisualImage uri={characterHighResPortraitUri(detail.character,resolve)} fallbackUri={characterPortraitUri(detail.character,resolve)} alt=""/><div><small>{t(`ui.hub.step.${detail.status}`)}</small><h3>{t(detail.title)}</h3><p>{t(detail.hint)}</p>{review.some(entry=>entry.event_id===detail.completion)?<EpisodeRecord entries={review.filter(entry=>entry.event_id===detail.completion)} t={t}/>:<p className="chapter-record-empty">아직 이 장면의 선택 기록이 없습니다.</p>}<button type="button" onClick={()=>setPage('map')}>진행 경로 상세 ↗</button></div></div>
+        <header><span>EPISODE 01 / STORY ARCHIVE</span><h2>스토리 모드 · 장면과 기록</h2><button type="button" onClick={() => setPage('journal')}>전체 기록 ↗</button></header>
+        <div className="chapter-record-path">{journey.map((step,index)=><button key={step.id} type="button" data-status={step.status} aria-pressed={detail.id===step.id} onClick={()=>setSelectedStep(step.id)}><VisualImage uri={characterPortraitUri(step.character,resolve)} alt=""/><span><small>{String(index+1).padStart(2,'0')} · {t(step.status === 'done' ? 'ui.hub.step.done' : 'ui.title.archive.preview')}</small><strong>{t(step.title)}</strong></span></button>)}</div>
+        <div className="chapter-record-detail" aria-live="polite"><VisualImage uri={characterHighResPortraitUri(detail.character,resolve)} fallbackUri={characterPortraitUri(detail.character,resolve)} alt=""/><div><small>{t(detail.status === 'done' ? 'ui.hub.step.done' : 'ui.title.archive.preview')}</small><h3>{t(detail.title)}</h3><p>{t(detail.hint)}</p>{review.some(entry=>entry.event_id===detail.completion)?<EpisodeRecord entries={review.filter(entry=>entry.event_id===detail.completion)} t={t}/>:<p className="chapter-record-empty">{t('ui.title.archive.empty')}</p>}<button type="button" onClick={()=>setPage('map')}>진행 경로 상세 ↗</button></div></div>
       </section>
     </section>
 
@@ -491,7 +492,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     </div>
 
     <section className="commercial-title-features" data-title-role="secondary-features" aria-label={t('ui.title.features')}>
-      <button type="button" onClick={() => setPage('map')}>
+      <button type="button" onClick={() => setModePreview('story')}>
         <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
         <span className="commercial-title-feature-shade" aria-hidden="true" />
         <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div><b>›</b>

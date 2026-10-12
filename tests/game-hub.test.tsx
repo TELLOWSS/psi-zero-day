@@ -26,7 +26,7 @@ describe('game hub navigation', () => {
       expect(summary.textContent).not.toContain('해금 구역');
       expect(host.querySelectorAll('.chapter-record-path button')).toHaveLength(5);
       act(() => host.querySelectorAll<HTMLButtonElement>('.chapter-record-path button')[4]!.click());
-      expect(host.querySelector('.chapter-record-detail')?.textContent).toContain('아직 이 장면의 선택 기록이 없습니다.');
+      expect(host.querySelector('.chapter-record-detail')?.textContent).toContain('이 장면의 완료 기록은 없습니다.');
       expect(host.querySelectorAll('.chapter-record-path button')[4]?.getAttribute('aria-pressed')).toBe('true');
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
@@ -56,6 +56,9 @@ describe('game hub navigation', () => {
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
       click('.commercial-title-features button:first-child');
+      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
+      click('.chapter-record-detail button');
       expect(host.querySelector('.hub-page-map')).not.toBeNull();
       expect(host.querySelectorAll('.hub-route-node')).toHaveLength(5);
       click('.hub-nav button:nth-child(3)');

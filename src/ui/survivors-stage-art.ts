@@ -66,7 +66,7 @@ export function drawStageWorkface(ctx: CanvasRenderingContext2D, id: string, haz
       ctx.strokeStyle = '#9de8ac'; ctx.beginPath(); ctx.moveTo(x + 28, y + 26); ctx.lineTo(x + 37, y + 35); ctx.lineTo(x + 53, y + 18); ctx.stroke(); ctx.strokeStyle = art.accent;
     }
     if (art.detail >= 4 && h.label) {
-      ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.font = '11px Pretendard, sans-serif'; ctx.textAlign = 'center';
       ctx.fillText(h.label, h.x, y + 84);
     }
   }
