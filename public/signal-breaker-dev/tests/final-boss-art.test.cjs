@@ -16,7 +16,7 @@ test('raster body replaces each procedural body without moving engine state or w
  const art=new root.SignalBreakerPremiumArt.PremiumArt(),ctx=new Proxy({drawImage:(...args)=>draws.push(args),createRadialGradient:()=>({addColorStop(){}})}, {get:(target,key)=>key in target?target[key]:()=>{},set:(target,key,value)=>(target[key]=value,true)});
  const methods=['deliveryBoss','conveyorBoss','extractionBoss','tensionBoss','gridBoss'];
  keys.forEach((identity,i)=>{for(const phase of ['sealed','exposed','rearming']){const boss={identity,phase,x:650,y:205,hp:2,maxHp:3,warningUntil:2,nodes:[{x:550,y:170,hit:false}],gatePhase:2,maxGatePhases:5},before=JSON.stringify(boss),n=draws.length;
-  assert.equal(art[methods[i]](ctx,boss,1,1),true);assert.equal(draws.length,n+1,'one authored body per frame');assert.equal(JSON.stringify(boss),before,'presentation cannot mutate collision or phases');assert.equal(art.lastBossArt.identity,identity);
+  assert.equal(art[methods[i]](ctx,boss,1,1),true);assert.equal(draws.length-n,[4,3,2,5,4][i],'one base and bounded authored joint patches');assert.ok(draws.slice(n).every(d=>d[0]===draws[n][0]),'joints reuse the same production image');assert.equal(JSON.stringify(boss),before,'presentation cannot mutate collision or phases');assert.equal(art.lastBossArt.identity,identity);
  }});
  assert.equal(new Set(images.filter(x=>x.includes('final-v2'))).size,5,'five independently cached authored bodies');
 });
