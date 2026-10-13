@@ -12,6 +12,29 @@ on:
 permissions:
   contents: read
 jobs:
+  weapon-art-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - name: Verify original weapon atlas alpha and encode delivery format
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import sharp from 'sharp';
+          import crypto from 'node:crypto';
+          const source='public/signal-breaker-dev/art/psi-practice-weapons-source-v1.png';
+          const info=await sharp(source).metadata();
+          const {data,info:raw}=await sharp(source).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+          let transparent=0;for(let i=3;i<data.length;i+=4)if(data[i]===0)transparent++;
+          const target='/tmp/psi-practice-weapons-v1.webp';await sharp(source).webp({quality:88,alphaQuality:100}).toFile(target);
+          const bytes=fs.readFileSync(target);
+          console.log('WEAPON_META_JSON='+JSON.stringify({width:info.width,height:info.height,hasAlpha:info.hasAlpha,transparent,transparentRatio:transparent/(raw.width*raw.height),cornerAlpha:data[3],bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}));
+          console.log('WEAPON_WEBP_BASE64='+bytes.toString('base64'));
+          NODE
   source-flow:
     runs-on: ubuntu-latest
     timeout-minutes: 22

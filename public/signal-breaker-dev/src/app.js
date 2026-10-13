@@ -214,7 +214,7 @@ function tick(now){const delta=last?Math.min(.05,(now-last)/1000):0;last=now;fra
 function updateQuality(){renderSurface();premium.setQuality(quality);premium.setReducedMotion(reduceMotion);$('qualityBtn').textContent=t('breaker.quality.'+quality);$('motionBtn').textContent=t(reduceMotion?'breaker.motion.low':'breaker.motion.full');try{localStorage.setItem(QUALITY_KEY,JSON.stringify({quality,reduceMotion}));}catch{}}
 $('qualityBtn').addEventListener('click',()=>{quality=quality==='high'?'balanced':quality==='balanced'?'low':'high';updateQuality();toast(t('breaker.quality.'+quality));});
 $('motionBtn').addEventListener('click',()=>{reduceMotion=!reduceMotion;updateQuality();toast(reduceMotion?'화면 흔들림 감소':'화면 흔들림 사용');});
-async function toggleFocus(){try{if(document.fullscreenElement)await document.exitFullscreen();else await $('shell').requestFullscreen();}catch{toast('현재 브라우저에서는 화면 확장이 제한됩니다');}}
+async function toggleFocus(){try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('현재 브라우저에서는 화면 확장이 제한됩니다');}}
 $('focusBtn').addEventListener('click',toggleFocus);
 $('conveyorBtn').addEventListener('click',()=>game.cycleConveyor());
 function selectMode(value,practice=false){practiceMode=false;veteranMode=false;mode=value;lab=practice;keys.clear();touchMove=0;setupStage(value==='chapter'?'CH-01':'SB-01');document.body.classList.add('breaker-focus');}
@@ -255,6 +255,7 @@ function renderLobby(){const progress=window.PSIOperatorProfile.operatorProgress
 
 
 /* Permanent top/status/control rails keep information and input outside the live arena. */
+document.body.append($('overlay'),$('stageEnding'));
 const topRail=$('battleTopRail'),statusRail=$('battleStatusRail'),controlRail=$('battleControlRail');
 topRail.append(document.querySelector('.hud-top'),$('guideBtn'),$('exitBtn'));
 $('battleSummary').append($('hudBottom'),$('bossEncounter'),$('veteranStatus'),$('signalObjective'),$('itemStatus'));
