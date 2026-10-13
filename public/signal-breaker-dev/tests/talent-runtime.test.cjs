@@ -11,10 +11,10 @@ test('guide reward survives reload and cannot be claimed twice',()=>{
 });
 test('malformed growth saves cannot inject ranks, tiers, sockets or invalid points',()=>{
  const storage=new Map([['psi.signal-breaker.talent-tech.v1',JSON.stringify({points:-9,talents:{kin_t1:999,eng_t1:-1,unknown:4},weaponLevels:{pulse:99,net:2,unknown:8},weaponSockets:{pulse:['bad','gem_pulse',null],net:'bad'}})]]),manager=load(storage);
- assert.equal(manager.points,5);assert.equal(manager.weaponLevels.pulse,1);assert.equal(manager.weaponLevels.net,2);assert.equal(manager.talents.kin_t1,undefined);assert.equal(manager.weaponSockets.pulse[0],null);
+ assert.equal(manager.points,5);assert.equal(manager.weaponLevels.pulse,1);assert.equal(manager.weaponLevels.net,2);assert.equal(manager.talents.kin_t1||0,0);assert.equal(manager.weaponSockets.pulse[0],null);
  assert.equal(manager.socketGem('pulse',.5,'gem_pulse'),false);assert.equal(manager.socketGem('pulse',0,'bad'),false);assert.equal(manager.addPoints(NaN),false);assert.equal(manager.addPoints(-5),false);assert.equal(manager.points,5);
 });
-test('unfinished effects cannot spend points or claim an ineffective weapon upgrade',()=>{
+test('prerequisites and engineering stock gate growth investment',()=>{
  const manager=load(new Map()),points=manager.points;
  assert.equal(manager.investTalent('def_t2'),false);assert.equal(manager.investTalent('eng_t5'),false);assert.equal(manager.points,points);
  assert.equal(manager.upgradeWeapon('scan'),false);assert.equal(manager.weaponLevels.scan,1);

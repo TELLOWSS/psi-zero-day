@@ -1,0 +1,20 @@
+const {chromium}=require(process.env.PSI_PLAYWRIGHT_MODULE||'playwright'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4173',out=path.resolve(process.env.PSI_QA_OUTPUT||'../../artifacts/growth-20261013');fs.mkdirSync(out,{recursive:true});
+(async()=>{const browser=await chromium.launch(process.env.CHROME_BIN?{executablePath:process.env.CHROME_BIN}:{channel:'chrome'});const rows=[];
+try{for(const [name,width,height] of [['portrait',360,640],['landscape',844,390],['pc',1440,900]]){
+ const context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(base+'/signal-breaker-dev/index.html?entry=prepare');await page.waitForFunction(()=>window.SignalBreakerQA);await page.locator('#talentBtn').click();
+ const pending=await page.locator('#talentTabContent').textContent();assert.ok(!pending.includes('准备')&&!pending.includes('효과 준비 중'));
+ const plus=page.locator('#talentTabContent button').filter({hasText:'+'});await plus.nth(0).click();assert.equal(await page.evaluate(()=>SignalBreakerTalentTech.manager.talents.def_t1),1);
+ await page.locator('#tabWeapons').click();assert.equal(await page.locator('#talentTabContent .primary-btn').first().isDisabled(),true);
+ await page.evaluate(()=>SignalBreakerTalentTech.manager.grantBossReward('CH-01','browser-fixture-17'));
+ await page.locator('#tabTalents').click();await page.locator('#tabWeapons').click();await page.locator('#talentTabContent .primary-btn').first().click();
+ const state=await page.evaluate(()=>({level:SignalBreakerTalentTech.manager.weaponLevels.pulse,parts:SignalBreakerTalentTech.manager.parts}));assert.deepEqual(state,{level:2,parts:0});
+ const slots=page.locator('#talentTabContent .iconbtn');await slots.first().click();assert.equal(await page.evaluate(()=>SignalBreakerTalentTech.manager.weaponSockets.pulse[0]),'gem_kinetic');
+ assert.equal(await page.locator('#talentTabContent').evaluate(el=>el.scrollWidth>el.clientWidth+1),false,'growth pane overflow');await page.screenshot({path:path.join(out,'growth-'+name+'.png')});await page.locator('#closeTalentTech').click();
+ await page.reload();await page.waitForFunction(()=>window.SignalBreakerQA);assert.equal(await page.evaluate(()=>SignalBreakerTalentTech.manager.weaponLevels.pulse),2);assert.equal(await page.evaluate(()=>SignalBreakerTalentTech.manager.weaponSockets.pulse[0]),'gem_kinetic');
+ await page.locator('#sandboxToggleBtn').click();const permanent=await page.evaluate(()=>localStorage.getItem('psi.signal-breaker.talent-tech.v1'));await page.locator('#maxWeaponsBtn').click();await page.locator('#spawnBoss4').click();assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().equipmentTier('anchor')),4);assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().checkpoint()),null);
+ await page.locator('#sandboxToggleBtn').click();await page.locator('#triggerStaggerBtn').click();await page.locator('#closeSandbox').click();assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().boss.trainingExposedUntil-SignalBreakerQA.engine().time<=4),true);assert.equal(await page.evaluate(()=>localStorage.getItem('psi.signal-breaker.talent-tech.v1')),permanent);
+ assert.deepEqual(errors,[]);rows.push({name,width,height,errors,checks:['predecessors','parts cost','owned gem','reload','no overflow','training tiers','4-second exposure','no checkpoint']});await context.close();
+}fs.writeFileSync(path.join(out,'browser-growth.json'),JSON.stringify(rows,null,2));console.log('PASS growth UI in portrait, landscape and PC: actual upgrade/socket, reload, bounded training and no overflow');
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});

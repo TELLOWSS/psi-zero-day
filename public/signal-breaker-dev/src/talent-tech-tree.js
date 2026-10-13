@@ -1,7 +1,7 @@
 /* SIGNAL BREAKER: WoW-style Talent Tree & Diablo-style Weapon Tech/Socket System.
  * Safe industrial engineering terminology. Non-P2W gameplay progression.
  */
-(function(){
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.SignalBreakerTalentTech={...api,manager:new api.TalentTechManager({storage:typeof localStorage==='object'?localStorage:null})};})(typeof window==='object'?window:globalThis,function(){
   'use strict';
 
   // 1. WoW-Style 3 Specializations (31 Points Total Cap, 1 point per wave/level)
@@ -196,13 +196,30 @@
   };
 
   const SOCKET_GEMS = [
-    { id: 'gem_kinetic', name: '키네틱 코어 (탄속)', bonus: '+12% 에어 펄스 탄속', color: '#ffb36a' },
-    { id: 'gem_thermal', name: '열역학 칩셋 (포획)', bonus: '+15% 포획 반경', color: '#68dbe3' },
-    { id: 'gem_pulse', name: '펄스 증폭기 (연쇄/콤보)', bonus: '+0.3초 콤보 · 삼중 펄스 확률 +10%', color: '#a68aff' }
+    { stat:{pulseSpeed:.12,pulseImpact:.15},id: 'gem_kinetic', name: '키네틱 코어 (탄속)', bonus: '+12% 에어 펄스 탄속', color: '#ffb36a' },
+    {stat:{netRadius:.15,magnetRadius:.15},id: 'gem_thermal', name: '열역학 칩셋 (포획)', bonus: '+15% 포획 반경', color: '#68dbe3' },
+    {stat:{comboWindow:.3,tripleSplitChance:.1},id: 'gem_pulse', name: '펄스 증폭기 (연쇄/콤보)', bonus: '+0.3초 콤보 · 삼중 펄스 확률 +10%', color: '#a68aff' }
+    ,{id:'gem_damper',name:'충격 완충 젬',bonus:'반사 감쇠 15% 감소',color:'#87d5dd',stat:{bounceVelocity:.15}}
+    ,{id:'gem_mist',name:'공학 미스트 젬',bonus:'미스트 감압 25% 가속',color:'#87e4cb',stat:{mistRate:.25}}
+    ,{id:'gem_tension',name:'텐션 하중 젬',bonus:'앵커 고정시간 +1초',color:'#ffc582',stat:{anchorDuration:1}}
+    ,{id:'gem_insulation',name:'절연 세라믹 젬',bonus:'전력 코어 접촉 피해 면역',color:'#ccabff',stat:{powerImmunity:1}}
   ];
+  const BOSS_LOOT={
+    'CH-01':{gemId:'gem_kinetic',partName:'고압 챔버 부품'},
+    'CH-02':{gemId:'gem_damper',commonGemId:'gem_pulse',partName:'댐퍼 앵커 부품'},
+    'CH-03':{gemId:'gem_mist',commonGemId:'gem_thermal',partName:'나노 집진 필터 부품'},
+    'CH-04':{gemId:'gem_tension',commonGemId:'gem_pulse',partName:'고장력 와이어 부품'},
+    'CH-05':{gemId:'gem_insulation',commonGemId:'gem_thermal',partName:'특고압 릴레이 부품'}
+  };
+  const GEM_WEAPONS={gem_kinetic:['pulse'],gem_thermal:['net','magnet'],gem_pulse:['pulse'],gem_mist:['mist'],gem_tension:['anchor']};
+  const compatible=(weapon,id)=>Object.hasOwn(WEAPON_TECHS,weapon)&&SOCKET_GEMS.some(g=>g.id===id)&&(!GEM_WEAPONS[id]||GEM_WEAPONS[id].includes(weapon));
 
   class TalentTechManager {
-    constructor() {
+    constructor(options = {}) {
+      this.storage = options.storage || null;
+      this.parts = 0;
+      this.inventory = {};
+      this.rewardClaims = [];
       this.storageKey = 'psi.signal-breaker.talent-tech.v1';
       this.guideRewardClaimed = false;
       this.points = 5; // 기본 지급 포인트
@@ -222,7 +239,7 @@
 
     load() {
       try {
-        const raw = localStorage.getItem(this.storageKey);
+        const raw = this.storage?.getItem(this.storageKey);
         if (!raw) return;
         const data = JSON.parse(raw);
         this.guideRewardClaimed = data.guideRewardClaimed === true;
@@ -237,6 +254,14 @@
           const sockets = data.weaponSockets?.[key];
           if (Array.isArray(sockets) && sockets.length === 3) this.weaponSockets[key] = sockets.map(id => SOCKET_GEMS.some(gem => gem.id === id) ? id : null);
         }
+        const validCount=v=>Number.isSafeInteger(v)&&v>=0&&v<=999;
+        if(validCount(data.parts))this.parts=data.parts;
+        for(const gem of SOCKET_GEMS)if(validCount(data.inventory?.[gem.id]))this.inventory[gem.id]=data.inventory[gem.id];
+        // Legacy mounted stock is preserved; incompatible mounts return to inventory.
+        if(data.schemaVersion!==2)for(const slots of Object.values(this.weaponSockets))for(const id of slots)if(id)this.inventory[id]=Math.max(this.inventory[id]||0,this.equippedCount(id));
+        const allocated={};for(const [weapon,slots] of Object.entries(this.weaponSockets))this.weaponSockets[weapon]=slots.map(id=>{if(!id||!compatible(weapon,id)||(allocated[id]||0)>=(this.inventory[id]||0))return null;allocated[id]=(allocated[id]||0)+1;return id;});
+        this.rewardClaims=Array.isArray(data.rewardClaims)?[...new Set(data.rewardClaims.filter(id=>typeof id==='string'&&id.length<=100))].slice(-512):[];
+        let remaining=Math.min(31,this.points);for(const tree of Object.values(TALENT_TREES))for(let index=0;index<tree.tiers.length;index++){const tier=tree.tiers[index],rank=this.talents[tier.id]||0,unlocked=index===0||this.talents[tree.tiers[index-1].id]===tree.tiers[index-1].maxRank;this.talents[tier.id]=unlocked?Math.min(rank,remaining):0;remaining-=this.talents[tier.id];}
         this.calcSpent();
       } catch (e) {
         console.warn('TalentTech load error', e);
@@ -245,7 +270,8 @@
 
     save() {
       try {
-        localStorage.setItem(this.storageKey, JSON.stringify({
+        this.storage?.setItem(this.storageKey, JSON.stringify({
+          schemaVersion:2,parts:this.parts,inventory:this.inventory,rewardClaims:this.rewardClaims,
           guideRewardClaimed: this.guideRewardClaimed,
           points: this.points,
           talents: this.talents,
@@ -262,7 +288,7 @@
     }
 
     getAvailablePoints() {
-      return Math.max(0, this.points - this.spentPoints);
+      return Math.max(0, Math.min(31,this.points) - this.spentPoints);
     }
 
     claimGuideReward() {
@@ -280,7 +306,7 @@
     }
 
     investTalent(talentId) {
-      if (!Object.hasOwn(ACTIVE_TALENT_EFFECTS, talentId)) return false;
+      if (!this.canInvest(talentId)) return false;
       // 해당 특성 찾기
       let found = null;
       for (const tree of Object.values(TALENT_TREES)) {
@@ -303,6 +329,18 @@
       return true;
     }
 
+    canInvest(id) {
+      if(this.getAvailablePoints()<=0)return false;
+      for(const tree of Object.values(TALENT_TREES)){const index=tree.tiers.findIndex(t=>t.id===id);if(index<0)continue;const tier=tree.tiers[index];return (this.talents[id]||0)<tier.maxRank&&(index===0||(this.talents[tree.tiers[index-1].id]||0)===tree.tiers[index-1].maxRank);}
+      return false;
+    }
+    equippedCount(id){return Object.values(this.weaponSockets).flat().filter(v=>v===id).length;}
+    availableGems(id){return Math.max(0,(this.inventory[id]||0)-this.equippedCount(id));}
+    canSocket(weapon,id){return compatible(weapon,id);}
+    grantBossReward(stage,key){
+      const entry=BOSS_LOOT[stage];if(!entry||typeof key!=='string'||!key||key.length>100||this.rewardClaims.includes(key))return null;
+      this.rewardClaims.push(key);this.rewardClaims=this.rewardClaims.slice(-512);for(const id of [entry.gemId,entry.commonGemId].filter(Boolean))this.inventory[id]=Math.min(999,(this.inventory[id]||0)+1);this.parts=Math.min(999,this.parts+1);this.points+=2;this.save();return {...entry,points:2,parts:1};
+    }
     resetTalents() {
       this.talents = {};
       this.calcSpent();
@@ -310,16 +348,20 @@
     }
 
     upgradeWeapon(weaponKey) {
-      if (!['pulse', 'net'].includes(weaponKey)) return false;
+      if(!Object.hasOwn(WEAPON_TECHS,weaponKey))return false;
+      if(this.parts<1)return false;
       if (!this.weaponLevels[weaponKey]) return false;
       if (this.weaponLevels[weaponKey] >= 4) return false;
+      this.parts--;
       this.weaponLevels[weaponKey]++;
       this.save();
       return true;
     }
 
     socketGem(weaponKey, slotIdx, gemId) {
-      if (!this.weaponSockets[weaponKey] || !Number.isInteger(slotIdx) || slotIdx < 0 || slotIdx > 2 || (gemId !== null && !SOCKET_GEMS.some(gem => gem.id === gemId))) return false;
+      if (!Object.hasOwn(WEAPON_TECHS,weaponKey) || !Number.isInteger(slotIdx) || slotIdx < 0 || slotIdx > 2 || (gemId !== null && !compatible(weaponKey,gemId))) return false;
+      if(this.weaponSockets[weaponKey][slotIdx]===gemId)return true;
+      if(gemId!==null&&this.availableGems(gemId)<1)return false;
       this.weaponSockets[weaponKey][slotIdx] = gemId;
       this.save();
       return true;
@@ -350,47 +392,21 @@
           }
         }
       }
-      // 2. Weapon Tier Enhancements
-      for (const [wKey, lvl] of Object.entries(this.weaponLevels)) {
-        if (lvl > 1) {
-          const tierBonus = (lvl - 1) * 0.08;
-          if (wKey === 'pulse') stats.pulseSpeed += tierBonus;
-          if (wKey === 'net') stats.netRadius += tierBonus;
-          if (wKey === 'magnet') stats.magnetRadius += tierBonus;
-        }
-      }
-      // 3. Diablo Socket Gems
-      for (const sockets of Object.values(this.weaponSockets)) {
-        for (const gemId of sockets) {
-          if (gemId === 'gem_kinetic') {
-            stats.pulseSpeed += 0.12;
-            stats.pulseImpact += 0.15;
-          } else if (gemId === 'gem_thermal') {
-            stats.netRadius += 0.15;
-            stats.magnetRadius += 0.15;
-          } else if (gemId === 'gem_pulse') {
-            stats.comboWindow += 0.3;
-            stats.tripleSplitChance += 0.1;
-          }
-        }
-      }
+      stats.weaponLevels={...this.weaponLevels};
+      stats.weaponSocketStats={};
+      for(const [key,sockets] of Object.entries(this.weaponSockets)){const values={};for(const id of sockets){const gem=SOCKET_GEMS.find(g=>g.id===id);if(gem)for(const [name,value] of Object.entries(gem.stat))values[name]=(values[name]||0)+value;}stats.weaponSocketStats[key]=values;}
       return stats;
     }
   }
 
-  const ACTIVE_TALENT_EFFECTS = {
-    def_t1: '최대 투자 시 콤보 유지시간 +0.4초',
-    kin_t1: '최대 투자 시 에어 펄스 탄속 +15%',
-    kin_t4: '최대 투자 시 발사마다 60% 확률로 삼중 펄스',
-    eng_t2: '최대 투자 시 포획 반경 +20%',
-    eng_t4: '최대 투자 시 장비 발사 간격 15% 단축'
-  };
+  const ACTIVE_TALENT_EFFECTS=Object.fromEntries(Object.values(TALENT_TREES).flatMap(tree=>tree.tiers.map(tier=>[tier.id,tier.desc])));
 
-  window.SignalBreakerTalentTech = {
+  return {
+    TalentTechManager,BOSS_LOOT,
     ACTIVE_TALENT_EFFECTS,
     TALENT_TREES,
     WEAPON_TECHS,
     SOCKET_GEMS,
-    manager: new TalentTechManager()
+    pointCap:31
   };
-})();
+});

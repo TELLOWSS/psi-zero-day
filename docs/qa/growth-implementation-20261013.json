@@ -1,0 +1,1294 @@
+{
+  "date": "2026-10-13",
+  "baseline": "0153152e",
+  "release": "0.49.0-growth-complete",
+  "implemented": {
+    "talents": 15,
+    "weapons": 6,
+    "tiersPerWeapon": 4,
+    "pointCap": 31,
+    "predecessors": true,
+    "bossLootTables": 5,
+    "ownedSockets": true,
+    "legacyMigration": true,
+    "comboFever": true,
+    "pureTrainingCommands": true
+  },
+  "tests": {
+    "mainPassed": 2059,
+    "mainSkipped": 1,
+    "breakerPassed": 250,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "assetHashes": 97
+  },
+  "browser": [
+    {
+      "name": "portrait",
+      "width": 360,
+      "height": 640,
+      "errors": [],
+      "checks": [
+        "predecessors",
+        "parts cost",
+        "owned gem",
+        "reload",
+        "no overflow",
+        "training tiers",
+        "4-second exposure",
+        "no checkpoint"
+      ]
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "errors": [],
+      "checks": [
+        "predecessors",
+        "parts cost",
+        "owned gem",
+        "reload",
+        "no overflow",
+        "training tiers",
+        "4-second exposure",
+        "no checkpoint"
+      ]
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "checks": [
+        "predecessors",
+        "parts cost",
+        "owned gem",
+        "reload",
+        "no overflow",
+        "training tiers",
+        "4-second exposure",
+        "no checkpoint"
+      ]
+    }
+  ],
+  "device": {
+    "base": "http://127.0.0.1:4173",
+    "report": [
+      {
+        "name": "phone",
+        "width": 390,
+        "height": 844,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 106,
+          "w": 390,
+          "h": 510,
+          "bottom": 616
+        },
+        "pixels": 447525,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 19,
+            "y": 50.140625,
+            "w": 65.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 90.59375,
+            "y": 50.140625,
+            "w": 65.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 162.1875,
+            "y": 50.140625,
+            "w": 65.609375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 233.796875,
+            "y": 50.140625,
+            "w": 65.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 305.390625,
+            "y": 50.140625,
+            "w": 65.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 160.5,
+            "y": 748,
+            "w": 69,
+            "h": 69,
+            "bottom": 817,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 103,
+            "y": 682,
+            "w": 64,
+            "h": 48,
+            "bottom": 730,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 173,
+            "y": 674,
+            "w": 54,
+            "h": 64,
+            "bottom": 738,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 233,
+            "y": 674,
+            "w": 54,
+            "h": 64,
+            "bottom": 738,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 10,
+            "y": 768,
+            "w": 56,
+            "h": 56,
+            "bottom": 824,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 316,
+            "y": 764,
+            "w": 64,
+            "h": 64,
+            "bottom": 828,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 168.8515625,
+            "y": 624,
+            "w": 52.28125,
+            "h": 44,
+            "bottom": 668,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 226.1328125,
+            "y": 624,
+            "w": 52.28125,
+            "h": 44,
+            "bottom": 668,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "small",
+        "width": 360,
+        "height": 640,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 106,
+          "w": 360,
+          "h": 306,
+          "bottom": 412
+        },
+        "pixels": 247860,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 19,
+            "y": 50.140625,
+            "w": 59.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 84.59375,
+            "y": 50.140625,
+            "w": 59.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 150.1875,
+            "y": 50.140625,
+            "w": 59.609375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 215.796875,
+            "y": 50.140625,
+            "w": 59.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 281.390625,
+            "y": 50.140625,
+            "w": 59.59375,
+            "h": 44,
+            "bottom": 94.140625,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 145.5,
+            "y": 544,
+            "w": 69,
+            "h": 69,
+            "bottom": 613,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 94,
+            "y": 478,
+            "w": 64,
+            "h": 48,
+            "bottom": 526,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 164,
+            "y": 470,
+            "w": 48,
+            "h": 64,
+            "bottom": 534,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 218,
+            "y": 470,
+            "w": 48,
+            "h": 64,
+            "bottom": 534,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 10,
+            "y": 564,
+            "w": 56,
+            "h": 56,
+            "bottom": 620,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 286,
+            "y": 560,
+            "w": 64,
+            "h": 64,
+            "bottom": 624,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 153.8515625,
+            "y": 420,
+            "w": 52.28125,
+            "h": 44,
+            "bottom": 464,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 211.1328125,
+            "y": 420,
+            "w": 52.28125,
+            "h": 44,
+            "bottom": 464,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 844,
+          "h": 390,
+          "bottom": 390
+        },
+        "pixels": 740610,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 573,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 625,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 677,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 729,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 781,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 659,
+            "y": 305,
+            "w": 65,
+            "h": 65,
+            "bottom": 370,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 662,
+            "y": 216.5,
+            "w": 58,
+            "h": 45,
+            "bottom": 261.5,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 725,
+            "y": 207,
+            "w": 50,
+            "h": 64,
+            "bottom": 271,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 780,
+            "y": 207,
+            "w": 50,
+            "h": 64,
+            "bottom": 271,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 12,
+            "y": 288,
+            "w": 88,
+            "h": 88,
+            "bottom": 376,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 744,
+            "y": 290,
+            "w": 88,
+            "h": 88,
+            "bottom": 378,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 710.53125,
+            "y": 155,
+            "w": 59.734375,
+            "h": 44,
+            "bottom": 199,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 774.265625,
+            "y": 155,
+            "w": 59.734375,
+            "h": 44,
+            "bottom": 199,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "short",
+        "width": 667,
+        "height": 375,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 667,
+          "h": 375,
+          "bottom": 375
+        },
+        "pixels": 563563,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 396,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 448,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 500,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 552,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 604,
+            "y": 6,
+            "w": 44,
+            "h": 44,
+            "bottom": 50,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 482,
+            "y": 290,
+            "w": 65,
+            "h": 65,
+            "bottom": 355,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 485,
+            "y": 201.5,
+            "w": 58,
+            "h": 45,
+            "bottom": 246.5,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 548,
+            "y": 192,
+            "w": 50,
+            "h": 64,
+            "bottom": 256,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 603,
+            "y": 192,
+            "w": 50,
+            "h": 64,
+            "bottom": 256,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 12,
+            "y": 273,
+            "w": 88,
+            "h": 88,
+            "bottom": 361,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 567,
+            "y": 275,
+            "w": 88,
+            "h": 88,
+            "bottom": 363,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 533.53125,
+            "y": 140,
+            "w": 59.734375,
+            "h": 44,
+            "bottom": 184,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 597.265625,
+            "y": 140,
+            "w": 59.734375,
+            "h": 44,
+            "bottom": 184,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 900,
+          "bottom": 900
+        },
+        "pixels": 2999479,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 1163,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 1215,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 1267,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 1319,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 1371,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 686,
+            "y": 808,
+            "w": 68,
+            "h": 68,
+            "bottom": 876,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 634,
+            "y": 716,
+            "w": 58,
+            "h": 44,
+            "bottom": 760,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 698,
+            "y": 699,
+            "w": 51,
+            "h": 78,
+            "bottom": 777,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 755,
+            "y": 699,
+            "w": 51,
+            "h": 78,
+            "bottom": 777,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 12,
+            "y": 791,
+            "w": 88,
+            "h": 88,
+            "bottom": 879,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 1338,
+            "y": 794,
+            "w": 88,
+            "h": 88,
+            "bottom": 882,
+            "reachable": true
+          },
+          {
+            "id": "leftBtn",
+            "x": 106,
+            "y": 811,
+            "w": 48,
+            "h": 48,
+            "bottom": 859,
+            "reachable": true
+          },
+          {
+            "id": "rightBtn",
+            "x": 160,
+            "y": 811,
+            "w": 48,
+            "h": 48,
+            "bottom": 859,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 692,
+            "y": 648,
+            "w": 56,
+            "h": 44,
+            "bottom": 692,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 753,
+            "y": 648,
+            "w": 56,
+            "h": 44,
+            "bottom": 692,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 106,
+          "w": 768,
+          "h": 690,
+          "bottom": 796
+        },
+        "pixels": 1192320,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 19,
+            "y": 51.140625,
+            "w": 141.1875,
+            "h": 44,
+            "bottom": 95.140625,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 166.1875,
+            "y": 51.140625,
+            "w": 141.203125,
+            "h": 44,
+            "bottom": 95.140625,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 313.390625,
+            "y": 51.140625,
+            "w": 141.203125,
+            "h": 44,
+            "bottom": 95.140625,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 460.59375,
+            "y": 51.140625,
+            "w": 141.203125,
+            "h": 44,
+            "bottom": 95.140625,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 607.796875,
+            "y": 51.140625,
+            "w": 141.1875,
+            "h": 44,
+            "bottom": 95.140625,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 349.5,
+            "y": 928,
+            "w": 69,
+            "h": 69,
+            "bottom": 997,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 298,
+            "y": 864,
+            "w": 58,
+            "h": 44,
+            "bottom": 908,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 362,
+            "y": 854,
+            "w": 51,
+            "h": 64,
+            "bottom": 918,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 419,
+            "y": 854,
+            "w": 51,
+            "h": 64,
+            "bottom": 918,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 10,
+            "y": 948,
+            "w": 56,
+            "h": 56,
+            "bottom": 1004,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 694,
+            "y": 944,
+            "w": 64,
+            "h": 64,
+            "bottom": 1008,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 356,
+            "y": 804,
+            "w": 56,
+            "h": 44,
+            "bottom": 848,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 417,
+            "y": 804,
+            "w": 56,
+            "h": 44,
+            "bottom": 848,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "fullhd",
+        "width": 1920,
+        "height": 1080,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 1920,
+          "h": 1080,
+          "bottom": 1080
+        },
+        "pixels": 2999391,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 1643,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 1695,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 1747,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 1799,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 1851,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 926,
+            "y": 988,
+            "w": 68,
+            "h": 68,
+            "bottom": 1056,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 874,
+            "y": 896,
+            "w": 58,
+            "h": 44,
+            "bottom": 940,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 938,
+            "y": 879,
+            "w": 51,
+            "h": 78,
+            "bottom": 957,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 995,
+            "y": 879,
+            "w": 51,
+            "h": 78,
+            "bottom": 957,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 12,
+            "y": 971,
+            "w": 88,
+            "h": 88,
+            "bottom": 1059,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 1818,
+            "y": 974,
+            "w": 88,
+            "h": 88,
+            "bottom": 1062,
+            "reachable": true
+          },
+          {
+            "id": "leftBtn",
+            "x": 106,
+            "y": 991,
+            "w": 48,
+            "h": 48,
+            "bottom": 1039,
+            "reachable": true
+          },
+          {
+            "id": "rightBtn",
+            "x": 160,
+            "y": 991,
+            "w": 48,
+            "h": 48,
+            "bottom": 1039,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 932,
+            "y": 828,
+            "w": 56,
+            "h": 44,
+            "bottom": 872,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 993,
+            "y": 828,
+            "w": 56,
+            "h": 44,
+            "bottom": 872,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "name": "4k",
+        "width": 3840,
+        "height": 2160,
+        "errors": [],
+        "overflow": false,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 3840,
+          "h": 2160,
+          "bottom": 2160
+        },
+        "pixels": 2999391,
+        "controls": [
+          {
+            "id": "stageSelectBtn",
+            "x": 3563,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "guideBtn",
+            "x": 3615,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "sandboxToggleBtn",
+            "x": 3667,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "talentBtn",
+            "x": 3719,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "pauseBtn",
+            "x": 3771,
+            "y": 15,
+            "w": 44,
+            "h": 44,
+            "bottom": 59,
+            "reachable": true
+          },
+          {
+            "id": "fireBtn",
+            "x": 1886,
+            "y": 2068,
+            "w": 68,
+            "h": 68,
+            "bottom": 2136,
+            "reachable": true
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 1834,
+            "y": 1976,
+            "w": 58,
+            "h": 44,
+            "bottom": 2020,
+            "reachable": true
+          },
+          {
+            "id": "pulseBtn",
+            "x": 1898,
+            "y": 1959,
+            "w": 51,
+            "h": 78,
+            "bottom": 2037,
+            "reachable": true
+          },
+          {
+            "id": "netBtn",
+            "x": 1955,
+            "y": 1959,
+            "w": 51,
+            "h": 78,
+            "bottom": 2037,
+            "reachable": true
+          },
+          {
+            "id": "joystick",
+            "x": 12,
+            "y": 2051,
+            "w": 88,
+            "h": 88,
+            "bottom": 2139,
+            "reachable": true
+          },
+          {
+            "id": "aimPad",
+            "x": 3738,
+            "y": 2054,
+            "w": 88,
+            "h": 88,
+            "bottom": 2142,
+            "reachable": true
+          },
+          {
+            "id": "leftBtn",
+            "x": 106,
+            "y": 2071,
+            "w": 48,
+            "h": 48,
+            "bottom": 2119,
+            "reachable": true
+          },
+          {
+            "id": "rightBtn",
+            "x": 160,
+            "y": 2071,
+            "w": 48,
+            "h": 48,
+            "bottom": 2119,
+            "reachable": true
+          },
+          {
+            "id": "shieldBtn",
+            "x": 1892,
+            "y": 1908,
+            "w": 56,
+            "h": 44,
+            "bottom": 1952,
+            "reachable": true
+          },
+          {
+            "id": "magnetBtn",
+            "x": 1953,
+            "y": 1908,
+            "w": 56,
+            "h": 44,
+            "bottom": 1952,
+            "reachable": true
+          }
+        ]
+      }
+    ]
+  },
+  "simulation": {
+    "totalRuns": 330,
+    "growth": {
+      "method": "3 legal 31P builds × 5 stages × 8 seeds × 2 episodes = 240 runs. Advanced gear/owned gem fixtures are prepared through manager commands; combat uses ordinary input routines at 120 Hz without forced boss resolution, core removal or life refill. Not human balance or mobile FPS.",
+      "summary": [
+        {
+          "profile": "defense",
+          "episode": 1,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 44.2421
+        },
+        {
+          "profile": "defense",
+          "episode": 2,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 57.80474999999999
+        },
+        {
+          "profile": "kinetic",
+          "episode": 1,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 42.22240000000001
+        },
+        {
+          "profile": "kinetic",
+          "episode": 2,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 54.38349999999999
+        },
+        {
+          "profile": "engineering",
+          "episode": 1,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 44.78102500000001
+        },
+        {
+          "profile": "engineering",
+          "episode": 2,
+          "runs": 40,
+          "won": 40,
+          "lost": 0,
+          "unfinished": 0,
+          "meanSeconds": 71.78549999999998
+        }
+      ]
+    },
+    "normal": {
+      "runs": 45,
+      "won": 45,
+      "meanSeconds": 61.41482222222221
+    },
+    "veteran": {
+      "runs": 45,
+      "profiles": [
+        {
+          "frame": "wrong",
+          "won": 0
+        },
+        {
+          "frame": "matching",
+          "won": 10
+        },
+        {
+          "frame": "evolved",
+          "won": 15
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Not human win rates or physical-device FPS.",
+    "New weather/construction scenarios, hardware Android/iOS verification and final art expansion are outside this implementation."
+  ]
+}

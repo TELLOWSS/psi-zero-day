@@ -1,5 +1,7 @@
 # NEW PSI · SIGNAL BREAKER 검증 및 개선 — 2026-10-13
 
+> 이 문서는 최초 검토 기록이다. 미연결 10특성·4장비 진화와 성장/전리품/소켓 보강은 이후 구현에서 진행했으며, 현재 상태는 [최신 구현·검증 MD](SIGNAL-BREAKER-GROWTH-IMPLEMENTATION-20261013.md)를 참조한다.
+
 ## 기준선과 범위
 
 - 실제 최신 개발본: `psi-zero-day-main`, GitHub `TELLOWSS/psi-zero-day`, 시작 커밋 `4212fd80`.

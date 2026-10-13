@@ -191,6 +191,7 @@ dialog.psi-workshop header button{flex-shrink:0}
 body.breaker-focus .utility-controls .util-btn{min-height:44px;height:44px}
 .stage-tabs-row{flex-wrap:wrap}
 .stage-card-enter-btn{min-height:44px}
+dialog.talent-dialog #talentTabContent button{min-height:44px!important;min-width:44px}
 .boss-cutin-box{line-height:1.45}
 .boss-cutin-title{line-height:1.3;overflow-wrap:anywhere}
 .boss-cutin-code,.boss-cutin-target{line-height:1.45;white-space:normal}

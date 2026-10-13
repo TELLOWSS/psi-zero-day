@@ -1,6 +1,6 @@
 /* Ordinary simulated inputs; no forced victories, damage changes or life refills. */
 const fs=require('node:fs'),{Game,DT}=require('../src/engine.js');
-function run(id,seed,frame,branch=null){const g=new Game(id,seed,{veteran:true,extended:true,premiumRun:true,burst:true,continuous:false,operation:true,causal:id==='CH-01'});const preferred=id==='CH-03'?'arc':'laser';g.selectFrame(frame==='wrong'?(preferred==='arc'?'laser':'arc'):preferred);g.start();for(let i=0;i<60000&&['playing','intermission'].includes(g.state);i++){
+function run(id,seed,frame,branch=null,stats=null){const g=new Game(id,seed,{veteran:true,extended:true,premiumRun:true,burst:true,continuous:false,operation:true,causal:id==='CH-01'});const preferred=id==='CH-03'?'arc':'laser';g.selectFrame(frame==='wrong'?(preferred==='arc'?'laser':'arc'):preferred);g.applyTalentStats(stats);g.start();for(let i=0;i<60000&&['playing','intermission'].includes(g.state);i++){
  if(g.state==='intermission'){if(frame==='evolved'&&g.pickupCount>=5&&!g.evolution.recipe)g.evolve(preferred==='arc'?'storm':'prism');if(branch){g.advanceEvolution(branch);g.advanceEvolution('capstone');}g.chooseTuning(g.draft[0]);}
  if(g.source&&!g.source.observed)g.observeSource();if(g.source&&!g.source.requested)g.controlSource('isolate');
  if(g.boss?.identity==='conveyor'&&g.conveyorDirection!==0)g.cycleConveyor();

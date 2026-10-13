@@ -1,5 +1,6 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.growth.forecast':'위험 예고',
 'breaker.tree.title':'무기 진화 경로',
 'breaker.tree.parts':' 부품 확보',
 'breaker.tree.wave2':'2필드 완료',

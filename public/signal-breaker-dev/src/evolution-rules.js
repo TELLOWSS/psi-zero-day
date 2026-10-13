@@ -30,7 +30,7 @@ function damage(g,s,target){
 }
 function hit(g,s,c){
  if(!g.veteran||c.echo||!c.armor)return false;
- c.armor=Math.max(0,c.armor-damage(g,s,c));c.glow=.18;
+ c.armor=Math.max(0,c.armor-damage(g,s,c)*g.growthDamage(s,true));c.glow=.18;
  g.event('armorhit',c.x,c.y,c.armor,c.kind);
  return c.armor>0;
 }
