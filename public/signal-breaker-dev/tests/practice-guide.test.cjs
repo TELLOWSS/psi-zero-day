@@ -25,3 +25,9 @@ test('reserved viewport framing includes operator, body and every relay',()=>{
   for(const [x,y] of [[251,594],[329,594],[601,85],[899,315],[620,140],[880,200],[720,295]]){const sx=(x-v.x)*v.scale,sy=(y-v.y)*v.scale;a.ok(sx>=0&&sx<=width);a.ok(sy>=0&&sy<=height);}
  }
 });
+
+test('complete-build atlas is a real transparent six-cell delivery image',async()=>{
+ const sharp=require('sharp'),meta=await sharp(require('node:path').join(__dirname,'../art/psi-practice-weapons-v1.webp')).metadata();
+ a.equal(meta.width,1536);a.equal(meta.height,1024);a.equal(meta.hasAlpha,true);
+ const {data,info}=await sharp(require('node:path').join(__dirname,'../art/psi-practice-weapons-v1.webp')).ensureAlpha().raw().toBuffer({resolveWithObject:true});let transparent=0;for(let i=3;i<data.length;i+=4)if(data[i]===0)transparent++;a.ok(transparent/(info.width*info.height)>.5);
+});

@@ -16,14 +16,14 @@ for(const [width,height] of [[390,844],[320,640],[844,390],[568,320],[768,1024],
  a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),0,'legacy win cannot fabricate XP');
  const before=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1'));return {credits:s.credits,records:s.records,checkpoint:s.checkpoint};});
  await page.locator('#practiceEntry').click();await page.locator('#actorSelect').selectOption('kang_taesik');a.equal(await page.evaluate(()=>SignalBreakerQA.engine().evolution.capstone),true);
- await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready);const practice=await assertClear(page);
+ await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready&&SignalBreakerQA.view().practiceWeapons.drawn);const practice=await assertClear(page);
  a.equal(await page.evaluate(()=>SignalBreakerQA.engine().practiceCharacter),'kang_taesik');a.equal(await page.evaluate(()=>new Set(SignalBreakerQA.engine().cores.map(c=>c.kind)).size),4);
  await page.locator('#guideBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'paused');const time=await page.evaluate(()=>SignalBreakerQA.engine().time);await page.keyboard.press('KeyP');await page.waitForTimeout(100);a.equal(await page.evaluate(()=>SignalBreakerQA.engine().time),time);await page.keyboard.press('Escape');a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
  await page.screenshot({path:out+'/practice-rails-'+width+'x'+height+'.png',fullPage:true});
  await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=89.99;g.update(.04);});await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='won');
  const after=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1'));return {credits:s.credits,records:s.records,checkpoint:s.checkpoint};});a.deepEqual(after,before);a.equal(await page.evaluate(()=>SignalBreakerQA.growth().profile.xp),0);
  await page.locator('#overlayInner .secondary-btn').first().click();await page.locator('#startOperation').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='playing');await assertClear(page);
- await page.locator('#guideBtn').click();a.ok((await page.locator('#guideContent').textContent()).includes('발생원'));await page.locator('#closeGuide').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
+ await page.locator('#guideBtn').click();a.ok((await page.locator('#guideContent').textContent()).includes('발생원'));await page.locator('#closeGuide').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='playing');
  await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true,502);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];});await page.waitForFunction(()=>!document.querySelector('#bossEncounter').hidden);const boss=await assertClear(page);
  await page.screenshot({path:out+'/boss-rails-'+width+'x'+height+'.png',fullPage:true});
  await page.setViewportSize({width:height,height:width});await page.waitForTimeout(150);const rotated=await assertClear(page);await page.setViewportSize({width,height});

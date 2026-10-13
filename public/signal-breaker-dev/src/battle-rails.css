@@ -59,3 +59,5 @@ body.breaker-focus .overlay-inner{max-height:calc(100dvh - 20px);overflow:auto}
 @media(prefers-reduced-motion:reduce){#battleTopRail *,#battleStatusRail *{transition:none}}
 
 #battleTopRail #stageCode i{display:none}#battleTopRail .hud-block{min-width:0;flex-shrink:1}
+
+.practice-weapon-preview{display:block;width:150px;height:150px;max-width:100%;margin:auto;background:url('../art/psi-practice-weapons-v1.webp') 0 0/300% 200% no-repeat}

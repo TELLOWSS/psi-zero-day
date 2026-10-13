@@ -1,5 +1,7 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.practice.start':'완성형으로 연습 시작',
+
 "breaker.guide.open":"가이드",
 "breaker.guide.title":"현장 가이드",
 "breaker.guide.ch01":"EP01 · 이동과 발생원 확인",

@@ -68,7 +68,7 @@ class Game {
  event(kind,x=W/2,y=H/2,n=0,material=null){const event={kind,x,y,n,material,t:this.time};this.events.push(event);EpisodeTwo.observe(this,event);if(this.events.length>70)this.events.shift();}
  // Read-only preview uses the same projectile edge/rail collision rules as play.
  launchGeometry(){
-  const p=this.player,grip={x:p.x,y:p.y-25};let dx=p.aimX-grip.x,dy=p.aimY-grip.y;if(dy>-18)dy=-85;const length=Math.hypot(dx,dy)||1;const direction={x:dx/length,y:dy/length};return {grip,direction,cell:WEAPONS[this.weapon].cell,color:(this.veteran||this.practice)&&this.weapon==='pulse'?(this.evolution.frame==='arc'?'#93edff':'#f3a1ff'):WEAPONS[this.weapon].color,muzzle:{x:grip.x+direction.x*22,y:grip.y+direction.y*22}};
+  const p=this.player,grip={x:p.x,y:p.y-25};let dx=p.aimX-grip.x,dy=p.aimY-grip.y;if(dy>-18)dy=-85;const length=Math.hypot(dx,dy)||1;const direction={x:dx/length,y:dy/length};return {grip,direction,cell:WEAPONS[this.weapon].cell,color:(this.veteran||this.practice)&&this.weapon==='pulse'?(this.evolution.frame==='arc'?'#93edff':'#f3a1ff'):WEAPONS[this.weapon].color,muzzle:{x:grip.x+direction.x*(this.practice?52:22),y:grip.y+direction.y*(this.practice?52:22)}};
  }
  predictShot(){
   const launch=this.launchGeometry(),spec=WEAPONS[this.weapon],net=this.weapon==='net';
