@@ -24,6 +24,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Mode rules and regression
         run: |
+          node scripts/build-signal-breaker-operator-profile.mjs
           node scripts/check-signal-breaker-release.mjs
           node --test public/signal-breaker-dev/tests/*.cjs
       - name: Reproduce all 80 simulated input runs
@@ -59,6 +60,7 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
+          node public/signal-breaker-dev/scripts/verify-guided-rehearsal.cjs
           node public/signal-breaker-dev/scripts/verify-psi-rpg-art.cjs
           node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
           node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs

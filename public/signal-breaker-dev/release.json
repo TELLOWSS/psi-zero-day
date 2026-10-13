@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.48.1-psi-art",
-  "cacheName": "psi-signal-breaker-webpreview-v0.48.1-psi-art",
-  "fingerprint": "0e1b3bcd09354e70af0467dd920acf9d2261c84d313a33c4c25ef7f1ec170ffa",
+  "version": "0.49.0-guided-rehearsal",
+  "cacheName": "psi-signal-breaker-webpreview-v0.49.0-guided-rehearsal",
+  "fingerprint": "6f15aa51dc741dc6af46f81eba6dc8afcd870070f5d5e2f9055b80d0be985481",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -245,6 +245,11 @@
       "sha256": "37250d66a96e8faf532f4f47adbbfe872c14a756d54cd460cce6f1c817ab2bcd"
     },
     {
+      "path": "/signal-breaker-dev/art/psi-practice-weapons-v1.webp",
+      "bytes": 354584,
+      "sha256": "d6fcf771e75f4793a8d56fe7ee3df708be29756f9c4d8a980b0eccf4d95be42a"
+    },
+    {
       "path": "/signal-breaker-dev/art/psi-projectiles-atlas-v1.webp",
       "bytes": 676966,
       "sha256": "6c2a599ec6b7e409babd2baf87ec080b84e7cbf7924c770449fada2f9a733c33"
@@ -326,8 +331,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 14888,
-      "sha256": "45b7fff040f8c807f7a64b624ca5eb471d5d4ce7675bbb4be9653331a17fca2b"
+      "bytes": 16141,
+      "sha256": "c5405e81dc6c6690c9b4d7e96452124d81a48a2b35c67385a87c83f17124a16f"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,13 +341,23 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6327,
-      "sha256": "89d8dd81d692c9f9391e9ac82b149d4191e54311318771ac32e62b8595e159eb"
+      "bytes": 6505,
+      "sha256": "fb15e6c8446419cf057f9baae4a9b8742b30f532249a272c3be403b665904866"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 105906,
-      "sha256": "3518426344e99e6c09b0d8d5cf26b41ee0e23d3a444fad591ff1f0544f5e7a19"
+      "bytes": 117553,
+      "sha256": "44d65de8a8768ac74ab211a9c2d23cad3c4a5b55547f46b8ba2a2f70478d962c"
+    },
+    {
+      "path": "/signal-breaker-dev/src/battle-rails.css",
+      "bytes": 10449,
+      "sha256": "97f58f0d98b680cd11fd6a539b89176b5dea3c2998c3b7732dedf249946650bf"
+    },
+    {
+      "path": "/signal-breaker-dev/src/battle-viewport.js",
+      "bytes": 1188,
+      "sha256": "3c3a772e3f6d8396a2b88c6b97e74d6c4069bd953f3dd7a3ef40b5824c49850a"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -391,8 +406,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 62763,
-      "sha256": "b77baad335ad9a1369d8bdf95615b27006ffa52601b2630ce169cdd0060ec7d5"
+      "bytes": 63618,
+      "sha256": "586b1539c759bc5963d23ff66129df7ac0df040eab0f1587b12e255238014768"
     },
     {
       "path": "/signal-breaker-dev/src/episode-two.js",
@@ -401,8 +416,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 4770,
-      "sha256": "01b4a54b415a82a92d39e47c6ee3dfef9b5daa241b8b6ca22f44651aa3372ec1"
+      "bytes": 4823,
+      "sha256": "27a088c4347073fb0b0d836652e06c8af3ad17c0817e8a31a2f3336b07f43481"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -416,8 +431,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 33561,
-      "sha256": "c24824ebce3177c30a2cefc73589fe75b63b6f3a32eef7165f68be853ca30add"
+      "bytes": 38330,
+      "sha256": "9dbd0903e2ef630eab9aa7d80651b3ba6ebf92a6057ccabc0c5695f08f579432"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -430,9 +445,19 @@
       "sha256": "509bf6076220a575a26603e873bdab7e488a7a653cbedf690e13dc26ca804387"
     },
     {
+      "path": "/signal-breaker-dev/src/operator-profile.js",
+      "bytes": 5031,
+      "sha256": "3d912bda4fbe8cda591ee657f62894137a7bd8eace24567f71954404dff21ef3"
+    },
+    {
       "path": "/signal-breaker-dev/src/portrait-camera.js",
       "bytes": 1356,
       "sha256": "ee7a6bb36b5f149187c4ff2a65c0435903a706110150d19cc7681f07420e7825"
+    },
+    {
+      "path": "/signal-breaker-dev/src/practice-rules.js",
+      "bytes": 2917,
+      "sha256": "e972e3b8ef4e2618dad40fd2ec5b46238c45ed5a578f7ad98b3a74aa7d43e0d5"
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
@@ -478,6 +503,11 @@
       "path": "/signal-breaker-dev/src/style.css",
       "bytes": 82988,
       "sha256": "7c5bb9becae60cec7a8e2ace0e331476c5ead5795217d482f9c37a372dde45bf"
+    },
+    {
+      "path": "/signal-breaker-dev/src/tutorial-rules.js",
+      "bytes": 2355,
+      "sha256": "e342500219fe763372be8a43dd8587208f02e65321a1c65bee087438ea891ee1"
     }
   ]
 }
