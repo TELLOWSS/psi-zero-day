@@ -69,3 +69,5 @@ body.breaker-focus .overlay-inner{max-height:calc(100dvh - 20px);overflow:auto}
 #battleMessages #chainGuide[hidden]{display:none!important}#battleMessages #chainGuide:not([hidden]){display:block!important}
 
 @media(orientation:portrait){#battleControlRail #viewBtn{display:grid;place-items:center;top:64px!important;left:8px;right:auto!important;bottom:auto!important;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;box-sizing:border-box;padding:3px}}
+
+#battleControlRail .fire-controls .weapon-btn{box-sizing:border-box;border-width:4px;border-image-width:4px;padding:2px 1px}#battleControlRail .fire-controls .weapon-icon{width:26px!important;height:26px!important}#battleControlRail .fire-controls .weapon-btn>span:last-child{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px;line-height:11px}
