@@ -101,7 +101,7 @@ function updateCamera(){const portrait=camera.height>camera.width;premium.setPor
  const shortBoss=!portrait&&camera.height>=140&&camera.height<=600&&encounter;
  const framing=shortBoss?'landscape':'normal';if(document.body.dataset.bossFraming!==framing)document.body.dataset.bossFraming=framing;
  const safeFrame=window.SignalBreakerBattleViewport.frame({width:camera.width,height:camera.height,worldWidth:W,ground:GROUND,player:game.player,boss:encounter});
- if(safeFrame){camera.scale=safeFrame.scale;camera.x=safeFrame.x;camera.y=safeFrame.y;camera.bossFraming=safeFrame.targets;}else if(portrait){
+ if(safeFrame){camera.scale=safeFrame.scale;camera.x=safeFrame.x;camera.y=safeFrame.y;camera.bossFraming=encounter?safeFrame.targets:null;}else if(portrait){
   const activeBoss=game.operation&&game.boss&&game.boss.phase!=='resolved'&&['playing','paused'].includes(game.state)?game.boss:null;
   if(activeBoss){
    const view=window.SignalBreakerBossCamera.frame({width:camera.width,height:camera.height,worldWidth:W,boundsTop:bounds.top,boundsHeight:bounds.height,ground:GROUND,player:game.player,boss:activeBoss});
