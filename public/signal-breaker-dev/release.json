@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.50.0-player-journey",
-  "cacheName": "psi-signal-breaker-webpreview-v0.50.0-player-journey",
-  "fingerprint": "ab2c19f20b892423dd729969acc9a7f636d853f44347698ac6917065fa9d4921",
+  "version": "0.51.0-uiux",
+  "cacheName": "psi-signal-breaker-webpreview-v0.51.0-uiux",
+  "fingerprint": "e22e6302cd49c8ee3550c355b6b8a0ae5ae8bafb46ef2269cd90cec8653b176b",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 25172,
-      "sha256": "7e4f6bd6783b867d8763072ca797ece92b0d88ac8ad4fc80c381d2b5f811ac56"
+      "bytes": 25290,
+      "sha256": "5f61883532a41dcd6b53c4af5171b4ef3e97e177cad0abbe986f99dbf01a217b"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,13 +336,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6413,
-      "sha256": "8fdc13bc70c8fe96b7a739eeaf91716764cb797fa2d31cab495bed3e80dd0556"
+      "bytes": 6403,
+      "sha256": "9e22eeccbf5f46057b418550bda84ecf18e951446140449e779bbe857f24f4a2"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 145738,
-      "sha256": "5cb0c8f5b9c81d858754797d9cf5acc44b815fe27fcf27d46a69cc420c7c101d"
+      "bytes": 148206,
+      "sha256": "c6d6e4a08654a45c8c4f1925e00cabe15460b5b2226bedd6430579c4cd459ca6"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -421,8 +421,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 37242,
-      "sha256": "56b42a71d401fbe98eb752d80055b1a1b31559c435a8bbf74f115ccd9cb4ba50"
+      "bytes": 38101,
+      "sha256": "1bc0b4a46127f5a8de8f4494fe296a4a23cf065bf20158a193c9632dcc43ef13"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -471,8 +471,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
-      "bytes": 22729,
-      "sha256": "d7f33979fd6fb6b44f274dc42d6f2c0e6fc2715e688cd3aebb94900c157172ba"
+      "bytes": 25031,
+      "sha256": "ee1d24d19a2c7849dc2da2ebed3d6e0b98a7dc907357a5a854c9def702715a40"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",

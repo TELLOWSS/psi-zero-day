@@ -254,3 +254,23 @@ body.breaker-focus #operationLobby .operation-actions{display:flex!important}
 body.breaker-focus .overlay{position:fixed;inset:0;box-sizing:border-box}
 body.breaker-focus .overlay-inner{box-sizing:border-box;overscroll-behavior:contain}
 .overlay-actions-row{position:sticky;bottom:0;background:#102834;z-index:1;padding:8px 0}
+
+/* UI/UX audit: legible status, predictable touch targets and keyboard focus. */
+body.breaker-focus .hud-top button{white-space:nowrap;word-break:keep-all}
+@media (min-width:1101px) and (min-height:691px){body.breaker-focus .hud-top button{width:auto;min-width:66px;font-size:12px}body.breaker-focus .hud-top .btn-text-full{display:inline}body.breaker-focus .hud-top .btn-text-short{display:none}}
+@media (orientation:portrait) and (max-width:1100px){body.breaker-focus #itemStatus{transform:none;left:12px;max-width:calc(100vw - 24px);white-space:normal;line-height:1.4}}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe09a!important;outline-offset:3px}
+.talent-lock-reason{font-size:11px;line-height:1.4;color:#b6cbd3;margin:0 8px;max-width:145px}
+dialog .shop-tabs button,dialog header button,.operation-resume{min-height:44px}
+#pauseSettings{min-height:44px;background:#163e4d;color:#dcf4f5;border:1px solid #5a929b;border-radius:8px;padding:8px 12px}
+@media (orientation:landscape) and (max-height:690px){body.breaker-focus #aimAngle{bottom:112px}body.breaker-focus #aimPadLabel{font-size:10px}}
+
+.talent-row{display:grid!important;grid-template-columns:minmax(0,1fr) 44px;gap:6px;align-items:center}
+.talent-row>div{grid-column:1;grid-row:1}.talent-row>button{grid-column:2;grid-row:1}
+.talent-row .talent-lock-reason{grid-column:1/-1;grid-row:2;max-width:none;margin:0}
+.talent-row small{font-size:12px!important;line-height:1.5!important}.talent-row strong{font-size:13px!important}
+#stageSelectDialog{height:auto!important;min-height:0!important;max-height:90dvh}
+#stageSelectDialog .stage-modal-body{max-height:calc(90dvh - 115px);overflow:auto}
+#stageSelectDialog .stage-tabs-row button[aria-pressed=true]{border-color:#8deae4;background:#1a4554;color:#fff;box-shadow:inset 0 -3px #8deae4}
+@media (orientation:portrait){body.breaker-focus #overlay:has([data-state=paused]){padding-top:108px}body.breaker-focus .overlay-inner[data-state=paused]{max-height:calc(100dvh - 120px)}}
+@media (orientation:landscape) and (max-height:690px){body.breaker-focus #overlay:has([data-state=paused]){padding-top:58px}body.breaker-focus .overlay-inner[data-state=paused]{max-height:calc(100dvh - 68px)}}

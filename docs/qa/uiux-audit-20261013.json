@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-13",
+  "release": "0.51.0-uiux",
+  "uiux": [
+    {
+      "name": "small",
+      "width": 360,
+      "height": 640,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "phone",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "short",
+      "width": 667,
+      "height": 375,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "fullhd",
+      "width": 1920,
+      "height": 1080,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    },
+    {
+      "name": "4k",
+      "width": 3840,
+      "height": 2160,
+      "errors": [],
+      "checks": [
+        "overlay initial focus and Tab containment",
+        "AUTO-consistent start hint",
+        "item status inside viewport",
+        "native Space does not fire",
+        "pause settings opens actual controls",
+        "EP02 names codes and selection semantics",
+        "talent labels and locked reasons",
+        "no overflow",
+        "investment focus preserved"
+      ]
+    }
+  ],
+  "journey": [
+    {
+      "name": "portrait",
+      "won": 10,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "won": 10,
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "won": 10,
+      "errors": []
+    }
+  ],
+  "deviceViewports": 8,
+  "root": {
+    "passed": 2059,
+    "skipped": 1
+  },
+  "breaker": {
+    "passed": 254
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "releaseAssets": 98,
+  "limits": [
+    "Physical mobile ergonomics and performance not measured.",
+    "ARIA/keyboard checks are not complete screen-reader certification.",
+    "Existing final art retained; no new bitmap assets."
+  ],
+  "evidence": "artifacts/uiux-20261013/"
+}
