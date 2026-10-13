@@ -1,0 +1,594 @@
+{
+  "date": "2026-10-14",
+  "release": "0.55.0-player-controls",
+  "tests": {
+    "typecheck": "PASS",
+    "rootSkipped": 1,
+    "standalonePassed": 268,
+    "build": "PASS",
+    "rootPassed": 2059
+  },
+  "controls": {
+    "base": "http://127.0.0.1:4173",
+    "method": "Real control clicks at four viewports and real first-wave checkpoint. Loss and veteran access are isolated diagnostic fixtures, not combat win-rate or human ease evidence.",
+    "rows": [
+      {
+        "name": "small",
+        "width": 320,
+        "height": 568,
+        "bounds": {
+          "x": 44,
+          "y": 406,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "bounds": {
+          "x": 64,
+          "y": 478,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "bounds": {
+          "x": 603,
+          "y": 215,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "bounds": {
+          "x": 604,
+          "y": 714,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "actual-checkpoint-restart",
+        "checks": [
+          "real first wave earns checkpoint",
+          "pause restart uses same seed",
+          "old checkpoint removed"
+        ]
+      },
+      {
+        "name": "veteran-frame-fixture",
+        "checks": [
+          "isolated unlocked EP01 record fixture",
+          "override recommended laser with arc",
+          "retry preparation retains chosen arc in engine and UI"
+        ]
+      }
+    ]
+  },
+  "uiux": {
+    "base": "http://127.0.0.1:4173",
+    "report": [
+      {
+        "name": "small",
+        "width": 360,
+        "height": 640,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "phone",
+        "width": 390,
+        "height": 844,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "short",
+        "width": 667,
+        "height": 375,
+        "bounds": {
+          "left": 271.8828125,
+          "right": 395.1171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "bounds": {
+          "left": 360.3828125,
+          "right": 483.6171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "bounds": {
+          "left": 12,
+          "right": 146.46875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "bounds": {
+          "left": 652.765625,
+          "right": 787.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "fullhd",
+        "width": 1920,
+        "height": 1080,
+        "bounds": {
+          "left": 892.765625,
+          "right": 1027.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "4k",
+        "width": 3840,
+        "height": 2160,
+        "bounds": {
+          "left": 1852.765625,
+          "right": 1987.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      }
+    ]
+  },
+  "journey": {
+    "method": "Browser flows at three viewports, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "runs": [
+          {
+            "state": "won",
+            "time": 56.04999999999746,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 48.70833333333121,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 57.56666666666404,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 62.19166666666378,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.099999999998875,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 105.32500000002989,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 88.01666666668278,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 114.95000000003755,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 123.45833333337765,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 112.2083333333687,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "runs": [
+          {
+            "state": "won",
+            "time": 52.86666666666431,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 49.19166666666452,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.37499999999727,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 56.28333333333078,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.474999999998854,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 107.6833333333651,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 87.84166666668264,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 114.55833333337057,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 97.32500000002352,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 109.86666666670017,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "runs": [
+          {
+            "state": "won",
+            "time": 57.29166666666406,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 48.76666666666454,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.25833333333061,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 70.4833333333355,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.108333333332208,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 100.25833333335919,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 91.62500000001899,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 114.22500000003697,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 116.54166666670548,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 109.31666666669973,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "limitations": [
+    "Diagnostic loss and veteran unlock fixtures are not human success evidence",
+    "Physical mobile touch ergonomics still need human testing"
+  ]
+}

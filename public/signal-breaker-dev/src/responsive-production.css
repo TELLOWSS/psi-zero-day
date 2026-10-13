@@ -11,6 +11,8 @@ body.breaker-focus .touch-controls{z-index:7}
 body.breaker-focus .fire-controls,
 body.twin-controls .fire-controls{display:flex;align-items:center;gap:6px;box-sizing:border-box}
 body.breaker-focus .fire-controls button{flex-shrink:0}
+body.breaker-focus .fire-controls #smartBtn,body.twin-controls .fire-controls #smartBtn{display:block;width:54px;max-width:54px;flex:0 0 54px;min-height:45px;height:48px;border-radius:9px;font-size:10px;white-space:normal}
+body.breaker-focus #smartBtn[aria-pressed="true"],body.twin-controls #smartBtn[aria-pressed="true"]{border-color:#91ead6;background:#235b59}
 body.breaker-focus .utility-controls,
 body.twin-controls .utility-controls{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap}
 body.breaker-focus .utility-controls button[hidden],

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.54.0-combat-vfx",
-  "cacheName": "psi-signal-breaker-webpreview-v0.54.0-combat-vfx",
-  "fingerprint": "eb5fffe8ed9073c6bc32f5c11ea472dea1457a805be170cb9892820ffee956c0",
+  "version": "0.55.0-player-controls",
+  "cacheName": "psi-signal-breaker-webpreview-v0.55.0-player-controls",
+  "fingerprint": "95589477ac11b612360e25d4033f6514c73ce153eb123b8e0661e0e8586744c2",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -336,13 +336,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6430,
-      "sha256": "5b5824db1ffa788c2555ebe9472e9cd42f516ed37d5cbdbadc54bccac1ff0293"
+      "bytes": 6435,
+      "sha256": "362ae3ec808d814f7b278b18c0526e593f8a2d246e0a06ca4e99ddab0ee79b2d"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 149100,
-      "sha256": "13aa1816b98a7db76d8e2fb0e6f061f5e037c5978df22b1319fdb1506fd8d55a"
+      "bytes": 149433,
+      "sha256": "71002d357d99138a2c2eb8d4ebf9f22c232c98ef37a6f0a20fcbe1499680c316"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -426,8 +426,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 39592,
-      "sha256": "b21132db203671a87dd78cecfe1fded857df92803b77b05239afda5adcf6fe65"
+      "bytes": 40124,
+      "sha256": "c7139c339dc211f26076154387ccbfd3181f39c96e71fd4e7199496d7245097b"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -476,13 +476,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
-      "bytes": 25869,
-      "sha256": "ff99e486397958c12a06024c059c4b201584211a77ff7f105f2254939387a6a8"
+      "bytes": 26233,
+      "sha256": "127f6fa18072eb9b5dc60f8bfc87e78c6a31acba0ac7df1e8ef88071b5c5ad25"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",
-      "bytes": 1057,
-      "sha256": "6f1aadba2596451972bfc44bde8420f02e7aa447654f92eba4e6adca703bdcf7"
+      "bytes": 1725,
+      "sha256": "fe5da3bafa8fc6eee199bf371debf2defed9e125c604c81b1a2da74973ab99f6"
     },
     {
       "path": "/signal-breaker-dev/src/stage-ending-content.js",
