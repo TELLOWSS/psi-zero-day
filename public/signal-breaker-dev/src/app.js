@@ -6,7 +6,8 @@ const endingPlayer=new window.SignalBreakerEndingPlayer(document.getElementById(
 let completionSaved=true;let veteranMode=false;
 const recordKey=(id=game.config.id)=>((game?.veteran)?'V-':'')+id;
 const lobbyKey=(id)=> (veteranMode?'V-':'')+id;
-const lobbyLocked=id=>!window.SignalBreakerEpisodeTwo.unlocked(records,id,veteranMode);
+let freeUnlockAll=false;
+const lobbyLocked=id=>freeUnlockAll?false:!window.SignalBreakerEpisodeTwo.unlocked(records,id,veteranMode);
 const t=id=>window.SignalBreakerText[id]||id;
 const premium=new window.SignalBreakerPremiumArt.PremiumArt();
 const firingPose=new window.SignalBreakerFiringPose.FiringPose();
@@ -341,7 +342,7 @@ $('exitBtn').addEventListener('click',()=>{clearInput();if(game.state==='playing
 function manualWeapon(id){if(game.operation){settings.smartWeapon=false;$('smartBtn').textContent=t('breaker.smart.off');$('smartBtn').setAttribute('aria-pressed','false');safeSave();}setWeapon(id);}
 $('pulseBtn').addEventListener('click',()=>{if(game.operation&&game.weapon==='pulse'){const styles=['rapid','spread','precision'];game.setPulseStyle(styles[(styles.indexOf(game.pulseStyle)+1)%3]);}manualWeapon(game.loadout[0]);});$('netBtn').addEventListener('click',()=>{if(game.operation&&game.weapon===game.loadout[1]){game.cycleSupport();}manualWeapon(game.loadout[1]);});$('shieldBtn').addEventListener('click',()=>{game.cycleShield();toast('방호판 각도 변경');});$('magnetBtn').addEventListener('click',()=>game.toggleMagnet());$('pauseBtn').addEventListener('click',pause);
 $('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;$('soundBtn').textContent=soundOn?'♫ ON':'♫ OFF';soundDirector.setSession(game.state==='playing',soundOn);safeSave();});
-window.addEventListener('keydown',e=>{if(endingPlayer.active||!$('operationLobby').hidden)return;if(e.target?.matches?.('select,input,textarea')||e.repeat)return;const key=e.code;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space',bindings.fire].includes(key))e.preventDefault();keys.add(key);if(key===bindings.aimLeft||key===bindings.aimRight){manualAimUntil=game.time+1.5;const d=game.launchGeometry().direction;game.setAimElevation(Math.atan2(-d.y,Math.abs(d.x)),key===bindings.aimLeft?-1:1);}if(key==='KeyC'&&!Object.values(bindings).includes('KeyC'))sourceAction();if(key===bindings.slot1)manualWeapon(game.loadout[0]);if(key===bindings.slot2)manualWeapon(game.loadout[1]);if(key===bindings.shield)game.cycleShield();if(key===bindings.magnet)game.toggleMagnet();if(key===bindings.pause)pause();if(key===bindings.conveyor)game.cycleConveyor();if(key==='Escape'&&game.state==='playing')pause();if(key===bindings.fire||key==='KeyF'&&!Object.values(bindings).includes('KeyF')){if(game.state==='ready'){game.start();hideOverlay();}game.fire();}if(key==='Enter'&&!Object.values(bindings).includes('Enter')&&game.state==='ready'){game.start();hideOverlay();}});
+window.addEventListener('keydown',e=>{if(endingPlayer.active||!$('operationLobby').hidden)return;if(e.target?.matches?.('select,input,textarea')||e.repeat)return;const key=e.code;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space',bindings.fire].includes(key))e.preventDefault();keys.add(key);if(key===bindings.aimLeft||key===bindings.aimRight){manualAimUntil=game.time+1.5;const d=game.launchGeometry().direction;game.setAimElevation(Math.atan2(-d.y,Math.abs(d.x)),key===bindings.aimLeft?-1:1);}if(key==='KeyC'&&!Object.values(bindings).includes('KeyC'))sourceAction();if(key===bindings.slot1)manualWeapon(game.loadout[0]);if(key===bindings.slot2)manualWeapon(game.loadout[1]);if(key===bindings.shield)game.cycleShield();if(key===bindings.magnet)game.toggleMagnet();if(key===bindings.pause)pause();if(key===bindings.conveyor)game.cycleConveyor();if(key==='Escape'&&game.state==='playing')pause();if(key===bindings.fire||key==='KeyF'&&!Object.values(bindings).includes('KeyF')){if(game.state==='ready'){game.start();hideOverlay();}game.fire();}if(key==='KeyM')openStageSelect();if(key==='BracketLeft')navigateStage(-1);if(key==='BracketRight')navigateStage(1);if(key==='Enter'&&!Object.values(bindings).includes('Enter')&&game.state==='ready'){game.start();hideOverlay();}});
 window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{soundDirector.suspend();clearInput();if(game.state==='playing')pause();});document.addEventListener('visibilitychange',()=>{if(document.hidden){soundDirector.suspend();if(game.state==='playing')pause();}});
 const endingVoice=new window.SignalBreakerEndingVoice(()=>soundDirector.ensure());
 const endingSound=new window.SignalBreakerEndingSound(()=>soundDirector.ensure());
@@ -540,6 +541,100 @@ $('closeTalentTech')?.addEventListener('click',closeTalentTech);
 $('tabTalents')?.addEventListener('click',()=>{talentActiveTab='talents';renderTalentTech();});
 $('tabWeapons')?.addEventListener('click',()=>{talentActiveTab='weapons';renderTalentTech();});
 $('talentTechDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeTalentTech();});
+
+// Stage Select Dialog Handlers & Navigation
+let stageSelectTab = 'ep1';
+function openStageSelect(){
+  if(endingPlayer.active) return;
+  renderStageSelect();
+  $('stageSelectDialog')?.showModal();
+}
+function navigateStage(delta){
+  const list = veteranMode ? window.SignalBreakerEpisodeTwo.STAGES : CHAPTER;
+  const curIdx = list.findIndex(s => s.id === game.config.id);
+  const nextIdx = (curIdx + delta + list.length) % list.length;
+  const target = list[nextIdx];
+  if(!freeUnlockAll && lobbyLocked(target.id)){
+    toast(`[🔒 잠김] ${target.name} - 이전 구역 클리어 필요`, 1.5);
+    return;
+  }
+  setupStage(target.id, false);
+  hideOverlay();
+  toast(`[작전 전환] ${target.id} · ${target.name}`, 1.5);
+}
+function renderStageSelect(){
+  const grid = $('stageCardsGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  const isEp2 = stageSelectTab === 'ep2';
+  const list = isEp2 ? window.SignalBreakerEpisodeTwo.STAGES : CHAPTER;
+  list.forEach((st, idx) => {
+    const isCurrent = game.config.id === st.id && (isEp2 === !!game.veteran);
+    const locked = !freeUnlockAll && (isEp2 ? !records?.['CH-05']?.won || (idx > 0 && !records?.['V-' + list[idx-1].id]?.won) : (idx > 0 && !records?.[list[idx-1].id]?.won));
+    const done = records[(isEp2 ? 'V-' : '') + st.id]?.won;
+    const card = document.createElement('div');
+    card.className = `stage-card-item${isCurrent ? ' current' : ''}`;
+    const code = (isEp2 ? 'EP02-0' + (idx+1) : st.id);
+    const hazardLabels = { metal: '철골/강재 (자력)', dust: '분진 연무 (미스트)', power: '전기 아크 (접지)', load: '편하중 (완충)' };
+    const primaryHazard = st.hazardOrder?.[0] || 'metal';
+    card.innerHTML = `
+      <div class="stage-card-header">
+        <span class="stage-card-code">${code}</span>
+        <span class="stage-card-status ${locked ? 'locked' : ''}">${isCurrent ? '★ 현재 작전' : done ? '✓ 개입 완료' : locked ? '🔒 잠김' : '● 개입 가능'}</span>
+      </div>
+      <div class="stage-card-body">
+        <h3>${st.name}</h3>
+        <p>${st.summary || st.description || '산업 설비 이상 징후 긴급 개입 구역'}</p>
+      </div>
+      <div class="stage-card-meta">
+        <span>위험: ${hazardLabels[primaryHazard] || primaryHazard}</span>
+        <span>${isEp2 ? '고난도 베테랑' : '표준 건설 아레나'}</span>
+      </div>
+      <button type="button" class="stage-card-enter-btn" ${locked ? 'disabled' : ''}>
+        ${isCurrent ? '현재 작전 재시작 ↺' : locked ? '이전 구역 완수 필요' : '작전 즉시 개입 ↗'}
+      </button>
+    `;
+    const enterBtn = card.querySelector('.stage-card-enter-btn');
+    if(enterBtn && !locked){
+      enterBtn.addEventListener('click', () => {
+        veteranMode = isEp2;
+        $('stageSelectDialog')?.close();
+        setupStage(st.id, false);
+        hideOverlay();
+        toast(`[작전 이동] ${code} · ${st.name} 현장 진입!`, 1.6);
+      });
+    }
+    grid.append(card);
+  });
+}
+$('stageSelectBtn')?.addEventListener('click', openStageSelect);
+$('hudStageBlock')?.addEventListener('click', openStageSelect);
+$('hudStageBlock')?.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStageSelect(); } });
+$('overlayStageBtn')?.addEventListener('click', openStageSelect);
+$('closeStageSelect')?.addEventListener('click', () => { $('stageSelectDialog')?.close(); });
+$('stageSelectDialog')?.addEventListener('cancel', e => { e.preventDefault(); $('stageSelectDialog')?.close(); });
+$('stageTabEp1')?.addEventListener('click', () => {
+  stageSelectTab = 'ep1';
+  $('stageTabEp1')?.classList.add('active');
+  $('stageTabEp2')?.classList.remove('active');
+  renderStageSelect();
+});
+$('stageTabEp2')?.addEventListener('click', () => {
+  stageSelectTab = 'ep2';
+  $('stageTabEp2')?.classList.add('active');
+  $('stageTabEp1')?.classList.remove('active');
+  renderStageSelect();
+});
+$('freeUnlockToggle')?.addEventListener('click', () => {
+  freeUnlockAll = !freeUnlockAll;
+  const btn = $('freeUnlockToggle');
+  if(btn){
+    btn.textContent = freeUnlockAll ? '🔓 전 스테이지 자유 개방: ON' : '🔓 전 스테이지 자유 개방: OFF';
+    btn.classList.toggle('active', freeUnlockAll);
+  }
+  toast(freeUnlockAll ? '★ 모든 스테이지 자유 접근 해금 완료!' : '표준 순차 잠금 규칙 복원', 1.4);
+  renderStageSelect();
+});
 
 // Guide Modal Handlers
 $('guideBtn')?.addEventListener('click', () => { $('guideDialog')?.showModal(); });

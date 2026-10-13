@@ -3,8 +3,10 @@
    Do not change gameplay hitboxes, input direction, aim, or automation here. */
 body.breaker-focus{--mobile-edge: max(12px, env(safe-area-inset-left, 0px));--mobile-bottom: max(12px, env(safe-area-inset-bottom, 0px))}
 body.breaker-focus #arena{touch-action:none}
-body.breaker-focus .hud-top{z-index:6;max-width:none;right:12px;pointer-events:none}
-body.breaker-focus .hud-top #pauseBtn{margin-left:auto;flex-shrink:0;pointer-events:auto}
+body.breaker-focus .hud-top{z-index:16;max-width:none;right:12px;pointer-events:none}
+body.breaker-focus .hud-top button,
+body.breaker-focus .hud-top .hud-block-clickable{pointer-events:auto!important}
+body.breaker-focus .hud-top #pauseBtn{margin-left:0;flex-shrink:0;pointer-events:auto}
 body.breaker-focus .touch-controls{z-index:7}
 body.breaker-focus .fire-controls,
 body.twin-controls .fire-controls{display:flex;align-items:center;gap:6px;box-sizing:border-box}
@@ -25,10 +27,11 @@ body.overview-open.breaker-focus .battle-radar{display:block}
 
 /* Tall phone: no buttons float in front of the operator or main combat area. */
 @media (orientation:portrait) and (max-width:690px){
- body.breaker-focus .hud-top{top:calc(env(safe-area-inset-top,0px) + 7px);left:10px;right:10px;height:46px;padding:4px 10px;gap:9px;align-items:center}
- body.breaker-focus .hud-top .hud-block strong{font-size:12px}
- body.breaker-focus .hud-top .hud-label{font-size:8px}
- body.breaker-focus .hud-top #pauseBtn{position:static!important;top:auto!important;right:auto!important;margin-left:auto!important;width:42px;min-width:42px;height:40px;min-height:40px}
+ body.breaker-focus .hud-top{top:calc(env(safe-area-inset-top,0px) + 7px);left:10px;right:10px;height:46px;padding:4px 6px;gap:5px;align-items:center}
+ body.breaker-focus .hud-top .hud-block strong{font-size:11px}
+ body.breaker-focus .hud-top .hud-label{font-size:7px}
+ body.breaker-focus .hud-top button{padding:3px 6px!important;font-size:10px!important}
+ body.breaker-focus .hud-top #pauseBtn{position:static!important;top:auto!important;right:auto;margin-left:0;width:34px;min-width:34px;height:34px;min-height:34px}
  body.breaker-focus .shield-hud{position:static!important;gap:3px}
  body.breaker-focus .health{gap:3px}
  body.breaker-focus .heart{width:10px;height:11px}

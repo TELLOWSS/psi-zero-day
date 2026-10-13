@@ -602,8 +602,52 @@ dialog.guide-dialog #closeGuide, dialog.sandbox-dialog #closeSandbox{background:
 .sandbox-btn.danger{border-color:#e85858;color:#ff8e8e;background:#2d1518}
 .sandbox-btn.highlight{border-color:#50e3b6;color:#7affd6;background:#113832}
 .sandbox-btn.fever{border-color:#f6be66;color:#ffe494;background:#35270f}
-.guide-btn, .sandbox-toggle-btn{background:#11333f;border:1px solid #3e6b7b;color:#aeeaf4;font-size:11px;font-weight:800;border-radius:8px;padding:4px 9px;cursor:pointer}
-.guide-btn:hover, .sandbox-toggle-btn:hover{background:#194a5b;border-color:#65d7e8;color:#ffffff}
+.guide-btn, .sandbox-toggle-btn, .stage-select-btn{background:#11333f;border:1px solid #3e6b7b;color:#aeeaf4;font-size:11px;font-weight:800;border-radius:8px;padding:4px 9px;cursor:pointer}
+.guide-btn:hover, .sandbox-toggle-btn:hover, .stage-select-btn:hover{background:#194a5b;border-color:#65d7e8;color:#ffffff}
+.stage-select-btn{border-color:#4895a5;color:#b2f4ff;background:linear-gradient(135deg,#133744,#0c2530);box-shadow:0 0 6px rgba(83,216,230,0.25)}
+
+/* Stage Select Dialog Styles */
+dialog.stage-dialog{width:min(940px,96vw);max-height:min(740px,92dvh);background:linear-gradient(135deg,#0b202bf8,#081622fc);border:1px solid #58cfde99;border-radius:18px;box-shadow:0 24px 70px #000c,inset 0 1px 0 #7fe5f633;padding:20px;color:#d8ecf1;z-index:100}
+dialog.stage-dialog::backdrop{background:#020b12b3}
+dialog.stage-dialog header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #284c5c;padding-bottom:10px;margin-bottom:14px}
+dialog.stage-dialog header h2{margin:2px 0 0;font-size:18px;color:#e8faff;font-weight:900}
+dialog.stage-dialog header small{font-size:10px;color:#6fa5b6;letter-spacing:1px;font-weight:800}
+dialog.stage-dialog #closeStageSelect{background:#1a3c49;border:1px solid #4a7587;border-radius:8px;padding:6px 14px;color:#def4f7;font-weight:700;cursor:pointer}
+.stage-modal-body{display:flex;flex-direction:column;gap:14px;max-height:calc(92dvh - 110px);overflow-y:auto}
+.stage-modal-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:6px 2px}
+.stage-tabs-row{display:flex;gap:8px}
+.stage-tabs-row button{background:#102c38;border:1px solid #335969;color:#92bdcb;font-size:12px;font-weight:800;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all 0.15s}
+.stage-tabs-row button.active{background:#1d4d5e;border-color:#5ed5e6;color:#ffffff;box-shadow:0 0 10px rgba(94,213,230,0.3)}
+.free-unlock-btn{background:#231a38;border:1px solid #6b4aa8;color:#d5b8ff;font-size:11px;font-weight:800;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s}
+.free-unlock-btn.active{background:#41237a;border-color:#be8fff;color:#fff;box-shadow:0 0 12px rgba(180,117,237,0.4)}
+.stage-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.stage-card-item{background:#091b24;border:1px solid #264a59;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;transition:border-color 0.15s,transform 0.1s}
+.stage-card-item:hover{border-color:#5ac7dd;transform:translateY(-2px)}
+.stage-card-item.current{border-color:#f8c573;background:linear-gradient(145deg,#132f3d,#0c202a);box-shadow:0 0 14px rgba(248,197,115,0.25)}
+.stage-card-header{display:flex;align-items:center;justify-content:space-between}
+.stage-card-code{font-size:12px;font-weight:900;color:#f3d288;background:#24322a;padding:2px 8px;border-radius:5px}
+.stage-card-status{font-size:10px;font-weight:800;color:#85ddb9}
+.stage-card-status.locked{color:#ff9e9e}
+.stage-card-body h3{margin:0;font-size:15px;color:#ffffff;font-weight:900}
+.stage-card-body p{margin:4px 0 0;font-size:11px;color:#9bc0cd;line-height:1.4}
+.stage-card-meta{display:flex;gap:8px;font-size:10px;color:#6fa1b1}
+.stage-card-meta span{background:#112a36;padding:2px 6px;border-radius:4px}
+.stage-card-enter-btn{min-height:38px;background:linear-gradient(135deg,#1f6377,#134352);border:1px solid #56c2d4;color:#ffffff;font-size:12px;font-weight:800;border-radius:8px;cursor:pointer;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s}
+.stage-card-enter-btn:hover{background:#267890;border-color:#84e2f2}
+.stage-card-enter-btn:disabled{opacity:0.45;cursor:not-allowed;border-color:#365360;background:#152630}
+
+/* Clickable HUD Stage block */
+.hud-block-clickable{cursor:pointer;transition:background 0.15s,transform 0.1s;border-radius:6px;padding:2px 6px;margin:-2px -6px}
+.hud-block-clickable:hover{background:#1a3d4d;box-shadow:0 0 8px rgba(83,216,230,0.25)}
+.hud-block-clickable:active{transform:scale(0.97)}
+
+/* Responsive Button Text rules */
+.btn-text-short{display:none}
+@media (max-width: 690px), (max-height: 600px){
+  .btn-text-full{display:none}
+  .btn-text-short{display:inline}
+  .guide-btn, .sandbox-toggle-btn, .stage-select-btn, .talent-btn{padding:4px 7px!important;min-width:32px;text-align:center}
+}
 
 
 
