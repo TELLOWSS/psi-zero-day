@@ -1,0 +1,383 @@
+{
+  "date": "2026-10-14",
+  "release": "0.54.0-combat-vfx",
+  "tests": {
+    "typecheck": "PASS",
+    "standalonePassed": 265,
+    "build": "PASS",
+    "rootSkipped": 1,
+    "rootPassed": 2059
+  },
+  "browser": {
+    "base": "http://127.0.0.1:4173",
+    "method": "Live ordinary automatic firing at three viewports. Separate gallery/1000-event bounded stress fixture; CPU draw timings in this desktop browser are not mobile FPS evidence.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "live": {
+          "active": 4,
+          "limit": 28,
+          "quality": "high",
+          "reduced": false,
+          "seen": [
+            "fire:pulse",
+            "impact:pulse",
+            "skillshot:pulse"
+          ]
+        },
+        "reduced": true,
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "live": {
+          "active": 5,
+          "limit": 28,
+          "quality": "high",
+          "reduced": false,
+          "seen": [
+            "fire:pulse",
+            "impact:pulse",
+            "skillshot:pulse"
+          ]
+        },
+        "reduced": true,
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "live": {
+          "active": 4,
+          "limit": 28,
+          "quality": "high",
+          "reduced": false,
+          "seen": [
+            "fire:pulse",
+            "impact:pulse",
+            "skillshot:pulse"
+          ]
+        },
+        "reduced": true,
+        "errors": []
+      }
+    ],
+    "measurements": [
+      {
+        "active": 8,
+        "limit": 8,
+        "quality": "low",
+        "reduced": false,
+        "seen": [
+          "impact:pulse"
+        ],
+        "medianDrawMs": 0,
+        "p95DrawMs": 0.10000000894069672
+      },
+      {
+        "active": 16,
+        "limit": 16,
+        "quality": "balanced",
+        "reduced": false,
+        "seen": [
+          "impact:pulse"
+        ],
+        "medianDrawMs": 0.09999999403953552,
+        "p95DrawMs": 0.20000000298023224
+      },
+      {
+        "active": 28,
+        "limit": 28,
+        "quality": "high",
+        "reduced": false,
+        "seen": [
+          "impact:pulse"
+        ],
+        "medianDrawMs": 0.10000000894069672,
+        "p95DrawMs": 0.29999999701976776
+      }
+    ]
+  },
+  "journey": {
+    "method": "Browser flows at three viewports, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "runs": [
+          {
+            "state": "won",
+            "time": 57.53333333333071,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 49.5416666666645,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 77.00000000000735,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 57.50833333333071,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.474999999998854,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 105.31666666669655,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 91.60000000001897,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 114.51666666670387,
+            "stage": "CH-03",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 111.00833333336774,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 112.95000000003596,
+            "stage": "CH-05",
+            "life": 4,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "runs": [
+          {
+            "state": "won",
+            "time": 55.84166666666414,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 54.166666666664234,
+            "stage": "CH-02",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.37499999999727,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 70.4833333333355,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.108333333332208,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 88.5833333333499,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 89.73333333335081,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 118.90000000004069,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 116.41666666670538,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 109.31666666669973,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "runs": [
+          {
+            "state": "won",
+            "time": 52.974999999997635,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 55.58333333333082,
+            "stage": "CH-02",
+            "life": 2,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 60.19166666666389,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 52.883333333330974,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 31.108333333332208,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 103.55000000002848,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 95.58333333335547,
+            "stage": "CH-02",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 128.50000000004746,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 116.29166666670528,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 118.91666666670737,
+            "stage": "CH-05",
+            "life": 4,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "limitations": [
+    "Gallery is a presentation fixture",
+    "Desktop draw CPU timings are not physical mobile FPS",
+    "Human fun and fatigue evaluation pending"
+  ]
+}

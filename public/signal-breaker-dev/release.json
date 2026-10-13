@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.53.0-gameplay",
-  "cacheName": "psi-signal-breaker-webpreview-v0.53.0-gameplay",
-  "fingerprint": "14d54b5efa8f4faa897f6b8b2aceaa46cc1613706b4b4ef38c68a6ecbc4e2946",
+  "version": "0.54.0-combat-vfx",
+  "cacheName": "psi-signal-breaker-webpreview-v0.54.0-combat-vfx",
+  "fingerprint": "eb5fffe8ed9073c6bc32f5c11ea472dea1457a805be170cb9892820ffee956c0",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 25290,
-      "sha256": "5f61883532a41dcd6b53c4af5171b4ef3e97e177cad0abbe986f99dbf01a217b"
+      "bytes": 25331,
+      "sha256": "b1677837578048701f3e7003cd831ef14ce34465f81505e1ceee958436679520"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,13 +336,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6406,
-      "sha256": "49f80c5e7bbaa86644498189b685e05a84262964bde6bf35ea822d78c06e8135"
+      "bytes": 6430,
+      "sha256": "5b5824db1ffa788c2555ebe9472e9cd42f516ed37d5cbdbadc54bccac1ff0293"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 148988,
-      "sha256": "3dcd9bd6077d98cbac3f92cedc192c45f434cd56a5377aad11359bccb5f1b8e9"
+      "bytes": 149100,
+      "sha256": "13aa1816b98a7db76d8e2fb0e6f061f5e037c5978df22b1319fdb1506fd8d55a"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -363,6 +363,11 @@
       "path": "/signal-breaker-dev/src/chapter-content.js",
       "bytes": 5156,
       "sha256": "cac0788e8972ceb0a82ad31790de4af07f1b646dd073f1fb83b74f828468f1c0"
+    },
+    {
+      "path": "/signal-breaker-dev/src/combat-vfx.js",
+      "bytes": 6174,
+      "sha256": "f756d168cc124d67a8d0471467bf165dba9534e8532af3bee879112060966ab4"
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance-content.js",
@@ -446,8 +451,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 49951,
-      "sha256": "b3fd048442e14a495fb338f3f439ba38df87e8f4a502302632f294ad237e3974"
+      "bytes": 50447,
+      "sha256": "c7948320cd8ab57693c1717fc7bb0cd402216df881125f720011c745fe69b42a"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
