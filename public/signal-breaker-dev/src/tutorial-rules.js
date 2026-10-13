@@ -1,5 +1,6 @@
 /* Episode learning presentation contracts; read-only engine facts, no gameplay mutation. */
 (function(root){'use strict';
+const Evolution=typeof module==='object'&&module.exports?require('./evolution-rules.js'):root.SignalBreakerEvolution;
 const LESSONS=Object.freeze({
  'CH-01':{titleId:'breaker.guide.ch01',steps:['breaker.guide.move','breaker.guide.source','breaker.guide.fire','breaker.guide.learn.reflect','breaker.guide.learn.capture']},
  'CH-02':{titleId:'breaker.guide.ch02',steps:['breaker.guide.move','breaker.guide.belt','breaker.guide.learn.reflect','breaker.guide.learn.capture']},
@@ -7,7 +8,7 @@ const LESSONS=Object.freeze({
  'CH-04':{titleId:'breaker.guide.ch04',steps:['breaker.guide.move','breaker.guide.anchor','breaker.guide.learn.reflect']},
  'CH-05':{titleId:'breaker.guide.ch05',steps:['breaker.guide.move','breaker.guide.scan','breaker.guide.learn.capture']}
 });
-function lesson(g){if(g.practice)return {titleId:'breaker.practice.title',actionId:'breaker.practice.action',completed:0,total:1};if(g.veteran)return {titleId:'breaker.guide.ep02',actionId:g.evolution.recipe?'breaker.guide.ep02.branch':'breaker.guide.ep02.recipe',completed:g.evolution.capstone?3:g.evolution.branch?2:g.evolution.recipe?1:0,total:3};
+function lesson(g){if(g.practice)return {titleId:'breaker.practice.title',actionId:'breaker.practice.action',completed:0,total:1};if(g.veteran)return {titleId:'breaker.guide.ep02',actionId:g.evolution.recipe&&!Evolution.active(g)?'breaker.guide.ep02.support':g.evolution.capstone?'breaker.guide.ep02.done':g.evolution.branch?'breaker.guide.ep02.final':g.evolution.recipe?'breaker.guide.ep02.branch':'breaker.guide.ep02.recipe',completed:g.evolution.capstone?3:g.evolution.branch?2:g.evolution.recipe?1:0,total:3};
 const spec=LESSONS[g.config.id]||LESSONS['CH-01'],done={
  'breaker.guide.move':g.movedDistance>=40,
  'breaker.guide.source':!!(g.source?.verified||g.sourceEvidence?.verified),

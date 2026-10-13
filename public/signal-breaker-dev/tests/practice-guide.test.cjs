@@ -17,7 +17,7 @@ test('read-only chapter guide uses actual source, reflection and capture facts',
  const g=new Game('CH-01',17,{causal:true});const before=JSON.stringify(g.snapshot());a.equal(T.lesson(g).actionId,'breaker.guide.move');a.equal(JSON.stringify(g.snapshot()),before);g.start();for(let i=0;i<3;i++)g.move(1,.05);a.equal(T.lesson(g).actionId,'breaker.guide.source');g.source.verified=true;g.shotsFired=1;g.reflectedHits=1;g.captureUnits=1;a.equal(T.lesson(g).actionId,'breaker.guide.next');
 });
 test('veteran guide follows exclusive recipe, branch and final state',()=>{
- const g=new Game('CH-01',7,{operation:true,premiumRun:true,extended:true,veteran:true});a.equal(T.lesson(g).completed,0);g.evolution={frame:'laser',recipe:'prism',branch:'focus',capstone:true};a.equal(T.lesson(g).completed,3);
+ const g=new Game('CH-01',7,{operation:true,premiumRun:true,extended:true,veteran:true});a.equal(T.lesson(g).completed,0);g.evolution={frame:'laser',recipe:'prism',branch:'focus',capstone:true};a.equal(T.lesson(g).completed,3);a.equal(T.lesson(g).actionId,'breaker.guide.ep02.support');g.loadout=['pulse','scan'];a.equal(T.lesson(g).actionId,'breaker.guide.ep02.done');g.evolution.capstone=false;a.equal(T.lesson(g).actionId,'breaker.guide.ep02.final');
 });
 test('reserved viewport framing includes operator, body and every relay',()=>{
  for(const [width,height] of [[844,194],[568,124],[390,528],[768,708]]){

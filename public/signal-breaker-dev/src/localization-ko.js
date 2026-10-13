@@ -1,5 +1,8 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.guide.ep02.done':'최종형을 완성했습니다. 위험 상성과 사선으로 남은 신호와 보스 약점을 해소하세요.',
+'breaker.guide.ep02.support':'진화 조합의 보조 장비를 다시 장착하세요. 같은 프레임이라도 보조 장비가 다르면 진화 효과가 작동하지 않습니다.',
+
 'breaker.practice.start':'완성형으로 연습 시작',
 
 "breaker.guide.open":"가이드",
@@ -23,7 +26,7 @@
 "breaker.guide.ep01.detail":"에피소드 1은 현장 대응을 배우는 과정입니다. 자동발사로 시작해 이동·사선·발생원 확인·장비 전환을 하나씩 연습하세요. 가이드를 열면 전투가 정지하며 닫으면 이어집니다.",
 "breaker.guide.ep02":"EP02 · 조합과 무기 진화",
 "breaker.guide.ep02.detail":"에피소드 1에서 익힌 위험별 대응을 조합합니다. 전기·레이저 프레임과 보조 장비로 진화하고 확산·집중을 고른 뒤 최종형으로 완성하세요. 작전 결과 경험치는 조작원 프로필에 남고 작전 부품은 다음 출동에서 새로 모읍니다.",
-"breaker.guide.ep02.recipe":"부품 5개로 전기·미스트, 전기·자력, 레이저·스캔, 레이저·포획망 중 한 조합을 정비 시간에 진화하세요.",
+"breaker.guide.ep02.recipe":"부품 {parts}개로 전기·미스트, 전기·자력, 레이저·스캔, 레이저·포획망 중 한 조합을 정비 시간에 진화하세요.",
 "breaker.guide.ep02.branch":"2필드 이후 부품 9개로 확산 또는 집중을 선택하세요. 다수 대응과 강한 장갑 대응의 차이를 체험하세요.",
 "breaker.guide.ep02.final":"3필드 이후 부품 14개로 최종형을 완성하세요. 출발 장비로 돌아가도 조작원 경험과 확인 기록은 남습니다.",
 "breaker.practice.entry":"완성형 체험 · 90초",
