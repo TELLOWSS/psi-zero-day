@@ -1,0 +1,1 @@
+PASS benchmark flow: six viewports, single full-screen scene, manual fire/cancel, overview pause/no fire, quick retry/gear, short guide, local record persistence

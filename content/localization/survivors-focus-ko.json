@@ -1,0 +1,8 @@
+{
+  "equipment": "장비 확인",
+  "pause": "일시정지",
+  "resume": "재개",
+  "bossIncoming": "대표 위험 접근",
+  "bossDeadline": "대표 위험 출현까지",
+  "bossDirection": "대표 위험 방향"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "lee_jaehoon",
+  "identity": "slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest.",
+  "side": "front",
+  "kind": "braces",
+  "file": "lee_jaehoon-front-braces-v1.png",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-a89e7875-87fb-412d-b59a-4f01a76f4bf3.png",
+  "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+  "status": "candidate",
+  "frameCount": 8
+}

@@ -146,6 +146,25 @@ async function mount(view: StrategyView, actions: readonly StrategyAction[], onA
 }
 
 describe('Strategy stage 2 interaction flow', () => {
+  it('lets a beginner select an actionable target directly and retry a rejected dispatch', async () => {
+    const onAction = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const { host, root } = await mount(baseView, entryActions, onAction);
+    const target = host.querySelector('[data-target-shortcut="yoon_sungho"]') as HTMLButtonElement;
+    expect(target).toBeInstanceOf(HTMLButtonElement);
+    expect(target.textContent).toContain('윤성호');
+    await act(async () => target.click());
+    await flush();
+    expect(host.querySelector('[data-choice="negotiate_yoon"]')).not.toBeNull();
+    await act(async () => (host.querySelector('.strategy-action-list button') as HTMLButtonElement).click());
+    const execute = host.querySelector('.strategy-action-confirm .strategy-execute-button') as HTMLButtonElement;
+    await act(async () => execute.click());
+    expect(execute.disabled).toBe(false);
+    expect(host.querySelector('[role="alert"]')).not.toBeNull();
+    await act(async () => execute.click());
+    expect(onAction).toHaveBeenCalledTimes(2);
+    expect(execute.disabled).toBe(true);
+    await act(async () => root.unmount()); host.remove();
+  });
   it('keeps the command tray visible while the engine is still on a non-choice strategy node', async () => {
     const onTransitionContinue = vi.fn();
     const { host, root } = await mount(baseView, []);
@@ -222,6 +241,8 @@ describe('Strategy stage 2 interaction flow', () => {
     expect(html).toContain('1 대상 선택');
     expect(html).not.toContain('strategy-observe-card');
     expect(html).not.toContain('대상 선택 시작');
+    expect(html).toContain('data-target-shortcut="yoon_sungho"');
+    expect(html).toContain('data-target-shortcut="site"');
   });
 
   it('connects an informational entry signal only to same-anchor authored actions', async () => {

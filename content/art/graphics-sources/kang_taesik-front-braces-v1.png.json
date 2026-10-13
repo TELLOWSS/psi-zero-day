@@ -1,0 +1,11 @@
+{
+  "id": "kang_taesik",
+  "identity": "stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet.",
+  "side": "front",
+  "kind": "braces",
+  "file": "kang_taesik-front-braces-v1.png",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-15c0bf92-79f1-4663-99ae-2e421610d252.png",
+  "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+  "status": "candidate",
+  "frameCount": 8
+}

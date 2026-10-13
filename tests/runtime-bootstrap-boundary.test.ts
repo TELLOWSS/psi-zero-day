@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
+import { GAME_TITLE } from '../src/app/brand';
 
 describe('runtime bootstrap boundary',()=>{
   const source=fs.readFileSync(new URL('../src/app/main.tsx', import.meta.url),'utf8');
@@ -12,7 +13,9 @@ describe('runtime bootstrap boundary',()=>{
   it('loads hub, runtime and save support in parallel after a branded shell is painted',()=>{
     expect(source).toContain('Promise.all([');
     expect(source).toContain("import('../ui/GameHub')");
-    expect(source).toContain('PSI : ZERO DAY');
+    expect(GAME_TITLE).toBe('NEW PSI : ZERO DAY');
+    expect(source).toContain("from './brand'");
+    expect(source).toContain('<strong>${GAME_TITLE}</strong>');
     expect(source).toContain('현장을 준비하고 있습니다.');
   });
 });

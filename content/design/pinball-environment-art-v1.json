@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "source": "C:/Users/user/.codex/generated_images/01a11d14-64ed-7052-a499-63110506a078/exec-11f957b3-5fd2-4e97-88b4-6056d04ad5f7.png",
+  "destination": "public/assets/survivors/pinball/environment-atlas-v1.png",
+  "prompt": "Use case game-assets final production. Transparent alpha sprite atlas, EXACT four columns two rows equal grid, landscape 2:1. Eight separate industrial animation PARTS for premium top-down pinball environments. All consistent orthographic TOP-DOWN camera, polished tactile 3D miniatures, crisp detailed weathered metallic surfaces, centered with 18% clear padding, no floor, no text or UI, never overlap another cell. Row1 left to right: orange gantry crane travelling trolley with hook assembly; small navy-and-orange harbor tugboat seen directly from above; circular industrial ventilation FAN rotor blades in a ring; heavy silver hydraulic PRESS moving plate with hazard striped edges. Row2 left to right: short gray rubber CONVEYOR belt module with rollers; red/yellow railway SIGNAL lamp housing with lenses; separate wispy white STEAM plume with soft true alpha; circular cyan energy CORE rotating mechanical ring. Objects isolated on true transparent background. Rendering style matches highly detailed miniature factory pinball equipment. Single sprite atlas, uniform cell positions, all mechanically usable."
+}

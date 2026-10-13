@@ -1,0 +1,63 @@
+[
+  {
+    "width": 1920,
+    "height": 1080,
+    "lockedPreview": true,
+    "sequentialUnlock": true,
+    "oldRecordsRetained": true,
+    "purchase": true,
+    "noDuplicateCharge": true,
+    "storageFailureRollback": true,
+    "imageHud": true,
+    "fourPartEvolution": true,
+    "moduleAndObjectiveResume": true,
+    "nextRunModule": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "lockedPreview": true,
+    "sequentialUnlock": true,
+    "oldRecordsRetained": true,
+    "purchase": true,
+    "noDuplicateCharge": true,
+    "storageFailureRollback": true,
+    "imageHud": true,
+    "fourPartEvolution": true,
+    "moduleAndObjectiveResume": true,
+    "nextRunModule": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "lockedPreview": true,
+    "sequentialUnlock": true,
+    "oldRecordsRetained": true,
+    "purchase": true,
+    "noDuplicateCharge": true,
+    "storageFailureRollback": true,
+    "imageHud": true,
+    "fourPartEvolution": true,
+    "moduleAndObjectiveResume": true,
+    "nextRunModule": true
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "lockedPreview": true,
+    "sequentialUnlock": true,
+    "oldRecordsRetained": true,
+    "purchase": true,
+    "noDuplicateCharge": true,
+    "storageFailureRollback": true,
+    "imageHud": true,
+    "fourPartEvolution": true,
+    "moduleAndObjectiveResume": true,
+    "nextRunModule": true
+  },
+  {
+    "offline": true,
+    "ownedHudAndModule": true,
+    "catalystCheckpoint": true
+  }
+]

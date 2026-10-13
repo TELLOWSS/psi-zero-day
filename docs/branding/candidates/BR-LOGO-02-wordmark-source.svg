@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="144" viewBox="0 0 460 144" color="#161a1d" role="img" aria-labelledby="name">
+  <title id="name">NEW PSI : ZERO DAY</title>
+  <metadata>BR-LOGO-02 / UNAPPROVED DIRECTOR FILE CANDIDATE / Chakra Petch Bold, unmodified OFL font / no runtime connection</metadata>
+  <defs>
+    <style>@font-face{font-family:BrandChakra;src:url(data:font/ttf;base64,FONT_DATA) format('truetype');font-weight:700}text{font-family:BrandChakra;font-weight:700;letter-spacing:0}</style>
+  </defs>
+  <g transform="translate(0 24)" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="round">
+    <path d="M68 20H28Q20 20 20 28V68Q20 76 28 76H68"/>
+    <path d="M76 34V62"/>
+  </g>
+  <g fill="currentColor">
+    <text x="112" y="73" font-size="58">NEW PSI</text>
+    <text x="114" y="112" font-size="28">: ZERO DAY</text>
+  </g>
+</svg>

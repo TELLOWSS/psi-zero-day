@@ -1,0 +1,7152 @@
+{
+  "method": "5 chapters × 2 deterministic input profiles × 8 seeds; 180 seconds per run; 120 Hz rules; assist every 0.12 seconds; first offered tuning; ordinary source commands; hazard cascade enabled; ordinary 40-point boost when two or more hazards remain and available; no forced completion. Not human win rate or device FPS.",
+  "summary": [
+    {
+      "chapter": "CH-01",
+      "profile": "stationary",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 2.96,
+      "peakCores": 9,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-01",
+      "profile": "roam",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 4.06,
+      "peakCores": 9,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-02",
+      "profile": "stationary",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 1.73,
+      "peakCores": 10,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-02",
+      "profile": "roam",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 2.72,
+      "peakCores": 9,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-03",
+      "profile": "stationary",
+      "runs": 8,
+      "won": 0,
+      "lost": 0,
+      "timeout": 8,
+      "meanWave": 4.75,
+      "maxIdle": 37.92,
+      "peakCores": 12,
+      "peakShots": 4
+    },
+    {
+      "chapter": "CH-03",
+      "profile": "roam",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 10.22,
+      "peakCores": 16,
+      "peakShots": 4
+    },
+    {
+      "chapter": "CH-04",
+      "profile": "stationary",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 44.55,
+      "peakCores": 11,
+      "peakShots": 29
+    },
+    {
+      "chapter": "CH-04",
+      "profile": "roam",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 2.92,
+      "peakCores": 9,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-05",
+      "profile": "stationary",
+      "runs": 8,
+      "won": 2,
+      "lost": 0,
+      "timeout": 6,
+      "meanWave": 5,
+      "maxIdle": 138.96,
+      "peakCores": 12,
+      "peakShots": 32
+    },
+    {
+      "chapter": "CH-05",
+      "profile": "roam",
+      "runs": 8,
+      "won": 8,
+      "lost": 0,
+      "timeout": 0,
+      "meanWave": 5,
+      "maxIdle": 7.38,
+      "peakCores": 11,
+      "peakShots": 32
+    }
+  ],
+  "runs": [
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 1,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 37.59,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 175,
+      "hits": 182,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 74
+      },
+      "events": {
+        "start": 1,
+        "fire": 175,
+        "bumper": 11,
+        "impact": 122,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 496,
+        "sourceobserved": 1,
+        "corebounce": 7,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "sourcerequested": 1,
+        "chain": 15,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 20,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 34,
+        "netfield": 10,
+        "capture": 9,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.5,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.32,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.82,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 6.8,
+          "shots": 43,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 2,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.62,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 170,
+      "hits": 178,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 29,
+        "fields": 0,
+        "particles": 72
+      },
+      "events": {
+        "start": 1,
+        "fire": 170,
+        "bumper": 11,
+        "impact": 123,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 457,
+        "sourceobserved": 1,
+        "corebounce": 9,
+        "hazardresolved": 62,
+        "resolved": 49,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 15,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 33,
+        "netfield": 15,
+        "capture": 13,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.81,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.54,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.87,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.24,
+          "shots": 40,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 3,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.26,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 165,
+      "hits": 172,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 96
+      },
+      "events": {
+        "start": 1,
+        "fire": 165,
+        "bumper": 13,
+        "impact": 120,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 494,
+        "sourceobserved": 1,
+        "corebounce": 6,
+        "hazardresolved": 62,
+        "resolved": 50,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 13,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 32,
+        "netfield": 15,
+        "capture": 12,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.59,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.12,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.68,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.71,
+          "shots": 38,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 4,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 38.29,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 185,
+      "hits": 187,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 74
+      },
+      "events": {
+        "start": 1,
+        "fire": 185,
+        "bumper": 12,
+        "impact": 122,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 483,
+        "sourceobserved": 1,
+        "corebounce": 7,
+        "hazardresolved": 62,
+        "resolved": 50,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 18,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 37,
+        "netfield": 13,
+        "capture": 12,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.24,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.79,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.27,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.83,
+          "shots": 51,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 5,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.62,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 172,
+      "hits": 184,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 29,
+        "fields": 0,
+        "particles": 107
+      },
+      "events": {
+        "start": 1,
+        "fire": 172,
+        "bumper": 12,
+        "impact": 124,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 473,
+        "sourceobserved": 1,
+        "corebounce": 12,
+        "hazardresolved": 62,
+        "resolved": 48,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 19,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 34,
+        "netfield": 12,
+        "capture": 14,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.22,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.79,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.53,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.92,
+          "shots": 40,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 6,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 38.91,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 200,
+      "hits": 193,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 99
+      },
+      "events": {
+        "start": 1,
+        "fire": 200,
+        "bumper": 11,
+        "impact": 127,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 580,
+        "sourceobserved": 1,
+        "corebounce": 8,
+        "hazardresolved": 62,
+        "resolved": 52,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 22,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 41,
+        "netfield": 13,
+        "capture": 10,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.61,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.13,
+          "shots": 47,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.14,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 5.87,
+          "shots": 40,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 7,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 35.75,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 173,
+      "hits": 194,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 89
+      },
+      "events": {
+        "start": 1,
+        "fire": 173,
+        "bumper": 11,
+        "impact": 130,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 465,
+        "sourceobserved": 1,
+        "corebounce": 7,
+        "hazardresolved": 62,
+        "resolved": 54,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 21,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 33,
+        "netfield": 14,
+        "capture": 8,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.47,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 4.32,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.02,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.78,
+          "shots": 42,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 8,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 35.96,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 178,
+      "hits": 182,
+      "maxIdle": 2.96,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 66
+      },
+      "events": {
+        "start": 1,
+        "fire": 178,
+        "bumper": 9,
+        "impact": 128,
+        "split": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "ricochet": 417,
+        "sourceobserved": 1,
+        "corebounce": 7,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "sourcerequested": 1,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "overdrive": 3,
+        "sourcecontrolled": 1,
+        "skillshot": 18,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 35,
+        "netfield": 10,
+        "capture": 9,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 10.16,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.84,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 4.9,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.96,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 6.1,
+          "shots": 33,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 1,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 46.17,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 224,
+      "hits": 182,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 84
+      },
+      "events": {
+        "start": 1,
+        "fire": 224,
+        "bumper": 9,
+        "impact": 128,
+        "split": 19,
+        "ricochet": 531,
+        "reinforcement": 30,
+        "corebounce": 19,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 56,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 25,
+        "skillshot": 16,
+        "overdrive": 3,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 42,
+        "netfield": 8,
+        "capture": 6,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.47,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 8.11,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.27,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 11.55,
+          "shots": 73,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 2,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 44.3,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 195,
+      "hits": 169,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 30,
+        "fields": 0,
+        "particles": 70
+      },
+      "events": {
+        "start": 1,
+        "fire": 195,
+        "bumper": 6,
+        "impact": 127,
+        "split": 19,
+        "ricochet": 473,
+        "reinforcement": 30,
+        "corebounce": 21,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 56,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 26,
+        "skillshot": 21,
+        "overdrive": 3,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 36,
+        "netfield": 9,
+        "capture": 6,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.47,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 8.11,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.12,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.83,
+          "shots": 48,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 3,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 47.71,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 204,
+      "hits": 163,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 31,
+        "fields": 0,
+        "particles": 89
+      },
+      "events": {
+        "start": 1,
+        "fire": 204,
+        "bumper": 6,
+        "impact": 123,
+        "split": 19,
+        "ricochet": 542,
+        "reinforcement": 30,
+        "corebounce": 21,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 26,
+        "skillshot": 19,
+        "overdrive": 3,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 39,
+        "netfield": 10,
+        "capture": 11,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.27,
+          "shots": 25,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.27,
+          "shots": 47,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.77,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.64,
+          "shots": 50,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 4,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.5,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 213,
+      "hits": 181,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 89
+      },
+      "events": {
+        "start": 1,
+        "fire": 213,
+        "bumper": 6,
+        "impact": 124,
+        "split": 19,
+        "ricochet": 491,
+        "reinforcement": 30,
+        "corebounce": 18,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 54,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 22,
+        "skillshot": 12,
+        "overdrive": 3,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 40,
+        "netfield": 13,
+        "capture": 8,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.94,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.03,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.11,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.66,
+          "shots": 61,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 5,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 47.65,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 212,
+      "hits": 191,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 30,
+        "fields": 0,
+        "particles": 71
+      },
+      "events": {
+        "start": 1,
+        "fire": 212,
+        "bumper": 8,
+        "impact": 129,
+        "split": 19,
+        "ricochet": 490,
+        "reinforcement": 30,
+        "corebounce": 19,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 54,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 24,
+        "skillshot": 19,
+        "overdrive": 3,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 41,
+        "netfield": 16,
+        "capture": 8,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.89,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.03,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 10.16,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.81,
+          "shots": 52,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 6,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 46.87,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 242,
+      "hits": 172,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 84
+      },
+      "events": {
+        "start": 1,
+        "fire": 242,
+        "bumper": 8,
+        "impact": 125,
+        "split": 19,
+        "ricochet": 548,
+        "reinforcement": 30,
+        "corebounce": 19,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "chain": 16,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 25,
+        "skillshot": 12,
+        "overdrive": 3,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 47,
+        "netfield": 13,
+        "capture": 9,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.61,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.87,
+          "shots": 52,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 11.63,
+          "shots": 71,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 7,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 45.2,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 220,
+      "hits": 180,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 93
+      },
+      "events": {
+        "start": 1,
+        "fire": 220,
+        "bumper": 8,
+        "impact": 123,
+        "split": 17,
+        "ricochet": 506,
+        "reinforcement": 30,
+        "corebounce": 19,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 56,
+        "chain": 15,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 25,
+        "skillshot": 15,
+        "overdrive": 3,
+        "powerup": 1,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 43,
+        "netfield": 11,
+        "capture": 6,
+        "stabilize": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.99,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.24,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.97,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.24,
+          "shots": 55,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-01",
+      "seed": 8,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.02,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 218,
+      "hits": 173,
+      "maxIdle": 4.06,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 94
+      },
+      "events": {
+        "start": 1,
+        "fire": 218,
+        "bumper": 6,
+        "impact": 121,
+        "split": 19,
+        "ricochet": 489,
+        "reinforcement": 30,
+        "corebounce": 17,
+        "sourceobserved": 1,
+        "hazardrelease": 62,
+        "sourcerequested": 1,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "chain": 15,
+        "itemdrop": 31,
+        "sourcecontrolled": 1,
+        "itemcollect": 24,
+        "skillshot": 14,
+        "overdrive": 3,
+        "powerup": 2,
+        "sourceverified": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 40,
+        "netfield": 13,
+        "capture": 9,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 13.76,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.99,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.61,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.11,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.56,
+          "shots": 57,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 1,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 35.2,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 170,
+      "hits": 170,
+      "maxIdle": 1.72,
+      "peaks": {
+        "cores": 9,
+        "shots": 29,
+        "fields": 0,
+        "particles": 113
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 170,
+        "corebounce": 13,
+        "impact": 117,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 454,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "chain": 15,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "overdrive": 3,
+        "skillshot": 11,
+        "bumper": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 34,
+        "netfield": 10,
+        "capture": 11,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.97,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.96,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 6.39,
+          "shots": 35,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 2,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 34.85,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 161,
+      "hits": 175,
+      "maxIdle": 1.73,
+      "peaks": {
+        "cores": 9,
+        "shots": 31,
+        "fields": 0,
+        "particles": 112
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 161,
+        "corebounce": 9,
+        "impact": 122,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 421,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "overdrive": 3,
+        "skillshot": 19,
+        "bumper": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 32,
+        "netfield": 10,
+        "capture": 11,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.98,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.01,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 5.82,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.16,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 3,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 33.82,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 150,
+      "hits": 159,
+      "maxIdle": 1.61,
+      "peaks": {
+        "cores": 8,
+        "shots": 26,
+        "fields": 0,
+        "particles": 87
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 150,
+        "corebounce": 10,
+        "impact": 114,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 397,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 54,
+        "chain": 15,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "skillshot": 19,
+        "bumper": 7,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 29,
+        "netfield": 13,
+        "capture": 8,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.12,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 4.65,
+          "shots": 22,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 5.7,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.47,
+          "shots": 32,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 4,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 34.44,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 175,
+      "hits": 179,
+      "maxIdle": 1.53,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 102
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 175,
+        "corebounce": 9,
+        "impact": 119,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 413,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 50,
+        "chain": 15,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "skillshot": 15,
+        "bumper": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 35,
+        "netfield": 13,
+        "capture": 12,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.26,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.52,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.62,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.17,
+          "shots": 41,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 5,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 34.92,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 162,
+      "hits": 174,
+      "maxIdle": 1.51,
+      "peaks": {
+        "cores": 8,
+        "shots": 28,
+        "fields": 0,
+        "particles": 100
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 162,
+        "corebounce": 9,
+        "impact": 122,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 422,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "skillshot": 16,
+        "bumper": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 32,
+        "netfield": 11,
+        "capture": 11,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.11,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.52,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.16,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.27,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 6,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 36.11,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 196,
+      "hits": 170,
+      "maxIdle": 1.69,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 71
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 196,
+        "corebounce": 17,
+        "impact": 127,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 517,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 55,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "skillshot": 13,
+        "bumper": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 39,
+        "netfield": 10,
+        "capture": 7,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.1,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.94,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.58,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.61,
+          "shots": 44,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 7,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 34.72,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 177,
+      "hits": 186,
+      "maxIdle": 1.72,
+      "peaks": {
+        "cores": 10,
+        "shots": 32,
+        "fields": 0,
+        "particles": 72
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 177,
+        "corebounce": 10,
+        "impact": 123,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 443,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 56,
+        "chain": 15,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "overdrive": 3,
+        "skillshot": 14,
+        "bumper": 8,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 36,
+        "netfield": 7,
+        "capture": 6,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.77,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.99,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.27,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.82,
+          "shots": 40,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 8,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 34.33,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 182,
+      "hits": 192,
+      "maxIdle": 1.52,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 81
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 182,
+        "corebounce": 12,
+        "impact": 126,
+        "split": 19,
+        "reinforcement": 30,
+        "ricochet": 437,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "chain": 16,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "overdrive": 3,
+        "skillshot": 15,
+        "bumper": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 36,
+        "netfield": 12,
+        "capture": 9,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.88,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.52,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.07,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 6.87,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 1,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 44.97,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 229,
+      "hits": 180,
+      "maxIdle": 2.62,
+      "peaks": {
+        "cores": 8,
+        "shots": 30,
+        "fields": 0,
+        "particles": 87
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 229,
+        "impact": 128,
+        "split": 19,
+        "ricochet": 511,
+        "corebounce": 13,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 59,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 12,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 43,
+        "netfield": 9,
+        "capture": 3,
+        "powerup": 1,
+        "bumper": 3,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.25,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.05,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.5,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.97,
+          "shots": 62,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 2,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.97,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 201,
+      "hits": 172,
+      "maxIdle": 2.62,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 94
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 201,
+        "impact": 134,
+        "split": 19,
+        "ricochet": 472,
+        "corebounce": 16,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 56,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 13,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 36,
+        "netfield": 8,
+        "capture": 6,
+        "bumper": 2,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.92,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.77,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.07,
+          "shots": 45,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 3,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 45.7,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 206,
+      "hits": 172,
+      "maxIdle": 2.72,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 97
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 206,
+        "impact": 124,
+        "split": 19,
+        "ricochet": 521,
+        "corebounce": 23,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 53,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 16,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 37,
+        "netfield": 11,
+        "capture": 9,
+        "bumper": 2,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.32,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.47,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.21,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.49,
+          "shots": 49,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 4,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 42.21,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 217,
+      "hits": 170,
+      "maxIdle": 2.62,
+      "peaks": {
+        "cores": 7,
+        "shots": 32,
+        "fields": 0,
+        "particles": 89
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 217,
+        "impact": 122,
+        "split": 19,
+        "ricochet": 513,
+        "corebounce": 14,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 16,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 40,
+        "netfield": 10,
+        "capture": 11,
+        "bumper": 3,
+        "stabilize": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.8,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.59,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.85,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.76,
+          "shots": 61,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 5,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 45.83,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 214,
+      "hits": 170,
+      "maxIdle": 2.62,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 76
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 214,
+        "impact": 128,
+        "split": 19,
+        "ricochet": 496,
+        "corebounce": 15,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 60,
+        "itemdrop": 31,
+        "itemcollect": 26,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 14,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 39,
+        "netfield": 11,
+        "capture": 2,
+        "bumper": 2,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.87,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.77,
+          "shots": 50,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.11,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.87,
+          "shots": 44,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 6,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 46.12,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 254,
+      "hits": 192,
+      "maxIdle": 2.67,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 94
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 254,
+        "impact": 125,
+        "split": 19,
+        "ricochet": 560,
+        "corebounce": 20,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 57,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 11,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 49,
+        "netfield": 13,
+        "capture": 5,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.94,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.17,
+          "shots": 58,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 5.97,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.83,
+          "shots": 65,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 7,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.45,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 228,
+      "hits": 185,
+      "maxIdle": 2.64,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 93
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 228,
+        "impact": 125,
+        "split": 19,
+        "ricochet": 525,
+        "corebounce": 14,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 51,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 12,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 42,
+        "netfield": 16,
+        "capture": 11,
+        "powerup": 1,
+        "bumper": 4,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.9,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.39,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.2,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.75,
+          "shots": 57,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 500,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-02",
+      "seed": 8,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 45.18,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 245,
+      "hits": 179,
+      "maxIdle": 2.62,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 94
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 245,
+        "impact": 128,
+        "split": 19,
+        "ricochet": 549,
+        "corebounce": 19,
+        "reinforcement": 30,
+        "hazardrelease": 62,
+        "hazardresolved": 62,
+        "resolved": 57,
+        "itemdrop": 31,
+        "itemcollect": 24,
+        "chain": 15,
+        "overdrive": 3,
+        "skillshot": 10,
+        "waveclear": 4,
+        "wave": 4,
+        "comboshot": 44,
+        "netfield": 10,
+        "capture": 5,
+        "bumper": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 12.21,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.68,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.72,
+          "shots": 47,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.52,
+          "shots": 46,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.05,
+          "shots": 59,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 60,
+      "pickups": 23,
+      "releases": 49,
+      "resolves": 46,
+      "pending": 4,
+      "chapter": "CH-03",
+      "seed": 1,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 46,
+      "total": 62,
+      "shots": 243,
+      "hits": 109,
+      "maxIdle": 26.87,
+      "peaks": {
+        "cores": 10,
+        "shots": 4,
+        "fields": 1,
+        "particles": 107
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 243,
+        "bumper": 34,
+        "ricochet": 144,
+        "reinforcement": 26,
+        "corebounce": 31,
+        "mist": 156,
+        "stabilize": 60,
+        "weapon": 76,
+        "reason": 10,
+        "netfield": 48,
+        "hazardrelease": 49,
+        "hazardresolved": 46,
+        "capture": 46,
+        "itemdrop": 23,
+        "itemcollect": 20,
+        "overdrive": 10,
+        "split": 9,
+        "waveclear": 4,
+        "wave": 4,
+        "chain": 1
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 2,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 1,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 54.05,
+          "shots": 79,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 54.61,
+          "shots": 67,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 30.35,
+          "shots": 39,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 100,
+      "pickups": 27,
+      "releases": 61,
+      "resolves": 54,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 2,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 54,
+      "total": 62,
+      "shots": 265,
+      "hits": 137,
+      "maxIdle": 12.83,
+      "peaks": {
+        "cores": 12,
+        "shots": 3,
+        "fields": 1,
+        "particles": 104
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 265,
+        "bumper": 39,
+        "ricochet": 137,
+        "reinforcement": 30,
+        "corebounce": 48,
+        "mist": 180,
+        "stabilize": 71,
+        "weapon": 100,
+        "reason": 12,
+        "netfield": 58,
+        "hazardrelease": 61,
+        "hazardresolved": 54,
+        "capture": 54,
+        "itemdrop": 27,
+        "itemcollect": 23,
+        "overdrive": 11,
+        "split": 11,
+        "waveclear": 4,
+        "wave": 4,
+        "chain": 3
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 31.55,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 28.26,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 50.19,
+          "shots": 80,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 50,
+      "pickups": 26,
+      "releases": 53,
+      "resolves": 53,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 3,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 53,
+      "total": 62,
+      "shots": 278,
+      "hits": 134,
+      "maxIdle": 14.78,
+      "peaks": {
+        "cores": 10,
+        "shots": 3,
+        "fields": 1,
+        "particles": 101
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 278,
+        "bumper": 30,
+        "ricochet": 147,
+        "reinforcement": 30,
+        "corebounce": 42,
+        "mist": 182,
+        "stabilize": 71,
+        "weapon": 94,
+        "reason": 9,
+        "netfield": 56,
+        "hazardrelease": 53,
+        "hazardresolved": 53,
+        "capture": 53,
+        "itemdrop": 26,
+        "itemcollect": 22,
+        "overdrive": 12,
+        "split": 9,
+        "waveclear": 4,
+        "wave": 4,
+        "chain": 4,
+        "powerup": 1
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 2,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 1,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 41.28,
+          "shots": 67,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 37.86,
+          "shots": 65,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 43.53,
+          "shots": 64,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 50,
+      "pickups": 22,
+      "releases": 46,
+      "resolves": 45,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 4,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 4,
+      "seconds": 179.98,
+      "life": 5,
+      "cleared": 45,
+      "total": 62,
+      "shots": 258,
+      "hits": 110,
+      "maxIdle": 14.42,
+      "peaks": {
+        "cores": 11,
+        "shots": 4,
+        "fields": 1,
+        "particles": 102
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 258,
+        "bumper": 30,
+        "ricochet": 155,
+        "reinforcement": 22,
+        "corebounce": 26,
+        "mist": 156,
+        "stabilize": 57,
+        "weapon": 83,
+        "reason": 11,
+        "netfield": 46,
+        "hazardrelease": 46,
+        "hazardresolved": 45,
+        "capture": 45,
+        "itemdrop": 22,
+        "itemcollect": 20,
+        "overdrive": 10,
+        "split": 8,
+        "waveclear": 3,
+        "wave": 3,
+        "powerup": 1,
+        "chain": 2
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 49.83,
+          "shots": 68,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 38.32,
+          "shots": 56,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 80,
+      "pickups": 20,
+      "releases": 44,
+      "resolves": 40,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 5,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 4,
+      "seconds": 179.98,
+      "life": 5,
+      "cleared": 40,
+      "total": 62,
+      "shots": 241,
+      "hits": 97,
+      "maxIdle": 37.92,
+      "peaks": {
+        "cores": 12,
+        "shots": 4,
+        "fields": 1,
+        "particles": 70
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 241,
+        "bumper": 31,
+        "ricochet": 150,
+        "reinforcement": 22,
+        "corebounce": 40,
+        "mist": 145,
+        "stabilize": 64,
+        "weapon": 70,
+        "reason": 9,
+        "netfield": 44,
+        "hazardrelease": 44,
+        "hazardresolved": 40,
+        "capture": 40,
+        "itemdrop": 20,
+        "itemcollect": 18,
+        "overdrive": 8,
+        "split": 8,
+        "waveclear": 3,
+        "wave": 3,
+        "chain": 2,
+        "powerup": 1
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 39.8,
+          "shots": 52,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 75.18,
+          "shots": 98,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 170,
+      "pickups": 30,
+      "releases": 62,
+      "resolves": 61,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 6,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 61,
+      "total": 62,
+      "shots": 247,
+      "hits": 139,
+      "maxIdle": 10.25,
+      "peaks": {
+        "cores": 11,
+        "shots": 4,
+        "fields": 1,
+        "particles": 93
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 247,
+        "bumper": 28,
+        "ricochet": 113,
+        "reinforcement": 30,
+        "corebounce": 29,
+        "mist": 162,
+        "stabilize": 86,
+        "weapon": 101,
+        "reason": 15,
+        "netfield": 62,
+        "hazardrelease": 62,
+        "hazardresolved": 61,
+        "capture": 61,
+        "itemdrop": 30,
+        "itemcollect": 27,
+        "overdrive": 11,
+        "split": 11,
+        "waveclear": 4,
+        "wave": 4,
+        "chain": 3,
+        "powerup": 1
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 28.33,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 28.24,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 30.83,
+          "shots": 44,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 100,
+      "pickups": 27,
+      "releases": 55,
+      "resolves": 54,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 7,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 54,
+      "total": 62,
+      "shots": 273,
+      "hits": 139,
+      "maxIdle": 14.17,
+      "peaks": {
+        "cores": 10,
+        "shots": 3,
+        "fields": 1,
+        "particles": 115
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 273,
+        "bumper": 30,
+        "ricochet": 140,
+        "reinforcement": 30,
+        "corebounce": 33,
+        "mist": 179,
+        "stabilize": 78,
+        "weapon": 97,
+        "reason": 12,
+        "netfield": 59,
+        "hazardrelease": 55,
+        "hazardresolved": 54,
+        "capture": 54,
+        "itemdrop": 27,
+        "itemcollect": 24,
+        "overdrive": 11,
+        "split": 9,
+        "waveclear": 4,
+        "wave": 4,
+        "chain": 5,
+        "powerup": 1
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 2,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 1,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 37.79,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 47.55,
+          "shots": 76,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 23.07,
+          "shots": 38,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 90,
+      "pickups": 28,
+      "releases": 62,
+      "resolves": 57,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 8,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 57,
+      "total": 62,
+      "shots": 263,
+      "hits": 132,
+      "maxIdle": 15.89,
+      "peaks": {
+        "cores": 11,
+        "shots": 3,
+        "fields": 1,
+        "particles": 101
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 263,
+        "bumper": 30,
+        "ricochet": 136,
+        "reinforcement": 30,
+        "corebounce": 43,
+        "mist": 168,
+        "stabilize": 78,
+        "weapon": 95,
+        "reason": 9,
+        "netfield": 57,
+        "hazardrelease": 62,
+        "hazardresolved": 57,
+        "capture": 57,
+        "itemdrop": 28,
+        "itemcollect": 25,
+        "overdrive": 12,
+        "split": 11,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "chain": 3
+      },
+      "remaining": [
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": true
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "dust",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 37.94,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 25.51,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 44.48,
+          "shots": 65,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 32.83,
+          "shots": 45,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 220,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 1,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 138.93,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 190,
+      "hits": 153,
+      "maxIdle": 6.36,
+      "peaks": {
+        "cores": 14,
+        "shots": 4,
+        "fields": 1,
+        "particles": 115
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 190,
+        "bumper": 17,
+        "ricochet": 43,
+        "reinforcement": 30,
+        "corebounce": 28,
+        "mist": 114,
+        "stabilize": 89,
+        "weapon": 113,
+        "netfield": 60,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 10,
+        "chain": 5,
+        "reason": 7,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 33.16,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 27.1,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 26,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 25.41,
+          "shots": 32,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 260,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 2,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 130.33,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 194,
+      "hits": 155,
+      "maxIdle": 6.36,
+      "peaks": {
+        "cores": 11,
+        "shots": 4,
+        "fields": 1,
+        "particles": 115
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 194,
+        "bumper": 17,
+        "ricochet": 41,
+        "reinforcement": 30,
+        "corebounce": 30,
+        "mist": 114,
+        "stabilize": 82,
+        "weapon": 105,
+        "netfield": 59,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 9,
+        "chain": 5,
+        "reason": 6,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 37.92,
+          "shots": 55,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 25.52,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 21.98,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 17.65,
+          "shots": 27,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 260,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 3,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 136.24,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 214,
+      "hits": 157,
+      "maxIdle": 10.22,
+      "peaks": {
+        "cores": 12,
+        "shots": 4,
+        "fields": 1,
+        "particles": 113
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 214,
+        "bumper": 16,
+        "ricochet": 68,
+        "reinforcement": 30,
+        "corebounce": 52,
+        "mist": 133,
+        "stabilize": 89,
+        "weapon": 107,
+        "netfield": 59,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 25,
+        "overdrive": 9,
+        "chain": 6,
+        "reason": 8,
+        "waveclear": 4,
+        "wave": 4,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 15.38,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 37.47,
+          "shots": 63,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 32.48,
+          "shots": 50,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 23.65,
+          "shots": 37,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 220,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 4,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 143.33,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 207,
+      "hits": 165,
+      "maxIdle": 6.36,
+      "peaks": {
+        "cores": 14,
+        "shots": 4,
+        "fields": 1,
+        "particles": 88
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 207,
+        "bumper": 21,
+        "ricochet": 40,
+        "reinforcement": 30,
+        "corebounce": 47,
+        "mist": 113,
+        "stabilize": 87,
+        "weapon": 113,
+        "netfield": 68,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 10,
+        "chain": 7,
+        "reason": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 28.57,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 35.8,
+          "shots": 55,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 23.67,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 28.04,
+          "shots": 38,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 180,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 5,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 151.68,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 212,
+      "hits": 163,
+      "maxIdle": 8.52,
+      "peaks": {
+        "cores": 11,
+        "shots": 4,
+        "fields": 1,
+        "particles": 96
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 212,
+        "bumper": 15,
+        "ricochet": 56,
+        "reinforcement": 30,
+        "corebounce": 45,
+        "mist": 122,
+        "stabilize": 94,
+        "weapon": 117,
+        "netfield": 64,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 11,
+        "chain": 5,
+        "reason": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 27.34,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 37.73,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 23.68,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 35.68,
+          "shots": 55,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 260,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 6,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 138.96,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 194,
+      "hits": 161,
+      "maxIdle": 7.9,
+      "peaks": {
+        "cores": 14,
+        "shots": 3,
+        "fields": 1,
+        "particles": 82
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 194,
+        "bumper": 20,
+        "ricochet": 37,
+        "reinforcement": 30,
+        "corebounce": 36,
+        "mist": 122,
+        "stabilize": 91,
+        "weapon": 115,
+        "netfield": 65,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 9,
+        "chain": 5,
+        "reason": 9,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 30.83,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 21.5,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 31.6,
+          "shots": 46,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 27.77,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 260,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 7,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 127.4,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 198,
+      "hits": 162,
+      "maxIdle": 6.36,
+      "peaks": {
+        "cores": 16,
+        "shots": 4,
+        "fields": 1,
+        "particles": 99
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 198,
+        "bumper": 25,
+        "ricochet": 39,
+        "reinforcement": 30,
+        "corebounce": 35,
+        "mist": 120,
+        "stabilize": 85,
+        "weapon": 103,
+        "netfield": 61,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 9,
+        "chain": 7,
+        "reason": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 21.77,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 19.21,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 27.28,
+          "shots": 45,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 31.88,
+          "shots": 51,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 260,
+      "pickups": 31,
+      "releases": 62,
+      "resolves": 62,
+      "pending": 0,
+      "chapter": "CH-03",
+      "seed": 8,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 130.42,
+      "life": 5,
+      "cleared": 62,
+      "total": 62,
+      "shots": 193,
+      "hits": 164,
+      "maxIdle": 6.36,
+      "peaks": {
+        "cores": 12,
+        "shots": 3,
+        "fields": 1,
+        "particles": 75
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "fire": 193,
+        "bumper": 20,
+        "ricochet": 31,
+        "reinforcement": 30,
+        "corebounce": 39,
+        "mist": 120,
+        "stabilize": 92,
+        "weapon": 119,
+        "netfield": 65,
+        "hazardrelease": 62,
+        "split": 11,
+        "hazardresolved": 62,
+        "capture": 62,
+        "itemdrop": 31,
+        "itemcollect": 27,
+        "overdrive": 9,
+        "chain": 7,
+        "reason": 8,
+        "waveclear": 4,
+        "wave": 4,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 27.26,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 25.47,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 22.35,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 25.18,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 30.17,
+          "shots": 50,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 1,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 51.8,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 228,
+      "hits": 140,
+      "maxIdle": 3.38,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 44
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 228,
+        "ricochet": 615,
+        "corebounce": 21,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 109,
+        "hazardresolved": 52,
+        "resolved": 49,
+        "itemdrop": 26,
+        "itemcollect": 21,
+        "skillshot": 15,
+        "split": 9,
+        "bumper": 7,
+        "chain": 11,
+        "overdrive": 3,
+        "capture": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 14,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.58,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.92,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.91,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 17.86,
+          "shots": 81,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 2,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 52.5,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 261,
+      "hits": 152,
+      "maxIdle": 5.9,
+      "peaks": {
+        "cores": 8,
+        "shots": 29,
+        "fields": 0,
+        "particles": 44
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 261,
+        "ricochet": 691,
+        "corebounce": 22,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 106,
+        "hazardresolved": 52,
+        "resolved": 46,
+        "itemdrop": 26,
+        "itemcollect": 20,
+        "skillshot": 15,
+        "split": 9,
+        "bumper": 5,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 6,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 14,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.58,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.95,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.57,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 17.87,
+          "shots": 97,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 3,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.8,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 202,
+      "hits": 158,
+      "maxIdle": 2.9,
+      "peaks": {
+        "cores": 11,
+        "shots": 28,
+        "fields": 0,
+        "particles": 73
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 202,
+        "ricochet": 502,
+        "corebounce": 21,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 105,
+        "hazardresolved": 52,
+        "resolved": 47,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "skillshot": 13,
+        "split": 9,
+        "bumper": 5,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "node": 3,
+        "reason": 2,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.41,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.77,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.08,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.01,
+          "shots": 46,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 4,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 47.37,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 219,
+      "hits": 148,
+      "maxIdle": 2.9,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 50
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 219,
+        "ricochet": 575,
+        "corebounce": 27,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 104,
+        "hazardresolved": 52,
+        "resolved": 46,
+        "itemdrop": 26,
+        "itemcollect": 18,
+        "skillshot": 12,
+        "split": 9,
+        "bumper": 7,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 6,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 7,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.39,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.09,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.02,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 12.32,
+          "shots": 58,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 5,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 83.67,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 390,
+      "hits": 141,
+      "maxIdle": 30.79,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 53
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 390,
+        "ricochet": 1196,
+        "corebounce": 26,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 105,
+        "hazardresolved": 52,
+        "resolved": 47,
+        "itemdrop": 26,
+        "itemcollect": 21,
+        "skillshot": 13,
+        "split": 9,
+        "bumper": 9,
+        "chain": 11,
+        "overdrive": 3,
+        "capture": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 21,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.51,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.2,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.68,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 46.74,
+          "shots": 230,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 6,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 93.29,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 411,
+      "hits": 148,
+      "maxIdle": 44.55,
+      "peaks": {
+        "cores": 10,
+        "shots": 28,
+        "fields": 0,
+        "particles": 51
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 411,
+        "ricochet": 1302,
+        "corebounce": 49,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 106,
+        "hazardresolved": 52,
+        "resolved": 47,
+        "itemdrop": 26,
+        "itemcollect": 20,
+        "skillshot": 18,
+        "split": 9,
+        "bumper": 9,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 5,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 30,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.39,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.09,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.02,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 58.25,
+          "shots": 249,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 7,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 61.82,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 313,
+      "hits": 153,
+      "maxIdle": 11.13,
+      "peaks": {
+        "cores": 8,
+        "shots": 29,
+        "fields": 0,
+        "particles": 46
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 313,
+        "ricochet": 872,
+        "corebounce": 24,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 108,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 20,
+        "skillshot": 20,
+        "split": 9,
+        "bumper": 9,
+        "chain": 11,
+        "overdrive": 3,
+        "capture": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 14,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.39,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.89,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.18,
+          "shots": 50,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 25.82,
+          "shots": 132,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 8,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 45.07,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 225,
+      "hits": 144,
+      "maxIdle": 2.9,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 51
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 225,
+        "ricochet": 586,
+        "corebounce": 21,
+        "reinforcement": 30,
+        "hazardrelease": 52,
+        "impact": 102,
+        "hazardresolved": 52,
+        "resolved": 46,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "skillshot": 17,
+        "split": 9,
+        "bumper": 6,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 6,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 6,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 11.53,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.39,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.09,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.02,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 11.04,
+          "shots": 68,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 1,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.4,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 179,
+      "hits": 135,
+      "maxIdle": 2.11,
+      "peaks": {
+        "cores": 8,
+        "shots": 27,
+        "fields": 0,
+        "particles": 51
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 179,
+        "ricochet": 406,
+        "corebounce": 24,
+        "reinforcement": 30,
+        "impact": 105,
+        "split": 9,
+        "skillshot": 11,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "capture": 4,
+        "bumper": 4,
+        "node": 3,
+        "reason": 6,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 28,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.71,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.63,
+          "shots": 46,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.11,
+          "shots": 43,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 2,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 37.13,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 192,
+      "hits": 148,
+      "maxIdle": 2.92,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 49
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 192,
+        "ricochet": 441,
+        "corebounce": 20,
+        "reinforcement": 30,
+        "impact": 110,
+        "split": 9,
+        "skillshot": 15,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "itemcollect": 17,
+        "chain": 11,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "capture": 2,
+        "bumper": 6,
+        "reason": 2,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.84,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.88,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.46,
+          "shots": 47,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 3,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 37.02,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 194,
+      "hits": 147,
+      "maxIdle": 2.37,
+      "peaks": {
+        "cores": 7,
+        "shots": 32,
+        "fields": 0,
+        "particles": 55
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 194,
+        "ricochet": 423,
+        "corebounce": 18,
+        "reinforcement": 30,
+        "impact": 107,
+        "split": 9,
+        "skillshot": 9,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 18,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "capture": 4,
+        "bumper": 5,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.07,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.16,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.83,
+          "shots": 44,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 4,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 37.22,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 176,
+      "hits": 144,
+      "maxIdle": 2.77,
+      "peaks": {
+        "cores": 9,
+        "shots": 28,
+        "fields": 0,
+        "particles": 46
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 176,
+        "ricochet": 396,
+        "corebounce": 23,
+        "reinforcement": 30,
+        "impact": 110,
+        "split": 9,
+        "skillshot": 15,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "itemcollect": 17,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "capture": 2,
+        "bumper": 4,
+        "reason": 1,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 29,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.84,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.86,
+          "shots": 53,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.57,
+          "shots": 35,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 5,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 38.86,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 184,
+      "hits": 153,
+      "maxIdle": 2.11,
+      "peaks": {
+        "cores": 7,
+        "shots": 31,
+        "fields": 0,
+        "particles": 47
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 184,
+        "ricochet": 399,
+        "corebounce": 22,
+        "reinforcement": 30,
+        "impact": 107,
+        "split": 9,
+        "skillshot": 10,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "capture": 4,
+        "bumper": 2,
+        "node": 3,
+        "reason": 9,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.71,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.15,
+          "shots": 44,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.05,
+          "shots": 52,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 6,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 37.35,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 178,
+      "hits": 144,
+      "maxIdle": 2.77,
+      "peaks": {
+        "cores": 7,
+        "shots": 28,
+        "fields": 0,
+        "particles": 51
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 178,
+        "ricochet": 395,
+        "corebounce": 22,
+        "reinforcement": 30,
+        "impact": 109,
+        "split": 9,
+        "skillshot": 13,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 49,
+        "itemdrop": 26,
+        "itemcollect": 16,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "bumper": 4,
+        "capture": 3,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.84,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 10.12,
+          "shots": 54,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 7.44,
+          "shots": 35,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 7,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 38.7,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 202,
+      "hits": 151,
+      "maxIdle": 2.33,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 58
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 202,
+        "ricochet": 445,
+        "corebounce": 22,
+        "reinforcement": 30,
+        "impact": 106,
+        "split": 9,
+        "skillshot": 11,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 47,
+        "itemdrop": 26,
+        "itemcollect": 16,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "bumper": 5,
+        "capture": 5,
+        "node": 3,
+        "reason": 13,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.07,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.49,
+          "shots": 59,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.18,
+          "shots": 48,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-04",
+      "seed": 8,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 36.24,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 184,
+      "hits": 144,
+      "maxIdle": 2.39,
+      "peaks": {
+        "cores": 9,
+        "shots": 32,
+        "fields": 0,
+        "particles": 48
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "weapon": 1,
+        "fire": 184,
+        "ricochet": 433,
+        "corebounce": 28,
+        "reinforcement": 30,
+        "impact": 109,
+        "split": 9,
+        "skillshot": 16,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "itemcollect": 16,
+        "chain": 12,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "bumper": 3,
+        "capture": 2,
+        "reason": 1,
+        "node": 3,
+        "unseal": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.22,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 5.73,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.84,
+          "shots": 24,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8,
+          "shots": 45,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 8.45,
+          "shots": 50,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 1,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 46.56,
+      "life": 4,
+      "cleared": 52,
+      "total": 52,
+      "shots": 207,
+      "hits": 145,
+      "maxIdle": 6.81,
+      "peaks": {
+        "cores": 10,
+        "shots": 29,
+        "fields": 0,
+        "particles": 83
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 207,
+        "impact": 110,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 3,
+        "reinforcement": 30,
+        "ricochet": 571,
+        "corebounce": 22,
+        "skillshot": 13,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "itemcollect": 18,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 2,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 20,
+        "reason": 9,
+        "hurt": 1,
+        "node": 3,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.52,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.22,
+          "shots": 25,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.51,
+          "shots": 39,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 16.71,
+          "shots": 75,
+          "damage": 1
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 2,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 4,
+      "cleared": 52,
+      "total": 52,
+      "shots": 352,
+      "hits": 146,
+      "maxIdle": 109.97,
+      "peaks": {
+        "cores": 12,
+        "shots": 29,
+        "fields": 0,
+        "particles": 52
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 352,
+        "impact": 109,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 2,
+        "reinforcement": 30,
+        "ricochet": 1167,
+        "corebounce": 23,
+        "skillshot": 18,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "itemcollect": 18,
+        "chain": 11,
+        "overdrive": 3,
+        "capture": 2,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 65,
+        "reason": 22,
+        "hurt": 1,
+        "node": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.15,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.57,
+          "shots": 25,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.91,
+          "shots": 49,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 3,
+      "profile": "stationary",
+      "state": "won",
+      "wave": 5,
+      "seconds": 39.25,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 206,
+      "hits": 165,
+      "maxIdle": 2.9,
+      "peaks": {
+        "cores": 10,
+        "shots": 32,
+        "fields": 0,
+        "particles": 115
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 206,
+        "impact": 108,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 2,
+        "reinforcement": 30,
+        "ricochet": 525,
+        "corebounce": 25,
+        "skillshot": 14,
+        "hazardresolved": 52,
+        "resolved": 49,
+        "itemdrop": 26,
+        "itemcollect": 17,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 4,
+        "reason": 3,
+        "node": 3,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.03,
+          "shots": 47,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.48,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.1,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 10.02,
+          "shots": 55,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 4,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 234,
+      "hits": 152,
+      "maxIdle": 128.49,
+      "peaks": {
+        "cores": 10,
+        "shots": 29,
+        "fields": 0,
+        "particles": 57
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 234,
+        "impact": 109,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 5,
+        "reinforcement": 30,
+        "ricochet": 653,
+        "corebounce": 19,
+        "skillshot": 16,
+        "hazardresolved": 52,
+        "resolved": 49,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 35,
+        "reason": 12,
+        "node": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.1,
+          "shots": 36,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.52,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.33,
+          "shots": 34,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 20,
+      "pickups": 25,
+      "releases": 52,
+      "resolves": 50,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 5,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 50,
+      "total": 52,
+      "shots": 151,
+      "hits": 133,
+      "maxIdle": 110.28,
+      "peaks": {
+        "cores": 12,
+        "shots": 29,
+        "fields": 0,
+        "particles": 57
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 151,
+        "impact": 103,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 56,
+        "reinforcement": 30,
+        "ricochet": 373,
+        "corebounce": 21,
+        "skillshot": 10,
+        "hazardresolved": 50,
+        "resolved": 44,
+        "itemdrop": 25,
+        "itemcollect": 19,
+        "chain": 10,
+        "overdrive": 12,
+        "capture": 6,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 5,
+        "denied": 10,
+        "node": 1
+      },
+      "remaining": [
+        {
+          "kind": "metal",
+          "tier": 0,
+          "stable": false
+        },
+        {
+          "kind": "metal",
+          "tier": 0,
+          "stable": false
+        }
+      ],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.33,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.72,
+          "shots": 26,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.7,
+          "shots": 34,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 6,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 170,
+      "hits": 136,
+      "maxIdle": 124.83,
+      "peaks": {
+        "cores": 11,
+        "shots": 28,
+        "fields": 0,
+        "particles": 52
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 170,
+        "impact": 106,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 3,
+        "reinforcement": 30,
+        "ricochet": 418,
+        "corebounce": 22,
+        "skillshot": 13,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 20,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 8,
+        "reason": 5,
+        "node": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.4,
+          "shots": 33,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.08,
+          "shots": 32,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.97,
+          "shots": 39,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 7,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 4,
+      "cleared": 52,
+      "total": 52,
+      "shots": 206,
+      "hits": 160,
+      "maxIdle": 138.96,
+      "peaks": {
+        "cores": 10,
+        "shots": 29,
+        "fields": 0,
+        "particles": 53
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 206,
+        "impact": 111,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 3,
+        "reinforcement": 30,
+        "ricochet": 520,
+        "corebounce": 17,
+        "skillshot": 16,
+        "hazardresolved": 52,
+        "resolved": 51,
+        "itemdrop": 26,
+        "itemcollect": 19,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 1,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "denied": 21,
+        "reason": 5,
+        "hurt": 1,
+        "node": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.99,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 6.95,
+          "shots": 35,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.49,
+          "shots": 45,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 8,
+      "profile": "stationary",
+      "state": "timeout",
+      "wave": 5,
+      "seconds": 179.97,
+      "life": 4,
+      "cleared": 52,
+      "total": 52,
+      "shots": 307,
+      "hits": 147,
+      "maxIdle": 121.18,
+      "peaks": {
+        "cores": 9,
+        "shots": 29,
+        "fields": 0,
+        "particles": 57
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 307,
+        "impact": 107,
+        "split": 9,
+        "hazardrelease": 52,
+        "bumper": 3,
+        "reinforcement": 30,
+        "ricochet": 974,
+        "corebounce": 18,
+        "skillshot": 16,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "itemcollect": 17,
+        "chain": 12,
+        "overdrive": 3,
+        "capture": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "powerup": 2,
+        "reason": 13,
+        "denied": 51,
+        "hurt": 1,
+        "node": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 7.61,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.15,
+          "shots": 37,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.57,
+          "shots": 25,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.77,
+          "shots": 40,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 1,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 44.46,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 191,
+      "hits": 141,
+      "maxIdle": 1.99,
+      "peaks": {
+        "cores": 11,
+        "shots": 29,
+        "fields": 0,
+        "particles": 93
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 191,
+        "impact": 112,
+        "split": 9,
+        "ricochet": 457,
+        "bumper": 3,
+        "reinforcement": 30,
+        "corebounce": 20,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 51,
+        "itemdrop": 26,
+        "chain": 12,
+        "itemcollect": 18,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 15,
+        "powerup": 2,
+        "capture": 1,
+        "node": 3,
+        "reason": 1,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.01,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 8.32,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.21,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 11.16,
+          "shots": 39,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 360,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 2,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 48.13,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 244,
+      "hits": 163,
+      "maxIdle": 3.76,
+      "peaks": {
+        "cores": 8,
+        "shots": 32,
+        "fields": 0,
+        "particles": 92
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 244,
+        "impact": 111,
+        "split": 9,
+        "ricochet": 567,
+        "bumper": 5,
+        "reinforcement": 30,
+        "corebounce": 23,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "chain": 10,
+        "itemcollect": 21,
+        "overdrive": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 9,
+        "powerup": 2,
+        "capture": 2,
+        "node": 3,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.01,
+          "shots": 34,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 11.15,
+          "shots": 59,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.98,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 13.22,
+          "shots": 67,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 3,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.25,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 201,
+      "hits": 151,
+      "maxIdle": 3.77,
+      "peaks": {
+        "cores": 11,
+        "shots": 30,
+        "fields": 0,
+        "particles": 90
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 201,
+        "impact": 106,
+        "split": 9,
+        "ricochet": 388,
+        "bumper": 3,
+        "reinforcement": 30,
+        "corebounce": 15,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 49,
+        "itemdrop": 26,
+        "chain": 11,
+        "itemcollect": 19,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 12,
+        "powerup": 2,
+        "capture": 3,
+        "node": 3,
+        "reason": 1,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 8.13,
+          "shots": 41,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 7.95,
+          "shots": 51,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 6.16,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 12.24,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 360,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 4,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 48.63,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 198,
+      "hits": 156,
+      "maxIdle": 7.38,
+      "peaks": {
+        "cores": 11,
+        "shots": 30,
+        "fields": 0,
+        "particles": 85
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 198,
+        "impact": 112,
+        "split": 9,
+        "ricochet": 425,
+        "bumper": 6,
+        "reinforcement": 30,
+        "corebounce": 25,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 51,
+        "itemdrop": 26,
+        "chain": 11,
+        "itemcollect": 19,
+        "overdrive": 4,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 11,
+        "powerup": 2,
+        "capture": 1,
+        "node": 3,
+        "reason": 1,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.36,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 8.3,
+          "shots": 45,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 7.73,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 14.47,
+          "shots": 32,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 5,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 43.25,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 194,
+      "hits": 146,
+      "maxIdle": 3.82,
+      "peaks": {
+        "cores": 7,
+        "shots": 29,
+        "fields": 0,
+        "particles": 88
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 194,
+        "impact": 111,
+        "split": 9,
+        "ricochet": 470,
+        "bumper": 3,
+        "reinforcement": 30,
+        "corebounce": 15,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 51,
+        "itemdrop": 26,
+        "chain": 11,
+        "itemcollect": 18,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 14,
+        "powerup": 2,
+        "capture": 1,
+        "node": 3,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 6.91,
+          "shots": 27,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.17,
+          "shots": 42,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.97,
+          "shots": 38,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 9.42,
+          "shots": 44,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 6,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 46.92,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 199,
+      "hits": 147,
+      "maxIdle": 3.5,
+      "peaks": {
+        "cores": 11,
+        "shots": 29,
+        "fields": 0,
+        "particles": 82
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 199,
+        "impact": 110,
+        "split": 9,
+        "ricochet": 458,
+        "bumper": 7,
+        "reinforcement": 30,
+        "corebounce": 27,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "chain": 12,
+        "itemcollect": 20,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 9,
+        "powerup": 2,
+        "capture": 2,
+        "node": 3,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.1,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 9.05,
+          "shots": 49,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.74,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 13.27,
+          "shots": 36,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 7,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 44.77,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 203,
+      "hits": 142,
+      "maxIdle": 3.22,
+      "peaks": {
+        "cores": 9,
+        "shots": 31,
+        "fields": 0,
+        "particles": 88
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 203,
+        "impact": 101,
+        "split": 9,
+        "ricochet": 418,
+        "bumper": 5,
+        "reinforcement": 30,
+        "corebounce": 15,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 48,
+        "itemdrop": 26,
+        "chain": 11,
+        "itemcollect": 18,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 11,
+        "powerup": 2,
+        "capture": 4,
+        "node": 3,
+        "reason": 1,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 7.1,
+          "shots": 31,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 5.19,
+          "shots": 30,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 9.92,
+          "shots": 57,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 13.79,
+          "shots": 42,
+          "damage": 0
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "points": 400,
+      "pickups": 26,
+      "releases": 52,
+      "resolves": 52,
+      "pending": 0,
+      "chapter": "CH-05",
+      "seed": 8,
+      "profile": "roam",
+      "state": "won",
+      "wave": 5,
+      "seconds": 47.72,
+      "life": 5,
+      "cleared": 52,
+      "total": 52,
+      "shots": 239,
+      "hits": 154,
+      "maxIdle": 3.59,
+      "peaks": {
+        "cores": 10,
+        "shots": 30,
+        "fields": 0,
+        "particles": 86
+      },
+      "events": {
+        "start": 1,
+        "conveyor": 1,
+        "hoiststart": 1,
+        "fire": 239,
+        "impact": 111,
+        "split": 9,
+        "ricochet": 582,
+        "bumper": 5,
+        "reinforcement": 30,
+        "corebounce": 20,
+        "hazardrelease": 52,
+        "hazardresolved": 52,
+        "resolved": 50,
+        "itemdrop": 26,
+        "chain": 12,
+        "itemcollect": 20,
+        "overdrive": 3,
+        "waveclear": 4,
+        "wave": 4,
+        "skillshot": 11,
+        "powerup": 2,
+        "capture": 2,
+        "node": 3,
+        "denied": 1,
+        "unseal": 1,
+        "boss": 1,
+        "victory": 1
+      },
+      "remaining": [],
+      "history": [
+        {
+          "wave": 1,
+          "time": 8.77,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 2,
+          "time": 9.36,
+          "shots": 40,
+          "damage": 0
+        },
+        {
+          "wave": 3,
+          "time": 8.3,
+          "shots": 45,
+          "damage": 0
+        },
+        {
+          "wave": 4,
+          "time": 8.52,
+          "shots": 43,
+          "damage": 0
+        },
+        {
+          "wave": 5,
+          "time": 12.77,
+          "shots": 68,
+          "damage": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+[
+  {
+    "id": "CH-01",
+    "width": 1920,
+    "height": 1080,
+    "changedChannels": 124045,
+    "isolated": {
+      "changed": 17611,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-02",
+    "width": 1920,
+    "height": 1080,
+    "changedChannels": 125171,
+    "isolated": {
+      "changed": 1774,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-03",
+    "width": 1920,
+    "height": 1080,
+    "changedChannels": 305263,
+    "isolated": {
+      "changed": 1653,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-04",
+    "width": 1920,
+    "height": 1080,
+    "changedChannels": 126348,
+    "isolated": {
+      "changed": 11302,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-05",
+    "width": 1920,
+    "height": 1080,
+    "changedChannels": 143143,
+    "isolated": {
+      "changed": 1069,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-01",
+    "width": 844,
+    "height": 390,
+    "changedChannels": 17035,
+    "isolated": {
+      "changed": 17673,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-02",
+    "width": 844,
+    "height": 390,
+    "changedChannels": 17498,
+    "isolated": {
+      "changed": 1774,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-03",
+    "width": 844,
+    "height": 390,
+    "changedChannels": 34177,
+    "isolated": {
+      "changed": 1653,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-04",
+    "width": 844,
+    "height": 390,
+    "changedChannels": 20491,
+    "isolated": {
+      "changed": 11302,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-05",
+    "width": 844,
+    "height": 390,
+    "changedChannels": 20878,
+    "isolated": {
+      "changed": 1069,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-01",
+    "width": 390,
+    "height": 844,
+    "changedChannels": 11721,
+    "isolated": {
+      "changed": 17673,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-02",
+    "width": 390,
+    "height": 844,
+    "changedChannels": 12236,
+    "isolated": {
+      "changed": 1774,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-03",
+    "width": 390,
+    "height": 844,
+    "changedChannels": 21499,
+    "isolated": {
+      "changed": 1653,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-04",
+    "width": 390,
+    "height": 844,
+    "changedChannels": 14414,
+    "isolated": {
+      "changed": 11302,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-05",
+    "width": 390,
+    "height": 844,
+    "changedChannels": 13407,
+    "isolated": {
+      "changed": 1069,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-01",
+    "width": 768,
+    "height": 1024,
+    "changedChannels": 19437,
+    "isolated": {
+      "changed": 17673,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-02",
+    "width": 768,
+    "height": 1024,
+    "changedChannels": 19917,
+    "isolated": {
+      "changed": 1774,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-03",
+    "width": 768,
+    "height": 1024,
+    "changedChannels": 39701,
+    "isolated": {
+      "changed": 1653,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-04",
+    "width": 768,
+    "height": 1024,
+    "changedChannels": 17902,
+    "isolated": {
+      "changed": 11302,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  },
+  {
+    "id": "CH-05",
+    "width": 768,
+    "height": 1024,
+    "changedChannels": 21898,
+    "isolated": {
+      "changed": 1069,
+      "reducedChanged": 0
+    },
+    "pause": true,
+    "reducedMotion": true,
+    "damage": true
+  }
+]

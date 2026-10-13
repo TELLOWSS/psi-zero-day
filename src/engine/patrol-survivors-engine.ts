@@ -1,3 +1,36 @@
+import {stageClearReward} from '../domain/survivors-recreation';
+import {stageThreatTraits} from './survivors-stage-threats';
+import {resolveHandoffCarry} from '../domain/survivors-handoff-carry';
+import type {OperationHandoff} from '../domain/survivors-operation-handoff';
+import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
+import {createTerrain,terrainMove,terrainHit,terrainWaypoint,terrainFreePoint} from './survivors-terrain';
+import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
+import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
+import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
+import {PATROL_DIFFICULTIES,DIFFICULTY_WARNING_SCALE, type PatrolDifficulty} from '../domain/survivors-challenge';
+import {lateThreatVariant} from './survivors-late-threats';
+import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
+import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
+import operationText from '../../content/localization/survivors-operation-ko.json';
+import { operationProgress, recordOperationControls } from './survivors-operation';
+import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus } from './survivors-boss-pattern';
+import { bossGameplayForStage } from './survivors-boss-gameplay';
+import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
+import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
+import {selectSurvivorsAutoTarget} from './survivors-auto-target';
+import { spawnPressure, selectStageHazard } from './survivors-difficulty';
+import { signatureEventIdentity, signatureEventPlan, type WaveSignatureEvent } from './survivors-signature-events';
+import { signatureCounterplayProfile, signatureCounterplayQualified } from './survivors-signature-counterplay';
+import { createSignatureMasteryState, signatureMasteryBossFinish, signatureMasteryBreak, signatureMasterySuccess } from './survivors-signature-mastery';
+import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
+import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
+import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
+import { ADVANCED_PATROL_STAGES } from './patrol-stage50';
+import { SurvivorsCollisionGrid } from './survivors-collision-grid';
+import { applyTacticalItem, tickTacticalItems } from './survivors-items';
+import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
+import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
+import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
 import type {
   CharacterId,
   CharacterProfile,
@@ -8,6 +41,7 @@ import type {
   PermanentUpgrades,
   PlayerStats,
   Projectile,
+  ProjectileKind,
   SafetyDrop,
   SurvivorsGameState,
   BaseWeaponId,
@@ -21,15 +55,20 @@ import type {
 export const WORLD_WIDTH = 1400;
 export const WORLD_HEIGHT = 900;
 export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
+const REPEATED_CONTACT_KINDS:ReadonlySet<ProjectileKind>=new Set(['extinguisher','cryo_blast','cone_trap','emf_beam','tesla_bolt','shout_shockwave']);
 
 export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
+  ...ADVANCED_PATROL_STAGES,
+  ...ADDITIONAL_PATROL_STAGES,
+  ...CAMPAIGN_PATROL_STAGES,
   stage_01: {
     id: 'stage_01',
     stageNumber: 1,
+    siteProfileId: 'apt-new-bottom-up-excavation',
     name: '서측 게이트 및 지상 복합 하역장',
     subtitle: 'Surface Logistics Hub',
     theme: 'surface_logistics',
-    description: '야간 콘크리트 타설을 앞두고 덤프트럭과 자재가 뒤엉킨 하역 광장. 이동식 투광기를 활용하고 시너 드럼통을 유폭시켜 스웜을 섬멸하십시오.',
+    description: '야간 콘크리트 타설을 앞두고 덤프트럭과 자재가 뒤엉킨 하역 광장. 이동식 투광기로 동선을 확인하고 인화물 보관구역을 격리하여 주변 작업자를 안전통로로 대피시키십시오.',
     floorColor: '#0c1219',
     gridColor: 'rgba(148, 163, 184, 0.08)',
     borderColor: '#f59e0b',
@@ -44,8 +83,8 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
       { id: 'floodlight_02', type: 'floodlight_tower', x: 700, y: 680, radius: 180, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '야간 투광기' },
     ],
     starChallenges: [
-      { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성 및 보스 격퇴', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '환경 기믹 마스터', description: '드럼통 유폭으로 적 5마리 이상 처치', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '격리·대피 조치 완료', description: '인화물 보관구역 격리로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
       { starIndex: 3, title: '소장 권한 마스터리', description: '현장소장 샤우팅 1회 이상 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '폭주 덤프트럭 골리앗',
@@ -56,6 +95,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_02: {
     id: 'stage_02',
     stageNumber: 2,
+    siteProfileId: 'apt-new-top-down-under-slab',
     name: '대심도 기초 굴착 구역 (-4F)',
     subtitle: 'Deep Underground Pit',
     theme: 'deep_excavation',
@@ -73,7 +113,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '지하 탈출 성공', description: '대심도 생존 시간 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '토사 재해 극복', description: '적 80마리 이상 제압', isCompleted: false, currentValue: 0, targetValue: 80 },
+      { starIndex: 2, title: '토사 재해 극복', description: '위험 노출 80건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 80 },
       { starIndex: 3, title: '안전 수칙 준수', description: '체력 50% 이상 유지한 채 승리', isCompleted: false, currentValue: 0, targetValue: 50 },
     ],
     bossName: '자율 크롤러 굴삭기 베헤모스',
@@ -84,10 +124,11 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_03: {
     id: 'stage_03',
     stageNumber: 3,
+    siteProfileId: 'apt-new-bottom-up-rc-frame',
     name: '45층 초고층 메가 골조 슬래브',
     subtitle: 'High-Rise Superframe Slab',
     theme: 'highrise_slab',
-    description: '외벽이 트인 180m 초고층 슬래브. 타워크레인 와이어가 휘몰아치는 낙하 경고 구역에 적을 유인하여 5,000 압살 피해를 입히십시오.',
+    description: '외벽이 트인 180m 초고층 슬래브. 양중 작업반경 경고를 읽고 무전 지시로 인양을 중지하여 위험 구역을 비우십시오.',
     floorColor: '#101720',
     gridColor: 'rgba(56, 189, 248, 0.08)',
     borderColor: '#0284c7',
@@ -100,8 +141,8 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '고공 풍압 극복', description: '45층 골조 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '낙하물 유인 압살', description: '크레인 낙하 구역으로 적 5마리 이상 압살', isCompleted: false, currentValue: 0, targetValue: 5 },
-      { starIndex: 3, title: '타워크레인 격추', description: '보스 광폭화 크레인 아라크네 제압', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '양중 작업반경 통제', description: '양중 작업반경 통제로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 3, title: '타워크레인 작업 통제', description: '대표 타워크레인 작업반경 통제', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '광폭화 타워크레인 아라크네',
     bossTitle: 'TOWER CRANE ARACHNE',
@@ -111,6 +152,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_04: {
     id: 'stage_04',
     stageNumber: 4,
+    siteProfileId: 'apt-new-top-down-concurrent',
     name: '혹한기 동절기 밀폐 양생 챔버',
     subtitle: 'Sub-Zero Winter Curing Chamber',
     theme: 'curing_chamber',
@@ -127,8 +169,8 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '동절기 혹한 극복', description: '혹한 양생실 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '화염 버너 유폭', description: '연료통 유폭 3회 이상 발동', isCompleted: false, currentValue: 0, targetValue: 3 },
-      { starIndex: 3, title: '펌프카 격파', description: '인페르노 매머드 처치 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '가열기 연료 격리', description: '연료 보관구역 위험 노출 3건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 3, title: '펌프카 작업반경 통제', description: '대표 펌프카 위험 통제 완료', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '초대형 펌프카 인페르노 매머드',
     bossTitle: 'INFERNO PUMP MAMMOTH',
@@ -138,10 +180,11 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_05: {
     id: 'stage_05',
     stageNumber: 5,
+    siteProfileId: 'data-center-electrical-ups',
     name: '하이퍼스케일 전산 플랜트',
     subtitle: 'Hyperscale Data Center Plant',
     theme: 'datacenter',
-    description: '최종 결전지. 특고압 수전설비와 서버 랙이 늘어선 사이버네틱 시설. 제로 데이 AI 코어 프로토콜 오메가를 셧다운하십시오.',
+    description: '데이터센터 전기·UPS 설치 구역. 전원 차단과 작업구역 격리로 위험 노출을 줄이고 중량 설비 반입 동선을 통제하십시오.',
     floorColor: '#070a10',
     gridColor: 'rgba(168, 85, 247, 0.08)',
     borderColor: '#a855f7',
@@ -150,32 +193,45 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     hazards: [
       { id: 'trans_01', type: 'electric_transformer', x: 450, y: 300, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
       { id: 'trans_02', type: 'electric_transformer', x: 950, y: 600, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
-      { id: 'crane_drop_04', type: 'crane_drop_zone', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '서지 방전 구역' },
+      { id: 'crane_drop_04', type: 'crane_drop_zone', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '설비 반입 작업반경' },
     ],
     starChallenges: [
-      { starIndex: 1, title: '제로 데이 셧다운', description: '데이터센터 180초 방어 및 코어 파괴', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '변전반 아크 방전', description: '특고압 변전반 3회 이상 가동', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 1, title: '제로 데이 셧다운', description: '데이터센터 설치 구역 180초 순찰 완료', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '전원 차단·구역 격리', description: '전원 차단·격리로 위험 노출 3건 해소', isCompleted: false, currentValue: 0, targetValue: 3 },
       { starIndex: 3, title: '최종 사자후 피니시', description: '소장 샤우팅으로 피니시 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
-    bossName: '재해 예측 AI 코어 프로토콜 오메가',
-    bossTitle: 'CORE PROTOCOL OMEGA',
+    bossName: 'UPS 중량 설비 반입 작업반경',
+    bossTitle: 'UPS INSTALLATION CONTROL',
     bossType: 'CRANE_BOSS',
     bossHp: 1800,
   },
 };
 
+const legacyMetrics = [['victory','environmental','shout'], ['victory','neutralized','hp'], ['victory','environmental','boss'], ['victory','environmental','boss'], ['victory','environmental','shout']] as const;
+for (let i = 0; i < 5; i++) {
+  const stage = PATROL_STAGES[`stage_0${i + 1}` as PatrolStageId];
+  stage.starChallenges.forEach((challenge, j) => { challenge.metric = legacyMetrics[i]![j]!; });
+}
+
 
 export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
+  safety_monitor: {
+    id: 'safety_monitor', name: '안전감시단', role: '현장 안전감시원', title: '작업반경·출입 통제 담당',
+    description: '한국 현장의 안전감시원. 무전 지시로 위험 노출을 줄이고 작업반경을 순찰합니다. 이동 속도 +20, 수집 반경 +20.',
+    startingWeapon: 'radio_boost', avatar: '🦺', portraitUri: '/assets/survivors/safety-monitor-v2.webp', heroBannerUri: '/assets/survivors/safety-monitor-v2.webp',
+    quote: '작업반경을 비우고, 확인 후 이동하세요.', traits: ['✦ 무전 지시 자동 조치', '✦ 이동 속도 +20', '✦ 수집 반경 +20'], color: '#a3e635',
+    statModifiers: { speedBonus: 20, pickupRadiusBonus: 20 },
+  },
   player: {
     id: 'player',
-    name: '윤안전 (정민주)',
+    name: '현장 안전관리자',
     role: '공인 산업안전관리자',
     title: '안전 하한선 총괄 책임자',
     description: '원칙과 법적 기준을 수호하는 안전관리자. 태블릿 스마트 센서로 위험 탐색 반경 및 경험치 수집 +25%, 쿨다운 -10%.',
     startingWeapon: 'safety_drone',
     avatar: '👩‍💼',
     portraitUri: '/assets/episode01/characters/player-portrait.webp',
-    heroBannerUri: '/assets/episode01/hires/key-art.webp',
+    heroBannerUri: '/assets/episode01/characters/player-portrait.webp',
     quote: '"법은 하한선이며, 안전은 타협의 대상이 아닙니다."',
     traits: ['✦ 스마트 태블릿 센서 탐색', '✦ 경험치 자석 반경 +30', '✦ 전 구역 작업중지권'],
     color: '#2563eb',
@@ -183,8 +239,8 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   },
   kang_taesik: {
     id: 'kang_taesik',
-    name: '강태식 (박기철)',
-    role: '베테랑 골조반장',
+    name: '강태식',
+    role: '형틀반장',
     title: '30년 현장의 버팀목',
     description: '수십 년 현장 경험으로 다져진 강인한 피지컬과 통솔력. 최대 HP +60, 넉백 파워 +40%, 피해 감소.',
     startingWeapon: 'extinguisher',
@@ -199,7 +255,7 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   yoon_sungho: {
     id: 'yoon_sungho',
     name: '윤성호',
-    role: '철근 숙련 기능공',
+    role: '철근반장',
     title: '철근 결속의 달인',
     description: '묵묵히 현장을 지탱하는 베테랑 철근공. 낙하물 완충 및 근접 제압 대미지 +30%, 든든한 맷집.',
     startingWeapon: 'cone_trap',
@@ -229,7 +285,7 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   lim_junho: {
     id: 'lim_junho',
     name: '임준호',
-    role: '현장 신입 신호수',
+    role: '신입근로자',
     title: '고속 기동 신호 유도원',
     description: '누구보다 빠른 발과 예리한 시야로 위험을 먼저 발견하는 신호수. 이동 속도 +40, 회피 기동 특화.',
     startingWeapon: 'radio_boost',
@@ -281,7 +337,7 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
     startingWeapon: 'safety_drone',
     avatar: '👩‍🔬',
     portraitUri: '/assets/episode01/characters/player-portrait.webp',
-    heroBannerUri: '/assets/episode01/hires/key-art.webp',
+    heroBannerUri: '/assets/episode01/characters/player-portrait.webp',
     quote: '"사고가 터진 뒤엔 늦습니다 · 데이터와 센서 신호로 0.1초 앞을 봅니다"',
     traits: ['✦ 쿨다운 -15% 가속', '✦ 치명타 확률 +15%', '✦ 스마트 드론 자동 레이저'],
     color: '#a855f7',
@@ -331,12 +387,28 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
     maxLevel: 5,
     category: 'weapon',
   },
+  grouting_gun: {
+    id: 'grouting_gun',
+    name: '초고압 그라우팅 주입건',
+    description: '고압 시멘트 몰탈을 전방에 관통 분사하여 밀어내고 슬로우를 부여합니다.',
+    icon: '🔫',
+    maxLevel: 5,
+    category: 'weapon',
+  },
+  emp_generator: {
+    id: 'emp_generator',
+    name: '휴대용 발전기 EMP 쇼크웨이브',
+    description: '주기적으로 고압 펄스를 방출해 주변 기계 위험 요소를 스턴시키고 피해를 입힙니다.',
+    icon: '🔋',
+    maxLevel: 5,
+    category: 'weapon',
+  },
 
   // --- Support Perks ---
   steel_boots: {
     id: 'steel_boots',
     name: '초경량 절연 안전화',
-    description: '현장 기동성을 대폭 향상시켜 이동 속도가 15% 빨라집니다.',
+    description: '현장 기동성을 대폭 향상시켜 이동 속도가 30 증가합니다.',
     icon: '👟',
     maxLevel: 3,
     category: 'support',
@@ -344,7 +416,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   magnet_beacon: {
     id: 'magnet_beacon',
     name: '무선 안전 센서 비콘',
-    description: '바닥에 떨어진 안전 기록(PSI 데이터)의 자석 흡수 반경이 35% 증가합니다.',
+    description: '바닥에 떨어진 안전 기록(PSI 데이터)의 자석 흡수 반경이 35 증가합니다.',
     icon: '🧲',
     maxLevel: 3,
     category: 'support',
@@ -368,7 +440,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   data_chip: {
     id: 'data_chip',
     name: '스마트 설계 데이터칩',
-    description: '정밀 센서 칩셋을 연동하여 치명타 확률 +10%, 공격력 배율 +15% 향상됩니다.',
+    description: '정밀 센서 칩셋을 연동하여 치명타 확률 +10%, 대응력 배율 +15% 향상됩니다.',
     icon: '💾',
     maxLevel: 3,
     category: 'support',
@@ -387,7 +459,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   cryo_blizzard: {
     id: 'cryo_blizzard',
     name: '★ 극저온 액화질소 블리자드',
-    description: '[진화 소화기] 영하 196도의 액화질소를 전방위에 뿜어내어 적을 얼리고 연쇄 동결 폭발을 일으킵니다.',
+    description: '[진화 소화기] 광역 안전 지시를 전달하여 작업을 멈추고 위험구역 이탈을 돕습니다.',
     icon: '❄️',
     maxLevel: 1,
     category: 'evolution',
@@ -396,7 +468,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   tesla_dome: {
     id: 'tesla_dome',
     name: '★ 고전압 테슬라 통제 돔',
-    description: '[진화 투광등] 안전 지대가 테슬라 타워로 변환되어 접근하는 적들에게 연쇄 감전 번개를 내리꽂습니다.',
+    description: '[진화 투광등] 감지망이 위험 접근을 읽고 순차적으로 작업중지 지시를 전달합니다.',
     icon: '⚡',
     maxLevel: 1,
     category: 'evolution',
@@ -414,11 +486,29 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   hunter_swarm: {
     id: 'hunter_swarm',
     name: '★ 자율 비행 헌터-킬러 편대',
-    description: '[진화 드론] 드론이 3기의 공격 편대로 증강되어 360도 연속 관통 고출력 레이저를 퍼붓습니다.',
+    description: '[진화 드론] 드론 3기가 작업반경을 감시하고 연속 지시 신호로 위험 접근을 차단합니다.',
     icon: '🛸',
     maxLevel: 1,
     category: 'evolution',
     recipe: { weapon: 'safety_drone', support: 'data_chip' },
+  },
+  hydraulic_ram: {
+    id: 'hydraulic_ram',
+    name: '★ 유압식 충격 램 브레이커',
+    description: '[진화 그라우팅건] 전방 180도에 초강력 유압 충격을 가해 경로상의 모든 위협을 분쇄 및 기절시킵니다.',
+    icon: '💥',
+    maxLevel: 1,
+    category: 'evolution',
+    recipe: { weapon: 'grouting_gun', support: 'steel_boots' },
+  },
+  plasma_grid: {
+    id: 'plasma_grid',
+    name: '★ 초전도 플라즈마 그리드 돔',
+    description: '[진화 EMP] 전자기 돔이 지속 전도되어 영역 내 모든 적에게 연쇄 번개 피해 및 주기적 마비 충격을 가합니다.',
+    icon: '🌐',
+    maxLevel: 1,
+    category: 'evolution',
+    recipe: { weapon: 'emp_generator', support: 'data_chip' },
   },
 };
 
@@ -428,6 +518,8 @@ export const EVOLUTION_RECIPES: Record<EvolutionPerkId, { weapon: BaseWeaponId; 
   tesla_dome: { weapon: 'floodlight', support: 'safety_harness' },
   emf_barricade: { weapon: 'cone_trap', support: 'steel_boots' },
   hunter_swarm: { weapon: 'safety_drone', support: 'data_chip' },
+  hydraulic_ram: { weapon: 'grouting_gun', support: 'steel_boots' },
+  plasma_grid: { weapon: 'emp_generator', support: 'data_chip' },
 };
 
 export interface GameInput {
@@ -450,15 +542,20 @@ export function createInitialSurvivorsState(
   characterId: CharacterId = 'yoon',
   upgrades: PermanentUpgrades = DEFAULT_PERMANENT_UPGRADES,
   stageId: PatrolStageId = 'stage_01',
+  difficulty: PatrolDifficulty = 'standard',
+  inventory: StoreInventory = {owned: [], equipped: []},
+  handoffs: readonly OperationHandoff[] = [],
 ): SurvivorsGameState {
   const profile = CHARACTER_PROFILES[characterId];
   const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
+  const carry = resolveHandoffCarry(handoffs,stageId);
 
   // Base stats influenced by character profile statModifiers & permanent upgrades
   const mods = profile.statModifiers || {};
-  const baseHp = 100 + (mods.maxHpBonus || 0) + upgrades.vitality * 15;
-  const baseSpeed = 220 + (mods.speedBonus || 0) + upgrades.mobility * 15;
-  const basePickup = 90 + (mods.pickupRadiusBonus || 0) + upgrades.intelligence * 20;
+  const gear = storeEffects(inventory);
+  const baseHp = 100 + (mods.maxHpBonus || 0) + upgrades.vitality * 15 + gear.hp;
+  const baseSpeed = 220 + (mods.speedBonus || 0) + upgrades.mobility * 15 + gear.speed;
+  const basePickup = 90 + (mods.pickupRadiusBonus || 0) + upgrades.intelligence * 20 + gear.pickup;
   const baseCooldown = mods.cooldownBonus || 0;
   const baseCrit = 0.05 + (mods.damageBonus ? 0.05 : 0);
   const baseDmg = 1.0 + (mods.damageBonus || 0);
@@ -471,10 +568,16 @@ export function createInitialSurvivorsState(
     speed: baseSpeed,
     invincibleTime: 0,
     pickupRadius: basePickup,
-    cooldownReduction: baseCooldown,
-    damageMultiplier: baseDmg,
-    critRate: baseCrit,
-    regenRate: 0,
+    cooldownReduction: baseCooldown + gear.cooldown,
+    damageMultiplier: baseDmg + gear.damage,
+    critRate: baseCrit + gear.crit,
+    regenRate: gear.regen,
+    dashCooldown: 0,
+    dashMaxCooldown: 3.2,
+    dashDuration: 0,
+    isDashing: false,
+    dashVx: 0,
+    dashVy: 0,
   };
 
   const initialPerks: Record<PerkId, number> = {
@@ -483,6 +586,8 @@ export function createInitialSurvivorsState(
     floodlight: 0,
     cone_trap: 0,
     safety_drone: 0,
+    grouting_gun: 0,
+    emp_generator: 0,
     steel_boots: 0,
     magnet_beacon: 0,
     safety_harness: 0,
@@ -493,6 +598,8 @@ export function createInitialSurvivorsState(
     tesla_dome: 0,
     emf_barricade: 0,
     hunter_swarm: 0,
+    hydraulic_ram: 0,
+    plasma_grid: 0,
   };
 
   // Set starting weapon
@@ -500,11 +607,13 @@ export function createInitialSurvivorsState(
 
   return {
     phase: 'ready',
+    difficulty,
     characterId,
     gameTime: 0,
     maxTime: TARGET_SURVIVAL_TIME,
     player: initialPlayer,
     hazards: [],
+    resolvedWorkers: [],
     projectiles: [],
     drops: [],
     level: 1,
@@ -527,6 +636,7 @@ export function createInitialSurvivorsState(
     timeDilation: 1.0,
     timeDilationTimer: 0,
 
+    premiumGear: {equipped:sanitizeInventory(inventory).equipped, used:[...sanitizeInventory(inventory).equipped], effects:gear, shield:gear.shield, shieldCooldown:0, feedback:0},
     psiCredits: 0,
     permanentUpgrades: { ...upgrades },
     hasRevived: false,
@@ -541,22 +651,22 @@ export function createInitialSurvivorsState(
     stage: {
       ...stage,
       starChallenges: [
-        { ...stage.starChallenges[0] },
+        { ...stage.starChallenges[0], description: operationText.victory_goal },
         { ...stage.starChallenges[1] },
         { ...stage.starChallenges[2] },
       ],
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
+    terrain:createTerrain(stage).map(t=>carry?.clearedTerrainIds.includes(t.id)&&t.kind==='rubble'?{...t,hp:0}:t),
+    inheritedTerrainIds:carry?.clearedTerrainIds??[],
+    terrainRecord:{cartStops:0,rubbleCleared:0,weakPointHits:0,damageTaken:0},
+    fieldTactics: {...createFieldTactics(), supportCharges:2 + gear.support, lineCharges:2 + gear.lines},
     starsEarned: [false, false, false],
     inFloodlight: false,
   };
 }
 
-let nextEntityId = 1;
-function genId(prefix: string): string {
-  return `${prefix}_${nextEntityId++}`;
-}
 
 // Cooldown trackers
 interface Cooldowns {
@@ -569,6 +679,8 @@ interface Cooldowns {
   tesla: number;
   emf: number;
   hunter: number;
+  grouting: number;
+  emp: number;
   spawnTimer: number;
 }
 
@@ -583,13 +695,110 @@ export class SurvivorsEngine {
     tesla: 0,
     emf: 0,
     hunter: 0,
+    grouting: 0,
+    emp: 0,
     spawnTimer: 1.5,
   };
 
   private lastFacingX = 1;
   private lastFacingY = 0;
 
-  constructor(public state: SurvivorsGameState = createInitialSurvivorsState()) {}
+  private audioSequence = 0;
+  private audioEvents: SurvivorsAudioEvent[] = [];
+  private controlProjectileIds=new Map<string,string>();
+  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number, feedback: Pick<SurvivorsAudioEvent, 'outcome' | 'actorKind' | 'collected'> = {}) {
+    this.audioEvents.push({id: ++this.audioSequence, type, x, y, ...feedback});
+    if (this.audioEvents.length > 256) this.audioEvents.shift();
+  }
+  drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
+  private projectileFeedback: ProjectileFeedback[] = [];
+  private readonly releasedProjectiles = new WeakSet<Projectile>();
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false, appliedDamage?: number, target?: Hazard) {
+    if (phase === 'release') {
+      if (this.releasedProjectiles.has(p)) return;
+      this.releasedProjectiles.add(p);
+    }
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{}),...(appliedDamage!==undefined?{appliedDamage}:{}),...(target?{species:target.species,targetId:target.id,targetRadius:target.radius,finishing:!blocked&&target.hp<=0&&Boolean(appliedDamage)}:{})});
+    if (this.projectileFeedback.length > 192) {
+      const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
+      this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
+    }
+  }
+  drainProjectileFeedback(): ProjectileFeedback[] {
+    const events = this.projectileFeedback; this.projectileFeedback = []; return events;
+  }
+  private addProjectile(projectile: Projectile) {
+    this.state.projectiles.push(projectile);
+    this.emitProjectileFeedback(projectile, 'launch');
+    if (projectile.kind === 'radio') this.emitAudio('shoot', projectile.x, projectile.y);
+    else if (projectile.kind === 'extinguisher' || projectile.kind === 'cryo_blast') this.emitAudio('spray', projectile.x, projectile.y);
+    else if (projectile.kind !== 'shout_shockwave') this.emitAudio('laser', projectile.x, projectile.y);
+  }
+  private nextEntityId = 1;
+  private readonly random: () => number;
+  private accumulator = 0;
+  private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
+  private readonly projectileHits = new WeakMap<Projectile, Set<string>>();
+  private readonly signatureEventsWarned = new Set<string>();
+  private readonly signatureEventsTriggered = new Set<string>();
+  private readonly signatureEventsResolved = new Set<string>();
+  private readonly signatureEventsFailed = new Set<string>();
+  private readonly signatureEventStartedAt = new Map<string,number>();
+  private readonly masteryBossFinishIds = new Set<string>();
+  constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
+    this.random = seededRandom(seed);
+  }
+  private clearRewardApplied=false;
+  /** Called only after the authoritative wallet transaction succeeds. */
+  applyStageClearReward(firstClear:boolean){
+    if(this.state.phase!=='victory'||this.clearRewardApplied)return null;
+    const reward=stageClearReward(this.state.stageId,this.state.difficulty??'standard',firstClear,this.state.starsEarned.filter(Boolean).length);
+    this.state.psiCredits+=reward.total;this.clearRewardApplied=true;return reward;
+  }
+  private equipmentPreviewOnly=false;
+  private equipmentPreviewResetTime=0;
+  static equipmentPreview(source:SurvivorsGameState,perk:PerkId,level:number):SurvivorsEngine {
+    const state=JSON.parse(JSON.stringify(source)) as SurvivorsGameState,engine=new SurvivorsEngine(state,0x50524556);
+    engine.equipmentPreviewOnly=true;state.phase='playing';state.player.x=700;state.player.y=450;
+    state.player.invincibleTime=999;state.hazards=[];state.projectiles=[];state.drops=[];state.terrain=[];state.interactiveHazards=[];state.bossEncounter=undefined;
+    for(const key of Object.keys(state.activePerks) as PerkId[])state.activePerks[key]=0;
+    const recipe=EVOLUTION_RECIPES[perk as EvolutionPerkId];
+    if(recipe){state.activePerks[recipe.weapon]=5;engine.applyPerk(recipe.support);}
+    else if(PERK_CATALOG[perk].category==='support')state.activePerks[CHARACTER_PROFILES[state.characterId].startingWeapon]=1;
+    for(let n=0;n<Math.min(PERK_CATALOG[perk].maxLevel,Math.max(1,level));n++)engine.applyPerk(perk);
+    engine.resetPreviewHazards();return engine;
+  }
+  private resetPreviewHazards() {
+    const positions=[[760,450],[865,425],[720,525]];
+    this.state.hazards=[];
+    for(const p of positions){this.spawnHazard('RUNAWAY_CART',160);const h=this.state.hazards.at(-1)!;h.x=p[0]!;h.y=p[1]!;h.expValue=0;}
+  }
+  previewEquipmentDefense():boolean {
+    if(!this.equipmentPreviewOnly)return false;
+    if(!this.state.hazards.length)this.resetPreviewHazards();
+    const h=this.state.hazards[0]!,previous={x:h.x,y:h.y,motion:h.motion};
+    this.state.player.hp=this.state.player.maxHp;this.state.player.invincibleTime=0;
+    h.x=this.state.player.x;h.y=this.state.player.y;h.motion={phase:'charge',timer:1,directionX:1,directionY:0};
+    this.checkCollisions();h.x=previous.x;h.y=previous.y;h.motion=previous.motion;this.state.player.invincibleTime=999;return true;
+  }
+  advanceEquipmentPreview(dt:number):void {
+    if(!this.equipmentPreviewOnly||!Number.isFinite(dt)||dt<=0)return;
+    dt=Math.min(.05,dt);this.state.gameTime+=dt;this.state.phase='playing';this.state.lastKilledEvents=[];this.state.drops=[];tickPremiumGear(this.state,dt);
+    if(this.state.hazards.length<3){this.equipmentPreviewResetTime+=dt;if(this.equipmentPreviewResetTime>=1.2){this.resetPreviewHazards();this.equipmentPreviewResetTime=0;}}
+    for(const h of this.state.hazards){h.hitFlashTimer=Math.max(0,(h.hitFlashTimer??0)-dt);h.isStunned=Math.max(0,(h.isStunned??0)-dt);}
+    this.updateWeapons(dt);this.updateProjectiles(dt);this.checkCollisions();
+    this.state.projectiles=this.state.projectiles.filter(p=>p.duration>0&&p.pierce>0);
+    this.drainAudioEvents();
+  }
+  private genId(prefix: string) { return `${prefix}_${this.nextEntityId++}`; }
+
+
+  setPaused(paused: boolean) {
+    if (this.state.phase === 'playing' || this.state.phase === 'paused') {
+      this.state.phase = paused ? 'paused' : 'playing';
+      this.accumulator = 0;
+    }
+  }
 
   start() {
     if (this.state.phase === 'ready') {
@@ -597,19 +806,167 @@ export class SurvivorsEngine {
     }
   }
 
+  // Fixed 60Hz physics preserves legacy 60Hz damage cadence. At most 250ms is
+  // caught up per call; longer foreground stalls discard excess wall time.
   update(dt: number, input: GameInput): void {
+    if (this.state.phase !== 'playing') { this.accumulator = 0; return; }
+    if (!Number.isFinite(dt) || dt <= 0) return;
+    this.accumulator += Math.min(dt, MAX_CATCH_UP_SECONDS);
+    const kills: NonNullable<SurvivorsGameState['lastKilledEvents']> = [];
+    while (this.accumulator + 1e-9 >= SIMULATION_STEP && this.state.phase === 'playing') {
+      this.accumulator -= SIMULATION_STEP;
+      this.step(SIMULATION_STEP, input);
+      if ((this.state.phase as string) === 'victory') this.emitAudio('win');
+      else if ((this.state.phase as string) === 'defeat') this.emitAudio('defeat');
+      kills.push(...(this.state.lastKilledEvents ?? []));
+    }
+    this.state.lastKilledEvents = kills;
+    if (this.state.phase !== 'playing') this.accumulator = 0;
+  }
+
+  requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  private terrainCleanupCooldown=0;
+  private rewardTerrainCleanup() {
+    if(this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+    this.state.psiCredits+=40;this.state.terrainGift={credits:40,remaining:2.5};
+  }
+  terrainCleanupStatus() {
+    const target=this.state.terrain?.find(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(this.state.player.x-(o.x+o.width/2),this.state.player.y-(o.y+o.height/2))<120);
+    return target?{remaining:Math.ceil(target.hp/40),cooldown:this.terrainCleanupCooldown,ready:this.state.phase==='playing'&&this.terrainCleanupCooldown<=0&&(!this.state.bossEncounter||this.state.bossEncounter.phase==='combat')}:null;
+  }
+  clearTerrain():boolean {
+    if(this.state.phase!=='playing'||this.terrainCleanupCooldown>0||this.state.bossEncounter&&this.state.bossEncounter.phase!=='combat')return false;
+    const o=this.state.terrain?.find(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(this.state.player.x-(o.x+o.width/2),this.state.player.y-(o.y+o.height/2))<120);
+    if(!o)return false;o.hp=Math.max(0,o.hp-40);this.terrainCleanupCooldown=.6;
+    if(o.hp===0)this.rewardTerrainCleanup();
+    this.emitAudio('control',o.x,o.y);return true;
+  }
+  deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  triggerPlayerDash():boolean {
+    if (this.state.phase !== 'playing') return false;
+    const player = this.state.player;
+    if ((player.dashCooldown ?? 0) > 0 || player.isDashing) return false;
+    let dirX = this.lastFacingX;
+    let dirY = this.lastFacingY;
+    const len = Math.hypot(dirX, dirY) || 1;
+    dirX /= len;
+    dirY /= len;
+    const dashSpeed = player.speed * 2.5;
+    player.dashVx = dirX * dashSpeed;
+    player.dashVy = dirY * dashSpeed;
+    player.isDashing = true;
+    player.dashDuration = 0.22;
+    player.dashCooldown = player.dashMaxCooldown ?? 3.2;
+    player.invincibleTime = Math.max(player.invincibleTime, 0.28);
+    this.emitAudio('control', player.x, player.y);
+    return true;
+  }
+  requestHandoff():boolean {
+    if(this.state.phase!=='playing'||!operationProgress(this.state).complete||!this.state.fieldTactics||this.state.fieldTactics.handoff)return false;
+    this.state.fieldTactics.handoff={x:this.state.player.x,y:this.state.player.y,remaining:4};return true;
+  }
+  cancelHandoff():void { if(this.state.fieldTactics)this.state.fieldTactics.handoff=undefined; }
+
+  beginExtraction(totalTime=15):boolean {
+    if(this.state.phase!=='playing'||!this.state.stageBossNeutralized||this.state.extractionPhase)return false;
+    this.state.extractionPhase={
+      x:WORLD_WIDTH/2,
+      y:WORLD_HEIGHT/2,
+      radius:155,
+      countdown:Math.max(1,totalTime),
+      totalTime:Math.max(1,totalTime),
+      status:'inbound',
+      playerInside:false,
+    };
+    return true;
+  }
+
+  tickExtraction(dt:number):boolean {
+    const extraction=this.state.extractionPhase;
+    if(!extraction||this.state.phase!=='playing'||extraction.status==='secured')return false;
+    const inside=Math.hypot(this.state.player.x-extraction.x,this.state.player.y-extraction.y)<=extraction.radius;
+    extraction.playerInside=inside;
+    extraction.status=inside?'active':'inbound';
+    if(inside&&Number.isFinite(dt)&&dt>0)extraction.countdown=Math.max(0,extraction.countdown-dt);
+    if(extraction.countdown>0)return false;
+    extraction.status='secured';
+    this.state.score+=8000;
+    this.state.psiCredits+=250;
+    this.state.phase='victory';
+    this.state.directorShoutTimer=0;
+    this.state.directorCutinPhase='none';
+    this.checkStarChallenges();
+    this.emitAudio('win');
+    return true;
+  }
+
+  canSkipBossIntro():boolean {
+    const e=this.state.bossEncounter;
+    return this.state.phase==='playing'&&e?.phase==='arrival'&&e.replay===true&&
+      (e.introDuration??0)-e.remaining+1e-8>=(e.replaySkippableAfter??Infinity);
+  }
+  skipBossIntro():boolean {
+    if(!this.canSkipBossIntro())return false;
+    this.beginBossCombat();return true;
+  }
+  private beginBossCombat():void {
+    const e=this.state.bossEncounter;if(!e||e.phase!=='arrival')return;
+    e.phase='combat';e.remaining=0;this.state.bossName=null;this.state.bossAlertTimer=0;
+    const boss=this.state.hazards.find(h=>h.id===e.bossId);
+    const progress=boss?.bossGameplay;
+    if(progress){
+      if(boss?.weakPointExposed&&(boss.weakPointTimer??0)>0){
+        progress.signatureResolvedThisCycle=true;
+        progress.combatPhase='weak_point';
+        progress.remaining=boss.weakPointTimer??0;
+      }else{
+        progress.combatPhase='pattern';
+      }
+    }
+  }
+
+  private step(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
 
     // Reset single-frame kill events
     this.state.lastKilledEvents = [];
 
+    const encounter=this.state.bossEncounter;
+    const extractionInProgress=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
+    if(encounter && encounter.phase!=='combat'){
+      if(encounter.phase==='secured'&&extractionInProgress){
+        // Extraction owns the final outcome. Keep simulation live so the player can
+        // move into the rendezvous zone and survive the final holding action.
+        encounter.remaining=0;
+      } else {
+        encounter.remaining=Math.max(0,encounter.remaining-dt);
+        if(encounter.phase==='arrival'){
+          this.state.bossAlertTimer=encounter.remaining;
+          if(encounter.remaining===0){
+            this.beginBossCombat();
+          }
+        } else if(encounter.remaining===0){
+          this.state.phase='victory';
+          this.state.score+=5000;
+          this.state.psiCredits+=Math.round(this.state.score/10*PATROL_DIFFICULTIES[this.state.difficulty??'standard'].reward);
+          this.checkStarChallenges();
+        }
+        return;
+      }
+    }
+
     // Micro Freeze / Hit Stop (Impact Screen Juice)
     if (this.state.hitStopTimer && this.state.hitStopTimer > 0) {
       this.state.hitStopTimer = Math.max(0, this.state.hitStopTimer - dt);
-      return; // Freeze game physics update for micro duration to deliver weighted impact feel
+      this.state.playerMotionTime=(this.state.playerMotionTime??this.state.gameTime)+dt;
+      if(this.state.premiumGear)this.state.premiumGear.recoveryAmount=0;
+      this.movePlayer(dt,input);
+      return;
     }
 
     // Combo countdown decay
+    this.terrainCleanupCooldown=Math.max(0,this.terrainCleanupCooldown-dt);
+    if(this.state.terrainGift)this.state.terrainGift.remaining=Math.max(0,this.state.terrainGift.remaining-dt);
     if (this.state.comboTimer > 0) {
       this.state.comboTimer -= dt;
       if (this.state.comboTimer <= 0) {
@@ -619,6 +976,12 @@ export class SurvivorsEngine {
 
     // Cap delta time to prevent physics tunneling
     let effectiveDt = Math.min(dt, 0.1);
+
+    // Apply Hit-Stop (Micro freeze on critical / weak point impact)
+    if ((this.state.hitStopTimer ?? 0) > 0) {
+      this.state.hitStopTimer = Math.max(0, (this.state.hitStopTimer ?? 0) - effectiveDt);
+      effectiveDt *= 0.15;
+    }
 
     // Apply Time Dilation (e.g. boss finish slow-motion)
     if (this.state.timeDilationTimer > 0) {
@@ -630,6 +993,35 @@ export class SurvivorsEngine {
     }
 
     this.state.gameTime += effectiveDt;
+    this.state.playerMotionTime=(this.state.playerMotionTime??this.state.gameTime-effectiveDt)+effectiveDt;
+    tickTacticalItems(this.state,effectiveDt);
+    if (this.state.lastDamage) this.state.lastDamage.remaining = Math.max(0, this.state.lastDamage.remaining - effectiveDt);
+    if (this.state.controlKit) {
+      this.state.controlKit.remaining = Math.max(0, this.state.controlKit.remaining - effectiveDt);
+      if (this.state.controlKit.remaining === 0 || this.state.controlKit.charges === 0) this.state.controlKit = undefined;
+    }
+    if (this.state.itemNotice) {
+      this.state.itemNotice.remaining -= effectiveDt;
+      if (this.state.itemNotice.remaining <= 0) this.state.itemNotice = undefined;
+    }
+    if (this.state.signatureEvent) {
+      this.state.signatureEvent.remaining -= effectiveDt;
+      if (this.state.signatureEvent.remaining <= 0) this.state.signatureEvent = undefined;
+    }
+    if (this.state.signatureCounterplay) {
+      this.state.signatureCounterplay.remaining -= effectiveDt;
+      if (this.state.signatureCounterplay.remaining <= 0) this.state.signatureCounterplay = undefined;
+    }
+    if(this.state.signatureMastery?.notice){
+      this.state.signatureMastery.notice.remaining=Math.max(0,this.state.signatureMastery.notice.remaining-effectiveDt);
+      if(this.state.signatureMastery.notice.remaining===0)this.state.signatureMastery.notice=undefined;
+    }
+    if ((this.state.signatureCounterplayBuffs?.cooldownRush ?? 0) > 0) {
+      this.state.signatureCounterplayBuffs!.cooldownRush=Math.max(0,this.state.signatureCounterplayBuffs!.cooldownRush!-effectiveDt);
+      if(this.state.signatureCounterplayBuffs!.cooldownRush===0&&!(this.state.signatureCounterplayBuffs!.bossWeakPointSeconds??0)) {
+        this.state.signatureCounterplayBuffs=undefined;
+      }
+    }
 
     // Update timers
     if (this.state.bossAlertTimer > 0) {
@@ -665,31 +1057,76 @@ export class SurvivorsEngine {
       }
     }
 
+    const hpBefore=this.state.player.hp;
+    tickPremiumGear(this.state,effectiveDt);
     this.updatePlayer(effectiveDt, input);
+    tickFieldTactics(this.state,effectiveDt,(x,y)=>{
+      for(const [offset,kind] of [[-18,'field_rations'],[18,'radio_battery']] as const) {
+        this.state.drops.push({id:this.genId('field_support'),x:Math.max(20,Math.min(WORLD_WIDTH-20,x+offset)),y:Math.max(20,Math.min(WORLD_HEIGHT-20,y)),exp:0,isHeal:false,itemKind:kind});
+      }
+      this.emitAudio('pickup',x,y);
+    });
+    for (const worker of this.state.resolvedWorkers ?? []) {
+      worker.remaining -= effectiveDt;
+      worker.x += Math.sign(WORLD_WIDTH / 2 - worker.x) * Math.min(Math.abs(WORLD_WIDTH / 2 - worker.x), 80 * effectiveDt);
+      worker.y += (worker.y < WORLD_HEIGHT / 2 ? -1 : 1) * 100 * effectiveDt;
+    }
+    this.state.resolvedWorkers = (this.state.resolvedWorkers ?? []).filter(w => w.remaining > 0);
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
+    this.updateSignatureEvents();
     this.updateSpawns(effectiveDt);
+    if(this.state.bossEncounter?.phase==='arrival')return;
     this.updateHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateStageHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateDrops(effectiveDt);
     this.checkCollisions();
+    if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
-    // Check survival victory
-    if (this.state.gameTime >= this.state.maxTime) {
-      this.state.phase = 'victory';
-      this.state.score += 5000;
-      this.state.psiCredits += Math.round(this.state.score / 10);
-      this.checkStarChallenges();
+    // Boss resolution normally ends the stage after a short confirmation.
+    // Once extraction has begun, however, the extraction hold owns the terminal outcome.
+    if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+      const extractionActive=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
+      if(extractionActive){
+        if(this.state.bossEncounter){
+          this.state.bossEncounter.phase='secured';this.state.bossEncounter.remaining=0;
+          this.state.bossName=null;this.state.bossAlertTimer=0;
+          this.state.directorShoutTimer=0;this.state.directorCutinPhase='none';
+        }
+      } else if(this.state.bossEncounter){
+        this.state.bossEncounter.phase='secured';this.state.bossEncounter.remaining=2.4;
+        this.state.bossName=null;this.state.bossAlertTimer=0;
+        this.state.directorShoutTimer=0;this.state.directorCutinPhase='none';
+        return;
+      } else {
+        this.state.phase = 'victory';
+        this.state.score += 5000;
+        this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
+        this.checkStarChallenges();
+      }
+    }
+    // Keep the intervention visible before spending its bulk XP. Terminal
+    // outcomes take precedence; a queued upgrade must never replace a result.
+    const outcome = this.state.phase as SurvivorsGameState['phase'];
+    if (outcome === 'victory' || outcome === 'defeat') {
+      this.state.directorShoutTimer = 0;
+      this.state.directorCutinPhase = 'none';
+    } else if (this.state.phase === 'playing' && this.state.directorShoutTimer === 0 && this.state.currentExp >= this.state.nextLevelExp) {
+      this.addExp(0);
     }
   }
 
   triggerDirectorShout(): boolean {
-    if (this.state.phase !== 'playing') return false;
+    if(this.state.bossEncounter&&this.state.bossEncounter.phase!=='combat')return false;
+    if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return false;
     if (this.state.ultimateCharge < this.state.maxUltimateCharge) {
       return false;
     }
 
+    this.emitAudio('shout');
     this.state.ultimateCharge = 0;
     this.state.directorShoutTimer = 2.0;
     this.state.directorCutinPhase = 'cutin';
@@ -697,12 +1134,12 @@ export class SurvivorsEngine {
     // 1. Time freeze & stun all existing hazards, deal massive damage
     for (const h of this.state.hazards) {
       h.isStunned = 3.5;
-      h.hp -= 9999;
+      this.damageHazard(h,9999);
     }
 
     // 2. Spawn massive expanding shockwave
-    this.state.projectiles.push({
-      id: genId('proj_shout'),
+    this.addProjectile({
+      id: this.genId('proj_shout'),
       x: this.state.player.x,
       y: this.state.player.y,
       vx: 0,
@@ -730,8 +1167,9 @@ export class SurvivorsEngine {
     return true;
   }
 
-  private updatePlayer(dt: number, input: GameInput) {
+  private movePlayer(dt: number, input: GameInput) {
     const { player } = this.state;
+    const previousPosition={x:player.x,y:player.y};
 
     // Environmental zone effects (Floodlight buff, Slurry drag)
     let speedMod = 1.0;
@@ -752,22 +1190,45 @@ export class SurvivorsEngine {
     }
     this.state.inFloodlight = inFloodlight;
 
-    // Direction normalize
-    const len = Math.hypot(input.moveX, input.moveY);
-    if (len > 0.001) {
-      const nx = input.moveX / len;
-      const ny = input.moveY / len;
-      const currentSpeed = player.speed * speedMod;
-      player.x += nx * currentSpeed * dt;
-      player.y += ny * currentSpeed * dt;
-      this.lastFacingX = nx;
-      this.lastFacingY = ny;
+    // Handle Active Dash Motion
+    if ((player.dashDuration ?? 0) > 0) {
+      player.dashDuration = Math.max(0, (player.dashDuration ?? 0) - dt);
+      player.x += (player.dashVx ?? 0) * dt;
+      player.y += (player.dashVy ?? 0) * dt;
+      if (player.dashDuration === 0) {
+        player.isDashing = false;
+      }
+    } else {
+      // Preserve analog precision while capping keyboard diagonals at full speed.
+      const len = Number.isFinite(input.moveX) && Number.isFinite(input.moveY)
+        ? Math.hypot(input.moveX, input.moveY) : 0;
+      if (len > 0.001) {
+        const nx = input.moveX / len;
+        const ny = input.moveY / len;
+        const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1) * Math.min(1, len);
+        player.x += nx * currentSpeed * dt;
+        player.y += ny * currentSpeed * dt;
+        this.lastFacingX = nx;
+        this.lastFacingY = ny;
+      }
     }
 
     // Clamp inside world boundaries
+    const resolved=terrainMove(this.state.terrain??[],previousPosition,player,14);
+    player.x=resolved.x;player.y=resolved.y;
     const padding = 20;
     player.x = Math.max(padding, Math.min(WORLD_WIDTH - padding, player.x));
     player.y = Math.max(padding, Math.min(WORLD_HEIGHT - padding, player.y));
+  }
+
+  private updatePlayer(dt: number, input: GameInput) {
+    this.movePlayer(dt,input);
+    const {player}=this.state;
+
+    // Dash cooldown decay
+    if ((player.dashCooldown ?? 0) > 0) {
+      player.dashCooldown = Math.max(0, (player.dashCooldown ?? 0) - dt);
+    }
 
     // Invincibility decay
     if (player.invincibleTime > 0) {
@@ -776,7 +1237,11 @@ export class SurvivorsEngine {
 
     // HP regen
     if (player.regenRate > 0 && player.hp < player.maxHp) {
+      const before = player.hp;
       player.hp = Math.min(player.maxHp, player.hp + player.regenRate * dt);
+      if (this.state.premiumGear && this.state.premiumGear.effects.regen > 0) {
+        this.state.premiumGear.recoveryAmount = player.hp - before;
+      }
     }
 
     // Drone orbit angle
@@ -794,7 +1259,8 @@ export class SurvivorsEngine {
       ...this.state.player,
       damageMultiplier: this.state.player.damageMultiplier * floodlightDmgBonus,
     };
-    const cdReduction = 1 - Math.min(0.6, player.cooldownReduction);
+    const signatureCooldownBonus=(this.state.signatureCounterplayBuffs?.cooldownRush??0)>0?.25:0;
+    const cdReduction = 1 - Math.min(0.75, player.cooldownReduction+signatureCooldownBonus);
 
     // ==========================================
     // 1. Radio Weapon & Evolution: Satellite Broadcast
@@ -803,21 +1269,21 @@ export class SurvivorsEngine {
     if (hasSatellite) {
       this.cooldowns.satellite -= dt;
       if (this.cooldowns.satellite <= 0) {
-        this.cooldowns.satellite = 1.1 * cdReduction;
+        this.cooldowns.satellite = equipmentTuning('satellite_broadcast', 1)!.interval * cdReduction;
         // Fire 8-directional cosmic sonic waves across the screen
-        const count = 8;
+        const count = equipmentTuning('satellite_broadcast', 1)!.count;
         for (let i = 0; i < count; i++) {
           const angle = (i * Math.PI * 2) / count;
-          this.state.projectiles.push({
-            id: genId('proj_satellite'),
+          this.addProjectile({
+            id: this.genId('proj_satellite'),
             x: player.x,
             y: player.y,
             vx: Math.cos(angle) * 580,
             vy: Math.sin(angle) * 580,
-            radius: 28,
-            damage: 95 * player.damageMultiplier,
-            duration: 2.2,
-            pierce: 99,
+            radius: equipmentTuning('satellite_broadcast', 1)!.radius,
+            damage: equipmentTuning('satellite_broadcast', 1)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('satellite_broadcast', 1)!.duration,
+            pierce: equipmentTuning('satellite_broadcast', 1)!.pierce,
             kind: 'satellite_wave',
             color: '#38bdf8',
           });
@@ -827,7 +1293,7 @@ export class SurvivorsEngine {
       const radioLvl = activePerks.radio_boost;
       if (radioLvl > 0) {
         this.cooldowns.radio -= dt;
-        const radioBaseCd = Math.max(0.4, 1.2 - radioLvl * 0.15) * cdReduction;
+        const radioBaseCd = equipmentTuning('radio_boost', radioLvl)!.interval * cdReduction;
         if (this.cooldowns.radio <= 0) {
           this.cooldowns.radio = radioBaseCd;
           const target = this.findNearestHazard(player.x, player.y);
@@ -835,7 +1301,7 @@ export class SurvivorsEngine {
             const dx = target.x - player.x;
             const dy = target.y - player.y;
             const dist = Math.hypot(dx, dy) || 1;
-            const bulletCount = radioLvl >= 4 ? 3 : radioLvl >= 2 ? 2 : 1;
+            const bulletCount = equipmentTuning('radio_boost', radioLvl)!.count;
 
             for (let i = 0; i < bulletCount; i++) {
               const spreadAngle = (i - (bulletCount - 1) / 2) * 0.22;
@@ -844,16 +1310,16 @@ export class SurvivorsEngine {
               const ndx = (dx / dist) * cos - (dy / dist) * sin;
               const ndy = (dx / dist) * sin + (dy / dist) * cos;
 
-              this.state.projectiles.push({
-                id: genId('proj_radio'),
+              this.addProjectile({
+                id: this.genId('proj_radio'),
                 x: player.x,
                 y: player.y,
                 vx: ndx * 480,
                 vy: ndy * 480,
-                radius: 10,
-                damage: (22 + radioLvl * 8) * player.damageMultiplier,
-                duration: 1.4,
-                pierce: radioLvl >= 3 ? 2 : 1,
+                radius: equipmentTuning('radio_boost', radioLvl)!.radius,
+                damage: equipmentTuning('radio_boost', radioLvl)!.damage * player.damageMultiplier,
+                duration: equipmentTuning('radio_boost', radioLvl)!.duration,
+                pierce: equipmentTuning('radio_boost', radioLvl)!.pierce,
                 kind: 'radio',
               });
             }
@@ -869,21 +1335,21 @@ export class SurvivorsEngine {
     if (hasCryo) {
       this.cooldowns.cryo -= dt;
       if (this.cooldowns.cryo <= 0) {
-        this.cooldowns.cryo = 1.6 * cdReduction;
+        this.cooldowns.cryo = equipmentTuning('cryo_blizzard', 1)!.interval * cdReduction;
         // 360-degree freezing blizzard
-        const sprays = 16;
+        const sprays = equipmentTuning('cryo_blizzard', 1)!.count;
         for (let i = 0; i < sprays; i++) {
-          const angle = (i * Math.PI * 2) / sprays + (Math.random() - 0.5) * 0.2;
-          this.state.projectiles.push({
-            id: genId('proj_cryo'),
+          const angle = (i * Math.PI * 2) / sprays + (this.random() - 0.5) * 0.2;
+          this.addProjectile({
+            id: this.genId('proj_cryo'),
             x: player.x,
             y: player.y,
             vx: Math.cos(angle) * 360,
             vy: Math.sin(angle) * 360,
-            radius: 20,
-            damage: 60 * player.damageMultiplier,
-            duration: 0.8,
-            pierce: 99,
+            radius: equipmentTuning('cryo_blizzard', 1)!.radius,
+            damage: equipmentTuning('cryo_blizzard', 1)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('cryo_blizzard', 1)!.duration,
+            pierce: equipmentTuning('cryo_blizzard', 1)!.pierce,
             kind: 'cryo_blast',
             color: '#a5f3fc',
           });
@@ -893,27 +1359,27 @@ export class SurvivorsEngine {
       const extLvl = activePerks.extinguisher;
       if (extLvl > 0) {
         this.cooldowns.extinguisher -= dt;
-        const extBaseCd = Math.max(0.6, 2.0 - extLvl * 0.25) * cdReduction;
+        const extBaseCd = equipmentTuning('extinguisher', extLvl)!.interval * cdReduction;
         if (this.cooldowns.extinguisher <= 0) {
           this.cooldowns.extinguisher = extBaseCd;
-          const sprayCount = 4 + extLvl * 2;
+          const sprayCount = equipmentTuning('extinguisher', extLvl)!.count;
           const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
 
           for (let i = 0; i < sprayCount; i++) {
-            const angleOffset = (Math.random() - 0.5) * 0.75;
+            const angleOffset = (this.random() - 0.5) * 0.75;
             const sprayAngle = baseAngle + angleOffset;
-            const speed = 260 + Math.random() * 80;
+            const speed = 260 + this.random() * 80;
 
-            this.state.projectiles.push({
-              id: genId('proj_ext'),
+            this.addProjectile({
+              id: this.genId('proj_ext'),
               x: player.x,
               y: player.y,
               vx: Math.cos(sprayAngle) * speed,
               vy: Math.sin(sprayAngle) * speed,
-              radius: 12 + extLvl * 2,
-              damage: (14 + extLvl * 6) * player.damageMultiplier,
-              duration: 0.65,
-              pierce: 3,
+              radius: equipmentTuning('extinguisher', extLvl)!.radius,
+              damage: equipmentTuning('extinguisher', extLvl)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('extinguisher', extLvl)!.duration,
+              pierce: equipmentTuning('extinguisher', extLvl)!.pierce,
               kind: 'extinguisher',
             });
           }
@@ -927,35 +1393,35 @@ export class SurvivorsEngine {
     const hasTesla = activePerks.tesla_dome > 0;
     if (hasTesla) {
       this.cooldowns.tesla -= dt;
-      const radius = 220;
+      const radius = equipmentTuning('tesla_dome', 1)!.radius;
       // Continuous aura + chain lightning
       for (const h of hazards) {
+        if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
-          h.hp -= 90 * player.damageMultiplier * dt;
-          h.speed = Math.max(25, h.speed * 0.7);
+          this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt);
         }
       }
       if (this.cooldowns.tesla <= 0) {
-        this.cooldowns.tesla = 0.5 * cdReduction;
+        this.cooldowns.tesla = equipmentTuning('tesla_dome', 1)!.interval * cdReduction;
         // Strike up to 4 targets with lightning
         let strikes = 0;
         for (const h of hazards) {
-          if (strikes >= 4) break;
+          if (strikes >= equipmentTuning('tesla_dome', 1)!.count) break;
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
-          if (dist <= radius + 100) {
-            h.hp -= 80 * player.damageMultiplier;
+          if (h.hp > 0 && dist <= radius + h.radius) {
+            this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.damage * player.damageMultiplier);
             strikes++;
-            this.state.projectiles.push({
-              id: genId('proj_tesla'),
+            this.addProjectile({
+              id: this.genId('proj_tesla'),
               x: h.x,
               y: h.y,
               vx: 0,
               vy: 0,
               radius: 25,
-              damage: 40 * player.damageMultiplier,
+              damage: equipmentTuning('tesla_dome', 1)!.secondaryDamage! * player.damageMultiplier,
               duration: 0.3,
-              pierce: 99,
+              pierce: equipmentTuning('tesla_dome', 1)!.pierce,
               kind: 'tesla_bolt',
               color: '#fbbf24',
             });
@@ -965,13 +1431,12 @@ export class SurvivorsEngine {
     } else {
       const floodLvl = activePerks.floodlight;
       if (floodLvl > 0) {
-        const radius = 90 + floodLvl * 22;
-        const auraDps = (18 + floodLvl * 9) * player.damageMultiplier;
+        const radius = equipmentTuning('floodlight', floodLvl)!.radius;
+        const auraDps = equipmentTuning('floodlight', floodLvl)!.continuousDamage! * player.damageMultiplier;
         for (const h of hazards) {
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (dist <= radius + h.radius) {
-            h.hp -= auraDps * dt;
-            h.speed = Math.max(30, h.speed * 0.85); // slow down
+            this.damageHazard(h,auraDps * dt);
           }
         }
       }
@@ -984,18 +1449,18 @@ export class SurvivorsEngine {
     if (hasEmf) {
       this.cooldowns.emf -= dt;
       if (this.cooldowns.emf <= 0) {
-        this.cooldowns.emf = 1.2 * cdReduction;
+        this.cooldowns.emf = equipmentTuning('emf_barricade', 1)!.interval * cdReduction;
         // Drop high-tech laser pylon
-        this.state.projectiles.push({
-          id: genId('proj_emf'),
+        this.addProjectile({
+          id: this.genId('proj_emf'),
           x: player.x,
           y: player.y,
           vx: 0,
           vy: 0,
-          radius: 36,
-          damage: 180 * player.damageMultiplier,
-          duration: 15.0,
-          pierce: 99,
+          radius: equipmentTuning('emf_barricade', 1)!.radius,
+          damage: equipmentTuning('emf_barricade', 1)!.damage * player.damageMultiplier,
+          duration: equipmentTuning('emf_barricade', 1)!.duration,
+          pierce: equipmentTuning('emf_barricade', 1)!.pierce,
           kind: 'emf_beam',
           color: '#ec4899',
         });
@@ -1004,19 +1469,19 @@ export class SurvivorsEngine {
       const coneLvl = activePerks.cone_trap;
       if (coneLvl > 0) {
         this.cooldowns.cone -= dt;
-        const coneCd = Math.max(1.8, 3.5 - coneLvl * 0.4) * cdReduction;
+        const coneCd = equipmentTuning('cone_trap', coneLvl)!.interval * cdReduction;
         if (this.cooldowns.cone <= 0) {
           this.cooldowns.cone = coneCd;
-          this.state.projectiles.push({
-            id: genId('proj_cone'),
+          this.addProjectile({
+            id: this.genId('proj_cone'),
             x: player.x,
             y: player.y,
             vx: 0,
             vy: 0,
-            radius: 16 + coneLvl * 2,
-            damage: (50 + coneLvl * 25) * player.damageMultiplier,
-            duration: 12.0,
-            pierce: 1 + Math.floor(coneLvl / 2),
+            radius: equipmentTuning('cone_trap', coneLvl)!.radius,
+            damage: equipmentTuning('cone_trap', coneLvl)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('cone_trap', coneLvl)!.duration,
+            pierce: equipmentTuning('cone_trap', coneLvl)!.pierce,
             kind: 'cone_trap',
           });
         }
@@ -1030,28 +1495,26 @@ export class SurvivorsEngine {
     if (hasHunter) {
       this.cooldowns.hunter -= dt;
       if (this.cooldowns.hunter <= 0) {
-        this.cooldowns.hunter = 0.22 * cdReduction;
+        this.cooldowns.hunter = equipmentTuning('hunter_swarm', 1)!.interval * cdReduction;
         // 3 drones firing
         const angleBase = this.state.droneAngle ?? 0;
-        for (let d = 0; d < 3; d++) {
-          const angle = angleBase + (d * Math.PI * 2) / 3;
-          const droneX = player.x + Math.cos(angle) * 85;
-          const droneY = player.y + Math.sin(angle) * 85;
-          const target = this.findNearestHazard(droneX, droneY);
+        for (let d = 0; d < equipmentTuning('hunter_swarm', 1)!.count; d++) {
+          const {x:droneX,y:droneY}=droneEmissionOrigin(player,angleBase,true,d);
+          const target = this.findNearestHazard(droneX, droneY, 260);
           if (target) {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
             const dist = Math.hypot(dx, dy) || 1;
-            this.state.projectiles.push({
-              id: genId('proj_hunter'),
+            this.addProjectile({
+              id: this.genId('proj_hunter'),
               x: droneX,
               y: droneY,
               vx: (dx / dist) * 750,
               vy: (dy / dist) * 750,
-              radius: 9,
-              damage: 48 * player.damageMultiplier,
-              duration: 1.2,
-              pierce: 4,
+              radius: equipmentTuning('hunter_swarm', 1)!.radius,
+              damage: equipmentTuning('hunter_swarm', 1)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('hunter_swarm', 1)!.duration,
+              pierce: equipmentTuning('hunter_swarm', 1)!.pierce,
               kind: 'hunter_beam',
               color: '#a855f7',
             });
@@ -1062,30 +1525,142 @@ export class SurvivorsEngine {
       const droneLvl = activePerks.safety_drone;
       if (droneLvl > 0) {
         this.cooldowns.drone -= dt;
-        const droneCd = Math.max(0.3, 0.9 - droneLvl * 0.12) * cdReduction;
+        const droneCd = equipmentTuning('safety_drone', droneLvl)!.interval * cdReduction;
         if (this.cooldowns.drone <= 0) {
           this.cooldowns.drone = droneCd;
           const angle = this.state.droneAngle ?? 0;
-          const droneX = player.x + Math.cos(angle) * 65;
-          const droneY = player.y + Math.sin(angle) * 65;
-          const target = this.findNearestHazard(droneX, droneY);
+          const {x:droneX,y:droneY}=droneEmissionOrigin(player,angle,false);
+          const target = this.findNearestHazard(droneX, droneY, 300);
           if (target) {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
             const dist = Math.hypot(dx, dy) || 1;
-            this.state.projectiles.push({
-              id: genId('proj_drone'),
+            this.addProjectile({
+              id: this.genId('proj_drone'),
               x: droneX,
               y: droneY,
               vx: (dx / dist) * 550,
               vy: (dy / dist) * 550,
-              radius: 7,
-              damage: (16 + droneLvl * 8) * player.damageMultiplier,
-              duration: 1.0,
-              pierce: 1,
+              radius: equipmentTuning('safety_drone', droneLvl)!.radius,
+              damage: equipmentTuning('safety_drone', droneLvl)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('safety_drone', droneLvl)!.duration,
+              pierce: equipmentTuning('safety_drone', droneLvl)!.pierce,
               kind: 'drone_laser',
             });
           }
+        }
+      }
+    }
+
+    // ==========================================
+    // 6. Grouting Gun & Evolution: Hydraulic Ram
+    // ==========================================
+    const hasRam = activePerks.hydraulic_ram > 0;
+    if (hasRam) {
+      this.cooldowns.grouting -= dt;
+      if (this.cooldowns.grouting <= 0) {
+        this.cooldowns.grouting = equipmentTuning('hydraulic_ram', 1)!.interval * cdReduction;
+        const tuning = equipmentTuning('hydraulic_ram', 1)!;
+        const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
+        for (let i = 0; i < tuning.count; i++) {
+          const spread = (i - (tuning.count - 1) / 2) * 0.28;
+          const angle = baseAngle + spread;
+          this.addProjectile({
+            id: this.genId('proj_ram'),
+            x: player.x,
+            y: player.y,
+            vx: Math.cos(angle) * 520,
+            vy: Math.sin(angle) * 520,
+            radius: tuning.radius,
+            damage: tuning.damage * player.damageMultiplier,
+            duration: tuning.duration,
+            pierce: tuning.pierce,
+            kind: 'hydraulic_wave',
+            color: '#38bdf8',
+          });
+        }
+      }
+    } else {
+      const groutLvl = activePerks.grouting_gun;
+      if (groutLvl > 0) {
+        this.cooldowns.grouting -= dt;
+        const groutCd = equipmentTuning('grouting_gun', groutLvl)!.interval * cdReduction;
+        if (this.cooldowns.grouting <= 0) {
+          this.cooldowns.grouting = groutCd;
+          const tuning = equipmentTuning('grouting_gun', groutLvl)!;
+          const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
+          for (let i = 0; i < tuning.count; i++) {
+            const spread = (i - (tuning.count - 1) / 2) * 0.22;
+            const angle = baseAngle + spread;
+            const spd = 400 + (this.random() - 0.5) * 60;
+            this.addProjectile({
+              id: this.genId('proj_grout'),
+              x: player.x,
+              y: player.y,
+              vx: Math.cos(angle) * spd,
+              vy: Math.sin(angle) * spd,
+              radius: tuning.radius,
+              damage: tuning.damage * player.damageMultiplier,
+              duration: tuning.duration,
+              pierce: tuning.pierce,
+              kind: 'grout_slug',
+              color: '#94a3b8',
+            });
+          }
+        }
+      }
+    }
+
+    // ==========================================
+    // 7. EMP Generator & Evolution: Plasma Grid
+    // ==========================================
+    const hasPlasma = activePerks.plasma_grid > 0;
+    if (hasPlasma) {
+      this.cooldowns.emp -= dt;
+      const tuning = equipmentTuning('plasma_grid', 1)!;
+      for (const h of hazards) {
+        if (h.hp <= 0) continue;
+        const dist = Math.hypot(h.x - player.x, h.y - player.y);
+        if (dist <= tuning.radius + h.radius) {
+          this.damageHazard(h, tuning.continuousDamage! * player.damageMultiplier * dt);
+        }
+      }
+      if (this.cooldowns.emp <= 0) {
+        this.cooldowns.emp = tuning.interval * cdReduction;
+        this.addProjectile({
+          id: this.genId('proj_plasma'),
+          x: player.x,
+          y: player.y,
+          vx: 0,
+          vy: 0,
+          radius: tuning.radius,
+          damage: tuning.damage * player.damageMultiplier,
+          duration: tuning.duration,
+          pierce: tuning.pierce,
+          kind: 'plasma_arc',
+          color: '#a78bfa',
+        });
+      }
+    } else {
+      const empLvl = activePerks.emp_generator;
+      if (empLvl > 0) {
+        this.cooldowns.emp -= dt;
+        const tuning = equipmentTuning('emp_generator', empLvl)!;
+        if (this.cooldowns.emp <= 0) {
+          this.cooldowns.emp = tuning.interval * cdReduction;
+          this.addProjectile({
+            id: this.genId('proj_emp'),
+            x: player.x,
+            y: player.y,
+            vx: 0,
+            vy: 0,
+            radius: tuning.radius,
+            damage: tuning.damage * player.damageMultiplier,
+            duration: tuning.duration,
+            pierce: tuning.pierce,
+            kind: 'emp_pulse',
+            color: '#60a5fa',
+          });
         }
       }
     }
@@ -1094,13 +1669,16 @@ export class SurvivorsEngine {
   private updateProjectiles(dt: number) {
     const alive: Projectile[] = [];
     for (const p of this.state.projectiles) {
+      const path = this.paths.get(p);
+      if (path) { path.x = p.x; path.y = p.y; }
+      else this.paths.set(p, {x: p.x, y: p.y});
       p.duration -= dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
 
       // Expand shockwave radius smoothly
-      if (p.kind === 'shout_shockwave') {
-        p.radius += 600 * dt;
+      if (p.kind === 'shout_shockwave' || p.kind === 'emp_pulse' || p.kind === 'hydraulic_wave') {
+        p.radius += 400 * dt;
       }
 
       if (
@@ -1111,70 +1689,236 @@ export class SurvivorsEngine {
         p.y <= WORLD_HEIGHT + 100
       ) {
         alive.push(p);
+      } else {
+        this.emitProjectileFeedback(p, 'release');
       }
     }
     this.state.projectiles = alive;
   }
 
+  private applySignatureCounterplay(event:WaveSignatureEvent,key:string,centroid:{x:number;y:number}):boolean {
+    const startedAt=this.signatureEventStartedAt.get(key)??this.state.gameTime;
+    const clearSeconds=Math.max(0,this.state.gameTime-startedAt);
+    const contactFailed=this.signatureEventsFailed.has(key);
+    const mastery=this.state.signatureMastery??createSignatureMasteryState();
+    if(!signatureCounterplayQualified(event.id,contactFailed,clearSeconds)){
+      this.state.signatureMastery=signatureMasteryBreak(mastery);
+      return false;
+    }
+
+    const profile=signatureCounterplayProfile(event.id);
+    this.state.signatureCounterplay={
+      eventId:event.id,kind:profile.kind,title:profile.title,detail:profile.detail,
+      accent:event.stageAccent,remaining:3.2,
+    };
+    this.state.score+=400;
+    switch(profile.kind){
+      case 'boss_weakpoint':
+      case 'boss_prereveal': {
+        const liveBoss=this.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+        if(liveBoss){
+          liveBoss.weakPointExposed=true;
+          liveBoss.weakPointTimer=Math.max(liveBoss.weakPointTimer??0,profile.value);
+        } else {
+          this.state.signatureCounterplayBuffs={
+            ...(this.state.signatureCounterplayBuffs??{}),
+            bossWeakPointSeconds:Math.max(this.state.signatureCounterplayBuffs?.bossWeakPointSeconds??0,profile.value),
+          };
+        }
+        break;
+      }
+      case 'cooldown_rush':
+        this.state.signatureCounterplayBuffs={
+          ...(this.state.signatureCounterplayBuffs??{}),
+          cooldownRush:Math.max(this.state.signatureCounterplayBuffs?.cooldownRush??0,profile.duration??8),
+        };
+        break;
+      case 'instant_counter':
+        this.addProjectile({
+          id:this.genId('proj_signature_counter'),x:this.state.player.x,y:this.state.player.y,
+          vx:0,vy:0,radius:90,damage:profile.value,duration:.55,pierce:99,
+          kind:'shout_shockwave',color:event.stageAccent,
+        });
+        this.state.hitStopTimer=Math.max(this.state.hitStopTimer??0,.08);
+        break;
+      case 'dash_reset':
+        this.state.player.dashCooldown=0;
+        this.state.player.invincibleTime=Math.max(this.state.player.invincibleTime,profile.value);
+        break;
+      case 'ultimate_surge':
+        this.state.ultimateCharge=Math.min(this.state.maxUltimateCharge,this.state.ultimateCharge+profile.value);
+        break;
+    }
+    this.state.signatureMastery=signatureMasterySuccess(mastery,event.id);
+    this.emitAudio('control',centroid.x,centroid.y);
+    return true;
+  }
+
+  private updateSignatureEvents():void {
+    const plan=signatureEventPlan(this.state.stage,this.state.maxTime);
+    for(const event of plan) {
+      const key=`${event.wave}:${event.id}`;
+      const centroid=event.spawns.reduce((acc,spawn)=>({x:acc.x+spawn.x,y:acc.y+spawn.y}),{x:0,y:0});
+      centroid.x/=event.spawns.length;centroid.y/=event.spawns.length;
+
+      if(this.signatureEventsTriggered.has(key)&&!this.signatureEventsResolved.has(key)){
+        const alive=this.state.hazards.some(h=>h.signatureEventId===key&&h.hp>0);
+        if(!alive){
+          this.signatureEventsResolved.add(key);
+          this.state.score+=event.wave===3?1000:650;
+          this.state.psiCredits+=event.reward;
+          const counterplay=this.applySignatureCounterplay(event,key,centroid);
+          this.state.signatureEvent={
+            id:event.id,wave:event.wave,title:`${event.title} · 통제 완료`,
+            detail:counterplay?'정확한 대응으로 COUNTERPLAY 보너스를 획득했습니다.':'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
+            severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'resolved',
+            positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+            reward:event.reward,remaining:2.1,
+          };
+          this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,.8);
+          this.emitAudio('control',centroid.x,centroid.y);
+        }
+        continue;
+      }
+
+      if(this.signatureEventsResolved.has(key))continue;
+      if(!this.signatureEventsWarned.has(key)&&this.state.gameTime+1e-6>=event.at-event.warningLead){
+        this.signatureEventsWarned.add(key);
+        this.state.signatureEvent={
+          id:event.id,wave:event.wave,title:event.title,detail:event.detail,
+          severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'warning',
+          positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+          remaining:event.warningLead,
+        };
+        this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.warningLead+.25);
+        this.emitAudio('boss_alarm',centroid.x,centroid.y);
+      }
+
+      if(this.state.stageBossSpawned||this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
+      this.signatureEventsTriggered.add(key);
+      this.signatureEventStartedAt.set(key,this.state.gameTime);
+      for(const spawn of event.spawns) {
+        this.spawnHazard(spawn.type,undefined,false,{
+          x:spawn.x,y:spawn.y,variant:spawn.variant,signatureEventId:key,
+          speedScale:spawn.speedScale,hpScale:spawn.hpScale,radiusScale:spawn.radiusScale,
+          warningTimer:spawn.warningTimer,directionX:spawn.directionX,directionY:spawn.directionY,
+        });
+      }
+      this.state.signatureEvent={
+        id:event.id,wave:event.wave,title:event.title,detail:event.detail,
+        severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'impact',
+        positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+        remaining:event.severity==='red'?3.2:2.7,
+      };
+      this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.severity==='red'?1.3:.85);
+      const identity=signatureEventIdentity(event.id);
+      this.state.timeDilation=1-(identity.cameraPressure*(event.severity==='red'?.24:.12));
+      this.state.timeDilationTimer=.10+identity.cameraPressure*.12;
+      this.emitAudio('impact',centroid.x,centroid.y,{actorKind:identity.impactActor});
+    }
+  }
+
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
-    const timeProgress = this.state.gameTime / this.state.maxTime; // 0.0 to 1.0
-
-    // Progressive spawn rate (faster as time goes on)
-    const spawnInterval = Math.max(0.2, 1.4 - timeProgress * 1.15);
-
-    if (this.cooldowns.spawnTimer <= 0) {
-      this.cooldowns.spawnTimer = spawnInterval;
-
-      // Boss event checking at 60s, 120s
+    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty, this.state.maxTime);
+    const stage = this.state.stage;
+    if (!this.state.stageBossSpawned) {
+      // The boss deadline is independent of ordinary spawn cadence and capacity.
       const time = Math.floor(this.state.gameTime);
-      const stage = this.state.stage;
       const stageBossName = stage ? `${stage.bossName} (${stage.bossTitle})` : '타이탄 크레인 8000 (TITAN CRANE)';
       const stageBossType = stage?.bossType || 'CRANE_BOSS';
       const stageBossHp = stage?.bossHp;
-      if (time === 60 && !this.state.hazards.some(h => h.type === stageBossType)) {
+      const operation = operationProgress(this.state);
+      const signatureBlocking=this.state.hazards.some(h=>Boolean(h.signatureEventId)&&h.hp>0);
+      // A successfully read operation may reveal the boss early, but never while a Wave 3
+      // signature set-piece is still unresolved. The hard boss deadline remains authoritative.
+      const riskExposed = time >= operation.revealAt && !signatureBlocking && operation.zonesSecured >= operation.zones && operation.controlsDone >= operation.controls;
+      if ((time >= operation.bossAt || riskExposed) && !this.state.stageBossSpawned) {
+        this.state.stageBossSpawned = true;
         this.triggerBossAlert(stageBossName);
-        this.spawnHazard(stageBossType, stageBossHp);
+        this.spawnHazard(stageBossType, stageBossHp, true);
+        const boss=this.state.hazards.at(-1)!;
+        boss.bossEncounterManaged=true;boss.bossAttackCycles=0;
+        const earnedWeakPoint=this.state.signatureCounterplayBuffs?.bossWeakPointSeconds??0;
+        if(earnedWeakPoint>0){
+          boss.weakPointExposed=true;
+          boss.weakPointTimer=Math.max(boss.weakPointTimer??0,earnedWeakPoint);
+          if(this.state.signatureCounterplayBuffs)delete this.state.signatureCounterplayBuffs.bossWeakPointSeconds;
+          if(this.state.signatureCounterplayBuffs&&!(this.state.signatureCounterplayBuffs.cooldownRush??0))this.state.signatureCounterplayBuffs=undefined;
+        }
+        // Final wave and stage-specific adapters are later implementation slices.
+        if(stage.stageNumber!==50)boss.bossGameplay=createBossCombat(bossGameplayForStage(stage.id));
+        // The introduction must be on the current workface, not outside the camera.
+        boss.x=Math.max(90,Math.min(WORLD_WIDTH-90,this.state.player.x+120));
+        boss.y=Math.max(90,Math.min(WORLD_HEIGHT-90,this.state.player.y-105));
+        const intro=bossGameplayForStage(stage.id).intro;
+        this.state.bossEncounter={bossId:boss.id,phase:'arrival',remaining:intro.firstPlaySeconds,
+          introDuration:intro.firstPlaySeconds,replay:this.bossIntroReplay,replaySkippableAfter:intro.replaySkippableAfterSeconds};
+        this.state.bossAlertTimer=intro.firstPlaySeconds;
         return;
       }
-
-      // Determine enemy type by elapsed time
-      const rand = Math.random();
-      let type: HazardType = 'UNHELMETED';
-
-      if (this.state.gameTime > 120 && rand < 0.12) {
-        type = stageBossType;
-      } else if (this.state.gameTime > 60 && rand < 0.35) {
-        type = 'RUNAWAY_CART';
-      } else if (this.state.gameTime > 30 && rand < 0.6) {
-        type = 'GAS_LEAK';
+    }
+    if (this.cooldowns.spawnTimer <= 0) {
+      this.cooldowns.spawnTimer = pressure.interval;
+      const alive = this.state.hazards.filter(h => h.hp > 0);
+      if (alive.length >= pressure.activeLimit) return;
+      let type = selectStageHazard(stage, this.state.gameTime, this.random(), this.state.maxTime, this.random());
+      const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
+      // Bound concurrent charging/falling threats without shortening their warnings.
+      if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
+        type = 'UNHELMETED';
       }
-
       this.spawnHazard(type);
     }
   }
 
   private triggerBossAlert(name: string) {
     this.state.bossAlertTimer = 3.5;
+    this.emitAudio('boss_alarm');
     this.state.bossName = name;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number) {
+  private damageHazard(h: Hazard, amount: number, projectile=false): void {
+    if (!Number.isFinite(amount) || amount <= 0 || h.hp <= 0) return;
+    const beforeHp=h.hp;
+    if(h.bossEncounterManaged){
+      if(this.state.bossEncounter?.phase!=='combat')return;
+      if(h.bossGameplay){
+        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);
+        if(h.hp<beforeHp)h.hitFlashTimer=0.08;
+        return;
+      }
+      // Structural interlocks expose the next core only after its risk cycle settles.
+      const floor=bossCoreFloor(h);
+      h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
+    } else h.hp=Math.max(0,h.hp-amount);
+    if(h.hp<beforeHp)h.hitFlashTimer=0.08;
+  }
+
+  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {
+    x:number;y:number;variant?:Hazard['variant'];signatureEventId?:string;
+    speedScale?:number;hpScale?:number;radiusScale?:number;warningTimer?:number;directionX?:number;directionY?:number;
+  }) {
     let x = 0;
     let y = 0;
-    const side = Math.floor(Math.random() * 4);
+    const side = Math.floor(this.random() * 4);
     if (side === 0) {
-      x = Math.random() * WORLD_WIDTH;
+      x = this.random() * WORLD_WIDTH;
       y = -20;
     } else if (side === 1) {
       x = WORLD_WIDTH + 20;
-      y = Math.random() * WORLD_HEIGHT;
+      y = this.random() * WORLD_HEIGHT;
     } else if (side === 2) {
-      x = Math.random() * WORLD_WIDTH;
+      x = this.random() * WORLD_WIDTH;
       y = WORLD_HEIGHT + 20;
     } else {
       x = -20;
-      y = Math.random() * WORLD_HEIGHT;
+      y = this.random() * WORLD_HEIGHT;
+    }
+
+    if(authored){
+      x=Math.max(20,Math.min(WORLD_WIDTH-20,authored.x));
+      y=Math.max(20,Math.min(WORLD_HEIGHT-20,authored.y));
     }
 
     let hp = 30;
@@ -1195,6 +1939,8 @@ export class SurvivorsEngine {
       radius = 12;
       damage = 8;
       expValue = 3;
+    } else if (type === 'FALLING_DEBRIS') {
+      hp = 45; speed = 105; radius = 18; damage = 18; expValue = 5;
     } else if (type === 'CRANE_BOSS') {
       hp = overrideHp || 500;
       speed = 65;
@@ -1205,33 +1951,83 @@ export class SurvivorsEngine {
 
     // Time scaling (if not explicit boss HP override)
     if (overrideHp) {
-      hp = overrideHp;
+      hp = Math.round(overrideHp * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].hp);
     } else {
-      const scale = 1 + (this.state.gameTime / 60) * 0.45;
+      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty, this.state.maxTime).hpScale;
       hp = Math.round(hp * scale);
     }
 
+    // Falling material targets the observed position, never follows after warning.
+    if (type === 'FALLING_DEBRIS') {
+      if(!authored){
+        x = Math.max(60, Math.min(WORLD_WIDTH - 60, this.state.player.x + (this.random() - 0.5) * 180));
+        y = Math.max(60, Math.min(WORLD_HEIGHT - 60, this.state.player.y + (this.random() - 0.5) * 180));
+      }
+      radius = 38;
+    }
+    if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
+    const traitRoll=isStageBoss||authored?.variant ? 0 : this.random();
+    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll);
+    const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):traits.variant??(traits.behavior?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',traitRoll)));
+    if(traits.behavior==='wide_debris')radius=52;
+    if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
+    if(variant==='pulse_gas'){radius=58;expValue*=2;}
+    if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
+    if(authored?.hpScale)hp=Math.max(1,Math.round(hp*authored.hpScale));
+    if(authored?.speedScale)speed*=authored.speedScale;
+    if(authored?.radiusScale)radius*=authored.radiusScale;
+    const authoredMotion=(type==='RUNAWAY_CART'&&authored?.warningTimer!==undefined)
+      ? {phase:'warning' as const,timer:authored.warningTimer,directionX:authored.directionX??0,directionY:authored.directionY??0}
+      : (type==='FALLING_DEBRIS'&&authored?.warningTimer!==undefined)
+        ? {phase:'warning' as const,timer:authored.warningTimer,directionX:0,directionY:0}
+        : (variant==='pulse_gas'&&authored?.warningTimer!==undefined)
+          ? {phase:'warning' as const,timer:authored.warningTimer,directionX:0,directionY:0}
+          : undefined;
     this.state.hazards.push({
-      id: genId(`haz_${type}`),
+      species: isStageBoss ? undefined : workfaceSpecies(this.state.stage.stageNumber,type),
+      variant,
+      behavior:traits.behavior,
+      id: this.genId(`haz_${type}`),
+      isStageBoss,
+      signatureEventId: authored?.signatureEventId,
       type,
       x,
       y,
       hp,
       maxHp: hp,
-      speed,
+      speed: speed * (isStageBoss?1:workfaceSpeedScale(workfaceSpecies(this.state.stage.stageNumber,type))),
       radius,
       damage,
       expValue,
+      motion: authoredMotion ?? (variant==='pulse_gas'||isStageBoss&&type==='CRANE_BOSS'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
+        ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
+        : type === 'FALLING_DEBRIS'
+          ? { phase: 'warning', timer: 1.25*DIFFICULTY_WARNING_SCALE[this.state.difficulty??'standard'], directionX: 0, directionY: 0 }
+          : undefined),
     });
   }
 
   private updateHazards(dt: number) {
     const { player } = this.state;
     for (const h of this.state.hazards) {
+      if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
+      if(h.bossGameplay){
+        h.bossGameplay.phaseIndex=h.bossPhase??1;
+        if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
+        if(tickGangform(h,player,dt))continue;
+        if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
+      }
+      if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
+        h.vx=0;h.vy=0;
+      }
       // 1. Radial Physics Knockback Deceleration
       if (h.vx || h.vy) {
+        const beforeKnockback={x:h.x,y:h.y};
         h.x += (h.vx || 0) * dt;
         h.y += (h.vy || 0) * dt;
+        if(h.type==='RUNAWAY_CART'||h.type==='UNHELMETED'){
+          const resolved=terrainMove(this.state.terrain??[],beforeKnockback,h,h.radius);h.x=resolved.x;h.y=resolved.y;
+        }
         const friction = Math.pow(0.03, dt);
         h.vx = (h.vx || 0) * friction;
         h.vy = (h.vy || 0) * friction;
@@ -1241,11 +2037,27 @@ export class SurvivorsEngine {
 
       if (h.isStunned && h.isStunned > 0) {
         h.isStunned -= dt;
-        continue;
+        if(!h.bossEncounterManaged)continue;
+      }
+
+      if ((h.weakPointTimer ?? 0) > 0) {
+        h.weakPointTimer = Math.max(0, (h.weakPointTimer ?? 0) - dt);
+        if (h.weakPointTimer === 0) {
+          h.weakPointExposed = false;
+        }
+      }
+
+      if ((h.hitFlashTimer ?? 0) > 0) {
+        h.hitFlashTimer = Math.max(0, (h.hitFlashTimer ?? 0) - dt);
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
-      let hazardSpeed = h.speed;
+      let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type) * premiumHazardSpeed(this.state,h);
+      const aura = this.state.activePerks.tesla_dome > 0 ? 'tesla_dome' : 'floodlight';
+      const auraLevel = this.state.activePerks[aura];
+      if (auraLevel > 0 && Math.hypot(h.x-player.x,h.y-player.y) <= equipmentTuning(aura,auraLevel)!.radius+h.radius) {
+        hazardSpeed *= aura === 'tesla_dome' ? .7 : .85;
+      }
       if (this.state.interactiveHazards) {
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed') continue;
@@ -1258,74 +2070,157 @@ export class SurvivorsEngine {
         }
       }
 
-      // Chase player
-      const dx = player.x - h.x;
-      const dy = player.y - h.y;
+      const previousMotion=h.motion?.phase;
+      const beforeTerrain={x:h.x,y:h.y};
+      const terrain=this.state.terrain??[];
+      const groundActor=h.type!=='GAS_LEAK'&&h.type!=='FALLING_DEBRIS'&&h.type!=='CRANE_BOSS';
+      const waypoint=groundActor&&h.motion?.phase==='approach'?terrainWaypoint(terrain,h,player,h.radius):player;
+      // Steering changes the approach path, never the locked charge target.
+      if (updateHazardMotion(h, player, dt, hazardSpeed,DIFFICULTY_WARNING_SCALE[this.state.difficulty??'standard'])) {
+        if(groundActor&&previousMotion==='approach'&&h.motion?.phase==='approach'){
+          const distance=Math.hypot(waypoint.x-beforeTerrain.x,waypoint.y-beforeTerrain.y)||1;
+          h.x=beforeTerrain.x+(waypoint.x-beforeTerrain.x)/distance*hazardSpeed*.65*dt;
+          h.y=beforeTerrain.y+(waypoint.y-beforeTerrain.y)/distance*hazardSpeed*.65*dt;
+        }
+        const wall=groundActor?terrainHit(terrain,beforeTerrain,h,h.radius):undefined;
+        if(wall&&previousMotion==='charge'){
+          h.x=beforeTerrain.x+(h.x-beforeTerrain.x)*Math.max(0,wall.t-.001);h.y=beforeTerrain.y+(h.y-beforeTerrain.y)*Math.max(0,wall.t-.001);
+          h.motion!.phase='cooldown';h.motion!.timer=1.2;h.weakPointExposed=true;h.weakPointTimer=2;
+          h.vx=0;h.vy=0;if(this.state.terrainRecord)this.state.terrainRecord.cartStops++;
+          this.emitAudio('impact',h.x,h.y,{actorKind:h.type});
+        }else if(groundActor){const p=terrainMove(terrain,beforeTerrain,h,h.radius);h.x=p.x;h.y=p.y;}
+        if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'charge' &&
+            (h.x < 20 || h.x > WORLD_WIDTH - 20 || h.y < 20 || h.y > WORLD_HEIGHT - 20)) {
+          h.x = Math.max(20, Math.min(WORLD_WIDTH - 20, h.x));
+          h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
+          h.motion.phase = 'cooldown'; h.motion.timer = h.isStageBoss?bossPattern(h).recovery:1.1;
+          h.weakPointExposed = true; h.weakPointTimer = h.isStageBoss ? 2.5 : 2.0;
+        }
+        if(h.bossGameplay&&isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
+        if(h.bossEncounterManaged&&(previousMotion==='charge'||previousMotion==='fall')&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent')){
+          h.bossAttackCycles=(h.bossAttackCycles??0)+1;resolveBossSignature(h);
+        }
+        continue;
+      }
+
+      // Workers and diffuse risks retain their existing approach behavior.
+      const destination=groundActor?terrainWaypoint(terrain,h,player,h.radius):player;
+      const dx = destination.x - h.x;
+      const dy = destination.y - h.y;
       const dist = Math.hypot(dx, dy) || 1;
 
-      h.x += (dx / dist) * hazardSpeed * dt;
-      h.y += (dy / dist) * hazardSpeed * dt;
+      const drift=h.behavior==='crosswind' ? Math.sin(this.state.gameTime*1.6+(h.id.charCodeAt(h.id.length-1)%7))*.85 : 0;
+      const directionLength=Math.hypot(1,drift);
+      h.x += ((dx-dy*drift) / dist / directionLength) * hazardSpeed * dt;
+      h.y += ((dy+dx*drift) / dist / directionLength) * hazardSpeed * dt;
+      if(groundActor){const p=terrainMove(terrain,beforeTerrain,h,h.radius);h.x=p.x;h.y=p.y;}
+
     }
+    // Avoided falls expire without granting control score, drops, or boss stars.
+    this.state.hazards = this.state.hazards.filter(h => h.isStageBoss || !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
   }
 
   private checkCollisions() {
     const { player, hazards, projectiles } = this.state;
+    const grid = hazards.length >= 128 && hazards.length * projectiles.length >= 12000 ? new SurvivorsCollisionGrid(hazards) : null;
 
     // 1. Projectiles vs Hazards
     for (const p of projectiles) {
-      for (const h of hazards) {
-        if (h.hp <= 0) continue;
-        const dist = Math.hypot(p.x - h.x, p.y - h.y);
-        if (dist <= p.radius + h.radius) {
-          // Critical hit calculation
-          const isCrit = Math.random() < player.critRate;
-          const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
-          h.hp -= damageDealt;
+      if (p.duration <= 0 || p.pierce <= 0) continue;
+      const previous = this.paths.get(p) ?? p;
+      // Local projectiles respect cover; expanding area pulses and gas cross it.
+      const blockedKinds=['radio','drone_laser','hunter_beam','grout_slug','extinguisher','cryo_blast'];
+      const terrainContact=blockedKinds.includes(p.kind)?terrainHit(this.state.terrain??[],previous,p,Math.min(p.radius,8)):undefined;
+      if(terrainContact){
+        p.x=previous.x+(p.x-previous.x)*Math.max(0,terrainContact.t-.001);p.y=previous.y+(p.y-previous.y)*Math.max(0,terrainContact.t-.001);
+        const o=terrainContact.object;
+        if(o.kind==='rubble'){
+          o.hp=Math.max(0,o.hp-p.damage);if(o.hp===0)this.rewardTerrainCleanup();
+        }
+      }
+      for(const h of hazards){
+        const zone=hitGangformZone(h,p,previous);
+        if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
+      }
+      if(p.duration<=0||p.pierce<=0)continue;
+      const candidates = grid?.candidates(previous.x, previous.y, p.x, p.y, p.radius) ?? hazards;
+      const repeatContact=REPEATED_CONTACT_KINDS.has(p.kind);
+      let hits = repeatContact?undefined:this.projectileHits.get(p);
+      for (const h of candidates) {
+        if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss || hits?.has(h.id)) continue;
+        if (p.duration <= 0 || p.pierce <= 0) break;
+        if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
+          // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
+          if(!repeatContact){
+            if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
+            hits.add(h.id);
+          }
+          // Critical & Weak Point hit calculation
+          const isWeakPoint = Boolean(
+            h.weakPointExposed ||
+            (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
+            (h.bossEncounterManaged && bossCoreStatus(h) === 'exposed')
+          );
+          const isCrit = isWeakPoint || this.random() < player.critRate;
+          const damageDealt = isWeakPoint ? p.damage * 2.5 : isCrit ? p.damage * 2.0 : p.damage;
+          const beforeHp=h.hp;
+          this.damageHazard(h,damageDealt,true);
+          const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(isWeakPoint&&!blocked&&this.state.terrainRecord)this.state.terrainRecord.weakPointHits++;
+          if(!blocked&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
+          if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
+          if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
+          if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked,Math.max(0,beforeHp-h.hp),h);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
-          if (isCrit) {
-            this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, 0.045);
+          if ((isCrit || isWeakPoint)&&!blocked) {
+            this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, isWeakPoint ? 0.06 : 0.045);
           }
 
-          // Dynamic Physics Radial Knockback impulse
-          const knockBase = p.kind === 'shout_shockwave' ? 340
-            : p.kind === 'satellite_wave' ? 190
-            : p.kind === 'cone_trap' ? 140
-            : p.kind === 'radio' ? 95
-            : 55;
-          // Boss has high mass resistance
-          const massFactor = h.type === 'CRANE_BOSS' ? 0.2 : h.type === 'RUNAWAY_CART' ? 0.5 : 1.0;
-          const knockForce = knockBase * massFactor;
-
-          const kx = (h.x - player.x) || 1;
-          const ky = (h.y - player.y) || 1;
-          const klen = Math.hypot(kx, ky) || 1;
-          h.vx = (h.vx || 0) + (kx / klen) * knockForce;
-          h.vy = (h.vy || 0) + (ky / klen) * knockForce;
-
-          // Direct displacement fallback
-          const directPush = knockForce * 0.15;
-          h.x += (kx / klen) * directPush;
-          h.y += (ky / klen) * directPush;
+          // A received instruction pauses the worker/equipment; no bodily knockback.
+          if (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS') {
+            h.vx = 0; h.vy = 0; h.isStunned = Math.max(h.isStunned ?? 0, 0.15);
+          }
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
+            this.emitProjectileFeedback(p, 'release', h.x, h.y, h.type === 'UNHELMETED',false,h.type,blocked);
             break;
           }
         }
       }
+      if(terrainContact)p.duration=0;
     }
 
     // 1-b. Projectiles vs Interactive Hazards (Barrels, Transformers)
     if (this.state.interactiveHazards) {
       for (const p of projectiles) {
         if (p.duration <= 0) continue;
+        let hits=this.projectileHits.get(p);
         for (const env of this.state.interactiveHazards) {
+          const hitId=`environment:${env.id}`;
+          if(hits?.has(hitId))continue;
           if (env.state === 'destroyed' || env.state === 'active') continue;
-          if (env.type === 'explosive_barrel' && env.state === 'idle') {
-            const dist = Math.hypot(p.x - env.x, p.y - env.y);
-            if (dist <= p.radius + env.radius) {
+          if (env.type === 'crane_drop_zone' && env.state === 'warning') {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
+              env.state = 'cooldown'; env.timer = 0.6;
+              let cleared = 0;
+              for (const h of hazards) if (h.hp > 0 && Math.hypot(h.x - env.x, h.y - env.y) <= env.radius + h.radius) {
+                this.damageHazard(h,h.hp); if(h.hp<=0)cleared++;
+              }
+              this.state.environmentalKills += cleared; this.state.score += cleared * 80;
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
+              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; this.emitProjectileFeedback(p, 'release', env.x, env.y); break;}
+            }
+          } else if (env.type === 'explosive_barrel' && env.state === 'idle') {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1334,12 +2229,15 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }
           } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
-            const dist = Math.hypot(p.x - env.x, p.y - env.y);
-            if (dist <= p.radius + env.radius) {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1348,6 +2246,7 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }
@@ -1358,53 +2257,89 @@ export class SurvivorsEngine {
 
     // Filter dead hazards and spawn drops + Combo & Impact Juice events
     const survivingHazards: Hazard[] = [];
+    const fragments:Hazard[]=[];
     if (!this.state.lastKilledEvents) {
       this.state.lastKilledEvents = [];
     }
 
     for (const h of hazards) {
       if (h.hp <= 0) {
+        if(h.variant==='split_gas'&&hazards.length+fragments.length<spawnPressure(this.state.stage.stageNumber,this.state.gameTime,this.state.difficulty).activeLimit-1){
+          for(const side of [-1,1])fragments.push({...h,id:this.genId('gas_fragment'),variant:undefined,x:Math.max(30,Math.min(WORLD_WIDTH-30,h.x+side*30)),hp:Math.max(12,Math.round(h.maxHp*.22)),maxHp:Math.max(12,Math.round(h.maxHp*.22)),radius:16,speed:h.speed*1.2,expValue:2});
+        }
+        if (h.type === 'UNHELMETED') {
+          const workers = this.state.resolvedWorkers ??= [];
+          workers.push({id: h.id, x: h.x, y: h.y, remaining: 3});
+          if (workers.length > 128) workers.shift();
+        }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
+        const supply = earnedTacticalSupply(this.state,Boolean(h.isStageBoss));
+        if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
+        if (h.isStageBoss) {
+          this.state.stageBossNeutralized = true;
+          const masteryBefore=this.state.signatureMastery??createSignatureMasteryState();
+          const finisherQualified=this.masteryBossFinishIds.delete(h.id);
+          if(finisherQualified){
+            const masteryAfter=signatureMasteryBossFinish(masteryBefore);
+            const zeroDayNew=masteryAfter.zeroDay&&!masteryBefore.zeroDay;
+            this.state.signatureMastery=masteryAfter;
+            if(zeroDayNew){
+              this.state.score+=3000;
+              this.state.psiCredits+=75;
+              this.state.timeDilation=.12;
+              this.state.timeDilationTimer=Math.max(this.state.timeDilationTimer,1.25);
+              this.state.hitStopTimer=Math.max(this.state.hitStopTimer??0,.14);
+            }
+          }
+        }
+        this.emitAudio('control', h.x, h.y, { ...(h.isStageBoss ? { outcome: 'boss' as const } : {}), actorKind: h.type });
 
         // Combo chain system
         this.state.comboCount = (this.state.comboCount || 0) + 1;
         this.state.comboTimer = 2.4; // 2.4 seconds combo window
         this.state.lastKilledEvents.push({
+          id:h.id,variant:h.variant,behavior:h.behavior,signatureEventId:h.signatureEventId,
+          species:h.species,radius:h.radius,motion:h.motion?{...h.motion}:undefined,
           type: h.type,
           x: h.x,
           y: h.y,
+          boss:Boolean(h.isStageBoss),
+          mastery:Boolean(h.isStageBoss&&this.state.signatureMastery?.zeroDay),
+          projectileId:this.controlProjectileIds.get(h.id),
         });
+        this.controlProjectileIds.delete(h.id);
 
         // Ultimate gauge increment
-        const ultGain = h.type === 'CRANE_BOSS' ? 12 : 2.5;
+        const ultGain = this.state.directorShoutTimer>0 ? 0 : (h.type === 'CRANE_BOSS' || h.isStageBoss) ? 8 : resourceProfile(this.state.difficulty).controlCharge;
         this.state.ultimateCharge = Math.min(
           this.state.maxUltimateCharge,
           this.state.ultimateCharge + ultGain,
         );
 
         // Boss death slow-motion execution finish
-        if (h.type === 'CRANE_BOSS') {
-          this.state.timeDilation = 0.25;
-          this.state.timeDilationTimer = 0.8;
-          this.state.hitStopTimer = 0.08;
-          this.state.score += 2500;
+        if (h.type === 'CRANE_BOSS' || h.isStageBoss) {
+          const zeroDayFinish=Boolean(h.isStageBoss&&this.state.signatureMastery?.zeroDay);
+          this.state.timeDilation = zeroDayFinish ? 0.12 : 0.25;
+          this.state.timeDilationTimer = zeroDayFinish ? Math.max(this.state.timeDilationTimer,1.25) : 0.8;
+          this.state.hitStopTimer = Math.max(this.state.hitStopTimer??0,zeroDayFinish?.14:.08);
+          if (h.type === 'CRANE_BOSS') this.state.score += 2500;
         }
 
         // Drop safety log (exp gem) - always provides EXP
         this.state.drops.push({
-          id: genId('drop_log'),
+          id: this.genId('drop_log'),
           x: h.x,
           y: h.y,
           exp: h.expValue,
         });
 
         // 6% chance to drop separate heal pack
-        if (Math.random() < 0.06) {
+        if (this.random() < resourceProfile(this.state.difficulty).healChance) {
           this.state.drops.push({
-            id: genId('drop_heal'),
-            x: h.x + (Math.random() - 0.5) * 20,
-            y: h.y + (Math.random() - 0.5) * 20,
+            id: this.genId('drop_heal'),
+            x: h.x + (this.random() - 0.5) * 20,
+            y: h.y + (this.random() - 0.5) * 20,
             exp: 0,
             isHeal: true,
           });
@@ -1413,21 +2348,31 @@ export class SurvivorsEngine {
         survivingHazards.push(h);
       }
     }
-    this.state.hazards = survivingHazards;
+    this.state.hazards = [...survivingHazards,...fragments];
 
     // 2. Hazards vs Player
-    if (player.invincibleTime <= 0) {
+    if (player.invincibleTime <= 0 && !player.isDashing) {
       for (const h of hazards) {
+        if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
-        if (dist <= h.radius + 14) {
-          player.hp -= h.damage;
+        if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
+          if(h.signatureEventId)this.signatureEventsFailed.add(h.signatureEventId);
+          if (this.state.controlKit && this.state.controlKit.charges > 0 && this.state.controlKit.remaining > 0) {
+            this.state.controlKit.charges -= 1;
+            this.emitAudio('control', player.x, player.y);
+          } else {
+            const damage = absorbPremiumDamage(this.state,h.damage);
+            player.hp -= damage;
+            if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
+            this.state.lastDamage = { source: h.type, amount: damage, remaining: 2 };
+            this.emitAudio(damage>0?'hit':'control');
+          }
           player.invincibleTime = 0.6; // 0.6s grace period
           // Knockback hazard slightly
           const dx = h.x - player.x || 1;
           const dy = h.y - player.y || 1;
           const dlen = Math.hypot(dx, dy);
-          h.x += (dx / dlen) * 30;
-          h.y += (dy / dlen) * 30;
+          if(!h.bossEncounterManaged){h.x += (dx / dlen) * 30;h.y += (dy / dlen) * 30;}
 
           if (player.hp <= 0) {
             // Check 1-time Revive from R&D First Aid upgrade
@@ -1436,8 +2381,8 @@ export class SurvivorsEngine {
               player.hp = Math.round(player.maxHp * 0.5);
               player.invincibleTime = 3.0; // 3 seconds invincible
               // Trigger emergency shockwave
-              this.state.projectiles.push({
-                id: genId('proj_revive_wave'),
+              this.addProjectile({
+                id: this.genId('proj_revive_wave'),
                 x: player.x,
                 y: player.y,
                 vx: 0,
@@ -1466,7 +2411,7 @@ export class SurvivorsEngine {
     if (!interactiveHazards) return;
 
     for (const hazard of (interactiveHazards as StageHazardObject[])) {
-      // 1. Explosive Barrel
+      // 1. Flammable storage isolation (legacy explosive_barrel ID retained)
       if (hazard.type === 'explosive_barrel') {
         if (hazard.state === 'warning') {
           hazard.timer -= dt;
@@ -1474,42 +2419,19 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.45;
 
-            // Massive 3000 AoE blast
-            const blastRadius = 220;
-            let killedCount = 0;
+            // Isolate the store and direct nearby exposed actors to safety.
+            // Legacy hp is remaining risk; this is not an explosion or injury.
+            const isolationRadius = 220;
+            let cleared = 0;
             for (const h of hazards) {
-              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-              if (d <= blastRadius + h.radius) {
-                h.hp -= 3000;
-                if (h.hp <= 0) {
-                  killedCount++;
-                }
+              if (h.hp > 0 && Math.hypot(h.x - hazard.x, h.y - hazard.y) <= isolationRadius + h.radius) {
+                this.damageHazard(h,3000);
+                if (h.hp <= 0) cleared++;
               }
             }
-            this.state.environmentalKills += killedCount;
-            this.state.score += killedCount * 50;
-
-            // Player caught too close takes minor self-damage
-            const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
-            if (pDist <= 100 && player.invincibleTime <= 0) {
-              player.hp = Math.max(1, player.hp - 15);
-              player.invincibleTime = 0.8;
-            }
-
-            // Explosion shockwave projectile
-            this.state.projectiles.push({
-              id: genId('barrel_blast'),
-              x: hazard.x,
-              y: hazard.y,
-              vx: 0,
-              vy: 0,
-              radius: 60,
-              damage: 600,
-              duration: 0.5,
-              pierce: 99,
-              kind: 'shout_shockwave',
-              color: '#f97316',
-            });
+            this.state.environmentalKills += cleared;
+            this.state.score += cleared * 50;
+            this.emitAudio('control', hazard.x, hazard.y);
           }
         } else if (hazard.state === 'active') {
           hazard.timer -= dt;
@@ -1532,42 +2454,18 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.6; // Impact duration
 
-            let crushedCount = 0;
-            for (const h of hazards) {
-              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-              if (d <= hazard.radius + h.radius) {
-                h.hp -= 5000;
-                if (h.hp <= 0) {
-                  crushedCount++;
-                }
-              }
-            }
-            this.state.environmentalKills += crushedCount;
-            this.state.score += crushedCount * 80;
-
             // Player crushed if inside
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
             if (pDist <= hazard.radius && player.invincibleTime <= 0) {
-              player.hp = Math.max(1, player.hp - 30);
+              const damage = absorbPremiumDamage(this.state,30);
+              player.hp = Math.max(1, player.hp - damage);
+              if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
+              this.state.lastDamage = { source: 'CRANE_DROP', amount: damage, remaining: 2 };
               player.invincibleTime = 1.0;
             }
 
-            // Impact shockwave
-            this.state.projectiles.push({
-              id: genId('crane_slam'),
-              x: hazard.x,
-              y: hazard.y,
-              vx: 0,
-              vy: 0,
-              radius: 70,
-              damage: 1000,
-              duration: 0.5,
-              pierce: 99,
-              kind: 'shout_shockwave',
-              color: '#ef4444',
-            });
           }
-        } else if (hazard.state === 'active') {
+        } else if (hazard.state === 'active' || hazard.state === 'cooldown') {
           if (hazard.timer <= 0) {
             hazard.state = 'idle';
             hazard.timer = 14; // Next drop in 14 seconds
@@ -1575,14 +2473,14 @@ export class SurvivorsEngine {
         }
       }
 
-      // 3. Electric Transformer (Surge discharge)
+      // 3. Power isolation clears exposure; it never rewards energizing equipment.
       if (hazard.type === 'electric_transformer') {
         if (hazard.state === 'active') {
           hazard.timer -= dt;
           for (const h of hazards) {
             const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-            if (d <= 200 + h.radius) {
-              h.hp -= 1500 * dt;
+            if (h.hp > 0 && d <= 200 + h.radius) {
+              this.damageHazard(h,h.hp);
               h.isStunned = 0.8;
               if (h.hp <= 0) {
                 this.state.environmentalKills++;
@@ -1602,53 +2500,21 @@ export class SurvivorsEngine {
   }
 
   private checkStarChallenges() {
-    const { stage, gameTime, maxTime, environmentalKills, hazardsNeutralized, player, directorShoutTimer, phase } = this.state;
-    if (!stage || !stage.starChallenges) return;
-
+    const { stage, environmentalKills, hazardsNeutralized, player, directorShoutTimer, phase } = this.state;
+    for (const challenge of stage.starChallenges) {
+      let value = 0;
+      switch (challenge.metric) {
+        case 'victory': value = phase === 'victory' ? 1 : 0; break;
+        case 'environmental': value = environmentalKills; break;
+        case 'neutralized': value = hazardsNeutralized; break;
+        case 'boss': value = this.state.stageBossNeutralized ? 1 : 0; break;
+        case 'shout': value = directorShoutTimer > 0 || challenge.isCompleted ? 1 : 0; break;
+        case 'hp': value = phase === 'victory' ? player.hp / player.maxHp * 100 : 0; break;
+      }
+      challenge.currentValue = Math.round(value);
+      challenge.isCompleted = value >= challenge.targetValue;
+    }
     const challenges = stage.starChallenges;
-
-    // Challenge 1: Survival time >= maxTime or victory
-    if (challenges[0]) {
-      challenges[0].currentValue = Math.min(challenges[0].targetValue, phase === 'victory' || gameTime >= maxTime ? 1 : 0);
-      if (challenges[0].currentValue >= challenges[0].targetValue) {
-        challenges[0].isCompleted = true;
-      }
-    }
-
-    // Challenge 2: Stage specific targets
-    if (challenges[1]) {
-      if (stage.id === 'stage_01' || stage.id === 'stage_03' || stage.id === 'stage_05') {
-        challenges[1].currentValue = environmentalKills;
-      } else {
-        challenges[1].currentValue = hazardsNeutralized;
-      }
-      if (challenges[1].currentValue >= challenges[1].targetValue) {
-        challenges[1].isCompleted = true;
-      }
-    }
-
-    // Challenge 3: Mastery / Shout / HP check
-    if (challenges[2]) {
-      if (stage.id === 'stage_01' || stage.id === 'stage_04' || stage.id === 'stage_05') {
-        if (directorShoutTimer > 0) {
-          challenges[2].currentValue = 1;
-          challenges[2].isCompleted = true;
-        }
-      } else if (stage.id === 'stage_02') {
-        if (phase === 'victory') {
-          const hpPercent = (player.hp / player.maxHp) * 100;
-          challenges[2].currentValue = Math.round(hpPercent);
-          if (hpPercent >= challenges[2].targetValue) {
-            challenges[2].isCompleted = true;
-          }
-        }
-      } else if (stage.id === 'stage_03') {
-        challenges[2].currentValue = hazardsNeutralized;
-        if (challenges[2].currentValue >= challenges[2].targetValue) {
-          challenges[2].isCompleted = true;
-        }
-      }
-    }
 
     this.state.starsEarned = [
       Boolean(challenges[0]?.isCompleted),
@@ -1662,6 +2528,7 @@ export class SurvivorsEngine {
     const remainingDrops: SafetyDrop[] = [];
 
     for (const drop of drops) {
+      const accessible=terrainFreePoint(this.state.terrain??[],drop,10);drop.x=accessible.x;drop.y=accessible.y;
       const dist = Math.hypot(player.x - drop.x, player.y - drop.y);
 
       // Magnet pickup range
@@ -1690,20 +2557,25 @@ export class SurvivorsEngine {
   }
 
   private collectDrop(drop: SafetyDrop) {
-    if (drop.isHeal) {
+    this.emitAudio('pickup', drop.x, drop.y, {collected:true});
+    if (drop.itemKind) {
+      applyTacticalItem(this.state, drop.itemKind);
+      this.state.itemNotice = {id: drop.id, kind: drop.itemKind, remaining: 2.4};
+    } else if (drop.isHeal) {
       this.state.player.hp = Math.min(this.state.player.maxHp, this.state.player.hp + 25);
     } else {
       this.addExp(drop.exp);
     }
-    // Increment ultimate charge by +0.8%
-    this.state.ultimateCharge = Math.min(
+    // Safety records retain full EXP; resource charge follows the selected contract.
+    if (!drop.itemKind && this.state.directorShoutTimer<=0) this.state.ultimateCharge = Math.min(
       this.state.maxUltimateCharge,
-      this.state.ultimateCharge + 0.8,
+      this.state.ultimateCharge + resourceProfile(this.state.difficulty).logCharge,
     );
   }
 
   addExp(amount: number) {
     this.state.currentExp += amount;
+    if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return; // Preserve bulk XP until the intervention/current choice finishes.
     if (this.state.currentExp >= this.state.nextLevelExp) {
       this.state.currentExp -= this.state.nextLevelExp;
       this.state.level += 1;
@@ -1713,6 +2585,7 @@ export class SurvivorsEngine {
   }
 
   triggerLevelUp() {
+    this.emitAudio('levelup');
     this.state.phase = 'levelup';
 
     // 1. Check if any Super Protocol evolution is ready!
@@ -1737,12 +2610,24 @@ export class SurvivorsEngine {
       return currentLevel < meta.maxLevel;
     });
 
-    const shuffled = [...availablePerkIds].sort(() => Math.random() - 0.5);
+    const shuffled = [...availablePerkIds];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(this.random() * (i + 1));
+      const a = shuffled[i]!, b = shuffled[j]!;
+      shuffled[i] = b; shuffled[j] = a;
+    }
 
     // If an evolution is available, include it as the first gold option!
     const selectedIds: PerkId[] = [];
     if (availableEvolutions.length > 0) {
       selectedIds.push(availableEvolutions[0]!);
+    } else {
+      const missingSupport = Object.values(EVOLUTION_RECIPES).find(recipe =>
+        (this.state.activePerks[recipe.weapon] ?? 0) >= 5 &&
+        (this.state.activePerks[recipe.support] ?? 0) === 0 && availablePerkIds.includes(recipe.support));
+      const buildOption = missingSupport?.support ?? shuffled.find(id =>
+        PERK_CATALOG[id].category === 'weapon' && (this.state.activePerks[id] ?? 0) > 0);
+      if (buildOption) selectedIds.push(buildOption);
     }
 
     for (const id of shuffled) {
@@ -1789,6 +2674,7 @@ export class SurvivorsEngine {
     // Check Evolution Announcement Banner
     if (perkMeta.category === 'evolution') {
       this.state.evolutionBanner = {
+        equipmentId: perkId,
         title: perkMeta.name,
         subtitle: '★ SUPER PROTOCOL EVOLUTION ACTIVATED ★',
         icon: perkMeta.icon,
@@ -1797,36 +2683,19 @@ export class SurvivorsEngine {
       this.state.score += 1000;
     }
 
-    // Apply immediate passive stat effects
-    if (perkId === 'steel_boots') {
-      player.speed += 30;
-    } else if (perkId === 'magnet_beacon') {
-      player.pickupRadius += 35;
-    } else if (perkId === 'safety_harness') {
-      player.maxHp += 30;
-      player.hp = Math.min(player.maxHp, player.hp + 30);
-      player.regenRate += 1.5;
-    } else if (perkId === 'quick_reflexes') {
-      player.cooldownReduction += 0.12;
-    } else if (perkId === 'data_chip') {
-      player.critRate += 0.10;
-      player.damageMultiplier += 0.15;
+    // Shared with upgrade cards; preserve existing additive passive effects.
+    const support = SUPPORT_EFFECTS[perkId];
+    if (support) {
+      for (const [key, delta] of Object.entries(support) as [keyof typeof support, number][]) player[key] += delta;
+      if (support.maxHp) player.hp = Math.min(player.maxHp, player.hp + support.maxHp);
     }
 
     this.state.perkOptions = [];
     this.state.phase = 'playing';
+    if (this.state.currentExp >= this.state.nextLevelExp) this.addExp(0);
   }
 
-  private findNearestHazard(x: number, y: number): Hazard | null {
-    let bestDist = Infinity;
-    let nearest: Hazard | null = null;
-    for (const h of this.state.hazards) {
-      const dist = Math.hypot(h.x - x, h.y - y);
-      if (dist < bestDist) {
-        bestDist = dist;
-        nearest = h;
-      }
-    }
-    return nearest;
+  private findNearestHazard(x: number, y: number, range = 450): Hazard | null {
+    return selectSurvivorsAutoTarget(this.state.hazards,x,y,range,h=>!terrainHit(this.state.terrain??[],{x,y},h,2));
   }
 }

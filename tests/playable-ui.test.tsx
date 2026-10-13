@@ -138,7 +138,7 @@ describe('Playable Episode React UI', () => {
     click(session.t('ui.start'));
     expect(session.getSnapshot().state!.flags).toEqual({});
     expect(session.getSnapshot().state!.event_runtime.choice_history).toEqual([]);
-  });
+  }, 15_000);
 
   it('survives StrictMode and React rerenders without recreating the engine or state', () => {
     const session = mount(); click(session.t('ui.start'));

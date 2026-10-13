@@ -1,0 +1,65 @@
+// @vitest-environment jsdom
+// These flow fixtures omit network image loading; readiness is verified in browser QA.
+vi.mock('../src/ui/use-prepared-survivors-actor',()=>({usePreparedSurvivorsActor:(selected:string)=>selected}));
+import { act } from 'react';
+import { createRoot } from 'react-dom/client';
+import { expect, it, vi } from 'vitest';
+import { PatrolSurvivorsGame } from '../src/ui/PatrolSurvivorsGame';
+import { PERK_CATALOG, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
+import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
+Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
+it('layers evolution over resumed patrol music and holds boss score through secured confirmation',()=>{
+ let frame:FrameRequestCallback=()=>{}; let clock=0;
+ vi.spyOn(performance,'now').mockImplementation(()=>clock);
+ vi.stubGlobal('requestAnimationFrame',(cb:FrameRequestCallback)=>{frame=cb;return 1;});
+ vi.stubGlobal('cancelAnimationFrame',vi.fn());
+ const gradient={addColorStop:vi.fn()};
+ const ctx=new Proxy({}, {get:(_,key)=>key==='createLinearGradient'||key==='createRadialGradient'?()=>gradient:key==='measureText'?()=>({width:10}):vi.fn(),set:()=>true});
+ vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(ctx as CanvasRenderingContext2D);
+ const unlock=vi.spyOn(SurvivorsSessionAudio.prototype,'getContext').mockReturnValue({currentTime:0} as AudioContext);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'preloadCandidates').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
+ const speech=vi.spyOn(SurvivorsSessionAudio.prototype,'playPlayerVoice').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
+ const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
+ const cues=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionCue').mockResolvedValue(true);
+ const silence=vi.spyOn(SurvivorsSessionAudio.prototype,'silence');
+ let engine!:SurvivorsEngine;const start=SurvivorsEngine.prototype.start;
+ vi.spyOn(SurvivorsEngine.prototype,'start').mockImplementation(function(this:SurvivorsEngine){engine=this;start.call(this);});
+ const host=document.createElement('div');document.body.append(host);const root=createRoot(host);
+ const tick=()=>act(()=>frame(clock));
+ try {
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} />));
+  expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.ready');
+  expect(music.mock.invocationCallOrder.at(-1)).toBeGreaterThan(silence.mock.invocationCallOrder.at(-1)!);
+  const musicToggle=[...host.querySelectorAll('button')].find(b=>b.textContent==='배경 음악')!;
+  expect(musicToggle.getAttribute('aria-pressed')).toBe('true');
+  unlock.mockClear();act(()=>window.dispatchEvent(new Event('pointerdown')));
+  expect(unlock).toHaveBeenCalledTimes(1);
+  act(()=>musicToggle.click());expect(musicToggle.getAttribute('aria-pressed')).toBe('false');
+  act(()=>musicToggle.click());expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.ready');
+  act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='시그널 워치 시작')!.click());
+  vi.spyOn(engine,'update').mockImplementationOnce(()=>{});clock=10;tick();
+  vi.spyOn(engine,'update').mockImplementationOnce(()=>{engine.state.phase='levelup';engine.state.perkOptions=[{...PERK_CATALOG.satellite_broadcast,level:1}];});
+  clock=20;tick();music.mockClear();
+  act(()=>host.querySelector<HTMLButtonElement>('.survivors-perk-card')!.click());
+  expect(engine.state.phase).toBe('playing');
+  expect(cues.mock.calls.at(-1)?.[0].id).toBe('patrol.evolution');
+  expect(cues.mock.calls.at(-1)?.[1]).toBe(3);
+  expect(music.mock.calls.map(([asset])=>asset.id)).toEqual(['patrol.foundation']);
+  vi.spyOn(engine,'update').mockImplementation(()=>{});
+  clock=500;tick();expect(music.mock.calls.every(([asset])=>asset.id==='patrol.foundation')).toBe(true);
+  expect(speech.mock.calls.filter(([cue])=>cue==='START')).toHaveLength(1);
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));clock=510;tick();
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted={false} />));clock=520;tick();
+  expect(speech.mock.calls.filter(([cue])=>cue==='START')).toHaveLength(1);
+  clock=4000;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.foundation');
+  engine.state.bossEncounter={bossId:'boss',phase:'arrival',remaining:3.5};
+  clock=4010;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.heavy_risk');
+  engine.state.bossEncounter.phase='secured';engine.state.hazards=[];
+  clock=4020;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.heavy_risk');
+  vi.spyOn(engine,'update').mockImplementationOnce(()=>{engine.state.phase='victory';});clock=4200;tick();
+  expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.success');
+ } finally {act(()=>root.unmount());unlock.mockClear();window.dispatchEvent(new Event('pointerdown'));expect(unlock).not.toHaveBeenCalled();host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
+});

@@ -1,0 +1,10 @@
+/* PSI RPG art foundation: original scene imagery, live accessible text and controls. */
+.brand-loading>img{object-position:38% center}
+.operation-lobby{background:linear-gradient(90deg,rgba(4,17,24,.90),rgba(4,17,24,.72)),url('../art/psi-rpg-base-v1.png') center/cover no-repeat}
+.operation-header,.operation-actions{background:rgba(5,22,30,.86)}
+.psi-workshop{background:linear-gradient(90deg,rgba(5,21,30,.91),rgba(5,21,30,.77)),url('../art/psi-rpg-lab-v1.png') 32% center/cover no-repeat}
+.psi-workshop header{background:rgba(8,29,39,.95)}
+.psi-workshop .shop-balance::before{width:36px;height:36px;flex-shrink:0;border-radius:50%;background-image:url('../art/psi-rpg-ui-parts-v1.png');background-size:300% 200%;background-position:50% 100%;background-repeat:no-repeat}
+.operation-lobby a:focus-visible,.operation-lobby button:focus-visible{outline:3px solid #ffe4a2;outline-offset:3px}
+@media(orientation:portrait){.brand-loading>img{object-position:36% center}.operation-lobby{background-position:30% center}.psi-workshop{background-position:28% center}}
+@media(prefers-reduced-motion:reduce){.brand-loading .loading-light{animation:none}}

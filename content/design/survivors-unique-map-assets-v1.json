@@ -1,0 +1,325 @@
+{
+  "generation": "Built-in imagegen; 32 original paintings; WebP quality 90; originals retained",
+  "maps": [
+    {
+      "number": 8,
+      "family": "remodel",
+      "landmark": "Old-new structural connection: rough old concrete on west meets a clean new reinforced slab on east, a distinctive diagonal bolted steel expansion joint flush with the ground, surveyed seam and peripheral steel connection plates.",
+      "uri": "/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-53024101-ee17-46a3-9993-404e2f77d696.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 594260
+    },
+    {
+      "number": 9,
+      "family": "datacenter",
+      "landmark": "MEP installation bay: galvanized duct sections and large green chilled-water pipe elbows stored separately along north and south walls, unfinished gray raised-floor pedestals at the outer margin, central flat slab with three colored flat service-route markings.",
+      "uri": "/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-171ec76a-4a91-426f-bbae-00183f05a4cb.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 530774
+    },
+    {
+      "number": 10,
+      "family": "datacenter",
+      "landmark": "Integrated commissioning hall: fully installed silver cooling cabinets along the northern edge and dark server enclosures at the eastern edge, completed pale antistatic floor with a distinctive broad white cross-shaped commissioning route and small flush test-point plates.",
+      "uri": "/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-6553ea12-70df-47df-8675-e70127330312.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 319166
+    },
+    {
+      "number": 14,
+      "family": "highrise",
+      "landmark": "Vertical structural assembly bay: broad square column base plates along the perimeter, steel beam stacks with red lifting tags at northwest, sunlit high-rise concrete slab with four clearly differentiated assembly sectors drawn as flat blue surveying outlines. No holes in the slab.",
+      "uri": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-d6ebc245-8d02-4232-88ed-e54db8408872.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 581674
+    },
+    {
+      "number": 19,
+      "family": "datacenter",
+      "landmark": "Final electrical validation bay: paired orange copper busbar enclosures at the west edge, aligned blue UPS cabinets at east, dark antistatic floor divided by parallel cream inspection lanes and a central broad square flush commissioning pad.",
+      "uri": "/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-e8ee933c-ee31-436f-a013-c28f40f7d12f.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 434032
+    },
+    {
+      "number": 22,
+      "family": "deepworks",
+      "landmark": "Underground ventilation and drainage station: massive circular silver duct fans on the north perimeter, blue drainage manifolds and hoses at the southwest margin, wet dark concrete with unique fan-shaped drainage traces and flat grated channels near the edges, central footing safe and intact.",
+      "uri": "/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-6e927952-25cc-4a1d-bc2b-1660fcebd161.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 618910
+    },
+    {
+      "number": 23,
+      "family": "deepworks",
+      "landmark": "Under-slab excavation spoil removal: orange spoil conveyor machinery along the west edge and empty yellow loading skips along east, dusty compacted central workface with curved twin vehicle tire traces and an asymmetrical broad northwest-to-southeast haul route. No cliff or pit in playable center.",
+      "uri": "/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-c303e0e2-d055-41e5-9fcb-e408542b0d53.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 684652
+    },
+    {
+      "number": 24,
+      "family": "deepworks",
+      "landmark": "Concurrent underground and surface logistics interface: huge concrete soffit visible only at upper rim, lifting transfer equipment at northeast, ventilation plant southwest; central dry concrete divided by a wide green pedestrian route and a diagonal amber material-transfer lane with a flat striped crossing.",
+      "uri": "/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-51ea6e21-64a5-4017-9663-568860eeb1be.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 585386
+    },
+    {
+      "number": 25,
+      "family": "deepworks",
+      "landmark": "Mid-excavation handoff platform: finished concrete transfer slab contrasted with rough excavation textures only outside its perimeter, stacked green guardrail panels north, tidy palletized handoff materials southeast, central wide rectangular cream handoff pad and radial survey marks.",
+      "uri": "/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-e78fd6c6-63f9-4406-b792-3043f009640c.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 585682
+    },
+    {
+      "number": 26,
+      "family": "remodel",
+      "landmark": "Existing utilities investigation room: old tiled floor mixed with uncovered worn concrete, exposed copper pipe and capped old utility terminals on west wall, portable inspection equipment at east margin, flush zigzag tracing marks and taped rectangular survey patches on the central flat floor.",
+      "uri": "/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-8274b7ff-8e3e-4897-8c6f-cfe47ef7c07e.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 578124
+    },
+    {
+      "number": 27,
+      "family": "demolition",
+      "landmark": "Selective demolition sorting bay: four clearly separated perimeter piles of salvaged brick, timber, steel and crushed concrete; central dusty intact floor with long parallel scraped adhesive scars and one diagonal clean material sorting aisle, no walls or debris blocking the center.",
+      "uri": "/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-e7dfc8b8-8ffd-428d-969c-8775fd9932b1.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 710308
+    },
+    {
+      "number": 28,
+      "family": "demolition",
+      "landmark": "Reinforcement and debris removal workface: organized long rebar salvage bundles at north edge, concrete crusher attachment and rolling skips at south edge, central mottled gray slab with distinctive rectangular removed-plinth stains and wide horseshoe-shaped dust sweep marks.",
+      "uri": "/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-7ceabe1a-6aeb-4c0f-9c64-e0a02e3ddf69.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 686310
+    },
+    {
+      "number": 29,
+      "family": "remodel",
+      "landmark": "Old and new utilities simultaneous isolation: old bronze valve assemblies at western perimeter, bright new stainless pipe manifold along east, patched central floor with two distinct flat orange and turquoise circuit-tracing bands meeting at an unblocked inspection square.",
+      "uri": "/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-16d19471-6723-4849-94e5-321ca34b4a31.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 583596
+    },
+    {
+      "number": 30,
+      "family": "deepworks",
+      "landmark": "Final underground handoff junction: neat white tunnel utility cabinets along the north rim, green ventilation connections east and tidy material pallets west, dry newly cleaned concrete floor with a broad T-shaped light-colored handoff route, drainage staining confined to outer margins.",
+      "uri": "/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-c533109c-1852-4c3f-96a1-dc7a6fa2886b.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 517556
+    },
+    {
+      "number": 32,
+      "family": "formwork",
+      "landmark": "Upper-floor formwork support inspection: perimeter arrays of stacked aluminum form panels and yellow adjustable support props, bright high-rise slab with distinct trapezoidal flat formwork imprint sectors and blue support survey dots, city context only beyond the protected outer boundary.",
+      "uri": "/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-ac2d74e9-7fd8-4c5e-8bdd-9ed2a6e01e85.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 663298
+    },
+    {
+      "number": 33,
+      "family": "rebar",
+      "landmark": "Upper-floor reinforcement delivery and tying bay: bundled dark steel reinforcement stored east and neatly arranged long prefabricated rebar cages north, central gray slab bearing a wide L-shaped delivery trace and diagonal tying-grid chalk outlines; real bars only along outer margins.",
+      "uri": "/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-b78e6976-075e-4c4d-aa39-f04c95748076.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 599800
+    },
+    {
+      "number": 34,
+      "family": "pour",
+      "landmark": "Upper-floor concrete placement preparation: folded pump hose assembly at northwest and cleaned yellow screed tools southeast, central sound slab with broad sweeping cured concrete finish arcs and three pale rectangular placement sections separated by flush contraction lines.",
+      "uri": "/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-13b7665d-d7de-4299-b2fe-f55319dec958.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 588992
+    },
+    {
+      "number": 35,
+      "family": "scaffold",
+      "landmark": "External scaffold and lifting coordination deck: green safety-net scaffold and tidy silver scaffold tube stacks along opposite edges, bright intact elevated deck with strong parallel green pedestrian strips and amber lifting transfer squares, height visible only outside safe outer boundary.",
+      "uri": "/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-81acd9db-84b8-409e-a3f3-cf93cbe1b35e.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 640632
+    },
+    {
+      "number": 36,
+      "family": "skydeck",
+      "landmark": "Rooftop mechanical equipment receiving deck: large wrapped silver air handling units and blue lifting pallets clustered at northern boundary, ventilation curbs along eastern margin, pale exposed rooftop floor with a diagonal broad reinforced delivery band and flush square equipment setting outlines.",
+      "uri": "/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-7d3d5531-75fd-48ad-8257-391a3ed43e90.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 535784
+    },
+    {
+      "number": 37,
+      "family": "waterproof",
+      "landmark": "Rooftop waterproofing and service segregation: sealed membrane rolls and green primer containers neatly stored west, stainless equipment supports east, central blue-gray completed membrane with prominent overlapping welded-sheet seams and a broad cream protected work route.",
+      "uri": "/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-d286e597-0375-4f86-a0c4-8ce0a6f2d115.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 443208
+    },
+    {
+      "number": 38,
+      "family": "finish",
+      "landmark": "Upper-floor finishing team handoff: bundled white partition boards and protective-wrapped interior fixtures at perimeter, central mostly finished pale terrazzo floor alternating with clearly taped flat protection-sheet rectangles, broad clean central transfer route and copper expansion joints.",
+      "uri": "/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-23efffa5-d969-48fa-bef1-8b100fb25c53.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 468434
+    },
+    {
+      "number": 39,
+      "family": "skydeck",
+      "landmark": "Concurrent upper and lower process check deck: enclosed elevated transfer slab, distinct red perimeter gantry landing rig north and blue services landing rig south; flat floor with two nonidentical diagonal traffic routes and a central broad white cross-work coordination pad.",
+      "uri": "/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-913a1198-de4a-457f-9a7c-02d10307723f.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 557506
+    },
+    {
+      "number": 40,
+      "family": "skydeck",
+      "landmark": "Final upper-floor coordinated handoff deck: completed broad gray slab with orderly secured yellow crane lifting accessories at northwest, wrapped aluminum wall units southeast, green edge protection; floor shows a broad circular flat survey rosette surrounded by four unique trapezoidal handoff sectors.",
+      "uri": "/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-f92ce880-9e66-4fbd-b0b0-04568346b8cc.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 538744
+    },
+    {
+      "number": 42,
+      "family": "plant",
+      "landmark": "Electrical and HVAC segregation room: white electrical switchgear on west perimeter versus silver cylindrical ventilation components along north, sealed light concrete floor with parallel red electrical and green HVAC flat floor routes separated by a wide clear center inspection lane.",
+      "uri": "/assets/survivors/maps/plant-stage-42-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-a36253c6-91ab-4dfd-8f3b-ca5c8864ecbf.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 483856
+    },
+    {
+      "number": 43,
+      "family": "datacenter",
+      "landmark": "UPS equipment receiving dock: broad dark-blue packaged UPS cabinets lined only along east wall, heavy-duty yellow pallet jacks and a loading threshold at south boundary, central graphite antistatic floor with a uniquely broad diagonal ribbed delivery surface and shallow flush wheel-guide plates.",
+      "uri": "/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-58efa309-f9da-41c7-9057-17d45e78b56a.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 511502
+    },
+    {
+      "number": 44,
+      "family": "plant",
+      "landmark": "Incoming power and distribution isolation hall: large red-brown transformer cages outside western workface, cream switchboard banks on east perimeter; pale floor has distinctive three nested rectangular flush grounding loops and a wide perpendicular copper service inspection strip.",
+      "uri": "/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-b3aec098-551d-4c8e-9aa0-9092447df6ee.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 516180
+    },
+    {
+      "number": 45,
+      "family": "plant",
+      "landmark": "Integrated services lifting hold bay: secured giant silver duct modules northwest, horizontal white pump skid southeast, yellow spreader storage at north rim; central industrial concrete with a single broad diagonal flat yellow transfer stripe and four flush rectangular rigging check pads.",
+      "uri": "/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-6c5b446f-d88d-4af9-8543-aef118efa22f.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 600968
+    },
+    {
+      "number": 46,
+      "family": "datacenter",
+      "landmark": "Pre-commissioning survey room: clean white testing carts and rolled cable test leads along northwest margin, unpowered black cabinet row at east rim, central light gray antistatic tile floor with contrasting square protection mats and a broad green inspection loop lying flat on the floor.",
+      "uri": "/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-63a6f2ad-37d0-4771-a4ab-e9fad8e221d4.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 408944
+    },
+    {
+      "number": 47,
+      "family": "plant",
+      "landmark": "Multi-zone integrated commissioning plaza: three clearly different perimeter service clusters, blue pump assemblies north, ivory distribution panels east, silver HVAC plant south; central pale floor with triangular flat commissioning zone outlines and one broad uncluttered central hexagonal inspection pad.",
+      "uri": "/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-067e0c5e-8515-4f92-9464-4f0fb9a15505.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 533080
+    },
+    {
+      "number": 48,
+      "family": "finish",
+      "landmark": "Final defect reinspection bay: finished satin gray resin floor interrupted by neatly repaired darker square patches, wrapped spare panels northwest, cleaned small inspection tool cabinets southeast; copper floor joints form an asymmetric large rectangular pattern distinct from any earlier map.",
+      "uri": "/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-3759bf75-a8c9-4662-b79c-d19b64f7018b.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 417040
+    },
+    {
+      "number": 49,
+      "family": "handover",
+      "landmark": "Operations team handoff circulation hall: completed white service cabinets at north perimeter and green spare-equipment racks on east, polished pale-gray flat floor with a broad green U-shaped protected operations route and separated amber logistics lane along south edge.",
+      "uri": "/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-18a9df59-bb43-4436-8f86-c06e82634772.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 454332
+    },
+    {
+      "number": 50,
+      "family": "plant",
+      "landmark": "Final ZERO DAY integrated handoff control workface: fully finished bright industrial hall with orderly ivory electrical cabinets along west, stainless cooling equipment north and blue pump systems east. Central high-quality pale terrazzo floor has a large distinctive octagonal flush commissioning medallion in charcoal and copper and four broad green safe-transfer routes. This is the most complete and polished construction state, not a dark dungeon.",
+      "uri": "/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+      "original": "C:/Users/user/.codex/generated_images/01a1002a-207a-7242-a0aa-73c7b743c706/exec-19df5540-3bc4-4791-8db3-1f33da15a7b8.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 567246
+    }
+  ]
+}

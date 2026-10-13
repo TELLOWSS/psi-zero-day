@@ -1,0 +1,74 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 844,
+      "height": 390
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 768,
+      "height": 1024
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 1024,
+      "height": 768
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 800
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080
+    },
+    "errors": [],
+    "checks": "manual fire/cancel, tactical pause/manual aim/no shot, quick retry preserves gear, guide timeout, bestTime persistence, CTA"
+  }
+]

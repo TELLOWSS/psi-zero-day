@@ -1,0 +1,7 @@
+{
+  "behaviors": {
+    "crosswind": "횡풍 확산 · 옆으로 흐르는 가스",
+    "flanking_cart": "우회 접근 · 돌진 예고 확인",
+    "wide_debris": "광역 낙하 · 표시 밖으로 이동"
+  }
+}

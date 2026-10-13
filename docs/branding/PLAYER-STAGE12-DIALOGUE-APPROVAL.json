@@ -1,0 +1,15 @@
+{
+ "event_id":"player.stage12.handoff.v1",
+ "character_id":"player",
+ "approval_date":"2026-10-09",
+ "user_statement":"두 방향 승인, 검증 후 연결",
+ "scope":"two_player_statements_text_pilot_only",
+ "statements":{
+  "together":"제가 확인한 경계부터 함께 보죠. 놓친 부분이 있다면 말씀해 주세요.",
+  "explain":"출입 경계와 재개 전에 확인할 내용을 먼저 짚을게요. 확인하지 못한 곳은 확인했다고 적지 않겠습니다."
+ },
+ "unapproved_draft_scope":["common_intro","coworker_response","new_reflection","career_formula","new_voice"],
+ "stats_reward_job_changes":false,
+ "physical_device_review":"pending",
+ "production_deployment":"not_deployed"
+}

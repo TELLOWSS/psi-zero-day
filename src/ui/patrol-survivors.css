@@ -12,11 +12,19 @@
   user-select: none;
   touch-action: none;
   -webkit-touch-callout: none;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', Roboto, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
   color: #f3f4f6;
   display: flex;
   flex-direction: column;
 }
+
+.survivors-container :is(button, input, select) { font-family: inherit; }
+.survivors-container :is(h2, h3) { font-weight: 750; line-height: 1.35; letter-spacing: 0; text-wrap: balance; }
+.survivors-container :is(p, li) { line-height: 1.6; word-break: keep-all; overflow-wrap: anywhere; }
+.survivors-container :is(.survivors-store-item-head strong, .survivors-ready-launch strong) { font-weight: 750; line-height: 1.4; }
+.survivors-container small { line-height: 1.5; }
 
 .survivors-canvas {
   width: 100%;
@@ -142,8 +150,34 @@
 }
 
 .survivors-timer small {
+  white-space: nowrap;
+  flex-shrink: 0;
   font-size: 11px;
   color: #94a3b8;
+}
+
+.survivors-wave-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 10px;
+}
+
+.survivors-wave-badge span {
+  font-size: 11px;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  line-height: 1.2;
+}
+
+.survivors-wave-badge small {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
 }
 
 .survivors-score-badge {
@@ -210,6 +244,60 @@
 }
 
 /* ACTIVE PERKS TRAY (BELOW HUD) */
+.survivors-equipment-workspace {padding:16px;background:#111a19;border:1px solid #607872;box-shadow:0 20px 60px #0009;text-align:left;}
+.survivors-equipment-workspace .survivors-equipment-toolbar {position:sticky;top:-16px;z-index:6;min-height:64px;margin:-16px -16px 12px;padding:10px 16px;box-sizing:border-box;background:#182421;border-bottom:1px solid #607872;}
+.survivors-equipment-toolbar h2 {font-size:18px;flex:1;min-width:0;}
+.survivors-toolbar-wallet {display:flex;gap:8px;align-items:center;color:#ffdf86;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.survivors-toolbar-wallet span {display:grid;gap:2px;}
+.survivors-toolbar-wallet small {font-size:11px;color:#c4d1cc;}
+.survivors-toolbar-wallet strong {font-size:18px;}
+.survivors-equipment-workspace .survivors-store-heading {display:none;}
+.survivors-store-wallet {display:flex;gap:8px;align-items:center;}
+.survivors-equipment-workspace .survivors-store-tabs {top:48px;grid-template-columns:repeat(4,minmax(0,1fr));background:#182421;border-bottom:1px solid #607872;}
+.survivors-maintenance-count {display:inline-block;padding:2px 5px;margin-left:5px;border-radius:4px;background:#ffe1a0;color:#241f15;font-size:11px;}
+.survivors-store .survivors-store-card {background:#1b2927;border:1px solid #566d68;border-radius:6px;padding:16px;gap:10px;}
+.survivors-store .survivors-store-card[data-rarity="elite"] {border-top:3px solid #77d8e8;}
+.survivors-store .survivors-store-card[data-rarity="legendary"] {border-top:3px solid #ffe1a0;}
+.survivors-store .survivors-store-card.is-equipped {border-color:#92e5b7;background:#213930;}
+.survivors-store .survivors-store-item-head {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start;}
+.survivors-store .survivors-store-item-head .survivors-premium-art {width:100%;height:auto;min-width:0;max-width:210px;aspect-ratio:1;border-radius:4px;background-color:#101918;}
+.survivors-store-item-head>div {display:grid;gap:6px;}
+.survivors-store-card strong {font-size:17px;letter-spacing:0;}
+.survivors-store .survivors-store-card button {border-radius:4px;padding:10px;min-height:44px;font:inherit;font-size:13px;}
+.survivors-store .survivors-store-card-actions .survivors-repair-button {background:#344331;border-color:#d7d19a;color:#fff5ca;}
+.survivors-condition-warning {color:#ffd68f;}
+.survivors-maintenance-summary {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid #566d68;}
+.survivors-maintenance-summary>div {display:grid;gap:6px;min-width:0;}
+.survivors-maintenance-summary strong {color:#ffe1a0;font-size:18px;}
+.survivors-maintenance-summary small,.survivors-maintenance-summary span {font-size:13px;}
+.survivors-maintenance-summary button,.survivors-maintenance-list button {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:4px;border:1px solid #d7d19a;background:#344331;color:#fff5ca;padding:10px 14px;cursor:pointer;font:inherit;font-size:13px;}
+.survivors-maintenance-summary button:disabled,.survivors-maintenance-list button:disabled {opacity:.5;cursor:not-allowed;}
+.survivors-maintenance-list>[role="listitem"] {display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #405752;}
+.survivors-maintenance-list .survivors-premium-art {width:88px;border-radius:4px;}
+.survivors-maintenance-list h4 {font-size:16px;margin:4px 0 8px;}
+.survivors-maintenance-list p {font-size:13px;margin:6px 0;color:#ffd68f;}
+.survivors-maintenance-list label {display:grid;gap:5px;font-size:12px;}
+.survivors-maintenance-list progress {width:100%;height:6px;accent-color:#91dbb3;}
+.survivors-maintenance-list [data-condition="broken"] p {color:#ffaaaa;}
+.survivors-maintenance-list [data-condition="critical"] progress {accent-color:#ffce7e;}
+@media(max-width:600px) {
+ .survivors-equipment-toolbar h2 {font-size:14px;}
+ .survivors-toolbar-wallet strong {font-size:16px;}
+ .survivors-equipment-toolbar {gap:8px;}
+ .survivors-store .survivors-store-item-head {grid-template-columns:100px minmax(0,1fr);align-items:center;gap:14px;}
+ .survivors-store .survivors-store-item-head .survivors-premium-art {width:100px;}
+ .survivors-maintenance-summary {flex-wrap:wrap;}
+ .survivors-maintenance-summary button {width:100%;}
+ .survivors-maintenance-list>[role="listitem"] {grid-template-columns:64px minmax(0,1fr);gap:12px;}
+ .survivors-maintenance-list .survivors-premium-art {width:64px;}
+ .survivors-maintenance-list button {grid-column:1/-1;}
+}
+@media(orientation:landscape) and (max-height:560px) {
+ .survivors-equipment-workspace .survivors-equipment-toolbar {min-height:52px;padding:6px 16px;margin-bottom:6px;}
+ .survivors-equipment-workspace .survivors-store-tabs {top:36px;margin:6px 0;}
+ .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art {width:min(100%,160px,max(56px,calc((100dvh - 310px)*1.125)));}
+ .survivors-equipment-workspace .survivors-fitting-visual {top:86px;}
+}
 .survivors-perks-tray {
   position: absolute;
   top: max(68px, calc(env(safe-area-inset-top) + 60px));
@@ -255,9 +343,9 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.6) 70%, rgba(245, 158, 11, 0.25) 100%);
+  background: rgba(255, 255, 255, 0.035);
   border: 2px solid rgba(245, 158, 11, 0.6);
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(245, 158, 11, 0.15);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
   touch-action: none;
   pointer-events: none;
   z-index: 35;
@@ -271,8 +359,8 @@
   margin-left: -23px;
   margin-top: -23px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fde047 0%, #f59e0b 60%, #b45309 100%);
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.8), 0 4px 10px rgba(0, 0, 0, 0.5);
+  background: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   border: 2px solid #fff;
   pointer-events: none;
 }
@@ -371,6 +459,10 @@
 }
 
 .survivors-perk-card {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  color: inherit;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -935,6 +1027,11 @@
   color: #94a3b8;
 }
 
+.survivors-ultimate-key { display:block; font:inherit; font-size:8px; }
+@media (hover:none), (pointer:coarse) {
+  .survivors-ultimate-key { display:none; }
+}
+
 .survivors-ultimate-btn.is-ready .survivors-ultimate-info small {
   color: #ffffff;
   font-weight: 900;
@@ -1014,6 +1111,9 @@
   box-shadow: 0 0 35px rgba(251, 191, 36, 0.75);
   padding: 12px 24px;
   display: flex;
+  width: min(420px, calc(100% - 32px));
+  box-sizing: border-box;
+  pointer-events: none;
   align-items: center;
   gap: 16px;
   z-index: 36;
@@ -1026,6 +1126,7 @@
 }
 
 .survivors-evo-banner-icon {
+  flex: 0 0 auto;
   font-size: 38px;
   filter: drop-shadow(0 0 10px #fbbf24);
 }
@@ -1036,6 +1137,16 @@
   font-weight: 900;
   color: #fbbf24;
 }
+
+.survivors-evo-banner-content { min-width: 0; }
+.survivors-challenge-select { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0;border:1px solid #52616d;border-radius:12px;padding:12px;text-align:left; }
+.survivors-challenge-select legend { color:#f8d477;font-size:13px; }
+.survivors-challenge-select button { display:grid;gap:6px;min-height:80px;padding:10px 8px;color:#dbe8ee;background:#172632;border:1px solid #52616d;border-radius:8px;cursor:pointer;font:inherit; }
+.survivors-challenge-select button[aria-pressed=true] { border-color:#f8d477;background:#374038; }
+.survivors-challenge-select button:focus-visible { outline:2px solid #f8d477;outline-offset:2px; }
+.survivors-challenge-select small { font-size:10px;line-height:1.5; }
+.survivors-challenge-select p { grid-column:1/-1;font-size:12px;line-height:1.6;color:#b9cbd5;margin:4px 0; }
+@media(max-width:600px) { .survivors-challenge-select { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
 .survivors-evo-banner-content p {
   margin: 2px 0 0 0;
@@ -1050,6 +1161,49 @@
 
 .survivors-ready-dialog {
   max-width: 820px !important;
+}
+
+.survivors-ready-launch {
+  position: sticky;
+  top: -32px;
+  z-index: 2;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  background: #16202c;
+  border-bottom: 1px solid #526074;
+  text-align: left;
+}
+.survivors-ready-launch p { margin: 4px 0 0; font-size: 14px; }
+.survivors-ready-launch .survivors-btn-primary { flex-shrink: 0; width: auto; margin: 0; }
+.survivors-mission-brief { text-align: left; padding: 16px 0; }
+.survivors-mission-brief h3 { color: #fbbf24; margin: 0 0 8px; }
+.survivors-mission-brief p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+.survivors-mission-brief ol { padding-left: 24px; margin: 12px 0; }
+.survivors-mission-brief li { margin: 8px 0; }
+.survivors-mission-brief li span { display: block; color: #cbd5e1; font-size: 14px; }
+.survivors-ready-details { text-align: left; margin: 16px 0; }
+.survivors-ready-details > summary { cursor: pointer; padding: 12px; border: 1px solid #526074; border-radius: 8px; color: #fbbf24; }
+.survivors-upgrade-stats { margin: 12px 0; font-size: 13px; }
+.survivors-upgrade-stats dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+.survivors-upgrade-stats dt { color: #cbd5e1; }
+.survivors-upgrade-stats dd { margin: 0; color: #94a3b8; }
+.survivors-upgrade-stats .is-changed strong { color: #7ee8bb; }
+.survivors-upgrade-stats small { display: block; color: #94a3b8; margin-top: 8px; line-height: 1.5; }
+.survivors-damage-notice { position: absolute; top: calc(var(--survivors-hud-bottom, 160px) + 8px); right: 16px; max-width: calc(100% - 32px); padding: 10px 14px; border: 1px solid #fb7185; border-radius: 12px; background: #221922; color: #fecdd3; font-weight: 700; pointer-events: none; }
+.survivors-live-objective { max-width: 260px; margin-top: 4px; font-size: 12px; color: #d9f9ec; white-space: normal; line-height: 1.4; }
+.survivors-boss-readout { display: grid; gap: 3px; margin-top: 4px; min-width: 0; }
+.survivors-boss-readout strong { font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.survivors-boss-readout progress { display: block; width: 100%; height: 6px; border: 0; accent-color: #edb35a; }
+.survivors-boss-readout progress::-webkit-progress-bar { background: #243932; }
+.survivors-boss-readout progress::-webkit-progress-value { background: #edb35a; }
+.survivors-boss-readout span { font-size: 11px; color: #f4d19a; }
+.survivors-boss-readout small { font-size: 10px; color: #b8d4c5; }
+@media (max-width: 600px) {
+  .survivors-ready-launch { top: -20px; flex-wrap: wrap; gap: 8px; }
+  .survivors-ready-launch .survivors-btn-primary { width: 100%; padding: 12px; }
 }
 
 .survivors-char-select-section {
@@ -1750,3 +1904,1213 @@
 
 
 
+
+/* Q03: reserve measured HUD height; alerts share one prioritized lane. */
+.survivors-container { --survivors-hud-bottom: 160px; }
+.survivors-boss-alert, .survivors-evo-banner { top: var(--survivors-hud-bottom, 160px); max-width: calc(100% - 32px); }
+.survivors-combo-banner { max-width: calc(100% - 32px); }
+.survivors-boss-alert-text strong, .survivors-evo-banner-content h4 { word-break: keep-all; overflow-wrap: break-word; }
+.survivors-hud-center, .survivors-player-hud { min-width: 0; }
+.survivors-score-badge strong, .survivors-kills-badge { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.survivors-perks-tray { top: var(--survivors-hud-bottom, 160px); max-width: 45%; }
+.survivors-modal-content { max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px); overflow-y: auto; }
+.survivors-modal-content.survivors-result-dialog {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
+}
+.survivors-result-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 4px; }
+.survivors-result-dialog .survivors-modal-title { letter-spacing: 0; }
+.survivors-actions-row.survivors-result-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  flex-shrink: 0;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, .15);
+}
+.survivors-result-actions button { min-width: 0; min-height: 44px; padding: 10px 8px; font-size: 14px; white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .survivors-actions-row.survivors-result-actions { grid-template-columns: 1fr; }
+}
+@media (max-height: 450px) and (orientation: landscape) {
+  .survivors-modal-content.survivors-result-dialog { padding: 12px; }
+  .survivors-result-dialog .survivors-modal-title { font-size: 18px; }
+  .survivors-actions-row.survivors-result-actions { margin-top: 8px; padding-top: 8px; }
+}
+.survivors-ultimate-control { bottom: max(16px, env(safe-area-inset-bottom)); left: max(16px, env(safe-area-inset-left)); }
+@media (max-width: 768px), (orientation: portrait) {
+  .survivors-perks-tray { top: auto; bottom: max(16px, env(safe-area-inset-bottom)); right: max(16px, env(safe-area-inset-right)); max-width: 40%; }
+  .survivors-combo-banner { right: 16px !important; padding: 6px 10px !important; font-size: 12px !important; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .survivors-hud-top { flex-direction: row; padding: 4px 8px; gap: 6px; }
+  .survivors-hud-center { width: auto; gap: 4px; }
+  .survivors-player-hud { width: auto; }
+  .survivors-top-actions { flex-shrink: 0; }
+  .survivors-btn-icon { font-size: 10px; padding: 4px 6px; }
+  .survivors-boss-alert-text small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .survivors-container *, .survivors-container *::before, .survivors-container *::after { animation: none !important; transition: none !important; }
+  .survivors-cutin-speedlines { display: none; }
+  .survivors-director-cutin-layer.phase-invert { filter: none; }
+}
+
+/* Keep perk tray out of the prioritized alert lane on every viewport. */
+.survivors-perks-tray { top: auto; bottom: max(16px, env(safe-area-inset-bottom)); right: max(16px, env(safe-area-inset-right)); left: auto; max-width: 40%; }
+.survivors-boss-risk {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  max-width: 150px;
+  font-size: 10px;
+  color: #fca5a5;
+}
+.survivors-boss-risk progress {
+  width: 100%;
+  height: 5px;
+  accent-color: #ef4444;
+}
+@media (max-width: 600px) {
+  .survivors-boss-risk { max-width: 92px; font-size: 9px; }
+}
+
+.survivors-perk-card:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 3px;
+}
+
+.survivors-supply-guide { margin: 12px 0; padding: 12px; border: 1px solid #475569; border-radius: 10px; text-align: left; color: #cbd5e1; }
+.survivors-supply-guide summary { cursor: pointer; min-height: 32px; font-weight: 700; color: #fbbf24; }
+.survivors-supply-guide p { margin: 6px 0 12px; font-size: 12px; line-height: 1.6; }
+.survivors-supply-guide ul { padding-left: 20px; font-size: 12px; line-height: 1.8; }
+.survivors-supply-guide small { color: #38bdf8; }
+.survivors-supply-cards { display: grid; gap: 10px; margin-bottom: 14px; }
+.survivors-supply-cards article { display: flex; gap: 12px; align-items: center; }
+.survivors-supply-art { display: block; flex: 0 0 54px; width: 54px; height: 54px; background-image: url('/assets/survivors/pickup-atlas-v2.webp'); background-size: 400% 200%; background-repeat: no-repeat; }
+
+/* Keep mobile combat visible: status and actions share two compact rows. */
+.survivors-combo-banner {
+  background: rgba(15, 23, 34, .82) !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(251, 191, 36, .4);
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+.survivors-combo-banner > span { display: none; }
+.survivors-combo-banner > div { display: flex; gap: 8px; align-items: center; }
+.survivors-combo-banner > div > div:not(.survivors-live-objective) { flex-shrink: 0; white-space: nowrap; }
+.survivors-live-objective { min-width: 0; word-break: keep-all; overflow-wrap: break-word; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .survivors-hud-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 6px 8px; top: max(4px, env(safe-area-inset-top)); border-radius: 10px; }
+  .survivors-player-hud { grid-column: 1 / -1; }
+  .survivors-hud-center { padding: 0; gap: 4px; }
+  .survivors-top-actions { gap: 4px; }
+  .survivors-btn-icon { min-height: 36px; padding: 4px 6px; font-size: 10px; }
+  .survivors-score-badge { padding: 0 4px; }
+  .survivors-score-badge span { font-size: 8px; }
+  .survivors-timer strong { font-size: 16px; }
+  .survivors-timer small { font-size: 9px; }
+  .survivors-ultimate-btn { width: 64px; height: 64px; min-width: 0; padding: 4px; }
+  .survivors-ultimate-btn.is-ready { animation: none; box-shadow: 0 0 12px rgba(245,158,11,.35); }
+  .survivors-ultimate-icon { font-size: 21px; }
+  .survivors-ultimate-info { font-size: 10px; }
+  .survivors-ultimate-info small { font-size: 9px; }
+}
+
+/* Text-free realistic emergency art; Korean captions remain selectable runtime text. */
+.survivors-cutin-speedlines { display: none; }
+.survivors-director-cutin-layer.phase-invert { background: transparent; mix-blend-mode: normal; animation: none; opacity: 0; transition: none; }
+.survivors-cutin-diagonal-banner {
+  width: min(960px, calc(100% - 32px)); height: auto; min-height: 280px;
+  padding: 0; gap: 0; display: block; overflow: hidden;
+  background: #111820; border: 1px solid #d1a84d; border-radius: 14px;
+  box-shadow: 0 20px 64px #0009; transform: none; animation: cutinBgFade .18s ease-out;
+}
+.survivors-cutin-portrait {
+  display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+  border: 0; border-radius: 0; box-shadow: none; transform: none; animation: none;
+}
+.survivors-cutin-textbox {
+  position: absolute; inset: auto 0 0; padding: 48px 24px 20px;
+  background: linear-gradient(transparent, #060c16ee 45%); gap: 8px;
+}
+.survivors-cutin-kicker { animation: none; letter-spacing: .06em; box-shadow: none; background: #171f2ed9; color: #f8d477; }
+.survivors-cutin-shout { font-size: clamp(22px, 3.6vw, 38px); line-height: 1.25; letter-spacing: -.02em; filter: none; animation: none; -webkit-text-fill-color: #fff; background: none; }
+.survivors-cutin-sub { font-size: 13px; line-height: 1.45; color: #d9e0e8; }
+.survivors-char-portrait-thumb.is-fullbody { object-position: 50% 0; transform: scale(1.8); transform-origin: 50% 0; }
+@media (max-width: 600px) and (orientation: portrait) {
+ .survivors-cutin-diagonal-banner { width: calc(100% - 24px); min-height: 0; }
+ .survivors-cutin-portrait { aspect-ratio: 4 / 3; object-position: 38% 50%; }
+ .survivors-cutin-textbox { position: relative; padding: 14px 16px 18px; background: #101923; }
+ .survivors-cutin-shout { font-size: 25px; }
+ .survivors-cutin-sub { font-size: 12px; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+ .survivors-cutin-diagonal-banner { width: min(640px, calc(100% - 32px)); min-height: 0; }
+ .survivors-cutin-portrait { max-height: 270px; object-position: 50% 35%; }
+ .survivors-cutin-textbox { padding: 40px 18px 14px; }
+ .survivors-cutin-shout { font-size: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .survivors-director-cutin-layer, .survivors-cutin-diagonal-banner { animation: none; transition: none; }
+}
+
+/* Full visual viewport keeps HUD above document scroll and browser chrome changes. */
+.survivors-container { position: fixed; inset: 0; height: 100dvh; max-height: none; z-index: 50; }
+.survivors-equipment-icon { display:inline-block; width:36px; height:36px; position:relative; background-size:300% 500%; background-repeat:no-repeat; flex-shrink:0; }
+.survivors-equipment-module { position:absolute; width:15px; height:15px; right:-3px; bottom:2px; background-size:400% 200%; background-repeat:no-repeat; }
+.survivors-equipment-pips { position:absolute; bottom:-2px; left:50%; transform:translateX(-50%); display:flex; gap:2px; }
+.survivors-equipment-pips i { width:3px; height:3px; background:#f8cd67; border-radius:1px; box-shadow:0 0 2px #000; }
+.survivors-equipment-icon.is-evolved { filter:drop-shadow(0 0 3px #bd84fb); }
+.survivors-equipment-icon.is-evolved .survivors-equipment-pips i { background:#c4b5fd; }
+.survivors-perk-badge .survivors-equipment-icon { width:28px; height:28px; }
+.survivors-perk-card-icon .survivors-equipment-icon { width:52px; height:52px; }
+.survivors-upgrade-preview { display:flex; align-items:center; gap:12px; margin-top:8px; font-size:11px; color:#f8d477; }
+.survivors-upgrade-preview .survivors-equipment-icon { width:42px; height:42px; }
+
+/* G08: compact alert outside the player focus; readable instruction at mobile sizes. */
+.survivors-boss-alert {
+  left: auto;
+  right: max(12px, env(safe-area-inset-right));
+  transform: none;
+  width: min(calc(100% - 24px), 440px);
+  border-width: 1px;
+  border-left: 4px solid #f97316;
+  background: rgba(15, 23, 42, .95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .28);
+  animation: none;
+  pointer-events: none;
+}
+.survivors-boss-alert-text { text-align: left; padding: 8px 12px; gap: 4px; }
+.survivors-boss-alert-text strong { font-size: clamp(12px, 2vw, 15px); line-height: 1.35; }
+.survivors-boss-alert-text small { display: block; color: #fed7aa; font-size: 11px; line-height: 1.4; }
+.survivors-boss-alert-text progress { width:100%; height:6px; accent-color:#8ee2ae; }
+.survivors-boss-skip { pointer-events:auto; align-self:flex-end; display:grid; place-items:center; width:44px; height:44px; flex-shrink:0; border:1px solid #8ee2ae; border-radius:4px; color:#d9f7e2; background:#20352c; cursor:pointer; }
+.survivors-boss-skip:disabled { opacity:.4; cursor:default; }
+.survivors-boss-skip:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+.survivors-boss-readout[data-core="interlocked"] progress,
+.survivors-focus-status[data-core="interlocked"] progress { accent-color:#82d7e5; }
+.survivors-boss-readout[data-core="exposed"] progress,
+.survivors-focus-status[data-core="exposed"] progress { accent-color:#8ee2ae; }
+.survivors-boss-readout[data-core="interlocked"] progress::-webkit-progress-value,
+.survivors-focus-status[data-core="interlocked"] progress::-webkit-progress-value { background:#82d7e5; }
+.survivors-boss-readout[data-core="exposed"] progress::-webkit-progress-value,
+.survivors-focus-status[data-core="exposed"] progress::-webkit-progress-value { background:#8ee2ae; }
+.survivors-boss-readout[data-core="interlocked"] progress::-moz-progress-bar,
+.survivors-focus-status[data-core="interlocked"] progress::-moz-progress-bar { background:#82d7e5; }
+.survivors-boss-readout[data-core="exposed"] progress::-moz-progress-bar,
+.survivors-focus-status[data-core="exposed"] progress::-moz-progress-bar { background:#8ee2ae; }
+@media (max-height: 480px) and (orientation: landscape) {
+  .survivors-boss-alert { width: min(44%, 440px); }
+  .survivors-boss-alert-text { padding: 5px 9px; }
+  .survivors-boss-alert-text small { display: block; font-size: 10px; }
+}
+
+.survivors-story-brief { padding: 12px 16px; border-left: 3px solid #38bdf8; background: rgba(15,23,42,.7); border-radius: 8px; text-align: left; }
+.survivors-story-brief strong { color: #7dd3fc; font-size: 13px; }
+.survivors-story-brief p, .survivors-story-result { color: #e2e8f0; font-size: 14px; line-height: 1.65; }
+.survivors-story-brief small { display: block; color: #a7f3d0; line-height: 1.6; }
+.survivors-story-result { margin: 14px 0; padding: 12px; border-left: 3px solid #34d399; background: rgba(16,185,129,.08); }
+
+.survivors-accountability-backdrop {position:fixed;inset:0;z-index:160;display:grid;place-items:center;padding:16px;background:rgba(5,12,19,.8);backdrop-filter:blur(5px);}
+.survivors-accountability-event {width:min(740px,100%);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:clamp(18px,3vw,30px);color:#e5edf1;background:linear-gradient(140deg,#1b2935,#101b24);border:1px solid #b69755;border-radius:14px;box-shadow:0 20px 70px #0008;text-align:left;}
+.survivors-accountability-event header small {color:#f2c677;letter-spacing:.08em;}
+.survivors-accountability-event h2 {font-size:clamp(21px,4vw,30px);margin:10px 0;}
+.survivors-equipment-workspace {width:min(960px,calc(100vw - 32px));max-width:960px;border-radius:8px;}
+.survivors-store-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.survivors-store-wallet {white-space:nowrap;color:#b7edc6;font-size:18px;}
+.survivors-store-slots {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid #647581;margin:16px 0;}
+.survivors-store-slots>div {display:grid;grid-template-columns:42px minmax(0,1fr);gap:6px;padding:12px;border-bottom:1px solid #ffffff15;align-items:center;}
+.survivors-store-slots small {grid-column:1/-1;color:#b7c7ce;}
+.survivors-store-slots strong {font-size:12px;overflow-wrap:anywhere;}
+.survivors-store-slots label {grid-column:1/-1;display:grid;gap:6px;min-width:0;font-size:13px;}
+.survivors-store-slots .survivors-premium-art {width:40px;height:40px;min-width:0;}
+.survivors-store-slots button {grid-column:1/-1;min-width:0;min-height:44px;padding:8px;border:1px solid #5b7e7a;border-radius:4px;background:#16362f;color:#d7f5e6;cursor:pointer;white-space:normal;overflow-wrap:anywhere;}
+.survivors-store-slots button:focus-visible {outline:2px solid #a8e3c1;outline-offset:2px;}
+.survivors-store-slots>div>span:not(.survivors-premium-art) {color:#84989f;font-size:12px;grid-column:1/-1;}
+.survivors-store-filters {display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:16px 0;}
+.survivors-store-filters label {display:flex;align-items:center;gap:8px;font-size:13px;}
+.survivors-store-filters select {max-width:200px;background:#16242a;color:#eef6f6;border:1px solid #627b84;padding:10px;border-radius:4px;}
+.survivors-store-filters input {accent-color:#71d2bc;width:18px;height:18px;}
+.survivors-store-filters>span {margin-left:auto;color:#adbec6;font-size:12px;}
+.survivors-store .survivors-store-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.survivors-store-item-head {display:flex;align-items:center;gap:12px;min-width:0;}
+.survivors-store-item-head>div {display:grid;gap:5px;min-width:0;}
+.survivors-store-item-head .survivors-premium-art {width:64px;height:64px;flex:0 0 64px;}
+.survivors-store-card {border-radius:6px;min-width:0;overflow-wrap:anywhere;}
+.survivors-store-item-head strong {font-size:14px;line-height:1.5;}
+.survivors-store-item-head small {font-size:11px;color:#b5c6c8;}
+.survivors-store-effect {color:#a9e6c6;font-size:13px;line-height:1.6;}
+.survivors-store-replacement {color:#f0cd8d;}
+.survivors-store-card>button {margin-top:auto;min-height:44px;white-space:normal;}
+.survivors-store-card details {border-top:1px solid #ffffff20;padding-top:8px;}
+@media(max-width:850px){.survivors-store .survivors-store-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.survivors-store-slots{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:500px){.survivors-store .survivors-store-grid{grid-template-columns:minmax(0,1fr);}.survivors-store-filters{gap:12px;}.survivors-store-slots>div{padding:8px;}}
+.survivors-accountability-event header span {color:#a8bbc7;font-size:13px;}
+.accountability-dialogue {padding:16px;border-left:3px solid #dbba77;background:#ffffff06;line-height:1.8;}
+.accountability-policy,.accountability-record {color:#b9c9d2;font-size:12px;line-height:1.7;}
+.accountability-facts section {border-top:1px solid #ffffff15;padding:10px 0;}
+.accountability-facts button {width:100%;padding:12px;border:1px solid #607887;border-radius:7px;background:#243642;color:#e6eef2;text-align:left;cursor:pointer;}
+.accountability-facts p,.accountability-result {font-size:14px;line-height:1.8;padding:4px 8px;}
+.accountability-actions {display:grid;gap:10px;margin-top:14px;}
+.accountability-actions button {width:100%;min-height:44px;white-space:normal;}
+.accountability-actions button:disabled {opacity:.4;cursor:not-allowed;}
+.survivors-accountability-event button:focus-visible {outline:3px solid #f2c677;outline-offset:3px;}
+.accountability-result {border-left:3px solid #d9b56b;padding:16px;background:#ffffff06;}
+.accountability-dialogue-row {display:flex;align-items:center;gap:12px;}
+.accountability-dialogue-row img {width:clamp(62px,12vw,96px);height:clamp(82px,16vw,128px);object-fit:cover;object-position:top;border:1px solid #6b7b85;border-radius:8px;}
+.accountability-dialogue-row p {flex:1;}
+.survivors-field-radio {position:absolute;left:12px;bottom:100px;z-index:22;width:min(420px,calc(100% - 108px));max-height:125px;overflow:auto;padding:10px 12px;border-left:3px solid #d4b06a;background:rgba(14,24,33,.88);border-radius:7px;color:#e1ebf0;pointer-events:none;}
+.survivors-field-radio strong {color:#ebc77e;font-size:11px;}
+.survivors-field-radio p {font-size:12px;line-height:1.65;margin:5px 0 0;}
+@media (max-height:480px) {.survivors-field-radio {bottom:70px;max-height:96px;width:min(370px,calc(100% - 220px));}}
+
+/* Scene-wide material finish: a quiet instrument panel leaves the site dominant. */
+.survivors-hud-top {
+  background: linear-gradient(180deg, rgba(28,39,48,.94), rgba(10,20,29,.91));
+  border-color: rgba(191,209,220,.23);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 4px 16px rgba(0,0,0,.32);
+}
+.survivors-level-tag { box-shadow: none; }
+.survivors-hp-bar-fill { background: linear-gradient(180deg,#75ddb5,#218c71); box-shadow: inset 0 1px 0 rgba(255,255,255,.24); }
+.survivors-timer strong { color: #f8e1ad; text-shadow: none; }
+.survivors-exp-bar-wrap { height: 4px; }
+.survivors-exp-bar { box-shadow: none; background: linear-gradient(90deg,#2684a4,#9ae5f2); }
+.survivors-btn-icon { border-color: rgba(193,210,223,.24); box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
+.survivors-stage-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 4px 14px rgba(0,0,0,.2); }
+.survivors-stage-card:focus-visible { outline: 2px solid #f8d792; outline-offset: 3px; }
+.survivors-operation-preview { display:block; margin:8px 0 0; color:#9ae5d0; font-size:11px; letter-spacing:.03em; }
+.survivors-tactical-actions { position:absolute;z-index:24;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:6px;max-width:calc(100% - 180px);flex-wrap:wrap;justify-content:center; }
+.survivors-tactical-actions button { min-height:38px;border:1px solid #5f8292;border-radius:9px;padding:6px 9px;background:rgba(13,29,39,.94);color:#d8e9ee;font-family:inherit;font-weight:600;font-size:11px;cursor:pointer; }
+.survivors-tactical-actions button:disabled { opacity:.5;cursor:default; }
+.survivors-tactical-actions button:focus-visible { outline:2px solid #f8d792;outline-offset:2px; }
+.survivors-tactical-actions small { color:#97b3bf;margin-left:4px; }
+.survivors-tactical-actions .is-handoff { border-color:#84cba4;color:#bbf7d0; }
+@media(max-width:600px) and (orientation:portrait) {
+  .survivors-tactical-actions { width:calc(100% - 24px);max-width:none;bottom:calc(max(18px,env(safe-area-inset-bottom)) + 76px);gap:4px;flex-wrap:nowrap; }
+  .survivors-tactical-actions button { flex:1;min-width:0;min-height:44px;font-size:10px;padding:5px 4px;word-break:keep-all; }
+  .survivors-tactical-actions small { display:none; }
+  .survivors-combo-banner { left:12px;right:12px !important;max-width:none;box-sizing:border-box; }
+  .survivors-combo-banner > div { flex-wrap:wrap;gap:2px 8px; }
+  .survivors-live-objective { flex-basis:100%;max-width:none;margin-top:0;font-size:11px; }
+  .survivors-evo-banner { gap:10px;padding:10px 12px;border-radius:10px;box-shadow:0 0 16px rgba(251,191,36,.3); }
+  .survivors-evo-banner-icon { font-size:28px; }
+  .survivors-evo-banner-content h4 { font-size:14px;line-height:1.4; }
+  .survivors-evo-banner-content p { font-size:9px;letter-spacing:0; }
+}
+/* The old left+right anchored wrapper must not swallow tactical button taps. */
+.survivors-ultimate-control { right:auto; width:max-content; pointer-events:none; }
+.survivors-ultimate-control button { pointer-events:auto; }
+
+.survivors-supply-countdown { display:block;color:#f8d477;font-size:10px;font-weight:500;line-height:1.5; }
+
+.accountability-handoff { margin:16px 0;padding:12px;border:1px solid #c3a86c;border-radius:8px; }
+.accountability-handoff legend { color:#f2c677; }
+.accountability-handoff p { font-size:12px;line-height:1.7; }
+.accountability-handoff label { display:flex;align-items:center;gap:10px;min-height:48px;padding:6px;font-size:13px;line-height:1.6;cursor:pointer; }
+.accountability-handoff input { width:20px;height:20px;flex-shrink:0;accent-color:#eac06e; }
+
+.survivors-store { margin: 20px 0; text-align: left; }
+.survivors-store p,.survivors-store-loadout { font-size: 13px; line-height: 1.5; color: #bfe8df; word-break: keep-all; }
+.survivors-store-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.survivors-store-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #142735; border: 1px solid #47616c; border-radius: 12px; }
+.survivors-store-card.is-equipped { border-color: #80efc6; background: #183c37; }
+.survivors-store-card span { font-size: 13px; word-break: keep-all; }
+.survivors-store-card button { margin-top: auto; min-height: 44px; color: #f2ffff; background: #245461; border: 1px solid #699da4; border-radius: 8px; cursor: pointer; }
+.survivors-store-card button:disabled { opacity: .45; cursor: default; }
+@media(max-width:420px) { .survivors-store-grid { grid-template-columns: 1fr; } }
+
+/* Dedicated production atlas: premium art is raster, frame decorations are presentation. */
+.survivors-premium-art { display:block; width:100%; aspect-ratio:1; background-size:400% 400%; background-repeat:no-repeat; border-radius:12px; }
+.survivors-store-card { position:relative; overflow:hidden; background:linear-gradient(150deg,#1c3541,#08121c 62%); border-color:#617982; box-shadow:inset 0 1px #ffffff16,0 5px 16px #0004; }
+.survivors-store-card[data-rarity="elite"] { border-color:#7a72ac; }
+.survivors-store-card[data-rarity="legendary"] { border-color:#d8b86e; background:linear-gradient(150deg,#413827,#08121c 58%); }
+.survivors-premium-rarity { color:#aad9e5; font-size:11px; letter-spacing:.1em; }
+[data-rarity="elite"] .survivors-premium-rarity { color:#c9b8ff; }
+[data-rarity="legendary"] .survivors-premium-rarity { color:#f3d38d; }
+.survivors-store-card .survivors-premium-art { max-width:250px; margin:auto; }
+.survivors-store-card .survivors-premium-art.is-large { max-width:400px; }
+.survivors-store-card.is-equipped { border-color:#8cecc5; box-shadow:inset 0 0 0 1px #8cecc5,0 0 22px #3ee5b020; }
+.survivors-store-card strong { font-size:17px; word-break:keep-all; }
+.survivors-premium-use { color:#b6c6d0 !important; margin:0; }
+.survivors-store-card details summary { cursor:pointer; padding:10px 0; min-height:44px; box-sizing:border-box; color:#bce7f0; font-size:13px; }
+.survivors-store-card details summary:focus-visible { outline:2px solid #a9e8e7; }
+.survivors-store-loadout { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.survivors-store-loadout > span { display:flex; align-items:center; gap:6px; border:1px solid #50716b; padding:4px 8px; border-radius:8px; }
+.survivors-store-loadout .survivors-premium-art { width:36px; }
+.survivors-premium-live { display:flex; align-items:center; gap:6px; height:22px; font-size:10px; color:#9ceaf1; white-space:nowrap; }
+.survivors-premium-live-icons { display:flex; }
+.survivors-premium-live .survivors-premium-art { width:20px; height:20px; border-radius:4px; }
+@media (max-width:420px) { .survivors-store-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; } .survivors-store-card { padding:10px; } .survivors-store-card strong { font-size:14px; } }
+.survivors-player-hud:has(.survivors-premium-live) { flex-direction:column; align-items:stretch; gap:3px; }
+
+.survivors-preflight-gear { display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:12px; align-items:center; padding:14px; margin:14px 0; border:1px solid #547883; border-radius:12px; background:linear-gradient(120deg,#142d38,#0b1822); text-align:left; }
+.survivors-preflight-gear > .survivors-premium-art { width:72px; }
+.survivors-preflight-gear strong { color:#a7dce5; font-size:12px; }
+.survivors-preflight-gear p { margin:6px 0; font-size:12px; line-height:1.6; color:#d1dfe5; word-break:keep-all; }
+.survivors-preflight-gear small { color:#b0bfc5; font-size:11px; }
+.survivors-preflight-gear button { min-height:44px; padding:8px 12px; background:#244957; color:#e9faff; border:1px solid #6b8d98; border-radius:8px; cursor:pointer; }
+@media (max-width:600px) { .survivors-preflight-gear { grid-template-columns:56px minmax(0,1fr); gap:8px; } .survivors-preflight-gear > .survivors-premium-art { width:56px; } .survivors-preflight-gear button { grid-column:2; justify-self:start; } }
+
+.survivors-premium-hp-badge { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; color:#c8e6ec; }
+.survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
+.survivors-premium-hp-badge small { font-size:9px; }
+.survivors-fitting { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 12px 0 24px; border-bottom: 1px solid #34443a; margin-bottom: 20px; }
+.survivors-repair-receipt {display:flex;flex-wrap:wrap;gap:12px;border-block:1px solid #5d9279;padding:10px 0;margin:10px 0;}
+.survivors-repair-receipt > span {display:flex;gap:8px;align-items:center;min-width:0;}
+.survivors-repair-receipt .survivors-premium-art {width:48px;height:48px;flex:0 0 48px;}
+.survivors-repair-receipt strong {font-size:12px;overflow-wrap:anywhere;}
+.survivors-repair-receipt small {display:block;color:#a5e7c7;font-size:11px;}
+.survivors-repair-receipt .survivors-premium-art,.survivors-store-item-head.is-repaired .survivors-premium-art {animation:survivors-repair-ready .55s ease-out both;}
+@keyframes survivors-repair-ready {0%{filter:brightness(.8);}45%{filter:brightness(1.25);}100%{filter:brightness(1);}}
+@media (prefers-reduced-motion:reduce) {.survivors-repair-receipt .survivors-premium-art,.survivors-store-item-head.is-repaired .survivors-premium-art {animation:none;}}
+.survivors-fitting-art { margin: 0; min-width: 0; position: relative; aspect-ratio: 9 / 8; background: #26332e; }
+.survivors-fitting-art canvas { display: block; width: 100%; height: 100%; }
+.survivors-fitting-art figcaption { position: absolute; bottom: 8px; left: 8px; right: 8px; text-align: center; font-size: 12px; }
+.survivors-fitting-summary { min-width: 0; }
+.survivors-fitting-summary h4 { margin: 0; font-size: 18px; }
+.survivors-fitting-summary p { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.survivors-fitting-summary dl { margin: 12px 0; font-size: 13px; }
+.survivors-fitting-summary dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid #34443a; }
+.survivors-fitting-summary dd { margin: 0; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.survivors-fitting-summary dt { min-width: 0; overflow-wrap: anywhere; }
+.survivors-fitting-summary dd span { color: #b7ebae; }
+.survivors-fitting-summary button, .survivors-store-card .survivors-fitting-button { background: transparent; border: 1px solid #688373; color: #e2eee6; border-radius: 4px; padding: 8px 10px; cursor: pointer; }
+.survivors-store-card .survivors-fitting-button[aria-pressed="true"] { border-color: #b7ebae; background: #283f31; }
+@media (max-width: 500px) { .survivors-fitting { grid-template-columns: 1fr; gap: 12px; } .survivors-fitting-art { width: min(100%, 280px); justify-self: center; } }
+
+.survivors-store [hidden] { display: none !important; }
+.survivors-stage-preview { display: block; width: min(100%, 270px); height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin: 12px auto; }
+.survivors-ready-launch button:disabled { opacity: .45; cursor: wait; }
+.survivors-audio-mixer { text-align: left; margin: 12px 0; border-top: 1px solid #62766b; padding-top: 10px; }
+.survivors-audio-mixer summary { cursor: pointer; min-height: 32px; font-size: 13px; }
+.survivors-audio-mixer label { display: grid; grid-template-columns: 95px minmax(0, 1fr) 40px; align-items: center; gap: 10px; min-height: 44px; font-size: 12px; }
+.survivors-audio-mixer input { width: 100%; min-width: 0; accent-color: #b7ebae; }
+.survivors-audio-mixer output { text-align: right; font-variant-numeric: tabular-nums; }
+.survivors-equipment-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.survivors-equipment-toolbar h2 { margin: 0; font-size: 20px; }
+.survivors-equipment-toolbar button { flex: 0 0 44px; width: 44px; height: 44px; border: 1px solid #62766b; background: #202b27; color: #fff; font-size: 26px; border-radius: 4px; cursor: pointer; }
+.survivors-store-upgrades { border-top: 1px solid #62766b; padding-top: 14px; margin-top: 20px; }
+.survivors-store-upgrades > summary { min-height: 44px; cursor: pointer; }
+.survivors-equipment-workspace .survivors-store-heading h3 { display: none; }
+.survivors-store-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); position: sticky; top: 0; z-index: 3; background: #16251e; border-bottom: 1px solid #62766b; margin: 12px 0; }
+.survivors-store-tabs button { min-height: 44px; border: 0; border-radius: 0; background: transparent; color: #dce8e1; padding: 10px 4px; font-size: 13px; cursor: pointer; }
+.survivors-store-tabs button[aria-selected="true"] { background: #344d40; box-shadow: inset 0 -3px #b7ebae; }
+.survivors-store-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+.survivors-fitting-action { position: static; background: #16251e; border-top: 1px solid #62766b; padding: 12px 0; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; align-items: center; }
+.survivors-fitting-action strong { font-size: 14px; overflow-wrap: anywhere; }
+.survivors-fitting-action button { min-height: 44px; padding: 10px 14px; border-radius: 4px; background: #b7ebae; color: #14221a; border: 0; cursor: pointer; }
+.survivors-fitting-action button:disabled { opacity: .45; cursor: not-allowed; }
+.survivors-fitting-action small { grid-column: 1 / -1; }
+.survivors-store .survivors-store-card { border-radius: 6px; background: #202b27; box-shadow: none; min-width: 0; }
+.survivors-store-card-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.survivors-store [hidden] {display:none!important;}
+.survivors-store-live {border-left:3px solid #a5dfbd;padding:8px 12px;background:#243d30;color:#e4f7ec;}
+.survivors-durability-rule {font-size:12px;line-height:1.6;color:#bdd2c7;text-align:left;}
+.survivors-item-condition {display:grid;grid-template-columns:1fr;gap:4px;font-size:12px;grid-column:1/-1;}
+.survivors-item-condition progress,.survivors-store-slots progress {width:100%;height:6px;accent-color:#a5dfbd;}
+.survivors-item-condition[data-low="true"] {color:#ffc985;}
+.survivors-item-condition[data-low="true"] progress {accent-color:#ffc985;}
+.survivors-store-card-actions .survivors-repair-button {grid-column:1/-1;background:#284238;color:#dff3e7;border:1px solid #719b87;}
+.survivors-fitting-controls {display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.survivors-fitting-controls button {min-height:44px;border:1px solid #688373;background:#20352a;color:#e4f3ea;padding:8px 12px;border-radius:4px;cursor:pointer;}
+.survivors-fitting-controls button[aria-pressed="true"] {background:#a5dfbd;color:#10281b;}
+.survivors-fitting-controls label {display:flex;align-items:center;gap:8px;font-size:12px;}
+.survivors-fitting-controls input {max-width:130px;min-height:44px;accent-color:#a5dfbd;}
+.survivors-fitting-motion-controls { flex-wrap:nowrap; }
+.survivors-fitting-attack-select { flex:1; min-width:0; min-height:44px; padding:6px 8px; border:1px solid #688373; border-radius:4px; background:#20352a; color:#e4f3ea; font-size:13px; }
+.survivors-fitting-slots {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+.survivors-fitting-slots label {display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;color:#d8e8de;}
+.survivors-fitting-slots select {width:100%;max-width:100%;min-height:44px;background:#20352a;color:#eef5f0;border:1px solid #688373;border-radius:4px;padding:8px;font-size:13px;}
+.survivors-fitting-slots small {min-height:32px;line-height:1.4;}
+.survivors-fitting-action strong small {display:block;font-size:11px;color:#bdd2c7;margin-top:4px;}
+.survivors-live-shop {border-color:#a5dfbd!important;color:#bfe8cf!important;}
+.survivors-clear-maintenance {border-top:1px solid #719b87;border-bottom:1px solid #719b87;padding:12px 0;text-align:left;}
+.survivors-clear-maintenance h3 {font-size:16px;margin:0 0 8px;}
+.survivors-clear-maintenance p {font-size:13px;margin:4px 0;}
+@media(max-width:600px) {
+ .survivors-fitting {grid-template-columns:1fr;gap:12px;}
+ .survivors-fitting-visual {width:min(100%,280px);justify-self:center;}
+ .survivors-fitting-slots {grid-template-columns:1fr;gap:10px;}
+ .survivors-fitting-action {grid-template-columns:1fr;}
+ .survivors-fitting-action button {width:100%;}
+ .survivors-top-actions {flex-wrap:wrap;justify-content:flex-end;}
+ .survivors-top-actions .survivors-live-shop {min-height:44px;}
+}
+@media(orientation:landscape) and (max-height:560px) {
+ .survivors-equipment-toolbar {margin-bottom:8px;}
+ .survivors-equipment-toolbar h2 {font-size:18px;margin:0;}
+ .survivors-store-heading {margin-bottom:4px;}
+ .survivors-durability-rule {margin:4px 0;}
+ .survivors-store-heading p {margin:4px 0;font-size:12px;}
+ .survivors-fitting {grid-template-columns:minmax(220px,32%) minmax(0,1fr);gap:16px;align-items:start;}
+ .survivors-fitting-visual {position:sticky;top:52px;}
+ .survivors-store .survivors-fitting-visual .survivors-fitting-art {width:min(100%,180px,max(110px,calc((100dvh - 260px)*1.125)));}
+ .survivors-fitting-controls label {gap:4px;}
+ .survivors-fitting-controls input {width:80px;max-width:80px;}
+ .survivors-fitting-summary dl {display:grid;grid-template-columns:1fr 1fr;gap:0 12px;}
+ .survivors-fitting-slots {grid-template-columns:1fr 1fr;}
+ .survivors-fitting-action {grid-template-columns:1fr auto;position:static;}
+}
+@media (max-width: 600px) {
+  .survivors-store .survivors-store-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .survivors-store .survivors-store-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 12px; }
+  .survivors-store-card .survivors-store-item-head, .survivors-store-card .survivors-store-effect, .survivors-store-card .survivors-premium-use, .survivors-store-card details, .survivors-store-card > small, .survivors-store-card-actions { grid-column: 1 / -1; }
+  .survivors-store .survivors-store-card button { min-height: 44px; min-width: 0; white-space: normal; overflow-wrap: anywhere; font-size: 13px; padding: 8px; }
+  .survivors-store .survivors-store-item-head .survivors-premium-art { width: 56px; min-width: 56px; border-radius: 4px; }
+  .survivors-store .survivors-store-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .survivors-store-filters > label:first-child { grid-column: 1 / -1; }
+  .survivors-store-filters select { min-height: 44px; max-width: 100%; }
+  .survivors-store-filters label { min-width: 0; font-size: 12px; }
+  .survivors-store .survivors-fitting-art { width: min(100%, 240px); }
+  .survivors-store .survivors-store-slots { grid-template-columns: minmax(0, 1fr); }
+}
+.survivors-perks-tray {
+  pointer-events: auto;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 4px;
+}
+.survivors-perks-tray .survivors-perk-badge { width: 44px; height: 44px; flex-shrink: 0; }
+.survivors-upgrade-dialog { max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+.survivors-upgrade-dialog .survivors-perk-card { border-radius: 8px; }
+.survivors-upgrade-dialog .survivors-perk-card-info { min-width: 0; }
+.survivors-choice-evolution { display: flex; flex-direction: column; gap: 4px; padding: 8px 0; border-top: 1px solid #49606a; }
+.survivors-choice-evolution strong { font-size: 12px; color: #dde8ea; }
+.survivors-choice-evolution span, .survivors-choice-evolution small { font-size: 11px; color: #a8bcc0; }
+.survivors-choice-evolution[data-status="ready"] small { color: #65e2b7; }
+.survivors-choice-evolution[data-status="evolved"] small { color: #ffd265; }
+.survivors-chapter-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0; }
+.survivors-chapter-tabs button { flex: 0 0 auto; min-height: 44px; border: 1px solid #536c70; border-radius: 4px; background: #1e3034; color: #dbe9e6; padding: 8px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+.survivors-chapter-tabs button[aria-selected="true"] { background: #b9e2cc; color: #152c24; border-color: #b9e2cc; }
+.survivors-chapter-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.survivors-chapter-story { font-size: 13px; color: #bdd3d5; line-height: 1.6; }
+.survivors-stage-tier { color: #f1cf8c; font-size: 12px; }
+.survivors-stage-thumbnail { display: block; width: 100%; height: 92px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; }
+.survivors-campaign-position { display: block; font-size: 10px; color: #adcbc5; margin-top: 3px; }
+.survivors-campaign-position[data-advanced="true"] { color: #f0d48f; }
+.survivors-current-workface { display: block; color: #d4e3df; font-size: 10px; white-space: normal; line-height: 1.4; margin-bottom: 3px; }
+.survivors-growth-record { border-top: 1px solid #4b6565; padding: 14px 0; text-align: left; }
+.survivors-growth-record h3 { font-size: 15px; margin: 0 0 10px; color: #d7eee1; }
+.survivors-character-chapters summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: 13px; }
+.survivors-character-chapters section { padding: 8px 0; border-top: 1px solid #4b6565; }
+.survivors-character-chapters h4 { margin: 0; font-size: 13px; }
+.survivors-character-chapters p { overflow-wrap: anywhere; }
+.survivors-growth-record dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 0; }
+.survivors-growth-record dt { font-size: 11px; color: #a6bbc0; }
+.survivors-growth-record dd { margin: 4px 0; font-size: 18px; color: #f3d99b; }
+.survivors-growth-record p { font-size: 12px; line-height: 1.6; color: #c5d7d4; }
+.survivors-growth-skills { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 16px; }
+.survivors-growth-skills label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: #a9cdc0; }
+.survivors-growth-skills span { display: flex; justify-content: space-between; gap: 4px; }
+.survivors-growth-skills progress { width: 100%; height: 5px; accent-color: #8bd5b1; }
+.survivors-growth-record small { display: block; font-size: 11px; color: #a9bfc0; margin-top: 8px; line-height: 1.5; }
+@media (min-width: 1100px) and (min-height: 600px) {
+  .survivors-upgrade-dialog { width: min(1080px, calc(100% - 32px)); max-width: 1080px; }
+  .survivors-upgrade-dialog .survivors-perk-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .survivors-upgrade-dialog .survivors-perk-card { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; }
+  .survivors-upgrade-dialog .survivors-perk-card-icon { align-self: flex-start; }
+}
+.survivors-arsenal-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
+}
+.survivors-arsenal-dialog .survivors-recipes-grid { min-height: 0; flex: 1 1 auto; }
+.survivors-arsenal-dialog .survivors-actions-row { flex-shrink: 0; }
+@media (max-height: 480px) {
+  .survivors-arsenal-dialog { padding: 12px 20px; }
+  .survivors-arsenal-dialog .survivors-modal-title { font-size: 20px; margin: 0 0 6px; }
+  .survivors-arsenal-dialog .survivors-modal-sub { font-size: 11px; margin-bottom: 10px; }
+  .survivors-arsenal-dialog .survivors-recipes-grid { margin-bottom: 10px; }
+}
+.survivors-perks-tray {
+  pointer-events: auto;
+}
+.survivors-perk-badge { cursor: pointer; }
+.survivors-perk-badge:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.survivors-arsenal-dialog .survivors-recipe-card { border-radius: 8px; }
+.survivors-arsenal-dialog .survivors-recipe-parts { flex-wrap: wrap; }
+.survivors-arsenal-dialog progress { width: 100%; height: 8px; accent-color: #55dcb2; }
+.survivors-evolution-status { font-size: 12px; color: #55dcb2; }
+
+.survivors-pause-command { display:flex; align-items:center; justify-content:center; gap:6px; }
+.survivors-focus-status { display:none; }
+.survivors-extraction-status { position:absolute; top:calc(var(--survivors-hud-bottom,160px) + 8px); left:16px; width:280px; max-width:calc(100% - 32px); height:46px; box-sizing:border-box; display:flex; align-items:center; gap:8px; padding:5px 10px; border:1px solid #caa765; border-radius:4px; background:rgba(12,22,22,.88); color:#f3d79d; z-index:65; pointer-events:none; font-size:12px; }
+.survivors-extraction-status[data-inside="true"] { border-color:#69c3a0; color:#b0ead2; }
+.survivors-extraction-status>span { min-width:0; flex:1; font-weight:650; }
+.survivors-extraction-status small { display:block; font-size:10px; font-weight:500; }
+.survivors-extraction-status>strong { display:flex; align-items:baseline; gap:2px; font-size:18px; min-width:35px; justify-content:flex-end; }
+.survivors-extraction-status progress { width:40px; height:4px; accent-color:#69c3a0; }
+@media(max-width:900px), (pointer:coarse) { .is-combat .survivors-extraction-status { top:calc(max(8px,env(safe-area-inset-top)) + 96px); left:max(8px,env(safe-area-inset-left)); height:40px; width:240px; max-width:calc(100% - 16px); } }
+.survivors-tactical-actions button { display:flex; align-items:center; justify-content:center; gap:5px; border-radius:8px; }
+@media (max-width:900px), (pointer:coarse) {
+  .is-combat .survivors-hud-top {
+    top:max(8px,env(safe-area-inset-top)); left:max(8px,env(safe-area-inset-left));
+    right:max(8px,env(safe-area-inset-right)); transform:none; width:auto;
+    height:44px; box-sizing:border-box; padding:0 4px 0 8px;
+    display:flex; flex-direction:row; gap:8px; border-radius:8px;
+    box-shadow:none; background:rgba(10,18,21,.76);
+  }
+  .is-combat .survivors-player-hud { flex:1; grid-column:auto; }
+  .is-combat .survivors-hp-container { flex:1; min-width:0; gap:5px; padding:0; border:0; background:none; }
+  .is-combat .survivors-hp-bar-bg { width:auto; flex:1; max-width:150px; min-width:30px; }
+  .is-combat .survivors-level-tag { font-size:10px; padding:2px 4px; letter-spacing:0; }
+  .is-combat .survivors-hud-center { width:auto; padding:0; }
+  .is-combat .survivors-timer strong { font-size:16px; letter-spacing:0; }
+  .is-combat .survivors-score-badge, .is-combat .survivors-kills-badge,
+  .is-combat .survivors-campaign-position, .is-combat .survivors-premium-live,
+  .is-combat .survivors-premium-hp-badge, .is-combat .survivors-timer small,
+  .is-combat .survivors-top-actions > button:not(.survivors-pause-command),
+  .is-combat .survivors-pause-command span, .is-combat .survivors-perks-tray,
+  .is-combat .survivors-combo-banner, .is-combat .survivors-field-radio { display:none; }
+  .is-combat .survivors-top-actions { flex-wrap:nowrap; }
+  .is-combat .survivors-combo-banner { display:none !important; }
+  .is-combat .survivors-pause-command { width:44px; height:44px; padding:0; min-height:44px; border:0; background:none; }
+  .is-combat .survivors-focus-status {
+    position:absolute; z-index:24; top:calc(max(8px,env(safe-area-inset-top)) + 48px);
+    left:max(12px,env(safe-area-inset-left)); right:max(12px,env(safe-area-inset-right));
+    display:flex; align-items:center; gap:6px; height:28px; pointer-events:none;
+    font-size:11px; text-shadow:0 1px 3px #000; color:#fff;
+  }
+  .survivors-focus-status strong { max-width:32%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; }
+  .survivors-focus-status svg { flex-shrink:0; color:#f8cf70; }
+  .survivors-focus-status progress { flex:1; min-width:24px; height:6px; accent-color:#ef7964; }
+  .survivors-focus-status span { white-space:nowrap; }
+  .is-combat .survivors-boss-alert:not(.survivors-encounter-notice) { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); }
+  .is-combat .survivors-encounter-notice { top:84px; width:calc(100% - 32px); max-width:520px; height:auto; margin:0; padding:0; clip-path:none; overflow:visible; }
+  .is-combat .survivors-tactical-actions {
+    left:auto; right:max(12px,env(safe-area-inset-right)); transform:none;
+    bottom:calc(max(12px,env(safe-area-inset-bottom)) + 76px);
+    width:148px; max-width:calc(100% - 24px); gap:8px; flex-wrap:nowrap;
+  }
+  .is-combat .survivors-tactical-actions button { position:relative; flex:0 0 44px; width:44px; height:44px; min-height:44px; padding:0; }
+  .is-combat .survivors-tactical-actions span, .is-combat .survivors-tactical-actions small { display:none; }
+  .is-combat .survivors-tactical-actions b { position:absolute; right:2px; bottom:1px; font-size:10px; }
+  .is-combat .survivors-ultimate-control { left:auto; right:max(12px,env(safe-area-inset-right)); bottom:max(12px,env(safe-area-inset-bottom)); }
+  .is-combat .survivors-ultimate-btn { width:64px; height:64px; min-width:64px; padding:4px; }
+  .is-combat .survivors-ultimate-info strong { display:none; }
+  .is-combat .survivors-ultimate-info small { font-size:10px; }
+}
+.survivors-arsenal-dialog .survivors-recipe-head .survivors-equipment-icon { flex-shrink: 0; }
+
+
+
+/* Wave supply is informational only: never block active combat. */
+.survivors-wave-director-notice {
+  position: absolute;
+  top: calc(var(--survivors-hud-reserve, 76px) + 10px);
+  left: 50%;
+  z-index: 60;
+  width: min(560px, calc(100% - 30px));
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 18px;
+  pointer-events: none;
+  text-align: center;
+  border: 1px solid rgba(56, 189, 248, .58);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(7, 18, 31, .95), rgba(14, 37, 59, .92));
+  box-shadow: 0 14px 36px rgba(0,0,0,.42), 0 0 26px rgba(56,189,248,.16);
+  backdrop-filter: blur(12px);
+  animation: survivors-wave-director-in 240ms cubic-bezier(.16,1,.3,1);
+}
+
+.survivors-wave-director-notice > span {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: #7dd3fc;
+}
+
+.survivors-wave-director-notice > strong {
+  font-size: 17px;
+  font-weight: 950;
+  letter-spacing: -.02em;
+  color: #f8fafc;
+}
+
+.survivors-wave-director-notice > small {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.survivors-wave-director-notice.is-wave-2 {
+  border-color: rgba(245, 158, 11, .62);
+  background: linear-gradient(135deg, rgba(48, 30, 6, .95), rgba(91, 52, 5, .92));
+  box-shadow: 0 14px 36px rgba(0,0,0,.42), 0 0 28px rgba(245,158,11,.2);
+}
+
+.survivors-wave-director-notice.is-wave-2 > span { color: #fbbf24; }
+
+.survivors-wave-director-notice.is-wave-3 {
+  border-color: rgba(248, 113, 113, .72);
+  background: linear-gradient(135deg, rgba(69, 10, 10, .96), rgba(127, 29, 29, .92));
+  box-shadow: 0 14px 38px rgba(0,0,0,.48), 0 0 34px rgba(239,68,68,.28);
+}
+
+.survivors-wave-director-notice.is-wave-3 > span { color: #fca5a5; }
+
+@keyframes survivors-wave-director-in {
+  from { opacity: 0; transform: translate(-50%, -14px) scale(.97); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.survivors-signature-event {
+  position: absolute;
+  top: calc(var(--survivors-hud-reserve, 76px) + 10px);
+  left: 50%;
+  z-index: 61;
+  width: min(600px, calc(100% - 28px));
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 16px;
+  pointer-events: none;
+  text-align: center;
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  animation: survivors-signature-hit 220ms cubic-bezier(.16,1,.3,1);
+}
+
+.survivors-signature-event > span {
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: .15em;
+}
+
+.survivors-signature-event > strong {
+  font-size: 17px;
+  font-weight: 950;
+  color: #fff;
+}
+.survivors-signature-event > em {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .18em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(2,6,23,.5);
+  color: #fff;
+}
+.survivors-signature-event > b {
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .06em;
+  color: var(--signature-stage-accent, #cbd5e1);
+}
+
+.survivors-signature-event::after {
+  content:'';
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:-1px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--signature-stage-accent,#94a3b8),transparent);
+  opacity:.9;
+}
+
+.survivors-signature-event.theme-deep_excavation { backdrop-filter:blur(12px) sepia(.12); }
+.survivors-signature-event.theme-highrise_slab { box-shadow:0 16px 42px rgba(0,0,0,.48),0 0 34px rgba(56,189,248,.22); }
+.survivors-signature-event.theme-curing_chamber { box-shadow:0 16px 42px rgba(0,0,0,.5),0 0 36px rgba(125,211,252,.24); }
+.survivors-signature-event.theme-datacenter { box-shadow:0 16px 44px rgba(0,0,0,.52),0 0 38px rgba(167,139,250,.26); }
+
+.survivors-signature-brief {
+  display:grid;
+  gap:7px;
+  padding:10px 12px;
+  margin-top:8px;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(7,13,22,.78));
+}
+
+.survivors-signature-brief > strong {
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.12em;
+  color:#cbd5e1;
+}
+
+.survivors-signature-brief > span {
+  display:grid;
+  grid-template-columns:34px 112px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  padding:6px 8px;
+  border-left:3px solid var(--brief-accent,#94a3b8);
+  background:rgba(15,23,42,.56);
+  border-radius:7px;
+}
+
+.survivors-signature-brief > span > b {
+  font-size:10px;
+  color:var(--brief-accent,#cbd5e1);
+}
+.survivors-signature-brief > span > em {
+  font-style:normal;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  color:#f8fafc;
+}
+.survivors-signature-brief > span > small {
+  font-size:11px;
+  font-weight:700;
+  color:#cbd5e1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.survivors-signature-brief > span > small > u {
+  display:block;
+  margin-top:2px;
+  color:#94a3b8;
+  font-size:9px;
+  font-weight:800;
+  text-decoration:none;
+}
+
+.survivors-signature-event.event-cart_convoy { border-color:#fb923c; box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(251,146,60,.30); }
+.survivors-signature-event.event-cart_convoy > em { color:#fed7aa; }
+.survivors-signature-event.event-gas_bloom { border-color:#22c55e; background:linear-gradient(135deg,rgba(5,46,22,.96),rgba(20,83,45,.93)); box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(34,197,94,.28); }
+.survivors-signature-event.event-gas_bloom > em { color:#bbf7d0; }
+.survivors-signature-event.event-lifting_cross { border-color:#facc15; background:linear-gradient(135deg,rgba(66,32,6,.96),rgba(113,63,18,.93)); }
+.survivors-signature-event.event-lifting_cross > em { color:#fef08a; }
+.survivors-signature-event.event-debris_corridor { border-color:#f97316; background:linear-gradient(135deg,rgba(67,20,7,.97),rgba(124,45,18,.94)); }
+.survivors-signature-event.event-debris_corridor > em { color:#ffedd5; }
+.survivors-signature-event.event-equipment_pincer { border-color:#ef4444; background:linear-gradient(135deg,rgba(69,10,10,.98),rgba(127,29,29,.95)); }
+.survivors-signature-event.event-equipment_pincer > em { color:#fecaca; }
+.survivors-signature-event.event-precollapse_signal { border-color:#dc2626; background:linear-gradient(135deg,rgba(24,3,3,.99),rgba(69,10,10,.97)); box-shadow:0 18px 44px rgba(0,0,0,.62),0 0 44px rgba(220,38,38,.34); }
+.survivors-signature-event.event-precollapse_signal > em { color:#fecaca; animation:survivors-collapse-label .5s ease-in-out infinite alternate; }
+
+@keyframes survivors-collapse-label {
+  from { opacity:.65; letter-spacing:.16em; }
+  to { opacity:1; letter-spacing:.22em; }
+}
+
+.survivors-signature-event > small {
+  max-width: 540px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.survivors-signature-event > i {
+  font-style:normal;
+  margin-top:2px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(2,6,23,.42);
+  color:#f8fafc;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.survivors-signature-event.is-amber {
+  border: 1px solid rgba(251,191,36,.7);
+  background: linear-gradient(135deg, rgba(69, 39, 5, .96), rgba(120, 53, 15, .93));
+  box-shadow: 0 14px 34px rgba(0,0,0,.46), 0 0 30px rgba(245,158,11,.24);
+}
+.survivors-signature-event.is-amber > span { color: #fde68a; }
+
+.survivors-signature-event.is-red {
+  border: 1px solid rgba(248,113,113,.82);
+  background: linear-gradient(135deg, rgba(69, 10, 10, .97), rgba(153, 27, 27, .94));
+  box-shadow: 0 16px 38px rgba(0,0,0,.52), 0 0 36px rgba(239,68,68,.3);
+}
+.survivors-signature-event.is-red > span { color: #fecaca; }
+.survivors-signature-event.is-warning { animation: survivors-signature-hit 220ms cubic-bezier(.16,1,.3,1), survivors-signature-warning-pulse .72s ease-in-out infinite alternate; }
+.survivors-signature-event.is-impact { transform:translateX(-50%) scale(1.015); }
+.survivors-signature-event.is-resolved {
+  border-color:rgba(52,211,153,.78);
+  background:linear-gradient(135deg,rgba(6,78,59,.96),rgba(6,95,70,.92));
+  box-shadow:0 16px 38px rgba(0,0,0,.46),0 0 34px rgba(16,185,129,.26);
+}
+.survivors-signature-event.is-resolved > span { color:#a7f3d0; }
+@keyframes survivors-signature-warning-pulse {
+  from { box-shadow:0 14px 34px rgba(0,0,0,.46),0 0 20px rgba(245,158,11,.16); }
+  to { box-shadow:0 14px 40px rgba(0,0,0,.54),0 0 42px rgba(245,158,11,.36); }
+}
+
+
+@keyframes survivors-signature-hit {
+  0% { opacity: 0; transform: translate(-50%, -12px) scale(.96); }
+  65% { opacity: 1; transform: translate(-50%, 2px) scale(1.01); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.survivors-counterplay-banner {
+  position:absolute;
+  top:calc(var(--survivors-hud-reserve,76px) + 118px);
+  left:50%;
+  z-index:62;
+  width:min(620px,calc(100% - 28px));
+  transform:translateX(-50%);
+  display:grid;
+  justify-items:center;
+  gap:3px;
+  padding:10px 16px;
+  border:1px solid color-mix(in srgb,var(--counterplay-accent,#34d399) 72%,white 8%);
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(3,20,18,.96),rgba(6,78,59,.93));
+  box-shadow:0 16px 42px rgba(0,0,0,.52),0 0 34px color-mix(in srgb,var(--counterplay-accent,#34d399) 28%,transparent);
+  pointer-events:none;
+  text-align:center;
+  animation:survivors-counterplay-pop 240ms cubic-bezier(.16,1,.3,1);
+}
+.survivors-counterplay-banner > span {font-size:9px;font-weight:950;letter-spacing:.16em;color:#a7f3d0;}
+.survivors-counterplay-banner > strong {font-size:16px;font-weight:950;color:#fff;}
+.survivors-counterplay-banner > small {font-size:11px;font-weight:750;color:#d1fae5;}
+.survivors-counterplay-banner.kind-boss_prereveal,
+.survivors-counterplay-banner.kind-boss_weakpoint {background:linear-gradient(135deg,rgba(24,24,27,.97),rgba(88,28,135,.94));}
+.survivors-counterplay-banner.kind-cooldown_rush {background:linear-gradient(135deg,rgba(4,47,46,.97),rgba(6,95,70,.94));}
+.survivors-counterplay-banner.kind-instant_counter {background:linear-gradient(135deg,rgba(69,26,3,.97),rgba(146,64,14,.94));}
+.survivors-counterplay-banner.kind-dash_reset {background:linear-gradient(135deg,rgba(7,43,76,.97),rgba(3,105,161,.94));}
+.survivors-counterplay-banner.kind-ultimate_surge {background:linear-gradient(135deg,rgba(69,10,10,.97),rgba(153,27,27,.94));}
+.survivors-counterplay-active {
+  position:absolute;
+  right:14px;
+  top:calc(var(--survivors-hud-reserve,76px) + 10px);
+  z-index:60;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:5px;
+  pointer-events:none;
+}
+.survivors-counterplay-active > span {
+  padding:6px 9px;
+  border:1px solid rgba(52,211,153,.42);
+  border-radius:999px;
+  background:rgba(3,22,20,.88);
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
+  color:#d1fae5;
+  font-size:10px;
+  font-weight:800;
+  backdrop-filter:blur(8px);
+}
+.survivors-counterplay-active b {color:#fff;font-weight:950;}
+@keyframes survivors-counterplay-pop {
+  0% {opacity:0;transform:translate(-50%,10px) scale(.94);}
+  68% {opacity:1;transform:translate(-50%,-2px) scale(1.02);}
+  100% {opacity:1;transform:translate(-50%,0) scale(1);}
+}
+
+.survivors-wave-supply-notice {
+  position: absolute;
+  top: calc(var(--survivors-hud-reserve, 76px) + 10px);
+  left: 50%;
+  z-index: 58;
+  width: min(620px, calc(100% - 28px));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.46);
+  border-radius: 12px;
+  background: rgba(4, 18, 31, 0.88);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  text-align: center;
+  animation: survivors-wave-supply-in 180ms ease-out;
+}
+
+.survivors-wave-supply-notice strong {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+  color: #e0f2fe;
+}
+
+.survivors-wave-supply-notice span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #bae6fd;
+}
+
+.survivors-wave-supply-notice.has-director {
+  top: calc(var(--survivors-hud-reserve, 76px) + 92px);
+}
+
+@keyframes survivors-wave-supply-in {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (max-width: 760px) {
+  .survivors-signature-event {
+    top: calc(var(--survivors-hud-reserve, 66px) + 6px);
+    width: calc(100% - 18px);
+    padding: 8px 10px;
+  }
+  .survivors-signature-event > strong { font-size: 14px; }
+  .survivors-signature-event > em { font-size: 8px; }
+  .survivors-signature-event > b { font-size: 9px; }
+  .survivors-signature-event > small { font-size: 10px; }
+  .survivors-signature-event > i { font-size:8px; }
+  .survivors-signature-brief > span { grid-template-columns:28px 90px minmax(0,1fr); gap:5px; padding:5px 6px; }
+  .survivors-signature-brief > span > em { font-size:8px; }
+  .survivors-signature-brief > span > small { font-size:10px; }
+  .survivors-counterplay-banner {top:calc(var(--survivors-hud-reserve,66px) + 102px);width:calc(100% - 18px);padding:8px 10px;}
+  .survivors-counterplay-banner > strong {font-size:13px;}
+  .survivors-counterplay-banner > small {font-size:10px;}
+  .survivors-counterplay-active {top:calc(var(--survivors-hud-reserve,66px) + 6px);right:8px;}
+  .survivors-counterplay-active > span {font-size:9px;padding:5px 7px;}
+
+  .survivors-wave-director-notice {
+    top: calc(var(--survivors-hud-reserve, 66px) + 6px);
+    width: calc(100% - 18px);
+    padding: 8px 10px;
+  }
+
+  .survivors-wave-director-notice > strong { font-size: 14px; }
+  .survivors-wave-director-notice > small { font-size: 10px; }
+
+  .survivors-wave-supply-notice {
+    top: calc(var(--survivors-hud-reserve, 66px) + 6px);
+    width: calc(100% - 18px);
+    padding: 7px 10px;
+  }
+
+  .survivors-wave-supply-notice strong { font-size: 11px; }
+  .survivors-wave-supply-notice span { font-size: 10px; }
+  .survivors-wave-supply-notice.has-director {
+    top: calc(var(--survivors-hud-reserve, 66px) + 78px);
+  }
+}
+
+
+/* Signature Mastery & Chain Lock */
+.survivors-mastery-meter {
+  position:absolute;
+  left:14px;
+  top:calc(var(--survivors-hud-reserve,76px) + 10px);
+  z-index:61;
+  min-width:168px;
+  display:grid;
+  gap:1px;
+  padding:8px 11px;
+  border:1px solid rgba(103,232,249,.46);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(8,47,73,.90),rgba(6,78,59,.88));
+  box-shadow:0 10px 26px rgba(0,0,0,.34),0 0 24px rgba(34,211,238,.16);
+  pointer-events:none;
+  backdrop-filter:blur(9px);
+}
+.survivors-mastery-meter > span {font-size:8px;font-weight:950;letter-spacing:.14em;color:#a5f3fc;}
+.survivors-mastery-meter > strong {font-size:15px;font-weight:1000;letter-spacing:.035em;color:#fff;}
+.survivors-mastery-meter > small {font-size:9px;font-weight:800;color:#bae6fd;}
+.survivors-mastery-meter.is-armed {
+  border-color:rgba(251,191,36,.72);
+  background:linear-gradient(135deg,rgba(69,26,3,.95),rgba(120,53,15,.91));
+  box-shadow:0 12px 30px rgba(0,0,0,.4),0 0 30px rgba(245,158,11,.24);
+}
+.survivors-mastery-meter.is-armed > span,.survivors-mastery-meter.is-armed > small {color:#fde68a;}
+.survivors-mastery-meter.is-zero-day {
+  border-color:rgba(250,204,21,.9);
+  background:linear-gradient(135deg,rgba(8,47,73,.97),rgba(88,28,135,.95),rgba(120,53,15,.94));
+  box-shadow:0 14px 34px rgba(0,0,0,.48),0 0 36px rgba(34,211,238,.25),0 0 50px rgba(250,204,21,.18);
+}
+.survivors-mastery-notice {
+  position:absolute;
+  left:50%;
+  top:calc(var(--survivors-hud-reserve,76px) + 184px);
+  z-index:67;
+  width:min(650px,calc(100% - 30px));
+  transform:translateX(-50%);
+  display:grid;
+  justify-items:center;
+  gap:4px;
+  padding:11px 18px;
+  border:1px solid rgba(103,232,249,.7);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(8,47,73,.97),rgba(6,78,59,.95));
+  box-shadow:0 18px 48px rgba(0,0,0,.54),0 0 42px rgba(34,211,238,.24);
+  text-align:center;
+  pointer-events:none;
+  animation:survivors-mastery-enter 280ms cubic-bezier(.16,1,.3,1);
+}
+.survivors-mastery-notice > span {font-size:9px;font-weight:1000;letter-spacing:.18em;color:#a5f3fc;}
+.survivors-mastery-notice > strong {font-size:20px;font-weight:1000;letter-spacing:.035em;color:#fff;text-shadow:0 2px 14px rgba(255,255,255,.18);}
+.survivors-mastery-notice > small {font-size:11px;font-weight:800;color:#dbeafe;}
+.survivors-mastery-notice.is-armed {
+  border-color:rgba(251,191,36,.9);
+  background:linear-gradient(135deg,rgba(69,26,3,.98),rgba(146,64,14,.95));
+  box-shadow:0 20px 52px rgba(0,0,0,.58),0 0 52px rgba(245,158,11,.33);
+}
+.survivors-mastery-notice.is-armed > span,.survivors-mastery-notice.is-armed > small {color:#fde68a;}
+.survivors-mastery-notice.is-broken {
+  border-color:rgba(248,113,113,.64);
+  background:linear-gradient(135deg,rgba(69,10,10,.94),rgba(127,29,29,.90));
+  box-shadow:0 14px 36px rgba(0,0,0,.46),0 0 26px rgba(239,68,68,.18);
+}
+.survivors-mastery-notice.is-zero_day {
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(760px,calc(100% - 26px));
+  padding:20px 24px;
+  border:2px solid rgba(250,204,21,.94);
+  background:linear-gradient(120deg,rgba(3,7,18,.98),rgba(8,47,73,.97),rgba(88,28,135,.95),rgba(120,53,15,.96));
+  box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 70px rgba(34,211,238,.32),0 0 90px rgba(250,204,21,.28);
+  animation:survivors-zero-day-enter 420ms cubic-bezier(.16,1,.3,1),survivors-zero-day-glow .72s ease-in-out infinite alternate;
+}
+.survivors-mastery-notice.is-zero_day > span {font-size:11px;color:#67e8f9;}
+.survivors-mastery-notice.is-zero_day > strong {font-size:30px;color:#fef3c7;text-shadow:0 0 24px rgba(250,204,21,.44);}
+.survivors-mastery-notice.is-zero_day > small {font-size:13px;color:#fff;}
+.is-zero-day-mastery {
+  color:#fbbf24 !important;
+  text-shadow:0 0 18px rgba(250,204,21,.34);
+}
+@keyframes survivors-mastery-enter {
+  0% {opacity:0;transform:translate(-50%,12px) scale(.92);}
+  70% {opacity:1;transform:translate(-50%,-2px) scale(1.03);}
+  100% {opacity:1;transform:translate(-50%,0) scale(1);}
+}
+@keyframes survivors-zero-day-enter {
+  0% {opacity:0;transform:translate(-50%,-50%) scale(.76);filter:brightness(1.8);}
+  70% {opacity:1;transform:translate(-50%,-50%) scale(1.045);}
+  100% {opacity:1;transform:translate(-50%,-50%) scale(1);}
+}
+@keyframes survivors-zero-day-glow {
+  from {box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 42px rgba(34,211,238,.22),0 0 54px rgba(250,204,21,.20);}
+  to {box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 82px rgba(34,211,238,.38),0 0 104px rgba(250,204,21,.34);}
+}
+@media (max-width: 760px) {
+  .survivors-mastery-meter {
+    left:8px;
+    top:calc(var(--survivors-hud-reserve,70px) + 6px);
+    min-width:145px;
+    padding:6px 8px;
+  }
+  .survivors-mastery-meter > strong {font-size:12px;}
+  .survivors-mastery-notice {
+    top:calc(var(--survivors-hud-reserve,70px) + 170px);
+    padding:9px 12px;
+  }
+  .survivors-mastery-notice > strong {font-size:16px;}
+  .survivors-mastery-notice.is-zero_day {
+    top:48%;
+    padding:16px 14px;
+  }
+  .survivors-mastery-notice.is-zero_day > strong {font-size:23px;}
+}
+
+/* Selection stays compact; optional detail is outside the selection button. */
+.survivors-perk-option { min-width:0; }
+.survivors-perk-option .survivors-perk-card { width:100%; height:auto; padding:12px; gap:10px; }
+.survivors-perk-option .survivors-perk-card-info h4 { margin:0; font-size:14px; line-height:1.35; }
+.survivors-perk-option .survivors-perk-card-info h4 span { font-size:10px; }
+.survivors-perk-option .survivors-perk-card-info > p { margin:5px 0; font-size:11px; line-height:1.4; }
+.survivors-upgrade-stats.is-compact { margin:6px 0 0; font-size:11px; }
+.survivors-upgrade-stats.is-compact dl { gap:4px 10px; }
+.survivors-perk-detail { color:#c6d5df; font-size:11px; padding:0 10px; }
+.survivors-perk-detail summary { cursor:pointer; min-height:32px; display:list-item; align-content:center; }
+.survivors-perk-detail > p { line-height:1.5; }
+.survivors-perk-detail[open] { padding-bottom:10px; }
+.survivors-perk-detail .survivors-upgrade-stats { font-size:11px; }
+.survivors-upgrade-dialog .survivors-perk-cards { gap:8px; }
+@media (max-width:760px) {
+  .survivors-upgrade-dialog { padding:14px; }
+  .survivors-upgrade-dialog > .survivors-modal-sub { margin:6px 0 10px; font-size:11px; }
+  .survivors-perk-option .survivors-perk-card-icon { width:36px; height:36px; flex:0 0 36px; }
+  .survivors-perk-option .survivors-perk-card-icon .survivors-equipment-icon { width:36px; height:36px; }
+  .survivors-perk-option .survivors-perk-card-info > p { display:none; }
+  .is-combat :is(.survivors-wave-director-notice,.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) {
+    top:calc(var(--survivors-hud-reserve,76px) + 10px); left:50%; right:auto; transform:translateX(-50%);
+    width:calc(100% - 24px); padding:8px 10px; border-radius:8px; gap:3px;
+  }
+  .is-combat :is(.survivors-wave-director-notice,.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) > strong { font-size:13px; line-height:1.35; }
+  .is-combat :is(.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) > span { display:none; }
+  .is-combat .survivors-signature-event > em { display:none; }
+  .is-combat .survivors-signature-event > small { font-size:10px; line-height:1.4; }
+  .is-combat .survivors-counterplay-active { top:auto; bottom:calc(max(12px,env(safe-area-inset-bottom)) + 132px); right:12px; }
+}
+@media (max-height:480px) and (orientation:landscape) {
+  .survivors-upgrade-dialog { width:calc(100% - 24px); max-width:1080px; padding:12px; }
+  .survivors-upgrade-dialog .survivors-perk-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .survivors-perk-option .survivors-perk-card { flex-direction:row; align-items:flex-start; padding:8px; }
+  .survivors-perk-option .survivors-perk-card-icon { display:none; }
+}
+
+@media (max-width:900px), (pointer:coarse) {
+  .is-combat .survivors-signature-event {
+    top:calc(var(--survivors-hud-bottom,76px) + 6px);
+    left:8px; right:auto; transform:none;
+    width:min(340px,calc(100% - 16px)); box-sizing:border-box;
+    padding:6px 9px; gap:2px; border-radius:4px; text-align:left; justify-items:start;
+    background:rgba(18,24,25,.94); box-shadow:none; backdrop-filter:none;
+    animation:none;
+  }
+  .is-combat .survivors-signature-event > :is(span,em,b) { display:none; }
+  .is-combat .survivors-signature-event > strong { font-size:13px; line-height:1.35; }
+  .is-combat .survivors-signature-event > small { font-size:11px; line-height:1.4; }
+  .is-combat .survivors-signature-event > i { font-size:10px; line-height:1.4; letter-spacing:0; }
+  .is-combat .survivors-signature-event > :is(strong,small,i) { max-width:100%; overflow-wrap:anywhere; }
+}
+.survivors-feel-settings { border:1px solid #43535f; border-radius:10px; padding:12px; margin:12px 0; }
+.survivors-feel-settings label { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:10px 0; }
+.survivors-feel-settings input { flex:1; min-width:90px; max-width:260px; }
+.survivors-feel-settings output { min-width:42px; }
+.survivors-terrain-record { margin:12px 0; padding:12px; border:1px solid #3f5c59; border-radius:8px; background:#122924; }
+.survivors-terrain-record h3 { font-size:14px; margin:0 0 8px; }
+.survivors-terrain-record dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:0; }
+.survivors-terrain-record dt { font-size:12px; color:#b1c8c5; }
+.survivors-terrain-record dd { margin:4px 0 0; font-weight:bold; color:#8fe5c6; }
+
+.survivors-feel-settings p { font-size:12px; line-height:1.5; color:#b3c6cd; }
+
+
+/* Device budget affects presentation only; controls and warnings stay available. */
+.survivors-container { height:100dvh; }
+.survivors-container[data-quality="low"] :is(.survivors-hud-top,.survivors-modal,.survivors-focus-status) {
+  backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:none;
+}
+@media (pointer:coarse) {
+  .is-combat .survivors-hud-top { backdrop-filter:none; -webkit-backdrop-filter:none; }
+  .is-combat .survivors-player-hud,.is-combat .survivors-hud-center { min-width:0; }
+  .is-combat .survivors-wave-badge { flex-shrink:0; }
+  .survivors-modal { max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom))); overflow-y:auto; }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px) {
+  .is-combat .survivors-hud-top { width:min(620px,calc(100% - max(16px,env(safe-area-inset-left)) - max(16px,env(safe-area-inset-right)))); left:50%; right:auto; transform:translateX(-50%); }
+  .is-combat .survivors-tactical-actions { right:max(12px,env(safe-area-inset-right)); width:44px; flex-direction:column; bottom:calc(max(12px,env(safe-area-inset-bottom)) + 76px); }
+  .is-combat .survivors-focus-status { top:calc(var(--survivors-hud-bottom,60px) + 4px); height:22px; }
+  .is-combat :is(.survivors-signature-event,.survivors-wave-director-notice,.survivors-counterplay-banner,.survivors-mastery-notice) { top:calc(var(--survivors-hud-bottom,60px) + 30px); width:min(340px,calc(100% - 140px)); }
+}
+@media (pointer:coarse) and (min-width:768px) and (min-height:601px) {
+  .is-combat .survivors-hud-top { max-width:760px; margin:0 auto; }
+  .is-combat .survivors-tactical-actions { gap:12px; width:180px; bottom:calc(max(24px,env(safe-area-inset-bottom)) + 88px); }
+  .is-combat .survivors-tactical-actions button { flex-basis:52px; width:52px; height:52px; }
+  .is-combat .survivors-ultimate-control { bottom:max(24px,env(safe-area-inset-bottom)); right:max(24px,env(safe-area-inset-right)); }
+}
+/* Transient wave notices must not cover the character on short landscape screens. */
+@media (pointer:coarse) {
+  .is-combat .survivors-wave-director-notice { padding:6px 9px; gap:2px; }
+  .is-combat .survivors-wave-director-notice > span { display:none; }
+  .is-combat .survivors-wave-director-notice > strong { font-size:13px; line-height:1.35; }
+  .is-combat .survivors-wave-director-notice > small { font-size:11px; line-height:1.4; }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px) {
+  .is-combat :is(.survivors-wave-director-notice,.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) {
+    left:max(12px,env(safe-area-inset-left)); right:auto; transform:none; text-align:left;
+    width:min(280px,calc(100% - 120px)); padding:4px 7px;
+  }
+  .is-combat .survivors-wave-director-notice > small { display:none; }
+}
+
+.survivors-clear-reward{border:1px solid #719b8755;background:#18322888;border-radius:8px;padding:12px;text-align:left;margin:12px 0}.survivors-clear-reward h3{font-size:15px;margin:0 0 8px;color:#a9f0c7}.survivors-clear-reward p{font-size:12px;margin:4px 0}

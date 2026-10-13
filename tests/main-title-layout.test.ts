@@ -75,10 +75,11 @@ describe('main title / loading / character production alignment', () => {
     expect(layout.composition.cast_mode).toBe('full_body_live_assets');
   });
 
-  it('makes the LIVE SITE DEF-CORE card a real representative-scenario entry on phone', () => {
+  it('keeps the LIVE SITE preview gated while defense is unfinished', () => {
     expect(gameHubSource).toContain('data-title-live-entry="DEF-CORE-01"');
-    expect(gameHubSource).toContain('onClick={() => onDefense(defenseEvents[0]?.id ?? null)}');
-    expect(gameHubSource).toContain('대표 시나리오 바로 시작');
+    expect(gameHubSource).toContain("onClick={() => setModePreview('defense')}");
+    expect(gameHubSource).not.toContain('onClick={() => onDefense(defenseEvents[0]?.id ?? null)}');
+    expect(gameHubSource).toContain('디펜스 모드 · 준비중');
     expect(gameHubCss).toContain('.commercial-title-field-status.is-live-entry');
     expect(gameHubCss).toContain('.commercial-title-field-status-cta');
   });

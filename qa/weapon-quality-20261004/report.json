@@ -1,0 +1,125 @@
+{
+  "scope": "SAVED_UNLOCK_FIXTURE_REAL_UI_AND_OFFLINE_RENDER_NOT_ANDROID_DEVICE",
+  "rows": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "11",
+      "decisionCount": 1,
+      "consequence": "잠금장치를 교체하고 착용 상태를 함께 재확인했다. 장비 결함은 위반 경고로 세지 않았다. 반장은 다음 작업 전 지급품 점검을 맡는다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "12",
+      "decisionCount": 2,
+      "consequence": "1차 경고를 기록했다. 민재가 직접 안전동선을 설명하고 계도 내용을 되짚었다. 반장은 안전통로 확보와 복귀 전 확인을 맡는다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "13",
+      "decisionCount": 3,
+      "consequence": "2차·최종 경고를 기록했다. 협력사 책임자와 반장이 다음 위반 시 출입배제를 설명했다. 작업 재개는 현장 조건과 이해 확인 뒤에만 가능하다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "14",
+      "decisionCount": 4,
+      "consequence": "세 번째 확인 위반과 기존 계도 기록을 대조하고 현장 출입배제를 확정했다. 출입배제 내용은 근로자와 협력사 책임자에게 전달됐다. 반입 공정은 대체 인력의 교육과 동선 인계가 끝날 때까지 보류된다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "11",
+      "decisionCount": 1,
+      "consequence": "잠금장치를 교체하고 착용 상태를 함께 재확인했다. 장비 결함은 위반 경고로 세지 않았다. 반장은 다음 작업 전 지급품 점검을 맡는다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "12",
+      "decisionCount": 2,
+      "consequence": "1차 경고를 기록했다. 민재가 직접 안전동선을 설명하고 계도 내용을 되짚었다. 반장은 안전통로 확보와 복귀 전 확인을 맡는다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "13",
+      "decisionCount": 3,
+      "consequence": "2차·최종 경고를 기록했다. 협력사 책임자와 반장이 다음 위반 시 출입배제를 설명했다. 작업 재개는 현장 조건과 이해 확인 뒤에만 가능하다.",
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "14",
+      "decisionCount": 4,
+      "consequence": "세 번째 확인 위반과 기존 계도 기록을 대조하고 현장 출입배제를 확정했다. 출입배제 내용은 근로자와 협력사 책임자에게 전달됐다. 반입 공정은 대체 인력의 교육과 동선 인계가 끝날 때까지 보류된다.",
+      "pass": true
+    }
+  ],
+  "uiEvidenceReused": true,
+  "audio": {
+    "maximumVoices": 24,
+    "silentVoices": 0,
+    "stressPeak": 0.173949733376503,
+    "pass": true,
+    "renders": [
+      {
+        "kind": "radio",
+        "peak": 0.015782326459884644
+      },
+      {
+        "kind": "extinguisher",
+        "peak": 0.024520935490727425
+      },
+      {
+        "kind": "drone_laser",
+        "peak": 0.014769978821277618
+      },
+      {
+        "kind": "cryo_blast",
+        "peak": 0.025535576045513153
+      },
+      {
+        "kind": "tesla_bolt",
+        "peak": 0.023100467398762703
+      },
+      {
+        "kind": "emf_beam",
+        "peak": 0.018180768936872482
+      },
+      {
+        "kind": "cone_trap",
+        "peak": 0.021213039755821228
+      }
+    ],
+    "previewGain": 12
+  },
+  "errors": [],
+  "pass": true
+}

@@ -1,0 +1,181 @@
+/* Actual transparent PSI equipment sprites, not baked-in text or opaque scene panels. */
+:root{--psi-frame:url('../art/psi-hud-field-v1.webp');--psi-accent:#91efe2}
+body[data-psi-hud=brass]{--psi-accent:#ffd28b}body[data-psi-hud=grid]{--psi-accent:#a0d8ff}
+
+/* Crystal-clear in-game HUD and controls without any blurry glass veils */
+body.breaker-focus .hud-top{
+  background:linear-gradient(180deg, rgba(6, 17, 24, 0.92) 0%, rgba(6, 17, 24, 0.6) 80%, transparent 100%)!important;
+  backdrop-filter:none!important;
+  border-bottom:1px solid rgba(83, 216, 230, 0.35)!important;
+  box-shadow:none!important;
+  padding:8px 18px;
+  min-height:50px;
+  isolation:isolate;
+}
+.hud-top::before,.boss-encounter::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;border:12px solid transparent;border-image:var(--psi-frame) 75 55 70 75 fill / 12px / 0 stretch}
+body.breaker-focus .boss-encounter{background:rgba(8, 24, 34, 0.9);border:0;isolation:isolate;padding:12px 18px;backdrop-filter:none!important}.boss-encounter::before{border-image-width:9px}
+
+body.breaker-focus .hud-bottom{
+  backdrop-filter:none!important;
+  background:linear-gradient(0deg, rgba(6, 17, 24, 0.94) 0%, rgba(6, 17, 24, 0.6) 80%, transparent 100%)!important;
+  border-top:1px solid rgba(83, 216, 230, 0.35)!important;
+}
+
+body.breaker-focus .health .heart{width:19px;height:23px;border:0;clip-path:none;background:url('../art/psi-shield-chip-v1.webp') center/contain no-repeat;box-shadow:none}.health .heart.empty{opacity:.2;filter:grayscale(1)}
+
+/* 100% Unobstructed playing area: no muddy glass overlays or blur sheets */
+body.breaker-focus .touch-controls{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  padding:0!important;
+}
+
+body.breaker-focus #fireBtn,body.twin-controls #fireBtn{
+  border:0!important;
+  border-radius:50%!important;
+  box-shadow:0 6px 20px rgba(0,0,0,0.6), 0 0 18px rgba(246, 178, 84, 0.35)!important;
+  background:url('../art/psi-fire-ring-v1.webp') center/contain no-repeat!important;
+  color:#fff4d0!important;
+  text-shadow:0 2px 6px rgba(0,0,0,0.9);
+  padding:8px;
+  transition:transform .08s ease, filter .08s ease;
+}
+body.breaker-focus #fireBtn:active,body.twin-controls #fireBtn:active{
+  transform:scale(0.93)!important;
+  filter:brightness(1.28) drop-shadow(0 0 12px rgba(255, 170, 60, 0.7))!important;
+}
+body.breaker-focus #fireBtn b{font-size:15px;letter-spacing:0.04em;color:#fffaeb;text-shadow:0 2px 5px #000}
+body.breaker-focus #fireBtn span{font-size:8px;opacity:0.92;color:#ffd796;text-shadow:0 1px 3px #000}
+
+body.breaker-focus #joystick,body.breaker-focus .aim-pad{
+  border:0!important;
+  box-shadow:0 4px 16px rgba(0,0,0,0.5), inset 0 0 10px rgba(92,230,219,0.15)!important;
+  background:url('../art/psi-nav-ring-v1.webp') center/100% 100% no-repeat!important;
+  border-radius:50%!important;
+}
+body.breaker-focus #joystick span{
+  border:0!important;
+  background:url('../art/psi-shield-chip-v1.webp') center/contain no-repeat!important;
+  box-shadow:0 0 10px rgba(89,201,215,0.55)!important;
+}
+
+body.breaker-focus .move-btn{
+  border:1px solid rgba(82, 148, 163, 0.6)!important;
+  border-radius:8px!important;
+  background:linear-gradient(150deg, #133a4a, #0a212b)!important;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)!important;
+  color:#7aebe2!important;
+  font-size:16px!important;
+  text-shadow:0 0 8px rgba(122,235,226,0.6)!important;
+  transition:all .08s ease;
+}
+body.breaker-focus .move-btn:active,body.breaker-focus .move-btn.pressed{
+  background:linear-gradient(150deg, #1f576e, #103747)!important;
+  border-color:#82f2e5!important;
+  color:#c7fff8!important;
+  transform:scale(0.93)!important;
+  box-shadow:0 0 12px rgba(130,242,229,0.4)!important;
+}
+body.breaker-focus .move-btn.suggested{
+  border-color:#ffda8c!important;
+  box-shadow:0 0 12px rgba(255,218,140,0.7), inset 0 0 8px rgba(255,218,140,0.25)!important;
+  color:#fffaea!important;
+}
+
+body.breaker-focus .util-btn{
+  border:1px solid rgba(75, 137, 153, 0.55)!important;
+  border-radius:8px!important;
+  background:linear-gradient(160deg, rgba(16, 44, 57, 0.85), rgba(7, 24, 33, 0.9))!important;
+  box-shadow:0 3px 10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)!important;
+  color:#bce5e7!important;
+  font-size:9px!important;
+  font-weight:800!important;
+  letter-spacing:0.02em;
+  transition:all .12s ease;
+  text-shadow:0 1px 3px #000;
+}
+body.breaker-focus .util-btn.active{
+  border-color:#7ee8d5!important;
+  background:linear-gradient(160deg, #174e57, #0d343b)!important;
+  color:#afffed!important;
+  box-shadow:inset 0 0 12px rgba(126,232,213,0.35), 0 0 10px rgba(126,232,213,0.25)!important;
+}
+body.breaker-focus #sourceBtn{
+  border-color:rgba(235, 179, 92, 0.6)!important;
+  color:#ffeaae!important;
+  background:linear-gradient(160deg, #3d2b17, #1f160b)!important;
+}
+
+body.breaker-focus #talentBtn{
+  border:1px solid #4a808e!important;
+  border-radius:7px!important;
+  background:linear-gradient(145deg, #163d4a, #0b222c)!important;
+  box-shadow:0 0 8px rgba(89,201,215,0.35)!important;
+  color:#baf4ff!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  padding:4px 9px!important;
+  cursor:pointer;
+}
+body.breaker-focus #talentBtn:active{
+  border-color:#86edf8!important;
+  background:#1e5163!important;
+  transform:scale(0.94);
+}
+body.breaker-focus #pauseBtn{
+  border:1px solid #4a808e!important;
+  border-radius:7px!important;
+  background:linear-gradient(145deg, #163d4a, #0b222c)!important;
+  box-shadow:0 0 8px rgba(119,248,198,0.25)!important;
+  color:#affbe7!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  padding:4px 9px!important;
+  cursor:pointer;
+}
+body.breaker-focus #pauseBtn:active{
+  border-color:#82f2d4!important;
+  background:#1c5256!important;
+  transform:scale(0.94);
+}
+body.breaker-focus .weapon-btn{border:7px solid transparent;border-image:var(--psi-frame) 75 55 70 75 fill / 7px / 0 stretch;background:rgba(6, 29, 41, 0.75);box-shadow:0 4px 10px rgba(0,0,0,0.4)}
+body.breaker-focus .weapon-btn.selected{color:var(--psi-accent);background:#154453ce;box-shadow:inset 0 0 14px #71dfc426,0 0 8px rgba(113,223,196,0.3)}
+.episode-switch{display:flex;gap:8px;padding:0 2px}.episode-switch button{min-height:44px;padding:10px 16px;border:1px solid #7898a16b;border-radius:8px;background:#0b2634;color:#d8efee;font-family:inherit;font-size:12px;font-weight:700}.episode-switch button[aria-pressed=true]{border-color:var(--psi-accent);color:var(--psi-accent);background:#193c48}.episode-status{font-size:12px;color:#bcd8d8;margin:10px 3px}
+.operation-stage[data-locked=true] img{filter:saturate(.3);opacity:.55}.operation-stage[data-locked=true] span{color:#c9b797}
+.signal-objective{position:absolute;top:214px;right:14px;max-width:210px;padding:5px 8px;background:#0c2c37c9;color:var(--psi-accent);font-size:10px;line-height:1.4;pointer-events:none;z-index:4}.signal-objective[hidden]{display:none}.signal-objective[data-complete=true]{color:#ffdd9c}
+.psi-workshop{width:min(920px,94vw);max-height:92dvh;overflow:auto;border:1px solid #749fa4;border-radius:16px;background:linear-gradient(150deg,#193944,#081b26);color:#e1f4ee;padding:18px;box-shadow:0 20px 80px #000a;font-family:inherit}.psi-workshop::backdrop{background:#020d17b8;backdrop-filter:blur(5px)}
+.psi-workshop header{position:sticky;top:-18px;z-index:2;display:flex;justify-content:space-between;align-items:center;background:#112c38;padding:10px 0}.psi-workshop h2{font-size:22px;margin:5px 0}.psi-workshop header small{color:var(--psi-accent);letter-spacing:.13em;font-size:10px}.psi-workshop p{font-size:12px;line-height:1.5}.psi-workshop button{min-height:44px;border:1px solid #749aa2;border-radius:8px;background:#143947;color:#e9ffff;padding:8px 14px;font-family:inherit;cursor:pointer}.psi-workshop button:disabled{opacity:.5;cursor:default}.psi-workshop button:focus-visible{outline:3px solid #ffe4a2;outline-offset:2px}
+.shop-balance{display:flex;align-items:center;gap:8px;font-size:16px!important;font-weight:800}.shop-balance::before{content:'';width:30px;height:30px;background:url('../art/psi-shield-chip-v1.webp') center/contain no-repeat}#shopTabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}#shopTabs button[aria-pressed=true]{background:#24616a;border-color:var(--psi-accent)}
+.shop-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.shop-items article{padding:14px;border:1px solid #80adb24d;border-radius:12px;background:#061c27a8;display:flex;flex-direction:column;gap:8px}.shop-items img{width:100%;height:95px;object-fit:contain}.shop-items h3{margin:0;font-size:16px}.shop-items p{margin:0;min-height:36px}.shop-items button{margin-top:auto;width:100%}#shopNotice{min-height:30px;color:#f3d69a}
+@media(max-width:600px){.shop-items{grid-template-columns:1fr}.shop-items article{display:grid;grid-template-columns:86px 1fr;align-items:center}.shop-items img{grid-row:span 2;height:75px}.shop-items button{grid-column:1/-1}.shop-items p{min-height:0}.episode-switch button{flex:1;padding:8px;font-size:11px}.signal-objective{top:214px;max-width:185px;font-size:9px}}
+@media(max-height:500px){.psi-workshop{padding:12px}.psi-workshop header{top:-12px}.psi-workshop h2{font-size:18px}.shop-items img{height:65px}.signal-objective{top:210px;left:12px;right:auto;max-width:195px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.psi-workshop::backdrop{backdrop-filter:none}}
+
+/* Keep all cards in normal scroll flow above the sticky action footer. */
+.operation-lobby .operation-main{flex:1 0 auto;min-height:auto}
+.operation-lobby .operation-stages{flex-shrink:0}
+
+/* Keep price context and category controls reachable while the catalog scrolls. */
+.psi-workshop[open]{display:flex;flex-direction:column;height:min(800px,92dvh);overflow:hidden}
+.psi-workshop header{position:static;flex-shrink:0}
+.psi-workshop .shop-balance{flex-shrink:0;margin:8px 0}
+.psi-workshop #shopTabs{flex-shrink:0;margin:4px 0 10px}
+.shop-scroll{overflow:auto;min-height:0;overscroll-behavior:contain;scroll-padding:10px;padding:3px 4px 8px}
+.shop-scroll>p:first-child{margin-top:0}
+@media(max-height:500px){.psi-workshop header{padding:3px 0}.psi-workshop h2{margin:2px 0}.psi-workshop .shop-balance{font-size:13px!important;margin:4px 0}.psi-workshop #shopTabs{margin:2px 0 6px;gap:4px}.psi-workshop #shopTabs button{padding:5px 12px}.shop-scroll{padding-top:0}}
+
+.psi-workshop #shopModuleStatus{flex-shrink:0;margin:2px 0 8px;color:#bfe9df;font-size:11px}
+
+/* One action line near the HUD instead of stacked panels through the playfield. */
+body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 112px);bottom:auto;left:12px;right:95px;transform:none;width:auto;max-width:400px;font-size:11px;padding:6px 9px;text-align:left;box-shadow:none;background:#092633df}
+body.breaker-focus[data-guidance=action] .radio-line,body.breaker-focus[data-guidance=event] .radio-line{display:none}
+body.breaker-focus .move-controls::after{display:none}
+@media(orientation:portrait){body.breaker-focus .assist-hint{max-width:none;font-size:10px}}
+@media(orientation:landscape) and (max-height:500px){body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 56px);left:120px;right:100px;max-width:none;font-size:10px}}
+body.breaker-focus[data-boss-framing=landscape] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 170px);left:12px;right:auto;max-width:260px}
+
+@media(orientation:portrait){body.breaker-focus[data-active-boss=true] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 262px)}}
+
+body.breaker-focus[data-guidance=action] .toast{visibility:hidden}

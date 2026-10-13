@@ -14,3 +14,4 @@ android/build/
 android/app/build/
 *.jks
 *.keystore
+psi-zero-day-main/

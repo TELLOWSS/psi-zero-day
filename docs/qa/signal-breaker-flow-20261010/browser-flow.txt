@@ -1,0 +1,1 @@
+PASS home scroll and mode entry, both-orientation movement, three wave progression, compact result, direct next-stage, rotation controls: four viewports

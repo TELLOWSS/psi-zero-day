@@ -1,3 +1,5 @@
+import { GameManual, gameManualText } from './GameManual';
+import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
 import type { EpisodeSession } from '../app/episode-session';
@@ -81,6 +83,7 @@ function initialPaidItemWallet() {
 
 export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession; onReturn?: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
+  const [showManual, setShowManual] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
   const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
   const [paidItemWallet, setPaidItemWallet] = useState(initialPaidItemWallet);
@@ -507,6 +510,8 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
     </div> : null}
+    {showManual && <GameManual onClose={() => setShowManual(false)} />}
+    <button type="button" className="game-manual-open" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}
@@ -526,7 +531,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       onTransitionContinue={continueStrategyTransition}
       onAction={action => {
         playUiCue('execute');
-        chooseEvent(action.instance_id, action.node_id, action.choice_id);
+        return chooseEvent(action.instance_id, action.node_id, action.choice_id);
       }}
     /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={snapshot.phase === 'complete' ? (resolveAsset('ep01.scene_bg.gate_dawn') ?? titleBackgroundUri) : titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
@@ -557,6 +562,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       <div className="start-block"><div><span className="eyebrow">{t('ui.day')} 01</span><h2>{t('ep01.title')}</h2><p>{t('ui.start_hint')}</p></div>
         <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.start(snapshot.revision); } }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
       </div>
+      <OperationHandoffDossier mode="story"/>
     </section> : isPlaying ? <>
       {!strategyActive ? <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section> : null}
       <EpisodeImmersiveScene
@@ -564,6 +570,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         nodeId={activeInstance?.current_node_id}
         speakerId={snapshot.dialogue?.speaker_id}
         speakerIdentity={person}
+        speakerGrowth={dialogueGrowth}
         relationshipCues={snapshot.relationshipFeedback.flatMap(({ npc_id, delta }) => {
           const cue = episode01RelationshipSceneCue(delta.applied_delta);
           return cue ? [{ character_id: npc_id, cue }] : [];

@@ -1,0 +1,74 @@
+[
+  {
+    "scope": "CHROMIUM_MOBILE_VIEWPORT_CONSTRUCTED_STRESS_NOT_ANDROID_DEVICE_FPS",
+    "frames": 180,
+    "hazards": 180,
+    "projectiles": 120,
+    "contacts": 21603,
+    "releases": 12957,
+    "maxPool": 64,
+    "cpuP95Ms": 1.5,
+    "pass": true,
+    "viewport": {
+      "width": 360,
+      "height": 800
+    },
+    "smoke": true,
+    "pause": true,
+    "errors": []
+  },
+  {
+    "scope": "CHROMIUM_MOBILE_VIEWPORT_CONSTRUCTED_STRESS_NOT_ANDROID_DEVICE_FPS",
+    "frames": 180,
+    "hazards": 180,
+    "projectiles": 120,
+    "contacts": 21603,
+    "releases": 12957,
+    "maxPool": 64,
+    "cpuP95Ms": 1.6999999999534339,
+    "pass": true,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "smoke": true,
+    "pause": true,
+    "errors": []
+  },
+  {
+    "scope": "CHROMIUM_MOBILE_VIEWPORT_CONSTRUCTED_STRESS_NOT_ANDROID_DEVICE_FPS",
+    "frames": 180,
+    "hazards": 180,
+    "projectiles": 120,
+    "contacts": 21603,
+    "releases": 12957,
+    "maxPool": 64,
+    "cpuP95Ms": 1.5999999998603016,
+    "pass": true,
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "smoke": true,
+    "pause": true,
+    "errors": []
+  },
+  {
+    "scope": "CHROMIUM_MOBILE_VIEWPORT_CONSTRUCTED_STRESS_NOT_ANDROID_DEVICE_FPS",
+    "frames": 180,
+    "hazards": 180,
+    "projectiles": 120,
+    "contacts": 21603,
+    "releases": 12957,
+    "maxPool": 64,
+    "cpuP95Ms": 1.9000000001396984,
+    "pass": true,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "smoke": true,
+    "pause": true,
+    "errors": []
+  }
+]

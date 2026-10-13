@@ -1,0 +1,47 @@
+PASS four distinct trial levels, including boss
+PASS prototype starts in ready state with correct mass units
+PASS fixed-step deterministic motion with same seed
+PASS pause freezes time, remaining cores and score
+PASS pulse splits 2→1→0 and conserves mass
+PASS net first stabilizes large unstable core then captures all its mass
+PASS net captures small dust without detonating
+PASS net uses area capture, and stabilizes nearby tier-two signal
+PASS shield collision redirects projectile upward
+PASS shield angle cycles all three states
+PASS magnet affects metallic trajectory but not dust
+PASS gate recovers units when eligible core approaches
+PASS boss requires all three relays before its final core can resolve
+PASS boss relays and exposed core can be cleared by physical projectile shots
+PASS boss node is not defeated by a net shot
+PASS gameplay route: aimed pulse physically strikes moving core
+PASS damage and lose state are bounded; retry starts without penalty
+PASS event queue drains and is bounded
+PASS core count cannot exceed performance budget
+PASS all source assets are local, and record namespace is unique
+
+20 engine checks passed.
+✔ tests\engine.test.cjs (110.4833ms)
+PASS graphics profile tiers / VFX object ceilings
+PASS offline PWA assets and source load order
+PASS audio API fallback without browser audio
+✔ original procedural art, bounded quality presets and offline asset contract (1.4392ms)
+PASS responsive contracts: phone / landscape / tablet / PC
+PASS independent PWA manifest and local concept sketch files
+✔ tests\responsive.test.cjs (108.6294ms)
+✔ audio bursts stay within voice cap and release every finished voice (4.1135ms)
+✔ preview leaves game, event queue, score and RNG untouched (4.3916ms)
+✔ reflection markers agree with actual pulse and net rail collisions (4.9826ms)
+✔ net preview marks actual capture radius and current target (0.3775ms)
+PASS offline best-score persistence after victory
+PASS HTML ID contracts and render-path smoke
+PASS ready→play→weapon→shield→pause→new stage
+PASS 180 mock canvas frames without JS error
+✔ tests\ui-smoke.test.cjs (169.9494ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 236.1068

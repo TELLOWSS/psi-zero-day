@@ -1,0 +1,22 @@
+{
+  "title": "현재 → 강화 후",
+  "new": "새 장비",
+  "damage": "1회 대응력",
+  "continuousDamage": "초당 지속 대응력",
+  "secondaryDamage": "추가 신호 대응력",
+  "interval": "발동 간격",
+  "count": "방출 수",
+  "radius": "범위",
+  "pierce": "통과 횟수",
+  "duration": "유지 시간",
+  "speed": "이동 속도",
+  "pickupRadius": "기록 회수 범위",
+  "maxHp": "최대 방호",
+  "regenRate": "초당 회복",
+  "cooldownReduction": "재사용 단축",
+  "critRate": "정밀 대응 확률",
+  "damageMultiplier": "대응력 배율",
+  "seconds": "초",
+  "note": "현재 요원·연구·지원 효과를 반영한 기본 수치입니다. 간격은 짧을수록 빠릅니다.",
+  "cooldown_cap": "재사용 단축은 이미 60% 상한에 도달했습니다. 다른 장비도 비교하세요."
+}

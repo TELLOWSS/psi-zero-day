@@ -1,0 +1,79 @@
+name: Signal Breaker causal flow
+on:
+  push:
+    branches: [main, codex/signal-break-causal-redesign-20261011]
+    paths:
+      - public/signal-breaker-dev/**
+      - .github/workflows/verify-signal-breaker-causal.yml
+  pull_request:
+    paths:
+      - public/signal-breaker-dev/**
+      - .github/workflows/verify-signal-breaker-causal.yml
+permissions:
+  contents: read
+jobs:
+  source-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install existing test dependencies
+        run: npm ci --ignore-scripts
+      - name: Mode rules and regression
+        run: |
+          node scripts/check-signal-breaker-release.mjs
+          node --test public/signal-breaker-dev/tests/*.cjs
+      - name: Reproduce all 80 simulated input runs
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-flow.cjs /tmp/psi-flow-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-flow-simulation.json'),require('./public/signal-breaker-dev/docs/flow-simulation-after-20261011.json'))"
+      - name: Reproduce all 80 hazard cascade input runs
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-burst.cjs /tmp/psi-burst-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-burst-simulation.json'),require('./public/signal-breaker-dev/docs/burst-simulation-after-20261011.json'))"
+      - name: Reproduce three one-hour continuous input sessions
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-continuous.cjs /tmp/psi-continuous-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-continuous-simulation.json'),require('./public/signal-breaker-dev/docs/continuous-simulation-20261011.json'))"
+      - name: Reproduce player-led operation and boss input sessions
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-operations.cjs /tmp/psi-operation-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-operation-simulation.json'),require('./public/signal-breaker-dev/docs/operation-simulation-20261011.json'))"
+      - name: Reproduce movement-guidance input sessions
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-assist-guidance.cjs /tmp/psi-assist-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-assist-simulation.json'),require('./public/signal-breaker-dev/docs/assist-guidance-simulation-20261012.json'))"
+      - name: Reproduce veteran affinity and evolution inputs
+        run: |
+          node public/signal-breaker-dev/scripts/simulate-veteran.cjs /tmp/veteran-simulation.json
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/veteran-simulation.json'),require('./docs/qa/breaker-evolution-20261012/veteran-input-simulation.json'))"
+      - name: Prepare browser verification
+        run: |
+          npm install --prefix "$RUNNER_TEMP/signal-breaker-browser" --no-package-lock playwright@1.58.2
+          "$RUNNER_TEMP/signal-breaker-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Phone portrait, phone landscape, tablet and PC
+        env:
+          SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
+          SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
+        run: |
+          node public/signal-breaker-dev/scripts/verify-psi-rpg-art.cjs
+          node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
+          node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
+          node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
+          node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
+          node public/signal-breaker-dev/scripts/verify-ui-release.cjs
+          node public/signal-breaker-dev/scripts/verify-boss-articulation.cjs
+          node public/signal-breaker-dev/scripts/verify-causal-source.cjs
+          node public/signal-breaker-dev/scripts/verify-stage-ending.cjs
+          node public/signal-breaker-dev/scripts/verify-campaign-ending.cjs
+          node public/signal-breaker-dev/scripts/verify-ending-sound.cjs
+          node public/signal-breaker-dev/scripts/verify-ending-voice.cjs
+          node public/signal-breaker-dev/scripts/verify-ending-voice-ingest.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: signal-breaker-causal-browser
+          path: ${{ runner.temp }}/causal-qa

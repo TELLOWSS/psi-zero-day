@@ -1,0 +1,80 @@
+import { stageArtProfile } from './survivors-stage-art';
+import type { BaseWeaponId, PerkId } from '../domain/patrol-survivors';
+
+export const PICKUP_ART='/assets/survivors/pickup-atlas-v2.webp';
+export const EQUIPMENT_ART='/assets/survivors/equipment-growth-v1.webp';
+export const EVOLUTION_ART='/assets/survivors/equipment-evolution-v1.webp';
+export const TACTICAL_EQUIPMENT_ART='/assets/survivors/tactical-equipment-v1.webp';
+export const EQUIPMENT_ROWS: Record<BaseWeaponId,number>={radio_boost:0,extinguisher:1,floodlight:2,cone_trap:3,safety_drone:4,grouting_gun:5,emp_generator:6};
+const EVOLVED: Partial<Record<PerkId,BaseWeaponId>>={satellite_broadcast:'radio_boost',cryo_blizzard:'extinguisher',tesla_dome:'floodlight',emf_barricade:'cone_trap',hunter_swarm:'safety_drone',hydraulic_ram:'grouting_gun',plasma_grid:'emp_generator'};
+export function equipmentAppearance(id:PerkId,level:number) {
+ const base=EVOLVED[id] ?? id;
+ if(!(base in EQUIPMENT_ROWS)) return null;
+ const lv=Math.min(5,Math.max(1,Math.round(level))),evolved=Boolean(EVOLVED[id]);
+ const tier=evolved?2:Math.floor((lv-1)/2);
+ const tactical=base==='grouting_gun'||base==='emp_generator';
+ const atlas=tactical?'tactical':evolved?'evolution':'base';
+ const cell=tactical?(base==='emp_generator'?4:0)+(evolved?3:tier):evolved?EQUIPMENT_ROWS[base as BaseWeaponId]:EQUIPMENT_ROWS[base as BaseWeaponId]*3+tier;
+ return {base:base as BaseWeaponId,level:lv,tier,cell,atlas,evolved,module:!tactical&&!evolved&&(lv===2||lv===4),scale:1+(lv-1)*.055};
+}
+export function stageGroundUri(stageId:string):string {
+ return stageArtProfile(stageId).ground;
+}
+
+// Scan alpha and bake the tightly fitted texture once; steady frames use drawImage.
+const atlases=new WeakMap<HTMLImageElement,HTMLCanvasElement[]>();
+const evolutionAtlases=new WeakMap<HTMLImageElement,HTMLImageElement>();
+const tacticalAtlases=new WeakMap<HTMLImageElement,HTMLImageElement>();
+export function registerTacticalEquipmentAtlas(base:HTMLImageElement,tactical:HTMLImageElement):void {
+ registerPropAtlas(tactical,4,2);tacticalAtlases.set(base,tactical);
+}
+export function registerEvolutionAtlas(base:HTMLImageElement,evolution:HTMLImageElement):void {
+ registerPropAtlas(evolution,3,2);evolutionAtlases.set(base,evolution);
+}
+const materialTints=new WeakMap<HTMLImageElement,Map<string,HTMLCanvasElement>>();
+export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:number,sourceRects?:readonly {x:number;y:number;width:number;height:number}[]):void {
+ if(atlases.has(image)||!image.naturalWidth) return;
+ const scratch=document.createElement('canvas');scratch.width=image.naturalWidth;scratch.height=image.naturalHeight;
+ const ctx=scratch.getContext('2d',{willReadFrequently:true});if(!ctx)return;
+ ctx.drawImage(image,0,0);const pixels=ctx.getImageData(0,0,scratch.width,scratch.height).data;
+ const frames:HTMLCanvasElement[]=[];
+ for(let cell=0;cell<columns*rows;cell++) {
+  const rect=sourceRects?.[cell];
+  const x0=rect?.x??Math.floor(cell%columns*scratch.width/columns),x1=rect?rect.x+rect.width:Math.floor((cell%columns+1)*scratch.width/columns);
+  const y0=rect?.y??Math.floor(Math.floor(cell/columns)*scratch.height/rows),y1=rect?rect.y+rect.height:Math.floor((Math.floor(cell/columns)+1)*scratch.height/rows);
+  let left=x1,right=x0,top=y1,bottom=y0;
+  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++)if(pixels[(y*scratch.width+x)*4+3]!>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+  const frame=document.createElement('canvas');frame.width=256;frame.height=256;
+  frame.dataset.propAtlas=image.src;frame.dataset.propCell=String(cell);
+  if(right>=left&&bottom>=top){const w=right-left+1,h=bottom-top+1,scale=248/Math.max(w,h);frame.getContext('2d')?.drawImage(image,left,top,w,h,(256-w*scale)/2,252-h*scale,w*scale,h*scale);}
+  frames.push(frame);
+ }
+ atlases.set(image,frames);
+}
+export function drawProp(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,cell:number,x:number,y:number,size:number):boolean {
+ if(!image)return false;const frame=atlases.get(image)?.[cell];if(!frame)return false;
+ ctx.drawImage(frame,x-size/2,y-size,size,size);return true;
+}
+/** Cache a material-colored silhouette once; never filter or read pixels in steady frames. */
+export function drawPropReaction(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,cell:number,x:number,y:number,size:number,color:string,strength:number):void {
+ const frame=image&&atlases.get(image)?.[cell];if(!image||!frame||strength<=0)return;
+ let cache=materialTints.get(image);if(!cache){cache=new Map();materialTints.set(image,cache);}
+ const key=cell+':'+color;let tinted=cache.get(key);
+ if(!tinted){
+  tinted=document.createElement('canvas');tinted.width=frame.width;tinted.height=frame.height;
+  const paint=tinted.getContext('2d');if(!paint)return;
+  paint.drawImage(frame,0,0);paint.globalCompositeOperation='source-in';paint.fillStyle=color;paint.fillRect(0,0,frame.width,frame.height);
+  if(cache.size>=18)cache.delete(cache.keys().next().value!);cache.set(key,tinted);
+ }
+ ctx.save();ctx.globalAlpha*=Math.min(.28,Math.max(0,strength));ctx.drawImage(tinted,x-size/2,y-size,size,size);ctx.restore();
+}
+export function drawEquipment(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,id:PerkId,level:number,x:number,y:number,size:number,pickupImage?:HTMLImageElement):boolean {
+ const art=equipmentAppearance(id,level);if(!art)return false;
+ const source=art.atlas==='tactical'?(image&&tacticalAtlases.get(image)):art.evolved?(image&&evolutionAtlases.get(image)):image;
+ if(!drawProp(ctx,source,art.cell,x,y,size*art.scale))return false;
+ if(art.module){ // Added power/controller modules use the approved pickup texture.
+  drawProp(ctx,pickupImage,art.base==='cone_trap'?6:3,x+size*.30,y+size*.04,size*.36);
+ }
+ return true;
+}
+

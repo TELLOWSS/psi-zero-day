@@ -1,3 +1,4 @@
+import { stagesFromSave, parseSave, safeNumber } from './survivors-save';
 /**
  * PSI : ZERO DAY — Unified Triad Meta Bridge
  * 스토리(Story) · 슈팅(Patrol Survivors) · 디펜스(Zero Breach) · 현장도감(Field Guide)
@@ -41,7 +42,8 @@ export function addFgPoints(delta: number): number {
 export function readSurvivorsCredits(): number {
   if (typeof window === 'undefined') return 0;
   try {
-    return Number(localStorage.getItem(STORAGE_KEY_SURVIVORS_CREDITS) || '0');
+    const wallet=parseSave(localStorage.getItem('psi.survivors.store_wallet')) as {credits?:unknown}|null;
+    return safeNumber(wallet&&typeof wallet.credits==='number'?wallet.credits:localStorage.getItem(STORAGE_KEY_SURVIVORS_CREDITS));
   } catch {
     return 0;
   }
@@ -51,7 +53,7 @@ export function readUnlockedPatrolStages(): readonly string[] {
   if (typeof window === 'undefined') return ['stage_01'];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_SURVIVORS_UNLOCKED);
-    return raw ? JSON.parse(raw) : ['stage_01'];
+    return stagesFromSave(parseSave(raw),parseSave(localStorage.getItem('psi.survivors.stage_stars')));
   } catch {
     return ['stage_01'];
   }

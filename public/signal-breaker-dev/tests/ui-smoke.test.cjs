@@ -1,0 +1,121 @@
+const assert=require('node:assert/strict');const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const dir=path.resolve(__dirname,'..');const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+const src=fs.readFileSync(path.join(dir,'src/app.js'),'utf8');
+const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]));
+const refs=[...src.matchAll(/\$\('([^']+)'\)/g)].map(x=>x[1]);for(const r of refs)assert.ok(ids.has(r),`missing HTML ID ${r}`);
+let queue=[], windowListeners={},documentListeners={},storage=new Map(),currentNow=0;
+class Element {
+ constructor(tag='div'){this.tag=tag;this.dataset={};this.children=[];this.style={setProperty(k,v){this[k]=v}};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
+ addEventListener(n,fn){(this.listeners[n]??=[]).push(fn)}
+ append(...es){this.children.push(...es)}appendChild(el){this.children.push(el)}replaceChildren(...es){this.children=es}
+ getBoundingClientRect(){return {left:0,top:0,width:1100,height:620}}getContext(){return proxyContext}
+ setAttribute(name,value){this[name]=value;}
+ setPointerCapture(){}trigger(n,e={}){for(const cb of this.listeners[n]||[])cb(e)}
+}
+const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}})}, {get:(obj,key)=>key in obj?obj[key]:()=>{},set:(obj,key,v)=>(obj[key]=v,true)});
+const elements={};const document={baseURI:'https://game.test/signal-breaker-dev/index.html',querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
+for(const id of ids)document.getElementById(id);
+global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
+global.location={search:'?entry=prepare'};
+global.window={PSIPresentationAssets:{image:url=>({src:url,complete:false,naturalWidth:0})},SignalBreakerEpisodeTwo:require('../src/episode-two.js'),SignalBreakerWorkshop:require('../src/psi-workshop.js'),SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/firing-pose.js'),'utf8'),{filename:'src/firing-pose.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/boss-camera.js'),'utf8'),{filename:'src/boss-camera.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/localization-ko.js'),'utf8'),{filename:'src/localization-ko.js'});
+window.SignalBreakerEndings=require('../src/stage-ending-content.js');
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-sound.js'),'utf8'),{filename:'src/ending-sound.js'});
+window.SignalBreakerEndingPerformanceContent=require('../src/ending-performance-content.js');
+for(const file of ['ending-performance.js','ending-voice.js'])vm.runInThisContext(fs.readFileSync(path.join(dir,'src',file),'utf8'),{filename:file});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-player.js'),'utf8'),{filename:'src/ending-player.js'});
+vm.runInThisContext(src,{filename:'src/app.js'});
+// Visual settings and focus screen must be operable without rerunning the game.
+elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textContent,window.SignalBreakerText['breaker.quality.balanced']);
+elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textContent,window.SignalBreakerText['breaker.quality.low']);
+elements.motionBtn.trigger('click');assert.equal(elements.motionBtn.textContent,window.SignalBreakerText['breaker.motion.low']);
+elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
+elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
+assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
+assert.ok(elements.overlayInner.children.some(el=>el.id==='overlayPrimary'),'ready overlay has start action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
+// Combined main-branch regression: stage completion cannot consume AUTO, start the next stage,
+// or skip loadout preparation. The two independently reviewed PRs must work together.
+const autoBeforeStage=JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire;
+assert.equal(autoBeforeStage,true);
+window.SignalBreakerQA.engine().finish(true);
+currentNow+=1000/60;queue.shift()(currentNow);
+assert.equal(window.SignalBreakerQA.snapshot().state,'won');
+assert.ok(elements.overlayInner.children.some(c=>c.id==='resultOperationSelect'),'completed operation offers stage choice');
+assert.ok(elements.overlayInner.children.some(c=>c.id==='resultLoadout'),'completed operation offers loadout review');
+for(let i=0;i<12;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().stage,'CH-01','no automatic handoff after operation clear');
+const chooseNext=elements.overlayInner.children.find(c=>c.id==='overlayPrimary');
+assert.ok(chooseNext,'next operation CTA exists');
+chooseNext.trigger('click');
+assert.equal(window.SignalBreakerQA.snapshot().stage,'CH-02');
+assert.equal(window.SignalBreakerQA.snapshot().state,'ready','choosing next operation opens preparation, not combat');
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO remains enabled during stage transition');
+const launchNext=elements.overlayInner.children.find(c=>c.id==='overlayPrimary');
+assert.ok(launchNext);
+launchNext.trigger('click');
+assert.equal(window.SignalBreakerQA.snapshot().state,'playing','combat begins only after explicit player launch');
+assert.equal(elements.autoFireBtn['aria-pressed'],'true','AUTO persists on next stage');
+console.log('PASS combined AUTO + player-chosen result → next stage preparation → explicit launch');
+const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
+window.SignalBreakerQA.continuous(false);window.SignalBreakerQA.controlMode('twin');assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
+elements.controlBtn.trigger('click');
+const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
+elements.arena.trigger('pointerdown',touch(10));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'hold starts firing immediately');
+const firstAim=window.SignalBreakerQA.engine().player.aimX;elements.arena.trigger('pointerdown',touch(11,900,350));
+assert.equal(window.SignalBreakerQA.engine().player.aimX,firstAim,'second touch cannot steal aim');
+elements.arena.trigger('pointercancel',touch(10));elements.arena.trigger('pointerup',touch(10));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'cancel cannot add a shot');
+elements.arena.trigger('pointerdown',touch(12));elements.arena.trigger('pointermove',touch(12,550,210));elements.arena.trigger('pointerup',touch(12));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'release fires exactly once');
+elements.controlBtn.trigger('click');
+for(let i=0;i<120;i++){const callback=queue.shift();assert.ok(callback,'requestAnimationFrame was scheduled');currentNow+=1000/60;callback(currentNow);}
+assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.textContent.length,6);
+const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');
+for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
+for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.some(c=>c.id==='quickRetry'));assert.ok(elements.overlayInner.children.some(c=>c.textContent===window.SignalBreakerText['breaker.lobby.operations']));
+const picker=elements.overlayInner.children[3].children[0];picker.value='kang_taesik';picker.trigger('change');
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
+const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');
+const before=window.SignalBreakerQA.engine().time;for(let i=0;i<60;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.engine().time,before);
+window.SignalBreakerQA.selectStage('SB-04');assert.equal(window.SignalBreakerQA.snapshot().stage,'SB-04');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');
+// Completion path must persist independent local progress exactly once.
+window.SignalBreakerQA.selectStage('SB-01');window.SignalBreakerQA.engine().start();window.SignalBreakerQA.engine().finish(true);currentNow+=1000/60;queue.shift()(currentNow);
+assert.equal(window.SignalBreakerQA.records()['SB-01'].won,true);
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).records['SB-01'].won,true);
+// Verify the default flow app loop, toggle and temporary direct aiming.
+window.SignalBreakerQA.selectStage('CH-01',true);window.SignalBreakerQA.controlMode('flow');
+for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>0,'flow fires automatically');
+elements.autoFireBtn.trigger('click');const autoStopped=window.SignalBreakerQA.snapshot().shotsFired;
+assert.equal(elements.autoFireBtn['aria-pressed'],'false','AUTO toggle is independent from FIRE');
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped,'explicit AUTO OFF stops automatic fire');
+window.SignalBreakerQA.engine().cooldown=0;
+elements.fireBtn.trigger('pointerdown',touch(91));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped+1,'manual FIRE still works while AUTO is OFF');
+elements.fireBtn.trigger('pointercancel',touch(91));
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped+1,'manual FIRE never silently enables AUTO');
+elements.aimPad.trigger('pointerdown',touch(92,250,200));const directAim=window.SignalBreakerQA.engine().launchGeometry().direction;
+assert.ok(directAim.x<0,'right pad can override towards left');elements.aimPad.trigger('pointerup',touch(92));
+elements.autoFireBtn.trigger('click');assert.equal(elements.autoFireBtn['aria-pressed'],'true');
+const resumed=window.SignalBreakerQA.snapshot().shotsFired;
+elements.joystick.trigger('pointerdown',touch(94));elements.joystick.trigger('pointermove',touch(94,920,250));
+elements.aimPad.trigger('pointerdown',touch(95,200,200));
+for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>resumed,'AUTO stays active during simultaneous movement and direct aim');
+const duringMove=window.SignalBreakerQA.snapshot().shotsFired;
+elements.fireBtn.trigger('pointerdown',touch(96));elements.fireBtn.trigger('pointercancel',touch(96));
+assert.equal(elements.autoFireBtn['aria-pressed'],'true','manual FIRE gesture never switches AUTO off');
+elements.aimPad.trigger('pointerup',touch(95));elements.joystick.trigger('pointercancel',touch(94));
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>duringMove,'AUTO keeps firing after fingers release');
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO setting persisted');
+console.log('PASS independent AUTO toggle, manual FIRE, cancellation, movement and direct aiming');
+console.log('PASS offline best-score persistence after victory');
+console.log('PASS HTML ID contracts and render-path smoke');console.log('PASS ready→play→weapon→shield→pause→new stage');console.log('PASS 180 mock canvas frames without JS error');

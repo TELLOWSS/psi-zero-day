@@ -1,0 +1,27 @@
+{
+  "version": 5,
+  "date": "2026-10-10",
+  "finalVisualLock": false,
+  "method": "built-in imagegen; WebP94 encoding only; native dimensions preserved",
+  "assets": [
+    {
+      "path": "loading-keyart-v1.webp",
+      "nativeWidth": 1672,
+      "nativeHeight": 941,
+      "bytes": 508518,
+      "sha256": "6611f1982274e2c670dc07ae025e668b972853cbddf3127317ccbae5a0cf3089",
+      "format": "RGB",
+      "status": "production-candidate"
+    },
+    {
+      "path": "control-gimbal-v1.webp",
+      "nativeWidth": 1262,
+      "nativeHeight": 1246,
+      "bytes": 287376,
+      "sha256": "cea0a0d376e12895547c2e88320ef779e50dd9882e0d104242173f7613a26953",
+      "format": "RGBA",
+      "status": "production-candidate",
+      "centerAlpha": 0
+    }
+  ]
+}

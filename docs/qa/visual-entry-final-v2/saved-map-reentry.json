@@ -1,0 +1,82 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "completed": false,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "completed": true,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/scaffold-v1.png",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "completed": false,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "completed": true,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/scaffold-v1.png",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "completed": false,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "completed": true,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/scaffold-v1.png",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "completed": false,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "completed": true,
+    "scope": "Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory",
+    "preview": "/assets/survivors/maps/scaffold-v1.png",
+    "overflow": false,
+    "errors": [],
+    "pass": true
+  }
+]

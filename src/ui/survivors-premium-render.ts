@@ -1,0 +1,90 @@
+import type {SurvivorsGameState} from '../domain/patrol-survivors';
+import {STORE_ITEMS} from '../domain/survivors-store';
+import {drawProp} from './survivors-equipment-art';
+import {hasWearable,inspectionDockAnchor,inspectionWearFlight,premiumBodySocket,drawActorEquipmentOcclusion,type WearableImages} from './survivors-wearable-art';
+import {applyActorTorsoTransform} from './survivors-rig-renderer';
+import {ACTOR_RIGS} from './survivors-animation-rig';
+import {EQUIPMENT_AURAS} from './survivors-equipment-identity';
+import {drawVfxCell} from './survivors-cinematic-vfx';
+import {type InspectionPhase} from './survivors-inspection-flight';
+import type {SpritePose} from './survivors-sprite-motion';
+import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
+import {equipmentAnimationTime} from './survivors-equipment-clock';
+import {EquipmentMotion,type EquipmentJoint} from './survivors-equipment-motion';
+import {ShieldPresentationTracker} from './survivors-shield-presentation';
+const mountedMotion=new EquipmentMotion();
+const shieldPresentation=new ShieldPresentationTracker();
+const categoryJoints={communication:'radio',tempo:'wrist',logistics:'pack',protection:'armor',tactics:'belt',companion:'dock'} satisfies Record<string,EquipmentJoint>;
+export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
+/** Raster art stays in presentation; status is read exclusively from the engine. */
+export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,_atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,_itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement;premiumAtlas?:HTMLImageElement;quiet?:boolean}):InspectionPhase|undefined {
+  const gear=state.premiumGear;if(!gear||!gear.equipped.length)return;
+  const {x,y}=state.player;
+  const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
+  const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose,state):undefined;
+  const flight=fittedInspection&&dock&&actorPose?inspectionWearFlight(state,actorPose.actor,actorPose.height,actorPose.pose,reducedMotion):undefined;
+  const shield=shieldPresentation.sample(state,reducedMotion,state.hazards.length>45||state.projectiles.length>60);
+  if(shield&&actorPose?.vfxAtlas?.naturalWidth) {
+    ctx.save();ctx.globalCompositeOperation='screen';
+    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,shield.width,shield.height,shield.alpha);
+    ctx.restore();
+  }
+  const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);
+  if(suppressed.length) {
+    const busy=state.hazards.length>45||state.projectiles.length>60;
+    // Bound presentation only: every eligible hazard still receives engine suppression.
+    const targets=suppressed.sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||a.id.localeCompare(b.id)).slice(0,busy?8:16);
+    for(const [index,hazard] of targets.entries()){
+      ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=busy?.28:.45;ctx.lineWidth=1.2;
+      if(!busy&&!reducedMotion&&index<3){ctx.beginPath();ctx.moveTo(x+(flight?.x??0),y+(flight?.y??-24));ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();}
+      ctx.beginPath();ctx.ellipse(hazard.x,hazard.y,hazard.radius+5,(hazard.radius+5)*.58,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+    }
+  }
+  if(gear.effects.pickup>0){
+    ctx.save();ctx.strokeStyle='#b7ebae';ctx.globalAlpha=.4;ctx.lineWidth=1;
+    for(const drop of state.drops.slice(0,48)){
+      if(Math.hypot(drop.x-x,drop.y-y)>state.player.pickupRadius)continue;
+      ctx.beginPath();ctx.moveTo(drop.x,drop.y);ctx.lineTo(x,y-14);ctx.stroke();
+    }ctx.restore();
+  }
+  if(!actorPose?.premiumAtlas?.naturalWidth)return flight?.phase;
+  const draw=(id:string,px:number,py:number,size:number)=>{
+    const item=STORE_ITEMS.find(item=>item.id===id);if(!item)return;
+    // Never substitute another purchase's category icon when this asset is unavailable.
+    drawProp(ctx,actorPose?.premiumAtlas,item.art,px,py+size/2,size);
+  };
+  const companion=gear.equipped.find(id=>STORE_ITEMS.find(item=>item.id===id)?.category==='companion');
+  if(companion) {
+    const fitted=hasWearable(state,companion,wearables);
+    // Idle companions stay on the body dock; only a real inspection deploys.
+    const px=x+(flight?.x??dock?.x??0),py=y+(flight?.y??dock?.y??-48);
+    const docked=!flight||flight.phase==='docked';
+    const deployment=flight&&dock?Math.min(1,Math.hypot(flight.x-dock.x,flight.y-dock.y)/40):1;
+    const size=flight?12+12*(flight.phase==='inspecting'?1:deployment):fitted?12:14;
+    if(!docked){ctx.save();ctx.fillStyle='#061017';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(px,y+(flight?.y??0)+28,9,3.5,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+    if(!docked||!fitted)draw(companion,px,py,size);
+    if(flight){ctx.save();ctx.fillStyle=docked?'#b7ebae':flight.phase==='inspecting'?'#66dcd4':'#e8c578';ctx.fillRect(px-1,py+size*.22,2,1.5);ctx.restore();}
+  }
+  // All other purchases use the same character-specific torso frame as raster wearables.
+  if(!actorPose)return flight?.phase;
+  ctx.save();ctx.translate(x,y);
+  applyActorTorsoTransform(ctx,actorPose.pose,actorPose.height,Boolean(ACTOR_RIGS[actorPose.actor.src.split('/').pop()??'']));
+  let attached=false;
+  for(const id of gear.equipped){
+    const item=STORE_ITEMS.find(item=>item.id===id);if(!item||item.category==='companion')continue;
+    const socket=premiumBodySocket(state.characterId,actorPose.actor,actorPose.height,item.category,actorPose.pose);
+    if(socket){
+      if(!hasWearable(state,id,wearables)){
+        ctx.save();ctx.translate(socket.x,socket.y);
+        ctx.rotate(mountedMotion.sample(state.player,equipmentAnimationTime(state),actorPose.pose,reducedMotion,id,categoryJoints[item.category]));
+        draw(id,0,0,socket.size);ctx.restore();
+      }
+      const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
+      if(aura&&!reducedMotion&&!actorPose.quiet){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(equipmentAnimationTime(state)*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
+      attached=true;
+    }
+  }
+  if(attached)drawActorEquipmentOcclusion(ctx,state.characterId,actorPose.actor,actorPose.height,actorPose.pose);
+  ctx.restore();
+  return flight?.phase;
+}

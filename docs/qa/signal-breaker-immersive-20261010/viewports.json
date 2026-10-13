@@ -1,0 +1,182 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "touch": true,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "fire": {
+        "x": 316,
+        "y": 723,
+        "width": 64,
+        "height": 64,
+        "top": 723,
+        "right": 380,
+        "bottom": 787,
+        "left": 316
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "touch": true,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 844,
+        "height": 390,
+        "top": 0,
+        "right": 844,
+        "bottom": 390,
+        "left": 0
+      },
+      "fire": {
+        "x": 766,
+        "y": 312,
+        "width": 64,
+        "height": 64,
+        "top": 312,
+        "right": 830,
+        "bottom": 376,
+        "left": 766
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "touch": true,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 1024,
+        "top": 0,
+        "right": 768,
+        "bottom": 1024,
+        "left": 0
+      },
+      "fire": {
+        "x": 694,
+        "y": 903,
+        "width": 64,
+        "height": 64,
+        "top": 903,
+        "right": 758,
+        "bottom": 967,
+        "left": 694
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "touch": true,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 768,
+        "top": 0,
+        "right": 1024,
+        "bottom": 768,
+        "left": 0
+      },
+      "fire": {
+        "x": 946,
+        "y": 678,
+        "width": 64,
+        "height": 64,
+        "top": 678,
+        "right": 1010,
+        "bottom": 742,
+        "left": 946
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "touch": true,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800,
+        "top": 0,
+        "right": 1280,
+        "bottom": 800,
+        "left": 0
+      },
+      "fire": {
+        "x": 1202,
+        "y": 710,
+        "width": 64,
+        "height": 64,
+        "top": 710,
+        "right": 1266,
+        "bottom": 774,
+        "left": 1202
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "touch": false,
+    "boxes": {
+      "arena": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 1080,
+        "top": 0,
+        "right": 1920,
+        "bottom": 1080,
+        "left": 0
+      },
+      "fire": {
+        "x": 1842,
+        "y": 990,
+        "width": 64,
+        "height": 64,
+        "top": 990,
+        "right": 1906,
+        "bottom": 1054,
+        "left": 1842
+      },
+      "overflow": false
+    },
+    "errors": [],
+    "checks": "hold, release, cancel, multitouch, pause, smart/manual, viewport"
+  }
+]

@@ -1,0 +1,33 @@
+2026-10-10 · Linked manual controls and production art validation
+
+npm test: PASS — 351 files, 2037 tests passed; 1 file/test skipped.
+node --test public/signal-breaker-dev/tests/*.cjs: PASS — 40 tests.
+npm run build --ignore-scripts: PASS — includes both TypeScript projects.
+Existing Vite chunk-size warning remains.
+git diff --check: PASS.
+
+verify-linked-art.cjs: PASS
+5 distinct maps × 2 mobile orientations (390×844, 844×390).
+PNG favicon/PWA icons; new transparent 6-device atlas; no active SVG requests.
+No input => no shots; horizontal pad reverses bearing and preserves elevation;
+vertical pad changes elevation; release/cancel stops movement;
+manual FIRE emits shots; releasing FIRE stops shots; pause freezes shots.
+No browser page errors or HTTP errors.
+
+verify-immersive.cjs: PASS — 6 viewports
+390×844, 844×390, 768×1024, 1024×768, 1280×800, 1920×1080.
+Full viewport, bounded controls, hold/release/cancel, multitouch, pause/resume,
+assisted/manual equipment selection, portrait view toggle, rotation,
+utility button separation, collapsed/expanded result CTA hit targets.
+One earlier concurrent-browser run timed out during screenshot; sequential rerun passed.
+
+Built home flow: PASS — 4 viewports
+390×844, 844×390, 741×355, 1440×900.
+One Breaker entry; no duplicate navigation; short-landscape cards visible;
+home → ready → full viewport playing state; no page errors.
+
+Result-modal regression uses a QA won-state/route fixture.
+CH-03 map evidence sets engine time to 6s to inspect closed-gate presentation.
+Screenshots are controlled QA evidence, not real-device playthrough proof.
+Physical Android/iPad sensitivity, sustained FPS/heat and production deployment
+are not verified by these automated checks.

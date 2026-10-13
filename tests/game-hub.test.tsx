@@ -9,6 +9,40 @@ import { episodeBounds, episodeOptions, playEpisode } from './helpers/episode01-
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 describe('game hub navigation', () => {
+  it('places live actions before the read-only status summary and keeps canonical character art', () => {
+    const session = new EpisodeSession();
+    const host = document.createElement('div');
+    const root = createRoot(host);
+    let launches = 0;
+    try {
+      act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={() => { throw new Error('Unreleased mode must remain a preview'); }} />));
+      const actions = host.querySelector('.commercial-title-actions')!;
+      const breaker = host.querySelector<HTMLAnchorElement>('.is-breaker-entry')!;
+      expect(breaker.getAttribute('href')).toBe('/signal-breaker-dev/index.html?entry=play');
+      expect(breaker.textContent).toContain('시그널 브레이커');
+      expect(host.querySelector('.commercial-mode-navigation')).toBeNull();
+      expect(host.querySelectorAll('a[href="/signal-breaker-dev/index.html?entry=play"]')).toHaveLength(1);
+      const summary = host.querySelector('.commercial-triad-dashboard')!;
+      expect(summary.textContent).not.toContain('해금 구역');
+      expect(host.querySelectorAll('.chapter-record-path button')).toHaveLength(5);
+      act(() => host.querySelectorAll<HTMLButtonElement>('.chapter-record-path button')[4]!.click());
+      expect(host.querySelector('.chapter-record-detail')?.textContent).toContain('이 장면의 완료 기록은 없습니다.');
+      expect(host.querySelectorAll('.chapter-record-path button')[4]?.getAttribute('aria-pressed')).toBe('true');
+      expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
+      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/player-map.webp');
+      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/player-map.webp');
+      expect(host.querySelector('.commercial-title-logo')?.getAttribute('role')).toBe('img');
+      expect(host.querySelector('.commercial-title-logo')?.getAttribute('aria-label')).toBe('NEW PSI : ZERO DAY');
+      expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/new-psi-wordmark-stacked-chalk.svg');
+      expect(host.querySelector('.commercial-title-wordmark source')?.getAttribute('srcset')).toBe('/assets/branding/new-psi-wordmark-wide-chalk.svg');
+      act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
+      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      act(() => host.querySelector<HTMLButtonElement>('.is-survivors-entry')!.click());
+      expect(launches).toBe(1);
+    } finally { act(() => root.unmount()); }
+  });
+
   it('opens the real run and preserves it when visiting the map and colleagues', async () => {
     const session = new EpisodeSession(episodeOptions(42), episodeBounds);
     const host = document.createElement('div');
@@ -22,6 +56,9 @@ describe('game hub navigation', () => {
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
       click('.commercial-title-features button:first-child');
+      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
+      click('.chapter-record-detail button');
       expect(host.querySelector('.hub-page-map')).not.toBeNull();
       expect(host.querySelectorAll('.hub-route-node')).toHaveLength(5);
       click('.hub-nav button:nth-child(3)');

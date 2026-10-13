@@ -1,0 +1,47 @@
+{
+  "player": {
+    "name": "안전관리자",
+    "title": "신호를 읽는 사람",
+    "role": "현장 안전관리자"
+  },
+  "kang_taesik": {
+    "name": "강태식",
+    "title": "현장의 버팀목",
+    "role": "형틀반장"
+  },
+  "yoon_sungho": {
+    "name": "윤성호",
+    "title": "철근의 수호자",
+    "role": "철근반장"
+  },
+  "lee_jaehoon": {
+    "name": "이재훈",
+    "title": "사각을 밝히는 설계자",
+    "role": "공사대리"
+  },
+  "lim_junho": {
+    "name": "임준호",
+    "title": "가장 먼저 알아챈 신호",
+    "role": "신입근로자"
+  },
+  "safety_monitor": {
+    "name": "안전감시원",
+    "title": "통제선의 파수꾼",
+    "role": "현장 안전감시원"
+  },
+  "choi_minseok": {
+    "name": "최민석",
+    "role": "크레인 신호수",
+    "title": "동선을 잇는 목소리"
+  },
+  "seo_jeongmin": {
+    "name": "서정민",
+    "role": "건축감리",
+    "title": "근거를 지키는 눈"
+  },
+  "oh_seungjae": {
+    "name": "오승재",
+    "role": "현장 공사팀장",
+    "title": "공정을 잇는 조율자"
+  }
+}

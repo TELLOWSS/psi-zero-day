@@ -60,11 +60,11 @@ jobs:
       - name: Verify defense-first title contract
         shell: bash
         run: |
-          grep -q "PHYSICAL_PHONE_V10" src/ui/GameHub.tsx
-          grep -q "현장 디펜스 시작" src/ui/GameHub.tsx
+          grep -q "MODE_SELECT_V11" src/ui/GameHub.tsx
+          grep -q "setModePreview('defense')" src/ui/GameHub.tsx
           grep -q "사고 전 신호를 읽고, 현장을 바꿔라." src/ui/GameHub.tsx
           grep -q "LIVE SITE" src/ui/GameHub.tsx
-          grep -q "TITLE PHYSICAL PHONE V10" src/ui/game-hub.css
+          grep -q "MODE_SELECT_V11" src/ui/shooting-entry.css
 
       - name: Install Korean QA font
         shell: bash
@@ -88,8 +88,11 @@ jobs:
         shell: bash
         env:
           PSI_TITLE_ARTIFACT_DIR: artifacts/title-defense-first
+          CODEX_PRIMARY_RUNTIME_NODE_MODULES: /tmp/psi-title-browser/node_modules
+          PSI_PREVIEW_URL: http://127.0.0.1:4173
         run: |
           mkdir -p artifacts/title-defense-first
+          npm install --prefix /tmp/psi-title-browser --no-save --package-lock=false playwright@1.62.1
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/title-preview.log 2>&1 &
           PREVIEW_PID=$!
           cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
@@ -106,7 +109,7 @@ jobs:
             cat /tmp/title-preview.log
             exit 1
           fi
-          node scripts/verify-title-defense-first.mjs
+          node scripts/verify-survivors-mode-previews.mjs
 
       - name: Upload title QA evidence
         if: always()

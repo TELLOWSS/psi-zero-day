@@ -1,0 +1,46 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> psi-zero-day@0.1.0 build
+> npm run typecheck && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> psi-zero-day@0.1.0 typecheck
+> tsc --noEmit && tsc --project tsconfig.engine.json
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 2519 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                0.99 kB │ gzip:   0.56 kB
+dist/assets/OperationHandoffDossier-BAnyF8lF.css               1.92 kB │ gzip:   0.67 kB
+dist/assets/FieldGuide-BGvTppVo.css                            6.46 kB │ gzip:   1.78 kB
+dist/assets/GameHub-9wifxygo.css                              23.38 kB │ gzip:   4.16 kB
+dist/assets/PatrolSurvivorsGame-BdVkWg4L.css                 135.41 kB │ gzip:  24.88 kB
+dist/assets/index-CilYaAsU.css                               836.72 kB │ gzip: 124.85 kB
+dist/assets/jsx-runtime-Cp--VFlr.js                            0.42 kB │ gzip:   0.29 kB
+dist/assets/episode-save-CIRk5beE.js                           1.97 kB │ gzip:   0.83 kB
+dist/assets/manifest-CziKXK_4.js                               2.03 kB │ gzip:   0.83 kB
+dist/assets/survivors-art-frame-layouts-8LUIr3H4.js            3.99 kB │ gzip:   0.90 kB
+dist/assets/OperationHandoffDossier-DTMwXsg9.js                4.18 kB │ gzip:   2.04 kB
+dist/assets/index-CoozzFvj.js                                  4.73 kB │ gzip:   2.31 kB
+dist/assets/react-BgwnOLO6.js                                  7.86 kB │ gzip:   2.99 kB
+dist/assets/package-BZxefZfb.js                               10.53 kB │ gzip:   2.03 kB
+dist/assets/strategy-psi-ByuajIQK.js                          20.49 kB │ gzip:   3.89 kB
+dist/assets/survivors-authored-actor-layouts-v1-mgKJ3_ee.js   64.60 kB │ gzip:   9.33 kB
+dist/assets/DefenseGame-C82cqtuo.js                          171.80 kB │ gzip:  51.89 kB
+dist/assets/GameHub-DXPUzn8C.js                              174.31 kB │ gzip:  51.82 kB
+dist/assets/client-CAeup7s4.js                               211.20 kB │ gzip:  65.86 kB
+dist/assets/FieldGuide-CT_DHIUm.js                           215.31 kB │ gzip:  33.67 kB
+dist/assets/PlayableEpisode-CWHCEdIX.js                      245.68 kB │ gzip:  52.20 kB
+dist/assets/operation-handoff-bridge-ko-CfHEhLCO.js          262.25 kB │ gzip:  75.64 kB
+dist/assets/episode-session-CROO3V1l.js                      443.76 kB │ gzip: 111.37 kB
+dist/assets/PatrolSurvivorsGame-CYSRQNmy.js                  593.72 kB │ gzip: 191.30 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.39s

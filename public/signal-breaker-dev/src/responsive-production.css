@@ -1,0 +1,121 @@
+/* Mobile production interaction zones, 2026-10-12.
+   Loaded after style.css to supersede legacy iterative layout passes.
+   Do not change gameplay hitboxes, input direction, aim, or automation here. */
+body.breaker-focus{--mobile-edge: max(12px, env(safe-area-inset-left, 0px));--mobile-bottom: max(12px, env(safe-area-inset-bottom, 0px))}
+body.breaker-focus #arena{touch-action:none}
+body.breaker-focus .hud-top{z-index:6;max-width:none;right:12px;pointer-events:none}
+body.breaker-focus .hud-top #pauseBtn{margin-left:auto;flex-shrink:0;pointer-events:auto}
+body.breaker-focus .touch-controls{z-index:7}
+body.breaker-focus .fire-controls,
+body.twin-controls .fire-controls{display:flex;align-items:center;gap:6px;box-sizing:border-box}
+body.breaker-focus .fire-controls button{flex-shrink:0}
+body.breaker-focus .utility-controls,
+body.twin-controls .utility-controls{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap}
+body.breaker-focus .utility-controls button[hidden],
+body.breaker-focus .fire-controls button[hidden]{display:none!important}
+body.breaker-focus .chain-guide,
+body.breaker-focus .radio-line,
+body.breaker-focus .toast{pointer-events:none;overflow-wrap:anywhere;text-align:center;line-height:1.35}
+body.breaker-focus .hud-bottom{pointer-events:none}
+body.breaker-focus .game-exit,
+body.breaker-focus .view-btn,
+body.breaker-focus .burst-boost{z-index:8}
+body.breaker-focus .battle-radar{display:none}
+body.overview-open.breaker-focus .battle-radar{display:block}
+
+/* Tall phone: no buttons float in front of the operator or main combat area. */
+@media (orientation:portrait) and (max-width:690px){
+ body.breaker-focus .hud-top{top:calc(env(safe-area-inset-top,0px) + 7px);left:10px;right:10px;height:46px;padding:4px 10px;gap:9px;align-items:center}
+ body.breaker-focus .hud-top .hud-block strong{font-size:12px}
+ body.breaker-focus .hud-top .hud-label{font-size:8px}
+ body.breaker-focus .hud-top #pauseBtn{position:static!important;top:auto!important;right:auto!important;margin-left:auto!important;width:42px;min-width:42px;height:40px;min-height:40px}
+ body.breaker-focus .shield-hud{position:static!important;gap:3px}
+ body.breaker-focus .health{gap:3px}
+ body.breaker-focus .heart{width:10px;height:11px}
+ body.breaker-focus .game-exit{top:calc(env(safe-area-inset-top,0px) + 62px);right:10px;min-height:36px;min-width:58px}
+ body.breaker-focus .view-btn{display:block;top:calc(env(safe-area-inset-top,0px) + 107px);right:10px;min-height:38px;height:38px}
+ body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 64px);left:10px;min-width:92px;min-height:44px;max-width:110px}
+ body.breaker-focus .chain-guide{top:calc(env(safe-area-inset-top,0px) + 60px);left:50%;transform:translateX(-50%);max-width:calc(100% - 228px);min-width:0;padding:5px 6px;font-size:10px}
+ body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 112px);left:50%;max-width:calc(100% - 170px);font-size:10px;padding:5px 8px}
+ body.breaker-focus .toast{top:calc(env(safe-area-inset-top,0px) + 154px);left:50%;max-width:calc(100% - 42px);font-size:10px;transform:translateX(-50%)}
+ body.breaker-focus #itemStatus{position:absolute;top:calc(env(safe-area-inset-top,0px) + 156px);left:10px;right:auto;width:max-content;max-width:calc(100% - 155px);font-size:9px;padding:4px 6px;background:#061e29c9;border-radius:7px}
+ body.breaker-focus .move-controls,
+ body.twin-controls .move-controls{position:fixed;left:calc(env(safe-area-inset-left,0px) + 11px);right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:none}
+ body.twin-controls #joystick,body.twin-controls #aimPad{width:88px;height:88px;opacity:.84}
+ body.twin-controls #aimPad{position:fixed;left:auto;right:calc(env(safe-area-inset-right,0px) + 11px);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:none}
+ body.breaker-focus #fireBtn,body.twin-controls #fireBtn{position:fixed;left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 27px);transform:translateX(-50%);width:69px;height:69px;min-height:69px}
+ body.breaker-focus #fireBtn:active{transform:translateX(-50%) scale(.96)}
+ body.breaker-focus .fire-controls,body.twin-controls .fire-controls{position:fixed;left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 121px);transform:translateX(-50%);max-width:calc(100vw - 20px);width:max-content;padding:5px;gap:6px}
+ body.breaker-focus .fire-controls .weapon-btn,body.twin-controls .fire-controls .weapon-btn{width:54px;max-width:54px;flex:0 0 54px;height:48px;min-height:48px}
+ body.breaker-focus .fire-controls #autoFireBtn,body.twin-controls .fire-controls #autoFireBtn{width:64px;max-width:64px;flex:0 0 64px;min-height:48px}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{position:fixed;left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 186px);transform:translateX(-50%);width:max-content;max-width:calc(100vw - 20px);gap:5px}
+ body.breaker-focus .utility-controls .util-btn,body.twin-controls .utility-controls .util-btn{width:auto;min-width:52px;max-width:94px;height:38px;min-height:38px;padding:4px 6px;font-size:9px;white-space:normal}
+ body.breaker-focus .utility-controls .source-btn{min-width:58px!important}
+ body.breaker-focus .hud-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 244px);left:50%;width:110px;height:22px;transform:translateX(-50%)}
+ body.breaker-focus .overlay-inner{max-height:calc(100dvh - 28px)}
+}
+@media (orientation:portrait) and (max-width:375px){
+ body.breaker-focus .hud-top{gap:5px;padding:4px 6px}
+ body.breaker-focus .hud-top .hud-block strong{font-size:11px}
+ body.breaker-focus .hud-top .hud-label{font-size:7px}
+ body.breaker-focus .heart{width:8px}
+ body.breaker-focus .utility-controls .util-btn,body.twin-controls .utility-controls .util-btn{min-width:46px;max-width:70px;padding:3px;font-size:8px}
+ body.breaker-focus .fire-controls .weapon-btn,body.twin-controls .fire-controls .weapon-btn{width:48px;max-width:48px;flex-basis:48px}
+ body.breaker-focus .chain-guide{display:none!important}
+}
+/* Short and wide: split controls into left thumb, right action stack, right aim. */
+@media (orientation:landscape) and (max-height:690px){
+ body.breaker-focus .hud-top{top:calc(env(safe-area-inset-top,0px) + 4px);left:10px;right:10px;height:39px;padding:4px 10px}
+ body.breaker-focus .hud-top .hud-block strong{font-size:13px}
+ body.breaker-focus .hud-top #pauseBtn{position:static!important;margin-left:auto!important;width:40px;height:36px;min-width:40px;min-height:36px}
+ body.breaker-focus .game-exit{top:calc(env(safe-area-inset-top,0px) + 54px);right:12px;min-height:35px}
+ body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 56px);left:12px;min-height:44px;max-width:104px}
+ body.breaker-focus .view-btn{display:none}
+ body.breaker-focus .chain-guide{top:calc(env(safe-area-inset-top,0px) + 52px);left:48%;max-width:40%;padding:5px 10px;font-size:10px}
+ body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 95px);left:49%;max-width:36%;font-size:10px}
+ body.breaker-focus .toast{top:calc(env(safe-area-inset-top,0px) + 95px);left:48%;max-width:38%;font-size:10px}
+ body.breaker-focus .move-controls,body.twin-controls .move-controls{position:fixed;left:calc(env(safe-area-inset-left,0px) + 12px);right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);transform:none}
+ body.twin-controls #joystick,body.twin-controls #aimPad{width:88px;height:88px}
+ body.twin-controls #aimPad{position:fixed;left:auto;right:calc(env(safe-area-inset-right,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:none}
+ body.breaker-focus #fireBtn,body.twin-controls #fireBtn{position:fixed;left:auto;right:calc(env(safe-area-inset-right,0px) + 120px);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);width:65px;height:65px;min-height:65px;transform:none}
+ body.breaker-focus #fireBtn:active{transform:scale(.96)}
+ body.breaker-focus .fire-controls,body.twin-controls .fire-controls{position:fixed;left:auto;right:calc(env(safe-area-inset-right,0px) + 9px);bottom:calc(env(safe-area-inset-bottom,0px) + 114px);transform:none;width:max-content;max-width:calc(100vw - 20px);padding:4px;gap:5px}
+ body.breaker-focus .fire-controls .weapon-btn,body.twin-controls .fire-controls .weapon-btn{width:50px;max-width:50px;flex:0 0 50px;height:45px;min-height:45px}
+ body.breaker-focus .fire-controls #autoFireBtn,body.twin-controls .fire-controls #autoFireBtn{width:58px;max-width:58px;flex:0 0 58px;min-height:45px}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{position:fixed;left:auto;right:calc(env(safe-area-inset-right,0px) + 10px);bottom:calc(env(safe-area-inset-bottom,0px) + 169px);transform:none;max-width:calc(100vw - 20px);gap:4px}
+ body.breaker-focus .utility-controls .util-btn,body.twin-controls .utility-controls .util-btn{height:36px;min-height:36px;width:auto;min-width:56px;max-width:81px;padding:4px;font-size:9px}
+ body.breaker-focus .hud-bottom{left:47%;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);width:104px;height:22px;transform:translateX(-50%)}
+ body.breaker-focus #itemStatus{position:absolute;top:calc(env(safe-area-inset-top,0px) + 48px);left:50%;transform:translateX(-50%);max-width:210px;font-size:9px}
+}
+@media (orientation:landscape) and (max-height:370px){
+ body.breaker-focus .fire-controls,body.twin-controls .fire-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 91px)}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 141px)}
+ body.breaker-focus .hud-top{height:35px}
+ body.breaker-focus .chain-guide{display:none!important}
+}
+@media (pointer:fine) and (min-width:1000px) and (min-height:700px){
+ body.breaker-focus .fire-controls,body.breaker-focus .utility-controls{opacity:.80}
+}
+
+/* Portrait thumb zones: preserve five controls without covering the right movement button. */
+@media(orientation:portrait){
+ body.breaker-focus .move-controls #joystick,body.twin-controls .move-controls #joystick{position:fixed;left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);width:56px;height:56px}
+ body.breaker-focus .move-controls #leftBtn,body.twin-controls .move-controls #leftBtn,body.breaker-focus .move-controls #rightBtn,body.twin-controls .move-controls #rightBtn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);width:44px;height:44px;min-width:44px;min-height:44px;transform:none}
+ body.breaker-focus .move-controls #leftBtn,body.twin-controls .move-controls #leftBtn{left:74px}
+ body.breaker-focus .move-controls #rightBtn,body.twin-controls .move-controls #rightBtn{left:124px}
+ body.breaker-focus #aimPad,body.twin-controls #aimPad{position:fixed;left:auto;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:64px;height:64px;transform:none}
+ body.breaker-focus #fireBtn,body.twin-controls #fireBtn{position:fixed;left:auto;right:82px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:64px;height:64px;transform:none}
+ body.breaker-focus #fireBtn:active,body.twin-controls #fireBtn:active{transform:scale(.96)}
+ body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 266px);bottom:auto;left:12px;transform:none;max-width:calc(100vw - 24px)}
+}
+
+/* Atlas cells are square: preserve native tool proportions at every viewport. */
+.gear-preview{width:90px;height:90px}
+body.breaker-focus .weapon-btn .weapon-icon{width:48px;height:48px}
+body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:78px}
+body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 208px)}
+@media(max-width:600px),(max-height:500px),(orientation:portrait){
+ body.breaker-focus .weapon-btn .weapon-icon{width:39px;height:39px}
+ body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:64px}
+ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 204px)}
+}

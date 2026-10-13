@@ -14,7 +14,7 @@ describe('H-01 through H-04 commercial presentation upgrade', () => {
   it('locks the title hierarchy in live DOM', () => {
     expect(hub).toContain('data-title-hierarchy="H01_LOCKED"');
     expect(hub).toContain('data-title-rank="brand">NEW PSI');
-    expect(hub).toContain('aria-label="PSI : ZERO DAY"');
+    expect(hub).toContain('aria-label={GAME_TITLE}');
     expect(hub).toContain('data-title-rank="slogan"');
     expect(hub).toContain('data-title-primary-cta="defense"');
     expect(layout.commercialPresentation.h01.desktopHeroWidthMaxVw).toBeLessThanOrEqual(52);

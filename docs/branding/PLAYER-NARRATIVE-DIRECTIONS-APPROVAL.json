@@ -1,0 +1,19 @@
+{
+ "character_id":"player",
+ "approval_date":"2026-10-09",
+ "user_statement":"서사 방향 구체화 승인",
+ "approved_scope":"develop_three_narrative_directions_only",
+ "directions":["현장 통제 전문","작업 조율·멘토링","위험 조사·개선"],
+ "final_user_statement":"문장·표시·변경 가능 저장 승인",
+ "final_text_approval":"approved_exact_three_statements",
+ "statements":{
+  "control":"중지와 재개 경계를 더 명확히 전달하는 역할을 맡아보고 싶어요.",
+  "coordination":"다음 팀이 질문하고 이해할 수 있도록 함께 확인하는 역할을 맡아보고 싶어요.",
+  "investigation":"확인한 것과 아직 모르는 것을 나누어, 위험의 원인을 더 살피는 역할을 맡아보고 싶어요."
+ },
+ "display_and_mutable_save_policy_approval":"approved_player_stage12_victory_route_and_dialogue_outside_combat_optional_mutable_interest",
+ "new_art_voice_approval":"not_included",
+ "career_stats_rewards_approval":"not_included",
+ "runtime_connected":"local_only",
+ "production_deployment":"not_deployed"
+}

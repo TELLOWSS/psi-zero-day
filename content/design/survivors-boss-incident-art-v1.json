@@ -1,0 +1,874 @@
+{
+  "id": "survivors-boss-incident-art-v1",
+  "status": "ART_PRODUCTION_REQUIRED",
+  "global": {
+    "style": "semi-realistic Korean construction-site cinematic key art; industrial realism; dramatic but plausible; no fantasy creature anatomy",
+    "composition": "16:9 master, central safe crop for 9:16; foreground human-scale clue, midground hazard mechanism, background current stage workface",
+    "textInImage": false,
+    "gore": false,
+    "victimImpact": false,
+    "ppe": "realistic Korean construction PPE and equipment proportions",
+    "lighting": "derive from stage map; preserve real worksite depth, dust, wind, practical light",
+    "transitionCamera": "WIDE → FOCUS → HUMAN CLOSE → DECISION → IMPACT → WIDE",
+    "forbidden": [
+      "poster pose",
+      "monster face pasted onto machinery",
+      "generic sci-fi HUD",
+      "graphic injury",
+      "floating characters",
+      "random construction background unrelated to stage"
+    ]
+  },
+  "assets": [
+    {
+      "stageId": "stage_01",
+      "bossId": "incident_01",
+      "target": "/assets/survivors/boss-incidents/stage_01-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_01-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "사각 후진 25T",
+      "codeName": "BLIND REVERSER",
+      "compositionBrief": "서측 게이트 및 지상 복합 하역장. 후진 덤프트럭과 보행 동선이 겹치고 신호수/운전자 시야가 끊겨 보행자를 충격하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 후진경고음이 다른 장비음에 묻힘, 유도원 부재, 보행자가 차량 후방 사각으로 진입. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_02",
+      "bossId": "incident_02",
+      "target": "/assets/survivors/boss-incidents/stage_02-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_02-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "선회반경 베헤모스",
+      "codeName": "SWING RADIUS",
+      "compositionBrief": "대심도 기초 굴착 구역 (-4F). 굴착기 선회/후진 중 작업자가 카운터웨이트와 구조물 사이에 끼이거나 충격받는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 카운터웨이트 사각, 협소 통로, 연약한 바닥으로 장비 진로 흔들림. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_03",
+      "bossId": "incident_03",
+      "target": "/assets/survivors/boss-incidents/stage_03-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_03-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "편심 양중 아라크네",
+      "codeName": "OFF-CENTER LIFT",
+      "compositionBrief": "45층 초고층 메가 골조 슬래브. 불균형 슬링/체결과 하부 잔류 때문에 인양물이 기울거나 회전해 작업자를 타격하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 슬링 장력 불균형, 하부 작업자 잔류, 태그라인 미사용. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_04",
+      "bossId": "incident_04",
+      "target": "/assets/survivors/boss-incidents/stage_04-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_04-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "무음의 양생실",
+      "codeName": "SILENT CO CHAMBER",
+      "compositionBrief": "혹한기 동절기 밀폐 양생 챔버. 밀폐 천막 안 연소식 가열기 배기가 축적되고 환기 부족으로 작업자가 위험에 노출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 환기구 결로/막힘, 가스측정기 상승, 가열기 주변 공기 흐름 정체. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_05",
+      "bossId": "incident_05",
+      "target": "/assets/survivors/boss-incidents/stage_05-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_05-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "고중심 UPS 큐브",
+      "codeName": "TOPPLE CUBE",
+      "compositionBrief": "하이퍼스케일 전산 플랜트. 고중심 UPS 캐비닛을 롤러/대차로 이동하다 바닥 단차나 방향전환에서 전도되어 작업자를 협착하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 장비가 한쪽으로 기울음, 바닥 단차, 손이 장비와 벽 사이에 위치. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_06",
+      "bossId": "incident_06",
+      "target": "/assets/survivors/boss-incidents/stage_06-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_06-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "숨은 활선",
+      "codeName": "HIDDEN LIVE LINE",
+      "compositionBrief": "리모델링 사전 조사·전원 차단. 도면과 실제 배선이 다른 리모델링 현장에서 미확인 활선/배관을 천공·절단해 감전 또는 아크가 발생하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 구도면과 표기 불일치, 미표시 회로, 탐지기 간헐 경고. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_07",
+      "bossId": "incident_07",
+      "target": "/assets/survivors/boss-incidents/stage_07-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_07-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "떠받침 없는 벽",
+      "codeName": "UNSUPPORTED REMNANT",
+      "compositionBrief": "리모델링 선택 철거. 부분 철거 후 남은 벽체/슬래브 지지조건이 바뀌어 예기치 않게 붕괴하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 균열 진행, 진동 증가, 임시지지 제거 흔적. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_08",
+      "bossId": "incident_08",
+      "target": "/assets/survivors/boss-incidents/stage_08-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_08-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+      "title": "회전하는 보강재",
+      "codeName": "PINCH BRACE",
+      "compositionBrief": "기존·신설 구조 접합. 보강 철골/브레이스를 접합 위치에 맞추는 동안 부재가 회전해 작업자를 기존 구조물 사이에 협착하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 편심 체결, 손으로 부재를 직접 유도, 임시 지지 부족. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_09",
+      "bossId": "incident_09",
+      "target": "/assets/survivors/boss-incidents/stage_09-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_09-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+      "title": "점화 전의 증기",
+      "codeName": "FLASH VAPOR",
+      "compositionBrief": "데이터센터 MEP 설치. 용제·단열재 등 가연성 물질이 있는 설비구역에서 용접/절단 불티가 증기와 만나 착화되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 용제 냄새/센서 경고, 가연물과 화기 작업 근접, 환기 정체. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_10",
+      "bossId": "incident_10",
+      "target": "/assets/survivors/boss-incidents/stage_10-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_10-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+      "title": "원격 기동",
+      "codeName": "REMOTE START",
+      "compositionBrief": "데이터센터 통합 시운전. 시운전 중 펌프·팬·구동부가 원격 명령으로 갑자기 기동해 점검자를 끼이게 하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 현장/중앙 제어 명령 충돌, LOTO 누락, 가드 열린 상태. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_11",
+      "bossId": "incident_11",
+      "target": "/assets/survivors/boss-incidents/stage_11-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_11-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "기울어진 지지축",
+      "codeName": "BROKEN LOAD PATH",
+      "compositionBrief": "형틀·시스템동바리 조립. 받침·U헤드·수직도·바닥지지 불량과 상부 적재가 겹쳐 지지계가 연쇄적으로 불안정해지는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 기울어진 동바리, 받침판 뜸, 상부 자재 집중 적재. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_12",
+      "bossId": "incident_12",
+      "target": "/assets/survivors/boss-incidents/stage_12-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_12-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "굴러오는 철근묶음",
+      "codeName": "ROLLING BUNDLE",
+      "compositionBrief": "철근 반입·배근. 장척 철근 묶음이 경사·대차·포크 위에서 이동하거나 굴러 작업자를 압박하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 결속밴드 이완, 받침목 부족, 작업자가 손으로 방향 유도. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_13",
+      "bossId": "incident_13",
+      "target": "/assets/survivors/boss-incidents/stage_13-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_13-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "압력 채찍",
+      "codeName": "HOSE WHIP",
+      "compositionBrief": "야간 콘크리트 타설. 콘크리트 펌프 막힘/압력변동 후 호스가 급격히 휘둘러 주변 작업자를 타격하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 호스 비정상 진동, 압력계 요동, 어두운 작업반경. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_14",
+      "bossId": "incident_14",
+      "target": "/assets/survivors/boss-incidents/stage_14-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_14-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+      "title": "매달린 갱폼",
+      "codeName": "DEADLINE LIFT",
+      "compositionBrief": "갱폼 인양·해체. 갱폼/부속 인양 시 체결핀·잔재물·부속품이 떨어지거나 하부 작업자가 남아 피격되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 하부 인원 잔류, 체결핀/부속 흔들림, 무전 신호 중복. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_15",
+      "bossId": "incident_15",
+      "target": "/assets/survivors/boss-incidents/stage_15-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_15-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "비어버린 한 칸",
+      "codeName": "MISSING BAY",
+      "compositionBrief": "외부 비계·작업발판. 작업발판 일부 또는 안전난간이 해체된 상태에서 자재 운반 중 작업자가 개방부로 추락하거나 자재가 하부로 떨어지는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 난간 한 구간 없음, 발판 틈, 자재가 통로 가장자리에 적치. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_16",
+      "bossId": "incident_16",
+      "target": "/assets/survivors/boss-incidents/stage_16-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_16-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "바람에 밀린 하중",
+      "codeName": "ROOF SWING",
+      "compositionBrief": "옥탑·지붕층 복합 작업. 지붕층에서 인양물을 유도하던 작업자가 돌풍과 하중 회전에 밀려 가장자리 위험에 노출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 풍속 상승, 개방된 가장자리, 태그라인 부족. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_17",
+      "bossId": "incident_17",
+      "target": "/assets/survivors/boss-incidents/stage_17-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_17-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "증기의 방",
+      "codeName": "VAPOR ROOM",
+      "compositionBrief": "방수·용제 보관. 밀폐·반밀폐 방수 작업에서 용제 증기 축적과 점화원/노출이 겹치는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 용기 개방, 환기 부족, 점화원 접근. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_18",
+      "bossId": "incident_18",
+      "target": "/assets/survivors/boss-incidents/stage_18-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_18-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "넘어지는 패널",
+      "codeName": "TIPPING PANEL",
+      "compositionBrief": "내부 마감·양중 동선. 석고보드·유리·대형 마감패널이 세워진 대차/랙에서 이동 중 전도되어 작업자를 협착하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 패널 상부 흔들림, 좁은 회전구간, 작업자가 측면을 손으로 지지. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_19",
+      "bossId": "incident_19",
+      "target": "/assets/survivors/boss-incidents/stage_19-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_19-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+      "title": "돌아오는 전원",
+      "codeName": "BACKFEED CORE",
+      "compositionBrief": "설비 시험·전원 격리. 다중 전원/UPS/발전기에서 한 전원을 차단했지만 다른 경로로 역송전되어 작업자가 노출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 차단기는 내려감, 다른 전원표시가 미약하게 살아있음, 시험일정 압박. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_20",
+      "bossId": "incident_20",
+      "target": "/assets/survivors/boss-incidents/stage_20-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_20-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "남겨진 임시상태",
+      "codeName": "RESIDUAL STATE",
+      "compositionBrief": "준공 전 최종 현장 인계. 준공 직전 임시전원·개구부·가설통로·잔여자재가 서로 다른 담당자 사이에서 미조치로 남아 후속 작업자가 노출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 완료 스티커와 실제 상태 불일치, 임시조치 표지 누락, 후속팀 조기 진입. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_21",
+      "bossId": "incident_21",
+      "target": "/assets/survivors/boss-incidents/stage_21-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_21-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "낮은 천장의 사각차량",
+      "codeName": "LOW-HEAD BLIND RUN",
+      "compositionBrief": "역타 지하 작업면 진입. 역타 슬래브 하부의 좁고 어두운 진입로에서 반입차량과 보행자가 시야 제한으로 충돌하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 낮은 조도, 기둥 뒤 사각, 차량과 보행 공용로. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_22",
+      "bossId": "incident_22",
+      "target": "/assets/survivors/boss-incidents/stage_22-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_22-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+      "title": "젖은 전원",
+      "codeName": "WET POWER",
+      "compositionBrief": "지하 환기·배수 확보. 배수펌프·임시전기 케이블이 젖은 작업면에서 손상되거나 접속부가 침수돼 감전 위험이 발생하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 고인 물 확대, 케이블 외피 손상, 차단기 반복 트립. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_23",
+      "bossId": "incident_23",
+      "target": "/assets/survivors/boss-incidents/stage_23-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_23-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+      "title": "후진 반출차",
+      "codeName": "SPOIL REVERSER",
+      "compositionBrief": "슬래브 하부 굴착 반출. 굴착토 반출차가 반복 후진하는 좁은 경로에서 신호가 끊겨 작업자를 충격하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 반복 후진으로 경계심 저하, 신호수 시야 단절, 대피공간 부족. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_24",
+      "bossId": "incident_24",
+      "target": "/assets/survivors/boss-incidents/stage_24-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_24-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+      "title": "위에서 오는 것",
+      "codeName": "VERTICAL CROSSING",
+      "compositionBrief": "지하·지상 동시 작업. 지상 양중/해체와 지하 설비 작업이 수직으로 겹쳐 개구부·슬래브 경계를 통해 물체가 하부 작업자에게 낙하하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 상부 작업음, 하부 인원 이동, 개구부 주변 자재. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_25",
+      "bossId": "incident_25",
+      "target": "/assets/survivors/boss-incidents/stage_25-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_25-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+      "title": "어제의 통로",
+      "codeName": "STALE ROUTE",
+      "compositionBrief": "굴착면 중간 인계. 교대/공정 전환 후 기존 안전통로가 자재·장비 배치로 바뀌었지만 이전 지시가 그대로 전달돼 작업자가 새 위험구역으로 진입하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 표지와 실제 동선 불일치, 조명은 옛 통로를 비춤, 신규팀이 과거 표지만 확인. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_26",
+      "bossId": "incident_26",
+      "target": "/assets/survivors/boss-incidents/stage_26-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_26-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+      "title": "압력이 남은 배관",
+      "codeName": "LIVE PIPE",
+      "compositionBrief": "리모델링 기존 설비 재조사. 기존 배관을 폐관/비가동으로 오인하고 절단·분해했지만 잔압이나 연결계통이 남아 유체가 분출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 밸브 표시 불명확, 배관 온도/진동 미세, 도면과 실제 연결 다름. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_27",
+      "bossId": "incident_27",
+      "target": "/assets/survivors/boss-incidents/stage_27-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_27-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+      "title": "철거물 사이의 로더",
+      "codeName": "DEBRIS LOADER",
+      "compositionBrief": "철거 폐기물 반출 분리. 철거물 적재·반출 중 로더/스키드로더가 더미와 벽 사이에서 후진해 작업자를 협착하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 높은 폐기물 더미가 시야 차단, 반출차 대기 압박, 보행자 임시횡단. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_28",
+      "bossId": "incident_28",
+      "target": "/assets/survivors/boss-incidents/stage_28-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_28-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+      "title": "끼이는 접합점",
+      "codeName": "CONNECTION PINCH",
+      "compositionBrief": "보강재 양중·접합. 보강재를 기존 구조에 맞추는 과정에서 하중이 미세 이동해 손·몸이 접합면 사이에 끼이는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 부재 정렬 오차, 손으로 직접 밀기, 임시고정 전 훅 장력 변화. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_29",
+      "bossId": "incident_29",
+      "target": "/assets/survivors/boss-incidents/stage_29-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_29-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+      "title": "두 개의 전원",
+      "codeName": "DUAL SOURCE",
+      "compositionBrief": "기존·신설 설비 동시 격리. 기존·신설 설비가 공존하며 표시/회로 구분이 혼재해 다른 계통을 차단하거나 신설측에서 역전원이 들어오는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 색상/라벨 혼재, 한쪽 차단 후 표시등 잔류, 작업자별 다른 계통 인식. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_30",
+      "bossId": "incident_30",
+      "target": "/assets/survivors/boss-incidents/stage_30-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_30-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+      "title": "막힌 탈출로",
+      "codeName": "NO EXIT",
+      "compositionBrief": "복합 지하 작업면 최종 인계. 지하 최종작업 중 자재 적치와 임시호스가 피난통로를 막고 환기 이상까지 겹쳐 비상 시 작업자가 신속히 빠져나오지 못하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 피난표지 일부 가림, 통로 폭 축소, 환기 경보 간헐. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_31",
+      "bossId": "incident_31",
+      "target": "/assets/survivors/boss-incidents/stage_31-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_31-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "가장자리로 달리는 대차",
+      "codeName": "EDGE RUNNER",
+      "compositionBrief": "상부 기준층 자재 반입. 상부 슬래브에서 중량 대차/파렛트잭이 경사·관성으로 가장자리 방향으로 움직여 작업자를 치거나 자재가 추락하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 바닥 미세경사, 브레이크 미체결, 가장자리 방호 일부 개방. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_32",
+      "bossId": "incident_32",
+      "target": "/assets/survivors/boss-incidents/stage_32-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_32-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+      "title": "너무 일찍 뺀 지지",
+      "codeName": "EARLY STRIKE",
+      "compositionBrief": "상부 형틀·지지부 확인. 콘크리트 강도/재지지 확인 전에 동바리·거푸집을 조기 해체해 슬래브 또는 지지계가 불안정해지는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 해체 표시와 강도기록 불일치, 재지지 누락, 일정 압박. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_33",
+      "bossId": "incident_33",
+      "target": "/assets/survivors/boss-incidents/stage_33-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_33-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+      "title": "회전하는 철근케이지",
+      "codeName": "REBAR CAGE SWING",
+      "compositionBrief": "상부 철근 반입·배근. 장척 철근케이지가 인양 중 바람/편심으로 회전해 배근 작업자를 치거나 가장자리로 밀어내는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 케이지 편심, 태그라인 한쪽만 사용, 배근팀이 작업반경 안에 잔류. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_34",
+      "bossId": "incident_34",
+      "target": "/assets/survivors/boss-incidents/stage_34-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_34-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+      "title": "거푸집 파열선",
+      "codeName": "POUR BLOWOUT",
+      "compositionBrief": "상부 타설 구역 교차 통제. 타설속도·측압 증가와 체결/보강 부족이 겹쳐 거푸집이 벌어지고 콘크리트가 급격히 유출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 폼 타이 변형, 패널 이음부 누수, 펌프 타설속도 상승. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_35",
+      "bossId": "incident_35",
+      "target": "/assets/survivors/boss-incidents/stage_35-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_35-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+      "title": "붙잡힌 비계",
+      "codeName": "SNAGGED SCAFFOLD",
+      "compositionBrief": "외부 비계·양중 협업. 양중물/로프가 비계 부재나 적치물에 걸려 비계 연결·벽이음에 비정상 하중을 주어 일부가 변형·붕괴하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 양중 경로와 비계 근접, 벽이음 일부 해체, 로프가 부재에 접촉. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_36",
+      "bossId": "incident_36",
+      "target": "/assets/survivors/boss-incidents/stage_36-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_36-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+      "title": "옥상 AHU 스윙",
+      "codeName": "ROOFTOP RECEIVER",
+      "compositionBrief": "옥탑 설비 반입. 대형 공조기/AHU를 옥상에 받는 과정에서 풍압과 좁은 착지면 때문에 하중이 회전해 유도자를 밀치거나 가장자리 위험을 만드는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 풍향변화, 착지면 협소, 작업자가 하중 가까이 접근. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_37",
+      "bossId": "incident_37",
+      "target": "/assets/survivors/boss-incidents/stage_37-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_37-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+      "title": "불꽃과 프라이머",
+      "codeName": "TORCH & PRIMER",
+      "compositionBrief": "옥탑 방수·설비 작업 분리. 토치 작업과 방수 프라이머/용제가 가까운 구역에서 동시 진행돼 증기 착화 위험이 높아지는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 프라이머 용기 개방, 바람이 증기를 화기 쪽으로 이동, 화기작업 경계 중첩. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_38",
+      "bossId": "incident_38",
+      "target": "/assets/survivors/boss-incidents/stage_38-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_38-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+      "title": "유리랙 전도",
+      "codeName": "GLASS RACK",
+      "compositionBrief": "상부 마감팀 동선 인계. 유리·석재·파티션 등 대형 판재 랙이 바닥 단차·방향전환·결속불량으로 전도되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: A프레임 결속 느슨함, 문턱 단차, 작업자 측면 동행. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_39",
+      "bossId": "incident_39",
+      "target": "/assets/survivors/boss-incidents/stage_39-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_39-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+      "title": "한 층 아래",
+      "codeName": "ONE FLOOR BELOW",
+      "compositionBrief": "상부·하부 공정 동시 확인. 상부 작업의 공구·클램프·자재가 개구부/외곽을 통해 하부 작업자에게 떨어지는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 상부 소형자재 가장자리 적치, 토보드/낙하방지 미흡, 하부팀 작업 지속. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_40",
+      "bossId": "incident_40",
+      "target": "/assets/survivors/boss-incidents/stage_40-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_40-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+      "title": "열린 가장자리",
+      "codeName": "EDGE LEFT OPEN",
+      "compositionBrief": "상부 교차작업 총괄 인계. 양중을 위해 임시로 해체한 안전난간/개구부 방호가 작업 종료 후 복구되지 않아 다음 공정 작업자가 노출되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 양중은 끝났지만 난간 비어있음, 인계표에는 완료 표시, 다음 팀 진입. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_41",
+      "bossId": "incident_41",
+      "target": "/assets/survivors/boss-incidents/stage_41-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_41-intro-portrait-v1.webp",
+      "existingStageBackground": null,
+      "title": "남아 있는 압력",
+      "codeName": "STORED PRESSURE",
+      "compositionBrief": "통합 설비실 진입. 배관/설비가 정지 상태처럼 보여도 압축공기·냉매·유체 잔압이 남아 플랜지/밸브 해체 시 분출하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 압력계 미세잔압, 바이패스 밸브 연결, 장비 소음이 없어 안심. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_42",
+      "bossId": "incident_42",
+      "target": "/assets/survivors/boss-incidents/stage_42-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_42-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/plant-stage-42-unique-v1.webp",
+      "title": "돌아가는 팬",
+      "codeName": "UNEXPECTED ROTOR",
+      "compositionBrief": "전기·공조 구역 분리. 전기·공조 시운전 경계가 섞여 점검 중인 팬/댐퍼가 인접팀 명령으로 갑자기 움직이는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 현장 스위치 OFF지만 BMS 자동모드, 가드 개방, 인접팀 테스트 시작. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_43",
+      "bossId": "incident_43",
+      "target": "/assets/survivors/boss-incidents/stage_43-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_43-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+      "title": "기울어지는 UPS",
+      "codeName": "HIGH COG",
+      "compositionBrief": "UPS 장비 반입. 대형 UPS를 스케이트/잭으로 이동 중 방향전환이나 바닥 이음에서 고중심 장비가 기울어 전도되는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 장비 상부 흔들림, 스케이트 높이 불균형, 회전반경 내 작업자. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_44",
+      "bossId": "incident_44",
+      "target": "/assets/survivors/boss-incidents/stage_44-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_44-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+      "title": "잘못 닫힌 큐비클",
+      "codeName": "WRONG CUBICLE",
+      "compositionBrief": "수전·배전 구역 격리. 유사한 배전반/큐비클 중 다른 회로를 차단하고 작업 대상은 살아있는 상태에서 접근하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 패널 외형 동일, 회로명 유사, 차단 후에도 표시 일부 유지. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_45",
+      "bossId": "incident_45",
+      "target": "/assets/survivors/boss-incidents/stage_45-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_45-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+      "title": "펌프스키드 슬링",
+      "codeName": "SKID RIGGING",
+      "compositionBrief": "통합 설비 양중 중지. 펌프스키드/대형 덕트 등 비대칭 설비를 잘못된 인양점에서 들어 올려 기울거나 슬링이 이동하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 무게중심 표기 불명확, 슬링각 불균형, 착지작업자 근접. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_46",
+      "bossId": "incident_46",
+      "target": "/assets/survivors/boss-incidents/stage_46-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_46-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+      "title": "자동모드 대기",
+      "codeName": "AUTO MODE ARMED",
+      "compositionBrief": "시운전 작업면 사전 확인. 시운전 전 점검 중 설비가 자동모드/예약명령에 남아 있어 작업자가 접근한 순간 펌프·댐퍼·컨베이어가 작동하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 자동모드 표시, 예약 명령 큐, 현장 인원이 가드 내부. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_47",
+      "bossId": "incident_47",
+      "target": "/assets/survivors/boss-incidents/stage_47-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_47-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+      "title": "동시에 켜지는 것들",
+      "codeName": "CASCADE START",
+      "compositionBrief": "다중 구역 통합 시운전. 여러 설비 구역을 통합 시운전하며 전기·압력·회전체가 연쇄적으로 기동해 작업반경이 겹치는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 구역별 준비상태 다름, 한 시스템 기동이 다른 시스템 트리거, 무전 채널 혼선. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_48",
+      "bossId": "incident_48",
+      "target": "/assets/survivors/boss-incidents/stage_48-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_48-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+      "title": "천장 속 마지막 결함",
+      "codeName": "LAST DEFECT ABOVE",
+      "compositionBrief": "최종 결함 구역 재확인. 마감 완료 구역의 천장·설비 결함을 임시 사다리로 재확인하다 불안정한 발판, 위쪽 활선/부품, 통행자와 겹쳐 사고가 나는 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 사다리 바닥 보호재 위 설치, 상부 작업공간 협소, 하부 통행 지속. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_49",
+      "bossId": "incident_49",
+      "target": "/assets/survivors/boss-incidents/stage_49-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_49-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+      "title": "막힌 운영동선",
+      "codeName": "HANDOVER BOTTLENECK",
+      "compositionBrief": "운영팀 인계 동선 확보. 운영팀이 들어오는 시점에도 잔여 자재·공사용 케이블·반입 작업이 통로를 점유해 비상동선과 작업동선이 충돌하는 사고 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 운영동선과 물류동선 교차, 비상구 일부 가림, 공사차량 마지막 반입. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    },
+    {
+      "stageId": "stage_50",
+      "bossId": "incident_50",
+      "target": "/assets/survivors/boss-incidents/stage_50-intro-v1.webp",
+      "portraitTarget": "/assets/survivors/boss-incidents/stage_50-intro-portrait-v1.webp",
+      "existingStageBackground": "/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+      "title": "ZERO DAY",
+      "codeName": "THE ACCIDENT THAT DID NOT HAPPEN",
+      "compositionBrief": "ZERO DAY · 통합 현장 인계. 양중·차량·낙하·전기/압력·신규인원·통신·공정지연 등 여러 위험신호가 같은 시간대에 겹쳐 하나의 중대사고 경로를 만드는 최종 사건 모티프 장면을 사고 직전 상태로 표현. 핵심 전조: 크레인 이동과 차량 진입 동시, 상부·하부 작업 중첩, 통신 지연·공정 압박·신규인원. 사람은 피해자가 아니라 위험을 알아차리거나 작업을 멈추려는 현장 인물로 배치.",
+      "visualPriority": [
+        "공정이 즉시 식별될 것",
+        "사고 메커니즘이 설명 없이 읽힐 것",
+        "필수 통제 대상의 위치가 원화와 실제 맵에서 연결될 것",
+        "보스는 장비/구조/환경 위험의 형상화이지 생물형 괴물이 아닐 것"
+      ],
+      "productionStatus": "MISSING_FINAL_ART"
+    }
+  ]
+}

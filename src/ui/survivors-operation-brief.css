@@ -1,0 +1,46 @@
+.survivors-operation-brief { margin:12px 0; padding:14px; border:1px solid #496663; border-radius:10px; background:#132525; }
+.survivors-operation-brief header { display:flex; gap:12px; align-items:center; }
+.survivors-operation-brief header img { width:52px; height:64px; object-fit:cover; border-radius:7px; }
+.survivors-operation-brief header div { display:grid; gap:4px; }
+.survivors-operation-brief header small { color:#81ddbb; font-size:11px; }
+.survivors-operation-brief header span { font-size:12px; color:#b9cdd0; }
+.survivors-operation-brief p { font-size:12px; line-height:1.65; }
+.survivors-operation-brief p strong { display:block; margin-bottom:3px; color:#9ee6ce; }
+.survivors-operation-links { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.survivors-operation-brief details { padding:8px 0; border-top:1px solid #38504b; }
+.survivors-operation-brief summary { cursor:pointer; font-size:12px; min-height:44px; align-content:center; }
+.survivors-operation-brief h4 { font-size:13px; margin:12px 0 6px; }
+.survivors-operation-brief ul { padding-left:18px; font-size:12px; line-height:1.65; }
+.survivors-operation-brief details p,.survivors-operation-brief li { overflow-wrap:anywhere; }
+.survivors-handoff-scene { margin:10px 0; }
+.survivors-narrative-interest-scene { margin:10px 0; }
+.survivors-narrative-interest-scene img { display:block; width:100%; height:auto; aspect-ratio:1672/941; object-fit:contain; }
+@media (max-height:450px) { .survivors-narrative-interest-scene img { max-height:calc(100dvh - 230px); } }
+.survivors-handoff-scene img { display:block; width:100%; height:auto; aspect-ratio:1672/941; object-fit:contain; }
+.survivors-handoff-scene figcaption { font-size:11px; line-height:1.6; color:#c4d6d1; margin-top:6px; }
+.survivors-handoff-dialogue { border-top:1px solid #496663; margin-top:12px; padding-top:4px; }
+.survivors-handoff-dialogue button { min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border:1px solid #6c9d8b; border-radius:4px; background:#173e35; color:#d9f8e9; font:inherit; font-size:12px; cursor:pointer; white-space:normal; }
+.survivors-handoff-dialogue button:hover { background:#245947; }
+.survivors-handoff-dialogue button:focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
+.survivors-narrative-direction { border-top:1px solid #496663; margin-top:12px; padding-top:4px; }
+.survivors-narrative-direction button,.survivors-narrative-direction select { min-height:44px; max-width:100%; padding:8px 12px; border:1px solid #6c9d8b; border-radius:4px; background:#173e35; color:#d9f8e9; font:inherit; font-size:12px; }
+.survivors-narrative-direction select { width:100%; }
+.survivors-narrative-direction button { display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+.survivors-narrative-direction button:disabled { opacity:.5; cursor:default; }
+.survivors-narrative-direction :focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
+.survivors-handoff-choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:8px; }
+.survivors-handoff-controls { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+.survivors-result-handoff { margin:12px 0; border-top:1px solid #496663; padding-top:8px; text-align:left; }
+.survivors-result-handoff summary { min-height:44px; align-content:center; cursor:pointer; font-size:13px; }
+.survivors-result-handoff p { font-size:12px; line-height:1.65; }
+.survivors-operation-brief details small { font-size:11px; color:#a6bab8; }
+@media(max-width:600px){.survivors-operation-links { grid-template-columns:1fr; gap:0; }}
+.survivors-operation-story { border-left:3px solid #73c9ad; padding:4px 12px; margin:12px 0; text-align:left; }
+.survivors-operation-story h4 { margin:6px 0; font-size:14px; color:#d9f4e9; }
+.survivors-operation-story p { font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.survivors-operation-story p strong { display:block; color:#a6e5cf; margin-bottom:4px; }
+.survivors-operation-story small { font-size:11px; line-height:1.6; color:#b1c8c1; }
+.survivors-story-facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0; }
+.survivors-story-facts div { background:#203532; padding:8px; border-radius:4px; }
+.survivors-story-facts dt { font-size:11px; color:#b7d6ca; }
+.survivors-story-facts dd { margin:4px 0 0; font-size:18px; color:#e1f8eb; }

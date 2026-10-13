@@ -1,0 +1,1260 @@
+[
+  {
+    "kind": "watch",
+    "width": 1920,
+    "height": 1080,
+    "loading": {
+      "width": 1920,
+      "height": 1080,
+      "src": "/signal-watch-loading/signal-watch-landscape-v2.webp",
+      "ratio": 1.7768331562167907
+    },
+    "intro": [
+      "/assets/episode01/backgrounds/foundation-map.webp",
+      "/assets/survivors/stage-01-ground-v2.webp",
+      "/assets/episode01/characters/player-portrait.webp",
+      "/signal-breaker-dev/art/ending-ch01-restored-v1.webp"
+    ],
+    "errors": []
+  },
+  {
+    "kind": "boss",
+    "id": "CH-01",
+    "width": 1920,
+    "height": 1080,
+    "identity": "delivery",
+    "view": {
+      "camera": {
+        "scale": 1.7454545454545454,
+        "x": 0,
+        "y": 1.25,
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "bossFraming": null
+      },
+      "bossLabel": {
+        "left": 1047.2727272727273,
+        "right": 1221.8181818181818,
+        "top": 442.9090909090909,
+        "bottom": 477.8181818181818
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "delivery",
+        "source": "art/boss-delivery-final-v2.webp",
+        "width": 252,
+        "height": 168.08203125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-02",
+    "width": 1920,
+    "height": 1080,
+    "identity": "conveyor",
+    "view": {
+      "camera": {
+        "scale": 1.7454545454545454,
+        "x": 0,
+        "y": 1.25,
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "bossFraming": null
+      },
+      "bossLabel": {
+        "left": 1090.9090909090908,
+        "right": 1265.4545454545455,
+        "top": 442.9090909090909,
+        "bottom": 477.8181818181818
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "conveyor",
+        "source": "art/boss-conveyor-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-03",
+    "width": 1920,
+    "height": 1080,
+    "identity": "extraction",
+    "view": {
+      "camera": {
+        "scale": 1.7454545454545454,
+        "x": 0,
+        "y": 1.25,
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "bossFraming": null
+      },
+      "bossLabel": {
+        "left": 1134.5454545454545,
+        "right": 1309.090909090909,
+        "top": 442.9090909090909,
+        "bottom": 477.8181818181818
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "extraction",
+        "source": "art/boss-extraction-final-v2.webp",
+        "width": 244,
+        "height": 183,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-04",
+    "width": 1920,
+    "height": 1080,
+    "identity": "tension",
+    "view": {
+      "camera": {
+        "scale": 1.7454545454545454,
+        "x": 0,
+        "y": 1.25,
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "bossFraming": null
+      },
+      "bossLabel": {
+        "left": 1178.181818181818,
+        "right": 1352.7272727272727,
+        "top": 442.9090909090909,
+        "bottom": 477.8181818181818
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "tension",
+        "source": "art/boss-tension-final-v2.webp",
+        "width": 286,
+        "height": 190.759765625,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-05",
+    "width": 1920,
+    "height": 1080,
+    "identity": "grid",
+    "view": {
+      "camera": {
+        "scale": 1.7454545454545454,
+        "x": 0,
+        "y": 1.25,
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "bossFraming": null
+      },
+      "bossLabel": {
+        "left": 1221.8181818181818,
+        "right": 1396.3636363636363,
+        "top": 442.9090909090909,
+        "bottom": 477.8181818181818
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "grid",
+        "source": "art/boss-grid-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "watch",
+    "width": 844,
+    "height": 390,
+    "loading": {
+      "width": 844,
+      "height": 390,
+      "src": "/signal-watch-loading/signal-watch-landscape-v2.webp",
+      "ratio": 1.7768331562167907
+    },
+    "intro": [
+      "/assets/episode01/backgrounds/foundation-map.webp",
+      "/assets/survivors/stage-01-ground-v2.webp",
+      "/assets/episode01/characters/player-portrait.webp",
+      "/signal-breaker-dev/art/ending-ch01-restored-v1.webp"
+    ],
+    "errors": []
+  },
+  {
+    "kind": "boss",
+    "id": "CH-01",
+    "width": 844,
+    "height": 390,
+    "identity": "delivery",
+    "view": {
+      "camera": {
+        "scale": 0.6208251473477406,
+        "x": -129.74050632911394,
+        "y": 4.462025316455694,
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "bossFraming": {
+          "top": 85,
+          "bottom": 594
+        }
+      },
+      "bossLabel": {
+        "left": 522.573673870334,
+        "right": 584.656188605108,
+        "top": 118.29076620825145,
+        "bottom": 130.70726915520626
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "delivery",
+        "source": "art/boss-delivery-final-v2.webp",
+        "width": 252,
+        "height": 168.08203125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-02",
+    "width": 844,
+    "height": 390,
+    "identity": "conveyor",
+    "view": {
+      "camera": {
+        "scale": 0.6208251473477406,
+        "x": -129.74050632911394,
+        "y": 4.462025316455694,
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "bossFraming": {
+          "top": 85,
+          "bottom": 594
+        }
+      },
+      "bossLabel": {
+        "left": 538.0943025540275,
+        "right": 600.1768172888015,
+        "top": 118.29076620825145,
+        "bottom": 130.70726915520626
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "conveyor",
+        "source": "art/boss-conveyor-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-03",
+    "width": 844,
+    "height": 390,
+    "identity": "extraction",
+    "view": {
+      "camera": {
+        "scale": 0.6208251473477406,
+        "x": -129.74050632911394,
+        "y": 4.462025316455694,
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "bossFraming": {
+          "top": 85,
+          "bottom": 594
+        }
+      },
+      "bossLabel": {
+        "left": 553.614931237721,
+        "right": 615.6974459724951,
+        "top": 118.29076620825145,
+        "bottom": 130.70726915520626
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "extraction",
+        "source": "art/boss-extraction-final-v2.webp",
+        "width": 244,
+        "height": 183,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-04",
+    "width": 844,
+    "height": 390,
+    "identity": "tension",
+    "view": {
+      "camera": {
+        "scale": 0.6208251473477406,
+        "x": -129.74050632911394,
+        "y": 4.462025316455694,
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "bossFraming": {
+          "top": 85,
+          "bottom": 594
+        }
+      },
+      "bossLabel": {
+        "left": 569.1355599214145,
+        "right": 631.2180746561886,
+        "top": 118.29076620825145,
+        "bottom": 130.70726915520626
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "tension",
+        "source": "art/boss-tension-final-v2.webp",
+        "width": 286,
+        "height": 190.759765625,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-05",
+    "width": 844,
+    "height": 390,
+    "identity": "grid",
+    "view": {
+      "camera": {
+        "scale": 0.6208251473477406,
+        "x": -129.74050632911394,
+        "y": 4.462025316455694,
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "bossFraming": {
+          "top": 85,
+          "bottom": 594
+        }
+      },
+      "bossLabel": {
+        "left": 584.656188605108,
+        "right": 646.7387033398821,
+        "top": 118.29076620825145,
+        "bottom": 130.70726915520626
+      },
+      "plane": {
+        "top": 0,
+        "height": 620
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "grid",
+        "source": "art/boss-grid-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "watch",
+    "width": 768,
+    "height": 1024,
+    "loading": {
+      "width": 768,
+      "height": 1024,
+      "src": "/signal-watch-loading/signal-watch-landscape-v2.webp",
+      "ratio": 1.7768331562167907
+    },
+    "intro": [
+      "/assets/episode01/backgrounds/foundation-map.webp",
+      "/assets/survivors/stage-01-ground-v2.webp",
+      "/assets/episode01/characters/player-portrait.webp",
+      "/signal-breaker-dev/art/ending-ch01-restored-v1.webp"
+    ],
+    "errors": []
+  },
+  {
+    "kind": "boss",
+    "id": "CH-01",
+    "width": 768,
+    "height": 1024,
+    "identity": "delivery",
+    "view": {
+      "camera": {
+        "scale": 0.6206060606060606,
+        "x": -68.75,
+        "y": -534.6000000000001,
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 799,
+          "player": 290,
+          "boss": 650
+        }
+      },
+      "bossLabel": {
+        "left": 415.030303030303,
+        "right": 477.09090909090907,
+        "top": 490.0305454545455,
+        "bottom": 502.44266666666675
+      },
+      "plane": {
+        "top": -534.6000000000001,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "delivery",
+        "source": "art/boss-delivery-final-v2.webp",
+        "width": 252,
+        "height": 168.08203125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-02",
+    "width": 768,
+    "height": 1024,
+    "identity": "conveyor",
+    "view": {
+      "camera": {
+        "scale": 0.6206060606060606,
+        "x": -68.75,
+        "y": -623.7,
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 824,
+          "player": 290,
+          "boss": 675
+        }
+      },
+      "bossLabel": {
+        "left": 430.54545454545456,
+        "right": 492.6060606060606,
+        "top": 545.3265454545455,
+        "bottom": 557.7386666666667
+      },
+      "plane": {
+        "top": -623.7,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "conveyor",
+        "source": "art/boss-conveyor-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-03",
+    "width": 768,
+    "height": 1024,
+    "identity": "extraction",
+    "view": {
+      "camera": {
+        "scale": 0.6206060606060606,
+        "x": -68.75,
+        "y": -552.75,
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 849,
+          "player": 290,
+          "boss": 700
+        }
+      },
+      "bossLabel": {
+        "left": 446.06060606060606,
+        "right": 508.1212121212121,
+        "top": 501.29454545454547,
+        "bottom": 513.7066666666667
+      },
+      "plane": {
+        "top": -552.75,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "extraction",
+        "source": "art/boss-extraction-final-v2.webp",
+        "width": 244,
+        "height": 183,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-04",
+    "width": 768,
+    "height": 1024,
+    "identity": "tension",
+    "view": {
+      "camera": {
+        "scale": 0.6206060606060606,
+        "x": -68.75,
+        "y": -534.6000000000001,
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 874,
+          "player": 290,
+          "boss": 725
+        }
+      },
+      "bossLabel": {
+        "left": 461.57575757575756,
+        "right": 523.6363636363636,
+        "top": 490.0305454545455,
+        "bottom": 502.44266666666675
+      },
+      "plane": {
+        "top": -534.6000000000001,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "tension",
+        "source": "art/boss-tension-final-v2.webp",
+        "width": 286,
+        "height": 190.759765625,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-05",
+    "width": 768,
+    "height": 1024,
+    "identity": "grid",
+    "view": {
+      "camera": {
+        "scale": 0.6206060606060606,
+        "x": -68.75,
+        "y": -572.55,
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 899,
+          "player": 290,
+          "boss": 750
+        }
+      },
+      "bossLabel": {
+        "left": 477.09090909090907,
+        "right": 539.1515151515151,
+        "top": 513.5825454545454,
+        "bottom": 525.9946666666666
+      },
+      "plane": {
+        "top": -572.55,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "grid",
+        "source": "art/boss-grid-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "watch",
+    "width": 390,
+    "height": 844,
+    "loading": {
+      "width": 390,
+      "height": 844,
+      "src": "/signal-watch-loading/signal-watch-landscape-v2.webp",
+      "ratio": 1.7768331562167907
+    },
+    "intro": [
+      "/assets/episode01/backgrounds/foundation-map.webp",
+      "/assets/survivors/stage-01-ground-v2.webp",
+      "/assets/episode01/characters/player-portrait.webp",
+      "/signal-breaker-dev/art/ending-ch01-restored-v1.webp"
+    ],
+    "errors": []
+  },
+  {
+    "kind": "boss",
+    "id": "CH-01",
+    "width": 390,
+    "height": 844,
+    "identity": "delivery",
+    "view": {
+      "camera": {
+        "scale": 0.5115151515151515,
+        "x": 143.77962085308053,
+        "y": -534.6000000000001,
+        "width": 390,
+        "height": 844,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 799,
+          "player": 290,
+          "boss": 650
+        }
+      },
+      "bossLabel": {
+        "left": 233.36363636363637,
+        "right": 284.5151515151515,
+        "top": 403.89236363636365,
+        "bottom": 414.1226666666667
+      },
+      "plane": {
+        "top": -534.6000000000001,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "delivery",
+        "source": "art/boss-delivery-final-v2.webp",
+        "width": 252,
+        "height": 168.08203125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-02",
+    "width": 390,
+    "height": 844,
+    "identity": "conveyor",
+    "view": {
+      "camera": {
+        "scale": 0.5115151515151515,
+        "x": 156.27962085308053,
+        "y": -623.7,
+        "width": 390,
+        "height": 844,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 824,
+          "player": 290,
+          "boss": 675
+        }
+      },
+      "bossLabel": {
+        "left": 239.75757575757572,
+        "right": 290.9090909090909,
+        "top": 449.4683636363636,
+        "bottom": 459.69866666666667
+      },
+      "plane": {
+        "top": -623.7,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "conveyor",
+        "source": "art/boss-conveyor-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-03",
+    "width": 390,
+    "height": 844,
+    "identity": "extraction",
+    "view": {
+      "camera": {
+        "scale": 0.5115151515151515,
+        "x": 168.77962085308053,
+        "y": -552.75,
+        "width": 390,
+        "height": 844,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 849,
+          "player": 290,
+          "boss": 700
+        }
+      },
+      "bossLabel": {
+        "left": 246.15151515151513,
+        "right": 297.30303030303025,
+        "top": 413.1763636363636,
+        "bottom": 423.40666666666664
+      },
+      "plane": {
+        "top": -552.75,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "extraction",
+        "source": "art/boss-extraction-final-v2.webp",
+        "width": 244,
+        "height": 183,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-04",
+    "width": 390,
+    "height": 844,
+    "identity": "tension",
+    "view": {
+      "camera": {
+        "scale": 0.5115151515151515,
+        "x": 181.27962085308053,
+        "y": -534.6000000000001,
+        "width": 390,
+        "height": 844,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 874,
+          "player": 290,
+          "boss": 725
+        }
+      },
+      "bossLabel": {
+        "left": 252.5454545454545,
+        "right": 303.6969696969697,
+        "top": 403.89236363636365,
+        "bottom": 414.1226666666667
+      },
+      "plane": {
+        "top": -534.6000000000001,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "tension",
+        "source": "art/boss-tension-final-v2.webp",
+        "width": 286,
+        "height": 190.759765625,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "boss",
+    "id": "CH-05",
+    "width": 390,
+    "height": 844,
+    "identity": "grid",
+    "view": {
+      "camera": {
+        "scale": 0.5115151515151515,
+        "x": 193.77962085308053,
+        "y": -572.55,
+        "width": 390,
+        "height": 844,
+        "dpr": 1,
+        "bossFraming": {
+          "left": 251,
+          "right": 899,
+          "player": 290,
+          "boss": 750
+        }
+      },
+      "bossLabel": {
+        "left": 258.93939393939394,
+        "right": 310.09090909090907,
+        "top": 423.3043636363636,
+        "bottom": 433.5346666666666
+      },
+      "plane": {
+        "top": -572.55,
+        "height": 1650
+      },
+      "assistance": null,
+      "supportActor": {
+        "ready": true,
+        "failed": false,
+        "characterId": "safety_monitor"
+      },
+      "supportDrawn": false,
+      "hazards": {
+        "ready": false,
+        "source": null,
+        "footprints": []
+      },
+      "bossArt": {
+        "identity": "grid",
+        "source": "art/boss-grid-final-v2.webp",
+        "width": 280,
+        "height": 186.7578125,
+        "ready": true
+      },
+      "equipment": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/boss-equipment-v1.webp"
+      },
+      "materials": {
+        "ready": true,
+        "source": "http://127.0.0.1:5317/signal-breaker-dev/art/core-materials-v2.webp"
+      }
+    }
+  },
+  {
+    "kind": "watch-resume",
+    "stage": "stage_02",
+    "map": "/assets/survivors/excavation-ground-v3.webp"
+  },
+  {
+    "kind": "watch-retry",
+    "pass": true
+  },
+  {
+    "kind": "watch-cancel",
+    "pass": true
+  },
+  {
+    "kind": "breaker-retry",
+    "pass": true
+  },
+  {
+    "kind": "breaker-offline",
+    "pass": true
+  }
+]

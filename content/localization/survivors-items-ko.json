@@ -1,0 +1,48 @@
+{
+  "guide_title": "전술 보급 · 장비 조합",
+  "supply_rule": "선택한 난이도의 통제 횟수와 최소 재보급 간격을 모두 충족하면 기록 회수 → 무전 배터리 → 통제 키트 → 회복 보급 → 유도등 순으로 보급됩니다. 대표 위험은 통제 키트를 보급합니다. 경험치 기록은 계속 획득합니다.",
+  "record_beacon": {
+    "name": "기록 회수 비콘",
+    "description": "현장에 남은 경험치를 한 번에 회수합니다. 구급함과 다른 전술 아이템은 그대로 남습니다."
+  },
+  "radio_battery": {
+    "name": "무전 배터리",
+    "description": "샤우팅 게이지를 입문 22 / 표준 16 / 고난도 14 / 극한 12 채웁니다. 최대치를 넘기지 않습니다."
+  },
+  "control_kit": {
+    "name": "긴급 통제 키트",
+    "description": "12초 동안 접촉 위험을 2회 차단합니다. 다시 얻으면 2회·12초로 갱신됩니다."
+  },
+  "kit_status": "접근 차단",
+  "evolution_title": "진화 조합",
+  "evolution_rule": "보유 장비 강화 한 칸을 우선 제공합니다. 장비 Lv.5에서 지원이 없으면 필요한 지원을 우선 제공합니다. 기본 장비 Lv.5 + 해당 지원 Lv.1을 갖추면 다음 레벨업에 진화 선택지가 등장합니다.",
+  "evolution_progress": "진화 준비",
+  "evolution_complete": "최종 진화 완료",
+  "loadout_title": "장비 성장 · 최종 진화",
+  "choice_evolution": "선택 후 진화 경로",
+  "evolution_ready": "준비 완료 · 다음 레벨업에서 진화 선택",
+  "supply_collected": "전술 보급 획득",
+  "field_rations": {
+    "name": "현장 회복 보급",
+    "description": "8초 동안 초당 체력 3을 회복합니다. 총 24 회복, 최대 체력을 넘기지 않으며 다시 얻으면 시간만 갱신합니다."
+  },
+  "route_lantern": {
+    "name": "안전 유도등",
+    "description": "10초 동안 이동 속도가 20% 증가합니다. 접촉 피해를 막지는 않으며 다시 얻으면 시간만 갱신합니다."
+  },
+  "recovery_status": "체력 회복",
+  "route_status": "이동 +20%",
+  "experience_name": "안전 기록",
+  "heal_name": "구급함",
+  "equipment_progress": "장비 성장",
+  "equipment_rule": "장비 레벨마다 모듈·표시등·작동 효과가 변합니다. Lv.3·Lv.5에서 본체가 바뀌고, 조합 진화는 별도 장비로 전환됩니다.",
+  "upgrade_preview": "다음 강화",
+  "choice_details": "상세 정보",
+  "tier_names": [
+    "기본",
+    "모듈 추가",
+    "전문",
+    "복합 모듈",
+    "최종"
+  ]
+}

@@ -3,6 +3,7 @@ import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actio
 import { strategyActionTargetKey } from '../app/strategy-actions';
 import type { PsiIndicatorId } from '../app/product-contract';
 import { psiIndicatorTextId } from '../app/strategy-psi';
+import {OperationHandoffDossier} from './OperationHandoffDossier';
 
 export interface StrategyOutcomeReconsideration {
   readonly item_id: string;
@@ -42,6 +43,7 @@ export function StrategyLoopPanel({
   onOutcomeContinue,
   onOutcomeReconsider,
   onActionFocus,
+  onTargetSelect,
   guidanceText,
   emptyText,
   transitionPrompt,
@@ -54,34 +56,51 @@ export function StrategyLoopPanel({
   readonly text: (id: string) => string;
   readonly personName: (characterId: string) => string;
   readonly targetLabel: (action: StrategyAction) => string;
-  readonly onAction?: (action: StrategyAction) => void;
+  readonly onAction?: (action: StrategyAction) => boolean | void;
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
   readonly onActionFocus?: (targetKey: string | null) => void;
+  readonly onTargetSelect?: (targetKey: string) => void;
   readonly guidanceText?: string;
   readonly emptyText?: string;
   readonly transitionPrompt?: string;
   readonly onTransitionContinue?: () => void;
 }) {
+  const confirmRef = useRef<HTMLDivElement>(null);
+  const [rejected, setRejected] = useState(false);
   const [pending, setPending] = useState<StrategyAction | null>(null);
   const [reconsiderConfirm, setReconsiderConfirm] = useState(false);
   const [executing, setExecuting] = useState(false);
   const executingRef = useRef(false);
   const actionSetKey = useMemo(() => actions.map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`).join('|'), [actions]);
+  const targetOptions = useMemo(() => [...new Map(
+    actions
+      .filter(action => action.enabled)
+      .map(action => [strategyActionTargetKey(action.target), action] as const),
+  ).values()], [actions]);
 
   useEffect(() => {
+    setRejected(false);
     setPending(null);
     setReconsiderConfirm(false);
     setExecuting(false);
     executingRef.current = false;
   }, [actionSetKey, focusId, outcome?.key]);
 
+  useEffect(() => {
+    if (pending) confirmRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+  }, [pending]);
+
   const executePending = () => {
     if (!pending?.enabled || !onAction || executingRef.current) return;
     executingRef.current = true;
     setExecuting(true);
-    onAction(pending);
+    if (onAction(pending) === false) {
+      executingRef.current = false;
+      setExecuting(false);
+      setRejected(true);
+    }
   };
 
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
@@ -138,7 +157,28 @@ export function StrategyLoopPanel({
         <strong>{nextStep.title}</strong>
         <small>{nextStep.hint}</small>
       </div>
+      {rejected ? <p role="alert">{text('ui.strategy.retry_action')}</p> : null}
+      <OperationHandoffDossier mode="story" story={{actions,text,execute:action=>{if(!executingRef.current&&action.enabled)setPending(action);}}}/>
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
+      {!focusId && targetOptions.length ? <div className="strategy-target-picker" aria-label={text('ui.strategy.guide.target_title')}>
+        {targetOptions.map(action => {
+          const targetKey = strategyActionTargetKey(action.target);
+          return <button
+            key={targetKey}
+            type="button"
+            data-target-shortcut={targetKey}
+            onMouseEnter={() => onActionFocus?.(targetKey)}
+            onMouseLeave={() => onActionFocus?.(null)}
+            onFocus={() => onActionFocus?.(targetKey)}
+            onBlur={() => onActionFocus?.(null)}
+            onClick={() => onTargetSelect?.(targetKey)}
+          >
+            <span className="strategy-target-picker-icon" aria-hidden="true">{actionIcon(action.intent)}</span>
+            <span><strong>{targetLabel(action)}</strong><small>{text(action.label_text_id)}</small></span>
+            <b aria-hidden="true">›</b>
+          </button>;
+        })}
+      </div> : null}
       {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
       {transitionPrompt ? <div className="strategy-transition-card" data-strategy-transition="true">
         <p>{transitionPrompt}</p>
@@ -181,7 +221,7 @@ export function StrategyLoopPanel({
           </div>
         </>}
 
-      {pending ? <div className="strategy-action-confirm" data-pending-choice={pending.choice_id}>
+      {pending ? <div ref={confirmRef} className="strategy-action-confirm" data-pending-choice={pending.choice_id}>
         <strong className="strategy-action-confirm-title">{text('ui.strategy.guide.confirm_title')}</strong>
         <div><span>{text('ui.strategy.actor')}</span><strong>{personName(pending.actor_character_id)}</strong></div>
         <div><span>{text('ui.strategy.target')}</span><strong>{targetLabel(pending)}</strong></div>

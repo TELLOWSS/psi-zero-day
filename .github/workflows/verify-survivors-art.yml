@@ -1,0 +1,130 @@
+name: Verify SURVIVORS Art
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/*typography.css'
+      - 'src/ui/tactical-ui.css'
+      - 'src/ui/SurvivorsEquipmentStore.tsx'
+      - 'src/ui/SurvivorsResultSummary.tsx'
+      - 'tests/verify-survivors-combat-ui.mjs'
+      - 'tests/survivors-result*'
+      - 'tests/survivors-live-store.test.tsx'
+      - 'tests/survivors-equipment-store.test.tsx'
+      - 'tests/survivors-store-effect-copy.test.ts'
+      - 'tests/verify-store-reference-layout.mjs'
+      - 'tests/verify-lz-guidance.mjs'
+      - 'tests/brand-production-slots.test.ts'
+      - 'src/ui/GameHub.tsx'
+      - 'src/ui/shooting-entry.css'
+      - 'tests/game-hub.test.tsx'
+      - 'tests/verify-brand-mobile-hierarchy.mjs'
+      - 'scripts/audit-brand-production-slots.mjs'
+      - 'content/branding/production-slots-v1.json'
+      - 'docs/branding/candidates/BR-LOGO-02*'
+      - 'public/assets/branding/**'
+      - 'scripts/review-brand-vector-candidate.mjs'
+      - 'content/localization/survivors-store-ko.json'
+      - 'content/localization/survivors-result-ko.json'
+      - 'content/localization/survivors-boss-ko.json'
+      - 'src/ui/survivors-boss-readout.ts'
+      - 'tests/survivors-boss-readout.test.ts'
+      - 'public/fonts/**'
+      - 'scripts/verify-tactical-ui.mjs'
+      - 'src/ui/survivors-projectile-vfx.ts'
+      - 'src/ui/survivors-authored-metal-impact.ts'
+      - 'src/engine/patrol-survivors-engine.ts'
+      - 'src/engine/survivors-equipment-tuning.ts'
+      - 'src/domain/survivors-projectile-feedback.ts'
+      - 'tests/survivors-equipment-damage-audit.test.ts'
+      - 'tests/survivors-confirmed-impact.test.ts'
+      - 'scripts/verify-survivors-confirmed-impact.mjs'
+      - 'scripts/verify-survivors-projectiles.mjs'
+      - 'public/assets/survivors/**'
+      - 'scripts/verify-survivors-browser.mjs'
+      - '.github/workflows/verify-survivors-art.yml'
+permissions:
+  contents: read
+jobs:
+  survivors-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - run: npm install --prefix /tmp/psi-browser-tools --no-save --package-lock=false playwright@1.62.1
+      - run: node /tmp/psi-browser-tools/node_modules/playwright/cli.js install ffmpeg
+      - run: npm run typecheck && npm test && npm run build
+      - name: Korean capture font
+        shell: bash
+        run: |
+          FONT_DIR="$HOME/.local/share/fonts/psi-qa"
+          mkdir -p "$FONT_DIR"
+          cp public/fonts/BlackHanSans-Regular.ttf "$FONT_DIR/"
+          cp public/fonts/BlackHanSans-OFL.txt "$FONT_DIR/"
+          fc-cache -f "$FONT_DIR"
+          fc-query --format '%{family}\n' "$FONT_DIR/BlackHanSans-Regular.ttf" | grep -F 'Black Han Sans'
+          fc-match --format '%{file}\n' 'Black Han Sans:charset=d55c' | grep -Fx "$FONT_DIR/BlackHanSans-Regular.ttf"
+      - name: Browser smoke and captures
+        shell: bash
+        env:
+          CODEX_PRIMARY_RUNTIME_NODE_MODULES: /tmp/psi-browser-tools/node_modules
+          PSI_PREVIEW_URL: http://127.0.0.1:4173
+        run: |
+          export CHROME_BIN="$(command -v google-chrome || command -v chromium)"
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/survivors-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          node scripts/verify-survivors-mode-previews.mjs
+          node scripts/verify-survivors-stage-resume.mjs
+          node scripts/verify-survivors-fitting-motion.mjs
+          node scripts/verify-survivors-rig.mjs
+          node scripts/verify-survivors-props.mjs
+          node scripts/verify-survivors-projectiles.mjs
+          node scripts/verify-survivors-confirmed-impact.mjs
+          npm run dev -- --host 127.0.0.1 --port 4174 > /tmp/survivors-pleasure-dev.log 2>&1 &
+          DEV_PID=$!
+          trap 'kill "$PREVIEW_PID" "$DEV_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-pleasure-motion.mjs
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-equipment-check-motion.mjs
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-survivors-combat-ui.mjs
+          node tests/verify-survivors-store-maintenance.mjs
+          node tests/verify-store-reference-layout.mjs
+          node tests/verify-lz-guidance.mjs
+          node scripts/audit-brand-production-slots.mjs
+          node scripts/review-brand-vector-candidate.mjs
+          node tests/verify-brand-mobile-hierarchy.mjs
+          node scripts/verify-tactical-ui.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: survivors-art-v2-captures
+          path: |
+            artifacts/survivors-browser
+            artifacts/mode-preview-release
+            artifacts/stage-resume
+            artifacts/fitting-motion
+            artifacts/pleasure-feedback
+            artifacts/equipment-check
+            artifacts/store-maintenance
+            artifacts/store-reference-layout
+            artifacts/lz-guidance
+            artifacts/brand-production-slots
+            artifacts/brand-vector-candidate
+            artifacts/brand-mobile-hierarchy
+            artifacts/tactical-ui
+            artifacts/combat-debrief-ui
+            artifacts/confirmed-impact

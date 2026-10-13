@@ -1,4 +1,5 @@
 import type { AssetResolver } from '../app/episode-visual-assets';
+import type { CharacterGrowthView } from '../app/character-growth';
 import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
@@ -86,6 +87,7 @@ export function EpisodeImmersiveScene({
   nodeId,
   speakerId,
   speakerIdentity,
+  speakerGrowth,
   relationshipCues = [],
   presentationType,
   previewChoiceId,
@@ -101,6 +103,7 @@ export function EpisodeImmersiveScene({
   readonly nodeId: string | null | undefined;
   readonly speakerId?: string | null;
   readonly speakerIdentity?: { readonly name: string; readonly role: string; readonly trade?: string };
+  readonly speakerGrowth?: CharacterGrowthView;
   readonly relationshipCues?: readonly { readonly character_id: string; readonly cue: Episode01RelationshipSceneCue }[];
   readonly presentationType?: string | null;
   readonly previewChoiceId?: string | null;
@@ -367,6 +370,10 @@ export function EpisodeImmersiveScene({
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
     {speakerIdentity ? <div className="episode-immersive-speaker-tag" aria-hidden="true">
+      {speakerId === 'player' && speakerGrowth?.character_id === speakerId && ['focused','skilled'].includes(speakerGrowth.stage) ? <>
+        <VisualImage uri={`assets/episode01/characters/player-${speakerGrowth.stage}-portrait-v1.png`} fallbackUri={characterMapUri('player',resolve)} alt="" className="episode-growth-speaker-portrait" />
+        <small className="episode-growth-speaker-stage">{speakerGrowth.stage_label}</small>
+      </> : null}
       <strong>{speakerIdentity.name}</strong>
       <span>{speakerIdentity.role}</span>
       {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}

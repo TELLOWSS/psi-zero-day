@@ -1,0 +1,16 @@
+{
+  "id": "BR-LOGO-02-DIRECTOR-20261008",
+  "date": "2026-10-08",
+  "decision": "DESIGN_AND_FILES_APPROVED_APPLY_AFTER_VERIFICATION",
+  "userAnswer": "디자인·파일 승인, 검증 후 운영 적용",
+  "scope": "BR-LOGO-02_WORDMARK_AND_SYMBOL_FILES_ONLY",
+  "trademarkClearance": "NOT_CONFIRMED",
+  "physicalDeviceReview": "NOT_CONFIRMED",
+  "otherArtApproval": false,
+  "approvedRuntimeFiles": [
+    {"id":"wordmark-stacked","source":"docs/branding/candidates/BR-LOGO-02-wordmark-chalk.svg","uri":"/assets/branding/new-psi-wordmark-stacked-chalk.svg","sha256":"d28f31456a9f295b2e4fcfa9a8e1bacbbbef2544795450c45bac3bea45e495d0","width":460,"height":144},
+    {"id":"wordmark-wide","source":"docs/branding/candidates/BR-LOGO-02-wordmark-wide-chalk.svg","uri":"/assets/branding/new-psi-wordmark-wide-chalk.svg","sha256":"76c6a80a1c3055d439bfcf6ef6007c0c2f004f2419d54658a6690c44e24baf3d","width":420,"height":72},
+    {"id":"symbol-ink","source":"docs/branding/candidates/BR-LOGO-02-symbol-ink.svg","uri":"/assets/branding/new-psi-symbol-ink.svg","sha256":"d6657c9f9ff91aaef60a19e41b7eb74572d6c9dd737bf9b479a6d9aab2921480","width":96,"height":96},
+    {"id":"symbol-chalk","source":"docs/branding/candidates/BR-LOGO-02-symbol-chalk.svg","uri":"/assets/branding/new-psi-symbol-chalk.svg","sha256":"d3ce77cf158163894c4e7ab13239c78f424fcd6ebe10985bf91273a2d79b041b","width":96,"height":96}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "lee_jaehoon",
+  "direction": "front-turns",
+  "file": "lee_jaehoon-front-turns-v2.png",
+  "source": "C:/Users/user/.codex/generated_images/01a11d14-64ed-7052-a499-63110506a078/exec-3fd2bd2a-93f5-4a23-8564-d47e1935c1f7.png",
+  "prompt": "Edit the FIRST reference sprite sheet only. Preserve the 2 columns by 4 rows, all eight full body grounded pivot poses, exact crop spacing, blue reflective vest/navy uniform/white blue-banded hardhat, rolled blueprint, black gloves and boots. Remove ALL eyeglasses/sunglasses from every face: this worker Lee Jaehoon has clear uncovered eyes and no glasses. Match the bare face identity in the second reference. No other anatomy changes, no added effects, no shadows outside boot contact, no text, transparent background.",
+  "status": "candidate",
+  "frameCount": 8
+}

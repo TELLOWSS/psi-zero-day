@@ -1,0 +1,53 @@
+name: Verify Survivors Signature Mastery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/engine/survivors-signature-mastery.ts'
+      - 'src/engine/survivors-signature-counterplay.ts'
+      - 'src/engine/survivors-signature-events.ts'
+      - 'src/engine/patrol-survivors-engine.ts'
+      - 'src/domain/patrol-survivors.ts'
+      - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/patrol-survivors.css'
+      - 'tests/survivors-signature-mastery.test.ts'
+      - 'tests/survivors-signature-events.test.ts'
+      - 'package.json'
+      - '.github/workflows/verify-survivors-signature-mastery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mastery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify mastery chain
+        run: npm run test:survivors-signature-mastery
+
+      - name: Verify signature events
+        run: npm run test:survivors-signature-events
+
+      - name: Verify survivors operation flow
+        run: npm run test:survivors-flow
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build

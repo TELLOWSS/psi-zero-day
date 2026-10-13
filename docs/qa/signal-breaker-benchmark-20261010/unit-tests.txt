@@ -1,0 +1,79 @@
+✔ five chapter IDs preserve all four legacy records; LAB earns nothing (8.185517ms)
+✔ swept projectiles hit cores and thin rails even at extreme velocity (3.117102ms)
+✔ rotating rail shape follows bounded travel and relative surface speed (3.778911ms)
+✔ conveyor acts only at floor contact and supports reverse and stop (0.646679ms)
+✔ portable magnet is bounded, metal-only, and switches polarity (2.954941ms)
+✔ mist needs sustained exposure, ignores metal, and never awards capture (3.877303ms)
+✔ anchor is one bounded tether and scanning cannot defeat a boss (4.266225ms)
+✔ gate rejects unstable dust; relay order and boss exposure cannot farm score (1.51976ms)
+✔ crowded splits and duplicate captures conserve recovery mass (1.910847ms)
+✔ contact feedback is bounded and pause freezes devices and fields (1.025406ms)
+✔ CH-01 has a physically playable clear path (21.0108ms)
+✔ CH-02 has a physically playable clear path (10.2256ms)
+✔ CH-03 has a physically playable clear path (8.388975ms)
+✔ CH-04 has a physically playable clear path (47.363735ms)
+✔ CH-05 has a physically playable clear path (46.596212ms)
+✔ linked movement mirrors bearing while preserving player-chosen elevation (4.656631ms)
+✔ linked angle remains constant over movement and at world boundaries (0.421548ms)
+✔ vertical pad input adjusts angle without firing or selecting a target (0.29954ms)
+✔ pad elevation reaches its shallow limit without a hidden minimum-angle jump (3.096602ms)
+✔ precision mode keeps chosen world target and paused input cannot change aim (0.945033ms)
+✔ device streams never duplicate across frames, pause, mute and resume (5.275579ms)
+✔ voice volume is independent from muted effects and follows session state (2.425108ms)
+✔ shuttle moves collision shape deterministically without changing stage geometry (1.816796ms)
+✔ moving bumper applies the collision at its rendered location (1.541461ms)
+✔ timed gate closes for three seconds and does not consume a blocked core (1.201563ms)
+✔ legacy gate remains open and pause freezes device timing (2.535472ms)
+PASS four distinct trial levels, including boss
+PASS prototype starts in ready state with correct mass units
+PASS fixed-step deterministic motion with same seed
+PASS pause freezes time, remaining cores and score
+PASS pulse splits 2→1→0 and conserves mass
+PASS net first stabilizes large unstable core then captures all its mass
+PASS net captures small dust without detonating
+PASS net uses area capture, and stabilizes nearby tier-two signal
+PASS shield collision redirects projectile upward
+PASS shield angle cycles all three states
+PASS magnet affects metallic trajectory but not dust
+PASS gate recovers units when eligible core approaches
+PASS boss requires all three relays before its final core can resolve
+PASS boss relays and exposed core can be cleared by physical projectile shots
+PASS boss node is not defeated by a net shot
+PASS gameplay route: aimed pulse physically strikes moving core
+PASS damage and lose state are bounded; retry starts without penalty
+PASS event queue drains and is bounded
+PASS core count cannot exceed performance budget
+PASS all source assets are local, and record namespace is unique
+
+20 engine checks passed.
+✔ public/signal-breaker-dev/tests/engine.test.cjs (197.923547ms)
+✔ muzzle, preview, shot and fire event agree across weapons and aim directions (56.610767ms)
+✔ online shell refreshes stale cached code; offline shell falls back within its own cache (4.666171ms)
+✔ shared complete images reuse cache; range media and unrelated app routes are untouched (1.042734ms)
+PASS graphics profile tiers / VFX object ceilings
+PASS offline PWA assets and source load order
+PASS audio API fallback without browser audio
+✔ original procedural art, bounded quality presets and offline asset contract (0.9443ms)
+PASS responsive contracts: phone / landscape / tablet / PC
+PASS independent PWA manifest and local concept sketch files
+✔ public/signal-breaker-dev/tests/responsive.test.cjs (142.433684ms)
+✔ common URL decodes once across consumers; unused assets never start loading (3.020219ms)
+✔ preview shares public assets but rejects directory escape (2.287787ms)
+✔ audio loading coalesces per context and URL (1.862179ms)
+✔ audio bursts stay within voice cap and release every finished voice (6.309353ms)
+✔ preview leaves game, event queue, score and RNG untouched (4.632311ms)
+✔ reflection markers agree with actual pulse and net rail collisions (13.93116ms)
+✔ net preview marks actual capture radius and current target (0.316755ms)
+PASS offline best-score persistence after victory
+PASS HTML ID contracts and render-path smoke
+PASS ready→play→weapon→shield→pause→new stage
+PASS 180 mock canvas frames without JS error
+✔ public/signal-breaker-dev/tests/ui-smoke.test.cjs (250.364681ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 578.85948

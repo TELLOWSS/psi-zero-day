@@ -19,12 +19,18 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Check title and guide
-      expect(host.textContent).toContain('PSI: 야간 긴급 순찰 (SURVIVORS)');
-      expect(host.textContent).toContain('순찰 시작하기');
+      expect(host.querySelector('.survivors-preflight-top h2')?.textContent).toBe('시그널 워치');
+      expect(host.querySelector('.survivors-ready-dialog')?.getAttribute('data-preflight')).toBe('brief');
+      const settings = Array.from(host.querySelectorAll('.survivors-preflight-tabs button')).find(button=>button.textContent==='설정')!;
+      act(()=>settings.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+      expect(settings.getAttribute('aria-pressed')).toBe('true');
+      expect(host.querySelector('.survivors-controls-guide')?.hasAttribute('hidden')).toBe(false);
+      expect(host.querySelector('.survivors-preflight-panel')?.hasAttribute('hidden')).toBe(true);
+      expect(host.textContent).toContain('시그널 워치 시작');
 
       // Click start
       const startBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent === '순찰 시작하기'
+        btn => btn.textContent === '시그널 워치 시작'
       );
       expect(startBtn).toBeDefined();
 
@@ -82,12 +88,12 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Verify 3 character selection cards exist
       expect(host.textContent).toContain('윤성호');
-      expect(host.textContent).toContain('박기철');
-      expect(host.textContent).toContain('정민주');
+      expect(host.textContent).toContain('강태식');
+      expect(host.textContent).toContain('현장 안전관리자');
 
       // Click Park Ki-cheol
       const parkBtn = Array.from(host.querySelectorAll('.survivors-char-card')).find(
-        card => card.textContent?.includes('박기철'),
+        card => card.textContent?.includes('강태식'),
       ) as HTMLButtonElement | undefined;
       expect(parkBtn).toBeDefined();
 
@@ -98,13 +104,13 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Click R&D Lab button
       const rdBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent?.includes('R&D 연구소'),
+        btn => btn.textContent?.includes('PSI 장비실'),
       );
       expect(rdBtn).toBeDefined();
       act(() => {
         rdBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
-      expect(host.textContent).toContain('R&D 안전 본부 영구 강화');
+      expect(host.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('PSI 장비실');
 
       // Close R&D modal
       const closeRdBtn = Array.from(host.querySelectorAll('button')).find(
@@ -116,13 +122,13 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Click Arsenal modal button
       const arsenalBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent?.includes('무기 진화 도감'),
+        btn => btn.textContent?.includes('대응 도구 진화 도감'),
       );
       expect(arsenalBtn).toBeDefined();
       act(() => {
         arsenalBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
-      expect(host.textContent).toContain('5대 슈퍼 프로토콜 진화 도감');
+      expect(host.textContent).toContain('장비 성장 · 최종 진화');
       expect(host.textContent).toContain('위성 브로드캐스트');
       expect(host.textContent).toContain('극저온 액화질소 블리자드');
     } finally {
@@ -131,7 +137,7 @@ describe('PatrolSurvivorsGame UI', () => {
     }
   });
 
-  it('renders 5 industrial stage cards and allows stage selection', () => {
+  it('renders 20 construction stage cards and allows stage selection', () => {
     const handleExit = vi.fn();
     const host = document.createElement('div');
     document.body.appendChild(host);
@@ -145,7 +151,7 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Verify stage cards
-      expect(host.textContent).toContain('작전 구역 선택 (5대 산업 스테이지)');
+      expect(host.textContent).toContain('현장 연속 작전 · 50개 구역');
       expect(host.textContent).toContain('STAGE 01');
       expect(host.textContent).toContain('서측 게이트 및 지상 복합 하역장');
       expect(host.textContent).toContain('STAGE 02');
@@ -153,6 +159,10 @@ describe('PatrolSurvivorsGame UI', () => {
       expect(host.textContent).toContain('STAGE 03');
       expect(host.textContent).toContain('45층 초고층 메가 골조 슬래브');
 
+      expect(host.querySelectorAll('.survivors-stage-card')).toHaveLength(10);
+      expect(host.querySelectorAll('.survivors-chapter-tabs button')).toHaveLength(5);
+      expect(host.textContent).toContain('STAGE 10');
+      expect(host.textContent).not.toContain('STAGE 010');
       // Click Stage 02
       const stage2Btn = Array.from(host.querySelectorAll('.survivors-stage-card')).find(
         card => card.textContent?.includes('STAGE 02'),

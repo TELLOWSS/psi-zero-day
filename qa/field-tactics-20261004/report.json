@@ -1,0 +1,97 @@
+{
+  "scope": "CHROMIUM_REAL_EARLY_GAMEPLAY_INPUTS_AND_PREPARED_HANDOFF_FIXTURE_NOT_ANDROID_FPS",
+  "rows": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "input": "keyboard",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "input": "buttons",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "input": "keyboard",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "input": "buttons",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "keyboard",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "buttons",
+      "cooldown": true,
+      "bounds": true,
+      "noEarlyExit": true,
+      "paused": true,
+      "instructions": true,
+      "errors": [],
+      "pass": true
+    }
+  ],
+  "engine": {
+    "scope": "PREPARED_OBJECTIVE_FIXTURE_PRODUCTION_ENGINE_NOT_HUMAN_CLEAR",
+    "choice": true,
+    "accepted": true,
+    "phase": "victory",
+    "pass": true
+  },
+  "pass": true
+}

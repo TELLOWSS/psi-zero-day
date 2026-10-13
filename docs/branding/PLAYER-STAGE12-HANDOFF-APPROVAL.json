@@ -1,0 +1,19 @@
+{
+  "asset_id": "player-stage12-handoff-v1",
+  "character_id": "player",
+  "stage_id": "stage_12",
+  "approved_scope": "design_and_exact_file",
+  "user_statement": "디자인·파일 승인, 검증 후 연결",
+  "approval_date": "2026-10-09",
+  "sha256": "0129709a46a7381b68491eba8c3b453b82fc9ae2b750470184ba5f18544da72e",
+  "path": "public/assets/survivors/growth/player-stage12-handoff-v1.png",
+  "dimensions": [1672, 941],
+  "generator": "built-in image_gen",
+  "identity_reference": "public/assets/episode01/characters/player-portrait.webp",
+  "runtime_gate": "matching player stage_12 victory handoff with rubbleCleared greater than zero; presentation only",
+  "save_or_rule_change": false,
+  "rights_review": "separate_review_not_certified_by_design_approval",
+  "dialogue_approval": "not_included",
+  "physical_device_review": "pending",
+  "production_deployment": "not_deployed"
+}

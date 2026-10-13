@@ -1,0 +1,203 @@
+{
+  "title": "PSI 장비실",
+  "browse": "장비 목록",
+  "loadout": "현재 장착",
+  "close": "장비실 닫기",
+  "upgrades": "기본 역량 강화",
+  "mapLoading": "현장 지도 불러오는 중",
+  "mapFailure": "현장 지도를 불러오지 못했습니다",
+  "mapRetry": "지도 다시 불러오기",
+  "fitting": "착용 미리보기",
+  "tryOn": "착용해 보기",
+  "currentLoadout": "현재 장착",
+  "resetFitting": "현재 장착으로 돌아가기",
+  "fittingLoading": "착용 이미지 불러오는 중",
+  "fittingFailure": "착용 이미지를 불러오지 못했습니다",
+  "fittingHp": "최대 안전 체력",
+  "currentHp": "안전 체력",
+  "fittingSpeed": "이동 속도",
+  "fittingPickup": "회수 반경",
+  "fittingDamage": "대응 효과 (%)",
+  "fittingCooldown": "대기 감소 (%)",
+  "fittingCrit": "정밀 대응 확률 (%)",
+  "fittingRegen": "초당 체력 회복",
+  "fittingShield": "보호막 용량",
+  "fittingShieldPeriod": "소진 후 복구 (초)",
+  "fittingSuppression": "카트·가스 감속 (%)",
+  "fittingUltimate": "초당 샤우팅 충전",
+  "fittingLines": "최초 장착 통제선 (회)",
+  "fittingSupport": "최초 장착 보급 (회)",
+  "intro": "모은 PSI로 구매·수리 · 현금 결제 없음 · 카테고리별 1개, 최대 6개 동시 장착",
+  "shopEntry": "PSI 장비실 · 구매·수리",
+  "shopShort": "PSI 장비실",
+  "liveShop": "순찰 일시정지 · 구매·장착 후 이어서 재개",
+  "liveApplied": "현재 순찰에 적용되었습니다",
+  "durability": "내구도",
+  "wearRule": "클리어 시 사용 장비 내구도 −15. 0이면 파손되어 효과가 사라집니다. PSI로 수리하면 내구도 100으로 복구되며, 파손 장비는 다시 장착해야 합니다.",
+  "walletLabel": "보유 포인트",
+  "maintenance": "정비",
+  "maintenanceReserve": "전체 수리비",
+  "afterMaintenance": "수리 후 잔액",
+  "repairAll": "전체 수리",
+  "maintenanceEmpty": "수리가 필요한 장비가 없습니다.",
+  "maintenanceDue": "정비 대상",
+  "nextClearBreak": "사용 후 클리어하면 파손 · 수리 권장",
+  "conditionLow": "내구도 낮음 · 정비 권장",
+  "repairShortfall": "수리 포인트 부족",
+  "repairComplete": "정상 · 수리 불필요",
+  "repairBalance": "수리 후",
+  "buyBalance": "구매 후",
+  "repair": "수리",
+  "repaired": "수리 완료 · 내구도 100 · 미장착 장비는 장착을 선택하세요",
+  "broken": "파손 · 사용 불가 · 수리로 복구",
+  "repairFirst": "내구도 0인 장비를 먼저 수리하세요",
+  "clearWear": "사용 장비 내구도 감소",
+  "noWear": "이번 작전에서 사용한 구매 장비가 없습니다",
+  "applyLoadout": "조합 장착",
+  "buyLoadout": "조합 구매·장착",
+  "appliedLoadout": "장비 조합 적용 완료",
+  "draftSlots": "착용 조합",
+  "fittingOnly": "미리보기 · 구매 전 PSI는 차감되지 않습니다",
+  "leftView": "왼쪽",
+  "rightView": "오른쪽",
+  "zoom": "확대",
+  "pose": "착용 포즈",
+  "poseIdle": "정지 포즈",
+  "poseWalk": "이동 포즈",
+  "poseTurn": "접지·회전 확인",
+  "poseAction": "공격 포즈",
+  "attackMotion": "미리보기 동작",
+  "attackShot": "통신 발사",
+  "attackSpray": "소화 분사",
+  "attackUltimate": "궁극기",
+  "pausePreview": "미리보기 일시정지",
+  "playPreview": "미리보기 재생",
+  "lowDurability": "내구도 낮음",
+  "fullCondition": "구매 시 내구도 100",
+  "healthRule": "최대 체력 장비의 재장착은 치료가 아닙니다. 보호막·전술 보급 최초 지급은 장비별 작전당 1회입니다.",
+  "categories": {
+    "communication": "계도 전달",
+    "tempo": "대응 방식",
+    "logistics": "보급·출동",
+    "protection": "생존 지원",
+    "companion": "동행 지원",
+    "tactics": "현장 전술"
+  },
+  "items": {
+    "voice_lens": {
+      "name": "지향성 계도 렌즈",
+      "description": "대응 효과 +15%p",
+      "use": "계도 전달의 기본 대응력을 강화"
+    },
+    "command_array": {
+      "name": "PSI 지휘 어레이",
+      "description": "대응 효과 +25%p",
+      "use": "후반 고체력 위험을 더 빠르게 통제"
+    },
+    "relay_core": {
+      "name": "교육 신호 중계 코어",
+      "description": "대응 재사용 대기 감소 +6%p",
+      "use": "일정한 대응 간격을 단축"
+    },
+    "precision_link": {
+      "name": "정밀 통제 링크",
+      "description": "정밀 대응 확률 +12%p",
+      "use": "정밀 대응으로 강한 한 번을 기대"
+    },
+    "recovery_mesh": {
+      "name": "보급 회수망",
+      "description": "회수 반경 +45",
+      "use": "위험에 접근하지 않고 보급 회수"
+    },
+    "dispatch_drive": {
+      "name": "긴급 출동 드라이브",
+      "description": "이동 속도 +30 · 회수 반경 +20",
+      "use": "회피와 회수를 함께 지원"
+    },
+    "rescue_shell": {
+      "name": "구조용 보호 셸",
+      "description": "최대 안전 체력 +30",
+      "use": "반복 접촉에 버틸 여유를 확보"
+    },
+    "recovery_cell": {
+      "name": "지속 회복 셀",
+      "description": "안전 체력 초당 +0.6",
+      "use": "짧은 안전 구간마다 체력을 회복"
+    },
+    "broadcast_crown": {
+      "name": "광역 교육 크라운",
+      "description": "대응 효과 +38%p · 대기 감소 +4%p",
+      "use": "밀려오는 후반 위험을 빠르게 통제"
+    },
+    "sync_gauntlet": {
+      "name": "동기화 지휘 건틀릿",
+      "description": "대기 감소 +16%p · 정밀 확률 +6%p",
+      "use": "짧아진 대응 간격으로 빈틈을 메움"
+    },
+    "extraction_pack": {
+      "name": "긴급 회수 백팩",
+      "description": "이동 +50 · 회수 반경 +65",
+      "use": "혼잡한 구역에서 보급을 모으며 탈출"
+    },
+    "shock_mantle": {
+      "name": "충격 흡수 맨틀",
+      "description": "체력 +20 · 보호막 45 / 소진 후 18초 복구",
+      "use": "돌진·가스·낙하 접촉 피해를 먼저 흡수"
+    },
+    "inspection_wing": {
+      "name": "PSI 감시 윙",
+      "description": "반경 180 내 카트·가스 이동 20% 감속",
+      "use": "위험 접근을 늦춰 회피 공간 확보"
+    },
+    "barrier_forge": {
+      "name": "통제선 포지",
+      "description": "작전당 최초 장착 시 통제선 +3회",
+      "use": "집중 위험 구역에 통제선을 연속 배치"
+    },
+    "rescue_wing": {
+      "name": "구조지원 윙",
+      "description": "초당 회복 +0.8 · 보호막 15 / 소진 후 24초 복구",
+      "use": "장기 순찰의 누적 피해를 복구"
+    },
+    "predictive_watch": {
+      "name": "예측 지휘 워치",
+      "description": "초당 샤우팅 충전 +0.35 · 작전당 최초 장착 시 보급 호출 +2회",
+      "use": "통제 성과가 적어도 긴급 지휘를 준비"
+    }
+  },
+  "category": "분류",
+  "ownedOnly": "보유 장비",
+  "affordableOnly": "구매 가능",
+  "emptySlot": "미장착",
+  "noResults": "조건에 맞는 장비가 없습니다.",
+  "replaces": "교체 대상:",
+  "shortfall": "부족:",
+  "purchased": "구매 완료 · 장착을 선택하세요",
+  "equipSuccess": "장착 완료",
+  "removeSuccess": "장착 해제 완료",
+  "buy": "구매",
+  "equip": "장착",
+  "remove": "해제",
+  "owned": "보유",
+  "equipped": "장착 중",
+  "failure": "저장하지 못했습니다. PSI는 차감되지 않았습니다.",
+  "empty": "장착 장비 없음",
+  "status": "장착 프로토콜",
+  "shield": "보호막",
+  "recharge": "복구",
+  "ready": "준비",
+  "preview": "장비 상세",
+  "all": "전체 장비",
+  "next": "다음 순찰 적용",
+  "recommend": "어려운 상황에서의 역할",
+  "legendary": "전설",
+  "elite": "정예",
+  "advanced": "첨단",
+  "briefTitle": "순찰 준비 · 장비의 역할",
+  "briefHard": "보급이 드문 고난도에서는 돌진 회피와 누적 피해 관리가 중요합니다.",
+  "briefStandard": "대응 간격·회수 거리·보호 장비를 준비하면 위기 때 여유를 확보할 수 있습니다.",
+  "briefOwned": "보유 장비 · 지금 장착할 수 있습니다",
+  "briefEquipped": "장착 완료 · 이번 순찰에 적용됩니다",
+  "briefBrowse": "PSI로 장비 구매·수리",
+  "briefCredits": "모은 PSI로 구매 · 장비는 선택 사항"
+}

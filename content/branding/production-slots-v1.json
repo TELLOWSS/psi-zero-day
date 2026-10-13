@@ -1,0 +1,18 @@
+{
+  "scope": "B2_EXISTING_AND_EXPLICITLY_APPROVED_SLOT_AUDIT_ONLY",
+  "baselineCommit": "ca58e14a028adafcf9d03da7db92664132033e73",
+  "finalApproval": "NOT_GRANTED_BY_THIS_CONTRACT",
+  "slots": [
+    {"id":"title-background","selector":".commercial-title-backdrop","uri":"/assets/episode01/hires/night-pour-hero.webp","width":1920,"height":1080,"fit":"cover","source":"src/app/episode-visual-assets.ts"},
+    {"id":"signal-entry","selector":".is-survivors-entry .commercial-title-action-art","uri":"/signal-watch-loading/signal-watch-landscape-v2.webp","width":1672,"height":941,"fit":"cover","source":"src/ui/GameHub.tsx","sharedSource":"src/ui/signal-watch-art.ts","generationRecord":"docs/art/visual-entry-final-v2-prompts.json"},
+    {"id":"defense-entry","selector":".is-defense-entry .commercial-title-action-art","uri":"/mode-previews/defense-coming-soon-v2.webp","width":1672,"height":941,"fit":"cover","source":"src/ui/GameHub.tsx"},
+    {"id":"story-entry","selector":".is-story-entry .commercial-title-action-art","uri":"/mode-previews/story-coming-soon-v2.webp","width":1672,"height":941,"fit":"cover","source":"src/ui/GameHub.tsx"},
+    {"id":"cast-player","selector":".commercial-title-worker[data-character=\"player\"] img","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
+    {"id":"cast-junho","selector":".commercial-title-worker[data-character=\"lim_junho\"] img","uri":"/assets/episode01/characters/lim-junho-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
+    {"id":"cast-jaehoon","selector":".commercial-title-worker[data-character=\"lee_jaehoon\"] img","uri":"/assets/episode01/characters/lee-jaehoon-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
+    {"id":"cast-jeongmin","selector":".commercial-title-worker[data-character=\"seo_jeongmin\"] img","uri":"/assets/episode01/characters/seo-jeongmin-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
+    {"id":"mobile-player","selector":".commercial-title-mobile-player","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"src/ui/GameHub.tsx"}
+  ],
+  "nonBinarySlots": [],
+  "approvedBrandFiles": "docs/branding/candidates/BR-LOGO-02-APPROVAL.json"
+}
