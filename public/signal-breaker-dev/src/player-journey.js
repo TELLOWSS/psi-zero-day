@@ -15,6 +15,7 @@
  }
  function recovery(game){
   if(game.source&&!game.source.verified)return 'breaker.journey.recovery.source';
+  if(game.failureReason!=='pressure'&&game.lastDamage?.source&&['delivery','conveyor','extraction','tension','grid'].includes(game.lastDamage.source))return 'breaker.gameplay.recovery.'+game.lastDamage.source;
   if(game.veteran&&!game.evolution?.recipe)return 'breaker.journey.recovery.evolution';
   if(game.boss?.phase==='sealed')return 'breaker.journey.recovery.nodes';
   return 'breaker.journey.recovery.'+({'CH-01':'move','CH-02':'belt','CH-03':'mist','CH-04':'anchor','CH-05':'scan'}[game.config.id]||'move');

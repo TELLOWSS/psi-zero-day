@@ -1,0 +1,8340 @@
+{
+  "date": "2026-10-13",
+  "release": "0.53.0-gameplay",
+  "tests": {
+    "build": "PASS",
+    "rootSkipped": 1,
+    "typecheck": "PASS",
+    "rootPassed": 2059,
+    "standalonePassed": 262
+  },
+  "simulation": {
+    "method": "100 runs: 5 stages × 5 seeds × automatic/first/middle/last draft choice. Up to 360 seconds at 120Hz, ordinary movement, assist, fire, source and boost commands. Manual choices use actual draft candidates. No forced clear, life refill or artificial stats. Not human enjoyment or purchase evidence.",
+    "summary": {
+      "runs": 100,
+      "won": 100,
+      "lost": 0,
+      "unfinished": 0,
+      "byPolicy": {
+        "auto": {
+          "won": 25,
+          "lost": 0,
+          "unfinished": 0
+        },
+        "first": {
+          "won": 25,
+          "lost": 0,
+          "unfinished": 0
+        },
+        "middle": {
+          "won": 25,
+          "lost": 0,
+          "unfinished": 0
+        },
+        "last": {
+          "won": 25,
+          "lost": 0,
+          "unfinished": 0
+        }
+      }
+    },
+    "runs": [
+      {
+        "stage": "CH-01",
+        "seed": 17,
+        "policy": "auto",
+        "state": "won",
+        "time": 74.158,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "bank",
+          "memory",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 17,
+        "policy": "first",
+        "state": "won",
+        "time": 74.042,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "bank",
+          "memory",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 17,
+        "policy": "middle",
+        "state": "won",
+        "time": 82.267,
+        "life": 1,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "capture",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "capture",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 17,
+        "policy": "last",
+        "state": "won",
+        "time": 69.242,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "capture",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 29,
+        "policy": "auto",
+        "state": "won",
+        "time": 78.367,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 29,
+        "policy": "first",
+        "state": "won",
+        "time": 64.733,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "bank"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 29,
+        "policy": "middle",
+        "state": "won",
+        "time": 65,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "capture"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "capture",
+              "focus"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "cadence",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 29,
+        "policy": "last",
+        "state": "won",
+        "time": 64.017,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "capture",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "capture"
+            ],
+            "choice": "capture"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "bank",
+          "focus",
+          "capture"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 43,
+        "policy": "auto",
+        "state": "won",
+        "time": 78.608,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "capture",
+          "cadence",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 43,
+        "policy": "first",
+        "state": "won",
+        "time": 71.017,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "memory",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "focus",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "cadence",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 43,
+        "policy": "middle",
+        "state": "won",
+        "time": 78.275,
+        "life": 1,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "capture",
+              "bank",
+              "focus"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "capture"
+            ],
+            "choice": "capture"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "bank",
+          "capture"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 43,
+        "policy": "last",
+        "state": "won",
+        "time": 73.575,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "cadence",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 71,
+        "policy": "auto",
+        "state": "won",
+        "time": 66.558,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "focus",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 71,
+        "policy": "first",
+        "state": "won",
+        "time": 73.983,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "bank",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "focus",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 71,
+        "policy": "middle",
+        "state": "won",
+        "time": 70.9,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "capture",
+              "memory"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 71,
+        "policy": "last",
+        "state": "won",
+        "time": 74.017,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 97,
+        "policy": "auto",
+        "state": "won",
+        "time": 74.042,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 97,
+        "policy": "first",
+        "state": "won",
+        "time": 64.6,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "memory",
+              "focus"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "memory",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "cadence"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 97,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.75,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "cadence",
+              "focus"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-01",
+        "seed": 97,
+        "policy": "last",
+        "state": "won",
+        "time": 69.467,
+        "life": 1,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "capture",
+          "focus",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 17,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.575,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "bank",
+          "memory",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 17,
+        "policy": "first",
+        "state": "won",
+        "time": 74.125,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "bank",
+          "memory",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 17,
+        "policy": "middle",
+        "state": "won",
+        "time": 74.025,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "capture",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "capture",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 17,
+        "policy": "last",
+        "state": "won",
+        "time": 74.1,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "capture",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 29,
+        "policy": "auto",
+        "state": "won",
+        "time": 74.033,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 29,
+        "policy": "first",
+        "state": "won",
+        "time": 64.342,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "bank"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 29,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.675,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "capture"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "capture",
+              "focus"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "cadence",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 29,
+        "policy": "last",
+        "state": "won",
+        "time": 74.008,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "capture",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "capture"
+            ],
+            "choice": "capture"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "bank",
+          "focus",
+          "capture"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 43,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.575,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "capture",
+          "cadence",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 43,
+        "policy": "first",
+        "state": "won",
+        "time": 74.017,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "memory",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "focus",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "cadence",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 43,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.558,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "capture",
+              "bank",
+              "focus"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "capture"
+            ],
+            "choice": "capture"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "bank",
+          "capture"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 43,
+        "policy": "last",
+        "state": "won",
+        "time": 63.992,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "cadence",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "cadence",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 71,
+        "policy": "auto",
+        "state": "won",
+        "time": 74.125,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "capture",
+          "focus",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 71,
+        "policy": "first",
+        "state": "won",
+        "time": 73.875,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "bank",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "focus",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 71,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.775,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "capture",
+              "memory"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 71,
+        "policy": "last",
+        "state": "won",
+        "time": 74.258,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "capture",
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "memory",
+          "capture",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 97,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.808,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 97,
+        "policy": "first",
+        "state": "won",
+        "time": 64.575,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "capture",
+              "memory",
+              "focus"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "memory",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "cadence"
+            ],
+            "choice": "memory"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "capture",
+          "focus",
+          "memory"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 97,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.825,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "cadence",
+              "focus"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "focus",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "capture",
+          "memory",
+          "cadence",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-02",
+        "seed": 97,
+        "policy": "last",
+        "state": "won",
+        "time": 74.033,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "capture",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "memory",
+              "capture"
+            ],
+            "choice": "capture"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "cadence",
+          "capture",
+          "focus",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 17,
+        "policy": "auto",
+        "state": "won",
+        "time": 74.208,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 17,
+        "policy": "first",
+        "state": "won",
+        "time": 64.625,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "cadence",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 17,
+        "policy": "middle",
+        "state": "won",
+        "time": 63.967,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "cadence",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "cadence",
+          "focus",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 17,
+        "policy": "last",
+        "state": "won",
+        "time": 64.05,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "focus",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 29,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.25,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 29,
+        "policy": "first",
+        "state": "won",
+        "time": 82.092,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "bank"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "bank",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 29,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.25,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "memory",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 29,
+        "policy": "last",
+        "state": "won",
+        "time": 74.317,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "field",
+          "bank",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 43,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.483,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 43,
+        "policy": "first",
+        "state": "won",
+        "time": 60.642,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "cadence",
+              "field"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 43,
+        "policy": "middle",
+        "state": "won",
+        "time": 63.95,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "bank",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 43,
+        "policy": "last",
+        "state": "won",
+        "time": 63.958,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "memory",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 71,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.058,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 71,
+        "policy": "first",
+        "state": "won",
+        "time": 64.5,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "bank",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 71,
+        "policy": "middle",
+        "state": "won",
+        "time": 64.058,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "focus",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 71,
+        "policy": "last",
+        "state": "won",
+        "time": 64.283,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 97,
+        "policy": "auto",
+        "state": "won",
+        "time": 64.583,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 97,
+        "policy": "first",
+        "state": "won",
+        "time": 64.225,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "field",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "memory"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 97,
+        "policy": "middle",
+        "state": "won",
+        "time": 74.383,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "memory",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-03",
+        "seed": 97,
+        "policy": "last",
+        "state": "won",
+        "time": 64.05,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "focus",
+          "cadence",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 17,
+        "policy": "auto",
+        "state": "won",
+        "time": 86.183,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 17,
+        "policy": "first",
+        "state": "won",
+        "time": 85.883,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "cadence",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 17,
+        "policy": "middle",
+        "state": "won",
+        "time": 78.608,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "cadence",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "cadence",
+          "focus",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 17,
+        "policy": "last",
+        "state": "won",
+        "time": 75.25,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "focus",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 29,
+        "policy": "auto",
+        "state": "won",
+        "time": 75.058,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 29,
+        "policy": "first",
+        "state": "won",
+        "time": 73.8,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "bank"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "bank",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 29,
+        "policy": "middle",
+        "state": "won",
+        "time": 86.183,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "memory",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 29,
+        "policy": "last",
+        "state": "won",
+        "time": 73.7,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "field",
+          "bank",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 43,
+        "policy": "auto",
+        "state": "won",
+        "time": 75.408,
+        "life": 2,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 43,
+        "policy": "first",
+        "state": "won",
+        "time": 86.375,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "cadence",
+              "field"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 43,
+        "policy": "middle",
+        "state": "won",
+        "time": 86.45,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "bank",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 43,
+        "policy": "last",
+        "state": "won",
+        "time": 75.15,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "memory",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 71,
+        "policy": "auto",
+        "state": "won",
+        "time": 86.183,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 71,
+        "policy": "first",
+        "state": "won",
+        "time": 57.375,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "bank",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 71,
+        "policy": "middle",
+        "state": "won",
+        "time": 75.942,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "focus",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 71,
+        "policy": "last",
+        "state": "won",
+        "time": 86.233,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 97,
+        "policy": "auto",
+        "state": "won",
+        "time": 75.942,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 97,
+        "policy": "first",
+        "state": "won",
+        "time": 86.183,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "field",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "memory"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 97,
+        "policy": "middle",
+        "state": "won",
+        "time": 71.867,
+        "life": 3,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "memory",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-04",
+        "seed": 97,
+        "policy": "last",
+        "state": "won",
+        "time": 86.183,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "focus",
+          "cadence",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 17,
+        "policy": "auto",
+        "state": "won",
+        "time": 34.575,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 17,
+        "policy": "first",
+        "state": "won",
+        "time": 34.742,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "cadence",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "bank",
+          "field",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 17,
+        "policy": "middle",
+        "state": "won",
+        "time": 36.883,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "cadence",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "cadence",
+          "focus",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 17,
+        "policy": "last",
+        "state": "won",
+        "time": 40.892,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "focus",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 29,
+        "policy": "auto",
+        "state": "won",
+        "time": 37.208,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 29,
+        "policy": "first",
+        "state": "won",
+        "time": 35.308,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "bank"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "bank",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 29,
+        "policy": "middle",
+        "state": "won",
+        "time": 37.533,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "field",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "focus",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "memory",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 29,
+        "policy": "last",
+        "state": "won",
+        "time": 38.7,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "memory",
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "focus",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "field",
+          "bank",
+          "cadence",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 43,
+        "policy": "auto",
+        "state": "won",
+        "time": 41.483,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 43,
+        "policy": "first",
+        "state": "won",
+        "time": 40.667,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "memory",
+              "cadence",
+              "field"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "memory",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 43,
+        "policy": "middle",
+        "state": "won",
+        "time": 39.142,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "focus",
+              "bank",
+              "cadence"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "focus"
+            ],
+            "choice": "focus"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "bank",
+          "focus"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 43,
+        "policy": "last",
+        "state": "won",
+        "time": 37.317,
+        "life": 4,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "memory",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "memory",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 71,
+        "policy": "auto",
+        "state": "won",
+        "time": 39.95,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 71,
+        "policy": "first",
+        "state": "won",
+        "time": 37.708,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "bank",
+              "field"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "bank",
+              "memory"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "cadence",
+          "field",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 71,
+        "policy": "middle",
+        "state": "won",
+        "time": 39.717,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "cadence",
+              "focus",
+              "field"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "field",
+              "cadence",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "memory",
+              "field"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 71,
+        "policy": "last",
+        "state": "won",
+        "time": 40.542,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "focus",
+              "bank",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "bank",
+              "field"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "bank",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "bank",
+              "cadence"
+            ],
+            "choice": "cadence"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "field",
+          "focus",
+          "cadence"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 97,
+        "policy": "auto",
+        "state": "won",
+        "time": 37.45,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 97,
+        "policy": "first",
+        "state": "won",
+        "time": 34.992,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "bank"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "focus",
+              "field",
+              "cadence"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "cadence",
+              "field",
+              "memory"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "memory"
+            ],
+            "choice": "field"
+          }
+        ],
+        "tunings": [
+          "bank",
+          "focus",
+          "cadence",
+          "field"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 97,
+        "policy": "middle",
+        "state": "won",
+        "time": 34.225,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "field"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "memory",
+              "cadence"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "cadence",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "focus",
+          "field",
+          "memory",
+          "bank"
+        ],
+        "peakShots": 32
+      },
+      {
+        "stage": "CH-05",
+        "seed": 97,
+        "policy": "last",
+        "state": "won",
+        "time": 34.992,
+        "life": 5,
+        "wave": 5,
+        "bossHP": 0,
+        "choices": [
+          {
+            "wave": 1,
+            "candidates": [
+              "bank",
+              "focus",
+              "memory"
+            ],
+            "choice": "memory"
+          },
+          {
+            "wave": 2,
+            "candidates": [
+              "bank",
+              "field",
+              "focus"
+            ],
+            "choice": "focus"
+          },
+          {
+            "wave": 3,
+            "candidates": [
+              "bank",
+              "field",
+              "cadence"
+            ],
+            "choice": "cadence"
+          },
+          {
+            "wave": 4,
+            "candidates": [
+              "field",
+              "bank"
+            ],
+            "choice": "bank"
+          }
+        ],
+        "tunings": [
+          "memory",
+          "focus",
+          "cadence",
+          "bank"
+        ],
+        "peakShots": 32
+      }
+    ]
+  },
+  "veteran": {
+    "method": "45 ordinary input runs, 120Hz movement/fire and aim each 14 ticks; frame choice and intermission evolution through engine methods; no forced wins or life refill. Not a human win-rate measurement.",
+    "runs": [
+      {
+        "id": "CH-01",
+        "frame": "wrong",
+        "seed": 17,
+        "state": "lost",
+        "waves": 5,
+        "time": 386.27,
+        "cleared": 58,
+        "maxUnits": 62,
+        "pickups": 29,
+        "recipe": null,
+        "life": 5,
+        "shots": 2223,
+        "waveTimes": [
+          107.88,
+          69.48,
+          42.04,
+          76.85
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "wrong",
+        "seed": 29,
+        "state": "lost",
+        "waves": 5,
+        "time": 368.81,
+        "cleared": 61,
+        "maxUnits": 62,
+        "pickups": 30,
+        "recipe": null,
+        "life": 5,
+        "shots": 2285,
+        "waveTimes": [
+          107.88,
+          70.09,
+          40.43,
+          60.39
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "wrong",
+        "seed": 43,
+        "state": "lost",
+        "waves": 5,
+        "time": 386.67,
+        "cleared": 61,
+        "maxUnits": 62,
+        "pickups": 30,
+        "recipe": null,
+        "life": 2,
+        "shots": 2441,
+        "waveTimes": [
+          107.88,
+          76.68,
+          41.63,
+          70.46
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "matching",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 167.25,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1021,
+        "waveTimes": [
+          45.15,
+          22.92,
+          19.48,
+          31.19,
+          48.52
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "matching",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 163.43,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1079,
+        "waveTimes": [
+          45.15,
+          24.47,
+          19.77,
+          33.18,
+          40.87
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "matching",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 165.09,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1105,
+        "waveTimes": [
+          45.15,
+          25.38,
+          27.12,
+          26.68,
+          40.77
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "evolved",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 107.95,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 714,
+        "waveTimes": [
+          45.15,
+          10.39,
+          12.1,
+          16.18,
+          24.13
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "evolved",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 102.91,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 613,
+        "waveTimes": [
+          45.15,
+          10.61,
+          10.81,
+          12.13,
+          24.21
+        ]
+      },
+      {
+        "id": "CH-01",
+        "frame": "evolved",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 108.07,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 647,
+        "waveTimes": [
+          45.15,
+          9.43,
+          12.75,
+          16.53,
+          24.2
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "wrong",
+        "seed": 17,
+        "state": "lost",
+        "waves": 1,
+        "time": 125,
+        "cleared": 8,
+        "maxUnits": 62,
+        "pickups": 4,
+        "recipe": null,
+        "life": 5,
+        "shots": 600,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-02",
+        "frame": "wrong",
+        "seed": 29,
+        "state": "lost",
+        "waves": 1,
+        "time": 125,
+        "cleared": 8,
+        "maxUnits": 62,
+        "pickups": 4,
+        "recipe": null,
+        "life": 5,
+        "shots": 600,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-02",
+        "frame": "wrong",
+        "seed": 43,
+        "state": "lost",
+        "waves": 1,
+        "time": 125,
+        "cleared": 8,
+        "maxUnits": 62,
+        "pickups": 4,
+        "recipe": null,
+        "life": 5,
+        "shots": 600,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-02",
+        "frame": "matching",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 187.06,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1166,
+        "waveTimes": [
+          45.44,
+          25.47,
+          28.04,
+          37.46,
+          50.65
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "matching",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 170.84,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1142,
+        "waveTimes": [
+          45.44,
+          24.13,
+          26.5,
+          31.46,
+          43.31
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "matching",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 173.28,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 5,
+        "shots": 1197,
+        "waveTimes": [
+          45.44,
+          27.87,
+          27.03,
+          28.88,
+          44.07
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "evolved",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 114.41,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 765,
+        "waveTimes": [
+          45.44,
+          11.22,
+          13.74,
+          21.53,
+          22.47
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "evolved",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 114.2,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 712,
+        "waveTimes": [
+          45.44,
+          12.6,
+          13.72,
+          19.01,
+          23.43
+        ]
+      },
+      {
+        "id": "CH-02",
+        "frame": "evolved",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 113.53,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 682,
+        "waveTimes": [
+          45.44,
+          12.15,
+          14.8,
+          16.76,
+          24.38
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "wrong",
+        "seed": 17,
+        "state": "lost",
+        "waves": 1,
+        "time": 120,
+        "cleared": 6,
+        "maxUnits": 62,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 576,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-03",
+        "frame": "wrong",
+        "seed": 29,
+        "state": "lost",
+        "waves": 1,
+        "time": 120,
+        "cleared": 6,
+        "maxUnits": 62,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 576,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-03",
+        "frame": "wrong",
+        "seed": 43,
+        "state": "lost",
+        "waves": 1,
+        "time": 120,
+        "cleared": 6,
+        "maxUnits": 62,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 576,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-03",
+        "frame": "matching",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 289.19,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 3,
+        "shots": 1710,
+        "waveTimes": [
+          76.47,
+          47.79,
+          27.93,
+          65.33,
+          71.67
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "matching",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 274.01,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": null,
+        "life": 2,
+        "shots": 1648,
+        "waveTimes": [
+          76.47,
+          49.02,
+          25.74,
+          49.29,
+          73.49
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "matching",
+        "seed": 43,
+        "state": "lost",
+        "waves": 5,
+        "time": 268.68,
+        "cleared": 56,
+        "maxUnits": 62,
+        "pickups": 28,
+        "recipe": null,
+        "life": 4,
+        "shots": 1554,
+        "waveTimes": [
+          76.47,
+          38.41,
+          31.55,
+          42.25
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "evolved",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 162.49,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "storm",
+        "life": 4,
+        "shots": 961,
+        "waveTimes": [
+          76.47,
+          20.22,
+          11.16,
+          20.92,
+          33.73
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "evolved",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 168.43,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "storm",
+        "life": 3,
+        "shots": 1004,
+        "waveTimes": [
+          76.47,
+          16.34,
+          16.76,
+          20.39,
+          38.47
+        ]
+      },
+      {
+        "id": "CH-03",
+        "frame": "evolved",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 162.55,
+        "cleared": 62,
+        "maxUnits": 62,
+        "pickups": 31,
+        "recipe": "storm",
+        "life": 4,
+        "shots": 948,
+        "waveTimes": [
+          76.47,
+          12.54,
+          19.73,
+          18.23,
+          35.58
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "wrong",
+        "seed": 17,
+        "state": "lost",
+        "waves": 2,
+        "time": 218.46,
+        "cleared": 12,
+        "maxUnits": 52,
+        "pickups": 6,
+        "recipe": null,
+        "life": 5,
+        "shots": 1026,
+        "waveTimes": [
+          113.45
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "wrong",
+        "seed": 29,
+        "state": "lost",
+        "waves": 2,
+        "time": 218.46,
+        "cleared": 11,
+        "maxUnits": 52,
+        "pickups": 5,
+        "recipe": null,
+        "life": 5,
+        "shots": 1023,
+        "waveTimes": [
+          113.45
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "wrong",
+        "seed": 43,
+        "state": "lost",
+        "waves": 2,
+        "time": 218.46,
+        "cleared": 12,
+        "maxUnits": 52,
+        "pickups": 6,
+        "recipe": null,
+        "life": 5,
+        "shots": 1070,
+        "waveTimes": [
+          113.45
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "matching",
+        "seed": 17,
+        "state": "lost",
+        "waves": 5,
+        "time": 221.74,
+        "cleared": 50,
+        "maxUnits": 52,
+        "pickups": 25,
+        "recipe": null,
+        "life": 5,
+        "shots": 1249,
+        "waveTimes": [
+          42.19,
+          48.42,
+          25.78,
+          30.34
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "matching",
+        "seed": 29,
+        "state": "lost",
+        "waves": 5,
+        "time": 221.76,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": null,
+        "life": 5,
+        "shots": 1276,
+        "waveTimes": [
+          42.19,
+          46.52,
+          26.08,
+          31.97
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "matching",
+        "seed": 43,
+        "state": "lost",
+        "waves": 5,
+        "time": 213.72,
+        "cleared": 49,
+        "maxUnits": 52,
+        "pickups": 24,
+        "recipe": null,
+        "life": 5,
+        "shots": 1155,
+        "waveTimes": [
+          42.19,
+          40.16,
+          23.63,
+          32.74
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "evolved",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 162.1,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 920,
+        "waveTimes": [
+          42.19,
+          48.42,
+          12.57,
+          16.91,
+          42.02
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "evolved",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 162.27,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 910,
+        "waveTimes": [
+          42.19,
+          46.52,
+          13.33,
+          16.93,
+          43.29
+        ]
+      },
+      {
+        "id": "CH-04",
+        "frame": "evolved",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 160.83,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 4,
+        "shots": 873,
+        "waveTimes": [
+          42.19,
+          40.16,
+          15.59,
+          13.39,
+          49.49
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "wrong",
+        "seed": 17,
+        "state": "lost",
+        "waves": 1,
+        "time": 110,
+        "cleared": 6,
+        "maxUnits": 52,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 528,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-05",
+        "frame": "wrong",
+        "seed": 29,
+        "state": "lost",
+        "waves": 1,
+        "time": 110,
+        "cleared": 6,
+        "maxUnits": 52,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 528,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-05",
+        "frame": "wrong",
+        "seed": 43,
+        "state": "lost",
+        "waves": 1,
+        "time": 110,
+        "cleared": 6,
+        "maxUnits": 52,
+        "pickups": 3,
+        "recipe": null,
+        "life": 5,
+        "shots": 528,
+        "waveTimes": []
+      },
+      {
+        "id": "CH-05",
+        "frame": "matching",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 252.03,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": null,
+        "life": 5,
+        "shots": 1441,
+        "waveTimes": [
+          55.21,
+          60.49,
+          37.19,
+          39.7,
+          59.44
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "matching",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 255.52,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": null,
+        "life": 5,
+        "shots": 1452,
+        "waveTimes": [
+          55.21,
+          64.39,
+          32.94,
+          39.42,
+          63.55
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "matching",
+        "seed": 43,
+        "state": "lost",
+        "waves": 5,
+        "time": 254.52,
+        "cleared": 45,
+        "maxUnits": 52,
+        "pickups": 22,
+        "recipe": null,
+        "life": 5,
+        "shots": 1394,
+        "waveTimes": [
+          55.21,
+          52.11,
+          32.23,
+          44.96
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "evolved",
+        "seed": 17,
+        "state": "won",
+        "waves": 5,
+        "time": 169.37,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 921,
+        "waveTimes": [
+          55.21,
+          60.49,
+          15.27,
+          15.47,
+          22.93
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "evolved",
+        "seed": 29,
+        "state": "won",
+        "waves": 5,
+        "time": 171.54,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 926,
+        "waveTimes": [
+          55.21,
+          64.39,
+          14.78,
+          17.46,
+          19.7
+        ]
+      },
+      {
+        "id": "CH-05",
+        "frame": "evolved",
+        "seed": 43,
+        "state": "won",
+        "waves": 5,
+        "time": 164.06,
+        "cleared": 52,
+        "maxUnits": 52,
+        "pickups": 26,
+        "recipe": "prism",
+        "life": 5,
+        "shots": 906,
+        "waveTimes": [
+          55.21,
+          52.11,
+          11.73,
+          20.66,
+          24.35
+        ]
+      }
+    ]
+  },
+  "campaign": {
+    "method": "12 fresh-account campaigns, guide +3P and initial 5P only; waves/bosses earn progression, upgrades consume earned parts, earned gems only. 120Hz ordinary command simulation, three same-seed attempts maximum with guided recovery. No state-forced wins, life refill or unlocked stage skip. Not human engagement/purchase evidence.",
+    "campaigns": [
+      {
+        "seed": 17,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7936,
+            "profile": "stationary",
+            "state": "won",
+            "time": 61.17,
+            "life": 1,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15855,
+            "profile": "stationary",
+            "state": "won",
+            "time": 44.52,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 79,
+            "reflectedHits": 26,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23774,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 43,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23774,
+            "profile": "guided",
+            "state": "won",
+            "time": 77.86,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 35,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31693,
+            "profile": "stationary",
+            "state": "won",
+            "time": 54.84,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 14,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39612,
+            "profile": "stationary",
+            "state": "won",
+            "time": 27.53,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8436,
+            "profile": "stationary",
+            "state": "won",
+            "time": 47.28,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 14,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16355,
+            "profile": "stationary",
+            "state": "won",
+            "time": 44.49,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24274,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 192.8,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 29,
+            "reflectedHits": 17,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24274,
+            "profile": "guided",
+            "state": "won",
+            "time": 78.03,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 35,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32193,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 108.63,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 12,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32193,
+            "profile": "guided",
+            "state": "won",
+            "time": 72.18,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40112,
+            "profile": "stationary",
+            "state": "won",
+            "time": 70.35,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 36,
+            "reflectedHits": 17,
+            "reason": null
+          }
+        ],
+        "points": 80,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 29,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7948,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 74.87,
+            "life": 0,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 77,
+            "reflectedHits": 19,
+            "reason": "breaker.gameplay.recovery.delivery"
+          },
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7948,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.09,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15867,
+            "profile": "stationary",
+            "state": "won",
+            "time": 43.44,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 79,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23786,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 25,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23786,
+            "profile": "guided",
+            "state": "won",
+            "time": 60.3,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 27,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31705,
+            "profile": "stationary",
+            "state": "won",
+            "time": 53.15,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 60,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39624,
+            "profile": "stationary",
+            "state": "won",
+            "time": 28.01,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8448,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 57.55,
+            "life": 0,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 20,
+            "reason": "breaker.gameplay.recovery.delivery"
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8448,
+            "profile": "guided",
+            "state": "won",
+            "time": 59.19,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 76,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16367,
+            "profile": "stationary",
+            "state": "won",
+            "time": 41.25,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24286,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 160.01,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 21,
+            "reflectedHits": 13,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24286,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.03,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 34,
+            "reflectedHits": 12,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32205,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 109.72,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 36,
+            "reflectedHits": 14,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32205,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.21,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 44,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40124,
+            "profile": "stationary",
+            "state": "won",
+            "time": 64.41,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 51,
+            "reflectedHits": 21,
+            "reason": null
+          }
+        ],
+        "points": 88,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 43,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7962,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 66.46,
+            "life": 0,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 12,
+            "reason": "breaker.gameplay.recovery.delivery"
+          },
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7962,
+            "profile": "guided",
+            "state": "won",
+            "time": 61.37,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 60,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15881,
+            "profile": "stationary",
+            "state": "won",
+            "time": 45.33,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 78,
+            "reflectedHits": 27,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23800,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 31,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23800,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.92,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 77,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31719,
+            "profile": "stationary",
+            "state": "won",
+            "time": 62.57,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39638,
+            "profile": "stationary",
+            "state": "won",
+            "time": 26.69,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8462,
+            "profile": "stationary",
+            "state": "won",
+            "time": 46.74,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16381,
+            "profile": "stationary",
+            "state": "won",
+            "time": 41.66,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 14,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24300,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 196.49,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 16,
+            "reflectedHits": 17,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24300,
+            "profile": "guided",
+            "state": "won",
+            "time": 73.93,
+            "life": 3,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 36,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32219,
+            "profile": "stationary",
+            "state": "won",
+            "time": 82.37,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40138,
+            "profile": "stationary",
+            "state": "won",
+            "time": 61.36,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 50,
+            "reflectedHits": 22,
+            "reason": null
+          }
+        ],
+        "points": 80,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 71,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7990,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 76.63,
+            "life": 0,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 67,
+            "reflectedHits": 12,
+            "reason": "breaker.gameplay.recovery.delivery"
+          },
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7990,
+            "profile": "guided",
+            "state": "won",
+            "time": 53.21,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15909,
+            "profile": "stationary",
+            "state": "won",
+            "time": 44.82,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23828,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 37,
+            "reflectedHits": 23,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23828,
+            "profile": "guided",
+            "state": "won",
+            "time": 54.39,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 43,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31747,
+            "profile": "stationary",
+            "state": "won",
+            "time": 53.69,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 60,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39666,
+            "profile": "stationary",
+            "state": "won",
+            "time": 30.05,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8490,
+            "profile": "stationary",
+            "state": "won",
+            "time": 45.48,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16409,
+            "profile": "stationary",
+            "state": "won",
+            "time": 39.97,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24328,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 153.52,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 27,
+            "reflectedHits": 16,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24328,
+            "profile": "guided",
+            "state": "won",
+            "time": 58.64,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 76,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32247,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 108.13,
+            "life": 4,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 60,
+            "reflectedHits": 17,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32247,
+            "profile": "guided",
+            "state": "won",
+            "time": 62.43,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 51,
+            "reflectedHits": 11,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40166,
+            "profile": "stationary",
+            "state": "won",
+            "time": 61.32,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 22,
+            "reflectedHits": 19,
+            "reason": null
+          }
+        ],
+        "points": 84,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 97,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 8016,
+            "profile": "stationary",
+            "state": "won",
+            "time": 54.39,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 7,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15935,
+            "profile": "stationary",
+            "state": "won",
+            "time": 45.12,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23854,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 30,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23854,
+            "profile": "guided",
+            "state": "won",
+            "time": 54.95,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 31,
+            "reflectedHits": 26,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31773,
+            "profile": "stationary",
+            "state": "won",
+            "time": 53.15,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39692,
+            "profile": "stationary",
+            "state": "won",
+            "time": 30.55,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 22,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8516,
+            "profile": "stationary",
+            "state": "won",
+            "time": 46.41,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16435,
+            "profile": "stationary",
+            "state": "won",
+            "time": 45.11,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 22,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24354,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 186.05,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 15,
+            "reflectedHits": 18,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24354,
+            "profile": "guided",
+            "state": "won",
+            "time": 73.94,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 34,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32273,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 107.73,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 44,
+            "reflectedHits": 16,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32273,
+            "profile": "guided",
+            "state": "won",
+            "time": 69.72,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 39,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40192,
+            "profile": "stationary",
+            "state": "won",
+            "time": 62.56,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 47,
+            "reflectedHits": 20,
+            "reason": null
+          }
+        ],
+        "points": 80,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 123,
+        "profile": "stationary",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 8042,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 73.44,
+            "life": 0,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 79,
+            "reflectedHits": 14,
+            "reason": "breaker.gameplay.recovery.delivery"
+          },
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 8042,
+            "profile": "guided",
+            "state": "won",
+            "time": 56.02,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15961,
+            "profile": "stationary",
+            "state": "won",
+            "time": 43.78,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 78,
+            "reflectedHits": 23,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23880,
+            "profile": "stationary",
+            "state": "playing",
+            "time": 360,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": null,
+            "chain": 31,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23880,
+            "profile": "guided",
+            "state": "won",
+            "time": 54.35,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 56,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31799,
+            "profile": "stationary",
+            "state": "won",
+            "time": 86.23,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 60,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39718,
+            "profile": "stationary",
+            "state": "won",
+            "time": 31.02,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8542,
+            "profile": "stationary",
+            "state": "won",
+            "time": 47.59,
+            "life": 2,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16461,
+            "profile": "stationary",
+            "state": "won",
+            "time": 40.63,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24380,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 168.86,
+            "life": 5,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "storm",
+            "chain": 19,
+            "reflectedHits": 11,
+            "reason": "breaker.journey.recovery.nodes"
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24380,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.03,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 42,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32299,
+            "profile": "stationary",
+            "state": "lost",
+            "time": 109.68,
+            "life": 4,
+            "waves": 4,
+            "bossReward": false,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 14,
+            "reason": "breaker.journey.recovery.anchor"
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32299,
+            "profile": "guided",
+            "state": "won",
+            "time": 68.89,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 49,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40218,
+            "profile": "stationary",
+            "state": "won",
+            "time": 60.17,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 47,
+            "reflectedHits": 21,
+            "reason": null
+          }
+        ],
+        "points": 84,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 17,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7936,
+            "profile": "guided",
+            "state": "won",
+            "time": 56.49,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 79,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15855,
+            "profile": "guided",
+            "state": "won",
+            "time": 41.68,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 26,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23774,
+            "profile": "guided",
+            "state": "won",
+            "time": 77.86,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 35,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31693,
+            "profile": "guided",
+            "state": "won",
+            "time": 44.47,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 11,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39612,
+            "profile": "guided",
+            "state": "won",
+            "time": 31.63,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 14,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8436,
+            "profile": "guided",
+            "state": "won",
+            "time": 58.87,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 73,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16355,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.68,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 23,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24274,
+            "profile": "guided",
+            "state": "won",
+            "time": 78.03,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 35,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32193,
+            "profile": "guided",
+            "state": "won",
+            "time": 72.18,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40112,
+            "profile": "guided",
+            "state": "won",
+            "time": 54.17,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 27,
+            "reflectedHits": 17,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 29,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7948,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.09,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15867,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.71,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 79,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23786,
+            "profile": "guided",
+            "state": "won",
+            "time": 59.96,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 38,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31705,
+            "profile": "guided",
+            "state": "won",
+            "time": 75.18,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 41,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39624,
+            "profile": "guided",
+            "state": "won",
+            "time": 29.72,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 22,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8448,
+            "profile": "guided",
+            "state": "won",
+            "time": 59.19,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 76,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16367,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.47,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 13,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24286,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.03,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 34,
+            "reflectedHits": 12,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32205,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.21,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 44,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40124,
+            "profile": "guided",
+            "state": "won",
+            "time": 45.09,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 59,
+            "reflectedHits": 14,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 43,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7962,
+            "profile": "guided",
+            "state": "won",
+            "time": 61.37,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 60,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15881,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.26,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 38,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23800,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.83,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 41,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31719,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.92,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 34,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39638,
+            "profile": "guided",
+            "state": "won",
+            "time": 33.28,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8462,
+            "profile": "guided",
+            "state": "won",
+            "time": 56.59,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 14,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16381,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.59,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 11,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24300,
+            "profile": "guided",
+            "state": "won",
+            "time": 73.93,
+            "life": 3,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 36,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32219,
+            "profile": "guided",
+            "state": "won",
+            "time": 64.15,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 61,
+            "reflectedHits": 11,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40138,
+            "profile": "guided",
+            "state": "won",
+            "time": 51.81,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 40,
+            "reflectedHits": 17,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 71,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 7990,
+            "profile": "guided",
+            "state": "won",
+            "time": 53.21,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15909,
+            "profile": "guided",
+            "state": "won",
+            "time": 44.12,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 33,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23828,
+            "profile": "guided",
+            "state": "won",
+            "time": 59.9,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 65,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31747,
+            "profile": "guided",
+            "state": "won",
+            "time": 62.2,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 50,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39666,
+            "profile": "guided",
+            "state": "won",
+            "time": 32.72,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8490,
+            "profile": "guided",
+            "state": "won",
+            "time": 59.27,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 46,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16409,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.7,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24328,
+            "profile": "guided",
+            "state": "won",
+            "time": 58.64,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 76,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32247,
+            "profile": "guided",
+            "state": "won",
+            "time": 62.43,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 51,
+            "reflectedHits": 11,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40166,
+            "profile": "guided",
+            "state": "won",
+            "time": 52.85,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 24,
+            "reflectedHits": 17,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 97,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 8016,
+            "profile": "guided",
+            "state": "won",
+            "time": 52.77,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 24,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15935,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.71,
+            "life": 3,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 81,
+            "reflectedHits": 36,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23854,
+            "profile": "guided",
+            "state": "won",
+            "time": 54.95,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 31,
+            "reflectedHits": 26,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31773,
+            "profile": "guided",
+            "state": "won",
+            "time": 44.33,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39692,
+            "profile": "guided",
+            "state": "won",
+            "time": 30.17,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8516,
+            "profile": "guided",
+            "state": "won",
+            "time": 56.26,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16435,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.6,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 81,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24354,
+            "profile": "guided",
+            "state": "won",
+            "time": 73.94,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 34,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32273,
+            "profile": "guided",
+            "state": "won",
+            "time": 69.72,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 39,
+            "reflectedHits": 19,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40192,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.46,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 59,
+            "reflectedHits": 8,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      },
+      {
+        "seed": 123,
+        "profile": "guided",
+        "progress": {
+          "completed": 10,
+          "total": 10,
+          "next": null,
+          "episodeOne": 5,
+          "episodeTwo": 5
+        },
+        "runs": [
+          {
+            "id": "CH-01",
+            "veteran": false,
+            "seed": 8042,
+            "profile": "guided",
+            "state": "won",
+            "time": 56.02,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 21,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": false,
+            "seed": 15961,
+            "profile": "guided",
+            "state": "won",
+            "time": 49.22,
+            "life": 3,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 80,
+            "reflectedHits": 30,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": false,
+            "seed": 23880,
+            "profile": "guided",
+            "state": "won",
+            "time": 62.97,
+            "life": 3,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 58,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": false,
+            "seed": 31799,
+            "profile": "guided",
+            "state": "won",
+            "time": 38,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 58,
+            "reflectedHits": 18,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": false,
+            "seed": 39718,
+            "profile": "guided",
+            "state": "won",
+            "time": 29.07,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": null,
+            "chain": 61,
+            "reflectedHits": 20,
+            "reason": null
+          },
+          {
+            "id": "CH-01",
+            "veteran": true,
+            "seed": 8542,
+            "profile": "guided",
+            "state": "won",
+            "time": 61.1,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 73,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-02",
+            "veteran": true,
+            "seed": 16461,
+            "profile": "guided",
+            "state": "won",
+            "time": 55.67,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 80,
+            "reflectedHits": 15,
+            "reason": null
+          },
+          {
+            "id": "CH-03",
+            "veteran": true,
+            "seed": 24380,
+            "profile": "guided",
+            "state": "won",
+            "time": 74.03,
+            "life": 4,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "storm",
+            "chain": 42,
+            "reflectedHits": 16,
+            "reason": null
+          },
+          {
+            "id": "CH-04",
+            "veteran": true,
+            "seed": 32299,
+            "profile": "guided",
+            "state": "won",
+            "time": 68.89,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 49,
+            "reflectedHits": 17,
+            "reason": null
+          },
+          {
+            "id": "CH-05",
+            "veteran": true,
+            "seed": 40218,
+            "profile": "guided",
+            "state": "won",
+            "time": 51.3,
+            "life": 5,
+            "waves": 4,
+            "bossReward": true,
+            "recipe": "prism",
+            "chain": 47,
+            "reflectedHits": 20,
+            "reason": null
+          }
+        ],
+        "points": 68,
+        "parts": 1,
+        "tiers": {
+          "pulse": 4,
+          "net": 4,
+          "magnet": 1,
+          "mist": 4,
+          "anchor": 1,
+          "scan": 1
+        }
+      }
+    ],
+    "summary": {
+      "campaigns": 12,
+      "complete": 12,
+      "attempts": 142,
+      "won": 120,
+      "lost": 16,
+      "unfinished": 6
+    }
+  },
+  "browserAgency": {
+    "method": "Three viewport browser tests with ordinary accelerated engine inputs and real UI selection, checkpoint and reload. Separate automatic setting test. No forced clear or life refill.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "automatic",
+        "checks": [
+          "real setting enables automatic valid tuning",
+          "wave two without blocking choice"
+        ]
+      }
+    ]
+  },
+  "browserJourney": {
+    "method": "Browser flows at three viewports, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "runs": [
+          {
+            "state": "won",
+            "time": 67.02499999999941,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 54.374999999997556,
+            "stage": "CH-02",
+            "life": 2,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.241666666663946,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 62.149999999997114,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 32.27499999999881,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 99.4250000000252,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 89.5833333333507,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 109.88333333336685,
+            "stage": "CH-03",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 110.55833333336739,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 108.36666666669898,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "runs": [
+          {
+            "state": "won",
+            "time": 54.84999999999753,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 48.9333333333312,
+            "stage": "CH-02",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.64166666666392,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 84.25000000001312,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 32.12499999999882,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 93.4416666666871,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 85.99166666668117,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 109.44166666669983,
+            "stage": "CH-03",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 107.12500000003132,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 119.55000000004121,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "runs": [
+          {
+            "state": "won",
+            "time": 55.96666666666413,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 49.799999999997816,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 60.0916666666639,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 56.066666666664126,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 32.11666666666549,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 113.31666666670291,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 90.07500000001775,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 117.78333333337314,
+            "stage": "CH-03",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 152.18333333335926,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 118.60833333337379,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "browserUi": {
+    "base": "http://127.0.0.1:4173",
+    "report": [
+      {
+        "name": "small",
+        "width": 360,
+        "height": 640,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "phone",
+        "width": 390,
+        "height": 844,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "short",
+        "width": 667,
+        "height": 375,
+        "bounds": {
+          "left": 271.8828125,
+          "right": 395.1171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "bounds": {
+          "left": 360.3828125,
+          "right": 483.6171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "bounds": {
+          "left": 12,
+          "right": 146.46875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "bounds": {
+          "left": 652.765625,
+          "right": 787.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "fullhd",
+        "width": 1920,
+        "height": 1080,
+        "bounds": {
+          "left": 892.765625,
+          "right": 1027.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "4k",
+        "width": 3840,
+        "height": 2160,
+        "bounds": {
+          "left": 1852.765625,
+          "right": 1987.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Not human enjoyment, retention or conversion evidence",
+    "Not physical mobile FPS evidence",
+    "No checkout or price defined"
+  ]
+}

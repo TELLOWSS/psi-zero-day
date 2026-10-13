@@ -10,7 +10,8 @@ const RECIPES=Object.freeze({
 });
 const stage=g=>Number(g.config.id.slice(-2));
 const BRANCHES=Object.freeze(['spread','focus']);
-function reset(g){g.evolution={frame:'arc',recipe:null,branch:null,capstone:false};}
+function preferredFrame(id){return id==='CH-03'?'arc':'laser';}
+function reset(g){g.pressureWarningWave=0;g.evolution={frame:'arc',recipe:null,branch:null,capstone:false};}
 function canAdvance(g,id){const e=g.evolution;if(!g.veteran||g.state!=='intermission'||!e.recipe)return false;return BRANCHES.includes(id)?!e.branch&&g.wave>=2&&g.pickupCount>=9:id==='capstone'&&!!e.branch&&!e.capstone&&g.wave>=3&&g.pickupCount>=14;}
 function advance(g,id){if(!canAdvance(g,id))return false;if(id==='capstone')g.evolution.capstone=true;else g.evolution.branch=id;g.event('evolved',g.player.x,g.player.y,1,id);return true;}
 function restore(g,e){if(!e||!['arc','laser'].includes(e.frame)||e.recipe!==null&&(!RECIPES[e.recipe]||RECIPES[e.recipe].frame!==e.frame||g.pickupCount<EpisodeTwo.requiredParts(g)))return false;const branch=e.branch??null,capstone=e.capstone??false;if(branch!==null&&(!BRANCHES.includes(branch)||!e.recipe||g.wave<2||g.pickupCount<9)||typeof capstone!=='boolean'||capstone&&(!branch||g.wave<3||g.pickupCount<14))return false;g.evolution={frame:e.frame,recipe:e.recipe,branch,capstone};return true;}
@@ -53,6 +54,6 @@ function contact(g,s,c){
  return true;
 }
 function limit(g){return 135-stage(g)*5-(g.wave-1)*10;}
-function step(g){if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
-return {RECIPES,BRANCHES,canAdvance,advance,restore,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
+function step(g){if(g.veteran&&g.state==='playing'&&g.pressureWarningWave!==g.wave&&limit(g)-(g.time-g.waveStart.time)<=8){g.pressureWarningWave=g.wave;g.event('pressuretimewarning',g.player.x,g.player.y,Math.max(0,Math.ceil(limit(g)-(g.time-g.waveStart.time))));}if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
+return {preferredFrame,RECIPES,BRANCHES,canAdvance,advance,restore,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
 });

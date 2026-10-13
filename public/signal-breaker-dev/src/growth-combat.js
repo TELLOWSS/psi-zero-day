@@ -6,14 +6,14 @@ const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function install(Game){
  const proto=Game.prototype,base={};
  for(const name of ['reset','applyTalentStats','event','fire','update','step','cycleShield','pulse','netBurst','capture','coreMotion','fieldForces','deployField','weaponContact','checkpoint','assistAim'])base[name]=proto[name];
- proto.reset=function(){base.reset.call(this);this.growthState={emergencyUsed:false,reflectionHits:0,nextTriple:false,cleanAt:0,scanReadyAt:0,slowRemaining:0};};
+ proto.reset=function(){base.reset.call(this);this.lastDamage=null;this.growthState={emergencyUsed:false,reflectionHits:0,nextTriple:false,cleanAt:0,scanReadyAt:0,slowRemaining:0};};
  proto.applyTalentStats=function(stats){base.applyTalentStats.call(this,stats?JSON.parse(JSON.stringify(stats)):null);};
  proto.growthStats=function(key=this.weapon){const stats={...(this.talentStats||{})};for(const [name,value] of Object.entries(this.talentStats?.weaponSocketStats?.[key]||{}))stats[name]=(stats[name]||0)+value;return stats;};
  proto.equipmentTier=function(key=this.weapon){return Math.round(clamp(this.talentStats?.weaponLevels?.[key]||1,1,4));};
  proto.growthDamage=function(shot,armored=false){const stats=this.growthStats(shot.kind);return (1+clamp(stats.pulseImpact,0,3))*(armored?Math.max(1,clamp(stats.armorPierceMultiplier||1,1,2)):1);};
- proto.damagePlayer=function(kind,x=this.player.x,y=this.player.y){
+ proto.damagePlayer=function(kind,x=this.player.x,y=this.player.y,source='core'){
   if(this.lab||this.godMode||this.player.invuln>0||kind==='power'&&this.growthStats().powerImmunity>0)return false;
-  this.player.life--;this.player.invuln=1.8;this.shake=7;
+  this.lastDamage={kind,source,time:this.time};this.player.life--;this.player.invuln=1.8;this.shake=7;
   if(this.player.life===1&&this.talentStats?.emergencyShield&&!this.growthState.emergencyUsed){this.growthState.emergencyUsed=true;this.player.invuln=3;this.event('emergencyshield',x,y,3,kind);}
   this.event('hurt',x,y,this.player.life,kind);if(this.player.life<=0)this.finish(false);return true;
  };

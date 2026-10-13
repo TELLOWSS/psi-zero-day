@@ -1,5 +1,16 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.gameplay.tuning':'튜닝 자동 선택 (OFF이면 구간마다 직접 선택)',
+'breaker.gameplay.tuning.help':'튜닝 선택 중 전투와 제한시간은 정지합니다. 자동 선택은 첫 번째 후보를 적용하고 바로 이어갑니다.',
+'breaker.gameplay.frame':'이 구역의 기본 신호에는 {frame} 프레임을 권장합니다. 다른 계열도 직접 선택할 수 있습니다.',
+'breaker.gameplay.pressure':'구간 제한시간 {seconds}초 남음 · 이동·장비·진화로 잔여 신호를 해소하세요.',
+'breaker.gameplay.recovery.delivery':'반입문 방출에 피격됐습니다. 노란 경고 구역을 벗어난 뒤 노드와 노출 코어를 공략하세요.',
+'breaker.gameplay.recovery.conveyor':'컨베이어 과부하에 피격됐습니다. 경고 중 벨트를 정지시키거나 위험 구역 밖으로 이동하세요.',
+'breaker.gameplay.recovery.extraction':'집진 압력 방출에 피격됐습니다. 미스트를 설비 흡입구에 맞혀 감압하거나 경고 구역을 벗어나세요.',
+'breaker.gameplay.recovery.tension':'장력선 파열에 피격됐습니다. 앵커로 장력선을 고정하거나 파열 범위 밖으로 이동하세요.',
+'breaker.gameplay.recovery.grid':'전력망 방전에 피격됐습니다. 경고 중 스캔하거나 표시된 전력 구역을 벗어나세요.',
+'breaker.gameplay.smart.off':'장비 자동 전환 OFF · 직접 선택 중. 일시정지 설정에서 다시 켤 수 있습니다.',
+
 'breaker.ui.move':'이동',
 'breaker.ui.settings':'조작·소리·화질 설정 열기',
 'breaker.ui.settings.after':'조작 설정은 다음 작전의 출발 준비에서 변경할 수 있습니다.',
