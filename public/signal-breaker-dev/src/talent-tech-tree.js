@@ -196,14 +196,15 @@
   };
 
   const SOCKET_GEMS = [
-    { id: 'gem_kinetic', name: '키네틱 코어 (공격력/속도)', bonus: '+20% 탄속 & 관통력', color: '#ffb36a' },
-    { id: 'gem_thermal', name: '열역학 칩셋 (범위/지속)', bonus: '+25% 효과 반경 & 지속시간', color: '#68dbe3' },
-    { id: 'gem_pulse', name: '펄스 증폭기 (연쇄/콤보)', bonus: '+0.5초 콤보 & 연쇄 파동', color: '#a68aff' }
+    { id: 'gem_kinetic', name: '키네틱 코어 (탄속)', bonus: '+12% 에어 펄스 탄속', color: '#ffb36a' },
+    { id: 'gem_thermal', name: '열역학 칩셋 (포획)', bonus: '+15% 포획 반경', color: '#68dbe3' },
+    { id: 'gem_pulse', name: '펄스 증폭기 (연쇄/콤보)', bonus: '+0.3초 콤보 · 삼중 펄스 확률 +10%', color: '#a68aff' }
   ];
 
   class TalentTechManager {
     constructor() {
       this.storageKey = 'psi.signal-breaker.talent-tech.v1';
+      this.guideRewardClaimed = false;
       this.points = 5; // 기본 지급 포인트
       this.spentPoints = 0;
       this.talents = {}; // { [talentId]: rank }
@@ -224,10 +225,18 @@
         const raw = localStorage.getItem(this.storageKey);
         if (!raw) return;
         const data = JSON.parse(raw);
-        if (typeof data.points === 'number') this.points = data.points;
-        if (data.talents) this.talents = { ...data.talents };
-        if (data.weaponLevels) this.weaponLevels = { ...this.weaponLevels, ...data.weaponLevels };
-        if (data.weaponSockets) this.weaponSockets = { ...this.weaponSockets, ...data.weaponSockets };
+        this.guideRewardClaimed = data.guideRewardClaimed === true;
+        if (Number.isSafeInteger(data.points) && data.points >= 0) this.points = data.points;
+        for (const tree of Object.values(TALENT_TREES)) for (const tier of tree.tiers) {
+          const rank = data.talents?.[tier.id];
+          if (Number.isInteger(rank) && rank >= 0 && rank <= tier.maxRank) this.talents[tier.id] = rank;
+        }
+        for (const key of Object.keys(this.weaponLevels)) {
+          const level = data.weaponLevels?.[key];
+          if (Number.isInteger(level) && level >= 1 && level <= 4) this.weaponLevels[key] = level;
+          const sockets = data.weaponSockets?.[key];
+          if (Array.isArray(sockets) && sockets.length === 3) this.weaponSockets[key] = sockets.map(id => SOCKET_GEMS.some(gem => gem.id === id) ? id : null);
+        }
         this.calcSpent();
       } catch (e) {
         console.warn('TalentTech load error', e);
@@ -237,6 +246,7 @@
     save() {
       try {
         localStorage.setItem(this.storageKey, JSON.stringify({
+          guideRewardClaimed: this.guideRewardClaimed,
           points: this.points,
           talents: this.talents,
           weaponLevels: this.weaponLevels,
@@ -255,12 +265,22 @@
       return Math.max(0, this.points - this.spentPoints);
     }
 
+    claimGuideReward() {
+      if (this.guideRewardClaimed) return false;
+      this.guideRewardClaimed = true;
+      this.addPoints(3);
+      return true;
+    }
+
     addPoints(n = 1) {
+      if (!Number.isSafeInteger(n) || n <= 0 || !Number.isSafeInteger(this.points + n)) return false;
       this.points += n;
       this.save();
+      return true;
     }
 
     investTalent(talentId) {
+      if (!Object.hasOwn(ACTIVE_TALENT_EFFECTS, talentId)) return false;
       // 해당 특성 찾기
       let found = null;
       for (const tree of Object.values(TALENT_TREES)) {
@@ -290,6 +310,7 @@
     }
 
     upgradeWeapon(weaponKey) {
+      if (!['pulse', 'net'].includes(weaponKey)) return false;
       if (!this.weaponLevels[weaponKey]) return false;
       if (this.weaponLevels[weaponKey] >= 4) return false;
       this.weaponLevels[weaponKey]++;
@@ -298,7 +319,7 @@
     }
 
     socketGem(weaponKey, slotIdx, gemId) {
-      if (!this.weaponSockets[weaponKey] || slotIdx < 0 || slotIdx > 2) return false;
+      if (!this.weaponSockets[weaponKey] || !Number.isInteger(slotIdx) || slotIdx < 0 || slotIdx > 2 || (gemId !== null && !SOCKET_GEMS.some(gem => gem.id === gemId))) return false;
       this.weaponSockets[weaponKey][slotIdx] = gemId;
       this.save();
       return true;
@@ -357,7 +378,16 @@
     }
   }
 
+  const ACTIVE_TALENT_EFFECTS = {
+    def_t1: '최대 투자 시 콤보 유지시간 +0.4초',
+    kin_t1: '최대 투자 시 에어 펄스 탄속 +15%',
+    kin_t4: '최대 투자 시 발사마다 60% 확률로 삼중 펄스',
+    eng_t2: '최대 투자 시 포획 반경 +20%',
+    eng_t4: '최대 투자 시 장비 발사 간격 15% 단축'
+  };
+
   window.SignalBreakerTalentTech = {
+    ACTIVE_TALENT_EFFECTS,
     TALENT_TREES,
     WEAPON_TECHS,
     SOCKET_GEMS,

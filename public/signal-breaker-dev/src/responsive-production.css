@@ -168,3 +168,73 @@ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px)
  .operation-stage{min-height:76px;padding:8px}
  .operation-actions{padding:10px 4vw}
 }
+
+/* Verified device composition, 2026-10-13. Reuse the production atlas at its
+   intended proportions; keep text and touch targets outside the frame edges. */
+body.breaker-focus .hud-top{min-height:52px;height:auto;padding:6px 12px!important;gap:8px;flex-wrap:nowrap}
+body.breaker-focus .hud-top::before{border-width:4px;border-image-width:4px}
+body.breaker-focus .hud-top .hud-divider{display:none}
+body.breaker-focus .hud-top .hud-block{flex:0 0 auto;min-width:0}
+body.breaker-focus .hud-top .hud-block:has(#score){display:none}
+body.breaker-focus .hud-top .hud-label{font-size:8px;line-height:1.2}
+body.breaker-focus .hud-top button{min-width:44px;min-height:44px;height:44px;flex:0 0 auto;margin:0!important;padding:5px 8px!important}
+body.breaker-focus .hud-top #stageSelectBtn{margin-left:auto!important}
+body.breaker-focus .hud-top #pauseBtn{width:44px;min-width:44px;min-height:44px;height:44px;position:static!important;margin-left:0!important}
+body.breaker-focus .health .heart{width:14px;height:18px}
+body.breaker-focus .hud-top .shield-hud{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+body.breaker-focus .hud-top .health{display:flex;gap:2px}
+dialog.psi-workshop{max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
+dialog.psi-workshop header{gap:12px}
+dialog.psi-workshop header h2{font-size:clamp(15px,3vw,22px);overflow-wrap:anywhere}
+dialog.psi-workshop header button{flex-shrink:0}
+.stage-cards-grid,.guide-steps,.loot-items{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))}
+body.breaker-focus .utility-controls .util-btn{min-height:44px;height:44px}
+.stage-tabs-row{flex-wrap:wrap}
+.stage-card-enter-btn{min-height:44px}
+.boss-cutin-box{line-height:1.45}
+.boss-cutin-title{line-height:1.3;overflow-wrap:anywhere}
+.boss-cutin-code,.boss-cutin-target{line-height:1.45;white-space:normal}
+.boss-cutin-meta{min-width:0}
+
+@media (orientation:portrait){
+ body.breaker-focus .hud-top{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 6px;min-height:94px;height:94px;padding:5px 8px!important}
+ body.breaker-focus .hud-top .hud-block-clickable{grid-column:1/3;margin:0;padding:0}
+ body.breaker-focus .hud-top .hud-block:has(#collected){grid-column:3}
+ body.breaker-focus .hud-top .shield-hud{grid-column:4/6}
+ body.breaker-focus .hud-top .hud-block strong{font-size:12px;line-height:1.2}
+ body.breaker-focus .hud-top .hud-block i{display:none}
+ body.breaker-focus .hud-top .btn-text-full{display:none}
+ body.breaker-focus .hud-top .btn-text-short{display:inline}
+ body.breaker-focus .hud-top button{grid-row:2;width:100%;min-width:0!important;height:44px;min-height:44px}
+ body.breaker-focus .hud-top #stageSelectBtn{margin-left:0!important}
+ body.breaker-focus .hud-top #pauseBtn{width:100%;min-width:0}
+ body.breaker-focus .game-card{padding-top:calc(106px + env(safe-area-inset-top));padding-bottom:calc(228px + env(safe-area-inset-bottom));background:#081c26}
+ body.breaker-focus .canvas-wrap{position:absolute;inset:calc(106px + env(safe-area-inset-top)) 0 calc(228px + env(safe-area-inset-bottom));min-height:0;height:auto;flex:1}
+ body.breaker-focus .game-exit{top:calc(108px + env(safe-area-inset-top))}
+ body.breaker-focus .burst-boost{top:calc(108px + env(safe-area-inset-top))}
+ body.breaker-focus .view-btn{top:calc(154px + env(safe-area-inset-top))}
+ body.breaker-focus .boss-encounter{top:calc(108px + env(safe-area-inset-top));left:12px;transform:none;width:calc(100vw - 96px);max-width:420px}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{bottom:calc(176px + env(safe-area-inset-bottom));max-width:calc(100vw - 20px)}
+ body.breaker-focus .utility-controls .util-btn{min-width:44px!important;max-width:84px;font-size:9px;padding:3px}
+ body.breaker-focus .fire-controls,body.twin-controls .fire-controls{bottom:calc(100px + env(safe-area-inset-bottom))}
+ body.breaker-focus .hud-bottom{bottom:calc(222px + env(safe-area-inset-bottom))}
+ body.breaker-focus .overlay-inner[data-state=ready]{max-height:calc(100dvh - 120px);overflow:auto;margin-bottom:0}
+ body.breaker-focus #overlay:has([data-state=ready]){align-items:center;padding-top:108px}
+ body.breaker-focus #itemStatus{top:calc(208px + env(safe-area-inset-top))}
+ body.breaker-focus.twin-controls #fireBtn{left:50%;right:auto;bottom:calc(27px + env(safe-area-inset-bottom));transform:translateX(-50%);width:69px;height:69px}
+ .boss-cutin-thumb{width:76px;height:76px}
+ .boss-cutin-row{gap:10px}
+ .boss-cutin-box{padding:12px}
+ .boss-cutin-alert-tag{font-size:9px;letter-spacing:.06em}
+}
+@media (orientation:landscape) and (max-height:690px){
+ body.breaker-focus .hud-top{height:48px;min-height:48px;top:max(4px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));padding:2px 8px!important}
+ body.breaker-focus .hud-top .btn-text-full{display:none}
+ body.breaker-focus .hud-top .btn-text-short{display:inline}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{bottom:calc(191px + env(safe-area-inset-bottom))}
+ body.breaker-focus .overlay-inner[data-state=ready]{max-height:calc(100dvh - 68px);overflow:auto}
+ body.breaker-focus #overlay:has([data-state=ready]){padding-top:58px}
+}
+@media (prefers-reduced-motion:reduce){
+ .stage-card-item,.stage-card-enter-btn,.hero-start-btn{transition:none}
+}

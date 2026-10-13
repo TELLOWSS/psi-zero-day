@@ -36,7 +36,8 @@ elements.motionBtn.trigger('click');assert.equal(elements.motionBtn.textContent,
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
-assert.ok(elements.overlayInner.children.some(el=>el.id==='overlayPrimary'),'ready overlay has start action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
+const findChild=(root,id)=>root.children.find(el=>el.id===id)||root.children.map(el=>findChild(el,id)).find(Boolean);
+const startButton=findChild(elements.overlayInner,'overlayPrimary');assert.ok(startButton,'ready overlay has start action');startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 // Combined main-branch regression: stage completion cannot consume AUTO, start the next stage,
 // or skip loadout preparation. The two independently reviewed PRs must work together.
 const autoBeforeStage=JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire;
@@ -54,7 +55,7 @@ chooseNext.trigger('click');
 assert.equal(window.SignalBreakerQA.snapshot().stage,'CH-02');
 assert.equal(window.SignalBreakerQA.snapshot().state,'ready','choosing next operation opens preparation, not combat');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO remains enabled during stage transition');
-const launchNext=elements.overlayInner.children.find(c=>c.id==='overlayPrimary');
+const launchNext=findChild(elements.overlayInner,'overlayPrimary');
 assert.ok(launchNext);
 launchNext.trigger('click');
 assert.equal(window.SignalBreakerQA.snapshot().state,'playing','combat begins only after explicit player launch');
@@ -63,6 +64,7 @@ console.log('PASS combined AUTO + player-chosen result → next stage preparatio
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
 window.SignalBreakerQA.continuous(false);window.SignalBreakerQA.controlMode('twin');assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
 elements.controlBtn.trigger('click');
+window.SignalBreakerQA.engine().start();elements.overlay.classList.add('hidden');
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
 elements.arena.trigger('pointerdown',touch(10));
 assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'hold starts firing immediately');

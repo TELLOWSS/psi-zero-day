@@ -97,11 +97,11 @@ class Game {
  selectWeapon(id){if(this.loadout.includes(id)){this.weapon=id;this.event('weapon',this.player.x,this.player.y,id==='pulse'?1:2);}}
  fire(){if(this.state==='ready')this.start();if(this.state!=='playing'||this.cooldown>0||this.shots.length>=32)return false;
   const launch=this.launchGeometry(),vx=launch.direction.x,vy=launch.direction.y;
-  const spec=WEAPONS[this.weapon],speedMul=1+(this.talentStats?.pulseSpeed||0);
+  const spec=WEAPONS[this.weapon],speedMul=1+(this.weapon==='pulse'?(this.talentStats?.pulseSpeed||0):0);
   this.shots.push({id:++this.id,x:launch.muzzle.x,y:launch.muzzle.y,vx:vx*spec.speed*speedMul,vy:vy*spec.speed*speedMul,r:spec.r,kind:this.weapon,...(this.veteran&&this.weapon==='pulse'?{element:this.evolution.frame,recipe:Evolution.active(this)?this.evolution.recipe:null,branch:Evolution.active(this)?this.evolution.branch:null,capstone:!!(Evolution.active(this)&&this.evolution.capstone)}:{}),life:this.shotLifetime(spec),bounces:0,trail:[],path:[{x:launch.muzzle.x,y:launch.muzzle.y}],hit:false});
   this.cooldown=spec.cooldown*(this.hasTuning('cadence')?.85:1)*(this.hasTuning('focus')?1.1:1)*(1-Math.min(.5,this.talentStats?.cooldownReduction||0));
   const primary=this.shots.at(-1);
-  if(this.talentStats?.tripleSplitChance>0&&Math.random()<this.talentStats.tripleSplitChance&&this.weapon==='pulse'&&this.shots.length<30){const a=Math.atan2(vy,vx),spd=Math.hypot(vx*spec.speed*speedMul,vy*spec.speed*speedMul);for(const offset of [-.18,.18])if(this.shots.length<32)this.shots.push({...primary,id:++this.id,vx:Math.cos(a+offset)*spd,vy:Math.sin(a+offset)*spd,trail:[],path:[]});}
+  if(this.talentStats?.tripleSplitChance>0&&createRng(this.seed ^ Math.imul(this.shotsFired+1,7919))()<Math.min(1,this.talentStats.tripleSplitChance)&&this.weapon==='pulse'&&this.shots.length<30){const a=Math.atan2(vy,vx),spd=Math.hypot(vx*spec.speed*speedMul,vy*spec.speed*speedMul);for(const offset of [-.18,.18])if(this.shots.length<32)this.shots.push({...primary,id:++this.id,vx:Math.cos(a+offset)*spd,vy:Math.sin(a+offset)*spd,trail:[],path:[]});}
   if(this.operation&&this.weapon==='pulse'){const profile=this.pulseStyle;if(profile==='rapid')this.cooldown*=.7;if(profile==='precision'){primary.vx*=1.4;primary.vy*=1.4;primary.life*=1.25;this.cooldown*=1.35;}if(profile==='spread'){this.cooldown*=1.25;const a=Math.atan2(primary.vy,primary.vx),speed=Math.hypot(primary.vx,primary.vy);for(const offset of [-.2,.2])if(this.shots.length<32)this.shots.push({...primary,id:++this.id,vx:Math.cos(a+offset)*speed,vy:Math.sin(a+offset)*speed,trail:[],path:[]});}}Burst.fire(this,primary);this.shotsFired++;this.usedWeapons.add(this.weapon);const event={kind:'fire',x:launch.muzzle.x,y:launch.muzzle.y,n:spec.cell+1,weapon:this.weapon,...(this.veteran&&this.weapon==='pulse'?{element:this.evolution.frame}:{}),dx:vx,dy:vy,sourceId:'shot:'+this.id,level:this.burstMode?this.burstRank():this.weaponLevel,t:this.time};this.events.push(event);if(this.events.length>70)this.events.shift();this.route.push({time:this.time,weapon:this.weapon,x:launch.muzzle.x,y:launch.muzzle.y,dx:vx,dy:vy});this.route=this.route.slice(-24);return true;
  }
  update(elapsed){if(this.state!=='playing')return;let d=clamp(finite(elapsed),0,.066);this.accumulator=Math.min(.099,this.accumulator+d);let n=0;while(this.state==='playing'&&this.accumulator>=DT&&n<12){this.step(DT);this.accumulator-=DT;n++;}}
@@ -109,7 +109,7 @@ class Game {
   const b=this.boss;if(!b||b.identity!=='delivery'||b.phase==='resolved')return;
   if(!b.warningUntil&&this.time>=b.nextDischargeAt-1.35&&this.time<b.nextDischargeAt){b.warningUntil=b.nextDischargeAt;b.dischargeX=this.player.x;this.event('bosswarning',b.dischargeX,GROUND-100,1,'metal');}
   if(this.time>=b.nextDischargeAt){
-   if(b.warningUntil&&Math.abs(this.player.x-b.dischargeX)<=b.dischargeHalfWidth&&!this.lab&&this.player.invuln<=0){this.player.life--;this.player.invuln=1.8;this.shake=7;this.event('hurt',this.player.x,this.player.y,this.player.life);if(this.player.life<=0)this.finish(false);}
+   if(b.warningUntil&&Math.abs(this.player.x-b.dischargeX)<=b.dischargeHalfWidth&&!this.lab&&!this.godMode&&this.player.invuln<=0){this.player.life--;this.player.invuln=1.8;this.shake=7;this.event('hurt',this.player.x,this.player.y,this.player.life);if(this.player.life<=0)this.finish(false);}
    this.event('bossdischarge',b.dischargeX,GROUND-100,1,'metal');b.warningUntil=0;b.discharges++;b.nextDischargeAt=this.time+Math.max(4.7,8.5-(b.gatePhase-1)*.85);
   }
  }
@@ -126,7 +126,7 @@ class Game {
    this.event('beltwarning',b.x,GROUND-78,b.surgeDirection,'metal');
   }
   if(this.time>=b.nextSurgeAt){
-   if(b.warningUntil&&!stopped&&this.player.x>=b.dangerLeft&&this.player.x<=b.dangerRight&&!this.lab&&this.player.invuln<=0){
+   if(b.warningUntil&&!stopped&&this.player.x>=b.dangerLeft&&this.player.x<=b.dangerRight&&!this.lab&&!this.godMode&&this.player.invuln<=0){
     this.player.life--;this.player.invuln=1.8;this.shake=7;
     this.event('hurt',this.player.x,this.player.y,this.player.life);
     if(this.player.life<=0)this.finish(false);
@@ -150,7 +150,7 @@ class Game {
   if(this.time>=b.nextPressureAt){
    if(b.mistUntil>this.time){b.pressureVents++;this.event('pressurevent',b.x,b.y,b.pressureVents,'dust');}
    else{
-    if(Math.abs(this.player.x-b.x)<=143&&!this.lab&&this.player.invuln<=0){
+    if(Math.abs(this.player.x-b.x)<=143&&!this.lab&&!this.godMode&&this.player.invuln<=0){
      this.player.life--;this.player.invuln=1.8;this.shake=7;
      this.event('hurt',this.player.x,this.player.y,this.player.life);
      if(this.player.life<=0)this.finish(false);
@@ -174,7 +174,7 @@ class Game {
   if(this.time>=b.nextSnapAt){
    if(held){b.secured++;this.event('tensionsecured',b.x,GROUND-128,b.secured,'load');}
    else{
-    if(this.player.x>=b.snapLeft&&this.player.x<=b.snapRight&&!this.lab&&this.player.invuln<=0){
+    if(this.player.x>=b.snapLeft&&this.player.x<=b.snapRight&&!this.lab&&!this.godMode&&this.player.invuln<=0){
      this.player.life--;this.player.invuln=1.8;this.shake=7;
      this.event('hurt',this.player.x,this.player.y,this.player.life);
      if(this.player.life<=0)this.finish(false);
@@ -203,7 +203,7 @@ class Game {
   }
   if(this.time>=b.nextArcAt){
    const danger=this.gridArcLanes().some(l=>Math.abs(this.player.x-l.x)<=l.half);
-   if(danger&&!this.lab&&this.player.invuln<=0){
+   if(danger&&!this.lab&&!this.godMode&&this.player.invuln<=0){
     this.player.life--;this.player.invuln=1.8;this.shake=8;
     this.event('hurt',this.player.x,this.player.y,this.player.life);
     if(this.player.life<=0)this.finish(false);
@@ -357,7 +357,7 @@ class Game {
   for(const spec of this.config.bumper){const b=this.bumperPosition(spec);const dx=c.x-b.x,dy=c.y-b.y,d=Math.hypot(dx,dy);if(d<c.r+b.r&&d>1){const nx=dx/d,ny=dy/d;c.x=b.x+nx*(c.r+b.r+1);c.y=b.y+ny*(c.r+b.r+1);const v=(c.vx-b.vx)*nx+c.vy*ny;if(v<0){c.vx-=(1+.62)*v*nx;c.vy-=(1+.62)*v*ny;if(Math.abs(v)>=8)this.contactEvent('bumper:'+c.id+':'+spec.x,'bumper',b.x+nx*b.r,b.y+ny*b.r,Math.abs(v),{nx,ny,vx:c.vx,vy:c.vy});}}}
   for(const rail of this.rail){const vx=c.vx,vy=c.vy;if(this.bounceSegment(c,rail,7,bounce)&&Math.hypot(c.vx-vx,c.vy-vy)>=8){this.contactEvent('rail:'+c.id+':'+rail.x,'corebounce',c.x,c.y);}}
   const g=this.config.gate;if(c.x>g.x-32&&c.y>g.y-92&&c.y<g.y+74&&c.vx>30){if((c.tier<=1||c.stable)&&(!this.config.gateStable||c.stable)&&(!this.config.gateKinds||this.config.gateKinds.includes(c.kind))&&this.circuit.every(n=>n.hit)&&this.gateStatus().open){this.gateOpenUntil=this.time+.6;this.capture(c);return;}else this.reason(!this.gateStatus().open?'gatewait':this.config.gateKinds&&!this.config.gateKinds.includes(c.kind)?'gatekind':this.config.gateStable&&!c.stable?'gatestable':'gatelocked',c.x,c.y);}
-  if(!this.lab&&!globalThis.SignalBreakerGodMode&&this.player.invuln===0&&Math.hypot(c.x-this.player.x,c.y-(this.player.y-10))<c.r+23){this.player.life--;this.player.invuln=1.8;this.shake=7;this.event('hurt',this.player.x,this.player.y,this.player.life);c.vy=-240;c.vx=(c.x-this.player.x>0?1:-1)*200;if(this.player.life<=0)this.finish(false);}
+  if(!this.lab&&!this.godMode&&this.player.invuln===0&&Math.hypot(c.x-this.player.x,c.y-(this.player.y-10))<c.r+23){this.player.life--;this.player.invuln=1.8;this.shake=7;this.event('hurt',this.player.x,this.player.y,this.player.life);c.vy=-240;c.vx=(c.x-this.player.x>0?1:-1)*200;if(this.player.life<=0)this.finish(false);}
   let speed=Math.hypot(c.vx,c.vy);if(speed>520){c.vx*=520/speed;c.vy*=520/speed;}
  }
  reason(code,x,y){if(this.lastReason?.code===code&&this.time-this.lastReason.time<1)return;this.lastReason={code,time:this.time};this.event('reason',x,y,0,code);}
