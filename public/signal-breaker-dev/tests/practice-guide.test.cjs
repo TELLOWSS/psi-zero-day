@@ -31,3 +31,9 @@ test('complete-build atlas is a real transparent six-cell delivery image',async(
  a.equal(meta.width,1536);a.equal(meta.height,1024);a.equal(meta.hasAlpha,true);
  const {data,info}=await sharp(require('node:path').join(__dirname,'../art/psi-practice-weapons-v1.webp')).ensureAlpha().raw().toBuffer({resolveWithObject:true});let transparent=0;for(let i=3;i<data.length;i+=4)if(data[i]===0)transparent++;a.ok(transparent/(info.width*info.height)>.5);
 });
+
+test('existing episode unlock and equipment labels remain localized with the new guide',()=>{
+ require('../src/localization-ko.js');const copy=globalThis.SignalBreakerText;
+ for(const id of ['breaker.ep01.name','breaker.ep02.name','breaker.ep02.locked','breaker.ep02.card.locked','breaker.ep02.card.complete','breaker.ep02.chain.reward','breaker.shop.open','breaker.tree.title','breaker.practice.entry','breaker.guide.open'])a.ok(copy[id]&&copy[id]!==id,id);
+ a.ok(copy['breaker.ep02.locked'].includes('{n}'));
+});
