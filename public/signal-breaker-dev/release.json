@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.49.0-guided-rehearsal",
   "cacheName": "psi-signal-breaker-webpreview-v0.49.0-guided-rehearsal",
-  "fingerprint": "ecee7cf0eaad0f27fc122c20587955f721789006c3aec0b461c5d855472629aa",
+  "fingerprint": "7854556ee0280f05e5a15fe32225b7bb13e4ee629b5b74260da11ecee9fdfc14",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -347,7 +347,7 @@
     {
       "path": "/signal-breaker-dev/src/app.js",
       "bytes": 116574,
-      "sha256": "86e84df17a85b65d9b3c20c9b48291e20d18afa5d929d7abe1164ab3c65398c5"
+      "sha256": "282438014445633b3fc997db86b016dc49a2feec984e3df1be6c3731d25344c3"
     },
     {
       "path": "/signal-breaker-dev/src/battle-rails.css",

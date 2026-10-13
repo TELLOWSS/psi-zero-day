@@ -264,8 +264,8 @@ topRail.append(document.querySelector('.hud-top'),$('guideBtn'),$('exitBtn'));
 $('battleSummary').append($('hudBottom'),$('bossEncounter'),$('veteranStatus'),$('signalObjective'),$('itemStatus'));
 $('battleMessages').append($('assistHint'),$('toast'),$('chainGuide'),$('radioLine'));
 function adaptBattleRails(){if(window.matchMedia?.('(orientation:landscape)').matches)topRail.append($('boostBtn'));else controlRail.append($('boostBtn'));clearInput();renderSurface();}
-const orientationQuery=window.matchMedia?.('(orientation:landscape)');orientationQuery?.addEventListener?.('change',adaptBattleRails);if(orientationQuery)adaptBattleRails();
-controlRail.append(document.querySelector('.touch-controls'),$('viewBtn'),$('boostBtn'));
+const orientationQuery=window.matchMedia?.('(orientation:landscape)');orientationQuery?.addEventListener?.('change',adaptBattleRails);
+controlRail.append(document.querySelector('.touch-controls'),$('viewBtn'),$('boostBtn'));if(orientationQuery)adaptBattleRails();
 function startPractice(){endingPlayer.cancel();practiceMode=true;veteranMode=false;lab=true;mode='chapter';closeLobby();setupStage('CH-01',false);}
 $('practiceEntry').addEventListener('click',startPractice);
 $('labBtn').addEventListener('click',startPractice);
