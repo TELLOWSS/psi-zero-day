@@ -67,3 +67,5 @@ body.breaker-focus .overlay-inner{max-height:calc(100dvh - 20px);overflow:auto}
  #battleControlRail #boostBtn{right:4px!important;left:auto!important;top:7px!important;bottom:auto!important;width:64px;min-width:44px;max-width:64px;min-height:44px;height:44px}}
 
 #battleMessages #chainGuide[hidden]{display:none!important}#battleMessages #chainGuide:not([hidden]){display:block!important}
+
+@media(orientation:portrait){#battleControlRail #viewBtn{display:grid;place-items:center;top:64px!important;left:8px;right:auto!important;bottom:auto!important;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;box-sizing:border-box;padding:3px}}
