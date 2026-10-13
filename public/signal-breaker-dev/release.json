@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.48.1-psi-art",
   "cacheName": "psi-signal-breaker-webpreview-v0.48.4-harmonized-ui",
-  "fingerprint": "fdf761cb172f161517d6732e523fdef11db97e509e9b0c61d1ade176404cfbf5",
+  "fingerprint": "b244c25027f43ab2a7a82379e8c49e97ab565b7f559fb75ccb14680abce68a43",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 23456,
-      "sha256": "195000286f9aa121e1b4aebdb7071a7c49f726db9ecd742f16e7338c36312186"
+      "bytes": 24323,
+      "sha256": "b81b61fc7da29d1fee0312d12f83d93b1b12e5a58662c47b070f4ba1c8fc9ef1"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -341,8 +341,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 136295,
-      "sha256": "a9783a833b242c18ea5c2819e140daa7ae0e3ac3ebfcd9e096e489201e4cbeab"
+      "bytes": 139184,
+      "sha256": "37f3151d2a83349c9754f8c0e4eaa36ac305eeca4b16a33d06c03dec84edb50d"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -461,8 +461,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
-      "bytes": 12194,
-      "sha256": "f7198ca8d7aa332bd30c1444a60328610a70c027a45bccf39c2b7fa727ffe94b"
+      "bytes": 15741,
+      "sha256": "328581cad0b8ad975bca46f1cff518584cd6f555ce58c2256c85a935c9095d76"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",

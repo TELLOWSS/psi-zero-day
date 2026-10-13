@@ -122,3 +122,49 @@ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px)
  body.breaker-focus .fire-controls #pulseBtn,body.breaker-focus .fire-controls #netBtn{height:auto;min-height:64px}
  body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 204px)}
 }
+
+/* ==========================================================================
+   LOBBY & STAGE SELECTION UNIVERSAL RESPONSIVENESS & ACTION BUTTONS
+   ========================================================================== */
+.stage-badge-action{display:inline-flex;align-items:center;justify-content:center;margin-top:8px;padding:3px 8px;font-size:11px;font-weight:800;border-radius:4px;background:rgba(0,229,255,0.15);border:1px solid rgba(0,229,255,0.45);color:#00e5ff;transition:all .15s ease}
+.operation-stage.selected .stage-badge-action{background:#00e5ff;color:#02181f;box-shadow:0 0 12px rgba(0,229,255,0.8)}
+.operation-stage[data-locked=true] .stage-badge-action{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:#7f98a2}
+.hero-start-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.hero-start-btn:active{transform:scale(.98)}
+
+/* Mobile Portrait Lobby & Loading Screen Optimization */
+@media (orientation: portrait), (max-width: 690px){
+ .operation-hero{min-height:220px;padding:16px 20px}
+ .operation-copy{padding:16px 0;max-width:100%}
+ .operation-copy h1{font-size:clamp(26px, 6.5vw, 36px);margin:8px 0}
+ .operation-copy p{font-size:13px;line-height:1.5;margin:4px 0 10px}
+ .operation-intel{margin-top:10px;padding-left:10px}
+ .operation-hero-actions{margin-top:14px;width:100%}
+ .hero-start-btn{width:100%;justify-content:center;min-height:52px;font-size:15px}
+ .operation-stages{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:0 16px 16px}
+ .operation-stage{min-height:84px;padding:10px}
+ .operation-actions{position:sticky;bottom:0;padding:12px 16px;background:rgba(5,18,25,0.96);backdrop-filter:blur(10px);z-index:90;box-shadow:0 -4px 20px rgba(0,0,0,0.7)}
+
+ /* Portrait Loading Screen - No Cutoff Guarantee */
+ .brand-loading{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;padding:max(20px,env(safe-area-inset-top)) 20px max(40px,env(safe-area-inset-bottom))!important;box-sizing:border-box!important}
+ .brand-loading>img{object-fit:cover!important;object-position:center 20%!important}
+ .brand-loading::before{background:linear-gradient(0deg,#03151df8 45%,#03151d90 70%,transparent 100%)!important}
+ .loading-brand{width:100%!important;max-width:360px!important;text-align:left!important;margin-bottom:8px!important}
+ .loading-brand h1{font-size:clamp(34px,11vw,50px)!important;line-height:0.95!important;margin:12px 0 8px!important;letter-spacing:-1.5px!important}
+ .loading-brand p{font-size:13px!important;line-height:1.5!important;margin:6px 0 16px!important;color:#c0ded4!important}
+ .loading-brand progress{width:100%!important;max-width:340px!important;height:4px!important;margin:12px 0 8px!important}
+ .loading-brand>span{font-size:12px!important;color:#8eeedb!important;font-weight:600!important}
+ .loading-exit{top:max(16px,env(safe-area-inset-top))!important;right:16px!important;font-size:12px!important;padding:10px!important;background:rgba(3,21,29,0.6)!important;border-radius:6px!important}
+}
+
+/* Mobile Landscape Lobby Optimization */
+@media (orientation: landscape) and (max-height: 600px){
+ .operation-hero{min-height:180px}
+ .operation-copy{padding:10px 4vw}
+ .operation-copy h1{font-size:clamp(22px,3.8vw,32px);margin:6px 0}
+ .operation-hero-actions{margin-top:8px}
+ .hero-start-btn{min-height:42px;padding:8px 18px;font-size:13px}
+ .operation-stages{margin:0 4vw 10px;gap:8px}
+ .operation-stage{min-height:76px;padding:8px}
+ .operation-actions{padding:10px 4vw}
+}
