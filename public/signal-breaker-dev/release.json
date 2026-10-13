@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.49.0-guided-rehearsal",
   "cacheName": "psi-signal-breaker-webpreview-v0.49.0-guided-rehearsal",
-  "fingerprint": "7c748c2426c4c0f4fe7b221b869819f7764f4349ae8649d0398bf63194e189b5",
+  "fingerprint": "8b3acca5e97e7f4f68a6946f235be1277f8c542ff44cac94e03beef0572c90f2",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -346,8 +346,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 116574,
-      "sha256": "282438014445633b3fc997db86b016dc49a2feec984e3df1be6c3731d25344c3"
+      "bytes": 116771,
+      "sha256": "7a2f2131ac8b4663322b3bb93a2b8764c7d2756a6a4541233fd1f5404c707948"
     },
     {
       "path": "/signal-breaker-dev/src/battle-rails.css",
@@ -431,8 +431,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 37981,
-      "sha256": "209c102a75149bf2f1ed7507c969af2b6956b3c5291225bb4058dd8d0452ca30"
+      "bytes": 37993,
+      "sha256": "990b69116d7492cccad8af026997444337b6d75371f05ee5513b83e3b7b8e078"
     },
     {
       "path": "/signal-breaker-dev/src/offline-presentation.js",
@@ -506,8 +506,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/tutorial-rules.js",
-      "bytes": 2020,
-      "sha256": "30eda2d0717fe1c59d47ac596ef7387484ec9e83707e3de8716e0911da1c0c44"
+      "bytes": 2074,
+      "sha256": "811e8543cc37d94680bafa1303cd27d3323a56b3f47a819cb333c48dc900e028"
     }
   ]
 }
