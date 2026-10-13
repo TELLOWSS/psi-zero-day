@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-13",
+  "release": "0.52.0-visual",
+  "assets": {
+    "version": 7,
+    "date": "2026-10-13",
+    "finalVisualLock": false,
+    "method": "Built-in image_gen edit of existing 4-core atlas, followed by a single transparent-gutter refinement. Original generated PNG copied without pixel edits. Measured source crops preserve native aspect and engine radius.",
+    "assets": [
+      {
+        "path": "core-materials-v3.png",
+        "nativeWidth": 1254,
+        "nativeHeight": 1254,
+        "bytes": 1187875,
+        "sha256": "4cb27b1c944fdc2be73af9cb64be2329c8ba7d01e5fef103a67d941d2d280b01",
+        "format": "RGBA",
+        "grid": [
+          2,
+          2
+        ],
+        "status": "runtime-integrated-production-candidate",
+        "slots": [
+          "metal",
+          "dust",
+          "power",
+          "load"
+        ],
+        "crops": [
+          [
+            145,
+            129,
+            407,
+            441
+          ],
+          [
+            718,
+            135,
+            416,
+            423
+          ],
+          [
+            113,
+            729,
+            467,
+            413
+          ],
+          [
+            795,
+            717,
+            297,
+            443
+          ]
+        ],
+        "replaces": "core-materials-v2.webp"
+      }
+    ]
+  },
+  "visualFixtures": {
+    "method": "Isolated training visual fixtures, not win-rate simulation.",
+    "count": 20,
+    "viewports": [
+      "portrait",
+      "small",
+      "landscape",
+      "pc"
+    ],
+    "errors": [],
+    "actorPixels": [
+      {
+        "viewport": "portrait",
+        "stage": 1,
+        "pixels": 59.87456445993031
+      },
+      {
+        "viewport": "portrait",
+        "stage": 2,
+        "pixels": 57.37562604340568
+      },
+      {
+        "viewport": "portrait",
+        "stage": 3,
+        "pixels": 55.07692307692307
+      },
+      {
+        "viewport": "portrait",
+        "stage": 4,
+        "pixels": 52.955315870570104
+      },
+      {
+        "viewport": "portrait",
+        "stage": 5,
+        "pixels": 50.99109792284867
+      },
+      {
+        "viewport": "small",
+        "stage": 1,
+        "pixels": 32.96817288801572
+      },
+      {
+        "viewport": "small",
+        "stage": 2,
+        "pixels": 32.96817288801572
+      },
+      {
+        "viewport": "small",
+        "stage": 3,
+        "pixels": 32.96817288801572
+      },
+      {
+        "viewport": "small",
+        "stage": 4,
+        "pixels": 32.96817288801572
+      },
+      {
+        "viewport": "small",
+        "stage": 5,
+        "pixels": 32.96817288801572
+      }
+    ],
+    "atlas": {
+      "width": 1254,
+      "height": 1254,
+      "opaque": 348,
+      "transparent": 1112155,
+      "gutterPixels": 371300,
+      "gutterVisible": 0
+    }
+  },
+  "regressions": {
+    "device": 8,
+    "uiux": 8,
+    "rootTests": 2059,
+    "rootSkipped": 1,
+    "breakerTests": 254,
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "releaseAssets": 98,
+  "limits": [
+    "Visual training fixtures are not campaign wins.",
+    "Director finalVisualLock remains false.",
+    "Physical-device GPU, thermal and readability checks remain.",
+    "Generated PNG preserves native pixels; transfer size increases about 0.63MB."
+  ],
+  "evidence": "artifacts/graphics-20261013/"
+}

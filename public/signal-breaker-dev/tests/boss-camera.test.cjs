@@ -33,12 +33,13 @@ test('camera framing is stable when relay nodes are cleared or reopening',()=>{
  a.equal(open.x,sealed.x);a.equal(open.scale,sealed.scale);a.equal(open.y,sealed.y);
  c.boss.phase='purging';a.equal(frame(c).scale,sealed.scale);
 });
-test('camera respects rendered portrait background height when it fits, permits cropping-free letterbox when not',()=>{
- const c=make(3);
- const normal=frame(c);a.ok(normal.scale<=c.height/c.boundsHeight+1e-8);
+test('portrait camera scale follows subjects instead of shrinking with tall decorative art',()=>{
+ const c=make(3,165,390,510);
+ const normal=frame(c);a.ok(normal.scale>c.height/c.boundsHeight,'actors larger than full-background fit');
  c.boundsHeight=2200;c.boundsTop=-985;
- const tall=frame(c);a.ok(tall.scale<=c.height/c.boundsHeight+1e-8);
- a.ok(tall.y>=c.boundsTop && tall.y+c.height/tall.scale<=c.boundsTop+c.boundsHeight+1e-7);
+ const tall=frame(c);a.equal(tall.scale,normal.scale);
+ a.ok((tall.subjectTop-tall.y)*tall.scale>=tall.safeTop-1e-7);
+ a.ok((tall.feet-tall.y)*tall.scale<=c.height-tall.safeBottom+1e-7);
 });
 test('the camera makes no physics changes and does not operate on resolved encounters',()=>{
  const c=make(3),before=JSON.stringify(c);for(let i=0;i<100;i++)frame(c);

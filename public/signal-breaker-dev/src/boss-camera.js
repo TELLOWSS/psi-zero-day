@@ -6,25 +6,31 @@ function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,groun
  if(!Number.isFinite(width)||!Number.isFinite(height)||width<1||height<1||!boss||!player||boss.phase==='resolved')return null;
  // Stable composition: include all three relay nodes, even those recently cleared.
  // Keeping them avoids distracting camera zoom jumps as armour/filters reopen.
- const targets=[{x:player.x,r:39},{x:boss.x,r:149},
+ const targets=[{x:player.x,r:65},{x:boss.x,r:149},
   ...(boss.nodes||[]).map(node=>({x:node.x,r:30}))];
  let left=clamp(Math.min(...targets.map(p=>p.x-p.r)),0,worldWidth);
  let right=clamp(Math.max(...targets.map(p=>p.x+p.r)),0,worldWidth);
  if(right-left<200){left=Math.max(0,left-100);right=Math.min(worldWidth,right+100);}
  const margin=16,span=Math.max(200,right-left),fitScale=(width-2*margin)/span;
- // IMPORTANT: existing Math.max(zoomFit, verticalCover) cropped the boss out.
- // Allow letterbox/edge fill behind controls rather than hide a live weak point.
+ // Fit both axes and leave HUD space rather than crop a live weak point.
  const backgroundCover=height/boundsHeight;
- const scale=Math.max(.01,Math.min(fitScale,backgroundCover));
+ // Fit gameplay subjects, not the entire tall decorative painting. The actor's
+ // feet and all boss relay rings remain visible while unused floor/ceiling crops.
+ const feet=Number.isFinite(player.y)?player.y+31:ground;
+ const bossY=Number.isFinite(boss.y)?boss.y:210;
+ const top=Math.min(bossY-120,...(boss.nodes||[]).map(n=>(Number.isFinite(n.y)?n.y:bossY)-31));
+ const safeTop=70,safeBottom=height*.20;
+ const verticalFit=(height-safeTop-safeBottom)/Math.max(200,feet-top);
+ const scale=Math.max(.01,Math.min(fitScale,verticalFit));
  const visible=width/scale,visibleHeight=height/scale;
  const minX=visible>=worldWidth?(worldWidth-visible)*.5:-margin/scale;
  const maxX=visible>=worldWidth?minX:worldWidth-visible+margin/scale;
  const x=visible>=worldWidth?minX:clamp((left+right-visible)*.5,minX,maxX);
- const wantedY=ground-.65*visibleHeight;
+ const wantedY=feet-(height-safeBottom)/scale;
  const maxY=boundsTop+boundsHeight-visibleHeight;
  const y=maxY>=boundsTop?clamp(wantedY,boundsTop,maxY):boundsTop;
  return {x,y,scale,visible,visibleHeight,targets:{left,right,player:player.x,boss:boss.x},
-         zoomFit:fitScale,verticalCover:backgroundCover};
+         zoomFit:fitScale,verticalCover:backgroundCover,verticalFit,subjectTop:top,feet,safeTop,safeBottom};
 }
 function landscapeFrame({width,height,worldWidth=1100,player,boss}){
  if(!Number.isFinite(width)||!Number.isFinite(height)||!boss||!player||boss.phase==='resolved'||width<=height||height>600||height<140||!Number.isFinite(boss.y)||!Number.isFinite(player.y))return null;

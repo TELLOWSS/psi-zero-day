@@ -1,0 +1,54 @@
+{
+  "version": 7,
+  "date": "2026-10-13",
+  "finalVisualLock": false,
+  "method": "Built-in image_gen edit of existing 4-core atlas, followed by a single transparent-gutter refinement. Original generated PNG copied without pixel edits. Measured source crops preserve native aspect and engine radius.",
+  "assets": [
+    {
+      "path": "core-materials-v3.png",
+      "nativeWidth": 1254,
+      "nativeHeight": 1254,
+      "bytes": 1187875,
+      "sha256": "4cb27b1c944fdc2be73af9cb64be2329c8ba7d01e5fef103a67d941d2d280b01",
+      "format": "RGBA",
+      "grid": [
+        2,
+        2
+      ],
+      "status": "runtime-integrated-production-candidate",
+      "slots": [
+        "metal",
+        "dust",
+        "power",
+        "load"
+      ],
+      "crops": [
+        [
+          145,
+          129,
+          407,
+          441
+        ],
+        [
+          718,
+          135,
+          416,
+          423
+        ],
+        [
+          113,
+          729,
+          467,
+          413
+        ],
+        [
+          795,
+          717,
+          297,
+          443
+        ]
+      ],
+      "replaces": "core-materials-v2.webp"
+    }
+  ]
+}

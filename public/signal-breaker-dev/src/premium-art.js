@@ -376,7 +376,7 @@ class PremiumArt{
   c.save();c.translate(x,y);c.rotate(angle);
   c.drawImage(image,left*sx,top*sy,width*sx,height*sy,-w/2,-h/2,w,h);c.restore();return true;
  }
- constructor(){this.canvas=null;this.cacheStage='';this.clock=0;this.fx=[];this.sparks=[];this.max=75;this.quality='high';this.reducedMotion=false;this.flash=0;this.hitFocus=0;this.lastEventId=0;this.recoil=0;this.recovery=[];this.scene=null;if(typeof Image!=='undefined'){this.scene=root.PSIPresentationAssets.image('art/sb01-delivery-bay-v1.webp');this.coreAtlas=root.PSIPresentationAssets.image('art/core-materials-v2.webp');this.operator=root.PSIPresentationAssets.image('art/operator-idle-v1.webp');}}
+ constructor(){this.canvas=null;this.cacheStage='';this.clock=0;this.fx=[];this.sparks=[];this.max=75;this.quality='high';this.reducedMotion=false;this.flash=0;this.hitFocus=0;this.lastEventId=0;this.recoil=0;this.recovery=[];this.scene=null;if(typeof Image!=='undefined'){this.scene=root.PSIPresentationAssets.image('art/sb01-delivery-bay-v1.webp');this.coreAtlas=root.PSIPresentationAssets.image('art/core-materials-v3.png');this.operator=root.PSIPresentationAssets.image('art/operator-idle-v1.webp');}}
  reset(){this.fx=[];this.sparks=[];this.recovery=[];this.recoil=0;this.flash=0;this.bossImpact=null;this.bossClocks=new WeakMap();}
  setQuality(q){this.quality=['high','balanced','low'].includes(q)?q:'high';this.max=this.quality==='high'?150:this.quality==='balanced'?75:30;if(this.sparks.length>this.max)this.sparks=this.sparks.slice(-this.max);}
  setReducedMotion(v){this.reducedMotion=!!v;}
@@ -440,12 +440,12 @@ class PremiumArt{
  core(c,q,time){
  if(!this.coreAtlas?.complete||!this.coreAtlas.naturalWidth)return false;
  const cell=['metal','dust','power','load'].indexOf(q.kind);if(cell<0)return false;
- const image=this.coreAtlas,w=image.naturalWidth/2,h=image.naturalHeight/2;
+ const image=this.coreAtlas;const crops=[[145,129,407,441],[718,135,416,423],[113,729,467,413],[795,717,297,443]],crop=crops[cell],sx=image.naturalWidth/1254,sy=image.naturalHeight/1254;const width=crop[2],height=crop[3],fit=size=>size/Math.max(width,height);
  // Authored 2x2 transparent cells. Art remains inside the existing collision footprint.
  const size=q.r*2;c.save();c.translate(q.x,q.y);
  const angle=this.reducedMotion?0:q.kind==='metal'?time*.22:q.kind==='load'?Math.sin(time*.7)*.06:q.kind==='dust'?Math.sin(time*.8)*.03:0;
  c.rotate(angle);c.globalAlpha=q.stable?.78:1;
- c.drawImage(image,(cell%2)*w,Math.floor(cell/2)*h,w,h,-size/2,-size/2,size,size);c.restore();
+ const scale=fit(size),dw=width*scale,dh=height*scale;c.drawImage(image,crop[0]*sx,crop[1]*sy,width*sx,height*sy,-dw/2,-dh/2,dw,dh);c.restore();
  c.save();disk(c,q.x,q.y,q.r,null,(palette[q.kind]||palette.metal)[0]+'88',1);
  if(!q.stable&&['dust','power'].includes(q.kind)&&q.mistExposure>0){
   const progress=sat(q.mistExposure/.75);c.beginPath();c.arc(q.x,q.y,q.r+6,-PI/2,-PI/2+TAU*progress);c.strokeStyle='#b6ffe0';c.lineWidth=3;c.stroke();

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.51.0-uiux",
-  "cacheName": "psi-signal-breaker-webpreview-v0.51.0-uiux",
-  "fingerprint": "e22e6302cd49c8ee3550c355b6b8a0ae5ae8bafb46ef2269cd90cec8653b176b",
+  "version": "0.52.0-visual",
+  "cacheName": "psi-signal-breaker-webpreview-v0.52.0-visual",
+  "fingerprint": "1d7cb329cbdd139c5645f52c8a2a0f6a7459380489efbd4cfb635963b9ecdc69",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -135,9 +135,9 @@
       "sha256": "cea0a0d376e12895547c2e88320ef779e50dd9882e0d104242173f7613a26953"
     },
     {
-      "path": "/signal-breaker-dev/art/core-materials-v2.webp",
-      "bytes": 558156,
-      "sha256": "e7c3f272a698e75138a1a66ca9ccd0e0f47928a3745c05034339e19728c9b29c"
+      "path": "/signal-breaker-dev/art/core-materials-v3.png",
+      "bytes": 1187875,
+      "sha256": "4cb27b1c944fdc2be73af9cb64be2329c8ba7d01e5fef103a67d941d2d280b01"
     },
     {
       "path": "/signal-breaker-dev/art/ending-ch01-restored-v1.webp",
@@ -215,9 +215,9 @@
       "sha256": "a8a984de3a00da3482e4e85ded40365489fc44ef861537e85aec5037d82ed342"
     },
     {
-      "path": "/signal-breaker-dev/art/production-v6.json",
-      "bytes": 688,
-      "sha256": "7f9341490cf15a8d52fa3b7d65a3440eb7e95d9cba7685810f4f7c362aae3ab3"
+      "path": "/signal-breaker-dev/art/production-v7.json",
+      "bytes": 1144,
+      "sha256": "1f756380da71c6e4ece4a185b8e46dbacea89c6e9807fb140cabe8991bc49630"
     },
     {
       "path": "/signal-breaker-dev/art/psi-fire-ring-v1.webp",
@@ -336,18 +336,18 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6403,
-      "sha256": "9e22eeccbf5f46057b418550bda84ecf18e951446140449e779bbe857f24f4a2"
+      "bytes": 6404,
+      "sha256": "e8bcc2148b0c7c24a3274263c53f43cd16d459f901654afc5e3973091d8d8a27"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 148206,
-      "sha256": "c6d6e4a08654a45c8c4f1925e00cabe15460b5b2226bedd6430579c4cd459ca6"
+      "bytes": 148248,
+      "sha256": "886282558b311a6b4a586798d83ea36d714c68fb29c5e14b0bd568a2dea2a5b1"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
-      "bytes": 2773,
-      "sha256": "57bff76de95e17286d84d7c633c8a1902df90bf4cd719749b66fab15a37d9ff2"
+      "bytes": 3217,
+      "sha256": "8c3be383e7f7b4bdd56d50aa7111c1ba89151a1ed3ac1a32381fd6a91ca3a347"
     },
     {
       "path": "/signal-breaker-dev/src/burst-rules.js",
@@ -446,8 +446,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 49718,
-      "sha256": "05ebec31abec7caa6b9997c0e38ed253aa1b005c0119852687f89bb2839dd901"
+      "bytes": 49951,
+      "sha256": "b3fd048442e14a495fb338f3f439ba38df87e8f4a502302632f294ad237e3974"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
@@ -471,8 +471,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/responsive-production.css",
-      "bytes": 25031,
-      "sha256": "ee1d24d19a2c7849dc2da2ebed3d6e0b98a7dc907357a5a854c9def702715a40"
+      "bytes": 25869,
+      "sha256": "ff99e486397958c12a06024c059c4b201584211a77ff7f105f2254939387a6a8"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",

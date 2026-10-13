@@ -9,8 +9,8 @@ test('four material sprites use isolated atlas cells and preserve gameplay state
   for(const stable of [false,true]){
    const q={kind,x:500,y:240,r:30,stable,mistExposure:.375,glow:0},before=JSON.stringify(q);
    a.equal(art.core(context,q,5),true);a.equal(JSON.stringify(q),before);
-   const v=calls.at(-1);a.deepEqual(v.slice(1,5),[cell%2*627,Math.floor(cell/2)*627,627,627]);
-   a.deepEqual(v.slice(5),[-30,-30,60,60]);
+   const v=calls.at(-1);a.deepEqual(v.slice(1,5),[[145,129,407,441],[718,135,416,423],[113,729,467,413],[795,717,297,443]][cell]);
+   const [x,y,width,height]=v.slice(5);a.ok(Math.abs(Math.max(width,height)-60)<1e-8);a.equal(x,-width/2);a.equal(y,-height/2);a.ok(width<=60+1e-8&&height<=60+1e-8,'art inside unchanged physical diameter');
   }
   if(['dust','power'].includes(kind))a.ok(arcs.some(v=>Math.abs(v[4]-v[3]-Math.PI)<1e-6),'half-exposure progress');
  }
