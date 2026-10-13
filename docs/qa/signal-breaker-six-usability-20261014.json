@@ -1,0 +1,819 @@
+{
+  "date": "2026-10-14",
+  "release": "0.56.0-mobile-usability",
+  "tests": {
+    "rootPassed": 2059,
+    "build": "PASS",
+    "standalonePassed": 271,
+    "typecheck": "PASS",
+    "rootSkipped": 1
+  },
+  "sixRequests": {
+    "base": "http://127.0.0.1:4173",
+    "method": "Real UI navigation and trusted Chrome touch input at four viewports. No forced victories. Geometry tests are not physical phone ergonomics evidence.",
+    "rows": [
+      {
+        "name": "small",
+        "width": 320,
+        "height": 568,
+        "pad": {
+          "x": 10,
+          "y": 452,
+          "width": 104,
+          "height": 104
+        },
+        "toast": {
+          "background": "rgba(16, 39, 49, 0.22)",
+          "shadow": "none",
+          "events": "none"
+        },
+        "movement": {
+          "value": 1,
+          "pad": "floating",
+          "floating": {
+            "active": true,
+            "pointerId": 3,
+            "startX": 112.39999389648438,
+            "startY": 274.4800109863281,
+            "curX": 160.39999389648438,
+            "curY": 274.4800109863281
+          }
+        },
+        "checks": [
+          "non-sticky footer",
+          "warm stage grid",
+          "ready/home/ready",
+          "dialog/home/ready",
+          "Korean controls",
+          "large portrait pad",
+          "trusted diagonal touch movement",
+          "two-finger floating movement and aim",
+          "release stops movement",
+          "transparent passive notice",
+          "playing/home/resume"
+        ],
+        "errors": []
+      },
+      {
+        "name": "portrait",
+        "width": 390,
+        "height": 844,
+        "pad": {
+          "x": 10,
+          "y": 728,
+          "width": 104,
+          "height": 104
+        },
+        "toast": {
+          "background": "rgba(16, 39, 49, 0.22)",
+          "shadow": "none",
+          "events": "none"
+        },
+        "movement": {
+          "value": 1,
+          "pad": "floating",
+          "floating": {
+            "active": true,
+            "pointerId": 3,
+            "startX": 127.80000305175781,
+            "startY": 473.20001220703125,
+            "curX": 175.8000030517578,
+            "curY": 473.20001220703125
+          }
+        },
+        "checks": [
+          "non-sticky footer",
+          "warm stage grid",
+          "ready/home/ready",
+          "dialog/home/ready",
+          "Korean controls",
+          "large portrait pad",
+          "trusted diagonal touch movement",
+          "two-finger floating movement and aim",
+          "release stops movement",
+          "transparent passive notice",
+          "playing/home/resume"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "pad": {
+          "x": 12,
+          "y": 288,
+          "width": 88,
+          "height": 88
+        },
+        "toast": {
+          "background": "rgba(16, 39, 49, 0.22)",
+          "shadow": "none",
+          "events": "none"
+        },
+        "movement": {
+          "value": 1,
+          "pad": "floating",
+          "floating": {
+            "active": true,
+            "pointerId": 3,
+            "startX": 227.67999267578125,
+            "startY": 280.79998779296875,
+            "curX": 275.67999267578125,
+            "curY": 280.79998779296875
+          }
+        },
+        "checks": [
+          "non-sticky footer",
+          "warm stage grid",
+          "ready/home/ready",
+          "dialog/home/ready",
+          "Korean controls",
+          "large portrait pad",
+          "trusted diagonal touch movement",
+          "two-finger floating movement and aim",
+          "release stops movement",
+          "transparent passive notice",
+          "playing/home/resume"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "pad": {
+          "x": 12,
+          "y": 791,
+          "width": 88,
+          "height": 88
+        },
+        "toast": {
+          "background": "rgba(16, 39, 49, 0.22)",
+          "shadow": "none",
+          "events": "none"
+        },
+        "movement": {
+          "value": 1,
+          "pad": "floating",
+          "floating": {
+            "active": true,
+            "pointerId": 3,
+            "startX": 358.79998779296875,
+            "startY": 648,
+            "curX": 406.79998779296875,
+            "curY": 648
+          }
+        },
+        "checks": [
+          "non-sticky footer",
+          "warm stage grid",
+          "ready/home/ready",
+          "dialog/home/ready",
+          "Korean controls",
+          "large portrait pad",
+          "trusted diagonal touch movement",
+          "two-finger floating movement and aim",
+          "release stops movement",
+          "transparent passive notice",
+          "playing/home/resume"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "uiux": {
+    "base": "http://127.0.0.1:4173",
+    "report": [
+      {
+        "name": "small",
+        "width": 360,
+        "height": 640,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "phone",
+        "width": 390,
+        "height": 844,
+        "bounds": {
+          "left": 12,
+          "right": 127.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "short",
+        "width": 667,
+        "height": 375,
+        "bounds": {
+          "left": 271.8828125,
+          "right": 395.1171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "bounds": {
+          "left": 360.3828125,
+          "right": 483.6171875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "bounds": {
+          "left": 12,
+          "right": 146.46875,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "bounds": {
+          "left": 652.765625,
+          "right": 787.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "fullhd",
+        "width": 1920,
+        "height": 1080,
+        "bounds": {
+          "left": 892.765625,
+          "right": 1027.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      },
+      {
+        "name": "4k",
+        "width": 3840,
+        "height": 2160,
+        "bounds": {
+          "left": 1852.765625,
+          "right": 1987.234375,
+          "visible": true
+        },
+        "errors": [],
+        "checks": [
+          "overlay initial focus and Tab containment",
+          "AUTO-consistent start hint",
+          "item status inside viewport",
+          "native Space does not fire",
+          "pause settings opens actual controls",
+          "EP02 names codes and selection semantics",
+          "talent labels and locked reasons",
+          "no overflow"
+        ]
+      }
+    ]
+  },
+  "journey": {
+    "method": "Browser flows at three viewports, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "runs": [
+          {
+            "state": "won",
+            "time": 52.741666666664315,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 50.39999999999778,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 74.0083333333383,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 44.54166666666478,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 36.274999999998585,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 105.10000000002971,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 92.20000000001944,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 124.36666666671171,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 113.1250000000361,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 120.60000000004204,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "runs": [
+          {
+            "state": "won",
+            "time": 50.74166666666443,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 49.73333333333115,
+            "stage": "CH-02",
+            "life": 3,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 56.008333333330796,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 53.95833333333091,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 33.48333333333208,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 96.02500000002249,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 91.4000000000188,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 114.78333333337075,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 111.93333333336848,
+            "stage": "CH-04",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 119.59166666670791,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "runs": [
+          {
+            "state": "won",
+            "time": 55.23333333333084,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 48.96666666666453,
+            "stage": "CH-02",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 59.29166666666394,
+            "stage": "CH-03",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 55.84166666666414,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 30.408333333332248,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 95.57500000002213,
+            "stage": "CH-01",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 91.7333333333524,
+            "stage": "CH-02",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 127.56666666671426,
+            "stage": "CH-03",
+            "life": 4,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 116.63333333337222,
+            "stage": "CH-04",
+            "life": 5,
+            "attempts": 0
+          },
+          {
+            "state": "won",
+            "time": 122.77500000004378,
+            "stage": "CH-05",
+            "life": 5,
+            "attempts": 0
+          }
+        ],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "tuningHome": {
+    "method": "Three viewport browser tests with ordinary accelerated engine inputs and real UI selection, checkpoint and reload. Separate automatic setting test. No forced clear or life refill.",
+    "rows": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "checks": [
+          "default manual choice",
+          "real first wave",
+          "timer frozen",
+          "checkpoint reload retains draft",
+          "last candidate applied"
+        ],
+        "errors": []
+      },
+      {
+        "name": "automatic",
+        "checks": [
+          "real setting enables automatic valid tuning",
+          "wave two without blocking choice"
+        ]
+      }
+    ]
+  },
+  "resultHome": {
+    "base": "http://127.0.0.1:4173",
+    "method": "Real control clicks at four viewports and real first-wave checkpoint. Loss and veteran access are isolated diagnostic fixtures, not combat win-rate or human ease evidence.",
+    "rows": [
+      {
+        "name": "small",
+        "width": 320,
+        "height": 568,
+        "bounds": {
+          "x": 44,
+          "y": 406,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "bounds": {
+          "x": 64,
+          "y": 478,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "bounds": {
+          "x": 603,
+          "y": 215,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "bounds": {
+          "x": 604,
+          "y": 714,
+          "width": 54,
+          "height": 48
+        },
+        "before": {
+          "id": "CH-01",
+          "seed": 20268929,
+          "loadout": [
+            "pulse",
+            "net"
+          ],
+          "weapon": "net",
+          "frame": "arc"
+        },
+        "checks": [
+          "manual state visible",
+          "one-click auto restore",
+          "retry preparation preserves chosen gear",
+          "old checkpoint cleared",
+          "no JS exception"
+        ]
+      },
+      {
+        "name": "actual-checkpoint-restart",
+        "checks": [
+          "real first wave earns checkpoint",
+          "pause restart uses same seed",
+          "old checkpoint removed"
+        ]
+      },
+      {
+        "name": "veteran-frame-fixture",
+        "checks": [
+          "isolated unlocked EP01 record fixture",
+          "override recommended laser with arc",
+          "retry preparation retains chosen arc in engine and UI"
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Horizontal ground movement retained",
+    "Viewport and trusted desktop touch input do not measure physical phone ergonomics or FPS"
+  ]
+}

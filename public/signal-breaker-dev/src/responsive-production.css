@@ -254,6 +254,38 @@ body.breaker-focus #operationLobby .operation-actions{display:flex!important}
 #operationLobby .operation-main{flex:1 0 auto;min-height:auto}
 #operationLobby .operation-header{flex-shrink:0}
 body.breaker-focus .overlay{position:fixed;inset:0;box-sizing:border-box}
+
+/* Player feedback 2026-10-14: native steel/warm worksite surfaces and clear exits. */
+#operationLobby .operation-actions{position:static!important;bottom:auto;box-shadow:none;backdrop-filter:none;margin-top:16px;background:#142329;border-top:1px solid #b6ab8966}
+#operationLobby #heroStartBtn{background:linear-gradient(150deg,#666852,#263c40)!important;color:#fff0cc!important;border:1px solid #d7bc83!important;box-shadow:inset 0 1px #fff1c444,0 3px 10px #0005!important;border-radius:7px!important;letter-spacing:0!important}
+.operation-stage{border-radius:8px;border-color:#a79c8055;background:#273638;min-height:122px;text-shadow:0 1px 3px #000}
+.operation-stage img{opacity:.62;filter:saturate(.85)}
+.operation-stage:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#14252aed,#13252a55)}
+.operation-stage.selected{border-color:#dbbb7d;box-shadow:inset 0 -3px #dbbb7d}
+.operation-stage.selected img{opacity:.8}
+.stage-badge-action,.operation-stage.selected .stage-badge-action{background:#24393be0;border-color:#c1ae80;color:#ffebc3;box-shadow:none}
+.stage-card-item{background:linear-gradient(145deg,#344346,#172b31);border-color:#b0a58866;border-radius:8px}
+.stage-card-item.current{border-color:#d6b575;background:linear-gradient(145deg,#4a5042,#192f35);box-shadow:inset 0 -3px #bb9c63}
+.stage-card-enter-btn{background:linear-gradient(145deg,#536254,#263b3d);border-color:#b9a579;color:#fff0cb}
+body.breaker-focus .overlay-inner[data-state=ready]{background:linear-gradient(145deg,#263b3bee,#12272af2);border-color:#a89b76;color:#eef0df}
+body.breaker-focus .assist-hint{background:#10273128;border:0;box-shadow:none;text-shadow:0 1px 3px #000}
+.breaker-lobby-return,#stageLobbyReturn{min-height:44px;padding:10px 14px;border:1px solid #829c99;border-radius:7px;background:#233d40;color:#e0eee7;font:inherit;font-size:13px;cursor:pointer;margin:7px 0}
+body.breaker-focus .toast{background:#10273138!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;color:#f0f6eb;text-shadow:0 1px 3px #000,0 0 5px #000;pointer-events:none;padding:4px 8px;max-width:min(400px,calc(100vw - 24px))}
+body.breaker-focus .radio-line,body.breaker-focus .chain-guide{background:#10273130!important;box-shadow:none;border:0;text-shadow:0 1px 3px #000}
+body.breaker-focus #exitBtn{cursor:pointer}
+body.breaker-focus #autoFireBtn{white-space:pre-line;line-height:1.4;font-size:10px}
+@media(orientation:portrait){
+ #operationLobby .operation-stages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow-x:visible;margin:0 16px 16px;gap:10px}
+ #operationLobby .operation-stage{min-height:140px;padding:12px;min-width:0}
+ body.breaker-focus .hud-top .btn-text-full{display:inline;font-size:11px;white-space:nowrap}
+ body.breaker-focus .hud-top .btn-text-short{display:none}
+ body.breaker-focus .hud-top button{padding:4px 2px!important;font-size:11px!important}
+ body.breaker-focus .move-controls #joystick,body.twin-controls .move-controls #joystick{width:104px;height:104px;left:10px;bottom:calc(12px + env(safe-area-inset-bottom));opacity:.9;touch-action:none}
+ body.breaker-focus .move-controls #leftBtn,body.breaker-focus .move-controls #rightBtn,body.twin-controls .move-controls #leftBtn,body.twin-controls .move-controls #rightBtn{display:none}
+ body.breaker-focus .move-controls small{position:fixed;bottom:calc(3px + env(safe-area-inset-bottom));left:40px;font-size:11px}
+ body.breaker-focus .toast{top:auto!important;bottom:calc(236px + env(safe-area-inset-bottom));left:12px!important;transform:none!important;text-align:left;font-size:11px;max-width:calc(100vw - 24px)}
+ body.breaker-focus .assist-hint{background:transparent;border:0;box-shadow:none;text-shadow:0 1px 3px #000;font-size:11px}
+}
 body.breaker-focus .overlay-inner{box-sizing:border-box;overscroll-behavior:contain}
 .overlay-actions-row{position:sticky;bottom:0;background:#102834;z-index:1;padding:8px 0}
 

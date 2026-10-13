@@ -21,6 +21,7 @@ try{for(const [name,width,height] of [['portrait',360,640],['landscape',844,390]
  for(let stage=0;stage<10;stage++){
   if(stage>0){if(stage===5){await page.locator('#overlayPrimary').click();await page.locator('#continueCampaign').click();}else await page.locator('#overlayPrimary').click();}
   assert.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready');
+  if(stage===1){await page.locator('#overlayInner .breaker-lobby-return').click();await page.waitForSelector('#operationLobby:not([hidden])');await page.locator('#resumeRun').click();assert.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready');}
   if(stage>=5){const frame=await page.evaluate(()=>SignalBreakerQA.engine().config.id==='CH-03'?'arc':'laser');await page.locator('#overlayInner [data-evolution="'+frame+'"]').click();}
   await page.locator('#overlayPrimary').click();let attempts=0;
   for(let batch=0;batch<230;batch++){

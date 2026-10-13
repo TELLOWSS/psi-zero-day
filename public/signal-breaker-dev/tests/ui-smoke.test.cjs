@@ -10,6 +10,8 @@ class Element {
  append(...es){this.children.push(...es)}appendChild(el){this.children.push(el)}replaceChildren(...es){this.children=es}
  getBoundingClientRect(){return {left:0,top:0,width:1100,height:620}}getContext(){return proxyContext}
  setAttribute(name,value){this[name]=value;}
+ removeAttribute(name){delete this[name];}
+ querySelector(selector){if(selector==='span'||selector==='.btn-text-full'){this.parts??={};return this.parts[selector]??=new Element('span');}return null;}
  setPointerCapture(){}trigger(n,e={}){for(const cb of this.listeners[n]||[])cb(e)}
 }
 const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}})}, {get:(obj,key)=>key in obj?obj[key]:()=>{},set:(obj,key,v)=>(obj[key]=v,true)});
@@ -18,6 +20,7 @@ for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
 global.location={search:'?entry=prepare'};
 global.window={PSIPresentationAssets:{image:url=>({src:url,complete:false,naturalWidth:0})},SignalBreakerJourney:require('../src/player-journey.js'),SignalBreakerEpisodeTwo:require('../src/episode-two.js'),SignalBreakerWorkshop:require('../src/psi-workshop.js'),SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
+window.SignalBreakerMovementPad=require('../src/movement-pad.js');window.SignalBreakerSession=require('../src/session-flow.js');
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/firing-pose.js'),'utf8'),{filename:'src/firing-pose.js'});
@@ -80,7 +83,7 @@ assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.
 const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');
 for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
 for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.some(c=>c.id==='quickRetry'));assert.ok(elements.overlayInner.children.some(c=>c.textContent===window.SignalBreakerText['breaker.lobby.operations']));
-const picker=elements.overlayInner.children[3].children[0];picker.value='kang_taesik';picker.trigger('change');
+const picker=elements.overlayInner.children.find(c=>c.className==='actor-picker').children[0];picker.value='kang_taesik';picker.trigger('change');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
 const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');
 const before=window.SignalBreakerQA.engine().time;for(let i=0;i<60;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.engine().time,before);
