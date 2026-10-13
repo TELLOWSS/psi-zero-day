@@ -6,7 +6,7 @@ const {chromium}=process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT
  :require('playwright');
 const root=path.resolve(__dirname,'../../..'),out=process.env.SIGNAL_BREAKER_QA_OUTPUT||path.join(root,'causal-qa');
 const url='http://127.0.0.1:5211/signal-breaker-dev/index.html';
-// Keep the complete live boss silhouette and relay points in the same portrait viewport.
+// Keep the complete boss and relays in the actual arena; controls now occupy a separate reserved rail.
 async function verifyPortraitBossFrame(page,width,height,chapter){
  if(height<=width)return;
  await page.waitForFunction(()=>{
@@ -15,7 +15,7 @@ async function verifyPortraitBossFrame(page,width,height,chapter){
   const at=x=>(x-c.x)*c.scale;
   const items=[{x:g.player.x,r:39},{x:b.x,r:149},...b.nodes.map(n=>({x:n.x,r:30}))];
   return items.every(({x,r})=>(x-r<0||at(x-r)>=14)&&(x+r>1100||at(x+r)<=c.width-14))
-  &&(594-c.y)*c.scale>c.height*.34&&(594-c.y)*c.scale<c.height*.84;
+  &&(()=>{const field=document.getElementById('arena').getBoundingClientRect(),controls=document.getElementById('battleControlRail').getBoundingClientRect(),feet=(594-c.y)*c.scale;return feet>=14&&feet<=c.height-14&&field.top+feet<=controls.top-12;})();
  },null,{timeout:7000});
  await page.screenshot({path:path.join(out,`operation-portrait-safe-${chapter}-${width}.png`)});
 }
