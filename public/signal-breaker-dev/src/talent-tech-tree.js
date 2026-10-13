@@ -278,8 +278,9 @@
           weaponLevels: this.weaponLevels,
           weaponSockets: this.weaponSockets
         }));
+        this.lastSaveSucceeded=true;return true;
       } catch (e) {
-        console.warn('TalentTech save error', e);
+        this.lastSaveSucceeded=false;return false;
       }
     }
 

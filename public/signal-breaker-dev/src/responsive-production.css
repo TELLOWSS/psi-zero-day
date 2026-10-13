@@ -239,3 +239,18 @@ dialog.talent-dialog #talentTabContent button{min-height:44px!important;min-widt
 @media (prefers-reduced-motion:reduce){
  .stage-card-item,.stage-card-enter-btn,.hero-start-btn{transition:none}
 }
+
+/* Journey summaries use existing art and stay within modal scroll areas. */
+.journey-progress,.journey-brief{border:1px solid #365462;border-radius:10px;padding:12px;background:#102431;color:#dcf4f5;line-height:1.55;text-align:left}
+.journey-progress{margin:12px 0}.journey-progress p,.journey-brief p{margin:6px 0;font-size:13px}.journey-progress small{display:block;margin-top:8px;color:#b1c9d1}
+.journey-progress button,.journey-brief button{min-height:44px;margin:4px 6px 4px 0;max-width:100%;white-space:normal}.journey-brief{margin:10px 0;width:100%;box-sizing:border-box}.growth-save-status{line-height:1.5;font-size:13px}
+
+.journey-brief .secondary-btn,.journey-progress .secondary-btn{background:#163e4d;color:#d7fcf6;border:1px solid #5a929b;border-radius:8px;padding:8px 12px;font:inherit;font-size:13px;cursor:pointer}
+body.breaker-focus .overlay-inner[data-state=ready]{overscroll-behavior:contain}
+/* Focus mode hides the game footer, not the campaign controls. */
+body.breaker-focus #operationLobby .operation-actions{display:flex!important}
+#operationLobby .operation-main{flex:1 0 auto;min-height:auto}
+#operationLobby .operation-header{flex-shrink:0}
+body.breaker-focus .overlay{position:fixed;inset:0;box-sizing:border-box}
+body.breaker-focus .overlay-inner{box-sizing:border-box;overscroll-behavior:contain}
+.overlay-actions-row{position:sticky;bottom:0;background:#102834;z-index:1;padding:8px 0}

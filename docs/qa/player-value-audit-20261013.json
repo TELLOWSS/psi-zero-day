@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-13",
+  "release": "0.50.0-player-journey",
+  "scope": "Existing approved 10-operation campaign; price/platform undecided, no cash checkout.",
+  "simulation": {
+    "method": "12 fresh-account campaigns, guide +3P and initial 5P only; waves/bosses earn progression, upgrades consume earned parts, earned gems only. 120Hz ordinary command simulation, three same-seed attempts maximum with guided recovery. No state-forced wins, life refill or unlocked stage skip. Not human engagement/purchase evidence.",
+    "campaigns": 12,
+    "complete": 12,
+    "attempts": 142,
+    "won": 120,
+    "lost": 16,
+    "unfinished": 6,
+    "profiles": [
+      {
+        "profile": "stationary",
+        "campaigns": 6,
+        "completed": 6,
+        "attempts": 82,
+        "won": 60,
+        "lost": 16,
+        "capped": 6
+      },
+      {
+        "profile": "guided",
+        "campaigns": 6,
+        "completed": 6,
+        "attempts": 60,
+        "won": 60,
+        "lost": 0,
+        "capped": 0
+      }
+    ]
+  },
+  "browser": {
+    "method": "Browser flows at three viewports, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+    "viewports": [
+      {
+        "name": "portrait",
+        "width": 360,
+        "height": 640,
+        "completed": 10,
+        "errors": [],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ]
+      },
+      {
+        "name": "landscape",
+        "width": 844,
+        "height": 390,
+        "completed": 10,
+        "errors": [],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ]
+      },
+      {
+        "name": "pc",
+        "width": 1440,
+        "height": 900,
+        "completed": 10,
+        "errors": [],
+        "checks": [
+          "fresh guide +3P",
+          "explicit preparation",
+          "ten ordinary combat wins",
+          "cinema before loot",
+          "real upgrade and socket",
+          "episode handoff",
+          "reload persistence",
+          "archive no reward",
+          "no horizontal overflow"
+        ]
+      }
+    ]
+  },
+  "regressions": {
+    "deviceViewports": 8,
+    "growthViewports": 3,
+    "rootTestsPassed": 2059,
+    "rootTestsSkipped": 1,
+    "breakerTestsPassed": 254,
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "releaseAssets": 98,
+  "limits": [
+    "Bots are not human win-rate, fun, retention or paid conversion evidence.",
+    "Six stationary attempts hit the 360-second observation cap; not wins. Guided retries complete.",
+    "Android/iOS physical performance and complete Director art/sound signoff remain.",
+    "No payment or entitlement integration until sales model and price are defined."
+  ],
+  "evidenceDirectory": "artifacts/player-journey-20261013"
+}
