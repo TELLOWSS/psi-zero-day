@@ -2,7 +2,7 @@
  * Pure presentation calculation: never modifies physics, aim, boss or operator state. */
 (function(root){'use strict';
 const clamp=(x,a,b)=>Math.min(Math.max(x,a),b);
-function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,ground=594,player,boss}){
+function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,ground=594,player,boss,insets=null}){
  if(!Number.isFinite(width)||!Number.isFinite(height)||width<1||height<1||!boss||!player||boss.phase==='resolved')return null;
  // Stable composition: include all three relay nodes, even those recently cleared.
  // Keeping them avoids distracting camera zoom jumps as armour/filters reopen.
@@ -19,7 +19,7 @@ function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,groun
  const feet=Number.isFinite(player.y)?player.y+31:ground;
  const bossY=Number.isFinite(boss.y)?boss.y:210;
  const top=Math.min(bossY-120,...(boss.nodes||[]).map(n=>(Number.isFinite(n.y)?n.y:bossY)-31));
- const safeTop=70,safeBottom=height*.20;
+ const safeTop=Number.isFinite(insets?.top)?clamp(insets.top,0,height*.25):70,safeBottom=Number.isFinite(insets?.bottom)?clamp(insets.bottom,0,height*.25):height*.20;
  const verticalFit=(height-safeTop-safeBottom)/Math.max(200,feet-top);
  const scale=Math.max(.01,Math.min(fitScale,verticalFit));
  const visible=width/scale,visibleHeight=height/scale;

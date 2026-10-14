@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.56.0-mobile-usability",
-  "cacheName": "psi-signal-breaker-webpreview-v0.56.0-mobile-usability",
-  "fingerprint": "840ef5811495df2751e86caf91b725e4301141c58b120758865f6045bff75c70",
+  "version": "0.57.0-portrait-immersion",
+  "cacheName": "psi-signal-breaker-webpreview-v0.57.0-portrait-immersion",
+  "fingerprint": "1a0b77ac4ec62cd57855e898a479e965d8f7bac12571721356ff1862ea34ef7a",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 25526,
-      "sha256": "d8834ef74f93f1b29debb4202090992864dfec0be3b31ed64805fb5ebaf6cd33"
+      "bytes": 26027,
+      "sha256": "54b6f6b233d0bebb5ac79a7ff3c6d59ad9f31d6011712fca5eba90d869d2f391"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,18 +336,18 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6460,
-      "sha256": "7e5a7e8037522d96f009624ff16adcc072e640fa1c84129b05a8490af39fef15"
+      "bytes": 6549,
+      "sha256": "ac875f4c79a8d6d6766b276dbf4595b83b4234f3e397667ba5a826ad8aa45594"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 152039,
-      "sha256": "2925322844b24b98c0d7d524dbffb3c31221587768f9533b4fcd3c5819873d49"
+      "bytes": 157811,
+      "sha256": "cce7a41f593eb80ecb09b895453574cba77fbaabc40afff3f8d01bd32b21b131"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
-      "bytes": 3217,
-      "sha256": "8c3be383e7f7b4bdd56d50aa7111c1ba89151a1ed3ac1a32381fd6a91ca3a347"
+      "bytes": 3400,
+      "sha256": "573a13881ece9ca9f72b68ae0a63718b74a18f25c43911c5b3e86ddbd4d8f496"
     },
     {
       "path": "/signal-breaker-dev/src/burst-rules.js",
@@ -426,8 +426,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 41475,
-      "sha256": "0d21b82fa79e6d3b428310b80901bb4346bfcdf1debcb78fa388e6d286d94d56"
+      "bytes": 42937,
+      "sha256": "5979fe5ae3af190ec406cbc66f339bf1d11617eaa9fe44648f0d34029712d150"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -453,6 +453,11 @@
       "path": "/signal-breaker-dev/src/portrait-camera.js",
       "bytes": 1356,
       "sha256": "ee7a6bb36b5f149187c4ff2a65c0435903a706110150d19cc7681f07420e7825"
+    },
+    {
+      "path": "/signal-breaker-dev/src/portrait-immersion.css",
+      "bytes": 8789,
+      "sha256": "ceee572b2d5cdbe8f2cc25846dfd3d5ac7dbbb4e92d3c3d1bc81204556ad8923"
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",

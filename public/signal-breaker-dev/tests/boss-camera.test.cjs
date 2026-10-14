@@ -1,6 +1,19 @@
 const {test}=require('node:test'),a=require('node:assert/strict');
 const {frame}=require('../src/boss-camera.js');
 const W=1100,ground=594;
+test('portrait immersive insets fit boss weak points and actor above the separate control dock',()=>{
+ for(const [width,height] of [[320,300],[390,576],[412,647],[768,756]]){
+  const c={width,height,worldWidth:W,boundsTop:-606,boundsHeight:1730,player:{x:290,y:563},boss:{x:700,y:205,phase:'sealed',nodes:[{x:600,y:170},{x:800,y:170},{x:700,y:325}]},insets:{top:16,bottom:24}};
+  const view=frame(c);a.equal(view.safeTop,16);a.equal(view.safeBottom,24);
+  a.ok((view.subjectTop-view.y)*view.scale>=15.9);a.ok((view.feet-view.y)*view.scale<=height-23.9);
+  for(const node of c.boss.nodes)a.ok((node.y-view.y)*view.scale>=0&&(node.y-view.y)*view.scale<height);
+ }
+});
+test('custom portrait insets preserve classic defaults when absent or invalid',()=>{
+ const c={width:390,height:576,player:{x:290,y:563},boss:{x:700,y:205,phase:'sealed',nodes:[]}};
+ const classic=frame(c),invalid=frame({...c,insets:{top:NaN,bottom:Infinity}});a.deepEqual(invalid,classic);
+ a.equal(classic.safeTop,70);a.equal(classic.safeBottom,576*.2);
+});
 const make=(stage,playerX=165,width=390,height=844)=>({
  width,height,worldWidth:W,boundsTop:-606,boundsHeight:1730,ground,
  player:{x:playerX},boss:{x:650+(stage-1)*25,phase:'sealed',

@@ -1,0 +1,83 @@
+/* Portrait field composition. All gameplay controls remain outside the arena. */
+.portrait-menu-btn,.portrait-battle-notice,.portrait-boost-btn{display:none}
+.portrait-pause-tools{display:none}
+/* Keep the map return reachable when a portrait menu is rotated to landscape. */
+body.breaker-focus.portrait-immersive.overview-open #viewBtn{display:grid!important;visibility:visible!important;z-index:16}
+@media (orientation:portrait){
+ body.breaker-focus.portrait-immersive{--portrait-header:60px;--portrait-dock:172px}
+ body.breaker-focus.portrait-immersive[data-active-boss=true]{--portrait-header:96px}
+ body.breaker-focus.portrait-immersive .game-card{padding-top:calc(var(--portrait-header) + env(safe-area-inset-top));padding-bottom:calc(var(--portrait-dock) + env(safe-area-inset-bottom))}
+ body.breaker-focus.portrait-immersive .canvas-wrap{inset:calc(var(--portrait-header) + env(safe-area-inset-top)) 0 calc(var(--portrait-dock) + env(safe-area-inset-bottom));height:auto;min-height:0}
+ body.breaker-focus.portrait-immersive .hud-top{top:env(safe-area-inset-top);left:max(4px,env(safe-area-inset-left));right:max(4px,env(safe-area-inset-right));height:56px;min-height:56px;padding:4px!important;grid-template-columns:minmax(52px,1fr) 34px 72px 44px 44px;gap:4px;border:0;background:#102429e8;border-radius:0;box-shadow:none}
+ body.breaker-focus.portrait-immersive .hud-top::before{display:none}
+ body.breaker-focus.portrait-immersive .hud-top .hud-block-clickable{grid-column:1;grid-row:1}
+ body.breaker-focus.portrait-immersive .hud-top .hud-block:has(#collected){grid-column:2;grid-row:1}
+ body.breaker-focus.portrait-immersive .hud-top .shield-hud{grid-column:3;grid-row:1;gap:3px}
+ body.breaker-focus.portrait-immersive .hud-top .hud-label{font-size:10px}
+ body.breaker-focus.portrait-immersive .hud-top .hud-block strong{font-size:11px}
+ body.breaker-focus.portrait-immersive .health{gap:1px}
+ body.breaker-focus.portrait-immersive .health .heart{width:13px;height:16px}
+ body.breaker-focus.portrait-immersive .hud-top #stageSelectBtn,
+ body.breaker-focus.portrait-immersive .hud-top #guideBtn,
+ body.breaker-focus.portrait-immersive .hud-top #sandboxToggleBtn,
+ body.breaker-focus.portrait-immersive .hud-top #talentBtn{display:none}
+ body.breaker-focus.portrait-immersive .hud-top #portraitMenuBtn{display:flex;grid-column:4;grid-row:1;align-items:center;justify-content:center}
+ body.breaker-focus.portrait-immersive .hud-top #pauseBtn{grid-column:5;grid-row:1}
+ body.breaker-focus.portrait-immersive .hud-top #portraitMenuBtn,
+ body.breaker-focus.portrait-immersive .hud-top #pauseBtn{min-width:44px!important;width:44px;height:44px;border-radius:6px;box-shadow:none;background:#20383bbb;color:#f3eedb;font-size:11px!important}
+ body.breaker-focus.portrait-immersive .boss-encounter{top:calc(60px + env(safe-area-inset-top));left:8px;right:8px;width:auto;max-width:none;height:30px;min-height:0;transform:none;border:0;border-radius:0;padding:0;background:transparent;box-shadow:none}
+ body.breaker-focus.portrait-immersive .boss-encounter::before,
+ body.breaker-focus.portrait-immersive .boss-encounter-thumb,
+ body.breaker-focus.portrait-immersive #bossEncounterStage{display:none}
+ body.breaker-focus.portrait-immersive .boss-encounter-body{min-width:0;width:100%}
+ body.breaker-focus.portrait-immersive .boss-encounter-title{font-size:11px;line-height:18px;gap:6px}
+ body.breaker-focus.portrait-immersive #bossEncounterName{font-size:11px;white-space:nowrap}
+ body.breaker-focus.portrait-immersive #bossEncounterPhase{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ body.breaker-focus.portrait-immersive .boss-encounter-track{height:3px;margin-top:2px}
+ body.breaker-focus.portrait-immersive #exitBtn,
+ body.breaker-focus.portrait-immersive #viewBtn,
+ body.breaker-focus.portrait-immersive #boostBtn,
+ body.breaker-focus.portrait-immersive #itemStatus,
+ body.breaker-focus.portrait-immersive #veteranStatus,
+ body.breaker-focus.portrait-immersive #signalObjective,
+ body.breaker-focus.portrait-immersive #assistHint,
+ body.breaker-focus.portrait-immersive #chainGuide,
+ body.breaker-focus.portrait-immersive #radioLine,
+ body.breaker-focus.portrait-immersive #toast,
+ body.breaker-focus.portrait-immersive #deviceStatus,
+ body.breaker-focus.portrait-immersive #hudBottom{display:none!important}
+ body.breaker-focus.portrait-immersive.overview-open #viewBtn{display:grid!important;position:fixed;top:calc(60px + env(safe-area-inset-top));bottom:auto;right:8px}
+ body.breaker-focus.portrait-immersive .portrait-battle-notice{display:block;position:fixed;bottom:calc(150px + env(safe-area-inset-bottom));left:8px;right:8px;z-index:7;height:20px;line-height:20px;font-size:11px;color:#fff0bf;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;text-shadow:0 1px 3px #000;background:transparent}
+ body.breaker-focus.portrait-immersive .portrait-battle-notice[hidden]{display:none}
+ body.breaker-focus.portrait-immersive .utility-controls,
+ body.breaker-focus.portrait-immersive.twin-controls .utility-controls{bottom:calc(106px + env(safe-area-inset-bottom));left:50%;right:auto;transform:translateX(-50%);display:flex;gap:4px;max-width:calc(100vw - 12px);width:max-content}
+ body.breaker-focus.portrait-immersive .utility-controls .util-btn{width:56px;max-width:56px;min-width:44px!important;flex:0 1 56px;min-height:44px;height:44px;font-size:11px;border-radius:6px;background:#1430369c;backdrop-filter:none;box-shadow:none}
+ body.breaker-focus.portrait-immersive #portraitBoostBtn{display:block}
+ body.breaker-focus.portrait-immersive #portraitBoostBtn[hidden]{display:none}
+ body.breaker-focus.portrait-immersive .utility-controls .util-btn:disabled{display:none}
+ body.breaker-focus.portrait-immersive .move-controls #joystick{position:fixed;left:4px;bottom:calc(2px + env(safe-area-inset-bottom));width:104px;height:104px;opacity:.75}
+ body.breaker-focus.portrait-immersive .move-controls small{display:none}
+ body.breaker-focus.portrait-immersive #aimPad{position:fixed;right:4px;left:auto;bottom:calc(8px + env(safe-area-inset-bottom));width:76px;height:76px;opacity:.8}
+ body.breaker-focus.portrait-immersive #aimPad #aimAngle{top:-22px;right:0;left:auto;bottom:auto;width:76px;text-align:center;font-size:11px}
+ body.breaker-focus.portrait-immersive #aimPadLabel{top:auto;bottom:0;font-size:10px}
+ body.breaker-focus.portrait-immersive .fire-controls,
+ body.breaker-focus.portrait-immersive.twin-controls .fire-controls{left:50%;right:auto;bottom:calc(62px + env(safe-area-inset-bottom));transform:translateX(-50%);display:grid;grid-template-columns:44px 44px;gap:4px;padding:0;background:transparent;border:0;box-shadow:none}
+ body.breaker-focus.portrait-immersive .fire-controls #smartBtn,
+ body.breaker-focus.portrait-immersive .fire-controls #autoFireBtn{display:none}
+ body.breaker-focus.portrait-immersive .fire-controls #pulseBtn,
+ body.breaker-focus.portrait-immersive .fire-controls #netBtn{width:44px;min-width:44px;min-height:44px;height:44px;padding:2px;border-radius:6px;font-size:9px;background:#143036b8;backdrop-filter:none;gap:1px;overflow:hidden}
+ body.breaker-focus.portrait-immersive .fire-controls .weapon-icon{width:24px;height:18px}
+ body.breaker-focus.portrait-immersive .fire-controls .weapon-btn>span:last-child{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ body.breaker-focus.portrait-immersive #fireBtn,
+ body.breaker-focus.portrait-immersive.twin-controls #fireBtn{left:50%;right:auto;bottom:calc(4px + env(safe-area-inset-bottom));transform:translateX(-50%);width:56px;height:56px;min-height:56px;font-size:11px;box-shadow:none}
+ body.breaker-focus.portrait-immersive #fireBtn b{font-size:11px}
+ body.breaker-focus.portrait-immersive #fireBtn span{font-size:9px}
+ body.breaker-focus.portrait-immersive #overlay:has([data-state=paused]),
+ body.breaker-focus.portrait-immersive #overlay:has([data-state=ready]){padding-top:calc(64px + env(safe-area-inset-top))}
+ body.breaker-focus.portrait-immersive .overlay-inner[data-state=paused],
+ body.breaker-focus.portrait-immersive .overlay-inner[data-state=ready]{max-height:calc(100dvh - 80px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+ .portrait-pause-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0;width:100%}
+ .portrait-pause-tools button{min-height:44px;padding:8px;border:1px solid #9d9a7770;border-radius:6px;background:#263d3f;color:#f5edcc;font:inherit;font-size:12px}
+ .portrait-pause-tools button[aria-pressed=true]{background:#3b4b3d;border-color:#dfc28b}
+ .portrait-pause-tools .portrait-field-details{grid-column:1/-1;padding:8px;text-align:left;line-height:1.55;font-size:12px;color:#d5e5dd;border-left:2px solid #d4b875}
+}
