@@ -102,7 +102,8 @@ function addPortraitPauseTools(parent){
  action('view','breaker.session.overview',()=>{portraitOverview=true;hideOverlay();$('viewBtn').click();});
  const style=action('immersion',portraitImmersion?'breaker.portrait.immersive':'breaker.portrait.classic',()=>{setPortraitImmersion(!portraitImmersion);style.textContent=t(portraitImmersion?'breaker.portrait.immersive':'breaker.portrait.classic');style.setAttribute('aria-pressed',String(portraitImmersion));});style.setAttribute('aria-pressed',String(portraitImmersion));
  const info=document.createElement('div');info.className='portrait-field-details';
- info.textContent=[$('signalObjective').hidden?'':$('signalObjective').textContent,$('veteranStatus').hidden?'':$('veteranStatus').textContent,$('itemStatus').hidden?'':$('itemStatus').textContent,$('deviceStatus').textContent,t('breaker.usability.score')+' '+game.score.toLocaleString(),t('breaker.portrait.deadline')+' '+$('time').textContent].filter(Boolean).join(' · ');panel.append(info);parent.append(panel);
+ const clock=game.veteran?t('breaker.portrait.deadline')+' '+Math.max(0,Math.ceil(game.waveTimeRemaining()))+'초':t('breaker.portrait.elapsed')+' '+$('time').textContent;
+ info.textContent=[$('signalObjective').hidden?'':$('signalObjective').textContent,$('veteranStatus').hidden?'':$('veteranStatus').textContent,$('itemStatus').hidden?'':$('itemStatus').textContent,$('deviceStatus').textContent,t('breaker.usability.score')+' '+game.score.toLocaleString(),clock].filter(Boolean).join(' · ');panel.append(info);parent.append(panel);
 }
 function updatePortraitNotice(){
  const notice=$('portraitBattleNotice');let message='';

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.57.0-portrait-immersion",
   "cacheName": "psi-signal-breaker-webpreview-v0.57.0-portrait-immersion",
-  "fingerprint": "76c023e0b18195a0786ccecd7aa1f53bf75ba58f7115ab24317bc84c87db0740",
+  "fingerprint": "18a5d3ff9687aef738caa7899e65cd2788c32cc9fcf152b102397de98164c99f",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -341,8 +341,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 156970,
-      "sha256": "37e0706d223ce2a899b543c3e1f326a0401e203f2a561c16477a827f4324e271"
+      "bytes": 157091,
+      "sha256": "11c5e19f2f20c7d64832a217a706545a2868853c8710b259ddee0dc5a88912cd"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -426,8 +426,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 42489,
-      "sha256": "d80e9f4e2b421011c90cf01416c87d76bf65157dcdb38a1f9a50f9b4be627a9d"
+      "bytes": 42533,
+      "sha256": "83bb26a7958be88689f2e30a0dbf65b64f8caa2b278184c84d0930e512eb12cd"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",

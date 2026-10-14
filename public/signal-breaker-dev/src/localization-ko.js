@@ -19,6 +19,7 @@
 'breaker.portrait.info':'현장 정보',
 'breaker.portrait.fullscreen':'전체화면',
 'breaker.portrait.deadline':'남은 시간',
+'breaker.portrait.elapsed':'작전 시간',
 'breaker.usability.home':'브레이커 홈',
 'breaker.usability.stage':'작전',
 'breaker.usability.flow':'구간',
