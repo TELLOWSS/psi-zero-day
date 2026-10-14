@@ -1,0 +1,21 @@
+const {chromium}=require(process.env.PSI_PLAYWRIGHT_MODULE||'playwright'),a=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4173',out=path.resolve(process.env.PSI_QA_OUTPUT||'docs/qa/signal-breaker-episode-three-20261014');fs.mkdirSync(out,{recursive:true});
+(async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'}),rows=[];try{
+ for(const [name,width,height] of [['portrait-small',320,568],['portrait',390,844],['tablet',768,1024],['landscape-small',568,320],['landscape',844,390],['pc',1440,900]]){
+ const context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(base+'/signal-breaker-dev/index.html');await page.waitForSelector('#operationLobby:not([hidden])',{timeout:45000});await page.locator('#episodeThree').click();a.equal(await page.locator('#heroStartBtn').isDisabled(),true,'fresh account EP03 locked');
+ // Only preparation/geometry uses a declared historical-save fixture. Full journey QA earns all fifteen.
+ await page.evaluate(()=>{const records={};for(const pre of ['','V-'])for(let i=1;i<=5;i++)records[pre+'CH-0'+i]={won:true};localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({version:1,records,sound:false}));});
+ await page.reload();await page.waitForSelector('#operationLobby:not([hidden])',{timeout:45000});a.equal(await page.locator('#operationLobby').getAttribute('data-episode'),'3');a.match(await page.locator('#journeyCount').textContent(),/10 \/ 15/);
+ const tabs=await page.locator('.episode-switch button').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {id:el.id,x:r.x,y:r.y,w:r.width,h:r.height};}));a.ok(tabs.every(t=>t.h>=44&&t.w>=44));a.ok(tabs.every(t=>t.x+t.w<=width+1));
+ await page.locator('#heroStartBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().episode),3);a.equal(await page.evaluate(()=>SignalBreakerQA.engine().evolution.recipe),'prism');a.match(await page.locator('#missionTitle').textContent(),/交|교차/);
+ await page.locator('#overlayInner [data-evolution="singularity"]').click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().evolution.recipe),'singularity');await page.locator('#overlayInner [data-evolution="prism"]').click();
+ await page.locator('#overlayPrimary').click();await page.waitForTimeout(2400);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().episode),3);
+ const bounds=await page.evaluate(()=>{const r=document.getElementById('canvasWrap').getBoundingClientRect();return {arena:{x:r.x,y:r.y,w:r.width,h:r.height},overflow:document.documentElement.scrollWidth>innerWidth+2,controls:[...document.querySelectorAll('.touch-controls button')].filter(e=>e.getBoundingClientRect().width&&getComputedStyle(e).visibility!=='hidden').map(e=>{const b=e.getBoundingClientRect();return {id:e.id,x:b.x,y:b.y,w:b.width,h:b.height};})};});
+ a.equal(bounds.overflow,false);if(width<1000)a.ok(bounds.controls.every(c=>c.x+c.w<=bounds.arena.x||c.x>=bounds.arena.x+bounds.arena.w||c.y+c.h<=bounds.arena.y||c.y>=bounds.arena.y+bounds.arena.h),'immersive controls outside arena');
+ await page.screenshot({path:path.join(out,name+'-combat.png')});
+ if(width<1000&&height<1100)await page.locator('#portraitMenuBtn').click();else await page.locator('#pauseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'paused');
+ await page.locator('#overlayInner .breaker-lobby-return').click();await page.waitForSelector('#operationLobby:not([hidden])');await page.locator('#resumeRun').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
+ a.deepEqual(errors,[]);rows.push({name,width,height,tabs,bounds,errors});await context.close();console.log('PASS EP03 visual/navigation '+name);
+ }fs.writeFileSync(path.join(out,'responsive.json'),JSON.stringify({method:'Fresh lock checks + declared ten-win historical-save preparation fixture; live combat at six viewports. Full fifteen-win journey is a separate ordinary-input test. No human fun or native-device FPS claim.',base,rows},null,2));
+ }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

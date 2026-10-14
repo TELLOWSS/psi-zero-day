@@ -651,3 +651,6 @@ dialog.stage-dialog #closeStageSelect{background:#1a3c49;border:1px solid #4a758
 
 
 
+
+/* Third episode tabs wrap without shrinking touch targets. */
+.episode-switch,.stage-tabs-row{flex-wrap:wrap}.episode-switch button,.stage-tabs-row button{min-height:44px}.episode-switch button[aria-pressed="true"],.stage-tabs-row button[aria-pressed="true"]{border-color:#91ffe1;color:#ddfff3;background:#1d4d5e}

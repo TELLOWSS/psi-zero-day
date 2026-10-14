@@ -1,0 +1,377 @@
+{
+  "method": "Browser flows at three viewports and fifteen operations, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits. Not human usability or frame-rate evidence.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 360,
+      "height": 640,
+      "runs": [
+        {
+          "state": "won",
+          "time": 62.56666666666376,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 48.424999999997894,
+          "stage": "CH-02",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 73.65000000000468,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 63.15833333333039,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 29.841666666665613,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 93.1916666666869,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 91.23333333335201,
+          "stage": "CH-02",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 131.60000000004464,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 129.36666666671334,
+          "stage": "CH-04",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 120.57500000004202,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 89.11666666668366,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 94.72500000002145,
+          "stage": "CH-02",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 93.35000000002036,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 112.57500000003566,
+          "stage": "CH-04",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 101.2000000000266,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "runs": [
+        {
+          "state": "won",
+          "time": 57.55833333333071,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 49.23333333333118,
+          "stage": "CH-02",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 61.016666666663845,
+          "stage": "CH-03",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 44.42499999999812,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 30.833333333332224,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 97.14166666669004,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 91.65833333335235,
+          "stage": "CH-02",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 114.35833333337041,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 141.67500000003548,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 116.64166666670556,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 92.37500000001958,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 94.0666666666876,
+          "stage": "CH-02",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 94.72500000002145,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 116.54166666670548,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 96.5916666666896,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "runs": [
+        {
+          "state": "won",
+          "time": 57.88333333333069,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 49.78333333333115,
+          "stage": "CH-02",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 72.18333333333685,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 68.58333333333398,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 31.108333333332208,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 97.90833333335732,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 86.44166666668153,
+          "stage": "CH-02",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 110.02500000003363,
+          "stage": "CH-03",
+          "life": 4,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 128.68333333338063,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 119.00000000004077,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 92.42500000001962,
+          "stage": "CH-01",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 98.90000000002478,
+          "stage": "CH-02",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 109.93333333336689,
+          "stage": "CH-03",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 111.05833333336778,
+          "stage": "CH-04",
+          "life": 5,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 95.57500000002213,
+          "stage": "CH-05",
+          "life": 5,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    }
+  ]
+}

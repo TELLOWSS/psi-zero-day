@@ -1,0 +1,512 @@
+{
+  "method": "Fresh lock checks + declared ten-win historical-save preparation fixture; live combat at six viewports. Full fifteen-win journey is a separate ordinary-input test. No human fun or native-device FPS claim.",
+  "base": "http://127.0.0.1:4174",
+  "rows": [
+    {
+      "name": "portrait-small",
+      "width": 320,
+      "height": 568,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 466.390625,
+          "w": 100,
+          "h": 51
+        },
+        {
+          "id": "veteranTour",
+          "x": 110,
+          "y": 466.390625,
+          "w": 100,
+          "h": 51
+        },
+        {
+          "id": "episodeThree",
+          "x": 218,
+          "y": 466.390625,
+          "w": 100,
+          "h": 51
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 0,
+          "y": 60,
+          "w": 320,
+          "h": 336
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "shieldBtn",
+            "x": 102,
+            "y": 418,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 162,
+            "y": 418,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 114,
+            "y": 462,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "netBtn",
+            "x": 162,
+            "y": 462,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "fireBtn",
+            "x": 132,
+            "y": 508,
+            "w": 56,
+            "h": 56
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 466.390625,
+          "w": 123.328125,
+          "h": 44
+        },
+        {
+          "id": "veteranTour",
+          "x": 133.328125,
+          "y": 466.390625,
+          "w": 123.34375,
+          "h": 44
+        },
+        {
+          "id": "episodeThree",
+          "x": 264.671875,
+          "y": 466.390625,
+          "w": 123.328125,
+          "h": 44
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 0,
+          "y": 60,
+          "w": 390,
+          "h": 612
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "shieldBtn",
+            "x": 137,
+            "y": 694,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 197,
+            "y": 694,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 149,
+            "y": 738,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "netBtn",
+            "x": 197,
+            "y": 738,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "fireBtn",
+            "x": 167,
+            "y": 784,
+            "w": 56,
+            "h": 56
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 455.390625,
+          "w": 104.90625,
+          "h": 44
+        },
+        {
+          "id": "veteranTour",
+          "x": 114.90625,
+          "y": 455.390625,
+          "w": 116.984375,
+          "h": 44
+        },
+        {
+          "id": "episodeThree",
+          "x": 239.890625,
+          "y": 455.390625,
+          "w": 147.046875,
+          "h": 44
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 0,
+          "y": 60,
+          "w": 768,
+          "h": 792
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "shieldBtn",
+            "x": 326,
+            "y": 874,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 386,
+            "y": 874,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 338,
+            "y": 918,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "netBtn",
+            "x": 386,
+            "y": 918,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "fireBtn",
+            "x": 356,
+            "y": 964,
+            "w": 56,
+            "h": 56
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "landscape-small",
+      "width": 568,
+      "height": 320,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 385.296875,
+          "w": 201.5,
+          "h": 44
+        },
+        {
+          "id": "veteranTour",
+          "x": 211.5,
+          "y": 385.296875,
+          "w": 145,
+          "h": 44
+        },
+        {
+          "id": "episodeThree",
+          "x": 364.5,
+          "y": 385.296875,
+          "w": 201.5,
+          "h": 44
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 116,
+          "y": 56,
+          "w": 284,
+          "h": 240
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "leftBtn",
+            "x": 12,
+            "y": 258,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "rightBtn",
+            "x": 66,
+            "y": 258,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "shieldBtn",
+            "x": 410,
+            "y": 112,
+            "w": 48,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 462,
+            "y": 112,
+            "w": 48,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 406,
+            "y": 60,
+            "w": 76,
+            "h": 44
+          },
+          {
+            "id": "netBtn",
+            "x": 486,
+            "y": 60,
+            "w": 76,
+            "h": 44
+          },
+          {
+            "id": "fireBtn",
+            "x": 424,
+            "y": 258,
+            "w": 56,
+            "h": 56
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 263.296875,
+          "w": 104.90625,
+          "h": 44
+        },
+        {
+          "id": "veteranTour",
+          "x": 114.90625,
+          "y": 263.296875,
+          "w": 116.984375,
+          "h": 44
+        },
+        {
+          "id": "episodeThree",
+          "x": 239.890625,
+          "y": 263.296875,
+          "w": 147.046875,
+          "h": 44
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 116,
+          "y": 56,
+          "w": 560,
+          "h": 310
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "leftBtn",
+            "x": 12,
+            "y": 328,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "rightBtn",
+            "x": 66,
+            "y": 328,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "shieldBtn",
+            "x": 686,
+            "y": 112,
+            "w": 48,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 738,
+            "y": 112,
+            "w": 48,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 682,
+            "y": 60,
+            "w": 76,
+            "h": 44
+          },
+          {
+            "id": "netBtn",
+            "x": 762,
+            "y": 60,
+            "w": 76,
+            "h": 44
+          },
+          {
+            "id": "fireBtn",
+            "x": 700,
+            "y": 328,
+            "w": 56,
+            "h": 56
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "tabs": [
+        {
+          "id": "episodeOne",
+          "x": 2,
+          "y": 526.25,
+          "w": 104.90625,
+          "h": 44
+        },
+        {
+          "id": "veteranTour",
+          "x": 114.90625,
+          "y": 526.25,
+          "w": 116.984375,
+          "h": 44
+        },
+        {
+          "id": "episodeThree",
+          "x": 239.890625,
+          "y": 526.25,
+          "w": 147.046875,
+          "h": 44
+        }
+      ],
+      "bounds": {
+        "arena": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 900
+        },
+        "overflow": false,
+        "controls": [
+          {
+            "id": "leftBtn",
+            "x": 106,
+            "y": 811,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "rightBtn",
+            "x": 160,
+            "y": 811,
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "shieldBtn",
+            "x": 661.5,
+            "y": 648,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "magnetBtn",
+            "x": 722.5,
+            "y": 648,
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "smartBtn",
+            "x": 604,
+            "y": 706.5,
+            "w": 54,
+            "h": 48
+          },
+          {
+            "id": "autoFireBtn",
+            "x": 664,
+            "y": 708.5,
+            "w": 58,
+            "h": 44
+          },
+          {
+            "id": "pulseBtn",
+            "x": 728,
+            "y": 684,
+            "w": 51,
+            "h": 93
+          },
+          {
+            "id": "netBtn",
+            "x": 785,
+            "y": 691.5,
+            "w": 51,
+            "h": 78
+          },
+          {
+            "id": "fireBtn",
+            "x": 686,
+            "y": 808,
+            "w": 68,
+            "h": 68
+          }
+        ]
+      },
+      "errors": []
+    }
+  ]
+}

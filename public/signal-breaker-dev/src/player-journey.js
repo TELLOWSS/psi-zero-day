@@ -3,11 +3,11 @@
  'use strict';
  const stages=['CH-01','CH-02','CH-03','CH-04','CH-05'];
  function progress(records={}){
-  const routes=[false,true].flatMap(veteran=>stages.map(id=>({id,veteran,key:(veteran?'V-':'')+id})));
+  const routes=[1,2,3].flatMap(episode=>stages.map(id=>({id,episode,veteran:episode>1,key:(episode===3?'E3-':episode===2?'V-':'')+id})));
   const complete=route=>records?.[route.key]?.won===true;
   const first=routes.find(route=>!complete(route));
-  return {completed:routes.filter(complete).length,total:10,next:first||null,
-   episodeOne:routes.slice(0,5).filter(complete).length,episodeTwo:routes.slice(5).filter(complete).length};
+  return {completed:routes.filter(complete).length,total:15,next:first||null,
+   episodeOne:routes.slice(0,5).filter(complete).length,episodeTwo:routes.slice(5,10).filter(complete).length,episodeThree:routes.slice(10).filter(complete).length};
  }
  function mastery(game,previous={}){
   const current={chain:game.bestChain>=3,reflect:game.reflectedHits>=3,gear:(game.usedWeapons?.size||0)>=2};

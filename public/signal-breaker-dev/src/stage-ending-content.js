@@ -1,7 +1,7 @@
 /* Authored campaign endings; derive evidence without changing combat rules. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.SignalBreakerEndings=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
- const VERSION='ch01-ending-v1';
+ const VERSION='ch01-ending-v1',EP3_VERSION='assault-ending-v1';
  // Focal positions are authored from the restored image, not gameplay coordinates.
  const cameras={
   'CH-01':{world:47,human:42,memory:47,hook:71},
@@ -44,7 +44,7 @@
    shots:Object.freeze(shots.map(shot=>direct(stageId,shot)))});
  }
  Object.freeze(definitions);
- const definition=id=>Object.hasOwn(definitions,id)?definitions[id]:null;
+ const definition=(id,episode)=>{const d=Object.hasOwn(definitions,id)?definitions[id]:null;if(!d||episode!==3)return d;return {...d,titleId:'breaker.ep03.'+id.slice(-1)+'.name',shots:d.shots.map(shot=>({...shot,...(!shot.id.startsWith('recall')?{lineId:'breaker.ep03.ending.'+shot.id}:{}),titleId:'breaker.ep03.'+id.slice(-1)+'.name'}))};};
  // Derived only from engine terminal state. No PSI score or real-site assessment.
  function record(game,runSerial){
   const d=definition(game?.config?.id);if(!d)return null;
@@ -52,6 +52,7 @@
    ||game.wave!==game.waveCount||game.boss?.identity!==d.bossIdentity||game.boss.phase!=='resolved'
    ||game.cores.length||game.pendingCores.length||!game.circuit.every(n=>n.hit)
    ||!game.boss.nodes.every(n=>n.hit))return null;
+  if(game.episode===3)return {version:EP3_VERSION,episode:3,id:EP3_VERSION+':'+d.stageId+':'+game.seed+':'+runSerial,stageId:d.stageId,bossIdentity:d.bossIdentity,origin:'game',measurementKind:'simulated',externalSync:false,evidence:{bossResolved:true,nodesResolved:true,circuitResolved:true,residualSignals:0,sourceAssessment:'unmeasured',surges:game.assault.surges,breaks:game.assault.breaks}};
   if(d.stageId!=='CH-01'){
    if(d.stageId==='CH-02'&&game.boss.segment!==game.boss.maxSegments||d.stageId==='CH-03'&&game.boss.filterStage!==game.boss.maxFilterStages)return null;
    if(d.stageId==='CH-04'&&game.boss.loadStage!==game.boss.maxLoadStages)return null;
@@ -74,6 +75,7 @@
  }
  function valid(value){
   const d=definition(value?.stageId);if(!d)return false;
+  if(value.version===EP3_VERSION)return value.episode===3&&value.bossIdentity===d.bossIdentity&&typeof value.id==='string'&&value.id.startsWith(EP3_VERSION+':'+d.stageId+':')&&value.origin==='game'&&value.measurementKind==='simulated'&&value.externalSync===false&&value.evidence?.bossResolved===true&&value.evidence.nodesResolved===true&&value.evidence.circuitResolved===true&&value.evidence.residualSignals===0&&value.evidence.sourceAssessment==='unmeasured'&&Number.isSafeInteger(value.evidence.breaks)&&value.evidence.breaks>=0&&value.evidence.surges===Math.floor(value.evidence.breaks/6);
   if(d.stageId!=='CH-01')return value.version===CAMPAIGN_VERSION&&value.bossIdentity===d.bossIdentity
    &&typeof value.id==='string'&&value.id.startsWith(CAMPAIGN_VERSION+':'+d.stageId+':')
    &&value.origin==='game'&&value.measurementKind==='simulated'&&value.externalSync===false
@@ -83,6 +85,6 @@
   &&value.origin==='game'&&value.measurementKind==='simulated'&&value.externalSync===false
   &&value.evidence?.observed===true&&value.evidence.controlled===true&&value.evidence.verified===true
   &&value.evidence.bossResolved===true&&value.evidence.residualSignals===0;}
- const evidenceIds=value=>!valid(value)?[]:value.stageId==='CH-01'?['breaker.ending.evidence.observed','breaker.ending.evidence.controlled','breaker.ending.evidence.verified']:['breaker.ending.ch'+value.stageId.slice(3)+'.evidence.nodes','breaker.ending.ch'+value.stageId.slice(3)+'.evidence.boss','breaker.ending.evidence.residual'];
+ const evidenceIds=value=>!valid(value)?[]:value.episode===3?['breaker.ep03.ending.evidence','breaker.ending.evidence.residual']:value.stageId==='CH-01'?['breaker.ending.evidence.observed','breaker.ending.evidence.controlled','breaker.ending.evidence.verified']:['breaker.ending.ch'+value.stageId.slice(3)+'.evidence.nodes','breaker.ending.ch'+value.stageId.slice(3)+'.evidence.boss','breaker.ending.evidence.residual'];
  return {VERSION,definition,record,valid,evidenceIds};
 });

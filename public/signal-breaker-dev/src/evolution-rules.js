@@ -18,7 +18,7 @@ function advance(g,id){if(!canAdvance(g,id))return false;if(id==='capstone')g.ev
 function restore(g,e){if(!e||!['arc','laser'].includes(e.frame)||e.recipe!==null&&(!RECIPES[e.recipe]||RECIPES[e.recipe].frame!==e.frame||g.pickupCount<EpisodeTwo.requiredParts(g)))return false;const branch=e.branch??null,capstone=e.capstone??false;if(branch!==null&&(!BRANCHES.includes(branch)||!e.recipe||g.wave<2||g.pickupCount<9)||typeof capstone!=='boolean'||capstone&&(!branch||g.wave<3||g.pickupCount<14))return false;g.evolution={frame:e.frame,recipe:e.recipe,branch,capstone};return true;}
 function armor(g,spec){return g.veteran&&!spec.echo?Math.round((18+stage(g)*6)*(spec.tier+1)*(1+(g.wave-1)*.35)):0;}
 function active(g){const e=g.evolution,spec=g.veteran&&e.recipe&&g.loadout.includes(RECIPES[e.recipe]?.support)?RECIPES[e.recipe]:null;return spec?{...spec,targets:Math.min(5,spec.targets+(e.branch==='spread'?1+(e.capstone?1:0):0))}:null;}
-function selectFrame(g,frame){if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null,branch:null,capstone:false};return true;}
+function selectFrame(g,frame){if(g.episode===3)return false;if(!g.veteran||g.state!=='ready'||!['arc','laser'].includes(frame))return false;g.evolution={frame,recipe:null,branch:null,capstone:false};return true;}
 function evolve(g,recipe){
  const spec=RECIPES[recipe];if(!g.veteran||g.state!=='intermission'||g.pickupCount<EpisodeTwo.requiredParts(g)||!spec||g.evolution.recipe||g.config.gateStable&&!['mist','net'].includes(spec.support))return false;
  g.evolution={frame:spec.frame,recipe,branch:null,capstone:false};g.loadout=['pulse',spec.support];g.weapon='pulse';
