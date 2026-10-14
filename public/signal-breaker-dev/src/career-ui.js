@@ -1,6 +1,6 @@
 /* Presentation only: career rules and transactions live in TalentTechManager. */
 (function(root){'use strict';
-function render(parent,{manager,characters,identity,text,canSelect,onSelect,onChange}){
+function render(parent,{manager,characters,identity,text,canSelect,onSelect,onChange,recommendationHost}){
  const api=root.SignalBreakerTalentTech,t=text,make=(tag,cls,content)=>{const e=document.createElement(tag);e.className=cls;if(content)e.textContent=content;return e;};
  const section=make('section','career-panel');section.setAttribute('aria-label',t('breaker.career.roster'));
  section.append(make('h3','',t('breaker.career.roster')),make('p','career-explainer',t(canSelect?'breaker.career.selectHelp':'breaker.career.locked')));
@@ -13,7 +13,7 @@ function render(parent,{manager,characters,identity,text,canSelect,onSelect,onCh
  section.append(make('p','career-explainer',t('breaker.career.unlock').replace('{tree}',api.TALENT_TREES[career.tree].name)),steps);
  const recommendation=manager.recommendation(),advice=make('div','career-recommendation');advice.setAttribute('role','status');
  if(recommendation){const node=api.TALENT_TREES[recommendation.tree].tiers.find(n=>n.id===recommendation.id);advice.append(make('strong','',t('breaker.career.recommended')+' · '+node.name),make('p','',node.desc),make('small','',t('breaker.career.cost').replace('{rank}',String(recommendation.rank+1)).replace('{max}',String(node.maxRank))));const button=make('button','primary-btn',t('breaker.career.apply'));button.type='button';button.id='applyRecommendedTalent';button.addEventListener('click',()=>{if(manager.investTalent(recommendation.id))onChange();else onChange();});advice.append(button);}else advice.append(make('p','',t(manager.getAvailablePoints()>0?'breaker.career.full':'breaker.career.noPoints')));
- advice.append(make('small','',t('breaker.career.ranks')),make('small','',t('breaker.career.shared')));section.prepend(advice);advice.prepend(make('h3','',(identity[id]?.name||id)+' · '+t('breaker.career.'+id+'.name')));parent.append(section);
+ const notes=make('details','tech-growth-notes');notes.append(make('summary','',t('breaker.tech.rules')),make('small','',t('breaker.career.ranks')),make('small','',t('breaker.career.shared')));advice.append(notes);if(recommendationHost)recommendationHost.append(advice);else section.prepend(advice);if(!recommendationHost)advice.prepend(make('h3','',(identity[id]?.name||id)+' · '+t('breaker.career.'+id+'.name')));parent.append(section);
 }
 root.SignalBreakerCareerUI={render};
 })(window);

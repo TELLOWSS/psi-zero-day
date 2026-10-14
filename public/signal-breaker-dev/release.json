@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.59.0-episode-three",
-  "cacheName": "psi-signal-breaker-webpreview-v0.59.0-episode-three",
-  "fingerprint": "a9c3fe7c03d85089f49336e986cbcbe30cba5f8ca1ef39592c1620cac4c45bb1",
+  "version": "0.60.0-living-tech-tree",
+  "cacheName": "psi-signal-breaker-webpreview-v0.60.0-living-tech-tree",
+  "fingerprint": "d096db1c91c5bc7c59e4d28796b51ede7a8718bffcf34c826f64db66afd7a965",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -625,6 +625,21 @@
       "sha256": "0d673f7bf3018dae02b1409870b45ce77fd5d92b582ebd7815a14b2745e8abf9"
     },
     {
+      "path": "/signal-breaker-dev/art/tech-nodes-atlas-v2.webp",
+      "bytes": 335828,
+      "sha256": "87c6e6f9dd3c045f426d0a7e47129fcd6576d151694d52508a3dcaea3261e7fe"
+    },
+    {
+      "path": "/signal-breaker-dev/art/tech-reactor-world-v1.webp",
+      "bytes": 535080,
+      "sha256": "e7be670bfd0f7e7ac3762fe67f533fa5207ecfe8a9f153d8277fa4f4a28993de"
+    },
+    {
+      "path": "/signal-breaker-dev/art/tech-tree-art-v1.json",
+      "bytes": 5424,
+      "sha256": "125b1c30d75ce19b8eb8b8e149dc855f9125fd3d11ddca69ea2180c4e988ecc2"
+    },
+    {
       "path": "/signal-breaker-dev/art/world-conveyor-v4.webp",
       "bytes": 529118,
       "sha256": "4ca1691d049dc9b913385e3e63ae073a269789470a520297c9e06953ef78d2e4"
@@ -661,8 +676,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 26436,
-      "sha256": "a2d8055bc89862b77a449dc1651debcd675a07f31ab8ac29c04975bb776b25e8"
+      "bytes": 26532,
+      "sha256": "359ec2013a7b990de6ef6875e7eaed571c3abe7c1e6a1c419e0bce05c97723b6"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -671,13 +686,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11106,
-      "sha256": "4649775960d7b6ad304835eb8b51c4a36d15bb6bf33cc959ff97943e7422e7de"
+      "bytes": 11263,
+      "sha256": "cdc14719a0945fc774e2bd2465b6ae462253110938872c72c6ad41bb28f54b17"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 165081,
-      "sha256": "04f041039a68d6aa27e48e1b824861ab815d8f85db1cec48963a6892fae4762a"
+      "bytes": 161808,
+      "sha256": "9141a705b839bc7a639eeb787cceeafa27114dcb1d27d406850551768b89cc87"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -696,8 +711,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/career-ui.js",
-      "bytes": 3341,
-      "sha256": "7f0aad8e66ba522954017030d845ead9ab398da1c13abfcf5812ee5cb8954e3a"
+      "bytes": 3555,
+      "sha256": "b281ce94dbf8e0fef753c153cccd05021846d09a1de65217525e7cff0a4e6d6a"
     },
     {
       "path": "/signal-breaker-dev/src/causal-source.js",
@@ -781,8 +796,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 51121,
-      "sha256": "b6a69a11a4db552f71ff871b78b9b58b1424ed976ab5d09f2ede1e2d426a56e9"
+      "bytes": 52405,
+      "sha256": "6ec86e39d9a64864038adc37423f05d620bb074170ca51be81fb4caca98f696b"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -863,6 +878,16 @@
       "path": "/signal-breaker-dev/src/talent-tech-tree.js",
       "bytes": 22498,
       "sha256": "309a3d4f93781d2e70724b23f3a42c2eba3b923c37b4febfabe6c818b599e2cd"
+    },
+    {
+      "path": "/signal-breaker-dev/src/tech-tree-art.css",
+      "bytes": 10245,
+      "sha256": "209e198d0d50cbb343fb320299628ae148aaaff1de975d168d2055ca478e2862"
+    },
+    {
+      "path": "/signal-breaker-dev/src/tech-tree-art.js",
+      "bytes": 10334,
+      "sha256": "df58115e8ca54cc8ac34940d8d088b04edb60e49abd69ba64356f37aa56ce2d2"
     }
   ]
 }

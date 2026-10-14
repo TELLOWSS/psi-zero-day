@@ -1,0 +1,19 @@
+{
+  "method": "Actual cache installation, network disabled, image decode and one real starter-point investment, offline reload and rank persistence, locked scanner inspection.",
+  "images": [
+    {
+      "path": "art/tech-reactor-world-v1.webp",
+      "w": 1672,
+      "h": 941
+    },
+    {
+      "path": "art/tech-nodes-atlas-v2.webp",
+      "w": 971,
+      "h": 1620
+    }
+  ],
+  "caches": [
+    "psi-signal-breaker-webpreview-v0.60.0-living-tech-tree"
+  ],
+  "errors": []
+}

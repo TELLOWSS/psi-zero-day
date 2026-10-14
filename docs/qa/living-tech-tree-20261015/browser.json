@@ -1,0 +1,209 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "method": "Fresh accounts, real starter points and manager/UI operations, no fabricated progression. Browser geometry and animation checks, not native Android FPS evidence.",
+  "rows": [
+    {
+      "name": "portrait-small",
+      "width": 320,
+      "height": 568,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape-small",
+      "width": 568,
+      "height": 320,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "reduced": false,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "reduced-motion",
+      "width": 390,
+      "height": 844,
+      "reduced": true,
+      "assets": [
+        {
+          "url": "art/tech-reactor-world-v1.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "url": "art/tech-nodes-atlas-v2.webp",
+          "width": 971,
+          "height": 1620
+        }
+      ],
+      "checks": [
+        "fifteen authored raster nodes",
+        "locked inspection costs nothing",
+        "branch choice",
+        "five real one-point investments",
+        "earned power link",
+        "motion control",
+        "24 real weapon-tier previews without part consumption",
+        "no overflow"
+      ],
+      "errors": []
+    }
+  ]
+}

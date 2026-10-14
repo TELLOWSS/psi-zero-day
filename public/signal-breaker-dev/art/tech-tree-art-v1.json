@@ -1,0 +1,35 @@
+{
+  "version": "tech-tree-art-v1",
+  "date": "2026-10-15",
+  "generation": "Built-in image_gen tool; model identifier not exposed",
+  "scope": "Signal Breaker talent/weapon progression presentation only",
+  "assets": [
+    {
+      "path": "art/tech-reactor-world-v1.webp",
+      "original": "docs/art/signal-breaker-tech-tree-20261015/tech-reactor-world-v1.png",
+      "width": 1672,
+      "height": 941,
+      "prompt": "Use case: stylized-concept. Asset type: final production background for Signal Breaker Korean construction-site action RPG skill tree. Create an exceptionally polished cinematic photorealistic industrial engineering scene, a luminous branching three-core technology reactor integrated into a believable high-rise construction-site workshop. Dark brushed steel, copper coils, machined brass, translucent glass, precision cables, cranes and unfinished concrete softly visible behind. Three connected engineering disciplines: emerald shield generator on the left, amber kinetic compression engine in the center, violet electromagnetic recovery reactor on the right. The three units branch upward like a sophisticated circuit-tree sculpture, with intricate energy conduits and restrained luminous filaments. Wide landscape composition about 16:9, full bleed; large readable dark negative areas across middle/lower region to overlay real interactive Korean UI. Crisp premium realistic physically based materials, cinematic depth, beautiful warm/cool lighting, subtle particles, extraordinary craftsmanship, coherent with realistic industrial safety equipment and construction-world art. This is background art, NOT a screenshot or fake UI. No people, no text, no letters, no numbers, no logos, no watermark, no invented buttons or drawn skill nodes. No fantasy castles, no firearms, no cartoon. Deliver high resolution."
+    },
+    {
+      "path": "art/tech-nodes-atlas-v2.webp",
+      "original": "docs/art/signal-breaker-tech-tree-20261015/tech-nodes-atlas-v2.png",
+      "width": 971,
+      "height": 1620,
+      "grid": {
+        "columns": 3,
+        "rows": 5,
+        "order": [
+          "defense",
+          "kinetic",
+          "engineering"
+        ]
+      },
+      "prompt": "Use case: stylized-concept. Asset type: final production skill-node icon atlas for Signal Breaker, realistic construction-site engineering RPG. Create ONE image, precisely THREE equal columns by FIVE equal rows, fifteen separate highly detailed 3D machined industrial devices, one centered isolated icon per cell on uniform very dark navy background. Portrait aspect ratio exactly 3:5 so every cell is square, large resolution and exquisite crisp detail. Equal cell centers and generous 20 percent safe margins, no overlapping between cells, no connecting lines, no borders, no text, no letters, no numbers, no logos, no watermarks. Consistent orthographic three-quarter product view and cinematic photoreal PBR steel, brass, copper, glass, cable materials. Column 1 emerald tactical protection: row1 shock-absorbing pad assembly, row2 precision tilt deflector, row3 emergency shield emitter, row4 dust-pressure filtering cartridge, row5 magnificent ultimate shield-ring generator. Column2 amber kinetic braking: row1 high pressure compression chamber, row2 resonance vibration fins, row3 armor-piercing industrial pulse resonator (not ammunition or firearm), row4 triple wave capacitor, row5 magnificent kinetic overdrive turbine. Column3 violet engineering recovery: row1 fine electromagnetic recovery coil, row2 deployable capture mesh assembly, row3 filtered mist injector, row4 smart remote recovery module, row5 magnificent ultimate industrial recovery lattice. Each successive row feels an engineering upgrade, last row is spectacular but remains within its own cell. Restrained emissive energy and refined premium craftsmanship, grounded realistic construction tech, beautiful readable silhouettes at small UI sizes. No fantasy swords, no humanoids, no guns, no cartoon, no skulls. This is actual game texture art, not a screenshot or interface mockup.",
+      "editInput": "docs/art/signal-breaker-tech-tree-20261015/tech-nodes-atlas-v1.png",
+      "editPrompt": "Use case: precise-object-edit. This is the edit target: the provided 3-column x 5-row Signal Breaker industrial skill atlas. Change ONLY the cell in COLUMN THREE, ROW THREE (the middle-row rightmost mist-emitting device) into a signal-resonance scanner: an exquisitely detailed steel/brass industrial sensor module with a violet glass scanning lens, small rotating radar receiver ring and clear resonance sensing elements, no mist or fluid cylinders. The actual game skill is a signal resonance scanner, not a mist injector. Keep ALL OTHER FOURTEEN icons, their exact silhouettes, colors, lighting, materials, positions, scale, and the uniform very dark navy background unchanged. Keep the precise 3 x 5 equal-cell portrait composition, same 3:5 aspect ratio, all icons within their original cell, do not add borders, words, numbers, logos, UI, watermark, or connectors. Maintain ultra detailed cinematic photoreal PBR construction engineering style. One surgical cell replacement, do not redesign the sheet."
+    }
+  ],
+  "delivery": "Original PNG preserved; WebP quality 92, no creative pixel editing or resizing; live labels not baked into artwork",
+  "rightsEvidence": "Generation provenance recorded; this metadata is not legal clearance"
+}

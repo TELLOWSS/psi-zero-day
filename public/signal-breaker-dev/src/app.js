@@ -496,10 +496,10 @@ function renderTalentTech(){
   const mgr=talentManager();
   $('tabTalents').classList.toggle('active',talentActiveTab==='talents');
   $('tabWeapons').classList.toggle('active',talentActiveTab==='weapons');$('tabTalents').setAttribute('aria-pressed',String(talentActiveTab==='talents'));$('tabWeapons').setAttribute('aria-pressed',String(talentActiveTab==='weapons'));
-  const container=$('talentTabContent');
+  const container=$('talentTabContent'),scrollBefore=container.dataset.techTab===talentActiveTab?container.scrollTop:0;container.dataset.techTab=talentActiveTab;
   container.replaceChildren();
   if(talentActiveTab==='talents'){
-    window.SignalBreakerCareerUI.render(container,{manager:mgr,characters:window.SignalBreakerActors.characters,identity:window.SignalBreakerActors.characterIdentity,text:t,canSelect:(game.state==='ready'||!$('operationLobby').hidden)&&!game.training,onSelect:id=>{if(mgr.setCharacter(id)){characterId=id;premium.actor=undefined;clearInput();safeSave();const select=document.getElementById('actorSelect');if(select)select.value=id;}renderTalentTech();},onChange:renderTalentTech});
+    const {recommendationHost}=window.SignalBreakerTechTreeArt.render(container,{manager:mgr,text:t,onChange:renderTalentTech,identity:window.SignalBreakerActors.characterIdentity,reduced:reduceMotion,quality});window.SignalBreakerCareerUI.render(container,{recommendationHost,manager:mgr,characters:window.SignalBreakerActors.characters,identity:window.SignalBreakerActors.characterIdentity,text:t,canSelect:(game.state==='ready'||!$('operationLobby').hidden)&&!game.training,onSelect:id=>{if(mgr.setCharacter(id)){characterId=id;premium.actor=undefined;clearInput();safeSave();const select=document.getElementById('actorSelect');if(select)select.value=id;}renderTalentTech();},onChange:renderTalentTech});
     const header=document.createElement('div');
     header.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#0d2936;border-radius:10px;margin-bottom:12px;';
     header.innerHTML=`<div><strong style="color:#ffd58f;font-size:14px;">보유 전문화 포인트: ${mgr.getAvailablePoints()} P</strong><small style="display:block;color:#92b4be;font-size:11px;">웨이브 완료·교본·보스 보상으로 획득 (획득 ${mgr.points}P · 투자 ${mgr.spentPoints}/31P, 다음 단계는 선행 특성 완료 후 개방)</small></div>`;
@@ -509,37 +509,11 @@ function renderTalentTech(){
     resetBtn.addEventListener('click',()=>{const success=mgr.resetTalents();renderTalentTech();if(success)toast('전문화 특성이 초기화되었습니다',0.8);});
     header.append(resetBtn);
     container.append(header);
-    const treesGrid=document.createElement('div');
-    treesGrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;';
-    for(const tree of Object.values(TM.TALENT_TREES)){
-      const col=document.createElement('div');col.className='talent-tree-column';col.dataset.tree=tree.id;
-      col.style.cssText=`background:#0b212dbd;border:1px solid ${tree.color}44;border-radius:12px;padding:12px;`;
-      col.innerHTML=`<h3 style="margin:0 0 6px;color:${tree.color};font-size:13px;">${tree.name}</h3><p style="margin:0 0 10px;font-size:10px;color:#89a8b2;line-height:1.4;">${tree.desc}</p>`;
-      const route=document.createElement('div');route.className='talent-route';route.setAttribute('aria-label',t('breaker.career.route'));for(const [i,node] of tree.tiers.entries()){const step=document.createElement('span');step.textContent=(i+1)+' · '+(mgr.talents[node.id]||0)+'/'+node.maxRank;step.title=node.name;step.className=(mgr.talents[node.id]||0)===node.maxRank?'is-earned':mgr.canInvest(node.id)?'is-next':'';route.append(step);if(i<tree.tiers.length-1)route.append(document.createTextNode(' → '));}col.append(route);
-      const tierList=document.createElement('div');
-      tierList.style.cssText='display:flex;flex-direction:column;gap:8px;';
-      for(const tier of tree.tiers){
-        const activeEffect=TM.ACTIVE_TALENT_EFFECTS[tier.id];
-        const rank=mgr.talents[tier.id]||0;
-        const item=document.createElement('div');item.className='talent-row';item.dataset.unlocked=String(tree.tiers.indexOf(tier)===0||(mgr.talents[tree.tiers[tree.tiers.indexOf(tier)-1].id]||0)===tree.tiers[tree.tiers.indexOf(tier)-1].maxRank);item.tabIndex=-1;item.setAttribute('role','group');item.setAttribute('aria-label',tier.name);
-        item.style.cssText=`background:#102c3a;border:1px solid ${rank>0?tree.color:'#304d5b'};border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;`;
-        item.innerHTML=`<div style="flex:1;min-width:0;padding-right:8px;"><div style="display:flex;align-items:center;gap:6px;"><strong style="font-size:11px;color:${rank>0?'#fff':'#bad2db'}">${tier.name}</strong><span style="font-size:10px;color:${tree.color};font-weight:800;">[${rank}/${tier.maxRank}]</span></div><small style="font-size:9px;color:#84a3ad;display:block;margin-top:2px;line-height:1.3;">${activeEffect}</small></div>`;
-        const investBtn=document.createElement('button');
-        investBtn.type='button';investBtn.dataset.talent=tier.id;investBtn.className='iconbtn';investBtn.style.cssText=`font-size:11px;min-width:32px;height:32px;padding:2px;border-color:${rank<tier.maxRank&&mgr.getAvailablePoints()>0?tree.color:'#476572'};`;
-        investBtn.textContent=activeEffect?'+':'준비 중';
-        investBtn.disabled=!mgr.canInvest(tier.id);investBtn.setAttribute('aria-label',t('breaker.ui.invest').replace('{name}',tier.name).replace('{rank}',String(rank)).replace('{max}',String(tier.maxRank)));if(investBtn.disabled){const reason=rank>=tier.maxRank?'breaker.ui.max':mgr.getAvailablePoints()<=0?'breaker.ui.points':'breaker.ui.predecessor';investBtn.title=t(reason);const note=document.createElement('small');note.className='talent-lock-reason';note.textContent=t(reason);item.append(note);}
-        investBtn.addEventListener('click',e=>{e.stopPropagation();if(mgr.investTalent(tier.id)){tone(520,0.06,'triangle',0.12,80);renderTalentTech();const next=container.querySelector('[data-talent="'+tier.id+'"]');(next?.disabled?next.closest('.talent-row'):next)?.focus?.({preventScroll:true});}});
-        item.append(investBtn);
-        tierList.append(item);
-      }
-      col.append(tierList);
-      treesGrid.append(col);
-    }
-    container.append(treesGrid);
+
   }else{
     const suggested=mgr.equipmentRecommendation(game.loadout);if(suggested){const advice=document.createElement('p');advice.className='career-recommendation';const button=document.createElement('button');button.type='button';button.className='primary-btn';button.id='applyRecommendedEquipment';button.textContent=t('breaker.career.recommended')+' · '+TM.WEAPON_TECHS[suggested.weapon].name+' · '+(suggested.type==='upgrade'?t('breaker.career.equipmentCost'):TM.SOCKET_GEMS.find(g=>g.id===suggested.gemId).name+' · '+t('breaker.career.socketCost'));button.addEventListener('click',()=>{if(suggested.type==='upgrade')mgr.upgradeWeapon(suggested.weapon);else mgr.socketGem(suggested.weapon,suggested.slot,suggested.gemId);renderTalentTech();});advice.append(button);container.append(advice);}
     const weapGrid=document.createElement('div');
-    weapGrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;';
+    weapGrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:12px;';
     const offsets={pulse:'0% 0%',net:'50% 0%',magnet:'100% 0%',mist:'0% 100%',anchor:'50% 100%',scan:'100% 100%'};
     for(const [wKey,wDef] of Object.entries(TM.WEAPON_TECHS)){
       const curLvl=mgr.weaponLevels[wKey]||1;
@@ -592,11 +566,11 @@ function renderTalentTech(){
       col.append(upBtn);
       weapGrid.append(col);
     }
-    container.append(weapGrid);for(const [i,col] of [...weapGrid.children].entries()){const key=Object.keys(TM.WEAPON_TECHS)[i],path=document.createElement('p');path.className='weapon-tier-path';path.textContent=t('breaker.career.weaponPath')+' '+mgr.weaponLevels[key]+'/4 · '+TM.WEAPON_TECHS[key].tiers.map((node,j)=>(j+1<=mgr.weaponLevels[key]?'✓ ':'')+node.name).join(' → ');col.prepend(path);}
+    window.SignalBreakerTechTreeArt.decorateWeapons(weapGrid,{manager:mgr,text:t,reduced:reduceMotion,quality});container.append(weapGrid);for(const [i,col] of [...weapGrid.children].entries()){const key=Object.keys(TM.WEAPON_TECHS)[i],path=document.createElement('p');path.className='weapon-tier-path';path.textContent=t('breaker.career.weaponPath')+' '+mgr.weaponLevels[key]+'/4 · '+TM.WEAPON_TECHS[key].tiers.map((node,j)=>(j+1<=mgr.weaponLevels[key]?'✓ ':'')+node.name).join(' → ');col.prepend(path);}
   }
   const health=document.createElement('p');health.className='growth-save-status';health.setAttribute('role','status');health.textContent=t(mgr.lastSaveSucceeded===false?'breaker.journey.unsaved':'breaker.journey.saved');container.append(health);
  if(mgr.lastSaveSucceeded===false){const retry=document.createElement('button');retry.type='button';retry.className='secondary-btn';retry.textContent=t('breaker.journey.retrySave');retry.addEventListener('click',()=>{mgr.save();renderTalentTech();});container.append(retry);}
- game?.applyTalentStats?.(mgr.getStats());
+ game?.applyTalentStats?.(mgr.getStats());container.scrollTop=scrollBefore;
 }
 let pendingBossLoot=null;
 function triggerBossLoot(){
