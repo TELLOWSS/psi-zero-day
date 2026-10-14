@@ -1718,7 +1718,8 @@
 .survivors-monarch-hero-img {
   width: 90px;
   height: 120px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center bottom;
   border-radius: 12px;
   border: 2px solid #38bdf8;
   box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);

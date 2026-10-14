@@ -59,10 +59,12 @@ export function projectCharacterVisualAssets(
   });
 }
 
+// Compatibility name: detail views must use the approved WATCH roster identity,
+// not the older cinematic portraits with different faces, ages and helmets.
 export const HIRES_PORTRAITS: Readonly<Record<string, string>> = Object.freeze({
-  kang_taesik: 'assets/episode01/hires/kang-taesik-portrait.webp',
-  yoon_sungho: 'assets/episode01/hires/yoon-sungho-portrait.webp',
-  lim_junho: 'assets/episode01/hires/lim-junho-portrait.webp',
+  kang_taesik: visuals.characters.kang_taesik.portrait_path,
+  yoon_sungho: visuals.characters.yoon_sungho.portrait_path,
+  lim_junho: visuals.characters.lim_junho.portrait_path,
 });
 
 export const HIRES_KEY_ART = Object.freeze({
@@ -71,7 +73,7 @@ export const HIRES_KEY_ART = Object.freeze({
 
 export function characterHighResPortraitUri(characterId: Id, resolve: AssetResolver): string | undefined {
   if (HIRES_PORTRAITS[characterId]) {
-    return HIRES_PORTRAITS[characterId];
+    return characterPortraitUri(characterId, resolve) ?? HIRES_PORTRAITS[characterId];
   }
   return characterPortraitUri(characterId, resolve);
 }

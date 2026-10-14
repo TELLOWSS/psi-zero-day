@@ -1,0 +1,376 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "reference": "WATCH patrol-agent roster; expression and map images also visually compared against approved cast production files",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-portrait.webp?v=afe3c5220802"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/choi-minseok-portrait.webp?v=0e3e6bc6d402"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/seo-jeongmin-portrait.webp?v=6a70cdac9751"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/oh-seungjae-portrait.webp?v=9c395505bd7c"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/player-portrait.webp",
+          "hero": "/assets/episode01/characters/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4174/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-portrait.webp?v=afe3c5220802"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/choi-minseok-portrait.webp?v=0e3e6bc6d402"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/seo-jeongmin-portrait.webp?v=6a70cdac9751"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/oh-seungjae-portrait.webp?v=9c395505bd7c"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/player-portrait.webp",
+          "hero": "/assets/episode01/characters/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4174/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-portrait.webp?v=afe3c5220802"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/choi-minseok-portrait.webp?v=0e3e6bc6d402"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/seo-jeongmin-portrait.webp?v=6a70cdac9751"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/oh-seungjae-portrait.webp?v=9c395505bd7c"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/player-portrait.webp",
+          "hero": "/assets/episode01/characters/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4174/assets/episode01/characters/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4174/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    }
+  ],
+  "tests": {
+    "passed": 2062,
+    "skipped": 1,
+    "typecheck": "PASS",
+    "build": "PASS"
+  },
+  "visualAudit": {
+    "portraitsAndExpressions": [
+      "public/assets/episode01/characters/choi-minseok-portrait.webp",
+      "public/assets/episode01/characters/kang-taesik-portrait.webp",
+      "public/assets/episode01/characters/kang-taesik-supportive.webp",
+      "public/assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "public/assets/episode01/characters/lim-junho-concerned.webp",
+      "public/assets/episode01/characters/lim-junho-portrait.webp",
+      "public/assets/episode01/characters/oh-seungjae-portrait.webp",
+      "public/assets/episode01/characters/player-focused-portrait-v1.png",
+      "public/assets/episode01/characters/player-portrait.webp",
+      "public/assets/episode01/characters/player-skilled-portrait-v1.png",
+      "public/assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "public/assets/episode01/characters/yoon-sungho-appreciative.webp",
+      "public/assets/episode01/characters/yoon-sungho-portrait.webp",
+      "public/assets/episode01/characters/performance/kang-taesik-conflict.webp",
+      "public/assets/episode01/characters/performance/lee-jaehoon-concern.webp",
+      "public/assets/episode01/characters/performance/lim-junho-relief.webp",
+      "public/assets/episode01/characters/performance/player-resolve.webp",
+      "public/assets/episode01/characters/performance/seo-jeongmin-neutral.webp"
+    ],
+    "confirmedInconsistentPaths": [
+      "assets/episode01/hires/kang-taesik-portrait.webp",
+      "assets/episode01/hires/yoon-sungho-portrait.webp",
+      "assets/episode01/hires/lim-junho-portrait.webp",
+      "assets/survivors/director_yoon_hero.jpg"
+    ]
+  }
+}

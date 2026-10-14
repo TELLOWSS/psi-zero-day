@@ -370,7 +370,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
         <button type="button" aria-label={gameManualText('open')} title={gameManualText('open')} onClick={() => setShowManual(true)}><HubIcon kind="help" /><span>{gameManualText('open')}</span></button>
         <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
-        <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
+        <button type="button" aria-label={t('ui.title.utility.people')} onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
         <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
         <button type="button" aria-label={t('ui.title.settings')} onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
       </nav>
