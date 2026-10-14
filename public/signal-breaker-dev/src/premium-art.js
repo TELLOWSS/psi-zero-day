@@ -443,9 +443,11 @@ class PremiumArt{
  const image=this.coreAtlas;const crops=[[145,129,407,441],[718,135,416,423],[113,729,467,413],[795,717,297,443]],crop=crops[cell],sx=image.naturalWidth/1254,sy=image.naturalHeight/1254;const width=crop[2],height=crop[3],fit=size=>size/Math.max(width,height);
  // Authored 2x2 transparent cells. Art remains inside the existing collision footprint.
  const size=q.r*2;c.save();c.translate(q.x,q.y);
+ if(this.quality!=='low'){c.save();c.globalAlpha=.3;c.beginPath();c.ellipse(2,q.r*.45,q.r*.75,q.r*.25,0,0,TAU);c.fillStyle='#020d19';c.fill();c.restore();}
  const angle=this.reducedMotion?0:q.kind==='metal'?time*.22:q.kind==='load'?Math.sin(time*.7)*.06:q.kind==='dust'?Math.sin(time*.8)*.03:0;
  c.rotate(angle);c.globalAlpha=q.stable?.78:1;
- const scale=fit(size),dw=width*scale,dh=height*scale;c.drawImage(image,crop[0]*sx,crop[1]*sy,width*sx,height*sy,-dw/2,-dh/2,dw,dh);c.restore();
+ const scale=fit(size),dw=width*scale,dh=height*scale;c.drawImage(image,crop[0]*sx,crop[1]*sy,width*sx,height*sy,-dw/2,-dh/2,dw,dh);
+ if(this.quality!=='low'){c.save();c.beginPath();c.arc(0,0,q.r*.85,0,TAU);c.clip();const sheen=c.createLinearGradient(-q.r,-q.r,q.r,q.r);sheen.addColorStop(0,'#d9f6ff28');sheen.addColorStop(.4,'#ffffff00');sheen.addColorStop(1,'#020b1938');c.fillStyle=sheen;c.fillRect(-q.r,-q.r,size,size);c.restore();}c.restore();
  c.save();disk(c,q.x,q.y,q.r,null,(palette[q.kind]||palette.metal)[0]+'88',1);
  if(!q.stable&&['dust','power'].includes(q.kind)&&q.mistExposure>0){
   const progress=sat(q.mistExposure/.75);c.beginPath();c.arc(q.x,q.y,q.r+6,-PI/2,-PI/2+TAU*progress);c.strokeStyle='#b6ffe0';c.lineWidth=3;c.stroke();

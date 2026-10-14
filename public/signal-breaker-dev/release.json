@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.61.0-equipped-motion",
-  "cacheName": "psi-signal-breaker-webpreview-v0.61.0-equipped-motion",
-  "fingerprint": "773e9e1f6845e5b4de29afa738d8fb71ce934bc4b36f7d2f8de783e502c59988",
+  "version": "0.62.0-evolution-clarity",
+  "cacheName": "psi-signal-breaker-webpreview-v0.62.0-evolution-clarity",
+  "fingerprint": "4d5aad3e770b897a0825860dcc4de3565e6df3d86b245ab1af03b20fe2792b39",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -686,13 +686,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11327,
-      "sha256": "f29f7d4a9f92127a37f5c90b2fd0634eff25785a2c6d1882564f569295b355d4"
+      "bytes": 11329,
+      "sha256": "e36523eacc255867b44d1c515fcefc9d935f511d3fb99fbfe715932cf02764fe"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 162303,
-      "sha256": "9f1ae0df5448ba41401fbc6cb980f14999479948e19b68edaf16719f69a7d8db"
+      "bytes": 163940,
+      "sha256": "eb6a5aa12cacc05ad3c44050e95560f05a150d894a0dcb2c550dd98f6b6e5c85"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -726,8 +726,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/combat-vfx.js",
-      "bytes": 8401,
-      "sha256": "40fd4dc29d559ef0554efe7cd03115c3ea683a8deedde95552de6dde1d3ed924"
+      "bytes": 9544,
+      "sha256": "24ce7bc6a98ef59a6d94d92bf6be98b95f08b51eb59b191e87d6a7fc75aefb96"
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance-content.js",
@@ -756,8 +756,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 67201,
-      "sha256": "dddd2b01c9ec685f5e767cc8810ad1e3cea5de51b11ab02f30d60f31904ebea0"
+      "bytes": 67266,
+      "sha256": "dcc2b16d6c118c0cd37184378ccccca559079ef2da3863758bc6181d78bdf236"
     },
     {
       "path": "/signal-breaker-dev/src/episode-three.js",
@@ -771,8 +771,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 5529,
-      "sha256": "9ee3362264a28ed958a835ef0c0b554c62f0e7048e78a3aa3b670330b792192c"
+      "bytes": 6769,
+      "sha256": "04191d86a1ffc421f03dc7df4a2a18dd1ba849e68f0d4e0a09bcd60c07a8ee10"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -796,8 +796,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 52646,
-      "sha256": "94df0f7d9b3d4eccd6722e239b0fa2a15f7acb6d7b18a79f3883f9e737cbe883"
+      "bytes": 53110,
+      "sha256": "b1bfcb0041b354ec8c562a564a35640118069412932242a2355329d03d7231a1"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -831,8 +831,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 50734,
-      "sha256": "8559a3eb6865bc05ea33a82d672074024eee4e2f547ce4a577257c635875b943"
+      "bytes": 51194,
+      "sha256": "289f749d56c318fddfd36f17d493950ddd693cc06a1bed08ac9e01eceb489262"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
@@ -891,13 +891,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/weapon-presentation.css",
-      "bytes": 1101,
-      "sha256": "58a8fa84bf04d0d31f1168913c1d2dd6f6b22bd606b8ed173fefcce284439015"
+      "bytes": 1282,
+      "sha256": "6e921b89f5ffdaff22455916000e4663011b6d994837197caa3d892960f143f2"
     },
     {
       "path": "/signal-breaker-dev/src/weapon-presentation.js",
-      "bytes": 3086,
-      "sha256": "0b20f3855c8257b5db68971e37a3f7c14d117fc3ecb2a93d8352fda15d34c490"
+      "bytes": 3699,
+      "sha256": "b55cbd76aaa2f754850740a10d86ddf8b736168cdec8c6c90467d7586070c0ff"
     }
   ]
 }

@@ -1,0 +1,932 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "method": "Developer access to EP03, real ready build selection and ordinary move/aim/fire/update. No parts/life/wins edits. UI reports inactive support after legal paused loadout command.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "recipes": [
+        {
+          "state": "playing",
+          "recipe": "storm",
+          "shots": [
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm"
+          ],
+          "links": [
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "mist"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "singularity",
+          "shots": [
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity"
+          ],
+          "links": [],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 6,
+            "eligible": false,
+            "active": true,
+            "support": "magnet"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "prism",
+          "shots": [
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism"
+          ],
+          "links": [],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "scan"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "plasma",
+          "shots": [
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma"
+          ],
+          "links": [
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "net"
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "recipes": [
+        {
+          "state": "playing",
+          "recipe": "storm",
+          "shots": [
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm"
+          ],
+          "links": [
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 230.57784884492824,
+              "toY": 418.5396565715579
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 209.55002936622486,
+              "toY": 434.87811213397924
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "mist"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "singularity",
+          "shots": [
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity"
+          ],
+          "links": [
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 95.24791666666617
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 6,
+            "eligible": false,
+            "active": true,
+            "support": "magnet"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "prism",
+          "shots": [
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism"
+          ],
+          "links": [],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "scan"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "plasma",
+          "shots": [
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma"
+          ],
+          "links": [
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 169.6034787863525,
+              "toY": 506.0092777777778
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 149.47700703910922,
+              "toY": 454.15477777777767
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 129.8488497864754,
+              "toY": 401.3169027777775
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 253.6814935806551,
+              "toY": 396.1847291666664
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 169.6034787863525,
+              "toY": 506.0092777777778
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 149.47700703910922,
+              "toY": 454.15477777777767
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 129.8488497864754,
+              "toY": 401.3169027777775
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 253.6814935806551,
+              "toY": 396.1847291666664
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 169.6034787863525,
+              "toY": 506.0092777777778
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 149.47700703910922,
+              "toY": 454.15477777777767
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 129.8488497864754,
+              "toY": 401.3169027777775
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 253.6814935806551,
+              "toY": 396.1847291666664
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "net"
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "recipes": [
+        {
+          "state": "playing",
+          "recipe": "storm",
+          "shots": [
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm",
+            "storm"
+          ],
+          "links": [
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 235.88726462754036,
+              "toY": 414.6347301809525
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "storm",
+              "toX": 211.2875941728809,
+              "toY": 433.47265055933303
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "mist"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "singularity",
+          "shots": [
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity",
+            "singularity"
+          ],
+          "links": [
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            },
+            {
+              "kind": "electrochain",
+              "recipe": "singularity",
+              "toX": 149.00000000000136,
+              "toY": 96.19826388888839
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 6,
+            "eligible": false,
+            "active": true,
+            "support": "magnet"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "prism",
+          "shots": [
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism",
+            "prism"
+          ],
+          "links": [],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "scan"
+          }
+        },
+        {
+          "state": "playing",
+          "recipe": "plasma",
+          "shots": [
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma",
+            "plasma"
+          ],
+          "links": [
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 98.6522641497745,
+              "toY": 399.4717499999997
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 98.6522641497745,
+              "toY": 399.4717499999997
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 152.96918409906758,
+              "toY": 503.75683333333336
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 127.79828393482246,
+              "toY": 452.0939999999999
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 98.6522641497745,
+              "toY": 399.4717499999997
+            },
+            {
+              "kind": "laserline",
+              "recipe": "plasma",
+              "toX": 252.88300212439594,
+              "toY": 394.64083333333303
+            }
+          ],
+          "progress": {
+            "next": "branch",
+            "parts": 9,
+            "wave": 2,
+            "collected": 5,
+            "eligible": false,
+            "active": true,
+            "support": "net"
+          }
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

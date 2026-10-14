@@ -1,6 +1,7 @@
 /* Bounded, deterministic presentation. Never reads randomness or writes game state. */
 (function(root){'use strict';
 const COLORS={pulse:'#ffcd85',bankshot:'#8de9ff',resonance:'#ffabd5',net:'#91ffe1',magnet:'#79dbff',mist:'#f5d39b',anchor:'#ffc38e',scan:'#bbaaff',arc:'#91efff',laser:'#f7acff'};
+const RECIPE_COLORS={storm:'#93e9ff',singularity:'#73ffdd',prism:'#f2a9ff',plasma:'#ffc2a0'};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function stroke(c,points,color,width){c.beginPath();c.moveTo(...points[0]);for(const p of points.slice(1))c.lineTo(...p);c.strokeStyle=color;c.lineWidth=width;c.stroke();}
 function ring(c,x,y,r,color,width=1){c.beginPath();c.arc(x,y,Math.max(.1,r),0,Math.PI*2);c.strokeStyle=color;c.lineWidth=width;c.stroke();}
@@ -10,9 +11,9 @@ class CombatVfx{
  configure(quality,reduced){this.quality=quality;this.reduced=!!reduced;this.items=this.items.slice(-this.limit());}
  limit(){return this.quality==='low'?8:this.quality==='high'?28:16;}
  event(e){
-  if(!['fire','impact','armorhit','bosshit','capture','skillshot','electrochain','laserline','relaybreak','assaultsurge','weaponcontact','ricochet','netfield'].includes(e.kind)||!Number.isFinite(e.x)||!Number.isFinite(e.y))return false;
+  if(!['fire','impact','armorhit','armorbreak','evolved','bosshit','capture','skillshot','electrochain','laserline','relaybreak','assaultsurge','weaponcontact','ricochet','netfield'].includes(e.kind)||!Number.isFinite(e.x)||!Number.isFinite(e.y))return false;
   const family=e.element||e.weapon||'pulse',materialColor={metal:'#ffd597',dust:COLORS.mist,power:COLORS.scan,load:COLORS.anchor}[e.material],color=['weaponcontact','ricochet','netfield'].includes(e.kind)?COLORS[family]||COLORS.pulse:['assaultsurge','relaybreak'].includes(e.kind)?'#91ffe1':e.kind==='capture'?COLORS.net:e.kind!=='fire'&&materialColor?materialColor:COLORS[family]||COLORS.pulse;
-  this.items.push({kind:e.kind,x:e.x,y:e.y,angle:Math.atan2(e.vy??e.dy??0,e.vx??e.dx??1),toX:e.toX,toY:e.toY,family,color,material:e.material,radius:e.kind==='netfield'&&Number.isFinite(e.n)?e.n:0,tier:e.equipmentTier||1,age:0,duration:e.kind==='netfield'?.42:['assaultsurge','relaybreak'].includes(e.kind)?.55:e.kind==='fire'?.16:e.kind==='capture'?.38:.25,seed:++this.serial});
+  this.items.push({kind:e.kind,x:e.x,y:e.y,angle:Math.atan2(e.vy??e.dy??0,e.vx??e.dx??1),toX:e.toX,toY:e.toY,family,color:RECIPE_COLORS[e.recipe]||color,recipe:e.recipe,capstone:!!e.capstone,material:e.material,radius:['netfield','armorbreak'].includes(e.kind)&&Number.isFinite(e.n)?e.n:0,tier:e.equipmentTier||1,age:0,duration:e.kind==='netfield'?.42:['assaultsurge','relaybreak','evolved'].includes(e.kind)?.55:e.kind==='armorbreak'?.38:e.kind==='fire'?.16:e.kind==='capture'?.38:.25,seed:++this.serial});
   this.items=this.items.slice(-this.limit());this.seen.add(e.kind+':'+family);return true;
  }
  update(dt){dt=clamp(Number(dt)||0,0,.05);for(const q of this.items)q.age+=dt;this.items=this.items.filter(q=>q.age<q.duration);}
@@ -30,8 +31,10 @@ class CombatVfx{
   c.restore();
  }
  draw(c){c.save();c.lineCap='round';for(const q of this.items){const t=q.age/q.duration,fade=(1-t)**2;c.save();c.globalAlpha=fade*(this.reduced?.4:.85);
+  if(q.kind==='armorbreak'){const r=q.radius+4+t*18;ring(c,q.x,q.y,r,'#9fffe0',this.quality==='low'?2:3);if(!this.reduced&&this.quality!=='low'){for(let i=0;i<6;i++){const a=i*Math.PI/3+q.seed,dx=Math.cos(a),dy=Math.sin(a);stroke(c,[[q.x+dx*r-dy*4,q.y+dy*r+dx*4],[q.x+dx*(r+5),q.y+dy*(r+5)],[q.x+dx*r+dy*4,q.y+dy*r-dx*4]],'#d4efff',1.6);}}c.restore();continue;}
+  if(q.kind==='evolved'){ring(c,q.x,q.y-24,18+t*22,'#b6f7e8',2);if(!this.reduced&&this.quality!=='low')ring(c,q.x,q.y-24,12+t*14,'#fff1be',1);c.restore();continue;}
   if(['electrochain','laserline'].includes(q.kind)){
-   if(Number.isFinite(q.toX)&&Number.isFinite(q.toY)){const pts=[[q.x,q.y]],dx=q.toX-q.x,dy=q.toY-q.y,len=Math.hypot(dx,dy)||1;for(let i=1;i<6;i++){const off=q.kind==='electrochain'&&!this.reduced?Math.sin(i*9+q.seed)*7:0;pts.push([q.x+dx*i/6-dy/len*off,q.y+dy*i/6+dx/len*off]);}pts.push([q.toX,q.toY]);stroke(c,pts,q.kind==='laserline'?COLORS.laser:COLORS.arc,this.quality==='low'?2:4);if(this.quality!=='low')stroke(c,pts,'#faffff',1);}c.restore();continue;
+   if(Number.isFinite(q.toX)&&Number.isFinite(q.toY)){const pts=[[q.x,q.y]],dx=q.toX-q.x,dy=q.toY-q.y,len=Math.hypot(dx,dy)||1;for(let i=1;i<6;i++){const off=q.kind==='electrochain'&&!this.reduced?Math.sin(i*9+q.seed)*7:0;pts.push([q.x+dx*i/6-dy/len*off,q.y+dy*i/6+dx/len*off]);}pts.push([q.toX,q.toY]);const tint=RECIPE_COLORS[q.recipe]||(q.kind==='laserline'?COLORS.laser:COLORS.arc);stroke(c,pts,tint,this.quality==='low'?2:q.capstone?5:4);if(this.quality!=='low'){stroke(c,pts,'#faffff',1);if(!this.reduced){const u=.15+.7*t,x=q.x+dx*u,y=q.y+dy*u;ring(c,x,y,q.recipe==='singularity'?7:3,tint,1.5);if(q.recipe==='prism'){for(const sign of [-1,1])stroke(c,[[q.x-dy/len*4*sign,q.y+dx/len*4*sign],[q.toX-dy/len*4*sign,q.toY+dx/len*4*sign]],tint,1);}if(q.recipe==='plasma')ring(c,q.toX,q.toY,4+t*12,tint,2);}}}c.restore();continue;
   }
   if(['assaultsurge','relaybreak'].includes(q.kind)){const r=14+t*85;ring(c,q.x,q.y,r,q.color,this.quality==='low'?2:3);if(!this.reduced&&this.quality!=='low')ring(c,q.x,q.y,r*.65,'#eafff2',1);c.restore();continue;}if(q.kind==='netfield'){const r=q.radius;c.globalAlpha=fade*.6;ring(c,q.x,q.y,r,COLORS.net,1.5);if(this.quality!=='low'&&!this.reduced){ring(c,q.x,q.y,r*(.35+.65*t),COLORS.net,1);for(let i=0;i<6;i++){const a=i*Math.PI/3;stroke(c,[[q.x,q.y],[q.x+Math.cos(a)*r,q.y+Math.sin(a)*r]],'#91ffe150',1);}}c.restore();continue;}
   if(q.kind==='weaponcontact'&&!['pulse','bankshot','resonance','arc','laser'].includes(q.family)){const r=8+t*24;if(q.family==='mist'){const count=this.quality==='low'?3:6;for(let i=0;i<count;i++){const a=i*Math.PI*2/count;ring(c,q.x+Math.cos(a)*r*.6,q.y+Math.sin(a)*r*.35,4+t*8,COLORS.mist,2);}}else{ring(c,q.x,q.y,r,q.color,1.5);if(q.family==='scan'){stroke(c,[[q.x-r,q.y],[q.x+r,q.y]],q.color,1);stroke(c,[[q.x,q.y-r],[q.x,q.y+r]],q.color,1);}if(q.family==='magnet')ring(c,q.x,q.y,r*.6,q.color,1);}c.restore();continue;}

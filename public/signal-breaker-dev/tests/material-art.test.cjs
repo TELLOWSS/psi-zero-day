@@ -5,7 +5,7 @@ test('four material sprites use isolated atlas cells and preserve gameplay state
  art.coreAtlas={complete:true,naturalWidth:1254,naturalHeight:1254};
  for(const quality of ['high','balanced','low'])for(const [cell,kind] of ['metal','dust','power','load'].entries()){
   art.setQuality(quality);art.setReducedMotion(true);const calls=[],arcs=[];
-  const context=new Proxy({drawImage:(...v)=>calls.push(v),arc:(...v)=>arcs.push(v)},{get:(o,k)=>k in o?o[k]:()=>{}});
+  const context=new Proxy({drawImage:(...v)=>calls.push(v),arc:(...v)=>arcs.push(v),createLinearGradient:()=>({addColorStop(){}})},{get:(o,k)=>k in o?o[k]:()=>{}});
   for(const stable of [false,true]){
    const q={kind,x:500,y:240,r:30,stable,mistExposure:.375,glow:0},before=JSON.stringify(q);
    a.equal(art.core(context,q,5),true);a.equal(JSON.stringify(q),before);
