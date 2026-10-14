@@ -41,8 +41,8 @@ function install(Game){
   if(key==='pulse'){this.growthState.nextTriple=false;if(tier>=2)this.cooldown*=.75;}
   if(key!=='pulse'&&this.supportCadenceUntil>this.time)this.cooldown*=1-clamp(stats.cooldownReduction,0,.5);
   const shots=this.shots.filter(s=>!before.has(s.id));
-  for(const shot of shots){shot.pierceBudget=key==='pulse'&&tier>=4?3:0;if(key==='pulse'&&tier>=3)shot.splashRadius=95;}
-  return true;
+  for(const shot of shots){const shotTier=this.equipmentTier(shot.kind);shot.equipmentTier=shotTier;shot.pierceBudget=shot.kind==='pulse'&&shotTier>=4?3:0;if(shot.kind==='pulse'&&shotTier>=3)shot.splashRadius=95;}
+  const event=[...this.events].reverse().find(e=>e.kind==='fire'&&e.weapon===key&&e.t===this.time);if(event){event.equipmentTier=tier;event.cooldown=this.cooldown;}return true;
  };
  proto.update=function(elapsed){
   const dt=clamp(elapsed,0,.066),slow=this.growthState.slowRemaining;

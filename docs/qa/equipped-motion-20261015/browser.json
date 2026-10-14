@@ -1,0 +1,2009 @@
+{
+  "method": "All six canonical actors use actual keyboard movement and UI pause/resume. Eight-weapon visual matrix uses developer free access + legal paused loadout commands and accelerated ordinary aim/fire/update; no forced win or life edits. Not native-device FPS evidence.",
+  "base": "http://127.0.0.1:4174",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "actors": [
+        {
+          "id": "player",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "player",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 267.67235687130625,
+                "cycle": 3.4646998480246247,
+                "angle": -1.0539760090272945,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.5522406832102813,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 346.3271476341057,
+                  "y": 547.558154342248
+                },
+                "tip": {
+                  "x": 362.13893136037,
+                  "y": 519.737523591062
+                }
+              }
+            },
+            "x": 351.75950000000006
+          },
+          "frozen": {
+            "time": 0.6250000000000002,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.913221714490394,
+              "angle": -1.0539760090272945,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.21893669739771537,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "kang_taesik",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "kang_taesik",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 257.9967217375898,
+                "cycle": 3.7317071736453475,
+                "angle": -1.053976009027294,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8629051530053952,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 350.81033866741495,
+                  "y": 548.0443164267177
+                },
+                "tip": {
+                  "x": 366.62212239367926,
+                  "y": 520.2236856755317
+                }
+              }
+            },
+            "x": 356.519
+          },
+          "frozen": {
+            "time": 0.5416666666666672,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.6462143888696588,
+              "angle": -1.053976009027294,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839625,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "yoon_sungho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "yoon_sungho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 261.14098259590367,
+                "cycle": 3.7317071736453413,
+                "angle": -1.0539760090272945,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8629051530053952,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 350.81033866741484,
+                  "y": 548.0443164267177
+                },
+                "tip": {
+                  "x": 366.62212239367915,
+                  "y": 520.2236856755317
+                }
+              }
+            },
+            "x": 356.5189999999999
+          },
+          "frozen": {
+            "time": 0.5416666666666672,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.3760093707265415,
+              "angle": -1.0539760090272945,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839625,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lee_jaehoon",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lee_jaehoon",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 276.38987730306224,
+                "cycle": 3.9971156530048715,
+                "angle": -1.0539760090272945,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.7711825047782878,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 355.62291796797183,
+                  "y": 547.9007786932763
+                },
+                "tip": {
+                  "x": 371.43470169423614,
+                  "y": 520.0801479420902
+                }
+              }
+            },
+            "x": 361.25
+          },
+          "frozen": {
+            "time": 0.5583333333333338,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9084251757067632,
+              "angle": -1.0539760090272945,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.6096663280055943,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lim_junho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lim_junho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 276.18652763532015,
+                "cycle": 3.997115653004871,
+                "angle": -1.0539760090272945,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.7711825047782878,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 355.62291796797183,
+                  "y": 547.9007786932763
+                },
+                "tip": {
+                  "x": 371.43470169423614,
+                  "y": 520.0801479420902
+                }
+              }
+            },
+            "x": 361.25
+          },
+          "frozen": {
+            "time": 0.5666666666666671,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.644615542608457,
+              "angle": -1.0539760090272945,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.6096663280055947,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "safety_monitor",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "safety_monitor",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 288.397275110037,
+                "cycle": 3.9971156530048617,
+                "angle": -1.0539760090272945,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8191051428502211,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 355.5802949586024,
+                  "y": 547.9757733318125
+                },
+                "tip": {
+                  "x": 371.39207868486676,
+                  "y": 520.1551425806265
+                }
+              }
+            },
+            "x": 361.24999999999983
+          },
+          "frozen": {
+            "time": 0.5583333333333338,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9116228682291728,
+              "angle": -1.0539760090272945,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.6096663280055943,
+              "reaction": 0
+            }
+          }
+        }
+      ],
+      "weapons": [
+        {
+          "weapon": "pulse",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "pulse",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.8076807948096,
+                "y": 543.7346234436333
+              },
+              "tip": {
+                "x": 308.0231022514189,
+                "y": 525.3838284240068
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "pulse",
+            "shots": [
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 903.4680926986227,
+                "y": 376.1601667839218
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 741.3263277253984,
+                "y": 371.91294220968
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 583.3051078806992,
+                "y": 344.4767438011609
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 449.95503248134304,
+                "y": 426.0314772630594
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 318.5365785647466,
+                "y": 518.0243950046773
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "bankshot",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "bankshot",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.8076807948096,
+                "y": 543.7346234436333
+              },
+              "tip": {
+                "x": 308.0231022514189,
+                "y": 525.3838284240068
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "bankshot",
+            "shots": [
+              {
+                "kind": "bankshot",
+                "tier": 1,
+                "x": 742.7494292588068,
+                "y": 373.97402012338586
+              },
+              {
+                "kind": "bankshot",
+                "tier": 1,
+                "x": 314.3721496354415,
+                "y": 520.939495255191
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "resonance",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.4071224700983522,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "resonance",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 280.81735965465316,
+                "y": 541.9596863875827
+              },
+              "tip": {
+                "x": 310.2018087597631,
+                "y": 529.2886899473178
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "resonance",
+            "shots": [
+              {
+                "kind": "resonance",
+                "tier": 1,
+                "x": 364.3452967871027,
+                "y": 485.958292249028
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "net",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0.6836964688204346,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "net",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 282.43795388768075,
+                "y": 543.2934322786234
+              },
+              "tip": {
+                "x": 307.01491150325194,
+                "y": 526.0895619477236
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "net",
+            "shots": [
+              {
+                "kind": "net",
+                "tier": 1,
+                "x": 311.9144538738843,
+                "y": 522.659882288281
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "magnet",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.4403921654882388,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "magnet",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 282.76332356085294,
+                "y": 541.4103539574498
+              },
+              "tip": {
+                "x": 309.90086020765443,
+                "y": 528.6215266170129
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "magnet",
+            "shots": [
+              {
+                "kind": "magnet",
+                "tier": 1,
+                "x": 525.4609078225154,
+                "y": 373.17736452424
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "mist",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.5225114941047703,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "mist",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.3343146747527,
+                "y": 542.9905809124583
+              },
+              "tip": {
+                "x": 309.0645077155441,
+                "y": 527.0207219925917
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "mist",
+            "shots": [
+              {
+                "kind": "mist",
+                "tier": 1,
+                "x": 418.6194115214888,
+                "y": 447.96641193495714
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "anchor",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.45735323083479446,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "anchor",
+              "tier": 1,
+              "length": 34,
+              "grip": {
+                "x": 279.2333073713763,
+                "y": 543.2988989272056
+              },
+              "tip": {
+                "x": 309.7389364858101,
+                "y": 528.2853519667898
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "anchor",
+            "shots": [],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "scan",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.638035166732678,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "scan",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 283.5738592133859,
+                "y": 542.7649464415264
+              },
+              "tip": {
+                "x": 307.6718871631888,
+                "y": 524.8963972858025
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "scan",
+            "shots": [],
+            "state": "playing"
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "actors": [
+        {
+          "id": "player",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "player",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 279.3464888213752,
+                "cycle": 3.7301083273841487,
+                "angle": -0.7077545808140502,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.49418616297004136,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 348.21637421014213,
+                  "y": 545.0796057067342
+                },
+                "tip": {
+                  "x": 372.53072950683793,
+                  "y": 524.2754684618004
+                }
+              }
+            },
+            "x": 356.49050000000005
+          },
+          "frozen": {
+            "time": 0.6583333333333334,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 1.4424398269482306,
+              "angle": -0.7077545808140502,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "kang_taesik",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "kang_taesik",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 264.1796698710092,
+                "cycle": 3.9971156530048737,
+                "angle": -0.7077545808140493,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.7711825047782878,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.5970311649203,
+                  "y": 545.4037558892461
+                },
+                "tip": {
+                  "x": 376.9113864616161,
+                  "y": 524.5996186443123
+                }
+              }
+            },
+            "x": 361.25000000000006
+          },
+          "frozen": {
+            "time": 0.5500000000000005,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9116228682291883,
+              "angle": -0.7077545808140511,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839629,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "yoon_sungho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "yoon_sungho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 278.7500052659167,
+                "cycle": 3.995516806743663,
+                "angle": -0.7077545808140505,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.819105142850221,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.5029882121731,
+                  "y": 545.459836528348
+                },
+                "tip": {
+                  "x": 376.8173435088689,
+                  "y": 524.6556992834142
+                }
+              }
+            },
+            "x": 361.2214999999999
+          },
+          "frozen": {
+            "time": 0.5500000000000005,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9100240219679718,
+              "angle": -0.7077545808140505,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839629,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lee_jaehoon",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lee_jaehoon",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 301.1703383144375,
+                "cycle": 3.995516806743663,
+                "angle": -0.7077545808140502,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8191051428502211,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.5029882121731,
+                  "y": 545.459836528348
+                },
+                "tip": {
+                  "x": 376.8173435088689,
+                  "y": 524.6556992834142
+                }
+              }
+            },
+            "x": 361.2214999999999
+          },
+          "frozen": {
+            "time": 0.5666666666666671,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9132217144903734,
+              "angle": -0.7077545808140502,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.49418616297004414,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lim_junho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lim_junho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 279.1647351955417,
+                "cycle": 3.99871449926608,
+                "angle": -0.7077545808140505,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.819105142850221,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.5599882121733,
+                  "y": 545.459836528348
+                },
+                "tip": {
+                  "x": 376.8743435088691,
+                  "y": 524.6556992834142
+                }
+              }
+            },
+            "x": 361.2785000000001
+          },
+          "frozen": {
+            "time": 0.5500000000000005,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9148205607515972,
+              "angle": -0.7077545808140505,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839629,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "safety_monitor",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "safety_monitor",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 269.37838232282036,
+                "cycle": 3.9971156530048777,
+                "angle": -0.7077545808140502,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.7711825047782878,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.59703116492034,
+                  "y": 545.4037558892461
+                },
+                "tip": {
+                  "x": 376.91138646161613,
+                  "y": 524.5996186443123
+                }
+              }
+            },
+            "x": 361.2500000000001
+          },
+          "frozen": {
+            "time": 0.5666666666666671,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.911622868229189,
+              "angle": -0.7077545808140502,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.49418616297004414,
+              "reaction": 0
+            }
+          }
+        }
+      ],
+      "weapons": [
+        {
+          "weapon": "pulse",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "pulse",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.8076807948096,
+                "y": 543.7346234436333
+              },
+              "tip": {
+                "x": 308.0231022514189,
+                "y": 525.3838284240068
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "pulse",
+            "shots": [
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 903.3738419004213,
+                "y": 377.45929179336457
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 741.2660935289517,
+                "y": 372.59030526726985
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 583.3302042296618,
+                "y": 344.68539567619615
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 449.95503248134304,
+                "y": 426.0314772630594
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 318.5365785647466,
+                "y": 518.0243950046773
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "bankshot",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6763723863307944,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "bankshot",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 282.20151384342864,
+                "y": 544.2596815945993
+              },
+              "tip": {
+                "x": 307.15666954445703,
+                "y": 524.2287004918817
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "bankshot",
+            "shots": [
+              {
+                "kind": "bankshot",
+                "tier": 1,
+                "x": 735.0444713329508,
+                "y": 372.98974833100186
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "resonance",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.411760393080755,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "resonance",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 280.8358230699479,
+                "y": 542.0022320265948
+              },
+              "tip": {
+                "x": 310.1611892461146,
+                "y": 529.1950895414915
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "resonance",
+            "shots": [
+              {
+                "kind": "resonance",
+                "tier": 1,
+                "x": 371.8549227251939,
+                "y": 480.7015540923642
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "net",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.7574912651215702,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "net",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 284.1875036062525,
+                "y": 543.4968068615035
+              },
+              "tip": {
+                "x": 305.9843650828057,
+                "y": 522.8837811308654
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "net",
+            "shots": [],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "magnet",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.44164337279373717,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "magnet",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 282.76759628410457,
+                "y": 541.4194058680276
+              },
+              "tip": {
+                "x": 309.8891102187124,
+                "y": 528.5966338629239
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "magnet",
+            "shots": [
+              {
+                "kind": "magnet",
+                "tier": 1,
+                "x": 529.8984140586603,
+                "y": 370.0711101589386
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "mist",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.5241965794469566,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "mist",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.3427365286759,
+                "y": 543.0051762394622
+              },
+              "tip": {
+                "x": 309.04597963691305,
+                "y": 526.9886122731831
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "mist",
+            "shots": [
+              {
+                "kind": "mist",
+                "tier": 1,
+                "x": 414.93286787915315,
+                "y": 450.5469924845921
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "anchor",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.4561844695643953,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "anchor",
+              "tier": 1,
+              "length": 34,
+              "grip": {
+                "x": 279.22712157861025,
+                "y": 543.2863116175605
+              },
+              "tip": {
+                "x": 309.7502771058811,
+                "y": 528.3084287011388
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "anchor",
+            "shots": [],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "scan",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6413592602114734,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "scan",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 283.5897338147114,
+                "y": 542.7862811695246
+              },
+              "tip": {
+                "x": 307.6282320095436,
+                "y": 524.8377267838074
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "scan",
+            "shots": [],
+            "state": "playing"
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "actors": [
+        {
+          "id": "player",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "player",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 274.70361445453534,
+                "cycle": 3.4631010017634223,
+                "angle": -0.7199181384739839,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.609666328005592,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 343.3873125696431,
+                  "y": 545.316772054313
+                },
+                "tip": {
+                  "x": 367.4468231250758,
+                  "y": 524.2184320287797
+                }
+              }
+            },
+            "x": 351.73100000000005
+          },
+          "frozen": {
+            "time": 0.6250000000000002,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9100240219679866,
+              "angle": -0.7199181384739839,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.17178268486958448,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "kang_taesik",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "kang_taesik",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 279.2181084088327,
+                "cycle": 3.9971156530048737,
+                "angle": -0.719918138473984,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.819105142850221,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.62286907971657,
+                  "y": 545.5653301916333
+                },
+                "tip": {
+                  "x": 376.6823796351493,
+                  "y": 524.4669901661
+                }
+              }
+            },
+            "x": 361.25000000000006
+          },
+          "frozen": {
+            "time": 0.5500000000000005,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9116228682291838,
+              "angle": -0.719918138473984,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839629,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "yoon_sungho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "yoon_sungho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 285.18145752586895,
+                "cycle": 3.997115653004871,
+                "angle": -0.7199181384739837,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8191051428502211,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.6228690797165,
+                  "y": 545.5653301916333
+                },
+                "tip": {
+                  "x": 376.68237963514923,
+                  "y": 524.4669901661
+                }
+              }
+            },
+            "x": 361.25
+          },
+          "frozen": {
+            "time": 0.5500000000000005,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9132217144903885,
+              "angle": -0.7199181384739837,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.6096663280055938,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lee_jaehoon",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lee_jaehoon",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 290.77516902908593,
+                "cycle": 3.9955168067436784,
+                "angle": -0.7199181384739837,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.862905153005395,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.5350924468422,
+                  "y": 545.6173112389231
+                },
+                "tip": {
+                  "x": 376.59460300227494,
+                  "y": 524.5189712133898
+                }
+              }
+            },
+            "x": 361.22150000000016
+          },
+          "frozen": {
+            "time": 0.5416666666666672,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.91162286822918,
+              "angle": -0.7199181384739837,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.771182504778289,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "lim_junho",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "lim_junho",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 291.23433626546023,
+                "cycle": 3.9971156530048715,
+                "angle": -0.7199181384739839,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.8191051428502211,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.6228690797165,
+                  "y": 545.5653301916333
+                },
+                "tip": {
+                  "x": 376.68237963514923,
+                  "y": 524.4669901661
+                }
+              }
+            },
+            "x": 361.25
+          },
+          "frozen": {
+            "time": 0.5416666666666672,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9100240219679729,
+              "angle": -0.7199181384739839,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.7198359892839625,
+              "reaction": 0
+            }
+          }
+        },
+        {
+          "id": "safety_monitor",
+          "run": {
+            "actor": {
+              "ready": true,
+              "failed": false,
+              "characterId": "safety_monitor",
+              "motion": {
+                "mode": "run",
+                "moving": true,
+                "speed": 279.06852832659274,
+                "cycle": 3.997115653004871,
+                "angle": -0.719918138473984,
+                "turning": false,
+                "actionKind": "shot",
+                "action": 0.819105142850221,
+                "reaction": 0
+              },
+              "equipment": {
+                "weapon": "pulse",
+                "tier": 1,
+                "length": 32,
+                "grip": {
+                  "x": 352.6228690797165,
+                  "y": 545.5653301916333
+                },
+                "tip": {
+                  "x": 376.68237963514923,
+                  "y": 524.4669901661
+                }
+              }
+            },
+            "x": 361.25
+          },
+          "frozen": {
+            "time": 0.5416666666666672,
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0.9100240219679719,
+              "angle": -0.719918138473984,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0.771182504778289,
+              "reaction": 0
+            }
+          }
+        }
+      ],
+      "weapons": [
+        {
+          "weapon": "pulse",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "pulse",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.8076807948096,
+                "y": 543.7346234436333
+              },
+              "tip": {
+                "x": 308.0231022514189,
+                "y": 525.3838284240068
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "pulse",
+            "shots": [
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 961.5476907786349,
+                "y": 384.1333729175974
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 798.5340086596118,
+                "y": 383.83932782995635
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 639.5443010582185,
+                "y": 359.60601822897104
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 497.26567589131776,
+                "y": 392.91402687607695
+              },
+              {
+                "kind": "pulse",
+                "tier": 1,
+                "x": 365.8472219747213,
+                "y": 484.9069446176949
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "bankshot",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.6107259643892086,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "bankshot",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.8076807948096,
+                "y": 543.7346234436333
+              },
+              "tip": {
+                "x": 308.0231022514189,
+                "y": 525.3838284240068
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "bankshot",
+            "shots": [
+              {
+                "kind": "bankshot",
+                "tier": 1,
+                "x": 742.7494292588068,
+                "y": 373.97402012338586
+              },
+              {
+                "kind": "bankshot",
+                "tier": 1,
+                "x": 314.3721496354415,
+                "y": 520.939495255191
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "resonance",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.411760393080755,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "resonance",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 280.8358230699479,
+                "y": 542.0022320265948
+              },
+              "tip": {
+                "x": 310.1611892461146,
+                "y": 529.1950895414915
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "resonance",
+            "shots": [
+              {
+                "kind": "resonance",
+                "tier": 1,
+                "x": 368.1001097561483,
+                "y": 483.3299231706961
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "net",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.7574912651215702,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "net",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 284.1875036062525,
+                "y": 543.4968068615035
+              },
+              "tip": {
+                "x": 305.9843650828057,
+                "y": 522.8837811308654
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "net",
+            "shots": [],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "magnet",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.44147980427719463,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "magnet",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 282.76703707371206,
+                "y": 541.4182228287436
+              },
+              "tip": {
+                "x": 309.89064804729196,
+                "y": 528.5998872209552
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "magnet",
+            "shots": [
+              {
+                "kind": "magnet",
+                "tier": 1,
+                "x": 525.4609078225154,
+                "y": 373.17736452424
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "mist",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.5191222772928369,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "mist",
+              "tier": 1,
+              "length": 32,
+              "grip": {
+                "x": 281.3174503168131,
+                "y": 542.9611824194432
+              },
+              "tip": {
+                "x": 309.10160930301106,
+                "y": 527.085398677225
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "mist",
+            "shots": [
+              {
+                "kind": "mist",
+                "tier": 1,
+                "x": 418.6194115214888,
+                "y": 447.96641193495714
+              }
+            ],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "anchor",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.4561844695643953,
+              "turning": false,
+              "actionKind": "shot",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "anchor",
+              "tier": 1,
+              "length": 34,
+              "grip": {
+                "x": 279.22712157861025,
+                "y": 543.2863116175605
+              },
+              "tip": {
+                "x": 309.7502771058811,
+                "y": 528.3084287011388
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "anchor",
+            "shots": [],
+            "state": "playing"
+          }
+        },
+        {
+          "weapon": "scan",
+          "actor": {
+            "ready": true,
+            "failed": false,
+            "characterId": "safety_monitor",
+            "motion": {
+              "mode": "action",
+              "moving": false,
+              "speed": 0,
+              "cycle": 0,
+              "angle": -0.638035166732678,
+              "turning": false,
+              "actionKind": "spray",
+              "action": 0,
+              "reaction": 0
+            },
+            "equipment": {
+              "weapon": "scan",
+              "tier": 1,
+              "length": 30,
+              "grip": {
+                "x": 283.5738592133859,
+                "y": 542.7649464415264
+              },
+              "tip": {
+                "x": 307.6718871631888,
+                "y": 524.8963972858025
+              }
+            }
+          },
+          "evidence": {
+            "weapon": "scan",
+            "shots": [
+              {
+                "kind": "scan",
+                "tier": 1,
+                "x": 571.480252557298,
+                "y": 348.91688212658636
+              }
+            ],
+            "state": "playing"
+          }
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

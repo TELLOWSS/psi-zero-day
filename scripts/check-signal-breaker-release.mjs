@@ -13,7 +13,7 @@ const paths=new Set(['/signal-breaker-dev/index.html','/signal-breaker-dev/servi
 for(const match of assets.matchAll(/'([^']+)'/g))paths.add(new URL(match[1],'https://release.invalid/signal-breaker-dev/').pathname.replace(/\/$/,'/index.html'));
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const files=[...paths].sort().map(url=>{const bytes=fs.readFileSync(path.join(root,url));return {path:url,bytes:bytes.length,sha256:sha(bytes)};});
-const expected={schemaVersion:1,version:'0.60.0-living-tech-tree',cacheName,fingerprint:sha(JSON.stringify(files)),files};
+const expected={schemaVersion:1,version:'0.61.0-equipped-motion',cacheName,fingerprint:sha(JSON.stringify(files)),files};
 const target=path.join(app,'release.json');
 if(process.argv.includes('--write'))fs.writeFileSync(target,JSON.stringify(expected,null,2)+'\n');
 assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),expected,'Release metadata is stale; run node scripts/check-signal-breaker-release.mjs --write');

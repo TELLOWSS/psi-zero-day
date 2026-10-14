@@ -1,5 +1,7 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.gear.identity':'나의 현장 장비',
+'breaker.gear.identity.help':'장비 개조 단계는 손에 든 장치와 발사체에도 반영됩니다. ◆ 표시는 보유 개조 단계이며 튜닝·조합 진화와 구분됩니다.',
 'breaker.tech.rules':'성장 규칙 자세히 보기',
 'breaker.tech.motion.static':'정적인 연출',
 'breaker.tech.back':'선택한 기술 위치로',
