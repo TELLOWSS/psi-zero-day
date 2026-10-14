@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../public/',import.meta.url));
 const app=path.join(root,'signal-breaker-dev');
@@ -16,6 +17,13 @@ const expected={schemaVersion:1,version:'0.57.0-portrait-immersion',cacheName,fi
 const target=path.join(app,'release.json');
 if(process.argv.includes('--write'))fs.writeFileSync(target,JSON.stringify(expected,null,2)+'\n');
 assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),expected,'Release metadata is stale; run node scripts/check-signal-breaker-release.mjs --write');
+if(process.argv.includes('--git')){
+ for(const file of files){
+  const committed=execFileSync('git',['show','HEAD:public'+file.path],{maxBuffer:32*1024*1024});
+  assert.equal(sha(committed),file.sha256,file.path+' Git bytes differ from the release; verify LF checkout attributes and commit the exact source');
+ }
+ console.log('PASS Git byte identity for all '+files.length+' release assets');
+}
 const remote=process.argv.indexOf('--remote');
 if(remote>=0){
  const base=new URL(process.argv[remote+1]);

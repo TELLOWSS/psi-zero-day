@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.57.0-portrait-immersion",
   "cacheName": "psi-signal-breaker-webpreview-v0.57.0-portrait-immersion",
-  "fingerprint": "1a0b77ac4ec62cd57855e898a479e965d8f7bac12571721356ff1862ea34ef7a",
+  "fingerprint": "76c023e0b18195a0786ccecd7aa1f53bf75ba58f7115ab24317bc84c87db0740",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -326,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 26027,
-      "sha256": "54b6f6b233d0bebb5ac79a7ff3c6d59ad9f31d6011712fca5eba90d869d2f391"
+      "bytes": 25977,
+      "sha256": "4a1cb8c400a184da7d2676979557d549472bcf27c4b1515ef2654ceedda3df88"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,18 +336,18 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6549,
-      "sha256": "ac875f4c79a8d6d6766b276dbf4595b83b4234f3e397667ba5a826ad8aa45594"
+      "bytes": 6493,
+      "sha256": "c10f36007e178f8ab2172e36a50fbf946743885c9acb8261bebe6ad18094ed57"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 157811,
-      "sha256": "cce7a41f593eb80ecb09b895453574cba77fbaabc40afff3f8d01bd32b21b131"
+      "bytes": 156970,
+      "sha256": "37e0706d223ce2a899b543c3e1f326a0401e203f2a561c16477a827f4324e271"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
-      "bytes": 3400,
-      "sha256": "573a13881ece9ca9f72b68ae0a63718b74a18f25c43911c5b3e86ddbd4d8f496"
+      "bytes": 3355,
+      "sha256": "088629bf6dbd7067f76295ded9a9d392e23d479bea837aa67765498ec4233d2b"
     },
     {
       "path": "/signal-breaker-dev/src/burst-rules.js",
@@ -426,8 +426,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 42937,
-      "sha256": "5979fe5ae3af190ec406cbc66f339bf1d11617eaa9fe44648f0d34029712d150"
+      "bytes": 42489,
+      "sha256": "d80e9f4e2b421011c90cf01416c87d76bf65157dcdb38a1f9a50f9b4be627a9d"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",

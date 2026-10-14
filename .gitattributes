@@ -3,3 +3,11 @@
 # Preserve byte-exact Director-approved vector deliveries across checkouts.
 docs/branding/candidates/BR-LOGO-02*.svg text eol=lf
 public/assets/branding/*.svg text eol=lf
+# Breaker release hashes must describe identical bytes on Windows and Linux.
+public/signal-breaker-dev/*.html text eol=lf
+public/signal-breaker-dev/*.js text eol=lf
+public/signal-breaker-dev/src/*.js text eol=lf
+public/signal-breaker-dev/src/*.css text eol=lf
+public/signal-breaker-dev/*.json text eol=lf
+public/signal-breaker-dev/art/*.json text eol=lf
+public/signal-breaker-dev/*.webmanifest text eol=lf

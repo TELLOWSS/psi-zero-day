@@ -37,6 +37,7 @@
 - 세로·가로·PC에서 각각 10작전·엔딩·보상·강화·저장 재접속 완료. 일반 엔진 명령을 가속한 자동 여정이며 승리를 강제하거나 생명을 리필하지 않았다.
 - 최종 빌드의 서비스워커에서 새 CSS 캐시를 확인하고, **오프라인 새로고침 → 몰입 화면 → 플레이**를 확인했다. 지원 Chrome의 전체화면 진입/종료도 검사했다.
 - 릴리스·서비스워커 캐시 버전을 갱신하고 **101개 자산**의 byte hash를 관리한다.
+- 첫 Vercel 빌드는 Windows 작성 파일 5개의 CRLF와 Git/Linux LF 차이 때문에 릴리스 무결성 검사에서 중단됐다. 해당 텍스트에 LF 속성을 고정하고 실제 파일을 정규화했다. 이미지·오디오는 바꾸지 않았다. `node scripts/check-signal-breaker-release.mjs --git`로 Git에 저장된 101개 파일까지 대조한다. 비교를 느슨하게 하거나 배포 검사를 우회하지 않았다.
 
 상세 결과: [QA 기록](qa/signal-breaker-portrait-immersion-20261014.json). 로컬 로그/추가 화면은 `artifacts/portrait-immersion*`에 있다. 적용한 검증 기준: [vercel:verification](C:/Users/user/.codex/plugins/cache/openai-curated-remote/vercel/0.54.1/skills/verification/SKILL.md), 배포 기준: [vercel:deployments-cicd](C:/Users/user/.codex/plugins/cache/openai-curated-remote/vercel/0.54.1/skills/deployments-cicd/SKILL.md).
 
