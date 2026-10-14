@@ -20,6 +20,7 @@ for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
 global.location={search:'?entry=prepare'};
 global.window={PSIPresentationAssets:{image:url=>({src:url,complete:false,naturalWidth:0})},SignalBreakerJourney:require('../src/player-journey.js'),SignalBreakerEpisodeTwo:require('../src/episode-two.js'),SignalBreakerWorkshop:require('../src/psi-workshop.js'),SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
+const talentAPI=require('../src/talent-tech-tree.js');window.SignalBreakerTalentTech={...talentAPI,manager:new talentAPI.TalentTechManager({storage:global.localStorage})};
 window.SignalBreakerMovementPad=require('../src/movement-pad.js');window.SignalBreakerSession=require('../src/session-flow.js');
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
@@ -84,7 +85,7 @@ const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of wind
 for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
 for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.some(c=>c.id==='quickRetry'));assert.ok(elements.overlayInner.children.some(c=>c.textContent===window.SignalBreakerText['breaker.lobby.operations']));
 const picker=elements.overlayInner.children.find(c=>c.className==='actor-picker').children[0];picker.value='kang_taesik';picker.trigger('change');
-assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
+assert.equal(picker.disabled,true);assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'player');
 const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');
 const before=window.SignalBreakerQA.engine().time;for(let i=0;i<60;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.engine().time,before);
 window.SignalBreakerQA.selectStage('SB-04');assert.equal(window.SignalBreakerQA.snapshot().stage,'SB-04');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');

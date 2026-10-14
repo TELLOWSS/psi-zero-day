@@ -212,7 +212,18 @@
     'CH-05':{gemId:'gem_insulation',commonGemId:'gem_thermal',partName:'특고압 릴레이 부품'}
   };
   const GEM_WEAPONS={gem_kinetic:['pulse'],gem_thermal:['net','magnet'],gem_pulse:['pulse'],gem_mist:['mist'],gem_tension:['anchor']};
+  // Character careers reuse earned entitlement, never grant points on switching.
+  const CAREERS={
+    player:{tree:'defense',order:['defense','engineering','kinetic'],stats:[{comboWindow:.1},{shieldTolerance:.05},{cooldownReduction:.04}]},
+    kang_taesik:{tree:'defense',order:['defense','kinetic','engineering'],stats:[{bounceVelocity:.05},{shieldTolerance:.05},{comboWindow:.2}]},
+    yoon_sungho:{tree:'kinetic',order:['defense','kinetic','engineering'],stats:[{pulseSpeed:.04},{pulseImpact:.05},{knockbackRadius:12}]},
+    lee_jaehoon:{tree:'engineering',order:['defense','engineering','kinetic'],stats:[{magnetRadius:.04},{netRadius:.05},{cooldownReduction:.04}]},
+    lim_junho:{tree:'engineering',order:['defense','engineering','kinetic'],stats:[{comboWindow:.1},{netCapacity:1},{magnetPull:.05}]},
+    safety_monitor:{tree:'defense',order:['defense','engineering','kinetic'],stats:[{shieldTolerance:.04},{hazardDelay:.04},{bounceVelocity:.06}]}
+  };
+  function validTalents(value,points){const result={};let remaining=Math.min(31,points);for(const tree of Object.values(TALENT_TREES))for(let i=0;i<tree.tiers.length;i++){const node=tree.tiers[i],rank=value?.[node.id];const unlocked=i===0||result[tree.tiers[i-1].id]===tree.tiers[i-1].maxRank;result[node.id]=unlocked&&Number.isInteger(rank)&&rank>=0?Math.min(rank,node.maxRank,remaining):0;remaining-=result[node.id];}return result;}
   const compatible=(weapon,id)=>Object.hasOwn(WEAPON_TECHS,weapon)&&SOCKET_GEMS.some(g=>g.id===id)&&(!GEM_WEAPONS[id]||GEM_WEAPONS[id].includes(weapon));
+  const recommendDraft=choices=>['capture','memory','field','cadence','bank','focus'].find(id=>choices.includes(id))||choices[0]||null;
 
   class TalentTechManager {
     constructor(options = {}) {
@@ -225,6 +236,7 @@
       this.points = 5; // 기본 지급 포인트
       this.spentPoints = 0;
       this.talents = {}; // { [talentId]: rank }
+      this.characterId='player';this.characterTalents={};
       this.weaponLevels = { pulse: 1, net: 1, magnet: 1, mist: 1, anchor: 1, scan: 1 };
       this.weaponSockets = {
         pulse: [null, null, null],
@@ -258,11 +270,13 @@
         if(validCount(data.parts))this.parts=data.parts;
         for(const gem of SOCKET_GEMS)if(validCount(data.inventory?.[gem.id]))this.inventory[gem.id]=data.inventory[gem.id];
         // Legacy mounted stock is preserved; incompatible mounts return to inventory.
-        if(data.schemaVersion!==2)for(const slots of Object.values(this.weaponSockets))for(const id of slots)if(id)this.inventory[id]=Math.max(this.inventory[id]||0,this.equippedCount(id));
+        if(![2,3].includes(data.schemaVersion))for(const slots of Object.values(this.weaponSockets))for(const id of slots)if(id)this.inventory[id]=Math.max(this.inventory[id]||0,this.equippedCount(id));
         const allocated={};for(const [weapon,slots] of Object.entries(this.weaponSockets))this.weaponSockets[weapon]=slots.map(id=>{if(!id||!compatible(weapon,id)||(allocated[id]||0)>=(this.inventory[id]||0))return null;allocated[id]=(allocated[id]||0)+1;return id;});
         this.rewardClaims=Array.isArray(data.rewardClaims)?[...new Set(data.rewardClaims.filter(id=>typeof id==='string'&&id.length<=100))].slice(-512):[];
         let remaining=Math.min(31,this.points);for(const tree of Object.values(TALENT_TREES))for(let index=0;index<tree.tiers.length;index++){const tier=tree.tiers[index],rank=this.talents[tier.id]||0,unlocked=index===0||this.talents[tree.tiers[index-1].id]===tree.tiers[index-1].maxRank;this.talents[tier.id]=unlocked?Math.min(rank,remaining):0;remaining-=this.talents[tier.id];}
         this.calcSpent();
+        for(const id of Object.keys(CAREERS))this.characterTalents[id]=validTalents(data.characterTalents?.[id]||(id==='player'?this.talents:{}),this.points);
+        this.characterId=Object.hasOwn(CAREERS,data.characterId)?data.characterId:'player';this.talents=this.characterTalents[this.characterId];this.calcSpent();
       } catch (e) {
         console.warn('TalentTech load error', e);
       }
@@ -271,7 +285,7 @@
     save() {
       try {
         this.storage?.setItem(this.storageKey, JSON.stringify({
-          schemaVersion:2,parts:this.parts,inventory:this.inventory,rewardClaims:this.rewardClaims,
+          schemaVersion:3,characterId:this.characterId,characterTalents:{...this.characterTalents,[this.characterId]:this.talents},parts:this.parts,inventory:this.inventory,rewardClaims:this.rewardClaims,
           guideRewardClaimed: this.guideRewardClaimed,
           points: this.points,
           talents: this.talents,
@@ -287,6 +301,15 @@
     calcSpent() {
       this.spentPoints = Object.values(this.talents).reduce((sum, v) => sum + (v || 0), 0);
     }
+    setCharacter(id){
+      if(!Object.hasOwn(CAREERS,id))return false;
+      const old=this.characterId,oldTalents=this.talents;
+      this.characterTalents[old]=oldTalents;this.characterId=id;this.talents=this.characterTalents[id]||{};this.calcSpent();
+      if(this.save()===false){this.characterId=old;this.talents=oldTalents;this.calcSpent();return false;}return true;
+    }
+    recommendation(){const career=CAREERS[this.characterId];if(this.canInvest('def_t1'))return {id:'def_t1',tree:'defense',cost:1,rank:this.talents.def_t1||0,maxRank:5};for(const key of [career.tree,...career.order.filter(id=>id!==career.tree)])for(const node of TALENT_TREES[key].tiers)if(this.canInvest(node.id))return {id:node.id,tree:key,cost:1,rank:this.talents[node.id]||0,maxRank:node.maxRank};return null;}
+    careerProgress(){const career=CAREERS[this.characterId];const invested=TALENT_TREES[career.tree].tiers.reduce((n,node)=>n+(this.talents[node.id]||0),0);return [5,9,15].map((required,index)=>({required,index,invested,active:invested>=required,stat:career.stats[index]}));}
+    equipmentRecommendation(loadout){for(const weapon of loadout.filter(id=>Object.hasOwn(WEAPON_TECHS,id))){if(this.parts>0&&this.weaponLevels[weapon]<4)return {type:'upgrade',weapon,cost:1};const slot=this.weaponSockets[weapon].indexOf(null),gem=SOCKET_GEMS.find(g=>compatible(weapon,g.id)&&this.availableGems(g.id)>0);if(slot>=0&&gem)return {type:'socket',weapon,slot,gemId:gem.id,cost:0};}return null;}
 
     getAvailablePoints() {
       return Math.max(0, Math.min(31,this.points) - this.spentPoints);
@@ -326,7 +349,7 @@
 
       this.talents[talentId] = cur + 1;
       this.calcSpent();
-      this.save();
+      if(this.save()===false){this.talents[talentId]=cur;this.calcSpent();return false;}
       return true;
     }
 
@@ -343,9 +366,10 @@
       this.rewardClaims.push(key);this.rewardClaims=this.rewardClaims.slice(-512);for(const id of [entry.gemId,entry.commonGemId].filter(Boolean))this.inventory[id]=Math.min(999,(this.inventory[id]||0)+1);this.parts=Math.min(999,this.parts+1);this.points+=2;this.save();return {...entry,points:2,parts:1};
     }
     resetTalents() {
+      const previous=this.talents;
       this.talents = {};
       this.calcSpent();
-      this.save();
+      if(this.save()===false){this.talents=previous;this.calcSpent();return false;}return true;
     }
 
     upgradeWeapon(weaponKey) {
@@ -355,7 +379,7 @@
       if (this.weaponLevels[weaponKey] >= 4) return false;
       this.parts--;
       this.weaponLevels[weaponKey]++;
-      this.save();
+      if(this.save()===false){this.parts++;this.weaponLevels[weaponKey]--;return false;}
       return true;
     }
 
@@ -363,8 +387,8 @@
       if (!Object.hasOwn(WEAPON_TECHS,weaponKey) || !Number.isInteger(slotIdx) || slotIdx < 0 || slotIdx > 2 || (gemId !== null && !compatible(weaponKey,gemId))) return false;
       if(this.weaponSockets[weaponKey][slotIdx]===gemId)return true;
       if(gemId!==null&&this.availableGems(gemId)<1)return false;
-      this.weaponSockets[weaponKey][slotIdx] = gemId;
-      this.save();
+      const previous=this.weaponSockets[weaponKey][slotIdx];this.weaponSockets[weaponKey][slotIdx] = gemId;
+      if(this.save()===false){this.weaponSockets[weaponKey][slotIdx]=previous;return false;}
       return true;
     }
 
@@ -393,6 +417,7 @@
           }
         }
       }
+      for(const node of this.careerProgress())if(node.active)for(const [key,value] of Object.entries(node.stat))stats[key]=(stats[key]||0)+value;
       stats.weaponLevels={...this.weaponLevels};
       stats.weaponSocketStats={};
       for(const [key,sockets] of Object.entries(this.weaponSockets)){const values={};for(const id of sockets){const gem=SOCKET_GEMS.find(g=>g.id===id);if(gem)for(const [name,value] of Object.entries(gem.stat))values[name]=(values[name]||0)+value;}stats.weaponSocketStats[key]=values;}
@@ -403,7 +428,7 @@
   const ACTIVE_TALENT_EFFECTS=Object.fromEntries(Object.values(TALENT_TREES).flatMap(tree=>tree.tiers.map(tier=>[tier.id,tier.desc])));
 
   return {
-    TalentTechManager,BOSS_LOOT,
+    TalentTechManager,BOSS_LOOT,CAREERS,validTalents,recommendDraft,
     ACTIVE_TALENT_EFFECTS,
     TALENT_TREES,
     WEAPON_TECHS,

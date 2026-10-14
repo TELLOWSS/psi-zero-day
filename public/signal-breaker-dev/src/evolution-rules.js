@@ -11,6 +11,7 @@ const RECIPES=Object.freeze({
 const stage=g=>Number(g.config.id.slice(-2));
 const BRANCHES=Object.freeze(['spread','focus']);
 function preferredFrame(id){return id==='CH-03'?'arc':'laser';}
+function recommendation(g){if(!g.veteran||g.state!=='intermission')return null;if(!g.evolution.recipe){if(g.pickupCount<EpisodeTwo.requiredParts(g))return null;return g.evolution.frame==='arc'?'storm':g.config.gateStable?'plasma':'prism';}if(canAdvance(g,'spread'))return 'spread';if(canAdvance(g,'capstone'))return 'capstone';return null;}
 function reset(g){g.pressureWarningWave=0;g.evolution={frame:'arc',recipe:null,branch:null,capstone:false};}
 function canAdvance(g,id){const e=g.evolution;if(!g.veteran||g.state!=='intermission'||!e.recipe)return false;return BRANCHES.includes(id)?!e.branch&&g.wave>=2&&g.pickupCount>=9:id==='capstone'&&!!e.branch&&!e.capstone&&g.wave>=3&&g.pickupCount>=14;}
 function advance(g,id){if(!canAdvance(g,id))return false;if(id==='capstone')g.evolution.capstone=true;else g.evolution.branch=id;g.event('evolved',g.player.x,g.player.y,1,id);return true;}
@@ -55,5 +56,5 @@ function contact(g,s,c){
 }
 function limit(g){return 135-stage(g)*5-(g.wave-1)*10;}
 function step(g){if(g.veteran&&g.state==='playing'&&g.pressureWarningWave!==g.wave&&limit(g)-(g.time-g.waveStart.time)<=8){g.pressureWarningWave=g.wave;g.event('pressuretimewarning',g.player.x,g.player.y,Math.max(0,Math.ceil(limit(g)-(g.time-g.waveStart.time))));}if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
-return {preferredFrame,RECIPES,BRANCHES,canAdvance,advance,restore,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
+return {preferredFrame,recommendation,RECIPES,BRANCHES,canAdvance,advance,restore,reset,armor,active,selectFrame,evolve,damage,hit,contact,limit,step};
 });

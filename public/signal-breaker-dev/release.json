@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.57.0-portrait-immersion",
-  "cacheName": "psi-signal-breaker-webpreview-v0.57.0-portrait-immersion",
-  "fingerprint": "18a5d3ff9687aef738caa7899e65cd2788c32cc9fcf152b102397de98164c99f",
+  "version": "0.58.0-character-careers",
+  "cacheName": "psi-signal-breaker-webpreview-v0.58.0-character-careers",
+  "fingerprint": "3a31cfd3ea3840d29f1c577c9baa08026e83aae5af8f61e718aa50bb9f33b4c1",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -53,6 +53,341 @@
       "path": "/assets/shared/signal-breaker-actors.js",
       "bytes": 102282,
       "sha256": "d08e8648cb12f9f392063ee8aa4ab38ead786f7acd3408ccb09bd8fe1151579b"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-east-v1.png",
+      "bytes": 2085170,
+      "sha256": "7988ec9c1256c937b73a0ca6d73f2af5b5b0fef4e5824bba34054116279d0d28"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-front-braces-v1.png",
+      "bytes": 1884019,
+      "sha256": "11f89489b93ee1050f09d462f8328e993622a61aea20ffbec1a665ff7ceafeb7"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-front-turns-v1.png",
+      "bytes": 1839413,
+      "sha256": "f8848c2b43121685679e8d85d89ce9e124d48d6fb3161e972bc0e5b82f798023"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-north-v1.png",
+      "bytes": 2085574,
+      "sha256": "3cb44992b2cd50683db0d470a7350cbecf450c9ded4268a3f5082614fe773710"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-northeast-v1.png",
+      "bytes": 2015457,
+      "sha256": "ea9ead4eedd69b399e577a773d4166a548216668e7384de663396869cffaa1d7"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-rear-braces-v1.png",
+      "bytes": 1384474,
+      "sha256": "ba52ec06ebbeb9f75a7a1858119c4132fa590e078b6302c15eb5d4cc62a65c1f"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-rear-turns-v1.png",
+      "bytes": 1827714,
+      "sha256": "4496034bd3dedc08ce19902cc3a44a8b9bbc099a24a9669dc9308b1655b9e9c0"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-south-v1.png",
+      "bytes": 1488359,
+      "sha256": "95bcabde031ed3201e031234366638d921e824f1aec04f988d9131945bc4d57f"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-southeast-v1.png",
+      "bytes": 2189365,
+      "sha256": "4405e9286ece8e64ea4726210699793a56d832d412f611e1d5ebc333ccc2c386"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-southwest-v1.png",
+      "bytes": 2143328,
+      "sha256": "d8053b1912c623260f8131632d4b1d5dc57daf90323f257db4877cec739a41b2"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/kang_taesik-west-v1.png",
+      "bytes": 2120320,
+      "sha256": "ff5277280a943f4e54446ca1eba602be6dfd3054ab7900a162814bde8a08b9bd"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-east-v1.png",
+      "bytes": 1031899,
+      "sha256": "85f17dd15c7a6902e99af6a6feb122ef261018203371619831ba0f8d3973af4e"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-front-braces-v1.png",
+      "bytes": 1656825,
+      "sha256": "dc9f4fcf9f3389d03749520888003b22c605fcd7c608aef58dbb76d38a00fd5b"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-front-turns-v2.png",
+      "bytes": 1643015,
+      "sha256": "f9387dd878c0daad227cbea5b13671eec6cdab076c4987dd1a47ae6efa8404a8"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-north-v1.png",
+      "bytes": 953381,
+      "sha256": "0f36c3d3ab3693f77e5a8a6e8bc0a8945be736b0a3b829e16a31be016e2ea32a"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-northeast-v1.png",
+      "bytes": 1073878,
+      "sha256": "c76042adcb90253b4e0ca776002f3fea27cacc6dbd10943704249ba2a9ca2748"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-rear-braces-v1.png",
+      "bytes": 1583109,
+      "sha256": "76c84e7c67230c5a3407647670d332ab656a140ec4c09254f9189b2757965339"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-rear-turns-v1.png",
+      "bytes": 1550529,
+      "sha256": "dedcf63b189e8f78ff0f609a62079c785eec8296f075c6e8985881112d5fb506"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-south-v1.png",
+      "bytes": 1065380,
+      "sha256": "3cb53b0948468a6505e15b810f18d98f66b25af8efd775ab4cde4149368fae34"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-southeast-v1.png",
+      "bytes": 1037691,
+      "sha256": "fc669eef43b6191fe22781a3da47aae0f403f755252a0654c30758235840a182"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-southwest-v1.png",
+      "bytes": 1905448,
+      "sha256": "e433fe15d90c7b0f642ddfa21e5fc755fa58b04c73e17841d2fd2b2ddb576303"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lee_jaehoon-west-v1.png",
+      "bytes": 1003972,
+      "sha256": "285620e74463681dd5bba63f8a47176c9816c41083a09885698fe97820c35e02"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-east-v1.png",
+      "bytes": 1940891,
+      "sha256": "0aa20a8949cb31c7fef83645a435aad7832dc60fea69bcef0960aefaafddc473"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-front-braces-v1.png",
+      "bytes": 1730955,
+      "sha256": "21e0817fcfccee15023cd19d51b17658c0b57245ee83b95e5b84e00f9dd6ad03"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-front-turns-v1.png",
+      "bytes": 1663400,
+      "sha256": "1936ca2f2d6a305452af65243328060c58f6115aefeccb5a4d71e21ac557c4ce"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-north-v1.png",
+      "bytes": 1206149,
+      "sha256": "f5376a9040ffb255894000c870d4af6f37e0ac7f1442ebce559cc2664842f9c7"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-northeast-v1.png",
+      "bytes": 1186585,
+      "sha256": "4f64495c80ec32167176aeed6eefd3e41165c72eda06bafb8a157db046958e4b"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-rear-braces-v1.png",
+      "bytes": 1666734,
+      "sha256": "3f88cc0cddc4e1303de53f7bfde13a6d8512ff3cdd8eb5ab3e2a0b00dc3dd72a"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-rear-turns-v1.png",
+      "bytes": 1667643,
+      "sha256": "0d67f1b1a60786a9ab7fc295d4dcf11c4c47dc577958916698fa8a8e2c79f13c"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-south-v1.png",
+      "bytes": 1928809,
+      "sha256": "2352698745bb03014196f9427f2b3f545b7c3a2bc09caa81481efdc70db9ea64"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-southeast-v1.png",
+      "bytes": 1443743,
+      "sha256": "7cdeec9405f17d3fa753bbed7acb2d8012a152afefb409cbab990f6a5d161250"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-southwest-v1.png",
+      "bytes": 1984337,
+      "sha256": "d798113a9f4e1a17ec5dee775c58de88535f816ae29a2cec45bc64893637e3d0"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/lim_junho-west-v1.png",
+      "bytes": 1077550,
+      "sha256": "10ee67efbd0313a615cc2ed139d8abcf1f1f4d6fc791a92af7e935fb13f27c4d"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-east-v1.png",
+      "bytes": 1302254,
+      "sha256": "afdc128cb621bd2e3b284d4c9df5d689180292dae8301ecaa4709314fe2d7115"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-front-braces-v1.png",
+      "bytes": 497388,
+      "sha256": "7b91413d5e92d684972d5aff7bf72d05d6caa82bfb9f3426152d0dacf5fa7457"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-front-turns-v1.png",
+      "bytes": 469138,
+      "sha256": "33d436f4e251dfe1248bf5b3a573eba15ee5e4dbb20ede890c90785ee553d5a2"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-north-v1.png",
+      "bytes": 1165262,
+      "sha256": "012c278cffcc41a452d6c6e01a7bb0de57d93fc11674255317755a0b85241231"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-northeast-v1.png",
+      "bytes": 1166615,
+      "sha256": "166a902293d896a0d981ab49d105ac4572535f27c85666c1b442c3283985f7f8"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-northwest-v1.png",
+      "bytes": 1219058,
+      "sha256": "e936a8fa45fb800d1666ad1d67d11e3b22d6bf6bf3a535f00620b0409b27f783"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-rear-braces-v1.png",
+      "bytes": 471755,
+      "sha256": "c92f69b2a76f9b40508396a49020a73b69bc6d03ad93acb87719e81d0c964f5c"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-rear-turns-v1.png",
+      "bytes": 501333,
+      "sha256": "8c5e82d2d03fd7f15009ef09ed82dc8304aba0078080de5c48057aa843f181ef"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-south-v2.png",
+      "bytes": 1183236,
+      "sha256": "de35b8e9545d75a1446474580584c17fb29ae18e1417fad49f9c6b5776f247aa"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-southeast-v1.png",
+      "bytes": 1362813,
+      "sha256": "7e8b20437c6f5baeb0d303d57edd802d1679de931419025bd7cbe4c22f2a2e95"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-southwest-v1.png",
+      "bytes": 1376832,
+      "sha256": "bcf66a4ad3334d39c13c8929572fe1f295eff763dc1c2ea8504482ed7662f211"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/player-west-v1.png",
+      "bytes": 1233043,
+      "sha256": "aff6e7c601ede2327acc712c8c09f72d91832255d111b95d17c87e440a1497ed"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-east-v1.png",
+      "bytes": 1969185,
+      "sha256": "fc3ad6cb0e3e1a5a1e1e39e746ba7b77a421b618757d5cfa4fbcf9e72ab771f6"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-front-braces-v1.png",
+      "bytes": 1680030,
+      "sha256": "6a21599f23562de5b556e3108478a1415b49e62955cc94044a3475868afd43c7"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-front-turns-v1.png",
+      "bytes": 1668319,
+      "sha256": "7a4c9edf7f963984b9b8cbeee2a71f3db5b4761a595eb0ff8b544bbc62953991"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-north-v1.png",
+      "bytes": 1057992,
+      "sha256": "752427f84c8103aa28cf9aac487c0261630ac860a1c0720ec539386b1a07eb62"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-northeast-v1.png",
+      "bytes": 1904170,
+      "sha256": "9e02aed24995c3d7a74ae38ef6a664fdbcd6428d2e34332a3faf38a8ddbf4761"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-rear-braces-v1.png",
+      "bytes": 1653864,
+      "sha256": "f79be8684b4d3fc9e62b6daafeed9c7a106b9e4bc4b64948f8daa83731b92c26"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-rear-turns-v1.png",
+      "bytes": 1603564,
+      "sha256": "9c63e2553c36d52857cfd4652ca49a331c408fea655d970ae2027f44f41fb8e1"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-south-v1.png",
+      "bytes": 1209666,
+      "sha256": "83392f06a76b4aa24d683f5944073ff146fa252a77c50b24619975824aa133cb"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-southeast-v1.png",
+      "bytes": 1949891,
+      "sha256": "d0347c8d6d22dd9f7dbb92e355cf12e360e993fc0f2bbc871a5beacf9b45f187"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-southwest-v1.png",
+      "bytes": 2002115,
+      "sha256": "804ebd729cef21afcc155948827be58bc2dfa9a76757718bf586603d028a2bf8"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/safety_monitor-west-v1.png",
+      "bytes": 1174470,
+      "sha256": "6a5393100663f27f17e34697e7af86073048b4410855c0b8ce8989541dda1a3a"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-east-v1.png",
+      "bytes": 1984971,
+      "sha256": "0844e55044e0f35022c1d69560fa8d796df9ab19bdb6852bba4327a28e7470f1"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-front-braces-v1.png",
+      "bytes": 1747645,
+      "sha256": "06016d5dfbd141e47250219317490a810a52287a8973f9def12450527121e92c"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-front-turns-v1.png",
+      "bytes": 1817535,
+      "sha256": "3e846d11eeb1f2d5d39cf94ceaa3018469de21e1773f639b63eecde65f544a53"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-north-v1.png",
+      "bytes": 1214555,
+      "sha256": "7cfcb5324d075d2ffc24d960ce6e560b940c0054e88b905614aa0537dd913065"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-northeast-v1.png",
+      "bytes": 2079369,
+      "sha256": "e55ae2deb6385d57c36ad51567073132576bed314d23e0b63bdcfce7c2d30a68"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-rear-braces-v1.png",
+      "bytes": 1759683,
+      "sha256": "43b3fad0a36874d7591e433e06502e9ad6def378b518842e99be9eb71196dbbc"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-rear-turns-v1.png",
+      "bytes": 1770036,
+      "sha256": "8a08a719f89024c65a07818c107a735470b82f5a42d89496c7346d509ca4400c"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-south-v1.png",
+      "bytes": 2061798,
+      "sha256": "43a5f721160daa0371ac6d3a2a96f3803fb0f393c4c4d99f74dc65bef030703d"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-southeast-v1.png",
+      "bytes": 2127922,
+      "sha256": "cee23da8e5430ebc6971c6c669b734f8ccd8b2d82cabecf042421da7c4d47213"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-southwest-v1.png",
+      "bytes": 1513248,
+      "sha256": "294bf1848a271a3eb6fbadac378fc11530b359766384b4660e4514b6bb6a93e4"
+    },
+    {
+      "path": "/assets/survivors/graphics-v1/actors/yoon_sungho-west-v1.png",
+      "bytes": 2030590,
+      "sha256": "4e6fe9d0c05192b2c5ba043dcff0dae7cd3d44c61841b86acc0af8c9fd8631a7"
     },
     {
       "path": "/assets/survivors/safety-monitor-v2.webp",
@@ -326,8 +661,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 25977,
-      "sha256": "4a1cb8c400a184da7d2676979557d549472bcf27c4b1515ef2654ceedda3df88"
+      "bytes": 26229,
+      "sha256": "baf45bcdec7b64a83071137f884be81c32c13940e7496d44819b858a5a21f4e2"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -336,13 +671,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6493,
-      "sha256": "c10f36007e178f8ab2172e36a50fbf946743885c9acb8261bebe6ad18094ed57"
+      "bytes": 11084,
+      "sha256": "d0370fada9c439f034469c977fd90413f17e6c630bf3311f4fe8ab58bd05e3b2"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 157091,
-      "sha256": "11c5e19f2f20c7d64832a217a706545a2868853c8710b259ddee0dc5a88912cd"
+      "bytes": 161116,
+      "sha256": "e7502bab049da497ede80022e47c07c75b42c46f7880321e6f83919337e0c243"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -353,6 +688,16 @@
       "path": "/signal-breaker-dev/src/burst-rules.js",
       "bytes": 6165,
       "sha256": "9d861fa13054cb145139535cd91ed4d0a4dfb2dc5b30a98897534a5eb69af1e5"
+    },
+    {
+      "path": "/signal-breaker-dev/src/career-ui.css",
+      "bytes": 3183,
+      "sha256": "e9ca3074100a65d8be422343fc642479ab474a73e1c3ca71d7554d948f4829b3"
+    },
+    {
+      "path": "/signal-breaker-dev/src/career-ui.js",
+      "bytes": 3341,
+      "sha256": "7f0aad8e66ba522954017030d845ead9ab398da1c13abfcf5812ee5cb8954e3a"
     },
     {
       "path": "/signal-breaker-dev/src/causal-source.js",
@@ -406,8 +751,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 5143,
-      "sha256": "19b2ef9c691d05dd79d857ffe18b8ac790c4cc09414a3997500e15a1747c2efd"
+      "bytes": 5499,
+      "sha256": "57d8946a6622da34b6cf806984bc13ef80980ce7b08ef213860c730e3031fa62"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -425,9 +770,14 @@
       "sha256": "472427b1627bb2a74cfe24f72326eb3f6a95cc8938132071ba136756ca8f759f"
     },
     {
+      "path": "/signal-breaker-dev/src/landscape-immersion.css",
+      "bytes": 6358,
+      "sha256": "30d63ca3f7897b8f891e38d81e61a48f000317cc253c58750068a5c2c72d590e"
+    },
+    {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 42533,
-      "sha256": "83bb26a7958be88689f2e30a0dbf65b64f8caa2b278184c84d0930e512eb12cd"
+      "bytes": 48311,
+      "sha256": "2d5592852965ed633587e2031f07b0eb843aba963406311a15f0e60841912a2d"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -506,8 +856,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/talent-tech-tree.js",
-      "bytes": 18429,
-      "sha256": "c8cce15fb8470997d1dec7e5d7d4b2996bad6e07d30b47223776646a7776f7a8"
+      "bytes": 22498,
+      "sha256": "309a3d4f93781d2e70724b23f3a42c2eba3b923c37b4febfabe6c818b599e2cd"
     }
   ]
 }

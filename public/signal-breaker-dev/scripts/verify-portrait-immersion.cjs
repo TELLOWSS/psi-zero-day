@@ -7,11 +7,11 @@ const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(
 (async()=>{
  const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'}),rows=[];
  try{
-  for(const [name,width,height] of [['small',320,568],['portrait',390,844],['tall',412,915],['tablet',768,1024],['landscape',844,390],['pc',1440,900]]){
+  for(const [name,width,height] of [['small',320,568],['portrait',390,844],['tall',412,915],['tablet',768,1024],['landscape',844,390],['small-landscape',568,320],['pc',1440,900]]){
    const context=await browser.newContext({viewport:{width,height},hasTouch:true,serviceWorkers:'block'}),page=await context.newPage(),errors=[];
    page.on('pageerror',error=>errors.push(error.message));await page.goto(base+'/signal-breaker-dev/index.html?entry=prepare');
    await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready);await page.locator('#overlayPrimary').click();await frames(page);
-   const immersive=height>width,arena=await page.locator('#arena').boundingBox();
+   const immersive=height>width||height<=690,arena=await page.locator('#arena').boundingBox();
    a.equal(await page.locator('#portraitMenuBtn').isVisible(),immersive);
    if(!immersive){a.ok(await page.locator('#smartBtn').isVisible());a.ok(await page.locator('#exitBtn').isVisible());await page.screenshot({path:path.join(out,name+'-unchanged.png')});rows.push({name,width,height,arena,checks:['portrait-only controls hidden','existing landscape/PC controls visible'],errors});await context.close();continue;}
    for(const id of ['exitBtn','viewBtn','itemStatus','veteranStatus','signalObjective','toast','chainGuide'])a.equal(await page.locator('#'+id).isVisible(),false,id+' must not cover battle');
@@ -33,7 +33,7 @@ const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(
    await page.locator('#portraitAction-guideBtn').click();a.ok(await page.locator('#guideDialog').evaluate(el=>el.open));await page.locator('#closeGuide').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'paused');
    await page.locator('#portraitAction-stageSelectBtn').click();a.ok(await page.locator('#stageSelectDialog').evaluate(el=>el.open));await page.locator('#closeStageSelect').click();
    await page.locator('#portraitAction-view').click();a.ok(await page.locator('#viewBtn').isVisible());await page.locator('#viewBtn').click();a.ok(await page.locator('#overlayInner[data-state=paused]').isVisible());
-   await page.locator('#portraitAction-immersion').click();a.equal(await page.evaluate(()=>document.body.classList.contains('portrait-immersive')),false);await page.locator('#overlayPrimary').click();const classicArena=await page.locator('#arena').boundingBox();a.ok(arena.height>classicArena.height+80,'more usable arena height');
+   await page.locator('#portraitAction-immersion').click();a.equal(await page.evaluate(()=>document.body.classList.contains('portrait-immersive')),false);await page.locator('#overlayPrimary').click();const classicArena=await page.locator('#arena').boundingBox();if(height>width)a.ok(arena.height>classicArena.height+80,'more usable arena height');
    await page.reload();await page.waitForSelector('#overlayPrimary');a.equal(await page.evaluate(()=>document.body.classList.contains('portrait-immersive')),false,'preference restored');await page.locator('#overlayPrimary').click();await page.locator('#pauseBtn').click();await page.locator('#portraitAction-immersion').click();await page.locator('#overlayPrimary').click();await frames(page);
    await page.screenshot({path:path.join(out,name+'-field.png')});
    // Isolated presentation fixture using the engine's authored boss factory. Not a campaign win or difficulty measurement.
@@ -42,7 +42,7 @@ const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(
    a.ok(await page.locator('#portraitBoostBtn').isVisible());await page.locator('#portraitBoostBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().runPoints),20,'real boost cost');
    await page.screenshot({path:path.join(out,name+'-boss-warning.png')});
    await page.locator('#portraitMenuBtn').click();await page.locator('#overlayInner .breaker-lobby-return').click();await page.waitForSelector('#operationLobby:not([hidden])');await page.locator('#resumeRun').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'playing');
-   await page.setViewportSize({width:height,height:width});await frames(page);a.equal(await page.locator('#portraitMenuBtn').isVisible(),false);a.ok(await page.locator('#exitBtn').isVisible());await page.setViewportSize({width,height});await frames(page);a.ok(await page.locator('#portraitMenuBtn').isVisible());a.equal(await page.evaluate(()=>SignalBreakerQA.view().movement.value),0);
+   await page.setViewportSize({width:height,height:width});await frames(page);a.equal(await page.locator('#portraitMenuBtn').isVisible(),width>height||width<=690);a.equal(await page.locator('#exitBtn').isVisible(),!(width>height||width<=690));await page.setViewportSize({width,height});await frames(page);a.ok(await page.locator('#portraitMenuBtn').isVisible());a.equal(await page.evaluate(()=>SignalBreakerQA.view().movement.value),0);
    a.deepEqual(errors,[]);rows.push({name,width,height,arena,classicArena,bossArena,bossBar,controls,checks:['expanded field','no control overlap','104px movement','trusted two-finger input','menu freezes time','smart/auto reachable','guide/stage/map return','preference persists','edge danger warning','boost costs 40P','home/resume','orientation restore'],errors});await context.close();console.log('PASS portrait immersion '+name);
   }
   fs.writeFileSync(path.join(out,'portrait-immersion.json'),JSON.stringify({base,method:'Actual UI and trusted touch at six viewports. Authored boss/points fixture tests presentation and boost controls only; does not prove human difficulty, FPS or a campaign victory.',rows},null,2));

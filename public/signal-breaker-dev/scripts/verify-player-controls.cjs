@@ -1,7 +1,7 @@
 const {chromium}=require(process.env.PSI_PLAYWRIGHT_MODULE||'playwright'),a=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4173',out=path.resolve(process.env.PSI_QA_OUTPUT||'../../artifacts/player-controls');fs.mkdirSync(out,{recursive:true});
 async function restoreSmartControl(page,width,height){
- const portrait=height>width;if(portrait)await page.locator('#portraitMenuBtn').click();
+ const portrait=height>width||height<=690;if(portrait)await page.locator('#portraitMenuBtn').click();
  const control=page.locator(portrait?'#portraitAction-smartBtn':'#smartBtn');a.ok(await control.isVisible());a.equal(await control.getAttribute('aria-pressed'),'false');const box=await control.boundingBox();a.ok(box.x>=0&&box.x+box.width<=width+1&&box.height>=44);await control.click();a.equal(await control.getAttribute('aria-pressed'),'true');if(portrait)await page.locator('#overlayPrimary').click();return box;
 }
 (async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'}),rows=[];try{
