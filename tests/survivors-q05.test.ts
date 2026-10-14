@@ -22,8 +22,9 @@ it('uncontrolled lifting danger never rewards exposing workers; a warned zone ca
  safe.e.update(1/60,idle);expect(safe.zone.state).toBe('cooldown');expect(safe.e.state.environmentalKills).toBe(1);
 });
 it('controlled worker resumes along the safety corridor and legacy IDs retain compatible star fields',()=>{
- const e=new SurvivorsEngine();e.start();e.state.resolvedWorkers=[{id:'safe',x:300,y:200,remaining:3}];e.update(1/60,idle);
- expect(e.state.resolvedWorkers[0]!.x).toBeGreaterThan(300);expect(e.state.resolvedWorkers[0]!.y).toBeLessThan(200);
+ const e=new SurvivorsEngine();e.start();e.state.resolvedWorkers=[{id:'safe',x:300,y:300,remaining:3}];e.update(1/60,idle);
+ expect(e.state.resolvedWorkers[0]!.x).toBeGreaterThan(300);expect(e.state.resolvedWorkers[0]!.route?.phase).toBe('approach');
+ expect(Math.hypot(e.state.resolvedWorkers[0]!.x-300,e.state.resolvedWorkers[0]!.y-300)).toBeLessThanOrEqual(100/60+.001);
  expect(PATROL_STAGES.stage_01.description).not.toMatch(/유폭|섬멸/);expect(PATROL_STAGES.stage_03.description).not.toMatch(/압살|유인/);
  expect(PATROL_STAGES.stage_01.starChallenges[1].targetValue).toBe(5);
 });

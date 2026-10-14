@@ -210,7 +210,7 @@ export interface SurvivorsGameState {
   lastDamage?: { source: HazardType | 'CRANE_DROP'; amount: number; remaining: number };
   // Legacy hp/damage/entity IDs denote remaining risk and intervention strength.
   // People are guided to safety; they are not attack targets.
-  resolvedWorkers?: Array<{id: string; x: number; y: number; remaining: number}>;
+  resolvedWorkers?: import('./survivors-safety-walkway').ResolvedWorker[];
   hazards: Hazard[];
   projectiles: Projectile[];
   drops: SafetyDrop[];

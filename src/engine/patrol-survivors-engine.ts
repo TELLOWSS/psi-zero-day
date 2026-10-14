@@ -4,6 +4,7 @@ import {resolveHandoffCarry} from '../domain/survivors-handoff-carry';
 import type {OperationHandoff} from '../domain/survivors-operation-handoff';
 import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
 import {createTerrain,terrainMove,terrainHit,terrainWaypoint,terrainFreePoint} from './survivors-terrain';
+import {createResolvedWorker,updateResolvedWorker,workerRouteTerrain} from './survivors-worker-egress';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
@@ -1066,12 +1067,11 @@ export class SurvivorsEngine {
       }
       this.emitAudio('pickup',x,y);
     });
-    for (const worker of this.state.resolvedWorkers ?? []) {
-      worker.remaining -= effectiveDt;
-      worker.x += Math.sign(WORLD_WIDTH / 2 - worker.x) * Math.min(Math.abs(WORLD_WIDTH / 2 - worker.x), 80 * effectiveDt);
-      worker.y += (worker.y < WORLD_HEIGHT / 2 ? -1 : 1) * 100 * effectiveDt;
+    if(this.state.resolvedWorkers?.length){
+      const routeTerrain=workerRouteTerrain(this.state.terrain??[],this.state.interactiveHazards);
+      this.state.resolvedWorkers=this.state.resolvedWorkers.filter(worker=>
+        !updateResolvedWorker(worker,effectiveDt,routeTerrain,this.state.interactiveHazards,WORLD_WIDTH,WORLD_HEIGHT));
     }
-    this.state.resolvedWorkers = (this.state.resolvedWorkers ?? []).filter(w => w.remaining > 0);
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
     this.updateSignatureEvents();
@@ -2269,7 +2269,7 @@ export class SurvivorsEngine {
         }
         if (h.type === 'UNHELMETED') {
           const workers = this.state.resolvedWorkers ??= [];
-          workers.push({id: h.id, x: h.x, y: h.y, remaining: 3});
+          workers.push(createResolvedWorker(h.id,h.x,h.y,workerRouteTerrain(this.state.terrain??[],this.state.interactiveHazards),WORLD_WIDTH,WORLD_HEIGHT));
           if (workers.length > 128) workers.shift();
         }
         this.state.score += h.expValue * 15;

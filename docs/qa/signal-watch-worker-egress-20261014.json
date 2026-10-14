@@ -1,0 +1,174 @@
+{
+  "base": "http://127.0.0.1:4173",
+  "method": "Isolated authored worker diagnostic fixture in live UI; risk already resolved to observe departure. Normal engine updates move the actor, no forced victory or player health refill. Not a human difficulty or frame-rate measurement.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "start": {
+        "id": "qa-educated",
+        "x": 520,
+        "y": 600,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "approach",
+          "entryY": 600,
+          "waiting": false
+        }
+      },
+      "entered": {
+        "id": "qa-educated",
+        "x": 698.7924032305009,
+        "y": 601.1486896099959,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "corridor",
+          "entryY": 600,
+          "waiting": false,
+          "waypoint": {
+            "x": 659,
+            "y": 639
+          }
+        }
+      },
+      "last": {
+        "x": 699.8731480156973,
+        "y": 979.1986667333065
+      },
+      "labels": [
+        "안전통로",
+        "↑ 안전통로 출구",
+        "↓ 안전통로 출구",
+        "안전통로 합류",
+        "안전통로 이동"
+      ],
+      "checks": [
+        "actual education-to-resolved transition",
+        "approach then corridor",
+        "tripod detour stays within corridor",
+        "pause freezes worker",
+        "only despawns at gate",
+        "world exit markings drawn"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "start": {
+        "id": "qa-educated",
+        "x": 520,
+        "y": 600,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "approach",
+          "entryY": 600,
+          "waiting": false
+        }
+      },
+      "entered": {
+        "id": "qa-educated",
+        "x": 698.7924032305009,
+        "y": 601.1486896099959,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "corridor",
+          "entryY": 600,
+          "waiting": false,
+          "waypoint": {
+            "x": 659,
+            "y": 639
+          }
+        }
+      },
+      "last": {
+        "x": 699.8731480156973,
+        "y": 979.1986667333065
+      },
+      "labels": [
+        "안전통로",
+        "↑ 안전통로 출구",
+        "↓ 안전통로 출구",
+        "안전통로 합류",
+        "안전통로 이동"
+      ],
+      "checks": [
+        "actual education-to-resolved transition",
+        "approach then corridor",
+        "tripod detour stays within corridor",
+        "pause freezes worker",
+        "only despawns at gate",
+        "world exit markings drawn"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "start": {
+        "id": "qa-educated",
+        "x": 520,
+        "y": 600,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "approach",
+          "entryY": 600,
+          "waiting": false
+        }
+      },
+      "entered": {
+        "id": "qa-educated",
+        "x": 698.7924032305009,
+        "y": 601.1486896099959,
+        "remaining": 1,
+        "route": {
+          "exit": "south",
+          "phase": "corridor",
+          "entryY": 600,
+          "waiting": false,
+          "waypoint": {
+            "x": 659,
+            "y": 639
+          }
+        }
+      },
+      "last": {
+        "x": 699.8731480156973,
+        "y": 979.1986667333065
+      },
+      "labels": [
+        "안전통로",
+        "↑ 안전통로 출구",
+        "↓ 안전통로 출구",
+        "안전통로 합류",
+        "안전통로 이동"
+      ],
+      "checks": [
+        "actual education-to-resolved transition",
+        "approach then corridor",
+        "tripod detour stays within corridor",
+        "pause freezes worker",
+        "only despawns at gate",
+        "world exit markings drawn"
+      ],
+      "errors": []
+    }
+  ],
+  "tests": {
+    "passed": 2068,
+    "skipped": 1,
+    "targetedPassed": 17,
+    "authoredStages": 50,
+    "staticRouteOrigins": 100,
+    "typecheck": "PASS",
+    "build": "PASS"
+  }
+}

@@ -1,4 +1,6 @@
 import type {Hazard} from '../domain/patrol-survivors';
+import {safetyWalkway} from '../domain/survivors-safety-walkway';
+import workerRouteText from '../../content/localization/survivors-worker-route-ko.json';
 import {SurvivorsPinballUnlockPreview} from './SurvivorsPinballCustomization';
 import {PINBALL_TABLE_IDS,pinballTableProgress} from '../domain/survivors-pinball-tables';
 import {drawEquipmentAura} from './survivors-equipment-aura';
@@ -2091,9 +2093,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Designated Green/Yellow Safety Walkway (안전통로: 45도 투시감 강화)
       ctx.save();
-      const walkW = 180;
-      const walkX = WORLD_WIDTH / 2 - walkW / 2;
-      ctx.fillStyle = 'rgba(34, 197, 94, 0.06)';
+      const walkway=safetyWalkway(WORLD_WIDTH,WORLD_HEIGHT);
+      const walkW = walkway.width;
+      const walkX = walkway.left;
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.10)';
       ctx.fillRect(walkX, 0, walkW, WORLD_HEIGHT);
 
       // Walkway 45-degree hazard stripe markings inside
@@ -2123,7 +2126,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillStyle = 'rgba(34, 197, 94, 0.16)';
       ctx.textAlign = 'center';
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
-        if (y === 180) ctx.fillText('안전통로', WORLD_WIDTH / 2, y);
+        if (y === 180) ctx.fillText(workerRouteText.walkway, walkway.centerX, y);
+      }
+      ctx.fillStyle='rgba(20,60,40,.8)';ctx.strokeStyle='#76d9a3';ctx.lineWidth=2;
+      for(const [y,arrow] of [[96,'↑'],[WORLD_HEIGHT-96,'↓']] as const){
+        ctx.fillRect(walkX+6,y-16,walkW-12,30);ctx.strokeRect(walkX+6,y-16,walkW-12,30);
+        ctx.fillStyle='#c8ffe2';ctx.fillText(arrow+' '+workerRouteText.exit,walkway.centerX,y+3);ctx.fillStyle='rgba(20,60,40,.8)';
       }
       ctx.restore();
 
@@ -2260,7 +2268,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
         ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(worker.x, worker.y - 61, 7, Math.PI, 0); ctx.fill();
         ctx.font = 'bold 10px Pretendard, sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
-        ctx.fillText('안전통로 이동', worker.x, worker.y - 65); ctx.restore();
+        ctx.fillText(worker.route?.waiting?workerRouteText.waiting:worker.route?.phase==='corridor'?workerRouteText.corridor:workerRouteText.approach, worker.x, worker.y - 65); ctx.restore();
       }
 
       // RENDER 2.5D APPROVED SAFETY STAMPS ON FLOOR
