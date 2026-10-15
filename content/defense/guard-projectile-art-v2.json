@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "visualVersion": "guard-projectile-material-v2-20261016",
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "promptFile": "docs/guard-projectile-image-prompt-20261016.json",
+  "atlas": {
+    "uri": "assets/defense/projectile-v2/guard-weapon-fx-atlas.png",
+    "width": 1254,
+    "height": 1254,
+    "columns": 4,
+    "rows": 4,
+    "cellWidth": 313.5,
+    "cellHeight": 313.5,
+    "hasAlpha": true,
+    "bytes": 2139132,
+    "sha256": "5c5e99c7649c131ba6315cf36ad56736d19bb38f3cc102d7582d8f01a27648d3"
+  },
+  "families": [
+    "PULSE",
+    "BURST",
+    "CONTROL",
+    "SENSOR"
+  ],
+  "rows": [
+    "PROJECTILE",
+    "MUZZLE",
+    "CONTACT",
+    "AFTERMATH"
+  ],
+  "budgets": {
+    "shots": 24,
+    "flights": 12,
+    "muzzles": 8,
+    "contacts": 12,
+    "resolveSprites": 4,
+    "damageLabels": 8
+  },
+  "lifetimeMs": 650
+}

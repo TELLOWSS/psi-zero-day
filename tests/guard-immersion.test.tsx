@@ -36,8 +36,9 @@ describe('Guard planning audit and battle feel',()=>{
   const labels=guardDamageLabels(Array.from({length:24},(_,i)=>({...shot,id:String(i)})));expect(labels).toHaveLength(8);
  });
  it('does not replay a muzzle or traveling projectile on delayed impact, and uses actual secondary route contacts',()=>{
-  const html=renderToStaticMarkup(<svg><DefenseCombatFX content={c} shots={[shot]}/></svg>);
-  expect(html).not.toContain('zb-shot-muzzle');expect(html).not.toContain('zb-shot-projectile');expect(html).toContain('L500 450');expect(html).toContain('data-combat-phase="IMPACT"');
+  const html=renderToStaticMarkup(<svg><DefenseCombatFX content={c} shots={[{...shot,targets:[hit('one'),{...hit('two'),point:{x:430,y:320}}]}]}/></svg>);
+  expect(html).not.toContain('data-weapon-muzzle=');expect(html).not.toContain('data-weapon-flight=');
+  expect(html).toContain('translate(500 450)');expect(html).toContain('translate(430 320)');expect(html).toContain('data-combat-phase="IMPACT"');
  });
  it('keeps effects bounded and expires old contacts during continuous fire',()=>{
   vi.useFakeTimers();
@@ -45,7 +46,7 @@ describe('Guard planning audit and battle feel',()=>{
   function Probe(){const visible=useDefenseCombatFX(state,shots);return <output>{visible.map(s=>s.id).join(',')}</output>;}
   act(()=>root.render(<Probe/>));expect(host.textContent).toBe('a');
   act(()=>vi.advanceTimersByTime(300));shots=[{...shot,id:'b'}];act(()=>root.render(<Probe/>));
-  act(()=>vi.advanceTimersByTime(150));expect(host.textContent).toBe('b');
+  act(()=>vi.advanceTimersByTime(400));expect(host.textContent).toBe('b');
   act(()=>vi.advanceTimersByTime(300));expect(host.textContent).toBe('');
  });
  it('requires an explicit confirm after a free evolution preview and distinguishes unavailable states',()=>{

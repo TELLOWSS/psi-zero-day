@@ -1,0 +1,21 @@
+/* Raster material detail carries the effect. No full-path lines or generic dot bullets. */
+.guard-weapon-fx{pointer-events:none}
+.guard-weapon-muzzle{opacity:0;animation:guard-material-muzzle 95ms ease-out both;transform-box:fill-box;transform-origin:42% 50%}
+.guard-weapon-flight{opacity:0;animation:guard-material-flight var(--flight) linear both}
+.guard-weapon-contact{opacity:0;animation:guard-material-contact 210ms var(--contact-delay) ease-out both;transform-box:fill-box;transform-origin:center}
+.guard-weapon-aftermath{opacity:0;animation:guard-material-aftermath 310ms calc(var(--contact-delay) + 45ms) ease-out both;transform-box:fill-box;transform-origin:center}
+.guard-weapon-shot .guard-damage-number{animation-delay:var(--contact-delay)}
+.guard-weapon-resolve{opacity:0;animation:guard-material-resolve 400ms var(--contact-delay) linear both}
+.guard-weapon-resolve .guard-resolution-atlas{animation-delay:var(--contact-delay)}
+.guard-weapon-shot.is-precision .guard-weapon-aftermath{animation-duration:240ms}
+.guard-weapon-shot.is-control .guard-weapon-aftermath{animation-duration:350ms}
+@keyframes guard-material-muzzle{0%{opacity:.95;transform:scale(.82)}35%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.08)}}
+@keyframes guard-material-flight{0%{opacity:0}8%,88%{opacity:1}100%{opacity:0}}
+@keyframes guard-material-contact{0%{opacity:0;transform:scale(.68)}12%{opacity:.95;transform:scale(.92)}35%{opacity:.82;transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
+@keyframes guard-material-aftermath{0%{opacity:0;transform:scale(.72)}20%{opacity:.48;transform:scale(.9)}100%{opacity:0;transform:scale(1.12)}}
+@keyframes guard-material-resolve{0%,70%{opacity:.7}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ .guard-weapon-fx .guard-weapon-flight,.guard-weapon-fx [data-weapon-muzzle],.guard-weapon-fx .guard-weapon-aftermath,.guard-weapon-fx .guard-weapon-resolve{display:none}
+ .guard-weapon-fx .guard-weapon-contact{animation:none;opacity:.42;transform:none}
+ .guard-weapon-fx .guard-damage-number{animation:none;opacity:1}
+}

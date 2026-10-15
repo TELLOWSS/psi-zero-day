@@ -1,0 +1,271 @@
+[
+  {
+    "name": "portrait",
+    "width": 390,
+    "height": 844,
+    "mobile": true,
+    "ready": {
+      "x": 4,
+      "y": 119.671875,
+      "width": 382,
+      "height": 636.65625
+    },
+    "selected": {
+      "x": 4,
+      "y": 119.671875,
+      "width": 382,
+      "height": 636.65625
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5260416666667425,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "small-portrait",
+    "width": 320,
+    "height": 568,
+    "mobile": true,
+    "ready": {
+      "x": 40,
+      "y": 100,
+      "width": 240,
+      "height": 400
+    },
+    "selected": {
+      "x": 40,
+      "y": 100,
+      "width": 240,
+      "height": 400
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5209177015000463,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "medium-portrait",
+    "width": 360,
+    "height": 740,
+    "mobile": true,
+    "ready": {
+      "x": 8.40625,
+      "y": 100.015625,
+      "width": 343.1875,
+      "height": 571.96875
+    },
+    "selected": {
+      "x": 8.40625,
+      "y": 100.015625,
+      "width": 343.1875,
+      "height": 571.96875
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5261901605593976,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "large-portrait",
+    "width": 430,
+    "height": 932,
+    "mobile": true,
+    "ready": {
+      "x": 4,
+      "y": 130.328125,
+      "width": 422,
+      "height": 703.328125
+    },
+    "selected": {
+      "x": 4,
+      "y": 130.328125,
+      "width": 422,
+      "height": 703.328125
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5234375,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "landscape",
+    "width": 844,
+    "height": 390,
+    "mobile": true,
+    "ready": {
+      "x": 75,
+      "y": 56,
+      "width": 550,
+      "height": 330
+    },
+    "selected": {
+      "x": 75,
+      "y": 56,
+      "width": 550,
+      "height": 330
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5208708319834686,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "small-landscape",
+    "width": 568,
+    "height": 320,
+    "mobile": true,
+    "ready": {
+      "x": 4,
+      "y": 61.203125,
+      "width": 416,
+      "height": 249.59375
+    },
+    "selected": {
+      "x": 4,
+      "y": 61.203125,
+      "width": 416,
+      "height": 249.59375
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5312591910969636,
+      "critical": [
+        {
+          "label": "재개Space",
+          "width": 48,
+          "height": 44
+        },
+        {
+          "label": "메뉴",
+          "width": 48,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "name": "desktop",
+    "width": 1440,
+    "height": 900,
+    "mobile": false,
+    "ready": {
+      "x": 243.328125,
+      "y": 133,
+      "width": 953.328125,
+      "height": 571.984375
+    },
+    "selected": {
+      "x": 312.921875,
+      "y": 133,
+      "width": 814.15625,
+      "height": 488.484375
+    },
+    "upgradeVisible": true,
+    "refund": true,
+    "layout": {
+      "overflow": false,
+      "alignment": 0.5364788123113036,
+      "critical": [
+        {
+          "label": "정지Space",
+          "width": 74,
+          "height": 52
+        },
+        {
+          "label": "설정",
+          "width": 66,
+          "height": 52
+        },
+        {
+          "label": "동료 지원Q",
+          "width": 79.109375,
+          "height": 44
+        },
+        {
+          "label": "🚨 E-STOPE",
+          "width": 95.75,
+          "height": 44
+        }
+      ]
+    },
+    "errors": []
+  }
+]

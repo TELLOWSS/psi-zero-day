@@ -7,20 +7,24 @@ import {defenseText as t} from '../app/defense-text';
 import {defenseG8aTowerVisual, defenseTowerArtUri} from '../app/defense-visual-assets';
 import type {DefenseAdvice} from '../app/defense-tactics';
 
-export function DefenseTechTree({content,tower,resource,advice,onCommand,ultimateAvailable=false}: {
+export function DefenseTechTree({content,tower,resource,advice,onCommand,ultimateAvailable=false,compact=false}: {
   readonly content: DefenseContent; readonly tower: DefenseTowerState; readonly resource: number;
   readonly advice: DefenseAdvice | null; readonly onCommand: (command: DefenseCommand) => void;
   readonly ultimateAvailable?:boolean;
+  readonly compact?:boolean;
 }) {
   const definition = content.towers.find(item=>item.id===tower.towerId)!;
   const current = definition.levels.find(item=>item.id===tower.levelId)!;
   const guard=isGuardMap(content.map.id),[previewId,setPreviewId]=useState<string|null>(null);
+  const [showAll,setShowAll]=useState(false);
+  const levels=compact&&!showAll?definition.levels.filter(level=>level.from===current.id):definition.levels;
   const preview=definition.levels.find(l=>l.id===previewId),canApply=preview&&guardEvolutionState(definition,tower,preview,resource,ultimateAvailable)==='available';
-  return <section className="zb-tech-tree" aria-label={t('defense.tactics.tree')}>
-    <header><strong>{t('defense.tactics.tree')}</strong><small>{t('defense.tactics.tree_hint')}</small></header>
+  return <section className="zb-tech-tree" data-compact={compact?'true':undefined} aria-label={t('defense.tactics.tree')}>
+    <header><strong>{t(compact?'guard.mobile.next_upgrade':'defense.tactics.tree')}</strong>{compact?<button type="button" className="guard-tree-toggle" aria-expanded={showAll} onClick={()=>setShowAll(value=>!value)}>{t(showAll?'guard.mobile.next_only':'guard.mobile.all_branches')}</button>:<small>{t('defense.tactics.tree_hint')}</small>}</header>
+    {compact?<p className="guard-current-level" data-final={!levels.length?'true':undefined}>{current.id} · {t('defense.tactics.equipped')}{!levels.length?` · ${t('guard.mobile.max_level')}`:''}</p>:null}
     <div className="zb-tech-nodes">
       {guard?<svg className="guard-tech-connectors" viewBox="0 0 800 200" preserveAspectRatio="none" aria-hidden="true"><path d="M100 100H300M300 100L400 50H700M300 100L400 150H700"/></svg>:null}
-      {definition.levels.map(level=>{
+      {levels.map(level=>{
         const active=level.id===current.id;
         const lockedUltimate=level.id.startsWith('L4')&&!ultimateAvailable;
         const next=level.from===current.id&&!lockedUltimate;

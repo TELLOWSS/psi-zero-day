@@ -114,7 +114,7 @@
 .zb-shell[data-map^="guard-gd-"] .zb-enemy-production-image{filter:drop-shadow(0 3px 3px #0008)}
 .zb-shell[data-map^="guard-gd-"] .zb-enemy-swift .zb-enemy-production-image{filter:drop-shadow(-4px 1px 3px #f5b24a55)}
 .zb-shell[data-map^="guard-gd-"] .zb-enemy-veiled.is-hidden .zb-enemy-production-image{opacity:.42;filter:drop-shadow(0 0 5px #bc8efb55)}
-.zb-shell[data-map^="guard-gd-"] .zb-enemy.is-hit .zb-enemy-production-image{filter:brightness(1.65) drop-shadow(0 0 4px #ffd78caa)}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy.is-hit .zb-enemy-production-image{animation:none;filter:brightness(1.15) drop-shadow(0 0 2px #ffd78c55)}
 .zb-shell[data-map^="guard-gd-"] .zb-enemy-boss.has-boss-armor .zb-enemy-production-image{filter:drop-shadow(0 0 6px #ffad3699)}
 .zb-shell[data-map^="guard-gd-"] .zb-resolve-burst{color:#ffe4ad;filter:drop-shadow(0 0 5px #ffca6b99)}
 .zb-shell[data-map^="guard-gd-"] .zb-resolve-burst circle{stroke:#ffe2ac;stroke-width:2;fill:#ffbc4320}

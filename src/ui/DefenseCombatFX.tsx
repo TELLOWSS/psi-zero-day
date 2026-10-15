@@ -6,6 +6,8 @@ import {guardMuzzleOffset} from '../app/guard-combat-presentation';
 import {guardDamageLabels} from '../app/guard-battle-feedback';
 import {defenseText as t} from '../app/defense-text';
 import './defense-combat-fx.css';
+import {GuardWeaponFX} from './GuardWeaponFX';
+import {GUARD_WEAPON_FX} from './guard-projectile-presentation';
 
 export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly DefenseCombatShot[]){
  const [visible,setVisible]=useState<readonly DefenseCombatShot[]>([]);
@@ -15,7 +17,8 @@ export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly Def
   if(!state||state.paused||state.status!=='RUNNING'){expires.current.clear();setVisible([]);return;}
   if(!shots.length)return;
   const key=shots.map(s=>s.id).join('|');if(seen.current===key)return;seen.current=key;
-  const now=performance.now();for(const shot of shots)expires.current.set(shot.id,now+420);
+  const lifetime=state.scenarioId.startsWith('guard-gd-')?GUARD_WEAPON_FX.lifetimeMs:420;
+  const now=performance.now();for(const shot of shots)expires.current.set(shot.id,now+lifetime);
   setVisible(previous=>[...previous.filter(p=>(expires.current.get(p.id)??0)>now&&!shots.some(s=>s.id===p.id)),...shots].slice(-24));
  },[state,shots]);
  useEffect(()=>{
@@ -27,6 +30,10 @@ export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly Def
 }
 
 export function DefenseCombatFX({shots,content,rotated=false}:{shots:readonly DefenseCombatShot[];content:DefenseContent;rotated?:boolean}){
+ return content.map.id.startsWith('guard-gd-')?<GuardWeaponFX shots={shots} content={content} rotated={rotated}/>:<LegacyDefenseCombatFX shots={shots} content={content} rotated={rotated}/>;
+}
+
+function LegacyDefenseCombatFX({shots,content,rotated=false}:{shots:readonly DefenseCombatShot[];content:DefenseContent;rotated?:boolean}){
  const guard=content.map.id.startsWith('guard-gd-');
  const damageLabels=new Set(guard?guardDamageLabels(shots):[]);
  useEffect(()=>{if(!guard)return;const atlas=new Image();atlas.src='/'+cinematic.resolveAtlas.uri;void atlas.decode?.().catch(()=>{});},[guard]);

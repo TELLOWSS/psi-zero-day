@@ -59,6 +59,9 @@ import './defense-tactics.css';
 import {defensePremiumArt,DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import './defense-premium.css';
 import './guard-usability.css';
+import './guard-mobile.css';
+import {useGuardBoardFit} from './use-guard-board-fit';
+import {GuardMobileInfo} from './GuardMobileInfo';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -264,7 +267,7 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
   >
     {isGuardMap(content.map.id)?<GuardRiskAura enemyId={enemy.enemyId} locked={(enemy.lockedUntilTick??0)>state.tick} armored={!!bossArmor}/>:null}
     {enemy.enemyId === 'VEILED' ? <ellipse cx="0" cy="8" rx="30" ry="16" className="zb-veiled-site-occlusion" aria-hidden="true" /> : null}
-    {isHit && enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED' ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
+    {isHit && enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED' && !isGuardMap(content.map.id) ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
       <ellipse cx="-25" cy="19" rx="18" ry="5" />
@@ -423,16 +426,20 @@ export function DefenseGame({
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
-  const [shortViewport,setShortViewport]=useState(()=>window.matchMedia?.('(max-height: 650px)').matches??false);
+  const [compactViewport,setCompactViewport]=useState(()=>window.matchMedia?.('(max-width: 900px), (max-height: 600px)').matches??false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen,setHelpOpen]=useState(false);
-  const mapFrame = defenseMapFrame(content.map.id, portrait&&!(guard&&shortViewport), content.map.width, content.map.height);
+  const [mobileInfoOpen,setMobileInfoOpen]=useState(false);
+  const guardMobile=guard&&compactViewport;
+  const boardFit=useGuardBoardFit(guardMobile&&!!state,portrait);
+  const mapFrame = defenseMapFrame(content.map.id, boardFit.rotate, content.map.width, content.map.height);
   const visualRoutes = defenseRoutes(content,state??undefined).map(route=>({...route,path:defenseVisualPath(content.map.id,route.path)}));
   const visualPath = visualRoutes[0]!.path;
   const tutorial = useDefenseTutorial(state, content, paused => {
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
+  useEffect(()=>{if(guardMobile&&tutorial.pausedByGuide)setMobileInfoOpen(true);},[guardMobile,tutorial.pausedByGuide]);
   const combatFrameRef=useRef<readonly DefenseCombatShot[]>([]);
   const combatShots=useDefenseCombatFX(state,combatFrameRef.current);
   const audio = useDefenseAudio(state, content.map.id,combatFrameRef.current,content.waves.length,portrait);
@@ -551,24 +558,27 @@ export function DefenseGame({
 
   useEffect(() => {
     const media = window.matchMedia?.('(orientation: portrait)');
-    const short=window.matchMedia?.('(max-height: 650px)');
+    const compact=window.matchMedia?.('(max-width: 900px), (max-height: 600px)');
     if (!media) return;
-    const sync = () => {setPortrait(media.matches);setShortViewport(short?.matches??false);};
+    const sync = () => {setPortrait(media.matches);setCompactViewport(compact?.matches??false);};
     sync();
     media.addEventListener?.('change', sync);
-    short?.addEventListener?.('change',sync);
-    return () => {media.removeEventListener?.('change', sync);short?.removeEventListener?.('change',sync);};
+    compact?.addEventListener?.('change',sync);
+    return () => {media.removeEventListener?.('change', sync);compact?.removeEventListener?.('change',sync);};
   }, []);
+  useEffect(()=>{setMobileInfoOpen(false);},[guardMobile,state?.runId]);
 
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
     if (!state) return;
     try {
       if (command.type === 'StartWave') {
+        setMobileInfoOpen(false);
         if (state.paused) persistence.dispatch({type:'SetPaused',paused:false});
         setSelectedPadId(null);
         setSelectedTowerId(null);
       }
       if (command.type === 'SetPaused' && !command.paused) {
+        setMobileInfoOpen(false);
         setSelectedPadId(null);
         setSelectedTowerId(null);
         setSettingsOpen(false);
@@ -715,7 +725,13 @@ export function DefenseGame({
     const tower = state.towers.find(item => item.padId === padId);
     setSelectedPadId(padId);
     setSelectedTowerId(tower?.id ?? null);
+    setMobileInfoOpen(false);
+    setSettingsOpen(false);
     setNotice('');
+  };
+  const openMobileInfo=()=>{
+    if(state?.status==='RUNNING'&&!state.paused)dispatch({type:'SetPaused',paused:true});
+    setSettingsOpen(false);setMobileInfoOpen(true);
   };
 
   const startWithSupport = (supportId: DefenseSupportId) => {
@@ -833,9 +849,12 @@ export function DefenseGame({
 
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
+  const needsTransition=!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id);
 
   return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
+      data-guard-mobile={guardMobile?'true':undefined}
+      data-mobile-info={mobileInfoOpen?'true':undefined}
       data-battle-paused={state.paused?'true':'false'}
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
@@ -859,12 +878,13 @@ export function DefenseGame({
           onClick={() => dispatch({ type: 'SetSpeed', speed: speed as 1 | 2 })}
         >{speed}×<kbd className="zb-hotkey">{speed}</kbd></button>)}
       </div>
-      <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => {if (!settingsOpen && !state.paused) dispatch({type:'SetPaused',paused:true});setSettingsOpen(open => !open);}}>{t('defense.tactics.settings')}</button>
+      <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => {if (!settingsOpen && !state.paused) dispatch({type:'SetPaused',paused:true});setMobileInfoOpen(false);setSettingsOpen(open => !open);}}>{t(guardMobile?'guard.mobile.menu':'defense.tactics.settings')}</button>
       <button type="button" className="zb-exit" onClick={() => { if(guard)void operations();else void persistence.exitToMain(); }}>{t(guard?'guard.home':'defense.ui.exit')}</button>
     </header>
     {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
       <button type="button" onClick={()=>setSettingsOpen(false)}>{t('defense.tactics.close')}</button>
-      <button type="button" onClick={() => { tutorial.replay(); setHelpOpen(true);setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
+      <button type="button" onClick={() => { tutorial.replay(); setHelpOpen(true);setSettingsOpen(false);if(guardMobile)setMobileInfoOpen(true); }}>{t('defense.tutorial.replay')}</button>
+      {guardMobile?<button type="button" onClick={openMobileInfo}>{t('guard.mobile.intel')}</button>:null}
       {guard?<div className="guard-settings-speed" aria-label={t('defense.ui.speed')}>{[1,2].map(speed=><button key={speed} type="button" aria-pressed={state.speed===speed} onClick={()=>dispatch({type:'SetSpeed',speed:speed as 1|2})}>{speed}×</button>)}</div>:null}
       <button
         type="button"
@@ -872,6 +892,7 @@ export function DefenseGame({
         aria-pressed={audio.muted}
         onClick={() => audio.setMuted(!audio.muted)}
       ><span>SOUND</span><b>{audio.muted ? 'OFF' : 'ON'}</b></button>
+      {guard?<button type="button" className="guard-menu-operations" onClick={()=>{void operations();}}>{t('guard.home')}</button>:null}
     </section> : null}
     <DefenseSaveStatus controller={persistence} />
     <section className="zb-tactics-strip" aria-label={t('defense.tactics.simulation')}>
@@ -883,7 +904,12 @@ export function DefenseGame({
       {!result?<button type="button" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('defense.tactics.recommend')}{advice?` · ${advice.padId} · R ${advice.cost}`:''}</button>:null}
     </section>
 
-    <section className="zb-stage">
+    {guardMobile&&mobileInfoOpen?<GuardMobileInfo onClose={()=>setMobileInfoOpen(false)}>
+      <GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>
+      {preview?<GuardWaveIntel key={`mobile-${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}} initiallyOpen/>:null}
+      <DefenseTutorial controller={tutorial}/><p>{t('guard.purchase.hint')}</p>
+    </GuardMobileInfo>:null}
+    <section className="zb-stage" ref={boardFit.ref}>
       <div
         className="zb-board-wrap"
         style={{
@@ -1050,9 +1076,15 @@ export function DefenseGame({
 
     <footer className="zb-command">
       <section className="zb-selection">
-        {guard&&canUndoDefenseBuild(state)?<button className="guard-undo-build" type="button" onClick={()=>dispatch({type:'UndoBuild'})}><strong>{t('guard.purchase.undo')}</strong><span>{state.lastTowerPurchase?.padId} · +R {state.towers.find(t=>t.id===state.lastTowerPurchase?.towerInstanceId)?.invested} · {t('guard.purchase.refund')}</span></button>:null}
+        {guard&&!guardMobile&&canUndoDefenseBuild(state)?<button className="guard-undo-build" type="button" onClick={()=>dispatch({type:'UndoBuild'})}><strong>{t('guard.purchase.undo')}</strong><span>{state.lastTowerPurchase?.padId} · +R {state.towers.find(t=>t.id===state.lastTowerPurchase?.towerInstanceId)?.invested} · {t('guard.purchase.refund')}</span></button>:null}
         {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>{advice?t(advice.reasonId):t('defense.tactics.no_advice')}</span></div> : null}
-        {selectedPad?<div className="zb-selection-heading"><small>{state.paused?t('defense.tactics.hold'):t('defense.tactics.advice_hint')}</small><button type="button" onClick={()=>{setSelectedPadId(null);setSelectedTowerId(null);}}>{t('defense.tactics.close')}</button></div>:null}
+        {selectedPad?<div className="zb-selection-heading">
+          <small>{guardMobile?`${selectedPad.id} · ${selectedTower?.levelId??t('guard.mobile.empty')} · ${t('defense.tactics.hold')}`:state.paused?t('defense.tactics.hold'):t('defense.tactics.advice_hint')}</small>
+          {guardMobile?<select className="guard-pad-select" aria-label={t('guard.mobile.pads')} value={selectedPadId??''} onChange={event=>choosePad(event.target.value)}>{content.map.pads.map(pad=><option key={pad.id} value={pad.id}>{pad.id} · {state.towers.find(tower=>tower.padId===pad.id)?.levelId??t('guard.mobile.empty')}</option>)}</select>:null}
+          {guardMobile&&canUndoDefenseBuild(state)?<button className="guard-undo-build is-mobile" type="button" onClick={()=>dispatch({type:'UndoBuild'})}>{t('guard.purchase.undo')}<b>{state.lastTowerPurchase?.padId} · +R {state.towers.find(t=>t.id===state.lastTowerPurchase?.towerInstanceId)?.invested}</b></button>:null}
+          <button type="button" onClick={()=>{setSelectedPadId(null);setSelectedTowerId(null);}}>{t(guardMobile?'guard.mobile.close':'defense.tactics.close')}</button>
+        </div>:null}
+        {guardMobile&&selectedPad?<nav className="guard-pad-rail" aria-label={t('guard.mobile.pads')}>{content.map.pads.map(pad=>{const tower=state.towers.find(item=>item.padId===pad.id);return <button key={pad.id} type="button" data-pad-choice={pad.id} aria-pressed={pad.id===selectedPadId} aria-label={`${pad.id} · ${tower?towerName(content.map.id,tower.towerId):t('guard.mobile.empty')}`} onClick={()=>choosePad(pad.id)}><strong>{pad.id}</strong><small>{tower?.levelId??'+'}</small></button>;})}</nav>:null}
         {selectedPad&&advice?.padId===selectedPad.id?<p className="zb-advice-reason">{t('defense.tactics.recommended')} · {towerName(content.map.id,advice.towerId)} · {t(advice.reasonId)}</p>:null}
 
         {selectedPad && !selectedPadTower ? <div className="zb-build-panel">
@@ -1091,6 +1123,7 @@ export function DefenseGame({
             <span>{t('defense.ui.range')} <b>{selectedLevel.range}</b></span>
             <span>{t('defense.ui.interval')} <b>{(selectedLevel.intervalTicks * content.tickMs / 1000).toFixed(2)}s</b></span>
           </div>
+          <details className="guard-tower-management" open={!guardMobile||undefined}><summary>{t('guard.mobile.management')}</summary>
           <div className="zb-target-mode">
             <span>{t('defense.ui.target')} <kbd className="zb-hotkey" style={{ fontSize: '8px' }}>T</kbd></span>
             {content.targetModes.map(mode => <button
@@ -1105,11 +1138,17 @@ export function DefenseGame({
               <span>{t('defense.ui.sell')}<kbd className="zb-hotkey">S</kbd></span><b>R {refund}</b>
             </button>
           </div>
-          <DefenseTechTree key={selectedTower.id} content={content} tower={selectedTower} resource={state.resource} advice={advice} onCommand={dispatch} ultimateAvailable={!!state.ultimateUnlocked&&!state.towers.some(t=>t.levelId.startsWith('L4'))}/>
+          </details>
+          <DefenseTechTree key={selectedTower.id} content={content} tower={selectedTower} resource={state.resource} advice={advice} onCommand={dispatch} compact={guardMobile} ultimateAvailable={!!state.ultimateUnlocked&&!state.towers.some(t=>t.levelId.startsWith('L4'))}/>
         </div> : null}
       </section>
 
       <section className="zb-run-controls">
+        {guardMobile&&(state.status==='READY'||state.status==='INTERMISSION'||state.paused)?<>
+          <button type="button" className="guard-mobile-recommend" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('guard.mobile.recommend')}</button>
+          <button type="button" className="guard-mobile-intel-toggle" aria-expanded={mobileInfoOpen} onClick={()=>mobileInfoOpen?setMobileInfoOpen(false):openMobileInfo()}>{t(needsTransition?'guard.mobile.transition':'guard.mobile.intel_short')}</button>
+          {state.status==='RUNNING'&&state.paused?<button type="button" className="guard-mobile-resume" onClick={()=>dispatch({type:'SetPaused',paused:false})}>{t('guard.mobile.continue')}</button>:null}
+        </>:null}
         {guard?<GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>:null}
         {guard&&(state.status==='READY'||state.status==='INTERMISSION')?<p className="guard-preparation-hint">{t('guard.preparation.hint')}</p>:null}
         {guard&&preview&&(state.status==='READY'||state.status==='INTERMISSION')?<GuardWaveIntel key={`${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}}/>:null}
@@ -1125,6 +1164,7 @@ export function DefenseGame({
             {state.supportCooldownRemaining > 0 ? `${supportCooldownSeconds}s` : t(defenseSupportHasTarget(state,content)?'defense.ui.support':'guard.support.no_target')}
             {state.supportCooldownRemaining <= 0 ? <kbd className="zb-hotkey">Q</kbd> : null}
           </button>
+          {guardMobile&&(state.supportId==='COMMANDER'||state.supportId==='SIGNALER')?<button type="button" className="guard-spatial-pick" onClick={()=>choosePad(state.towers[0]?.padId??content.map.pads[0]!.id)}>{t('guard.mobile.select_equipment')}</button>:null}
         </div>
 
         {/* Phase 2: Active E-Stop Button */}
@@ -1144,7 +1184,7 @@ export function DefenseGame({
         {(state.status === 'READY' || state.status === 'INTERMISSION') ? <button
           className="zb-start-wave"
           type="button"
-          disabled={!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id)}
+          disabled={needsTransition}
           onClick={() => dispatch({ type: 'StartWave' })}
         >{t(state.status === 'READY' ? 'defense.ui.start_wave' : 'defense.ui.start_next')}<kbd className="zb-hotkey">Enter</kbd></button> : null}
         {notice ? <p className="zb-notice" role="status">{notice}</p> : null}
@@ -1155,6 +1195,10 @@ export function DefenseGame({
         {selectedPad&&state.paused?<p>{t('defense.tactics.hold_hint')}</p>:null}
       </div>
     </footer>
+    {guardMobile&&selectedPad&&!result?<nav className="guard-mobile-selectionbar" aria-label={t('guard.mobile.selection_actions')}>
+      <button type="button" onClick={()=>{setSelectedPadId(null);setSelectedTowerId(null);}}>{t('guard.mobile.map')}</button>
+      {state.status==='RUNNING'?<button type="button" className="is-primary" onClick={()=>dispatch({type:'SetPaused',paused:false})}>{t('guard.mobile.continue')}</button>:<button type="button" className="is-primary" onClick={()=>needsTransition?openMobileInfo():dispatch({type:'StartWave'})}>{t(needsTransition?'guard.mobile.transition':state.status==='READY'?'defense.ui.start_wave':'defense.ui.start_next')}</button>}
+    </nav>:null}
 
     {result ? <section className={`zb-result ${result.won ? 'is-win' : 'is-loss'}`} role="dialog" aria-modal="true" aria-labelledby="zb-result-title" data-result-grade="COMMERCIAL_GFX_V1">
       <div>

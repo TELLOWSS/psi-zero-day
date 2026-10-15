@@ -1,0 +1,74 @@
+[
+  {
+    "family": "PULSE",
+    "width": 1440,
+    "height": 900,
+    "phase": "CONTACT",
+    "flightMs": 70,
+    "path": "M145.64 172.68L107.25 300",
+    "contacts": 1,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "BURST",
+    "width": 1440,
+    "height": 900,
+    "phase": "CONTACT",
+    "flightMs": 132,
+    "path": "M122.96 174.84Q128.105 202.2569608753737 133.25 300",
+    "contacts": 2,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "CONTROL",
+    "width": 1440,
+    "height": 900,
+    "phase": "CONTACT",
+    "flightMs": 75,
+    "path": "M110 150L110.50000000000009 300",
+    "contacts": 2,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "SENSOR",
+    "width": 1440,
+    "height": 900,
+    "phase": "CONTACT",
+    "flightMs": 55,
+    "path": "M107.84 159.72L94.25 300",
+    "contacts": 1,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "PULSE",
+    "width": 390,
+    "height": 844,
+    "phase": "CONTACT",
+    "flightMs": 70,
+    "path": "M82.68 164.36L107.25 300",
+    "contacts": 1,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "BURST",
+    "width": 568,
+    "height": 320,
+    "phase": "CONTACT",
+    "flightMs": 132,
+    "path": "M122.96 174.84Q128.105 202.2569608753737 133.25 300",
+    "contacts": 2,
+    "oldPrimitives": 0,
+    "pausedEffectsCleared": true,
+    "errors": []
+  }
+]

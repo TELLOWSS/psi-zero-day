@@ -61,9 +61,11 @@ async function assertLayout(page){
   assert.equal(await shell.getAttribute('data-speed'),'2');
   await page.locator('.guard-settings-speed button').first().click();
   await page.locator('.zb-defense-settings-panel>button').nth(1).click();
-  await page.locator('.guard-help[open] .zb-tutorial').waitFor({state:'visible'});
+  const mobile=await shell.getAttribute('data-guard-mobile')==='true';
+  await page.locator(mobile?'.guard-mobile-info-panel .zb-tutorial':'.guard-help[open] .zb-tutorial').waitFor({state:'visible'});
   await page.locator('.zb-tutorial button').first().click();
-  await page.locator('.guard-help summary').click();
+  if(mobile)await page.locator('.guard-mobile-info-panel header button').click();
+  else await page.locator('.guard-help summary').click();
   const resource=Number(await shell.getAttribute('data-resource'));
   await page.locator('.zb-pad-hit').first().click();
   await page.locator('.zb-tower-shop button').first().click();
@@ -83,7 +85,7 @@ async function assertLayout(page){
   await page.locator('.zb-pad-hit').first().click();await page.locator('.guard-undo-build').click();
   assert.equal(Number(await shell.getAttribute('data-resource')),resource);
   await page.locator('.zb-tower-shop button').first().click();
-  await page.getByRole('button',{name:'현장으로 돌아가기',exact:true}).click();
+  await page.locator('.zb-selection-heading>button:last-child').click();
   await page.locator('.zb-start-wave').click();
   await page.waitForFunction(()=>Number(document.querySelector('[data-defense-screen="combat"]').dataset.tick)>5);
   assert.equal(await page.locator('.guard-undo-build').count(),0);

@@ -1,0 +1,30 @@
+[
+  {
+    "family": "PULSE",
+    "width": 1440,
+    "height": 900,
+    "reducedMotion": "reduce",
+    "phase": "CONTACT",
+    "flightMs": 70,
+    "path": "M145.64 172.68L107.25 300",
+    "contacts": 1,
+    "oldPrimitives": 0,
+    "flightVisible": false,
+    "pausedEffectsCleared": true,
+    "errors": []
+  },
+  {
+    "family": "PULSE",
+    "width": 390,
+    "height": 844,
+    "reducedMotion": "reduce",
+    "phase": "CONTACT",
+    "flightMs": 70,
+    "path": "M82.68 164.36L107.25 300",
+    "contacts": 1,
+    "oldPrimitives": 0,
+    "flightVisible": false,
+    "pausedEffectsCleared": true,
+    "errors": []
+  }
+]

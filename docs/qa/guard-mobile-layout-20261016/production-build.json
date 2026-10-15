@@ -1,0 +1,38 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "before": {
+      "x": 4,
+      "y": 119.671875,
+      "width": 382,
+      "height": 636.65625
+    },
+    "after": {
+      "x": 4,
+      "y": 119.671875,
+      "width": 382,
+      "height": 636.65625
+    },
+    "upgrade": true,
+    "errors": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "before": {
+      "x": 4,
+      "y": 61.203125,
+      "width": 416,
+      "height": 249.59375
+    },
+    "after": {
+      "x": 4,
+      "y": 61.203125,
+      "width": 416,
+      "height": 249.59375
+    },
+    "upgrade": true,
+    "errors": []
+  }
+]
