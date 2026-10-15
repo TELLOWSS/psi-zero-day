@@ -1,5 +1,6 @@
 import './shooting-entry.css';
 import './hub-unified.css';
+import './hub-cinematic.css';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -353,10 +354,10 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
-  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11">
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art="cinematic-dawn-v1">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
+    <img src="/assets/branding/home-v2/site-at-dawn.png" alt="" width="1672" height="941" fetchPriority="high" decoding="async" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
     <div className="commercial-title-sun-glow" aria-hidden="true" />
@@ -381,6 +382,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     <button type="button" className="work-stop-song-open" onClick={() => setShowSongPlayer(true)}>♫ {workStopSongText('open')}</button>
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
+      <div className="hub-cinematic-intro">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
       <div className="commercial-title-logo" data-title-rank="primary" role="img" aria-label={GAME_TITLE}>
         <picture className="commercial-title-wordmark">
@@ -388,10 +390,12 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <img src="/assets/branding/new-psi-wordmark-stacked-chalk.svg" alt="" width="460" height="144" />
         </picture>
       </div>
+      <p className="hub-home-name">{t('ui.hub.home_name')}</p>
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
+      </div>
 
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
@@ -408,7 +412,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
             <em className="breaker-brand-line">SIGNAL / WATCH</em>
             <strong className="commercial-title-survivors-title commercial-title-mode-title" aria-label="시그널 워치 (SURVIVORS)">
               시그널 워치 <span className="commercial-mode-genre">(SURVIVORS)</span>
-              <span className="commercial-title-badge-new">LIVE</span>
             </strong>
             <small>사고 전 신호 포착 · 현장 위험 실시간 요격 · 3-Wave 시네마틱 서바이벌</small>
           </span>
@@ -418,14 +421,14 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <img src="/signal-breaker-dev/art/map-delivery-v3.webp" alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon">↗</span>
-          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / BREAKER</em><strong className="commercial-title-mode-title">{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>각도를 바꿔, 흐름을 끊어라. · 수동 반사 아케이드</small></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / BREAKER</em><strong className="commercial-title-mode-title">{t('ui.hub.breaker_title')}</strong><small>각도를 바꿔, 흐름을 끊어라. · 수동 반사 아케이드</small></span>
           <b>›</b>
         </a>
         {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art" data-title-primary-cta="defense" type="button" onClick={() => onDefense("guard-campaign")}>
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD</em><strong className="commercial-title-mode-title">{defenseText('guard.title')} <span className="commercial-title-badge-new">LIVE</span></strong><small>{defenseText('guard.hub.description')}</small></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD</em><strong className="commercial-title-mode-title">{defenseText('guard.title')}</strong><small>{defenseText('guard.hub.description')}</small></span>
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
@@ -461,7 +464,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       onClick={() => setModePreview('defense')}
     >
       <div className="commercial-title-field-status-head">
-        <span>LIVE SITE</span><b>DEF-CORE-01</b>
+        <span>{defenseText('defense.tactics.preview')}</span><b>DEF-CORE-01</b>
       </div>
       <strong>서측 Gate · 차량–보행 간섭</strong>
       <small>대표 시나리오 · WAVE 8 / 10</small>

@@ -1,0 +1,290 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "scrollHeight": 1502,
+      "height": 900,
+      "columns": "315.594px 315.609px 315.594px 315.609px"
+    },
+    "cards": [
+      {
+        "x": 64.796875,
+        "y": 454,
+        "width": 315.59375,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 396.390625,
+        "y": 454,
+        "width": 315.609375,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 728,
+        "y": 454,
+        "width": 315.59375,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 1059.59375,
+        "y": 454,
+        "width": 315.609375,
+        "height": 250,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "scrollHeight": 1570,
+      "height": 1080,
+      "columns": "348px 348px 348px 348px"
+    },
+    "cards": [
+      {
+        "x": 240,
+        "y": 508,
+        "width": 348,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 604,
+        "y": 508,
+        "width": 348,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 968,
+        "y": 508,
+        "width": 348,
+        "height": 250,
+        "titleInside": true
+      },
+      {
+        "x": 1332,
+        "y": 508,
+        "width": 348,
+        "height": 250,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 2038,
+      "height": 844,
+      "columns": "358px"
+    },
+    "cards": [
+      {
+        "x": 16,
+        "y": 398,
+        "width": 358,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 576,
+        "width": 358,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 754,
+        "width": 358,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 932,
+        "width": 358,
+        "height": 166,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 320,
+      "scrollWidth": 320,
+      "scrollHeight": 2077,
+      "height": 568,
+      "columns": "288px"
+    },
+    "cards": [
+      {
+        "x": 16,
+        "y": 398,
+        "width": 288,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 576,
+        "width": 288,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 754,
+        "width": 288,
+        "height": 166,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 932,
+        "width": 288,
+        "height": 166,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 844,
+      "scrollWidth": 844,
+      "scrollHeight": 1411,
+      "height": 390,
+      "columns": "376.031px 376.031px"
+    },
+    "cards": [
+      {
+        "x": 37.96875,
+        "y": 248,
+        "width": 376.03125,
+        "height": 194.5,
+        "titleInside": true
+      },
+      {
+        "x": 430,
+        "y": 248,
+        "width": 376.03125,
+        "height": 194.5,
+        "titleInside": true
+      },
+      {
+        "x": 37.96875,
+        "y": 458.5,
+        "width": 376.03125,
+        "height": 194.5,
+        "titleInside": true
+      },
+      {
+        "x": 430,
+        "y": 458.5,
+        "width": 376.03125,
+        "height": 194.5,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "art": {
+      "width": 1672,
+      "height": 941
+    },
+    "layout": {
+      "width": 568,
+      "scrollWidth": 568,
+      "scrollHeight": 1568,
+      "height": 320,
+      "columns": "262px 262px"
+    },
+    "cards": [
+      {
+        "x": 16,
+        "y": 236,
+        "width": 262,
+        "height": 194,
+        "titleInside": true
+      },
+      {
+        "x": 290,
+        "y": 236,
+        "width": 262,
+        "height": 194,
+        "titleInside": true
+      },
+      {
+        "x": 16,
+        "y": 442,
+        "width": 262,
+        "height": 194,
+        "titleInside": true
+      },
+      {
+        "x": 290,
+        "y": 442,
+        "width": 262,
+        "height": 194,
+        "titleInside": true
+      }
+    ],
+    "storyStillGated": true,
+    "guardEntryWorks": true,
+    "errors": []
+  }
+]

@@ -1,0 +1,80 @@
+/* Final key art owns the scene; shared covers provide a clear, quiet game library. */
+:root .commercial-title-home[data-title-layout='MODE_SELECT_V11'][data-home-art='cinematic-dawn-v1']{
+ background:#0a151c!important;padding:24px clamp(20px,4.5vw,80px) 48px!important;isolation:isolate;
+ & .commercial-title-backdrop{height:min(850px,100dvh)!important;object-fit:cover;object-position:70% 36%;opacity:1;filter:none!important;animation:none!important;transform:none!important;z-index:-3}
+ & .commercial-title-grade{height:100dvh!important;background:linear-gradient(0deg,#0a151c 0%,#0a151ce0 12%,#0a151c10 57%),linear-gradient(90deg,#06131cc9 0%,#06131c8c 35%,#06131c00 75%)!important;z-index:-2}
+ & :is(.commercial-title-grain,.commercial-title-depth,.commercial-title-scan){display:none!important}
+ & .commercial-title-topline{max-width:1440px;margin:auto;min-height:44px;z-index:4}
+ & .commercial-title-meta b{font-size:11px;letter-spacing:.16em;color:#e4c28d}
+ & .commercial-title-utility{gap:8px!important}
+ & .commercial-title-utility button{min-height:44px!important;padding:8px 10px!important;border:1px solid transparent;border-radius:8px;background:#07172240;color:#e6ebed;backdrop-filter:blur(10px)}
+ & .commercial-title-utility button:hover{background:#0b202bba;border-color:#b9d1d640}
+ & .work-stop-song-open{position:absolute!important;top:86px!important;right:clamp(20px,4.5vw,80px)!important;margin:0!important;background:#07172280!important;border:1px solid #d1d9d530!important;border-radius:20px!important;padding:6px 12px!important;font-size:11px!important;z-index:4}
+ & .commercial-title-copy{display:block!important;max-width:1440px!important;margin:0 auto!important}
+ & .hub-cinematic-intro{box-sizing:border-box;min-height:386px;padding:58px 0 24px;max-width:650px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-shadow:0 2px 18px #07121bd9}
+ & .commercial-title-logo{width:clamp(250px,27vw,370px)!important;margin:0!important}
+ & .hub-home-name{margin:14px 0 0;color:#f6e4c1;font-size:22px;font-weight:600;letter-spacing:.14em}
+ & .commercial-title-copy h1{font-size:clamp(23px,2.6vw,36px)!important;line-height:1.4!important;letter-spacing:-.045em;max-width:590px;margin:18px 0 8px!important;word-break:keep-all}
+ & .commercial-title-english{display:none!important}
+ & .commercial-title-actions.is-defense-first{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;margin:0!important;align-items:stretch}
+ & .commercial-title-actions .commercial-title-action.has-mode-art{position:relative!important;display:flex!important;flex-direction:column;align-items:stretch!important;justify-content:flex-end;grid-column:auto!important;min-height:250px!important;padding:124px 20px 20px!important;gap:0!important;border:1px solid #a2b8bd38!important;border-radius:12px!important;background:#10222d!important;box-shadow:0 12px 32px #0003!important;overflow:hidden;isolation:isolate;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;opacity:1!important}
+ & .commercial-title-action.has-mode-art .commercial-title-action-art{position:absolute;inset:0!important;width:100%!important;height:100%!important;object-fit:cover;object-position:center 35%;opacity:1!important;filter:none!important;z-index:-2;transition:transform .35s ease}
+ & .commercial-title-action.has-mode-art .commercial-title-action-shade{position:absolute;inset:0;background:linear-gradient(0deg,#0a1b25 3%,#0a1b25eb 28%,#0a1b2566 62%,#0a1b2500 100%)!important;z-index:-1}
+ & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy{position:relative!important;inset:auto!important;display:flex!important;flex-direction:column;align-items:flex-start!important;width:100%!important;flex:0 0 auto!important}
+ & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy strong{font-size:clamp(19px,1.6vw,25px)!important;line-height:1.35!important;color:#f4f5ee!important;letter-spacing:-.04em;text-align:left!important}
+ & .commercial-title-action.has-mode-art .breaker-brand-line{font-size:9px!important;letter-spacing:.15em;color:#d3d7c8!important;margin-bottom:7px}
+ & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy small{display:block!important;font-size:11px!important;line-height:1.6!important;min-height:36px;color:#bccbd0!important;margin:7px 0 0!important;text-align:left;word-break:keep-all}
+ & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-icon{display:none!important}
+ & .commercial-title-actions .commercial-title-action.has-mode-art>b{position:absolute!important;top:14px!important;right:14px!important;left:auto!important;inset-inline-start:auto!important;display:grid;place-items:center;width:28px;height:28px;border:1px solid #e0e5d744;border-radius:50%;background:#0a1b2570;color:#f7e2b9;font-size:20px;z-index:2}
+ & .commercial-title-actions .commercial-title-action.has-mode-art:hover{transform:translateY(-4px)!important;border-color:#e8cc91a0!important;box-shadow:0 18px 38px #0005!important}
+ & .commercial-title-action.has-mode-art:hover .commercial-title-action-art{transform:scale(1.035)}
+ & .commercial-title-action.has-mode-art:focus-visible{outline:3px solid #f0d29a!important;outline-offset:4px}
+ & .commercial-title-action.is-story-entry>em{display:none!important}
+ & .commercial-title-action.is-story-entry .commercial-title-badge-new{display:inline-block!important;font-size:9px!important;background:#293b44;color:#e3d9c3;border:1px solid #abaaa46b;margin-left:6px;padding:2px 5px;vertical-align:middle}
+ & .commercial-title-action.is-sub-entry{grid-column:1/-1!important;min-height:58px!important;padding:12px 18px!important;border:0!important;border-top:1px solid #bed0d22b!important;border-bottom:1px solid #bed0d22b!important;border-radius:0!important;background:transparent!important}
+ & .commercial-title-action.is-sub-entry .commercial-title-action-copy{display:flex;flex-direction:row;align-items:center;gap:16px}
+ & .commercial-title-action.is-sub-entry .commercial-title-action-copy strong{font-size:15px!important}
+ & .commercial-title-action.is-sub-entry .commercial-title-action-copy small{font-size:11px!important;margin:0!important}
+ & .chapter-record-home{margin-top:38px!important}
+ & .commercial-title-features{max-width:1440px;margin-inline:auto!important}
+ @media(min-width:1700px){& .hub-cinematic-intro{min-height:440px}}
+ @media(max-width:1050px){
+  & .commercial-title-actions.is-defense-first{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  & .hub-cinematic-intro{min-height:350px;padding-top:50px}
+  & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:218px!important;padding-top:98px!important}
+ }
+ @media(max-width:600px){
+  padding:12px 16px 32px!important;
+  & .commercial-title-backdrop{height:580px!important;object-position:73% 20%}
+  & .commercial-title-grade{background:linear-gradient(0deg,#0a151c 20%,#0a151c66 65%,#0a151c20),linear-gradient(90deg,#06131c96,#06131c00)!important}
+  & .commercial-title-topline{gap:6px!important;flex-wrap:nowrap}
+  & .commercial-title-utility{gap:0!important}
+  & .commercial-title-utility button{width:44px!important;min-width:44px;padding:8px!important}
+  & .work-stop-song-open{top:66px!important;right:16px!important;min-height:44px!important;font-size:10px!important}
+  & .hub-cinematic-intro{min-height:342px;padding:96px 0 24px;justify-content:flex-end}
+  & .commercial-title-logo{width:240px!important}
+  & .hub-home-name{font-size:17px;margin-top:8px;letter-spacing:.11em}
+  & .commercial-title-copy h1{font-size:22px!important;max-width:310px;margin:14px 0 0!important}
+  & .commercial-title-actions.is-defense-first{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+  & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:166px!important;padding:22px 48px 22px 18px!important;justify-content:center}
+  & .commercial-title-action.has-mode-art .commercial-title-action-art{object-position:65% 35%;width:68%!important;left:auto!important}
+  & .commercial-title-action.has-mode-art .commercial-title-action-shade{background:linear-gradient(90deg,#0a1b25 0%,#0a1b25d4 42%,#0a1b251a 100%),linear-gradient(0deg,#0a1b25ad,transparent)!important}
+  & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy strong{font-size:23px!important}
+  & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy small{max-width:230px;min-height:0}
+  & .commercial-title-action.is-sub-entry .commercial-title-action-copy{flex-direction:column;gap:3px;align-items:flex-start}
+ }
+ @media(orientation:landscape) and (max-height:600px){
+  & .hub-cinematic-intro{min-height:180px;padding:24px 0 22px;max-width:75%}
+  & .commercial-title-logo{width:240px!important}
+  & .hub-home-name{font-size:16px;margin-top:8px}
+  & .commercial-title-copy h1{font-size:23px!important;margin-top:12px!important}
+  & .commercial-title-actions.is-defense-first{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:194px!important;padding:80px 16px 16px!important}
+  & .commercial-title-action.has-mode-art .commercial-title-action-art{width:100%!important;left:0!important}
+  & .commercial-title-action.has-mode-art .commercial-title-action-shade{background:linear-gradient(0deg,#0a1b25 3%,#0a1b25eb 28%,#0a1b2566 62%,transparent 100%)!important}
+  & .commercial-title-actions .commercial-title-action.has-mode-art .commercial-title-action-copy strong{font-size:20px!important}
+ }
+ @media(prefers-reduced-motion:reduce){& .commercial-title-actions .commercial-title-action.has-mode-art,& .commercial-title-action.has-mode-art .commercial-title-action-art{transition:none!important;transform:none!important}}
+}
+:root.psi-title-motion-off .commercial-title-home[data-home-art='cinematic-dawn-v1'] .commercial-title-actions .commercial-title-action.has-mode-art,
+:root.psi-title-motion-off .commercial-title-home[data-home-art='cinematic-dawn-v1'] .commercial-title-action.has-mode-art .commercial-title-action-art{transition:none!important;transform:none!important}

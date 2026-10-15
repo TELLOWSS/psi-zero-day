@@ -201,8 +201,8 @@
     "h03": {
       "status": "ACTUAL_PLAY_QA_PASS",
       "role": "tactical pre-entry briefing",
+      "headingTextId": "defense.tactics.preview",
       "requiredText": [
-        "LIVE SITE",
         "DEF-CORE-01",
         "서측 Gate · 차량–보행 간섭",
         "대표 시나리오 · WAVE 8 / 10",

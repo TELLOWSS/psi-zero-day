@@ -27,8 +27,10 @@ describe('H-01 through H-04 commercial presentation upgrade', () => {
     expect(css).toContain('.commercial-title-cast[data-title-role="human-anchor"]');
   });
 
-  it('promotes LIVE SITE to a tactical briefing without adding interaction', () => {
+  it('labels the tactical preview by its actual function without a live-status claim', () => {
     expect(hub).toContain('data-title-role="live-briefing"');
+    expect(hub).toContain(`defenseText('${layout.commercialPresentation.h03.headingTextId}')`);
+    expect(hub).not.toContain('>LIVE<');expect(hub).not.toContain('>LIVE SITE<');
     for (const text of layout.commercialPresentation.h03.requiredText) expect(hub).toContain(text);
     expect(layout.commercialPresentation.h03.interactionRule).toContain('no new click behavior');
   });
