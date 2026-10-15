@@ -1,0 +1,1115 @@
+{
+  "method": "Exact same seed 17; preserved encounter version 1 versus new version 2 plans for all 15 stages. Counts and mass are finite authored populations, not simulated kills. Armor is evaluated at each actual wave. Actual victories are separately verified by browser journey.",
+  "rows": [
+    {
+      "episode": 1,
+      "stage": "CH-01",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 6,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 7,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 10,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 9,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 11,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 112,
+        "waves": [
+          {
+            "count": 12,
+            "mass": 16,
+            "unarmored": 12,
+            "lastScheduled": 0
+          },
+          {
+            "count": 15,
+            "mass": 19,
+            "unarmored": 15,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 20,
+            "lastScheduled": 0
+          },
+          {
+            "count": 21,
+            "mass": 25,
+            "unarmored": 21,
+            "lastScheduled": 0
+          },
+          {
+            "count": 25,
+            "mass": 30,
+            "unarmored": 25,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 1,
+      "stage": "CH-02",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 6,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 7,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 10,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 9,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 11,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 112,
+        "waves": [
+          {
+            "count": 12,
+            "mass": 16,
+            "unarmored": 12,
+            "lastScheduled": 0
+          },
+          {
+            "count": 15,
+            "mass": 19,
+            "unarmored": 15,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 20,
+            "lastScheduled": 0
+          },
+          {
+            "count": 21,
+            "mass": 25,
+            "unarmored": 21,
+            "lastScheduled": 0
+          },
+          {
+            "count": 25,
+            "mass": 30,
+            "unarmored": 25,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 1,
+      "stage": "CH-03",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 6,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 7,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 10,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 9,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 11,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 112,
+        "waves": [
+          {
+            "count": 12,
+            "mass": 16,
+            "unarmored": 12,
+            "lastScheduled": 0
+          },
+          {
+            "count": 15,
+            "mass": 19,
+            "unarmored": 15,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 20,
+            "lastScheduled": 0
+          },
+          {
+            "count": 21,
+            "mass": 25,
+            "unarmored": 21,
+            "lastScheduled": 0
+          },
+          {
+            "count": 25,
+            "mass": 30,
+            "unarmored": 25,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 1,
+      "stage": "CH-04",
+      "before": {
+        "totalUnits": 52,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 8,
+            "unarmored": 6,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 7,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 10,
+            "unarmored": 10,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 9,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 14,
+            "unarmored": 11,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 102,
+        "waves": [
+          {
+            "count": 12,
+            "mass": 14,
+            "unarmored": 12,
+            "lastScheduled": 0
+          },
+          {
+            "count": 15,
+            "mass": 17,
+            "unarmored": 15,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 20,
+            "unarmored": 20,
+            "lastScheduled": 0
+          },
+          {
+            "count": 21,
+            "mass": 23,
+            "unarmored": 21,
+            "lastScheduled": 0
+          },
+          {
+            "count": 25,
+            "mass": 28,
+            "unarmored": 25,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 1,
+      "stage": "CH-05",
+      "before": {
+        "totalUnits": 52,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 8,
+            "unarmored": 6,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 7,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 10,
+            "unarmored": 10,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 9,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 14,
+            "unarmored": 11,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 102,
+        "waves": [
+          {
+            "count": 12,
+            "mass": 14,
+            "unarmored": 12,
+            "lastScheduled": 0
+          },
+          {
+            "count": 15,
+            "mass": 17,
+            "unarmored": 15,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 20,
+            "unarmored": 20,
+            "lastScheduled": 0
+          },
+          {
+            "count": 21,
+            "mass": 23,
+            "unarmored": 21,
+            "lastScheduled": 0
+          },
+          {
+            "count": 25,
+            "mass": 28,
+            "unarmored": 25,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 2,
+      "stage": "CH-01",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 142,
+        "waves": [
+          {
+            "count": 16,
+            "mass": 20,
+            "unarmored": 14,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 24,
+            "unarmored": 18,
+            "lastScheduled": 0
+          },
+          {
+            "count": 26,
+            "mass": 28,
+            "unarmored": 22,
+            "lastScheduled": 0
+          },
+          {
+            "count": 28,
+            "mass": 32,
+            "unarmored": 26,
+            "lastScheduled": 0
+          },
+          {
+            "count": 33,
+            "mass": 38,
+            "unarmored": 30,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 2,
+      "stage": "CH-02",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 142,
+        "waves": [
+          {
+            "count": 16,
+            "mass": 20,
+            "unarmored": 14,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 24,
+            "unarmored": 18,
+            "lastScheduled": 0
+          },
+          {
+            "count": 26,
+            "mass": 28,
+            "unarmored": 22,
+            "lastScheduled": 0
+          },
+          {
+            "count": 28,
+            "mass": 32,
+            "unarmored": 26,
+            "lastScheduled": 0
+          },
+          {
+            "count": 33,
+            "mass": 38,
+            "unarmored": 30,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 2,
+      "stage": "CH-03",
+      "before": {
+        "totalUnits": 62,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 12,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 13,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 142,
+        "waves": [
+          {
+            "count": 16,
+            "mass": 20,
+            "unarmored": 14,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 24,
+            "unarmored": 18,
+            "lastScheduled": 0
+          },
+          {
+            "count": 26,
+            "mass": 28,
+            "unarmored": 22,
+            "lastScheduled": 0
+          },
+          {
+            "count": 28,
+            "mass": 32,
+            "unarmored": 26,
+            "lastScheduled": 0
+          },
+          {
+            "count": 33,
+            "mass": 38,
+            "unarmored": 30,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 2,
+      "stage": "CH-04",
+      "before": {
+        "totalUnits": 52,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 8,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 14,
+            "unarmored": 0,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 132,
+        "waves": [
+          {
+            "count": 16,
+            "mass": 18,
+            "unarmored": 14,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 18,
+            "lastScheduled": 0
+          },
+          {
+            "count": 26,
+            "mass": 26,
+            "unarmored": 22,
+            "lastScheduled": 0
+          },
+          {
+            "count": 28,
+            "mass": 30,
+            "unarmored": 26,
+            "lastScheduled": 0
+          },
+          {
+            "count": 33,
+            "mass": 36,
+            "unarmored": 30,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 2,
+      "stage": "CH-05",
+      "before": {
+        "totalUnits": 52,
+        "waves": [
+          {
+            "count": 6,
+            "mass": 8,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 10,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 0
+          },
+          {
+            "count": 11,
+            "mass": 14,
+            "unarmored": 0,
+            "lastScheduled": 0
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 132,
+        "waves": [
+          {
+            "count": 16,
+            "mass": 18,
+            "unarmored": 14,
+            "lastScheduled": 0
+          },
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 18,
+            "lastScheduled": 0
+          },
+          {
+            "count": 26,
+            "mass": 26,
+            "unarmored": 22,
+            "lastScheduled": 0
+          },
+          {
+            "count": 28,
+            "mass": 30,
+            "unarmored": 26,
+            "lastScheduled": 0
+          },
+          {
+            "count": 33,
+            "mass": 36,
+            "unarmored": 30,
+            "lastScheduled": 0
+          }
+        ]
+      }
+    },
+    {
+      "episode": 3,
+      "stage": "CH-01",
+      "before": {
+        "totalUnits": 58,
+        "waves": [
+          {
+            "count": 8,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 7.280000000000001
+          },
+          {
+            "count": 13,
+            "mass": 15,
+            "unarmored": 0,
+            "lastScheduled": 17.200000000000003
+          },
+          {
+            "count": 5,
+            "mass": 6,
+            "unarmored": 0,
+            "lastScheduled": 8.3
+          },
+          {
+            "count": 14,
+            "mass": 17,
+            "unarmored": 0,
+            "lastScheduled": 17.360000000000003
+          },
+          {
+            "count": 9,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 12
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 159,
+        "waves": [
+          {
+            "count": 20,
+            "mass": 24,
+            "unarmored": 12,
+            "lastScheduled": 8.919999999999998
+          },
+          {
+            "count": 31,
+            "mass": 37,
+            "unarmored": 18,
+            "lastScheduled": 13.6
+          },
+          {
+            "count": 15,
+            "mass": 18,
+            "unarmored": 12,
+            "lastScheduled": 8.14
+          },
+          {
+            "count": 39,
+            "mass": 47,
+            "unarmored": 24,
+            "lastScheduled": 16.24
+          },
+          {
+            "count": 28,
+            "mass": 33,
+            "unarmored": 17,
+            "lastScheduled": 11.559999999999999
+          }
+        ]
+      }
+    },
+    {
+      "episode": 3,
+      "stage": "CH-02",
+      "before": {
+        "totalUnits": 64,
+        "waves": [
+          {
+            "count": 9,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 12
+          },
+          {
+            "count": 14,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 17.360000000000003
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 8.620000000000001
+          },
+          {
+            "count": 17,
+            "mass": 19,
+            "unarmored": 0,
+            "lastScheduled": 22.400000000000002
+          },
+          {
+            "count": 9,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 12
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 159,
+        "waves": [
+          {
+            "count": 21,
+            "mass": 25,
+            "unarmored": 13,
+            "lastScheduled": 9.04
+          },
+          {
+            "count": 33,
+            "mass": 36,
+            "unarmored": 24,
+            "lastScheduled": 13.84
+          },
+          {
+            "count": 17,
+            "mass": 21,
+            "unarmored": 13,
+            "lastScheduled": 8.38
+          },
+          {
+            "count": 39,
+            "mass": 46,
+            "unarmored": 24,
+            "lastScheduled": 16.24
+          },
+          {
+            "count": 28,
+            "mass": 31,
+            "unarmored": 20,
+            "lastScheduled": 11.559999999999999
+          }
+        ]
+      }
+    },
+    {
+      "episode": 3,
+      "stage": "CH-03",
+      "before": {
+        "totalUnits": 58,
+        "waves": [
+          {
+            "count": 8,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 7.280000000000001
+          },
+          {
+            "count": 13,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 17.200000000000003
+          },
+          {
+            "count": 5,
+            "mass": 6,
+            "unarmored": 0,
+            "lastScheduled": 8.3
+          },
+          {
+            "count": 14,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 17.360000000000003
+          },
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 12
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 155,
+        "waves": [
+          {
+            "count": 20,
+            "mass": 22,
+            "unarmored": 14,
+            "lastScheduled": 8.919999999999998
+          },
+          {
+            "count": 31,
+            "mass": 38,
+            "unarmored": 18,
+            "lastScheduled": 13.6
+          },
+          {
+            "count": 15,
+            "mass": 18,
+            "unarmored": 12,
+            "lastScheduled": 8.14
+          },
+          {
+            "count": 39,
+            "mass": 43,
+            "unarmored": 27,
+            "lastScheduled": 16.24
+          },
+          {
+            "count": 28,
+            "mass": 34,
+            "unarmored": 16,
+            "lastScheduled": 11.559999999999999
+          }
+        ]
+      }
+    },
+    {
+      "episode": 3,
+      "stage": "CH-04",
+      "before": {
+        "totalUnits": 67,
+        "waves": [
+          {
+            "count": 9,
+            "mass": 11,
+            "unarmored": 0,
+            "lastScheduled": 12
+          },
+          {
+            "count": 14,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 17.360000000000003
+          },
+          {
+            "count": 7,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 8.620000000000001
+          },
+          {
+            "count": 17,
+            "mass": 21,
+            "unarmored": 0,
+            "lastScheduled": 22.400000000000002
+          },
+          {
+            "count": 9,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 12
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 166,
+        "waves": [
+          {
+            "count": 21,
+            "mass": 26,
+            "unarmored": 12,
+            "lastScheduled": 9.04
+          },
+          {
+            "count": 33,
+            "mass": 39,
+            "unarmored": 20,
+            "lastScheduled": 13.84
+          },
+          {
+            "count": 17,
+            "mass": 21,
+            "unarmored": 13,
+            "lastScheduled": 8.38
+          },
+          {
+            "count": 39,
+            "mass": 47,
+            "unarmored": 24,
+            "lastScheduled": 16.24
+          },
+          {
+            "count": 28,
+            "mass": 33,
+            "unarmored": 17,
+            "lastScheduled": 11.559999999999999
+          }
+        ]
+      }
+    },
+    {
+      "episode": 3,
+      "stage": "CH-05",
+      "before": {
+        "totalUnits": 56,
+        "waves": [
+          {
+            "count": 8,
+            "mass": 9,
+            "unarmored": 0,
+            "lastScheduled": 7.280000000000001
+          },
+          {
+            "count": 13,
+            "mass": 15,
+            "unarmored": 0,
+            "lastScheduled": 17.200000000000003
+          },
+          {
+            "count": 5,
+            "mass": 6,
+            "unarmored": 0,
+            "lastScheduled": 8.3
+          },
+          {
+            "count": 14,
+            "mass": 16,
+            "unarmored": 0,
+            "lastScheduled": 17.360000000000003
+          },
+          {
+            "count": 9,
+            "mass": 10,
+            "unarmored": 0,
+            "lastScheduled": 12
+          }
+        ]
+      },
+      "after": {
+        "totalUnits": 152,
+        "waves": [
+          {
+            "count": 20,
+            "mass": 23,
+            "unarmored": 13,
+            "lastScheduled": 8.919999999999998
+          },
+          {
+            "count": 31,
+            "mass": 34,
+            "unarmored": 22,
+            "lastScheduled": 13.6
+          },
+          {
+            "count": 15,
+            "mass": 18,
+            "unarmored": 12,
+            "lastScheduled": 8.14
+          },
+          {
+            "count": 39,
+            "mass": 46,
+            "unarmored": 24,
+            "lastScheduled": 16.24
+          },
+          {
+            "count": 28,
+            "mass": 31,
+            "unarmored": 20,
+            "lastScheduled": 11.559999999999999
+          }
+        ]
+      }
+    }
+  ]
+}

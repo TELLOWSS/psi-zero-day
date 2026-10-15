@@ -1,5 +1,8 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.lobby.sites':'현장 선택',
+'breaker.lobby.entry.preview':'현장을 고른 뒤 작전 준비',
+'breaker.lobby.details':'작전 안내 · 캠페인 기록 · 자유 개방',
 'breaker.rest.entry.name':'쉬어가는 무한모드',
 'breaker.rest.entry.desc':'네 가지 장비로 가볍게 · 언제든 편하게 마무리',
 'breaker.gear.identity':'나의 현장 장비',

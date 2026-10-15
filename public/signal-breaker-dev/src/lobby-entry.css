@@ -1,0 +1,54 @@
+/* Entry lobby only: one primary action, actual art, progressive disclosure. */
+#operationLobby{background:#0d1c23;scrollbar-gutter:stable}
+#operationLobby .operation-header{padding:16px max(24px,5vw);border:0;background:#0d1c23}
+#operationLobby .operation-header strong{font-size:19px;letter-spacing:.12em}
+#operationLobby .operation-main{width:min(1440px,100%);margin:0 auto;padding:0 clamp(16px,3vw,40px) 32px;box-sizing:border-box;gap:0}
+#operationLobby .episode-switch{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;padding:0;background:none;border:0}
+#operationLobby .episode-switch button{flex:1;min-height:44px;border:1px solid #49626a;border-radius:8px;padding:9px 12px;background:#172c34;color:#c6d7d8;font:inherit;font-size:12px}
+#operationLobby .episode-switch button[aria-pressed=true]{background:#284b50;color:#e4fff4;border-color:#aad8c6;box-shadow:inset 0 -2px #aad8c6}
+#operationLobby .operation-hero{flex:none;min-height:350px;border:1px solid #71898055;border-radius:18px;background:#10252c}
+#operationLobby .operation-hero:after{background:linear-gradient(90deg,#071d29dc,#071d2980 45%,transparent 80%)}
+#operationLobby .operation-hero>img{object-position:62% center}
+#operationLobby .operation-copy{padding:38px;max-width:52%;box-sizing:border-box}
+#operationLobby .operation-copy h1{font-size:clamp(30px,3.4vw,48px);line-height:1.2;letter-spacing:-.04em;margin:16px 0}
+#operationLobby .operation-copy p{font-size:14px;line-height:1.65;color:#d4e0db;margin:0 0 24px;max-width:350px}
+#operationLobby .hero-start-btn{min-height:50px;padding:12px 24px;background:#b8e9d5;color:#0a282b;border:0;border-radius:8px;font:inherit;font-weight:800;box-shadow:0 4px 24px #0004;cursor:pointer}
+#operationLobby .lobby-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0 0}
+#operationLobby .lobby-tools button{min-height:48px;border:1px solid #49626a;border-radius:9px;background:#1a3039;color:#dfebe6;font:inherit;font-size:13px;text-decoration:none;padding:10px;max-width:none;cursor:pointer}
+#operationLobby .lobby-return{display:flex;gap:12px;flex-wrap:wrap;margin:4px 0}
+#operationLobby .lobby-return button{min-height:44px;background:none;border:0;color:#a9d8cb;text-align:left;font:inherit;font-size:12px;cursor:pointer}
+#operationLobby .lobby-section-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:16px 0 10px}
+#operationLobby .lobby-section-heading h2{font-size:17px;margin:0;font-weight:600}
+#operationLobby .lobby-section-heading small{font-size:11px;color:#b0c6c8}
+#operationLobby .operation-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;gap:10px;overflow:visible}
+#operationLobby .operation-stage{min-height:122px;border-radius:10px;padding:14px;cursor:pointer}
+#operationLobby .operation-stage strong{font-size:12px;line-height:1.5;position:relative;z-index:1}
+#operationLobby .operation-stage span{display:none}
+#operationLobby .operation-stage img{opacity:.45}
+#operationLobby .operation-stage .stage-badge-action{font-size:10px;margin-top:12px}
+#operationLobby .rest-mode-entry{margin:16px 0;min-height:58px;padding:12px 16px;border-radius:10px;background:#18372f}
+#operationLobby .rest-mode-entry strong{font-size:19px;letter-spacing:.06em}
+#operationLobby .lobby-details{padding:16px;border:1px solid #49626a;border-radius:10px;background:#12262e;font-size:13px}
+#operationLobby .lobby-details summary{min-height:28px;cursor:pointer;color:#c7d9d8;line-height:28px}
+#operationLobby .lobby-details .operation-intel{margin:16px 0}
+#operationLobby .lobby-details .journey-progress{margin:16px 0;padding:14px}
+#operationLobby .lobby-details .operation-loot{padding:8px 0;flex-wrap:wrap}
+body.breaker-focus #operationLobby .operation-actions{display:none!important}
+#operationLobby button:focus-visible,#operationLobby a:focus-visible,#operationLobby summary:focus-visible{outline:3px solid #ffe0a0;outline-offset:3px}
+#operationLobby button[disabled]{opacity:.55;cursor:default}
+@media(max-width:650px){
+ #operationLobby .operation-header{padding:12px 18px}#operationLobby .operation-header strong{font-size:16px}
+ #operationLobby .episode-switch{gap:4px;margin-bottom:10px}#operationLobby .episode-switch button{font-size:10px;padding:8px 4px}
+ #operationLobby .operation-hero{min-height:340px;align-items:flex-end}#operationLobby .operation-hero>img{object-position:70% center}
+ #operationLobby .operation-hero:after{background:linear-gradient(0deg,#071c29f5,#071c2970 65%,#071c2910)}
+ #operationLobby .operation-copy{padding:22px;max-width:100%;width:100%}#operationLobby .operation-copy h1{font-size:30px;margin:10px 0}
+ #operationLobby .operation-copy p{font-size:12px;margin-bottom:18px;max-width:290px}#operationLobby .hero-start-btn{width:100%}
+ #operationLobby .lobby-tools{gap:6px;margin-top:10px}#operationLobby .lobby-tools button{font-size:11px;padding:8px 4px}
+ #operationLobby .operation-stages{grid-template-columns:repeat(2,minmax(0,1fr))}#operationLobby .operation-stage{min-height:96px;padding:12px}
+ #operationLobby .lobby-section-heading{align-items:flex-start;flex-direction:column;gap:3px}#operationLobby .rest-mode-entry strong span{display:block;margin:3px 0 0}
+}
+@media(orientation:landscape) and (max-height:500px){
+ #operationLobby .operation-header{padding:8px 24px}#operationLobby .episode-switch{margin-bottom:8px}
+ #operationLobby .operation-hero{min-height:210px}#operationLobby .operation-copy{padding:22px;max-width:60%}
+ #operationLobby .operation-copy h1{font-size:28px;margin:8px 0}#operationLobby .operation-copy p{font-size:12px;margin-bottom:12px}
+}

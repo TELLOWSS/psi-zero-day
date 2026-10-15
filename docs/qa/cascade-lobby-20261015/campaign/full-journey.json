@@ -1,0 +1,692 @@
+{
+  "method": "Browser flows at three viewports and fifteen operations, combat accelerated with ordinary engine commands and real app event/reward handling; no forced victory or seed/life edits; recommended evolution + tuning chosen via real UI and parts proven unspent. Not human usability or frame-rate evidence.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 360,
+      "height": 640,
+      "runs": [
+        {
+          "state": "won",
+          "time": 60.39166666666388,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 55.683333333330815,
+          "stage": "CH-02",
+          "life": 2,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 78.7833333333421,
+          "stage": "CH-03",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 64.60833333333082,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 26,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 50.08333333333113,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 26,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 84.83333333334691,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 74.32500000000522,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 108.34166666669896,
+          "stage": "CH-03",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 81.00000000001053,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 67.53333333333315,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 90.32500000001795,
+          "stage": "CH-01",
+          "life": 4,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 105.87500000003033,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 84,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 93.80833333335406,
+          "stage": "CH-03",
+          "life": 4,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 82,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 99.52500000002527,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 105.49166666669669,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 81,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "runs": [
+        {
+          "state": "won",
+          "time": 62.91666666666374,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 55.64999999999748,
+          "stage": "CH-02",
+          "life": 3,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 60.86666666666385,
+          "stage": "CH-03",
+          "life": 4,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 58.308333333330665,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 26,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 47.12499999999797,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 25,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 77.97500000000812,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 73.9250000000049,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 92.83333333335328,
+          "stage": "CH-03",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 93.35000000002036,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 64.39999999999732,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 91.15833333335195,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 104.77500000002945,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 84,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 97.47500000002364,
+          "stage": "CH-03",
+          "life": 4,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 82,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 98.2166666666909,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 101.44166666669346,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 81,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "runs": [
+        {
+          "state": "won",
+          "time": 72.15833333333683,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 54.049999999997574,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 56.11666666666412,
+          "stage": "CH-03",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 28,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 56.74166666666409,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 26,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 49.93333333333114,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": null,
+            "branch": null,
+            "capstone": false
+          },
+          "parts": 23,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 86.19166666668133,
+          "stage": "CH-01",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 73.55833333333794,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 96.91666666668986,
+          "stage": "CH-03",
+          "life": 3,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 71,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 93.22500000002026,
+          "stage": "CH-04",
+          "life": 4,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 68.608333333334,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 66,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 104.20833333336233,
+          "stage": "CH-01",
+          "life": 4,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 95.87500000002237,
+          "stage": "CH-02",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 84,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 95.82500000002233,
+          "stage": "CH-03",
+          "life": 5,
+          "evolution": {
+            "frame": "arc",
+            "recipe": "storm",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 82,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 101.18333333335993,
+          "stage": "CH-04",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 86,
+          "attempts": 0
+        },
+        {
+          "state": "won",
+          "time": 96.60000000002294,
+          "stage": "CH-05",
+          "life": 5,
+          "evolution": {
+            "frame": "laser",
+            "recipe": "prism",
+            "branch": "spread",
+            "capstone": true
+          },
+          "parts": 81,
+          "attempts": 0
+        }
+      ],
+      "checks": [
+        "fresh guide +3P",
+        "explicit preparation",
+        "fifteen ordinary combat wins",
+        "cinema before loot",
+        "real upgrade and socket",
+        "episode handoff",
+        "reload persistence",
+        "archive no reward",
+        "no horizontal overflow"
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "rows": [
+    {
+      "name": "small",
+      "width": 320,
+      "height": 568,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    },
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    },
+    {
+      "name": "small-landscape",
+      "width": 568,
+      "height": 320,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "primaryAction": true,
+      "secondaryDetailsClosed": true,
+      "previewDoesNotLaunch": true
+    }
+  ]
+}
