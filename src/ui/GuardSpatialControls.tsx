@@ -13,6 +13,7 @@ export function GuardSpatialControls({content,state,selectedTower,onCommand}:{co
  const offsets:Record<string,readonly [number,number]>={N:[0,-100],E:[100,0],S:[0,100],W:[-100,0]};
  const offset=offsets[direction]!;
  if(state.status==='RUNNING'&&!selectedTower)return null;
+ if(!needsTransition&&!selectedTower&&!credit)return null;
  return <section className="guard-spatial-controls">
   <small>{t(state.ultimateUnlocked?'guard.ultimate.slot':'guard.ultimate.locked')}</small>
   {transition&&state.mapPhase!=='SHIFTED'?<p>{t('guard.transition.warning')}</p>:null}

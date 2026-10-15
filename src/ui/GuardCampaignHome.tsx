@@ -7,6 +7,7 @@ import art from '../../content/defense/guard-art-v1.json';
 import p2 from '../../content/defense/guard-p2-art-v1.json';
 import './guard-campaign.css';
 import {GuardTacticalDebrief} from './GuardTacticalDebrief';
+import {GuardStagePreview} from './GuardStagePreview';
 
 export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}:{document:DefenseSaveDocument;onSelect:(id:string,replace:boolean)=>void;onResume?:()=>void;onExit:()=>void;onPractice?:()=>void}){
  const [pending,setPending]=useState<string|null>(null);
@@ -25,7 +26,8 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
    <div className="guard-stage-grid">{guardContents.map((content,i)=>{
     const record=document.records.find(r=>r.scenarioId===content.scenario.id),unlocked=guardStageUnlocked(content.scenario.id,document),key=`guard.gd0${i+1}`;
     return <article key={key} className={unlocked?'is-unlocked':'is-locked'} data-guard-stage={content.scenario.id}>
-     <img src={'/'+[...art.boards,...p2.boards][i]!.uri} alt=""/><div><small>GD-0{i+1} · {t(i<3?'guard.surface':'guard.underground')} · {content.waves.length}{t('guard.wave')} <span>{'★'.repeat(record?.bestStars??0)}</span></small>
+     <GuardStagePreview content={content} uri={'/'+[...art.boards,...p2.boards][i]!.uri}/><div><small>GD-0{i+1} · {t(i<3?'guard.surface':'guard.underground')} · {content.waves.length}{t('guard.wave')} <span>{'★'.repeat(record?.bestStars??0)}</span></small>
+     <span className="guard-stage-tactic">{t(key+'.tactic')}</span>
      <h3>{t(key+'.title')}</h3><p>{t(key+'.hint')}</p><button disabled={!unlocked} onClick={()=>active?setPending(content.scenario.id):onSelect(content.scenario.id,false)}>{t(unlocked?'guard.start':'guard.locked')}</button>
      {record?.lastTacticalReport?.contentVersion===content.contentVersion?<details className="guard-last-report"><summary>{t('guard.review.last')}</summary><GuardTacticalDebrief report={record.lastTacticalReport}/></details>:null}</div>
     </article>;

@@ -119,8 +119,21 @@ export function createDefenseRun(content: DefenseContent, supportId: DefenseRunS
   },content);
 }
 
+/** A purchase can be refunded only before the simulation or wave has advanced. */
+export function canUndoDefenseBuild(state: DefenseRunState): boolean {
+  const purchase=state.lastTowerPurchase;
+  return !!purchase && ['READY','RUNNING','INTERMISSION'].includes(state.status)
+    && purchase.tick===state.tick && purchase.waveId===state.waveId && purchase.status===state.status
+    && state.towers.some(t=>t.id===purchase.towerInstanceId && t.padId===purchase.padId && t.levelId==='L1');
+}
+
 export function applyDefenseCommand(state: DefenseRunState, content: DefenseContent, command: DefenseCommand): DefenseRunState {
   if (state.status === 'WON' || state.status === 'LOST') return state;
+  if(command.type==='UndoBuild'){
+    if(!canUndoDefenseBuild(state))throw new Error('Purchase can no longer be undone');
+    const tower=state.towers.find(t=>t.id===state.lastTowerPurchase!.towerInstanceId)!;
+    return {...state,resource:state.resource+tower.invested,towers:state.towers.filter(t=>t.id!==tower.id),lastTowerPurchase:undefined};
+  }
   if (command.type === 'SetPaused') return { ...state, paused: command.paused };
   if(command.type==='ConfirmTransition'){
     const transition=content.map.transition;if(!transition||state.status!=='INTERMISSION'||state.waveId!==transition.beforeWave||state.enemies.length)throw Error('Transition unavailable');
@@ -205,7 +218,8 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
       id: `tower-${state.nextTowerSequence}`, padId: command.padId, towerId: command.towerId, levelId: 'L1',
       targetMode: content.defaultTargetMode, invested: level.cost, attackCooldown: 0, revealCooldown: 0,
     };
-    return { ...state, resource: state.resource - level.cost, towers: [...state.towers, tower], nextTowerSequence: state.nextTowerSequence + 1 };
+    return { ...state, resource: state.resource - level.cost, towers: [...state.towers, tower], nextTowerSequence: state.nextTowerSequence + 1,
+      lastTowerPurchase:{towerInstanceId:tower.id,padId:tower.padId,tick:state.tick,waveId:state.waveId,status:state.status} };
   }
   const index = state.towers.findIndex(tower => tower.id === command.towerInstanceId);
   if (index < 0) throw new Error('Unknown tower instance');
@@ -216,7 +230,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
   }
   if (command.type === 'Sell') {
     const refund = Math.floor(tower.invested * content.sellRate);
-    return { ...state, resource: state.resource + refund, towers: state.towers.filter(item => item.id !== tower.id) };
+    return { ...state, resource: state.resource + refund, towers: state.towers.filter(item => item.id !== tower.id),lastTowerPurchase:undefined };
   }
   const next = towerLevel(content, tower.towerId, command.levelId);
   if(command.levelId.startsWith('L4')&&(!content.ultimateEnabled||!state.ultimateUnlocked))throw Error('Ultimate locked');
@@ -228,7 +242,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     attackCooldown: Math.min(tower.attackCooldown, next.intervalTicks),
     revealCooldown: next.revealIntervalTicks > 0 ? Math.min(tower.revealCooldown, next.revealIntervalTicks) : 0,
   };
-  return { ...state, resource: state.resource - next.cost, towers: replaceAt(state.towers, index, upgraded) };
+  return { ...state, resource: state.resource - next.cost, towers: replaceAt(state.towers, index, upgraded),lastTowerPurchase:undefined };
 }
 
 function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunState {

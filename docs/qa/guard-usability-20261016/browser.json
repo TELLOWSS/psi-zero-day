@@ -1,0 +1,367 @@
+[
+  {
+    "name": "landscape",
+    "width": 844,
+    "height": 390,
+    "cards": [
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      }
+    ],
+    "crew": 6,
+    "freshSelectable": 2,
+    "threeClearSelectable": 5,
+    "undoRefund": 220,
+    "reloadUndo": true,
+    "replayGuide": true,
+    "settingsSpeed": true,
+    "ready": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5338564532470976,
+      "board": {
+        "x": 95.34375,
+        "y": 109,
+        "width": 463.328125,
+        "height": 277.984375
+      },
+      "dock": {
+        "x": 654,
+        "y": 106,
+        "width": 190,
+        "height": 284
+      },
+      "status": "READY"
+    },
+    "combat": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5338564532470976,
+      "board": {
+        "x": 88.84375,
+        "y": 97,
+        "width": 488.328125,
+        "height": 292.984375
+      },
+      "dock": {
+        "x": 666,
+        "y": 97,
+        "width": 178,
+        "height": 293
+      },
+      "status": "RUNNING"
+    },
+    "errors": []
+  },
+  {
+    "name": "small-landscape",
+    "width": 568,
+    "height": 320,
+    "cards": [
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 130,
+        "display": "grid",
+        "align": "left"
+      }
+    ],
+    "crew": 6,
+    "freshSelectable": 2,
+    "threeClearSelectable": 5,
+    "undoRefund": 220,
+    "reloadUndo": true,
+    "replayGuide": true,
+    "settingsSpeed": true,
+    "ready": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5364606088139254,
+      "board": {
+        "x": 15.671875,
+        "y": 109,
+        "width": 346.65625,
+        "height": 207.984375
+      },
+      "dock": {
+        "x": 378,
+        "y": 106,
+        "width": 190,
+        "height": 214
+      },
+      "status": "READY"
+    },
+    "combat": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5364606088139254,
+      "board": {
+        "x": 9.171875,
+        "y": 97,
+        "width": 371.65625,
+        "height": 222.984375
+      },
+      "dock": {
+        "x": 390,
+        "y": 97,
+        "width": 178,
+        "height": 223
+      },
+      "status": "RUNNING"
+    },
+    "errors": []
+  },
+  {
+    "name": "pc",
+    "width": 1440,
+    "height": 900,
+    "cards": [
+      {
+        "height": 154,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 154,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 154,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 154,
+        "display": "grid",
+        "align": "left"
+      }
+    ],
+    "crew": 6,
+    "freshSelectable": 2,
+    "threeClearSelectable": 5,
+    "undoRefund": 220,
+    "reloadUndo": true,
+    "replayGuide": true,
+    "settingsSpeed": true,
+    "ready": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.533874745538401,
+      "board": {
+        "x": 243.328125,
+        "y": 133,
+        "width": 953.328125,
+        "height": 571.984375
+      },
+      "dock": {
+        "x": 0,
+        "y": 711,
+        "width": 1440,
+        "height": 189
+      },
+      "status": "READY"
+    },
+    "combat": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5364788123113036,
+      "board": {
+        "x": 114.171875,
+        "y": 109,
+        "width": 1211.65625,
+        "height": 726.984375
+      },
+      "dock": {
+        "x": 0,
+        "y": 836,
+        "width": 1440,
+        "height": 64
+      },
+      "status": "RUNNING"
+    },
+    "errors": []
+  },
+  {
+    "name": "portrait",
+    "width": 390,
+    "height": 844,
+    "cards": [
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      }
+    ],
+    "crew": 6,
+    "freshSelectable": 2,
+    "threeClearSelectable": 5,
+    "undoRefund": 220,
+    "reloadUndo": true,
+    "replayGuide": true,
+    "settingsSpeed": true,
+    "ready": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5209177015001027,
+      "board": {
+        "x": 37.5,
+        "y": 162,
+        "width": 315,
+        "height": 525
+      },
+      "dock": {
+        "x": 0,
+        "y": 691,
+        "width": 390,
+        "height": 153
+      },
+      "status": "READY"
+    },
+    "combat": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5288328384346654,
+      "board": {
+        "x": 7.8125,
+        "y": 152,
+        "width": 374.390625,
+        "height": 623.984375
+      },
+      "dock": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64
+      },
+      "status": "RUNNING"
+    },
+    "errors": []
+  },
+  {
+    "name": "small-portrait",
+    "width": 320,
+    "height": 568,
+    "cards": [
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      },
+      {
+        "height": 138,
+        "display": "grid",
+        "align": "left"
+      }
+    ],
+    "crew": 6,
+    "freshSelectable": 2,
+    "threeClearSelectable": 5,
+    "undoRefund": 220,
+    "reloadUndo": true,
+    "replayGuide": true,
+    "settingsSpeed": true,
+    "ready": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5417027231589284,
+      "board": {
+        "x": 4,
+        "y": 170.90625,
+        "width": 312,
+        "height": 187.1875
+      },
+      "dock": {
+        "x": 0,
+        "y": 415,
+        "width": 320,
+        "height": 153
+      },
+      "status": "READY"
+    },
+    "combat": {
+      "overflow": false,
+      "hudOverflow": false,
+      "briefOverflow": false,
+      "alignment": 0.5417027231589284,
+      "board": {
+        "x": 4,
+        "y": 210.40625,
+        "width": 312,
+        "height": 187.1875
+      },
+      "dock": {
+        "x": 0,
+        "y": 504,
+        "width": 320,
+        "height": 64
+      },
+      "status": "RUNNING"
+    },
+    "errors": []
+  }
+]

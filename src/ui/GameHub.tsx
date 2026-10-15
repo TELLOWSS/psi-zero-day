@@ -1,4 +1,5 @@
 import './shooting-entry.css';
+import './hub-unified.css';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -424,7 +425,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{defenseText('guard.title')}</strong><small>{defenseText('guard.chapter_hint')}</small></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD</em><strong className="commercial-title-mode-title">{defenseText('guard.title')} <span className="commercial-title-badge-new">LIVE</span></strong><small>{defenseText('guard.hub.description')}</small></span>
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
@@ -432,7 +433,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
           <span className="commercial-title-action-copy">
-            <strong>스토리 모드 · 준비중</strong>
+            <em className="breaker-brand-line">STORY / EPISODE 01</em><strong className="commercial-title-mode-title">스토리 모드 <span className="commercial-title-badge-new">준비중</span></strong>
             <small>사람·증거·판단이 연결되는 본편 시네마틱을 완성하고 있습니다 · 탭하여 보기</small>
           </span>
           <em>EP.01</em>

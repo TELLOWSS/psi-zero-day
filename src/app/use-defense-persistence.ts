@@ -333,7 +333,7 @@ export function useDefensePersistence(
     const next = applyDefenseCommand(current, runContent, command);
     stateRef.current = next;
     setStateInternal(next);
-    if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
+    if (command.type === 'Build' || command.type === 'UndoBuild' || command.type === 'Upgrade' || command.type === 'Sell'
       || command.type === 'SetPaused' || command.type === 'StartWave' || command.type === 'TriggerEStop'
       || command.type === 'ConfirmTransition' || command.type === 'RelocateTower' || command.type === 'UseSupport') {
       void persistRun(next);

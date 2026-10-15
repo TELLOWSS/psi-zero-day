@@ -1,0 +1,38 @@
+[
+  {
+    "id": "guard-gd-01",
+    "route": "0,300 220,300 220,140 520,140 520,440 800,440 800,280 1000,280",
+    "wave": "웨이브\n1 / 6",
+    "boardArt": "assets/defense/guard-v1/gd-01.webp"
+  },
+  {
+    "id": "guard-gd-02",
+    "route": "0,180 300,180 300,430 600,430 600,180 820,180 820,370 1000,370",
+    "wave": "웨이브\n1 / 7",
+    "boardArt": "assets/defense/guard-v1/gd-02.webp"
+  },
+  {
+    "id": "guard-gd-03",
+    "route": "0,360 200,360 200,160 450,160 450,420 700,420 700,200 1000,200",
+    "wave": "웨이브\n1 / 8",
+    "boardArt": "assets/defense/guard-v1/gd-03.webp"
+  },
+  {
+    "id": "guard-gd-04",
+    "route": "0,300 230,300 230,140 500,140 500,440 790,440 790,250 1000,250",
+    "wave": "웨이브\n1 / 7",
+    "boardArt": "assets/defense/guard-p2-v1/gd-04.webp"
+  },
+  {
+    "id": "guard-gd-05",
+    "route": "0,160 260,160 260,300 600,300 600,160 800,160 800,300 1000,300",
+    "wave": "웨이브\n1 / 8",
+    "boardArt": "assets/defense/guard-p2-v1/gd-05.webp"
+  },
+  {
+    "id": "guard-gd-06",
+    "route": "0,160 250,160 250,430 590,430 590,160 800,160 800,300 1000,300",
+    "wave": "웨이브\n1 / 9",
+    "boardArt": "assets/defense/guard-p2-v1/gd-06.webp"
+  }
+]

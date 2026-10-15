@@ -181,6 +181,7 @@ export type DefenseRunMode = 'TRAINING' | 'EVENT';
 export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
+  readonly lastTowerPurchase?: {readonly towerInstanceId:string;readonly padId:string;readonly tick:number;readonly waveId:number;readonly status:DefenseStatus};
   readonly ultimateUnlocked?:boolean;
   readonly pendingAttacks?:readonly DefensePendingAttack[];
   readonly mapPhase?:'INITIAL'|'SHIFTED';
@@ -260,6 +261,7 @@ export interface DefenseTacticalReport {
 }
 
 export type DefenseCommand =
+  | {readonly type:'UndoBuild'}
   | {readonly type:'RelocateTower';readonly towerInstanceId:string;readonly padId:string}
   | {readonly type:'ConfirmTransition'}
   | { readonly type: 'Build'; readonly padId: string; readonly towerId: DefenseTowerId }

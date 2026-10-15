@@ -22,14 +22,14 @@ import type {
   DefenseCombatShot, DefenseContent, DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
 } from '../domain/defense';
 import {
-  advanceDefenseWithCombat, applyDefenseCommand, defenseResult, defenseSupportHasTarget,
+  advanceDefenseWithCombat, applyDefenseCommand, canUndoDefenseBuild, defenseResult, defenseSupportHasTarget,
 } from '../engine/defense';
 import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
-import {GUARD_ENTRY,guardContents,guardStageIds,guardStageUnlocked,guardSupportUnlocked,isGuardMap,isGuardScenario} from '../content/guard-campaign';
+import {GUARD_ENTRY,guardContents,guardStageIds,guardStageUnlocked,guardSupportUnlocked,guardSupportUnlockStage,isGuardMap,isGuardScenario} from '../content/guard-campaign';
 import {defenseEnemyPath,defenseRoutes} from '../engine/defense-geometry';
 import {GuardBattleFields,GuardEvolutionFX,GuardBattleFeedback,GuardWaveMeter} from './GuardBattleAtmosphere';
 import {GuardWorldLighting,GuardEquipmentRig,GuardRiskAura} from './GuardCinematicWorld';
@@ -58,6 +58,7 @@ import {DefenseTechTree} from './DefenseTechTree';
 import './defense-tactics.css';
 import {defensePremiumArt,DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import './defense-premium.css';
+import './guard-usability.css';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -343,19 +344,21 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
 }
 
 function SupportCard({
-  session, supportId, onChoose,content,
+  session, supportId, onChoose,content,locked=false,unlockStage,
 }: {
   session: EpisodeSession;
   supportId: DefenseSupportId;
   onChoose: () => void;
   content:DefenseContent;
+  locked?:boolean;
+  unlockStage?:number;
 }) {
   const characterId = defenseSupportCharacterId(supportId);
   const character = session.character(characterId);
   const portrait = characterPortraitUri(characterId, id => session.assetUri(id));
   const body=characterMapUri(characterId,id=>session.assetUri(id));
   const support=content.supports.find(item=>item.id===supportId)!;
-  return <button className="zb-support-card" type="button" onClick={onChoose} data-support={supportId}>
+  return <button className="zb-support-card" type="button" onClick={()=>{if(!locked)onChoose();}} data-support={supportId} data-locked={locked?'true':undefined} aria-disabled={locked}>
     <VisualImage uri={body} alt="" className="zb-support-fullbody"/>
     <VisualImage uri={portrait} alt="" className="zb-support-portrait" />
     <span>
@@ -371,7 +374,7 @@ function SupportCard({
       <span>{t('defense.art.cooldown')} <b>{support.cooldownTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>
       </span>
     </span>
-    <i>{t('defense.ui.support.choose')}</i>
+    <i>{locked?`${t('guard.crew.locked')} · GD-0${unlockStage} ${t('guard.crew.unlock')}`:t('defense.ui.support.choose')}</i>
   </button>;
 }
 
@@ -407,7 +410,7 @@ export function DefenseGame({
   const guardIndex=guardStageIds.indexOf(content.scenario.id);
   const guardKey=`guard.gd0${guardIndex+1}`;
   const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
-  const SUPPORT_IDS = content.scenario.availableSupports.filter(id=>!guard||guardSupportUnlocked(id,persistence.document)) as readonly DefenseSupportId[];
+  const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
   const PRODUCTION_MAP = defenseProductionMapEntry(content.map.id);
   const G8A_WORLD_FINAL = content.map.id === 'map-apt-bottom-up-excavation-01' ? defenseG8aWorldFinalAsset() : null;
@@ -420,8 +423,10 @@ export function DefenseGame({
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
+  const [shortViewport,setShortViewport]=useState(()=>window.matchMedia?.('(max-height: 650px)').matches??false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
+  const [helpOpen,setHelpOpen]=useState(false);
+  const mapFrame = defenseMapFrame(content.map.id, portrait&&!(guard&&shortViewport), content.map.width, content.map.height);
   const visualRoutes = defenseRoutes(content,state??undefined).map(route=>({...route,path:defenseVisualPath(content.map.id,route.path)}));
   const visualPath = visualRoutes[0]!.path;
   const tutorial = useDefenseTutorial(state, content, paused => {
@@ -546,11 +551,13 @@ export function DefenseGame({
 
   useEffect(() => {
     const media = window.matchMedia?.('(orientation: portrait)');
+    const short=window.matchMedia?.('(max-height: 650px)');
     if (!media) return;
-    const sync = () => setPortrait(media.matches);
+    const sync = () => {setPortrait(media.matches);setShortViewport(short?.matches??false);};
     sync();
     media.addEventListener?.('change', sync);
-    return () => media.removeEventListener?.('change', sync);
+    short?.addEventListener?.('change',sync);
+    return () => {media.removeEventListener?.('change', sync);short?.removeEventListener?.('change',sync);};
   }, []);
 
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
@@ -578,7 +585,7 @@ export function DefenseGame({
         audio.playCue('place');
       }
       if (command.type === 'Upgrade') audio.playCue('upgrade');
-      if (command.type === 'Sell') {
+      if (command.type === 'Sell' || command.type === 'UndoBuild') {
         setSelectedTowerId(null);
         audio.playCue('sell');
       }
@@ -794,7 +801,7 @@ export function DefenseGame({
   </main>;
 
   if (!state) return <main className="zb-shell zb-prep zb-premium-deployment" data-defense-screen="support-select" data-scenario={content.scenario.id} data-map={content.map.id}>
-    <img className="zb-deployment-keyart" src={DEFENSE_PREMIUM_HERO} alt="" aria-hidden="true"/>
+    <img className="zb-deployment-keyart" src={guard?(BOARD_ART_URI??DEFENSE_PREMIUM_HERO):DEFENSE_PREMIUM_HERO} alt="" aria-hidden="true"/>
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t(guard?'guard.title':'defense.ui.hub.title')}</h1></div>
       <button type="button" onClick={() => setSelectedScenarioId(campaignEntry?GUARD_ENTRY:null)}>{t(campaignEntry?'guard.home':'defense.scenario.back')}</button>
@@ -810,13 +817,15 @@ export function DefenseGame({
       <small className="zb-simulation-boundary">{t('defense.tactics.boundary')}</small>
     </section>
     <section className="zb-support-grid">
-      <header className="zb-crew-heading"><h2>{t('defense.art.crew')}</h2><p>{t('defense.art.crew_hint')}</p></header>
+      <header className="zb-crew-heading"><h2>{t('defense.art.crew')} {guard?<small>{SUPPORT_IDS.filter(id=>guardSupportUnlocked(id,persistence.document)).length} / {SUPPORT_IDS.length} {t('guard.crew.available')}</small>:null}</h2><p>{t(guard?'guard.crew_hint':'defense.art.crew_hint')}</p></header>
       {SUPPORT_IDS.map(id => <SupportCard
         key={id}
         session={session}
         supportId={id}
         onChoose={() => startWithSupport(id)}
         content={content}
+        locked={guard&&!guardSupportUnlocked(id,persistence.document)}
+        unlockStage={guardStageIds.indexOf(guardSupportUnlockStage(id)??'')+1}
       />)}
     </section>
     <section className="zb-deployment-bottom"><details><summary>{t('defense.art.tree')} · {t('defense.art.standard')}</summary><div className="zb-deployment-equipment">{TOWER_IDS.map(id=><div key={id}><img src={defenseTowerArtUri(id,'L3A',content.map.id)??undefined} alt=""/><strong>{towerName(content.map.id,id)}</strong><small>{towerRole(content.map.id,id)}</small></div>)}</div></details><OperationHandoffDossier mode="defense"/></section>
@@ -855,7 +864,8 @@ export function DefenseGame({
     </header>
     {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
       <button type="button" onClick={()=>setSettingsOpen(false)}>{t('defense.tactics.close')}</button>
-      <button type="button" onClick={() => { tutorial.replay(); setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
+      <button type="button" onClick={() => { tutorial.replay(); setHelpOpen(true);setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
+      {guard?<div className="guard-settings-speed" aria-label={t('defense.ui.speed')}>{[1,2].map(speed=><button key={speed} type="button" aria-pressed={state.speed===speed} onClick={()=>dispatch({type:'SetSpeed',speed:speed as 1|2})}>{speed}×</button>)}</div>:null}
       <button
         type="button"
         data-audio-muted={audio.muted ? 'true' : 'false'}
@@ -867,7 +877,7 @@ export function DefenseGame({
     <section className="zb-tactics-strip" aria-label={t('defense.tactics.simulation')}>
       {guard?<GuardBattleFeedback state={state} shots={combatFrameRef.current}/>:null}
       {guard?<GuardWaveMeter content={content} state={state}/>:null}
-      <div className="guard-next-intel"><small>{t(guard&&guardIndex===2&&state.waveId>=5?'guard.shift':'defense.tactics.simulation')}</small><strong>{preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave')}</strong>
+      <div className="guard-next-intel"><small>{guard?`GD-0${guardIndex+1} · ${t(guardKey+'.title')}`:t('defense.tactics.simulation')}</small><strong>{preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave')}</strong>
       <span>{preview?.groups.map(group=>`${enemyName(content.map.id,group.enemy)} ×${group.count}`).join(' · ')}</span>
       {isRadioVisible&&radioChatter?<span className="zb-radio-line" role="status">{radioChatter.speaker} · {radioChatter.text}</span>:null}</div>
       {!result?<button type="button" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('defense.tactics.recommend')}{advice?` · ${advice.padId} · R ${advice.cost}`:''}</button>:null}
@@ -1040,6 +1050,7 @@ export function DefenseGame({
 
     <footer className="zb-command">
       <section className="zb-selection">
+        {guard&&canUndoDefenseBuild(state)?<button className="guard-undo-build" type="button" onClick={()=>dispatch({type:'UndoBuild'})}><strong>{t('guard.purchase.undo')}</strong><span>{state.lastTowerPurchase?.padId} · +R {state.towers.find(t=>t.id===state.lastTowerPurchase?.towerInstanceId)?.invested} · {t('guard.purchase.refund')}</span></button>:null}
         {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>{advice?t(advice.reasonId):t('defense.tactics.no_advice')}</span></div> : null}
         {selectedPad?<div className="zb-selection-heading"><small>{state.paused?t('defense.tactics.hold'):t('defense.tactics.advice_hint')}</small><button type="button" onClick={()=>{setSelectedPadId(null);setSelectedTowerId(null);}}>{t('defense.tactics.close')}</button></div>:null}
         {selectedPad&&advice?.padId===selectedPad.id?<p className="zb-advice-reason">{t('defense.tactics.recommended')} · {towerName(content.map.id,advice.towerId)} · {t(advice.reasonId)}</p>:null}
@@ -1139,7 +1150,7 @@ export function DefenseGame({
         {notice ? <p className="zb-notice" role="status">{notice}</p> : null}
       </section>
       <div className="zb-planning-notes">
-        <DefenseTutorial controller={tutorial}/>
+        {guard?<details className="guard-help" open={helpOpen||tutorial.pausedByGuide} onToggle={event=>setHelpOpen(event.currentTarget.open)}><summary>{t('guard.controls.help')}</summary><DefenseTutorial controller={tutorial}/><p>{t('guard.purchase.hint')}</p></details>:<DefenseTutorial controller={tutorial}/>}
         {preview?.groups.some(group=>group.enemy==='BOSS')?<p className="zb-danger-note">{t('defense.tactics.boss')}</p>:preview?.groups.some(group=>group.enemy==='VEILED')?<p>{t('defense.tactics.hidden')}</p>:null}
         {selectedPad&&state.paused?<p>{t('defense.tactics.hold_hint')}</p>:null}
       </div>

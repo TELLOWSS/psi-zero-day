@@ -12,6 +12,9 @@ export function guardStageUnlocked(id:string,document:DefenseSaveDocument){
 }
 export function guardSupportUnlocked(id:DefenseSupportId,document:DefenseSaveDocument){
  if(id==='COORDINATOR'||id==='OBSERVER')return true;
- const stage=id==='REBAR_LEAD'?guardStageIds[0]:id==='ENGINEER'?guardStageIds[1]:id==='COMMANDER'?guardStageIds[2]:id==='SIGNALER'?guardStageIds[3]:undefined;
+ const stage=guardSupportUnlockStage(id);
  return !!stage&&document.records.some(r=>r.scenarioId===stage&&r.clears>0);
+}
+export function guardSupportUnlockStage(id:DefenseSupportId){
+ return id==='REBAR_LEAD'?guardStageIds[0]:id==='ENGINEER'?guardStageIds[1]:id==='COMMANDER'?guardStageIds[2]:id==='SIGNALER'?guardStageIds[3]:undefined;
 }

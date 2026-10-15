@@ -71,6 +71,10 @@ function validTower(value: unknown): value is DefenseTowerState {
 export function isDefenseRunState(value: unknown): value is DefenseRunState {
   if (!record(value)) return false;
   return nonEmptyString(value.runId)
+    && (value.lastTowerPurchase===undefined || (record(value.lastTowerPurchase)
+      && nonEmptyString(value.lastTowerPurchase.towerInstanceId) && nonEmptyString(value.lastTowerPurchase.padId)
+      && nonNegativeInteger(value.lastTowerPurchase.tick) && integer(value.lastTowerPurchase.waveId)
+      && ['READY','RUNNING','INTERMISSION'].includes(String(value.lastTowerPurchase.status))))
     && (value.mode === 'TRAINING' || value.mode === 'EVENT')
     && (value.variant === 'STANDARD' || value.variant === 'EVENT_MODIFIED')
     && (value.scenarioId === undefined || nonEmptyString(value.scenarioId))

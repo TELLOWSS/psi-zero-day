@@ -1,0 +1,65 @@
+.guard-stage-preview{position:relative;min-width:0;aspect-ratio:5/3;overflow:hidden;background:#102a34}
+.guard-stage-grid article>.guard-stage-preview{padding:0}
+.guard-stage-grid .guard-stage-preview img{width:100%;height:100%;object-fit:cover;filter:brightness(.72)}
+.guard-stage-preview svg{position:absolute;inset:0;width:100%;height:100%;fill:none}
+.guard-stage-preview polyline{stroke:#ffe0a2;stroke-width:9;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 2px 3px #000)}
+.guard-stage-preview polyline.is-secondary{stroke:#89e8de}
+.guard-stage-preview polyline.is-transition{stroke:#89e8de;stroke-dasharray:18 14}
+.guard-stage-preview circle{fill:#0c2938;stroke:#fff3cb;stroke-width:4}
+.guard-stage-preview>span{position:absolute;bottom:8px;left:8px;padding:5px 8px;border-radius:6px;background:#0b2437e8;color:#f8dca4;font-size:11px}
+.guard-stage-grid .guard-stage-tactic{display:block;font-size:12px;color:#acd8d1;margin:8px 0}
+.zb-crew-heading h2 small{display:inline-block;color:#acd8d1;font-size:12px;margin-left:8px}
+:root .zb-premium-deployment[data-map^='guard-gd-'] .zb-support-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-content:start}
+:root .zb-premium-deployment[data-map^='guard-gd-'] .zb-support-card{min-height:0}
+:root .zb-premium-deployment[data-map^='guard-gd-'] .zb-support-fullbody{height:170px}
+:root .zb-premium-deployment .zb-support-card[data-locked='true']{border-style:dashed;background:#182c36;cursor:default}
+:root .zb-premium-deployment .zb-support-card[data-locked='true'] .zb-support-fullbody{opacity:.65}
+:root .zb-premium-deployment .zb-support-card[data-locked='true']>i{background:#243e49;color:#ccdcd8;font-size:11px;line-height:1.5}
+.guard-undo-build{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;min-height:44px;padding:8px 12px;margin-bottom:8px;border:1px solid #aedcca;border-radius:8px;background:#1a423f;color:#ecfff6;text-align:left}
+.guard-undo-build strong{font-size:13px}.guard-undo-build span{font-size:11px;color:#b8e1cf}
+.guard-help{font-size:12px;line-height:1.5;color:#c9dcd6}.guard-help summary{min-height:44px;align-content:center;cursor:pointer}
+.guard-help p{line-height:1.6}
+:root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-tactics-strip{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px;height:44px;min-height:0;overflow:hidden;padding:4px 8px}
+:root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-tactics-strip>.guard-wave-meter{flex:1;min-width:80px;max-width:none}
+:root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-tactics-strip>button{flex:0 0 auto;max-width:45%;min-height:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guard-settings-speed{display:flex;gap:8px}.guard-settings-speed button[aria-pressed='true']{outline:2px solid #f0ce8b}
+:root .zb-shell[data-map^='guard-gd-']:not([data-status='RUNNING']) .zb-support-action,
+:root .zb-shell[data-map^='guard-gd-']:not([data-status='RUNNING']) .zb-estop-action{display:none}
+@media(max-width:900px){
+ :root .zb-premium-deployment[data-map^='guard-gd-'] .zb-support-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ :root .zb-premium-deployment[data-map^='guard-gd-'] .zb-support-fullbody{height:150px}
+ .guard-stage-grid article{grid-template-columns:1fr}
+ .guard-stage-grid .guard-stage-preview{aspect-ratio:5/3}
+}
+@media(orientation:portrait){
+ :root .zb-shell[data-map^='guard-gd-'][data-defense-screen='combat'][data-orientation][data-selection-mode]{grid-template-areas:"hud" "brief" "field" "dock";grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;padding-bottom:env(safe-area-inset-bottom)}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-stage{padding:4px;min-height:0}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-command{display:block;max-height:38dvh;height:auto;overflow:auto;padding:6px 10px}
+ :root .zb-shell[data-map^='guard-gd-'][data-selection-mode='NONE']:not([data-status='RUNNING']) .zb-selection,
+ :root .zb-shell[data-map^='guard-gd-'] .guard-preparation-hint{display:none}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-run-controls{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+ :root .zb-shell[data-map^='guard-gd-'] .zb-run-controls>details{margin:0;width:100%;box-sizing:border-box}
+ :root .zb-shell[data-map^='guard-gd-'] .zb-start-wave{order:-1;min-height:46px}
+ :root .zb-shell[data-map^='guard-gd-'] .zb-planning-notes{margin:0}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-command{max-height:72px;padding:5px 8px}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-run-controls{flex-direction:row;gap:6px}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-support-action{flex:1;max-width:none}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-estop-action{flex:0 0 auto}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-estop-action>span{display:none}
+ :root .zb-shell[data-map^='guard-gd-'] .zb-tower-shop button{min-height:72px}
+}
+@media(orientation:landscape) and (max-height:600px){
+ :root .zb-shell[data-map^='guard-gd-'][data-defense-screen='combat'][data-orientation][data-selection-mode='NONE'][data-status='RUNNING']{grid-template-areas:"hud hud" "brief brief" "field dock";grid-template-columns:minmax(0,1fr) 178px;grid-template-rows:auto 44px minmax(0,1fr)}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-command{height:100%;max-height:none;overflow:auto;padding:6px}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-run-controls{flex-direction:column;align-items:stretch}
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-support-action,
+ :root .zb-shell[data-map^='guard-gd-'][data-status='RUNNING'][data-selection-mode='NONE'] .zb-estop-action{flex:0 0 auto;max-width:none}
+}
+@media(orientation:portrait) and (max-height:650px){
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud{grid-template-columns:repeat(6,minmax(0,1fr))}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud .zb-speed{display:none}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud .zb-meter{padding:3px 1px;flex-direction:column!important;gap:2px}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud .zb-meter span{font-size:9px}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud .zb-meter strong{font-size:13px}
+ :root .zb-shell[data-map^='guard-gd-'][data-orientation][data-selection-mode] .zb-hud button{font-size:10px;padding:3px}
+}
