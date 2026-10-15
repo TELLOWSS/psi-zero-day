@@ -1,0 +1,174 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "method": "Fresh real UI; all six weapons/four preview tiers, image hashes differ T1 vsT4, unchanged campaign snapshot/storage during inspection, real first-boss victory earns the upgrade part and socket gem, actual upgrade/socket clicks and reload persistence. No resources, health or victory injected.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "all24TierPreviews": true,
+      "previewDoesNotMutateMainOrStorage": true,
+      "hiddenPreviewFrozen": true,
+      "actualFirstBossWon": true,
+      "earned": {
+        "level": 2,
+        "gem": "gem_kinetic",
+        "parts": 0,
+        "preview": {
+          "weapon": "pulse",
+          "owned": 2,
+          "preview": 2,
+          "shots": 2,
+          "steps": 132,
+          "time": 1.0999999999999985,
+          "playing": false,
+          "tier": 2,
+          "sockets": {
+            "bounceVelocity": 0,
+            "comboWindow": 0,
+            "shieldTolerance": 0,
+            "pulseSpeed": 0.12,
+            "pulseImpact": 0.15,
+            "hitStopBoost": 0,
+            "magnetRadius": 0,
+            "netRadius": 0,
+            "cooldownReduction": 0,
+            "tripleSplitChance": 0,
+            "weaponLevels": {
+              "pulse": 2,
+              "net": 1,
+              "magnet": 1,
+              "mist": 1,
+              "anchor": 1,
+              "scan": 1
+            },
+            "weaponSocketStats": {
+              "pulse": {
+                "pulseSpeed": 0.12,
+                "pulseImpact": 0.15
+              },
+              "net": {},
+              "magnet": {},
+              "mist": {},
+              "anchor": {},
+              "scan": {}
+            }
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "all24TierPreviews": true,
+      "previewDoesNotMutateMainOrStorage": true,
+      "hiddenPreviewFrozen": true,
+      "actualFirstBossWon": true,
+      "earned": {
+        "level": 2,
+        "gem": "gem_kinetic",
+        "parts": 0,
+        "preview": {
+          "weapon": "pulse",
+          "owned": 2,
+          "preview": 2,
+          "shots": 2,
+          "steps": 132,
+          "time": 1.0999999999999985,
+          "playing": false,
+          "tier": 2,
+          "sockets": {
+            "bounceVelocity": 0,
+            "comboWindow": 0,
+            "shieldTolerance": 0,
+            "pulseSpeed": 0.12,
+            "pulseImpact": 0.15,
+            "hitStopBoost": 0,
+            "magnetRadius": 0,
+            "netRadius": 0,
+            "cooldownReduction": 0,
+            "tripleSplitChance": 0,
+            "weaponLevels": {
+              "pulse": 2,
+              "net": 1,
+              "magnet": 1,
+              "mist": 1,
+              "anchor": 1,
+              "scan": 1
+            },
+            "weaponSocketStats": {
+              "pulse": {
+                "pulseSpeed": 0.12,
+                "pulseImpact": 0.15
+              },
+              "net": {},
+              "magnet": {},
+              "mist": {},
+              "anchor": {},
+              "scan": {}
+            }
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "all24TierPreviews": true,
+      "previewDoesNotMutateMainOrStorage": true,
+      "hiddenPreviewFrozen": true,
+      "actualFirstBossWon": true,
+      "earned": {
+        "level": 2,
+        "gem": "gem_kinetic",
+        "parts": 0,
+        "preview": {
+          "weapon": "pulse",
+          "owned": 2,
+          "preview": 2,
+          "shots": 2,
+          "steps": 132,
+          "time": 1.0999999999999985,
+          "playing": false,
+          "tier": 2,
+          "sockets": {
+            "bounceVelocity": 0,
+            "comboWindow": 0,
+            "shieldTolerance": 0,
+            "pulseSpeed": 0.12,
+            "pulseImpact": 0.15,
+            "hitStopBoost": 0,
+            "magnetRadius": 0,
+            "netRadius": 0,
+            "cooldownReduction": 0,
+            "tripleSplitChance": 0,
+            "weaponLevels": {
+              "pulse": 2,
+              "net": 1,
+              "magnet": 1,
+              "mist": 1,
+              "anchor": 1,
+              "scan": 1
+            },
+            "weaponSocketStats": {
+              "pulse": {
+                "pulseSpeed": 0.12,
+                "pulseImpact": 0.15
+              },
+              "net": {},
+              "magnet": {},
+              "mist": {},
+              "anchor": {},
+              "scan": {}
+            }
+          }
+        }
+      },
+      "errors": []
+    }
+  ]
+}

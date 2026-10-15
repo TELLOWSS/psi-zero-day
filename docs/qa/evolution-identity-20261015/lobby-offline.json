@@ -1,0 +1,9 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "offline": true,
+  "cached": "psi-signal-breaker-webpreview-v0.66.0-evolution-identity",
+  "keyArtReady": true,
+  "layoutReady": true,
+  "explicitPreparation": true,
+  "errors": []
+}

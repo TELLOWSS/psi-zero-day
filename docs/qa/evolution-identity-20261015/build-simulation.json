@@ -1,0 +1,165 @@
+{
+  "method": "Eight real EP03 CH02 complete encounters, same seed17, chosen build/branch through normal APIs, normal movement/aim/fire/support/boost/tuning. No health, captures, rewards or victory injected.",
+  "rows": [
+    {
+      "recipe": "storm",
+      "branch": "spread",
+      "state": "won",
+      "life": 5,
+      "time": 91.9833333333526,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 15,
+      "maxShots": 32,
+      "maxFields": 1,
+      "fieldEvents": 0,
+      "links": 829,
+      "evolution": {
+        "frame": "arc",
+        "recipe": "storm",
+        "branch": "spread",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "storm",
+      "branch": "focus",
+      "state": "won",
+      "life": 5,
+      "time": 86.63333333334835,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 13,
+      "maxShots": 32,
+      "maxFields": 1,
+      "fieldEvents": 0,
+      "links": 769,
+      "evolution": {
+        "frame": "arc",
+        "recipe": "storm",
+        "branch": "focus",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "singularity",
+      "branch": "spread",
+      "state": "won",
+      "life": 5,
+      "time": 91.80000000001912,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 13,
+      "maxShots": 32,
+      "maxFields": 2,
+      "fieldEvents": 568,
+      "links": 930,
+      "evolution": {
+        "frame": "arc",
+        "recipe": "singularity",
+        "branch": "spread",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "singularity",
+      "branch": "focus",
+      "state": "won",
+      "life": 5,
+      "time": 91.61666666668565,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 12,
+      "maxShots": 32,
+      "maxFields": 2,
+      "fieldEvents": 631,
+      "links": 724,
+      "evolution": {
+        "frame": "arc",
+        "recipe": "singularity",
+        "branch": "focus",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "prism",
+      "branch": "spread",
+      "state": "won",
+      "life": 5,
+      "time": 103.83333333336203,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 15,
+      "maxShots": 32,
+      "maxFields": 0,
+      "fieldEvents": 0,
+      "links": 385,
+      "evolution": {
+        "frame": "laser",
+        "recipe": "prism",
+        "branch": "spread",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "prism",
+      "branch": "focus",
+      "state": "won",
+      "life": 5,
+      "time": 103.51666666669512,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 16,
+      "maxShots": 32,
+      "maxFields": 0,
+      "fieldEvents": 0,
+      "links": 325,
+      "evolution": {
+        "frame": "laser",
+        "recipe": "prism",
+        "branch": "focus",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "plasma",
+      "branch": "spread",
+      "state": "won",
+      "life": 5,
+      "time": 95.36666666668863,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 17,
+      "maxShots": 32,
+      "maxFields": 1,
+      "fieldEvents": 712,
+      "links": 665,
+      "evolution": {
+        "frame": "laser",
+        "recipe": "plasma",
+        "branch": "spread",
+        "capstone": true
+      }
+    },
+    {
+      "recipe": "plasma",
+      "branch": "focus",
+      "state": "won",
+      "life": 5,
+      "time": 95.62500000002217,
+      "cleared": 159,
+      "total": 159,
+      "maxCores": 15,
+      "maxShots": 32,
+      "maxFields": 1,
+      "fieldEvents": 763,
+      "links": 541,
+      "evolution": {
+        "frame": "laser",
+        "recipe": "plasma",
+        "branch": "focus",
+        "capstone": true
+      }
+    }
+  ]
+}

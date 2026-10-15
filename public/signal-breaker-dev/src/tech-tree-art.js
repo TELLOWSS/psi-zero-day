@@ -42,18 +42,39 @@ function render(parent,{manager:m,text:t,onChange,identity,reduced=false,quality
  }
  drawInspector();parent.append(panel);return {recommendationHost};
 }
+let previews=[],previewRaf=0,gearSelected='pulse';
+// Authored sprite rectangles preserve complete grips, hoses and emitters in the generated atlas.
+const GEAR_FRAMES=[[[30,48,200,197],[235,48,240,197],[470,38,244,213],[714,32,304,219]],[[8,275,216,204],[228,268,237,211],[465,262,240,218],[709,258,311,224]],[[8,514,210,194],[228,500,236,208],[466,489,241,221],[708,482,312,230]],[[10,768,208,197],[225,751,240,218],[461,741,246,232],[708,711,312,265]],[[12,1044,200,188],[214,1006,249,233],[462,992,246,254],[708,979,312,269]],[[10,1305,201,198],[212,1288,249,218],[459,1273,249,235],[708,1249,312,262]]];
+function paintGear(el,key,tier){const row=Object.keys(root.SignalBreakerTalentTech.WEAPON_TECHS).indexOf(key),[x,y,w,h]=GEAR_FRAMES[row][tier-1],sprite=make('span','gear-sprite-window');el.replaceChildren();el.style.backgroundImage='none';el.style.position='relative';sprite.style.width='96%';sprite.style.aspectRatio=w+'/'+h;sprite.style.backgroundSize=(1024/w*100)+'% '+(1536/h*100)+'%';sprite.style.backgroundPosition=(x/(1024-w)*100)+'% '+(y/(1536-h)*100)+'%';el.append(sprite);}
+function mountPreview(col,key,level,m,t,reduced,quality){
+ if(!root.SignalBreakerEngine||!root.SignalBreakerPremiumArt)return null;
+ const box=make('section','gear-simulation'),label=make('p','gear-preview-label'),form=make('div','gear-evolution-form'),canvas=make('canvas','gear-preview-canvas'),sockets=make('div','gear-preview-sockets'),play=make('button','iconbtn',t('breaker.gear.demo'));form.setAttribute('aria-hidden','true');
+ canvas.width=550;canvas.height=310;canvas.setAttribute('aria-label',t('breaker.gear.demo'));play.type='button';
+ const art=new root.SignalBreakerPremiumArt.PremiumArt();art.setQuality('low');art.setReducedMotion(reduced);const actor=root.SignalBreakerActors?.createActor(m.characterId||'player');
+ const p={canvas,art,actor,key,level,owned:level,m,t,reduced,playing:false,label,model:null};
+ for(const id of m.weaponSockets[key]||[]){const gem=root.SignalBreakerTalentTech.SOCKET_GEMS.find(g=>g.id===id),chip=make('span','',gem?gem.name:t('breaker.gear.empty'));if(gem)chip.style.color=gem.color;sockets.append(chip);}
+ function select(tier){p.steps=0;p.level=tier;paintGear(form,key,tier);p.model=new root.SignalBreakerEngine.Game('SB-01',17,{lab:true});p.model.setLoadout([key,key==='pulse'?'net':'pulse']);p.model.selectWeapon(key);const stats=m.getStats();p.model.applyTalentStats({...stats,weaponLevels:{...stats.weaponLevels,[key]:tier}});p.model.start();col.dataset.ownedTier=String(level);col.dataset.previewTier=String(tier);label.textContent=t('breaker.gear.previewTier').replace('{n}',String(tier))+' · '+t(tier===level?'breaker.gear.owned':'breaker.gear.inspectOnly');advancePreview(p,1.1);drawPreview(p);}
+ play.addEventListener('click',()=>{for(const q of previews)q.playing=false;select(p.level);p.playing=!reduced&&quality!=='low';startPreviews();});
+ box.append(label,form,canvas,sockets,play);col.prepend(box);previews.push(p);select(level);return select;
+}
+function advancePreview(p,seconds){const g=p.model;for(let i=0;i<Math.min(240,Math.ceil(seconds*120));i++){p.steps++;if(g.state!=='playing'||g.time>4.5){g.reset();g.setLoadout([p.key,p.key==='pulse'?'net':'pulse']);g.selectWeapon(p.key);const stats=p.m.getStats();g.applyTalentStats({...stats,weaponLevels:{...stats.weaponLevels,[p.key]:p.level}});g.start();}g.assistAim(false);g.fire();g.update(1/120);for(const e of g.drainEvents())p.art.combatVfx?.event(e);p.art.combatVfx?.update(1/120);}}
+function drawPreview(p){const c=p.canvas.getContext('2d');if(!c)return;const g=p.model;c.setTransform(.5,0,0,.5,0,0);c.fillStyle='#0a202b';c.fillRect(0,0,1100,620);c.strokeStyle='#31515b';c.lineWidth=1;for(let x=0;x<1100;x+=100){c.beginPath();c.moveTo(x,0);c.lineTo(x,620);c.stroke();}for(const q of g.cores)p.art.core(c,q,g.time);for(const f of g.fields){c.strokeStyle=f.kind==='net'?'#91ffe1':f.kind==='magnet'?'#79dbff':'#e9c58c';c.beginPath();c.arc(f.x,f.y,f.radius,0,Math.PI*2);c.stroke();}for(const s of g.shots)p.art.projectile(c,s,g.time);p.art.combatVfx?.draw(c);p.actor?.draw(c,g.player,g.player.x,g.player.y+31,g.time,5,p.key,{...g.launchGeometry(),equipmentTier:p.level,reducedMotion:p.reduced});}
+function startPreviews(){if(previewRaf)return;let last=0;const frame=now=>{previewRaf=0;previews=previews.filter(p=>p.canvas.isConnected);let running=false;for(const p of previews){const r=p.canvas.getBoundingClientRect();if(!p.playing||document.hidden||!p.canvas.closest('dialog')?.open)continue;running=true;if(r.bottom>0&&r.top<innerHeight){advancePreview(p,Math.min(.04,(now-last)/1000||0));drawPreview(p);}}last=now;if(running)previewRaf=requestAnimationFrame(frame);};previewRaf=requestAnimationFrame(frame);}
 function decorateWeapons(grid,{manager:m,text:t,reduced=false,quality='balanced'}){
+ previews=previews.filter(p=>p.canvas.isConnected);
  const api=root.SignalBreakerTalentTech,keys=Object.keys(api.WEAPON_TECHS);
  for(const [index,col] of [...grid.children].entries()){
-  const key=keys[index],weapon=api.WEAPON_TECHS[key],level=m.weaponLevels[key]||1;col.classList.add('tech-weapon-column');col.dataset.weapon=key;col.dataset.motion=String(!reduced&&quality!=='low'&&!motionPaused);
-  const path=make('div','tech-weapon-path');path.setAttribute('aria-label',t('breaker.tech.weaponPath'));const detail=make('p','tech-weapon-detail');
+  const key=keys[index],weapon=api.WEAPON_TECHS[key],level=m.weaponLevels[key]||1,ownedHeader=col.firstElementChild;col.classList.add('tech-weapon-column');col.dataset.weapon=key;col.dataset.motion=String(!reduced&&quality!=='low'&&!motionPaused);
+  const ownedArt=col.querySelector('.gear-owned-art');if(ownedArt)paintGear(ownedArt,key,level);
+  const preview=mountPreview(col,key,level,m,t,reduced,quality),path=make('div','tech-weapon-path');path.setAttribute('aria-label',t('breaker.tech.weaponPath'));const detail=make('p','tech-weapon-detail');
   for(const [i,tier] of weapon.tiers.entries()){
-   const node=make('button','tech-weapon-node'+(i<level?' is-powered':''));node.type='button';node.setAttribute('aria-pressed',String(i+1===level));node.setAttribute('aria-label','Tier '+(i+1)+' · '+tier.name);node.title=tier.desc;
-   const icon=make('span','tech-weapon-icon');icon.style.backgroundPosition=(index%3*50)+'% '+(index>=3?100:0)+'%';icon.setAttribute('aria-hidden','true');node.append(icon,make('small','',(i+1)+' · '+t(i<level?'breaker.tech.complete':'breaker.tech.inspect')));
-   node.addEventListener('click',()=>{for(const b of path.children)b.setAttribute('aria-pressed',String(b===node));detail.textContent=tier.name+' · '+tier.desc;});path.append(node);
+   const node=make('button','tech-weapon-node'+(i<level?' is-powered':''));node.type='button';node.dataset.tier=String(i+1);node.setAttribute('aria-pressed',String(i+1===level));node.setAttribute('aria-label','Tier '+(i+1)+' · '+tier.name);node.title=tier.desc;
+   const icon=make('span','tech-weapon-icon');paintGear(icon,key,i+1);icon.setAttribute('aria-hidden','true');node.append(icon,make('small','',(i+1)+' · '+t(i<level?'breaker.tech.complete':'breaker.tech.inspect')));
+   node.addEventListener('click',()=>{for(const b of path.children)b.setAttribute('aria-pressed',String(b===node));detail.textContent=tier.name+' · '+tier.desc;preview?.(i+1);});path.append(node);
   }
-  detail.textContent=weapon.tiers[level-1].name+' · '+t('breaker.tech.weaponPreview');col.prepend(path,detail);
+  detail.textContent=weapon.tiers[level-1].name+' · '+weapon.tiers[level-1].desc;col.prepend(path,detail);if(ownedHeader)col.prepend(ownedHeader);
  }
+ const nav=make('nav','gear-weapon-nav');nav.setAttribute('aria-label',t('breaker.gear.identity'));const choose=key=>{gearSelected=key;for(const col of grid.children)col.hidden=col.dataset.weapon!==key;for(const button of nav.children)button.setAttribute('aria-pressed',String(button.dataset.gearTab===key));for(const p of previews)if(p.key!==key)p.playing=false;};for(const key of keys){const b=make('button','',api.WEAPON_TECHS[key].name);b.type='button';b.dataset.gearTab=key;b.addEventListener('click',()=>choose(key));nav.append(b);}choose(keys.includes(gearSelected)?gearSelected:keys[0]);return nav;
 }
-root.SignalBreakerTechTreeArt={render,decorateWeapons};
+root.SignalBreakerTechTreeArt={render,decorateWeapons,previewStatus:()=>previews.map(p=>({weapon:p.key,owned:p.owned,preview:p.level,shots:p.model.shots.length,steps:p.steps,time:p.model.time,playing:p.playing&&!!p.canvas.closest('dialog')?.open,tier:p.model.equipmentTier(p.key),sockets:{...p.model.growthStats(p.key)}}))};
 })(window);

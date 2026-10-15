@@ -1,0 +1,7 @@
+{
+  "base": "http://127.0.0.1:4174",
+  "systemReducedMotion": true,
+  "staticPreview": true,
+  "unchangedSteps": true,
+  "errors": []
+}

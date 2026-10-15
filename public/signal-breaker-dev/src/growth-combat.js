@@ -81,7 +81,7 @@ function install(Game){
   base.fieldForces.call(this,c,dt);
   for(const f of this.fields){const d=distance(c,f);if(d>f.radius)continue;
    if(f.kind==='net'){if(f.tier===3)c.frozenUntil=f.until;else if(d>10){c.vx+=(f.x-c.x)/d*350*dt;c.vy+=(f.y-c.y)/d*350*dt;}}
-   if(f.kind==='magnet'&&c.kind==='metal'){
+   if(f.kind==='magnet'&&c.kind==='metal'&&!f.evolutionRecipe){
     if(f.tier>=2&&d>12){const force=(1-d/f.radius)*300*(this.growthStats('magnet').magnetPull||0);c.vx+=(f.x-c.x)/d*force*dt;c.vy+=(f.y-c.y)/d*force*dt;}
     if(f.tier>=3){c.magneticExposure=(c.magneticExposure||0)+dt;if(c.magneticExposure>=.75)c.stable=true;if(f.tier===3&&d>20){c.vx+=(f.y-c.y)/d*200*dt;c.vy-=(f.x-c.x)/d*200*dt;}}
     if(f.tier>=4){c.vx+=(this.config.gate.x-c.x)*dt*2;c.vy+=(this.config.gate.y-c.y)*dt*2;}
@@ -106,7 +106,8 @@ function install(Game){
   const tier=this.equipmentTier('anchor'),existing=this.anchors.find(a=>a.id===target.id);
   if(existing){this.anchors=this.anchors.filter(a=>a.id!==target.id);this.event('anchor',target.x,target.y,0);return;}
   if(tier>=2&&target.kind==='load'){target.vx*=.5;target.vy*=.5;}
-  const limit=tier>=3?3:1;this.anchors.push({id:target.id,x:target.x,y:target.y,until:this.time+3+(this.weaponLevel-1)+(this.hasTuning('field')?.5:0)+(this.growthStats('anchor').anchorDuration||0)});this.anchors=this.anchors.slice(-limit);this.event('anchor',target.x,target.y,1);
+  const limit=tier>=4?5:tier>=3?3:1,targets=tier>=4?[target,...this.cores.filter(c=>c!==target&&distance(c,target)<=220).sort((a,b)=>distance(a,target)-distance(b,target)).slice(0,2)]:[target];
+  for(const c of targets){this.anchors=this.anchors.filter(a=>a.id!==c.id);this.anchors.push({id:c.id,x:c.x,y:c.y,until:this.time+3+(this.weaponLevel-1)+(tier>=4?1.5:0)+(this.hasTuning('field')?.5:0)+(this.growthStats('anchor').anchorDuration||0)});}this.anchors=this.anchors.slice(-limit);this.event('anchor',target.x,target.y,targets.length);
  };
  proto.assistAim=function(smart){const target=base.assistAim.call(this,smart);if(target&&this.equipmentTier('scan')>=3&&this.scanUntil>this.time){this.setAim(target.x,target.y);target.aligned=!target.blocked;}return target;};
  proto.predictiveThreats=function(){
