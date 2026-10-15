@@ -1,20 +1,69 @@
 /* SIGNAL BREAKER procedural audio layer: original, no licensed samples.
    Bounded oscillators/noise envelopes. Gracefully silent if audio is unavailable. */
 (function(root){'use strict';
+/* Director-supplied 15-stage preview scores. All CANDIDATE_NONAPPROVED:
+   do not merge audio binaries to public main without licensing and listening QA.
+   Missing/malformed assets fall back to the previous game music. */
+const FALLBACK_SCORE='/assets/survivors/pinball/audio-candidates-v1/after-the-shift-v01.mp3';
+const CAMPAIGN_SCORE_CANDIDATES=Object.freeze({
+ 1:Object.freeze({
+  'CH-01':'./audio/ep01/ch01_ricochet_candidate_v01.ogg',
+  'CH-02':'./audio/ep01/ch02_belt_candidate_v01.ogg',
+  'CH-03':'./audio/ep01/ch03_unfinished_candidate_v01.ogg',
+  'CH-04':'./audio/ep01/ch04_steel_candidate_v01.ogg',
+  'CH-05':'./audio/ep01/ch05_relay_candidate_v01.ogg'
+ }),
+ 2:Object.freeze({
+  'CH-01':'./audio/ep02/ch06_point_contact_candidate_v01.ogg',
+  'CH-02':'./audio/ep02/ch07_ratchet_candidate_v01.ogg',
+  'CH-03':'./audio/ep02/ch08_glass_candidate_v01.ogg',
+  'CH-04':'./audio/ep02/ch09_asymmetric_candidate_v01.ogg',
+  'CH-05':'./audio/ep02/ch10_manual_override_candidate_v01.ogg'
+ }),
+ 3:Object.freeze({
+  'CH-01':'./audio/ep03/ch11_brushed_steel_candidate_v01.ogg',
+  'CH-02':'./audio/ep03/ch12_gantry_candidate_v01.ogg',
+  'CH-03':'./audio/ep03/ch13_perimeter_candidate_v01.ogg',
+  'CH-04':'./audio/ep03/ch14_winch_candidate_v01.ogg',
+  'CH-05':'./audio/ep03/ch15_architect_candidate_v01.ogg'
+ })
+});
+function scoreFor(game){
+ if(game?.operation!==true||![1,2,3].includes(game.episode))return FALLBACK_SCORE;
+ return CAMPAIGN_SCORE_CANDIDATES[game.episode]?.[game.config?.id] || FALLBACK_SCORE;
+}
 class SoundDirector{
- constructor(){this.context=null;this.master=null;this.voiceBus=null;this.noise=null;this.last=new Map();this.voices=0;this.maxVoices=24;this.voiceLimit=24;this.enabled=true;this.playing=false;this.epoch=0;this.recorded=new Map();this.recording=new Set();this.active=new Set();this.music=null;this.voiceStream=null;this.voiceURL=null;this.loops=new Map();this.mix={music:.16,effects:.45,devices:.12,voice:.35};this.characterId='player';this.duckUntil=0;this.variant=0;}
+ constructor(){this.context=null;this.master=null;this.voiceBus=null;this.noise=null;this.last=new Map();this.voices=0;this.maxVoices=24;this.voiceLimit=24;this.enabled=true;this.playing=false;this.epoch=0;this.recorded=new Map();this.recording=new Set();this.active=new Set();this.music=null;this.voiceStream=null;this.voiceURL=null;this.loops=new Map();this.mix={music:.16,effects:.45,devices:.12,voice:.35};this.characterId='player';this.duckUntil=0;this.variant=0;this.musicTarget=null;this.musicPath=null;this.musicEpoch=0;this.musicFadeAt=0;this.failedMusic=new Set();}
  setSession(playing,enabled){
   if(this.playing===playing&&this.enabled===enabled)return;
   this.playing=playing;this.enabled=enabled;this.epoch++;
   if(this.master)this.master.gain.value=(playing&&enabled)?this.mix.effects:0;if(this.voiceBus)this.voiceBus.gain.value=playing&&enabled?this.mix.voice:0;
   if(!playing||!enabled){for(const source of this.active){try{source.stop();}catch{}}this.music?.pause();this.voiceStream?.pause();for(const audio of this.loops.values())audio.pause();return;}
-  if(typeof root.Audio==='function'){if(!this.music){this.music=new root.Audio('/assets/survivors/pinball/audio-candidates-v1/after-the-shift-v01.mp3');this.music.loop=true;this.music.volume=this.mix.music;this.music.preload='none';}void this.music.play().catch(()=>{});}
+  if(typeof root.Audio==='function'){if(!this.music){this.music=new root.Audio(FALLBACK_SCORE);this.musicPath=FALLBACK_SCORE;this.music.loop=true;this.music.volume=this.mix.music;this.music.preload='none';}void this.music.play().catch(()=>{});}
  }
  suspend(){for(const source of this.active){try{source.stop();}catch{}}this.music?.pause();this.voiceStream?.pause();for(const audio of this.loops.values())audio.pause();if(this.master)this.master.gain.value=0;if(this.voiceBus)this.voiceBus.gain.value=0;this.playing=false;}
- setMix(values){for(const key of ['music','effects','devices','voice'])if(Number.isFinite(values[key]))this.mix[key]=Math.max(0,Math.min(1,values[key]));if(this.master)this.master.gain.value=this.playing&&this.enabled?this.mix.effects:0;if(this.voiceBus)this.voiceBus.gain.value=this.playing&&this.enabled?this.mix.voice:0;if(this.voiceStream)this.voiceStream.volume=this.mix.voice;if(this.music)this.music.volume=this.mix.music*(Date.now()<this.duckUntil?.3:1);for(const audio of this.loops.values())audio.volume=this.mix.devices;}
- setScene(game,characterId){this.characterId=characterId;this.playerLife=game.player?.life??5;const want=new Map();if(game.state==='playing'&&this.enabled){if(game.config.conveyor&&game.conveyorDirection!==0)want.set('belt','/assets/survivors/pinball/audio-phase2c-v1/conveyor_mechanism_loop.wav');if(game.config.tension&&game.time>=game.tensionLockUntil)want.set('hoist','/assets/survivors/pinball/audio-phase1-v1/harbor_crane_motor_loop.mp3');}
+ setMix(values){for(const key of ['music','effects','devices','voice'])if(Number.isFinite(values[key]))this.mix[key]=Math.max(0,Math.min(1,values[key]));if(this.master)this.master.gain.value=this.playing&&this.enabled?this.mix.effects:0;if(this.voiceBus)this.voiceBus.gain.value=this.playing&&this.enabled?this.mix.voice:0;if(this.voiceStream)this.voiceStream.volume=this.mix.voice;if(this.music)this.music.volume=this.musicLevel();for(const audio of this.loops.values())audio.volume=this.mix.devices;}
+ musicLevel(){const fade=this.musicFadeAt?Math.min(1,Math.max(0,(Date.now()-this.musicFadeAt)/800)):1;return this.mix.music*(Date.now()<this.duckUntil?.3:1)*fade;}
+ setMusicPath(path){
+  if(!this.music||this.musicPath===path)return;
+  const epoch=++this.musicEpoch,player=this.music;player.pause();
+  this.musicPath=path;this.musicFadeAt=Date.now();player.src=path;player.loop=true;player.preload='auto';
+  try{player.currentTime=0;}catch{}
+  player.onerror=()=>{if(epoch!==this.musicEpoch||path===FALLBACK_SCORE)return;this.failedMusic.add(path);this.setMusicPath(FALLBACK_SCORE);};
+  player.volume=0;
+  if(this.playing&&this.enabled)void player.play().catch(error=>{
+   if(epoch!==this.musicEpoch||error?.name==='NotAllowedError'||path===FALLBACK_SCORE)return;
+   this.failedMusic.add(path);this.setMusicPath(FALLBACK_SCORE);
+  });
+ }
+ syncScore(game){
+  if(!this.music||!this.playing||!this.enabled)return;
+  const target=scoreFor(game);if(this.musicTarget===target)return;this.musicTarget=target;
+  this.setMusicPath(this.failedMusic.has(target)?FALLBACK_SCORE:target);
+ }
+ setScene(game,characterId){this.characterId=characterId;this.syncScore(game);this.playerLife=game.player?.life??5;const want=new Map();if(game.state==='playing'&&this.enabled){if(game.config.conveyor&&game.conveyorDirection!==0)want.set('belt','/assets/survivors/pinball/audio-phase2c-v1/conveyor_mechanism_loop.wav');if(game.config.tension&&game.time>=game.tensionLockUntil)want.set('hoist','/assets/survivors/pinball/audio-phase1-v1/harbor_crane_motor_loop.mp3');}
   if(typeof root.Audio==='function')for(const [id,url] of want){let audio=this.loops.get(id);if(!audio){audio=new root.Audio(url);audio.loop=true;audio.preload='none';audio.volume=this.mix.devices;this.loops.set(id,audio);}if(audio.paused)void audio.play().catch(()=>{});}
-  for(const [id,audio] of this.loops)if(!want.has(id))audio.pause();if(this.music)this.music.volume=this.mix.music*(Date.now()<this.duckUntil?.3:1);
+  for(const [id,audio] of this.loops)if(!want.has(id))audio.pause();if(this.music)this.music.volume=this.musicLevel();
  }
  sample(event){
   const phase1='/assets/survivors/pinball/audio-phase1-v1/',phase2='/assets/survivors/pinball/audio-phase2-v1/',device='/assets/survivors/pinball/audio-phase2c-v1/';
@@ -91,5 +140,5 @@ class SoundDirector{
  default:break;
  }}catch{/* Audio never blocks gameplay. */}}
 }
-root.SignalBreakerPremiumSound={SoundDirector};
+root.SignalBreakerPremiumSound={SoundDirector,CAMPAIGN_SCORE_CANDIDATES,scoreFor};
 })(typeof window!=='undefined'?window:globalThis);

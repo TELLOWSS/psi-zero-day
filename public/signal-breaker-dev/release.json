@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.66.0-evolution-identity",
-  "cacheName": "psi-signal-breaker-webpreview-v0.66.0-evolution-identity",
-  "fingerprint": "9908e2e12b9244197b0bdbc552d4ea10ba39e0b355e9ecccc0c2006114d04d6b",
+  "version": "0.66.1-stage-audio",
+  "cacheName": "psi-signal-breaker-webpreview-v0.66.1-stage-audio",
+  "fingerprint": "7e76d9019a353562d3cad1ddf1764f49899d726b2720c162ddde45903c969fac",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -675,6 +675,81 @@
       "sha256": "cf8be643c0efc14edec821ae267b6e1ec402d4c11dea0dc51b197f6f524c56b3"
     },
     {
+      "path": "/signal-breaker-dev/audio/ep01/ch01_ricochet_candidate_v01.ogg",
+      "bytes": 1083098,
+      "sha256": "478c084cfafb7b51ff8e99f92a727cbd2cb7821fbf07d83b7b4f55c02ed7fce6"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep01/ch02_belt_candidate_v01.ogg",
+      "bytes": 1061801,
+      "sha256": "9896ef17e817a8de3df95739bd214f23c53be0a3c8764d5e605e19027e7761ef"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep01/ch03_unfinished_candidate_v01.ogg",
+      "bytes": 1139901,
+      "sha256": "25d3a3adf155971c1c7f1af3676bfeb8e9028dbcbfa7a38caf476d1d4d89521d"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep01/ch04_steel_candidate_v01.ogg",
+      "bytes": 1136399,
+      "sha256": "b39d74acc00cfbd4ca71cc80e2e2d5dd221172dccb63c30c72ca366d05a68744"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep01/ch05_relay_candidate_v01.ogg",
+      "bytes": 1046129,
+      "sha256": "bb6b63f7bc0a4336002df320396b0afed595a721f3597c7960192a3c0a4b1703"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep02/ch06_point_contact_candidate_v01.ogg",
+      "bytes": 938403,
+      "sha256": "9fa005afd00d2d592daf3fc42aaaf764afb26e760d76b021b6d7acfd3f91014d"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep02/ch07_ratchet_candidate_v01.ogg",
+      "bytes": 926305,
+      "sha256": "3b7682e13d7560b3602d990c79fabb247bff87d433f0591d89725e5b1afe0670"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep02/ch08_glass_candidate_v01.ogg",
+      "bytes": 972001,
+      "sha256": "9cfd770ef4fe3572afaf0750a540d4a4a6abf8414985e199d61f90110cb7bfef"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep02/ch09_asymmetric_candidate_v01.ogg",
+      "bytes": 979628,
+      "sha256": "78b3d203f022b70bf96e649472969437249bc82af628613998bae405edba6962"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep02/ch10_manual_override_candidate_v01.ogg",
+      "bytes": 917177,
+      "sha256": "727edca3b6106e9e0b2f0790ddd28ad658fd52ad8847d5b2217a7bedf43092c3"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep03/ch11_brushed_steel_candidate_v01.ogg",
+      "bytes": 992539,
+      "sha256": "6cb65d1ae935ba79622489c9b2aa14365b75de8bd164af8e7cb608d31c52c13d"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep03/ch12_gantry_candidate_v01.ogg",
+      "bytes": 928791,
+      "sha256": "9bdf869c3dc498f2ca4e64d67e0a4e6a60349957ebc3a62a5bc5c39e372f47b7"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep03/ch13_perimeter_candidate_v01.ogg",
+      "bytes": 972411,
+      "sha256": "2b43f04fd45ba1f848eacfa60849208d38ac5166dd38dba1371b75d2e74a1bfd"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep03/ch14_winch_candidate_v01.ogg",
+      "bytes": 917224,
+      "sha256": "2a5e7f7c2d0eb7cc44aa9f41ada7ff9291f713f9ace3aae7b83f95b9fd9d273c"
+    },
+    {
+      "path": "/signal-breaker-dev/audio/ep03/ch15_architect_candidate_v01.ogg",
+      "bytes": 902797,
+      "sha256": "e45bb9225be3c1f058c3dd94835be2b3f23f4922dd547a9642bfd0274929ec20"
+    },
+    {
       "path": "/signal-breaker-dev/icon-192.png",
       "bytes": 83286,
       "sha256": "a86a24b88eccb12dd61261d30c7c2d73db3946f0a1f8b189970d5e69723c0482"
@@ -701,8 +776,8 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11644,
-      "sha256": "6678b9dc4f4701664bc22ab285b8d3d8f28cab2d9bf5cb1a569bbabb3972eae3"
+      "bytes": 11637,
+      "sha256": "fa35805607742772a7fdca21a6d7eccab4697d1b7224120822ec3f8c5a938e2e"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
@@ -856,8 +931,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
-      "bytes": 14447,
-      "sha256": "320ae08a792d85002f65ddbf6e52708ec9a405886171d85ed4f50bfa3c147040"
+      "bytes": 17107,
+      "sha256": "1b42cb68300cc1b22eed5e4f1689f5f583e200a91aa07c8108e2263e6315d272"
     },
     {
       "path": "/signal-breaker-dev/src/psi-rpg-art.css",
