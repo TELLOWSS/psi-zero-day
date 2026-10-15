@@ -12,11 +12,13 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
  const [pending,setPending]=useState<string|null>(null);
  const active=document.activeRun&&!['WON','LOST'].includes(document.activeRun.status);
  const cleared=guardContents.filter(c=>document.records.some(r=>r.scenarioId===c.scenario.id&&r.clears>0)).length;
+ const next=guardContents.find(c=>guardStageUnlocked(c.scenario.id,document)&&!document.records.some(r=>r.scenarioId===c.scenario.id&&r.clears>0));
  return <main className="guard-home" data-defense-screen="guard-home">
   <header className="guard-home-hero" style={{backgroundImage:`linear-gradient(90deg,#071b27ed,#071b2755),url(/${DEFENSE_PREMIUM_HERO})`}}>
    <nav><span>SIGNAL GUARD</span><button onClick={onExit}>{t('guard.hub')}</button></nav>
    <small>{t('guard.subtitle')}</small><h1>{t('guard.title')}</h1><p>{t('guard.promise')}</p>
    {active&&onResume?<button className="guard-primary" onClick={onResume}>{t('guard.resume')}</button>:null}
+   {!active&&next?<button className="guard-primary" onClick={()=>onSelect(next.scenario.id,false)}>{t('guard.next')} · {t(`guard.gd0${guardContents.indexOf(next)+1}.title`)}</button>:null}
    <span className="guard-progress">{t('guard.chapter')} · {cleared} / {guardContents.length} {t('guard.clear')}</span>
   </header>
   <section className="guard-operations"><h2>{t(cleared===guardContents.length?'guard.complete':'guard.chapter')}</h2><p>{t(cleared===guardContents.length?'guard.complete_hint':'guard.chapter_hint')}</p>

@@ -7,12 +7,19 @@ export function guardMuzzleOffset(shot:DefenseCombatShot,rotated=false,targetInd
  return rotated?{x:y,y:-x}:{x,y};
 }
 export function defenseCombatPan(shot:DefenseCombatShot,portrait=false):number{
- const point=shot.targets[0]?.point;if(!point)return 0;
+ const point=shot.targets[0]?.point??shot.targetPoint;if(!point)return 0;
  const fraction=portrait?(600-point.y)/600:point.x/1000;
  return Math.max(-.6,Math.min(.6,fraction*1.2-.6));
 }
 export function guardSoundEnvelope(family:DefenseTowerId,level:DefenseLevelId){
  const base={attack:.17,impact:.26,rate:1,attackGain:.30,impactGain:.42};
+ if(level==='L4A'||level==='L4B'){
+  const a=level==='L4A';
+  if(family==='PULSE')return {...base,attack:a?.10:.24,impact:a?.18:.32,rate:a?1.18:.78,attackGain:.32,impactGain:.44};
+  if(family==='BURST')return {...base,attack:a?.20:.28,impact:a?.50:.36,rate:a?.86:.72,attackGain:.32,impactGain:.46};
+  if(family==='CONTROL')return {...base,attack:a?.22:.12,impact:a?.36:.20,rate:a?.72:.96,attackGain:.24,impactGain:.34};
+  return {...base,attack:a?.13:.20,impact:a?.32:.24,rate:a?1.15:1.38,attackGain:.22,impactGain:.34};
+ }
  if(level!=='L3A'&&level!=='L3B')return base;
  const a=level==='L3A';
  if(family==='PULSE')return {...base,attack:a?.10:.22,impact:a?.16:.28,rate:a?1.1:.86};

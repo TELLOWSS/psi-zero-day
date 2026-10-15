@@ -32,7 +32,7 @@ const out=path.resolve(process.env.PSI_QA_OUTPUT||'docs/qa/guard-campaign-202610
      if(status==='INTERMISSION'&&!row.manualHold){const before=await shell.getAttribute('data-tick');await page.clock.runFor(11000);if(await shell.getAttribute('data-tick')!==before||await shell.getAttribute('data-status')!=='INTERMISSION')throw Error('Manual preparation auto-advanced');row.manualHold=true;await page.screenshot({path:path.join(out,`${name}-gd${stage}-manual-preparation.png`)});}
      for(let n=0;n<40;n++){
       const advice=page.locator('.zb-tactics-strip button');if(await advice.isDisabled())break;await advice.click();
-      const buy=page.locator('.zb-tower-shop button[data-recommended="true"],.zb-tech-nodes button[data-recommended="true"]');if(await buy.count()!==1)throw Error('Missing real recommendation command');await buy.click();row.purchases++;
+      const buy=page.locator('.zb-tower-shop button[data-recommended="true"],.zb-tech-nodes button[data-recommended="true"]');if(await buy.count()!==1)throw Error('Missing real recommendation command');await buy.click();const confirm=page.locator('.guard-evolution-confirm');if(await confirm.count()&&await confirm.isEnabled())await confirm.click();row.purchases++;
      }
      const close=page.getByRole('button',{name:'현장으로 돌아가기',exact:true});if(await close.count())await close.click();await page.locator('.zb-start-wave').click();
     }

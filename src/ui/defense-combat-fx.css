@@ -1,4 +1,17 @@
 .zb-combat-fx{pointer-events:none}
+.guard-impact-rays{fill:none;stroke:var(--shot);stroke-width:1.8;opacity:0;transform-box:fill-box;transform-origin:center;animation:guard-impact-snap .23s .10s ease-out both}
+.guard-resolve-fragments{fill:var(--shot);stroke:#fff0ce;stroke-width:.5;opacity:0;transform-box:fill-box;transform-origin:center;animation:guard-fragment-release .30s .10s ease-out both}
+.guard-damage-number{fill:#fff4d7;stroke:#11232c;stroke-width:3;paint-order:stroke;font-size:13px;font-weight:900;opacity:0;animation:guard-damage-read .35s .10s ease-out both}
+.guard-damage-number.is-resolved{fill:#a9ffdc;font-size:15px}
+.zb-shot.is-real-impact .zb-contact-wave,.zb-shot.is-real-impact .zb-contact-core,.zb-shot.is-real-impact .zb-contact-shards,.zb-shot.is-real-impact .zb-contact-resolve,.zb-shot.is-real-impact .guard-impact-rays,.zb-shot.is-real-impact .guard-resolve-fragments,.zb-shot.is-real-impact .guard-damage-number{animation-delay:0s}
+.zb-shot.is-l4a .zb-shot-core{stroke-width:2.4;stroke-dasharray:5 8}
+.zb-shot.is-l4b .zb-shot-core{stroke-width:2;stroke-dasharray:none}
+.zb-shot[data-combat-mechanic="PIERCE"] .zb-shot-halo{stroke-width:6;opacity:.35}
+.zb-shot[data-combat-mechanic="LOCK"] .zb-contact-shards{stroke-width:3}
+.zb-shot[data-combat-mechanic="ANALYSIS"] .zb-contact-core{fill:#f0d5ff}
+@keyframes guard-impact-snap{0%{opacity:1;transform:scale(.35)}35%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.2)}}
+@keyframes guard-fragment-release{from{opacity:1;transform:scale(.5)}to{opacity:0;transform:scale(1.7)}}
+@keyframes guard-damage-read{0%,65%{opacity:1}100%{opacity:0}}
 .zb-shot{--shot:#ffd16b;animation:zb-shot-life .42s linear forwards}
 .zb-shot.is-burst{--shot:#ffad65}.zb-shot.is-control{--shot:#65e8db}.zb-shot.is-sensor{--shot:#c6a2ff}
 .zb-shot path,.zb-shot circle{vector-effect:non-scaling-stroke}
@@ -36,4 +49,5 @@
  .zb-shot-core{opacity:.45}.zb-contact-wave,.zb-contact-shards{opacity:.6}
  .zb-contact-core,.zb-contact-resolve{opacity:0}
  .guard-branch-wave{opacity:.3}.guard-clear-count{opacity:.8}
+ .guard-impact-rays,.guard-resolve-fragments{display:none}.guard-damage-number{opacity:1}
 }

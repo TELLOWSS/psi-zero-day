@@ -16,6 +16,7 @@ export class DefenseCombatMixer {
  constructor(private readonly useSupplied=false){}
  private context:AudioContext|null=null;
  private bus:DynamicsCompressorNode|null=null;
+ private combatBus:GainNode|null=null;
  private buffers=new Map<string,AudioBuffer>();
  private sources=new Set<AudioBufferSourceNode>();
  private last=new Map<string,number>();
@@ -29,6 +30,7 @@ export class DefenseCombatMixer {
   if(!window.AudioContext)return;
   if(!this.context){
    this.context=new AudioContext();this.bus=this.context.createDynamicsCompressor();
+   this.combatBus=this.context.createGain();this.combatBus.connect(this.bus);
    this.bus.threshold.value=-16;this.bus.knee.value=12;this.bus.ratio.value=5;
    this.bus.attack.value=this.useSupplied?.001:.003;this.bus.release.value=.12;
    if(this.useSupplied){
@@ -80,7 +82,7 @@ export class DefenseCombatMixer {
   const source=ctx.createBufferSource(),gain=ctx.createGain(),stereo=ctx.createStereoPanner(),start=ctx.currentTime+delay,offset=this.onset.get(id)??0,seconds=Math.min(duration,buffer.duration-offset);
   if(seconds<=0)return;source.buffer=buffer;source.playbackRate.value=rate;stereo.pan.value=Math.max(-.6,Math.min(.6,pan));
   gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(gainValue*(this.normalization.get(id)??1),start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+seconds/rate);
-  source.connect(gain).connect(stereo).connect(this.bus);this.sources.add(source);this.priority.set(source,rank);
+  source.connect(gain).connect(stereo).connect(rank<9?this.combatBus!:this.bus);this.sources.add(source);this.priority.set(source,rank);
   source.onended=()=>{this.sources.delete(source);this.priority.delete(source);source.disconnect();gain.disconnect();stereo.disconnect();};source.start(start,offset,seconds);
   this.report({phase:'sample',id,source:'user-supplied-binary',voices:this.sources.size,pan:stereo.pan.value,...detail});
  }
@@ -89,11 +91,12 @@ export class DefenseCombatMixer {
   const family=shot.towerId,envelope=guardSoundEnvelope(family,shot.levelId),rate=envelope.rate,detail={shotId:shot.id,family,level:shot.levelId,rate,attackWindow:envelope.attack,impactWindow:envelope.impact};
   if(shot.phase!=='IMPACT')this.sample(`${family}_FIRE_AUDIO`,envelope.attackGain,0,envelope.attack,pan,3,rate,detail);
   if(shot.phase!=='LAUNCH')this.sample(`${family}_IMPACT_AUDIO`,envelope.impactGain,shot.phase==='IMPACT'?0:.10,envelope.impact,pan,4,rate,detail);
-  if(shot.targets.some(t=>t.resolved))this.sample(`${family}_RESOLVE_AUDIO`,.32,.13,.35,pan,5,1,detail);
+  const resolved=shot.targets.filter(t=>t.resolved).length;
+  if(resolved)this.sample(`${family}_RESOLVE_AUDIO`,Math.min(.42,.28+resolved*.02),shot.phase==='IMPACT'?.025:.13,resolved>=3?.45:.35,pan,resolved>=3?6:5,1,{...detail,resolved,grouped:resolved>=3});
   const primary=shot.targets[0];if(primary)this.sample(`ENEMY_${primary.enemyId}_IMPACT_AUDIO`,.20,.11,.21,pan,2,1,detail);
   if(shot.phase!=='IMPACT')this.sample(`${family}_TRAVEL_AUDIO`,.12,.025,.10,pan,1,rate,detail);
  }
- critical(id:string){this.sample(id,.5,0,1.2,0,9);}
+ critical(id:string){const ctx=this.context,gain=this.combatBus?.gain;if(ctx&&gain){gain.cancelScheduledValues?.(ctx.currentTime);gain.setValueAtTime(.22,ctx.currentTime);gain.linearRampToValueAtTime(1,ctx.currentTime+.9);}this.sample(id,.5,0,1.2,0,9);}
  stop(){const count=this.sources.size;for(const source of this.sources){try{source.stop();}catch{/* already ended */}}this.sources.clear();this.priority.clear();this.last.clear();if(count)this.report({phase:'stopped',stopped:count,voices:0});}
- dispose(){this.stop();this.generation++;this.buffers.clear();if(this.context)void this.context.close();this.context=null;this.bus=null;}
+ dispose(){this.stop();this.generation++;this.buffers.clear();if(this.context)void this.context.close();this.context=null;this.bus=null;this.combatBus=null;}
 }

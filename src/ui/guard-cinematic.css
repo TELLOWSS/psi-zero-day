@@ -1,0 +1,37 @@
+.guard-world-lighting,.guard-equipment-rig,.guard-risk-aura{pointer-events:none}
+.guard-world-lighting.is-live .guard-worklight-breath{animation:guard-worklight 6s ease-in-out infinite}
+.guard-equipment-rig{--rig:#80efeb}
+.guard-equipment-rig.is-burst{--rig:#ffcf83}.guard-equipment-rig.is-control{--rig:#8bffcd}.guard-equipment-rig.is-sensor{--rig:#d6b8ff}
+.guard-equipment-plinth{fill:none;stroke:var(--rig);stroke-width:.8;opacity:.25;stroke-dasharray:5 11}
+.guard-aperture-halo{fill:var(--rig);filter:blur(1.8px)}
+.guard-aperture-core{fill:#d9fff5}
+.guard-risk-contact{fill:#050c11;opacity:.4;filter:blur(1.6px)}
+.guard-boss-circuit{fill:none;stroke:#ffcf7e;stroke-width:1.5;stroke-dasharray:10 8;opacity:.7;animation:guard-circuit 3s linear infinite}
+.guard-boss-circuit.is-armored{stroke:#fff2bf;stroke-width:3;animation-duration:1.5s}
+.guard-boss-supportlight{fill:none;stroke:#ffb365;stroke-width:2;opacity:.65}
+.guard-swarm-orbit{fill:none;stroke:#ffcd8c;stroke-width:.8;stroke-dasharray:7 14;opacity:.3;animation:guard-circuit 2s linear infinite}
+.guard-lock-state{fill:none;stroke:#a4ffe0;stroke-width:2}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy .guard-risk-suspension{animation:guard-core-hover 2.1s ease-in-out infinite;animation-delay:var(--guard-motion-phase,0s)}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy-swarm .guard-risk-suspension{animation:guard-swarm-hover 1.4s ease-in-out infinite;animation-delay:var(--guard-motion-phase,0s);transform-box:fill-box;transform-origin:center}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy-armored .guard-risk-suspension{animation:guard-heavy-roll .8s ease-in-out infinite;animation-delay:var(--guard-motion-phase,0s)}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy-swift .guard-risk-suspension{animation:guard-heavy-roll .38s ease-in-out infinite;animation-delay:var(--guard-motion-phase,0s)}
+.zb-shell[data-map^="guard-gd-"] .zb-enemy-boss .guard-risk-suspension{animation:guard-core-hover 3.2s ease-in-out infinite;animation-delay:var(--guard-motion-phase,0s)}
+.guard-resolution-atlas{animation:guard-resolve-frames .40s step-end forwards;image-rendering:auto}
+.guard-resolve-groundlight{fill:#ffd388;opacity:0;animation:guard-ground-flare .36s ease-out both}
+.zb-shell[data-map^="guard-gd-"][data-battle-paused="true"] .guard-risk-suspension,
+.zb-shell[data-map^="guard-gd-"][data-battle-paused="true"] .guard-risk-aura *{animation-play-state:paused}
+.zb-shell[data-map^="guard-gd-"] .zb-board-production-art{image-rendering:auto}
+@keyframes guard-worklight{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes guard-circuit{from{stroke-dashoffset:0}to{stroke-dashoffset:-72}}
+@keyframes guard-core-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.2px)}}
+@keyframes guard-swarm-hover{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+@keyframes guard-heavy-roll{0%,100%{transform:translateY(0)}50%{transform:translateY(-.6px)}}
+@keyframes guard-ground-flare{0%{opacity:0}15%{opacity:.18}55%{opacity:.09}100%{opacity:0}}
+@keyframes guard-resolve-frames{
+ 0%{transform:translate(0,0)}12.5%{transform:translate(-96px,0)}25%{transform:translate(-192px,0)}37.5%{transform:translate(-288px,0)}
+ 50%{transform:translate(0,-96px)}62.5%{transform:translate(-96px,-96px)}75%{transform:translate(-192px,-96px)}87.5%,100%{transform:translate(-288px,-96px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .guard-world-lighting *,.guard-risk-suspension,.guard-risk-aura *,.guard-resolution-atlas,.guard-resolve-groundlight{animation:none!important}
+ .guard-resolution-atlas{display:none}.guard-resolve-groundlight{opacity:0}
+}

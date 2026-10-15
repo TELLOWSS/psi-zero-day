@@ -210,6 +210,7 @@ export function useDefenseCamera(
     const previous = previousRef.current;
     const signal = defenseCameraSignal(previous, state, content);
     previousRef.current = state;
+    if(content.map.id.startsWith('guard-gd-')){clearTimers();return;}
 
     if (!state || state.status === 'WON' || state.status === 'LOST') {
       clearTimers();
@@ -274,7 +275,7 @@ export function useDefenseCamera(
 
   return {
     mode,
-    scale: Math.min(1.8, defenseCameraScale(mode, portrait) * manualScale),
+    scale: Math.min(1.8, (content.map.id.startsWith('guard-gd-')?1:defenseCameraScale(mode, portrait)) * manualScale),
     manualScale,
     focus: {
       left: Math.max(8, Math.min(92, focusPercent.left)),

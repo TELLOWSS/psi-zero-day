@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "visualVersion": "guard-cinematic-20261016-v1",
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "source": "C:/Users/user/.codex/generated_images/01a13f52-a9f8-7bc3-882e-04ad824ccf4e/exec-635c2408-2721-42b3-91a2-3a1c06455577.png",
+  "promptFile": "docs/guard-cinematic-image-prompts-20261016.json",
+  "resolveAtlas": {
+    "uri": "assets/defense/cinematic-v1/signal-resolve-atlas.webp",
+    "width": 1280,
+    "height": 640,
+    "columns": 4,
+    "rows": 2,
+    "frames": 8,
+    "frameSize": 320,
+    "durationMs": 400,
+    "safePaddingPixels": 32,
+    "hasAlpha": true,
+    "bytes": 229470,
+    "sha256": "1145af14cb69bff13141b380566b31cfbd4664540b9c3714596a34793351d574"
+  },
+  "budgets": {
+    "attackGroups": 24,
+    "resolveSprites": 4,
+    "damageLabels": 8,
+    "worldLightingLayers": 2
+  }
+}

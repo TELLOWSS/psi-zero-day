@@ -1,0 +1,128 @@
+[
+  {
+    "family": "PULSE",
+    "width": 1440,
+    "height": 900,
+    "actualDamage": 12,
+    "decoded": 27,
+    "atlasSeen": true,
+    "maxResolve": 1,
+    "atlasWidth": 1280,
+    "samples": 12,
+    "maxVoices": 8,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 1211.65625,
+      "height": 726.984375,
+      "fraction": 0.6796721926088687
+    },
+    "errors": []
+  },
+  {
+    "family": "BURST",
+    "width": 1440,
+    "height": 900,
+    "actualDamage": 16,
+    "decoded": 27,
+    "atlasSeen": true,
+    "maxResolve": 1,
+    "atlasWidth": 1280,
+    "samples": 12,
+    "maxVoices": 8,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 1211.65625,
+      "height": 726.984375,
+      "fraction": 0.6796721926088687
+    },
+    "errors": []
+  },
+  {
+    "family": "CONTROL",
+    "width": 1440,
+    "height": 900,
+    "actualDamage": 3,
+    "decoded": 27,
+    "atlasSeen": false,
+    "maxResolve": 0,
+    "atlasWidth": 1280,
+    "samples": 4,
+    "maxVoices": 4,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 1211.65625,
+      "height": 726.984375,
+      "fraction": 0.6796721926088687
+    },
+    "errors": []
+  },
+  {
+    "family": "SENSOR",
+    "width": 1440,
+    "height": 900,
+    "actualDamage": 8,
+    "decoded": 27,
+    "atlasSeen": false,
+    "maxResolve": 0,
+    "atlasWidth": 1280,
+    "samples": 4,
+    "maxVoices": 4,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 1211.65625,
+      "height": 726.984375,
+      "fraction": 0.6796721926088687
+    },
+    "errors": []
+  },
+  {
+    "family": "PULSE",
+    "width": 390,
+    "height": 844,
+    "actualDamage": 12,
+    "decoded": 27,
+    "atlasSeen": true,
+    "maxResolve": 1,
+    "atlasWidth": 1280,
+    "samples": 12,
+    "maxVoices": 8,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 378,
+      "height": 630,
+      "fraction": 0.7234779438570907
+    },
+    "errors": []
+  },
+  {
+    "family": "BURST",
+    "width": 568,
+    "height": 320,
+    "actualDamage": 16,
+    "decoded": 27,
+    "atlasSeen": true,
+    "maxResolve": 1,
+    "atlasWidth": 1280,
+    "samples": 12,
+    "maxVoices": 8,
+    "maxGroups": 1,
+    "pausedEffectsCleared": true,
+    "muted": true,
+    "board": {
+      "width": 428,
+      "height": 256.796875,
+      "fraction": 0.6046933456205986
+    },
+    "errors": []
+  }
+]
