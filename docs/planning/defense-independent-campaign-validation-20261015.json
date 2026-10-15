@@ -21,5 +21,15 @@
     "relativeDocumentLinksExist": true,
     "allStagesExplicitlyUnimplemented": true
   },
-  "runtimeTestsRun": false
+  "runtimeTestsRun": false,
+  "characterRoster": {
+    "existingCanonCharacters": 6,
+    "verticalSliceCount": 4,
+    "campaignCount": 6,
+    "existingBaseAbilities": 2,
+    "newAbilitiesProposed": 4,
+    "canonicalRoleIdsChecked": true,
+    "unlockStageIdsChecked": true,
+    "runtimeChanged": false
+  }
 }

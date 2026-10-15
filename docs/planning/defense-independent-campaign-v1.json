@@ -381,5 +381,62 @@
     "storyCaseId": "event-ramp-reconstruction-v1",
     "storyCasePlacement": "OPTIONAL_CASE_RECONSTRUCTION",
     "storyCaseUnlockUnchanged": true
+  },
+  "characterRosterPlan": {
+    "status": "PLANNING_ONLY",
+    "document": "../DEFENSE-CHARACTER-ROSTER-PLAN-20261015.md",
+    "verticalSliceCount": 4,
+    "campaignCount": 6,
+    "oneActiveCharacterPerRun": true,
+    "members": [
+      {
+        "characterId": "kang_taesik",
+        "role": "형틀반장",
+        "tactic": "FLOW_CONTROL",
+        "milestone": "P1",
+        "unlockAfterStageId": null,
+        "abilityStatus": "EXISTING_BASE_ABILITY"
+      },
+      {
+        "characterId": "lim_junho",
+        "role": "신입근로자",
+        "tactic": "INFORMATION",
+        "milestone": "P1",
+        "unlockAfterStageId": null,
+        "abilityStatus": "EXISTING_BASE_ABILITY"
+      },
+      {
+        "characterId": "yoon_sungho",
+        "role": "철근반장",
+        "tactic": "ARMORED_CORE",
+        "milestone": "P1",
+        "unlockAfterStageId": "GD-01",
+        "abilityStatus": "PROPOSED_NOT_IMPLEMENTED"
+      },
+      {
+        "characterId": "lee_jaehoon",
+        "role": "공사대리",
+        "tactic": "FIRING_TIMING",
+        "milestone": "P1",
+        "unlockAfterStageId": "GD-02",
+        "abilityStatus": "PROPOSED_NOT_IMPLEMENTED"
+      },
+      {
+        "characterId": "player",
+        "role": "현장 안전관리자",
+        "tactic": "REDEPLOYMENT",
+        "milestone": "P2",
+        "unlockAfterStageId": "GD-03",
+        "abilityStatus": "PROPOSED_NOT_IMPLEMENTED"
+      },
+      {
+        "characterId": "choi_minseok",
+        "role": "크레인 신호수",
+        "tactic": "DIRECTIONAL_COVERAGE",
+        "milestone": "P2",
+        "unlockAfterStageId": "GD-04",
+        "abilityStatus": "PROPOSED_NOT_IMPLEMENTED"
+      }
+    ]
   }
 }
