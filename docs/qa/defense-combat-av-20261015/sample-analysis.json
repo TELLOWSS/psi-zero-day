@@ -1,0 +1,44 @@
+[
+  {
+    "file": "control-resolve.ogg",
+    "duration": 0.41,
+    "sampleRate": 48000,
+    "channels": 2,
+    "attack": {
+      "rms": 0.1011551985981044,
+      "peak": 0.41476431488990784
+    },
+    "impact": {
+      "rms": 0.10579608960175907,
+      "peak": 0.442709743976593
+    }
+  },
+  {
+    "file": "area-resolve.ogg",
+    "duration": 0.4691458333333333,
+    "sampleRate": 48000,
+    "channels": 2,
+    "attack": {
+      "rms": 0.11440712094871637,
+      "peak": 0.5119442343711853
+    },
+    "impact": {
+      "rms": 0.0803415652192341,
+      "peak": 0.5119442343711853
+    }
+  },
+  {
+    "file": "control-barrier-clack.ogg",
+    "duration": 0.53,
+    "sampleRate": 48000,
+    "channels": 2,
+    "attack": {
+      "rms": 0.017211137667838147,
+      "peak": 0.06878641247749329
+    },
+    "impact": {
+      "rms": 0.04257375000934809,
+      "peak": 0.30414721369743347
+    }
+  }
+]

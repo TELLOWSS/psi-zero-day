@@ -1,0 +1,104 @@
+[
+  {
+    "name": "portrait",
+    "width": 390,
+    "height": 844,
+    "errors": [],
+    "alignmentError": 0.5192836319887094,
+    "levels": 4,
+    "current": "L2",
+    "overflow": false,
+    "board": {
+      "x": 6,
+      "y": 200.921875,
+      "width": 378,
+      "height": 226.796875
+    },
+    "selectionPaused": true,
+    "closeStillPaused": true,
+    "reloadWave": "1",
+    "resumeResource": "60"
+  },
+  {
+    "name": "landscape",
+    "width": 844,
+    "height": 390,
+    "errors": [],
+    "alignmentError": 0.5146278763616368,
+    "levels": 4,
+    "current": "L2",
+    "overflow": false,
+    "board": {
+      "x": 65.34375,
+      "y": 109,
+      "width": 463.328125,
+      "height": 277.984375
+    },
+    "selectionPaused": true,
+    "closeStillPaused": true,
+    "reloadWave": "1",
+    "resumeResource": "60"
+  },
+  {
+    "name": "pc",
+    "width": 1440,
+    "height": 900,
+    "errors": [],
+    "alignmentError": 0.5213856446541474,
+    "levels": 4,
+    "current": "L2",
+    "overflow": false,
+    "board": {
+      "x": 430.828125,
+      "y": 133,
+      "width": 578.328125,
+      "height": 346.984375
+    },
+    "selectionPaused": true,
+    "closeStillPaused": true,
+    "reloadWave": "1",
+    "resumeResource": "60",
+    "secondTabBlocked": true,
+    "loadedOfflinePlay": true
+  },
+  {
+    "name": "portrait-small",
+    "width": 320,
+    "height": 568,
+    "errors": [],
+    "alignmentError": 0.516667716732803,
+    "levels": 4,
+    "current": "L2",
+    "overflow": false,
+    "board": {
+      "x": 29.921875,
+      "y": 159,
+      "width": 260.15625,
+      "height": 156.09375
+    },
+    "selectionPaused": true,
+    "closeStillPaused": true,
+    "reloadWave": "1",
+    "resumeResource": "60"
+  },
+  {
+    "name": "landscape-small",
+    "width": 568,
+    "height": 320,
+    "errors": [],
+    "alignmentError": 0.5277401416588082,
+    "levels": 4,
+    "current": "L2",
+    "overflow": false,
+    "board": {
+      "x": 3,
+      "y": 119.40625,
+      "width": 312,
+      "height": 187.1875
+    },
+    "selectionPaused": true,
+    "closeStillPaused": true,
+    "reloadWave": "1",
+    "resumeResource": "60"
+  }
+]

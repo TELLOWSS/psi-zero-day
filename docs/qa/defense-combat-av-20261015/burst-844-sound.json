@@ -1,0 +1,58 @@
+[
+  {
+    "phase": "decoded",
+    "file": "control-resolve.ogg",
+    "duration": 0.41
+  },
+  {
+    "phase": "decoded",
+    "file": "control-barrier-clack.ogg",
+    "duration": 0.53
+  },
+  {
+    "phase": "decoded",
+    "file": "area-resolve.ogg",
+    "duration": 0.4691458333333333
+  },
+  {
+    "phase": "launch",
+    "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:0:tower-1",
+    "family": "BURST",
+    "level": "L1",
+    "voices": 1,
+    "rate": 0.85,
+    "pan": -0.5960999727249146
+  },
+  {
+    "phase": "impact",
+    "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:0:tower-1",
+    "family": "BURST",
+    "level": "L1",
+    "voices": 2,
+    "rate": 0.85,
+    "pan": -0.5960999727249146
+  },
+  {
+    "phase": "launch",
+    "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:40:tower-1",
+    "family": "BURST",
+    "level": "L1",
+    "voices": 2,
+    "rate": 0.85,
+    "pan": -0.4401000142097473
+  },
+  {
+    "phase": "impact",
+    "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:40:tower-1",
+    "family": "BURST",
+    "level": "L1",
+    "voices": 3,
+    "rate": 0.85,
+    "pan": -0.4401000142097473
+  },
+  {
+    "phase": "stopped",
+    "stopped": 3,
+    "voices": 0
+  }
+]

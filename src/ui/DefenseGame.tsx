@@ -19,10 +19,10 @@ import {
 } from '../content/defense-events';
 import { defenseEventAvailabilityFromState } from '../app/defense-story-bridge';
 import type {
-  DefenseContent, DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
+  DefenseCombatShot, DefenseContent, DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
 } from '../domain/defense';
 import {
-  advanceDefense, applyDefenseCommand, defenseResult,
+  advanceDefenseWithCombat, applyDefenseCommand, defenseResult,
 } from '../engine/defense';
 import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
@@ -30,6 +30,7 @@ import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } fro
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import { useDefenseAudio } from './useDefenseAudio';
+import {DefenseCombatFX,useDefenseCombatFX} from './DefenseCombatFX';
 import { useDefenseEffects } from './useDefenseEffects';
 import { useDefenseCamera } from './useDefenseCamera';
 import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
@@ -172,7 +173,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
       {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
       {premium?<ellipse cx="0" cy="20" rx="28" ry="8" className="zb-premium-contact" aria-hidden="true"/>:null}
-      {premium&&firing?<g className={`zb-premium-discharge is-${tower.towerId.toLowerCase()}`} aria-hidden="true">
+      {premium&&firing&&content.map.id!=='ramp-01'?<g className={`zb-premium-discharge is-${tower.towerId.toLowerCase()}`} aria-hidden="true">
         <path d="M21-29L49-16M25-34L57-26M20-39L47-45"/>
         <circle cx="30" cy="-31" r="9"/>
       </g>:null}
@@ -401,7 +402,9 @@ export function DefenseGame({
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
-  const audio = useDefenseAudio(state, content.map.id);
+  const combatFrameRef=useRef<readonly DefenseCombatShot[]>([]);
+  const combatShots=useDefenseCombatFX(state,combatFrameRef.current);
+  const audio = useDefenseAudio(state, content.map.id,combatFrameRef.current);
   const effects = useDefenseEffects(state);
   const camera = useDefenseCamera(state, content, portrait);
   const oneStep = useDefCoreOneStep({
@@ -494,7 +497,10 @@ export function DefenseGame({
     const timer = window.setInterval(() => {
       setState(current => {
         if (!current) return current;
-        const advanced = advanceDefense(current, resolveDefenseContentForRun(current), 1);
+        const frame = advanceDefenseWithCombat(current, resolveDefenseContentForRun(current), 1);
+        // Assignment is idempotent if React checks the updater twice. Effects consume unique engine IDs.
+        combatFrameRef.current=frame.shots;
+        const advanced=frame.state;
         return applyDefCoreOneStepRuntime(current, advanced, oneStep.choice, oneStep.choiceTick);
       });
     }, content.tickMs);
@@ -816,6 +822,7 @@ export function DefenseGame({
       <button type="button" className="zb-exit" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
+      <button type="button" onClick={()=>setSettingsOpen(false)}>{t('defense.tactics.close')}</button>
       <button type="button" onClick={() => { tutorial.replay(); setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
       <button
         type="button"
@@ -941,6 +948,7 @@ export function DefenseGame({
             </g>;
           })}
           {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} content={content} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
+          {content.map.id==='ramp-01'?<DefenseCombatFX shots={combatShots} content={content}/>:null}
         </svg>
         {content.map.id === G8A_MAP_ID ? <div className="zb-board-grade" aria-hidden="true" data-world-grade="COMMERCIAL_GFX_V1" /> : null}
 

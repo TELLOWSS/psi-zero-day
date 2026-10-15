@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
-import type { DefenseRunState } from '../domain/defense';
+import {useDefenseCombatAudio} from './useDefenseCombatAudio';
+import type { DefenseCombatShot,DefenseRunState } from '../domain/defense';
 import { premiumDefenseCueUri } from '../app/defense-premium-audio';
 import { useG8aPremiumMix } from './useG8aPremiumMix';
 
@@ -65,8 +66,9 @@ export function defenseResolveCues(previous: DefenseRunState, current: DefenseRu
   return [...(single ? ['single_resolve' as const] : []), ...(area ? ['area_resolve' as const] : [])];
 }
 
-export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null) {
+export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null, shots:readonly DefenseCombatShot[] = []) {
   const muted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
+  const armCombat=useDefenseCombatAudio(state,shots,muted,mapId==='ramp-01');
   const contextRef = useRef<AudioContext | null>(null);
   const previousRef = useRef<DefenseRunState | null>(null);
   const armedRef = useRef(false);
@@ -88,8 +90,9 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
   const armAudio = useCallback(() => {
     armedRef.current = true;
     premiumMix.arm();
+    armCombat();
     if (!muted) ensureContext();
-  }, [ensureContext, muted, premiumMix.arm]);
+  }, [ensureContext, muted, premiumMix.arm,armCombat]);
 
   const playOscillatorCue = useCallback((cue: DefenseAudioCue) => {
     const context = ensureContext();
@@ -156,14 +159,14 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     if (previous.status !== 'WON' && state.status === 'WON') playCue('win');
     if (previous.status !== 'LOST' && state.status === 'LOST') playCue('loss');
 
-    for (const cue of defenseResolveCues(previous, state)) {
+    for (const cue of mapId==='ramp-01'?[]:defenseResolveCues(previous, state)) {
       if (state.tick - lastResolveTickRef.current[cue] < DEFENSE_RESOLVE_AUDIO_MIN_TICKS) continue;
       lastResolveTickRef.current[cue] = state.tick;
       playCue(cue);
     }
 
     previousRef.current = state;
-  }, [playCue, state]);
+  }, [playCue, state,mapId]);
 
   useEffect(() => {
     const onVisibility = () => {
@@ -184,7 +187,10 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
 
   return {
     muted,
-    setMuted: setAudioMuted,
+    setMuted: (value:boolean) => {
+      setAudioMuted(value);
+      if(!value){armedRef.current=true;ensureContext();armCombat(true);}
+    },
     armAudio,
     playCue,
     premiumMixEnabled: premiumMix.enabled,

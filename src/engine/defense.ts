@@ -1,5 +1,5 @@
 import type {
-  DefenseCommand, DefenseContent, DefenseEnemyDefinition, DefenseEnemyState, DefenseLevelId,
+  DefenseCombatFrame, DefenseCombatShot, DefenseCommand, DefenseContent, DefenseEnemyDefinition, DefenseEnemyState, DefenseLevelId,
   DefensePoint, DefenseResult, DefenseRunState, DefenseSlowEffect, DefenseTargetMode,
   DefenseTowerDefinition, DefenseTowerLevelDefinition, DefenseTowerState,
 } from '../domain/defense';
@@ -275,7 +275,8 @@ function applySlow(enemy: DefenseEnemyState, effect: DefenseSlowEffect): Defense
   const withoutSource = enemy.slowEffects.filter(item => item.sourceId !== effect.sourceId && item.endTick > effect.startTick);
   return { ...enemy, slowEffects: [...withoutSource, effect] };
 }
-function attackWithTowers(state: DefenseRunState, content: DefenseContent): DefenseRunState {
+function attackWithTowers(state: DefenseRunState, content: DefenseContent): DefenseCombatFrame {
+  const shots: DefenseCombatShot[] = [];
   const pathLength = defensePathLength(content.map.path);
   const bonus = activeRangeBonus(state, content);
   let enemies = state.enemies;
@@ -305,6 +306,7 @@ function attackWithTowers(state: DefenseRunState, content: DefenseContent): Defe
           const point = defensePositionAtDistance(content.map.path, enemy.distance);
           return distanceSquared(targetPoint, point) <= splashRadiusSq + EPSILON;
         }).sort((a, b) => compareFirst(a, b, pathLength))].slice(0, level.maxTargets);
+        const hits: DefenseCombatShot["targets"][number][] = [];
         for (const hit of ordered) {
           const enemyIndex = enemies.findIndex(enemy => enemy.id === hit.id);
           if (enemyIndex < 0) continue;
@@ -317,8 +319,10 @@ function attackWithTowers(state: DefenseRunState, content: DefenseContent): Defe
           if (updated.hp > 0 && level.slowFraction > 0 && level.slowTicks > 0) {
             updated = applySlow(updated, { sourceId: tower.id, fraction: level.slowFraction, startTick: state.tick, endTick: state.tick + level.slowTicks });
           }
+          hits.push({id: current.id, enemyId: current.enemyId, distance: current.distance, point:defensePositionAtDistance(content.map.path,current.distance), damage: current.hp-updated.hp, resolved: updated.hp===0});
           enemies = replaceAt(enemies, enemyIndex, updated);
         }
+        shots.push({id: `${state.runId}:${state.tick}:${tower.id}`, towerId:tower.towerId, levelId:tower.levelId, padId:tower.padId, targets:hits});
         cooldown = level.intervalTicks;
       }
     }
@@ -329,7 +333,7 @@ function attackWithTowers(state: DefenseRunState, content: DefenseContent): Defe
     if (enemy.hp <= 0 && !rewarded.has(enemy.id)) { resource += enemyDefinition(content, enemy.enemyId).reward; rewarded.add(enemy.id); }
   }
   enemies = enemies.filter(enemy => enemy.hp > 0);
-  return { ...state, enemies, towers, resource };
+  return { state: { ...state, enemies, towers, resource }, shots };
 }
 
 function triggerBossPhase(state: DefenseRunState, content: DefenseContent): DefenseRunState {
@@ -365,32 +369,42 @@ function tickCooldownsOnly(state: DefenseRunState): DefenseRunState {
   };
 }
 
-export function tickDefense(state: DefenseRunState, content: DefenseContent): DefenseRunState {
-  if (state.paused || state.status === 'READY' || state.status === 'WON' || state.status === 'LOST') return state;
+function tickDefenseFrame(state: DefenseRunState, content: DefenseContent): DefenseCombatFrame {
+  if (state.paused || state.status === 'READY' || state.status === 'WON' || state.status === 'LOST') return {state,shots:[]};
   if (state.status === 'INTERMISSION') {
     let next = tickCooldownsOnly(state);
     next = { ...next, tick: next.tick + 1, intermissionRemaining: Math.max(0, next.intermissionRemaining - 1) };
-    if (next.intermissionRemaining === 0) return startWaveState(next, content);
-    return next;
+    if (next.intermissionRemaining === 0) return {state:startWaveState(next, content),shots:[]};
+    return {state:next,shots:[]};
   }
   let next: DefenseRunState = { ...state, supportCooldownRemaining: decrementCooldown(state.supportCooldownRemaining) };
   next = spawnDue(next, content);
   next = moveAndLeak(next, content);
   next = revealEnemies(next, content);
-  next = attackWithTowers(next, content);
+  const combat = attackWithTowers(next, content);
+  next = combat.state;
   next = triggerBossPhase(next, content);
   next = cleanEffects(next);
   next = beginIntermissionOrWin(next, content);
   if (next.status === 'RUNNING') next = { ...next, tick: next.tick + 1, waveTick: next.waveTick + 1 };
   else next = { ...next, tick: next.tick + 1 };
-  return next;
+  return {state:next,shots:combat.shots};
 }
 
+export function tickDefense(state: DefenseRunState, content: DefenseContent): DefenseRunState {
+  return tickDefenseFrame(state,content).state;
+}
+export function advanceDefenseWithCombat(state: DefenseRunState, content: DefenseContent, wallSteps = 1): DefenseCombatFrame {
+  let next=state;
+  const shots: DefenseCombatShot[]=[];
+  const steps=Math.max(0,Math.floor(wallSteps))*state.speed;
+  for(let i=0;i<steps;i++){
+    const frame=tickDefenseFrame(next,content);next=frame.state;shots.push(...frame.shots);
+  }
+  return {state:next,shots};
+}
 export function advanceDefense(state: DefenseRunState, content: DefenseContent, wallSteps = 1): DefenseRunState {
-  let next = state;
-  const steps = Math.max(0, Math.floor(wallSteps)) * state.speed;
-  for (let i = 0; i < steps; i++) next = tickDefense(next, content);
-  return next;
+  return advanceDefenseWithCombat(state,content,wallSteps).state;
 }
 export function defenseResult(state: DefenseRunState): DefenseResult {
   const won = state.status === 'WON';

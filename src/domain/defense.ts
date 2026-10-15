@@ -7,6 +7,25 @@ export type DefenseSupportId = 'COORDINATOR' | 'OBSERVER' | 'COMMANDER' | 'REBAR
 export type DefenseLevelId = 'L1' | 'L2' | 'L3A' | 'L3B';
 
 export interface DefensePoint { readonly x: number; readonly y: number }
+/** Ephemeral engine output for presentation; never part of a saved run. */
+export interface DefenseCombatShot {
+  readonly id: string;
+  readonly towerId: DefenseTowerId;
+  readonly levelId: DefenseLevelId;
+  readonly padId: string;
+  readonly targets: readonly {
+    readonly id: string;
+    readonly enemyId: DefenseEnemyId;
+    readonly distance: number;
+    readonly point: DefensePoint;
+    readonly damage: number;
+    readonly resolved: boolean;
+  }[];
+}
+export interface DefenseCombatFrame {
+  readonly state: DefenseRunState;
+  readonly shots: readonly DefenseCombatShot[];
+}
 export interface DefensePad extends DefensePoint { readonly id: string }
 export interface DefenseMapDefinition {
   readonly id: string;
