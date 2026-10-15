@@ -438,5 +438,15 @@
         "abilityStatus": "PROPOSED_NOT_IMPLEMENTED"
       }
     ]
+  },
+  "towerEvolutionPlan": {
+    "document": "../DEFENSE-TOWER-EVOLUTION-AV-MASTER-PLAN-20261015.md",
+    "catalog": "defense-tower-evolution-v1.json",
+    "currentStates": 16,
+    "proposedFinalStates": 8,
+    "totalTargetStates": 24,
+    "maxConcurrentL4": 1,
+    "finalCandidatesUnlockAfterStageId": "GD-03",
+    "status": "PLANNING_ONLY"
   }
 }

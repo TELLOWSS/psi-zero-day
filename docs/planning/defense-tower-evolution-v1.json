@@ -1,0 +1,601 @@
+{
+  "schemaVersion": 1,
+  "status": "PLANNING_ONLY_NOT_RUNTIME_CONTENT",
+  "createdDate": "2026-10-15",
+  "document": "../DEFENSE-TOWER-EVOLUTION-AV-MASTER-PLAN-20261015.md",
+  "sourceRuleFile": "content/defense/zero-breach-v1.json",
+  "sourceArtManifest": "content/defense/premium-art-v1.json",
+  "tickMs": 50,
+  "policies": {
+    "families": 4,
+    "currentStates": 16,
+    "proposedFinalStates": 8,
+    "totalTargetStates": 24,
+    "maxConcurrentL4": 1,
+    "finalCandidatesUnlockAfterStageId": "GD-03",
+    "finalUseRequiresInRunResource": true,
+    "finalUseRequiresParentL3": true,
+    "requiresStoryOrOtherMode": false,
+    "legacyTrainingUnchanged": true,
+    "addedArtGeneratedThisTask": false,
+    "newMechanicsImplementedThisTask": false
+  },
+  "nodes": [
+    {
+      "id": "PULSE.L1",
+      "towerId": "PULSE",
+      "levelId": "L1",
+      "proposedDisplayName": "단일 맥동기",
+      "parentId": null,
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L1",
+        "from": null,
+        "cost": 80,
+        "damage": 12,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 16,
+        "range": 155,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 800,
+      "currentArtUri": "assets/defense/premium-v1/pulse-l1.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "PULSE.L2",
+      "towerId": "PULSE",
+      "levelId": "L2",
+      "proposedDisplayName": "이중 축압기",
+      "parentId": "PULSE.L1",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L2",
+        "from": "L1",
+        "cost": 60,
+        "damage": 20,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 16,
+        "range": 165,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 800,
+      "currentArtUri": "assets/defense/premium-v1/pulse-l2.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "PULSE.L3A",
+      "towerId": "PULSE",
+      "levelId": "L3A",
+      "proposedDisplayName": "고속 맥동기",
+      "parentId": "PULSE.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3A",
+        "from": "L2",
+        "cost": 110,
+        "damage": 20,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 9,
+        "range": 170,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 450,
+      "currentArtUri": "assets/defense/premium-v1/pulse-l3a.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "PULSE.L3B",
+      "towerId": "PULSE",
+      "levelId": "L3B",
+      "proposedDisplayName": "축선 정밀기",
+      "parentId": "PULSE.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3B",
+        "from": "L2",
+        "cost": 110,
+        "damage": 26,
+        "damageType": "PURE",
+        "intervalTicks": 18,
+        "range": 195,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 900,
+      "currentArtUri": "assets/defense/premium-v1/pulse-l3b.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "PULSE.L4A",
+      "towerId": "PULSE",
+      "levelId": "L4A",
+      "proposedDisplayName": "맥동 연쇄기",
+      "parentId": "PULSE.L3A",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "sequential-burst",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "PULSE.L4B",
+      "towerId": "PULSE",
+      "levelId": "L4B",
+      "proposedDisplayName": "축선 관통기",
+      "parentId": "PULSE.L3B",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "bounded-axis-pierce",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "BURST.L1",
+      "towerId": "BURST",
+      "levelId": "L1",
+      "proposedDisplayName": "방사 분산기",
+      "parentId": null,
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L1",
+        "from": null,
+        "cost": 110,
+        "damage": 16,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 40,
+        "range": 165,
+        "splashRadius": 65,
+        "maxTargets": 5,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 2000,
+      "currentArtUri": "assets/defense/premium-v1/burst-l1.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "BURST.L2",
+      "towerId": "BURST",
+      "levelId": "L2",
+      "proposedDisplayName": "다중 압력기",
+      "parentId": "BURST.L1",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L2",
+        "from": "L1",
+        "cost": 80,
+        "damage": 26,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 36,
+        "range": 175,
+        "splashRadius": 75,
+        "maxTargets": 6,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1800,
+      "currentArtUri": "assets/defense/premium-v1/burst-l2.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "BURST.L3A",
+      "towerId": "BURST",
+      "levelId": "L3A",
+      "proposedDisplayName": "광역 확산기",
+      "parentId": "BURST.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3A",
+        "from": "L2",
+        "cost": 130,
+        "damage": 34,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 36,
+        "range": 180,
+        "splashRadius": 100,
+        "maxTargets": 8,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1800,
+      "currentArtUri": "assets/defense/premium-v1/burst-l3a.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "BURST.L3B",
+      "towerId": "BURST",
+      "levelId": "L3B",
+      "proposedDisplayName": "집중 압력기",
+      "parentId": "BURST.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3B",
+        "from": "L2",
+        "cost": 130,
+        "damage": 36,
+        "damageType": "PURE",
+        "intervalTicks": 40,
+        "range": 180,
+        "splashRadius": 50,
+        "maxTargets": 3,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 2000,
+      "currentArtUri": "assets/defense/premium-v1/burst-l3b.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "BURST.L4A",
+      "towerId": "BURST",
+      "levelId": "L4A",
+      "proposedDisplayName": "환형 쇄파기",
+      "parentId": "BURST.L3A",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "expanding-once-per-target-wave",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "BURST.L4B",
+      "towerId": "BURST",
+      "levelId": "L4B",
+      "proposedDisplayName": "집속 착탄기",
+      "parentId": "BURST.L3B",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "delayed-fixed-point-impact",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "CONTROL.L1",
+      "towerId": "CONTROL",
+      "levelId": "L1",
+      "proposedDisplayName": "단일 제어기",
+      "parentId": null,
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L1",
+        "from": null,
+        "cost": 90,
+        "damage": 3,
+        "damageType": "PURE",
+        "intervalTicks": 20,
+        "range": 135,
+        "splashRadius": 60,
+        "maxTargets": 3,
+        "slowFraction": 0.3,
+        "slowTicks": 30,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1000,
+      "currentArtUri": "assets/defense/premium-v1/control-l1.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "CONTROL.L2",
+      "towerId": "CONTROL",
+      "levelId": "L2",
+      "proposedDisplayName": "복합 고정기",
+      "parentId": "CONTROL.L1",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L2",
+        "from": "L1",
+        "cost": 65,
+        "damage": 5,
+        "damageType": "PURE",
+        "intervalTicks": 20,
+        "range": 145,
+        "splashRadius": 65,
+        "maxTargets": 4,
+        "slowFraction": 0.4,
+        "slowTicks": 32,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1000,
+      "currentArtUri": "assets/defense/premium-v1/control-l2.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "CONTROL.L3A",
+      "towerId": "CONTROL",
+      "levelId": "L3A",
+      "proposedDisplayName": "집중 억제기",
+      "parentId": "CONTROL.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3A",
+        "from": "L2",
+        "cost": 110,
+        "damage": 8,
+        "damageType": "PURE",
+        "intervalTicks": 20,
+        "range": 155,
+        "splashRadius": 55,
+        "maxTargets": 3,
+        "slowFraction": 0.55,
+        "slowTicks": 36,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1000,
+      "currentArtUri": "assets/defense/premium-v1/control-l3a.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "CONTROL.L3B",
+      "towerId": "CONTROL",
+      "levelId": "L3B",
+      "proposedDisplayName": "광역 제어기",
+      "parentId": "CONTROL.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3B",
+        "from": "L2",
+        "cost": 110,
+        "damage": 6,
+        "damageType": "PURE",
+        "intervalTicks": 20,
+        "range": 175,
+        "splashRadius": 105,
+        "maxTargets": 7,
+        "slowFraction": 0.35,
+        "slowTicks": 40,
+        "revealRadius": 0,
+        "revealIntervalTicks": 0,
+        "revealTicks": 0
+      },
+      "currentAttackIntervalMs": 1000,
+      "currentArtUri": "assets/defense/premium-v1/control-l3b.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "CONTROL.L4A",
+      "towerId": "CONTROL",
+      "levelId": "L4A",
+      "proposedDisplayName": "삼점 고정기",
+      "parentId": "CONTROL.L3A",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "bounded-three-point-hold",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "CONTROL.L4B",
+      "towerId": "CONTROL",
+      "levelId": "L4B",
+      "proposedDisplayName": "그물 경계기",
+      "parentId": "CONTROL.L3B",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "line-crossing-slow-field",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "SENSOR.L1",
+      "towerId": "SENSOR",
+      "levelId": "L1",
+      "proposedDisplayName": "단일 관측기",
+      "parentId": null,
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L1",
+        "from": null,
+        "cost": 75,
+        "damage": 8,
+        "damageType": "PURE",
+        "intervalTicks": 20,
+        "range": 130,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 130,
+        "revealIntervalTicks": 20,
+        "revealTicks": 50
+      },
+      "currentAttackIntervalMs": 1000,
+      "currentArtUri": "assets/defense/premium-v1/sensor-l1.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "SENSOR.L2",
+      "towerId": "SENSOR",
+      "levelId": "L2",
+      "proposedDisplayName": "복합 관측기",
+      "parentId": "SENSOR.L1",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L2",
+        "from": "L1",
+        "cost": 55,
+        "damage": 12,
+        "damageType": "PURE",
+        "intervalTicks": 18,
+        "range": 145,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 145,
+        "revealIntervalTicks": 20,
+        "revealTicks": 60
+      },
+      "currentAttackIntervalMs": 900,
+      "currentArtUri": "assets/defense/premium-v1/sensor-l2.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "SENSOR.L3A",
+      "towerId": "SENSOR",
+      "levelId": "L3A",
+      "proposedDisplayName": "광역 관측망",
+      "parentId": "SENSOR.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3A",
+        "from": "L2",
+        "cost": 95,
+        "damage": 14,
+        "damageType": "PURE",
+        "intervalTicks": 18,
+        "range": 185,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 220,
+        "revealIntervalTicks": 20,
+        "revealTicks": 80
+      },
+      "currentAttackIntervalMs": 900,
+      "currentArtUri": "assets/defense/premium-v1/sensor-l3a.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "SENSOR.L3B",
+      "towerId": "SENSOR",
+      "levelId": "L3B",
+      "proposedDisplayName": "정밀 분석기",
+      "parentId": "SENSOR.L2",
+      "status": "EXISTING_RULE_ART_REVIEW_REQUESTED",
+      "implementationMilestone": "P1",
+      "currentRuleSnapshot": {
+        "id": "L3B",
+        "from": "L2",
+        "cost": 95,
+        "damage": 25,
+        "damageType": "PURE",
+        "intervalTicks": 15,
+        "range": 145,
+        "splashRadius": 0,
+        "maxTargets": 1,
+        "slowFraction": 0,
+        "slowTicks": 0,
+        "revealRadius": 145,
+        "revealIntervalTicks": 20,
+        "revealTicks": 60
+      },
+      "currentAttackIntervalMs": 750,
+      "currentArtUri": "assets/defense/premium-v1/sensor-l3b.webp",
+      "currentArtScope": [
+        "ramp-01"
+      ]
+    },
+    {
+      "id": "SENSOR.L4A",
+      "towerId": "SENSOR",
+      "levelId": "L4A",
+      "proposedDisplayName": "다중 관측망",
+      "parentId": "SENSOR.L3A",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "three-observation-nodes",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    },
+    {
+      "id": "SENSOR.L4B",
+      "towerId": "SENSOR",
+      "levelId": "L4B",
+      "proposedDisplayName": "해석 집중기",
+      "parentId": "SENSOR.L3B",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "implementationMilestone": "P2",
+      "plannedMechanic": "single-target-analysis-channel",
+      "currentArtUri": null,
+      "balanceStatus": "UNVALIDATED_REQUIRES_ENGINE_AND_PLAYTEST"
+    }
+  ]
+}

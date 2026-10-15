@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-15",
+  "scope": "PLANNING_ONLY",
+  "families": 4,
+  "currentRuleSnapshotsChecked": 16,
+  "existingArtUrisChecked": 16,
+  "plannedFinalNodes": 8,
+  "totalTargetNodes": 24,
+  "uniquePlannedFinalMechanics": 8,
+  "plannedCharacterFinalCombinations": 48,
+  "checks": {
+    "nodeIdsUnique": true,
+    "allParentsExist": true,
+    "noCrossBranchFinalUpgrade": true,
+    "currentRulesAndTickConversionsMatchSource": true,
+    "existingArtUrisExist": true,
+    "stageUnlockExists": true,
+    "documentNodeNamesMatch": true,
+    "documentLinksExist": true
+  },
+  "runtimeChanged": false,
+  "newArtGenerated": false,
+  "newFinalMechanicsSimulated": false
+}
