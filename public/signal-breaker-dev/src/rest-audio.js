@@ -1,0 +1,10 @@
+/* Original real-time synthesis. No sampled or AI-generated recordings. */
+(function(root){'use strict';class RestAudio{
+ constructor(){this.ctx=null;this.prefs={music:0,ambient:0,effects:0};this.running=false;this.nextPad=0;this.nextShot=0;this.nextCapture=0;this.voices=[];this.index=0;}
+ unlock(){try{this.ctx=this.ctx||new (window.AudioContext||window.webkitAudioContext)();if(this.ctx.state==='suspended')void this.ctx.resume();}catch{}}
+ configure(p){this.prefs=p;}
+ stop(){this.running=false;if(this.ctx){for(const v of this.voices){try{v.osc.stop();}catch{}}this.voices=[];this.nextPad=0;}}
+ tone(freq,duration,gain,type='sine'){const c=this.ctx;if(!c||c.state!=='running'||!gain)return;this.voices=this.voices.filter(v=>v.end>c.currentTime);if(this.voices.length>=12)return;const o=c.createOscillator(),g=c.createGain(),at=c.currentTime;o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),at+Math.min(.35,duration*.3));g.gain.exponentialRampToValueAtTime(.0001,at+duration);o.connect(g).connect(c.destination);o.start(at);o.stop(at+duration+.02);o.onended=()=>{o.disconnect();g.disconnect();};this.voices.push({osc:o,end:at+duration+.02});}
+ update(active){this.running=active;if(!active||!this.ctx)return;const t=this.ctx.currentTime;if(t>=this.nextPad){this.nextPad=t+4;const chords=[[196,246.94,293.66],[174.61,220,261.63],[164.81,196,246.94],[174.61,220,293.66]],chord=chords[this.index++%4];for(const f of chord)this.tone(f,4.8,.009*this.prefs.music);this.tone(73.42,4.8,.008*this.prefs.ambient);}}
+ event(e){if(!this.running||!this.ctx)return;const t=this.ctx.currentTime;if(e.kind==='fire'&&t>=this.nextShot){this.nextShot=t+.12;this.tone(e.element==='arc'?392:440,.12,.012*this.prefs.effects,'triangle');}if(e.kind==='capture'&&t>=this.nextCapture){this.nextCapture=t+.12;this.tone(587.33,.3,.024*this.prefs.effects);}if(this.nextCapture===undefined)this.nextCapture=0;}
+}root.SignalBreakerRestAudio={RestAudio};})(typeof window!=='undefined'?window:globalThis);

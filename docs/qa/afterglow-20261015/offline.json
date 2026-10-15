@@ -1,0 +1,64 @@
+{
+  "method": "Actual rest combat to safe breath boundary, full service-worker install, previously uncached query-string navigation offline, resume and all six actual actor dependencies, low/reduced real gameplay; separate injected quota failure through real UI. No campaign fixtures or state wins.",
+  "cp": {
+    "seed": 1023305744,
+    "cycle": 1,
+    "counts": {
+      "resolved": 69,
+      "returned": 0,
+      "seconds": 120.00000000004157
+    }
+  },
+  "caches": [
+    "psi-signal-breaker-webpreview-v0.63.0-afterglow"
+  ],
+  "view": {
+    "active": true,
+    "assetReady": true,
+    "camera": {
+      "x": 340,
+      "y": 0,
+      "scale": 0.9285714285714286,
+      "offsetX": 0,
+      "offsetY": 16.14285714285711
+    },
+    "prefs": {
+      "actor": "safety_monitor",
+      "build": "plasma",
+      "rhythm": "calm",
+      "autoFire": true,
+      "autoAim": true,
+      "pad": "free",
+      "padSize": 118,
+      "reduced": true,
+      "quality": "low",
+      "music": 0.35,
+      "ambient": 0.3,
+      "effects": 0.45,
+      "idle": 90,
+      "reminder": 0,
+      "showStats": true
+    },
+    "returnEffects": 0,
+    "effects": {
+      "active": 8,
+      "limit": 8,
+      "quality": "low",
+      "reduced": true,
+      "seen": [
+        "fire:arc",
+        "fire:laser",
+        "weaponcontact:arc",
+        "capture:pulse",
+        "electrochain:pulse",
+        "ricochet:laser",
+        "weaponcontact:laser",
+        "netfield:net"
+      ]
+    },
+    "pausedReason": "",
+    "storageFailed": false
+  },
+  "errors": [],
+  "quotaErrors": []
+}

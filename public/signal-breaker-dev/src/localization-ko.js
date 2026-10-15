@@ -1,5 +1,7 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+'breaker.rest.entry.name':'쉬어가는 무한모드',
+'breaker.rest.entry.desc':'네 가지 장비로 가볍게 · 언제든 편하게 마무리',
 'breaker.gear.identity':'나의 현장 장비',
 'breaker.gear.identity.help':'장비 개조 단계는 손에 든 장치와 발사체에도 반영됩니다. ◆ 표시는 보유 개조 단계이며 튜닝·조합 진화와 구분됩니다.',
 'breaker.tech.rules':'성장 규칙 자세히 보기',
