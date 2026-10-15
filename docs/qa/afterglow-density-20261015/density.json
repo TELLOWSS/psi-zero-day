@@ -1,0 +1,406 @@
+{
+  "baseline": "8d98cdbe",
+  "method": "Same seeds, 240 seconds at 120Hz per build/rhythm, ordinary sinusoidal movement and real automatic fire. Active-window comparison uses cycle seconds 10–100 for both versions. No health, hits or captures injected.",
+  "rows": [
+    {
+      "build": "storm",
+      "rhythm": "calm",
+      "seed": 17,
+      "before": {
+        "meanCores": 0.72,
+        "maxCores": 5,
+        "emptyPercent": 74.27,
+        "activeEmptyPercent": 70.6,
+        "longestEmptySeconds": 23.38,
+        "resolved": 131,
+        "chainHits": 85,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 10.13,
+        "maxCores": 18,
+        "emptyPercent": 0.17,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.39,
+        "resolved": 1427,
+        "chainHits": 958,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "storm",
+      "rhythm": "calm",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 0.61,
+        "maxCores": 3,
+        "emptyPercent": 78.13,
+        "activeEmptyPercent": 76.31,
+        "longestEmptySeconds": 23.39,
+        "resolved": 134,
+        "chainHits": 87,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 9.78,
+        "maxCores": 14,
+        "emptyPercent": 0.26,
+        "activeEmptyPercent": 0.35,
+        "longestEmptySeconds": 0.35,
+        "resolved": 1422,
+        "chainHits": 959,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "storm",
+      "rhythm": "bright",
+      "seed": 17,
+      "before": {
+        "meanCores": 0.82,
+        "maxCores": 6,
+        "emptyPercent": 71.42,
+        "activeEmptyPercent": 66.77,
+        "longestEmptySeconds": 22.44,
+        "resolved": 187,
+        "chainHits": 122,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 18.01,
+        "maxCores": 26,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1794,
+        "chainHits": 1259,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "storm",
+      "rhythm": "bright",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 1.2,
+        "maxCores": 8,
+        "emptyPercent": 63.73,
+        "activeEmptyPercent": 56.59,
+        "longestEmptySeconds": 21.98,
+        "resolved": 188,
+        "chainHits": 122,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 17.99,
+        "maxCores": 28,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1723,
+        "chainHits": 1200,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "singularity",
+      "rhythm": "calm",
+      "seed": 17,
+      "before": {
+        "meanCores": 0.72,
+        "maxCores": 5,
+        "emptyPercent": 74.27,
+        "activeEmptyPercent": 70.6,
+        "longestEmptySeconds": 23.38,
+        "resolved": 131,
+        "chainHits": 85,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 9.71,
+        "maxCores": 17,
+        "emptyPercent": 1.4,
+        "activeEmptyPercent": 0.7,
+        "longestEmptySeconds": 2.08,
+        "resolved": 1530,
+        "chainHits": 1044,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "singularity",
+      "rhythm": "calm",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 0.78,
+        "maxCores": 5,
+        "emptyPercent": 73.59,
+        "activeEmptyPercent": 70.24,
+        "longestEmptySeconds": 23.33,
+        "resolved": 131,
+        "chainHits": 84,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 9.15,
+        "maxCores": 15,
+        "emptyPercent": 1.63,
+        "activeEmptyPercent": 1.81,
+        "longestEmptySeconds": 0.64,
+        "resolved": 1652,
+        "chainHits": 1133,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "singularity",
+      "rhythm": "bright",
+      "seed": 17,
+      "before": {
+        "meanCores": 0.85,
+        "maxCores": 6,
+        "emptyPercent": 70.89,
+        "activeEmptyPercent": 65.54,
+        "longestEmptySeconds": 22.44,
+        "resolved": 187,
+        "chainHits": 123,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 18.11,
+        "maxCores": 28,
+        "emptyPercent": 0.49,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 1.16,
+        "resolved": 1756,
+        "chainHits": 1246,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "singularity",
+      "rhythm": "bright",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 1.03,
+        "maxCores": 8,
+        "emptyPercent": 65.14,
+        "activeEmptyPercent": 57.74,
+        "longestEmptySeconds": 21.98,
+        "resolved": 187,
+        "chainHits": 122,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 18.32,
+        "maxCores": 28,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1703,
+        "chainHits": 1200,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "prism",
+      "rhythm": "calm",
+      "seed": 17,
+      "before": {
+        "meanCores": 1.61,
+        "maxCores": 5,
+        "emptyPercent": 35.39,
+        "activeEmptyPercent": 22.5,
+        "longestEmptySeconds": 19.35,
+        "resolved": 116,
+        "chainHits": 9,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 10.29,
+        "maxCores": 17,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1001,
+        "chainHits": 509,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "prism",
+      "rhythm": "calm",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 2,
+        "maxCores": 7,
+        "emptyPercent": 24.03,
+        "activeEmptyPercent": 6.7,
+        "longestEmptySeconds": 21.36,
+        "resolved": 121,
+        "chainHits": 8,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 10.5,
+        "maxCores": 17,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 936,
+        "chainHits": 461,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "prism",
+      "rhythm": "bright",
+      "seed": 17,
+      "before": {
+        "meanCores": 2.48,
+        "maxCores": 8,
+        "emptyPercent": 21.62,
+        "activeEmptyPercent": 4.79,
+        "longestEmptySeconds": 18.73,
+        "resolved": 154,
+        "chainHits": 13,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 19.42,
+        "maxCores": 28,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1253,
+        "chainHits": 703,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "prism",
+      "rhythm": "bright",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 2.47,
+        "maxCores": 8,
+        "emptyPercent": 21.55,
+        "activeEmptyPercent": 8.53,
+        "longestEmptySeconds": 17.1,
+        "resolved": 161,
+        "chainHits": 19,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 19.43,
+        "maxCores": 28,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1249,
+        "chainHits": 710,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "plasma",
+      "rhythm": "calm",
+      "seed": 17,
+      "before": {
+        "meanCores": 1.61,
+        "maxCores": 5,
+        "emptyPercent": 35.39,
+        "activeEmptyPercent": 22.5,
+        "longestEmptySeconds": 19.35,
+        "resolved": 116,
+        "chainHits": 9,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 9.96,
+        "maxCores": 17,
+        "emptyPercent": 0.26,
+        "activeEmptyPercent": 0.34,
+        "longestEmptySeconds": 0.27,
+        "resolved": 1261,
+        "chainHits": 781,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "plasma",
+      "rhythm": "calm",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 2,
+        "maxCores": 7,
+        "emptyPercent": 24.03,
+        "activeEmptyPercent": 6.7,
+        "longestEmptySeconds": 21.36,
+        "resolved": 121,
+        "chainHits": 8,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 10.07,
+        "maxCores": 17,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1228,
+        "chainHits": 764,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "plasma",
+      "rhythm": "bright",
+      "seed": 17,
+      "before": {
+        "meanCores": 2.48,
+        "maxCores": 8,
+        "emptyPercent": 21.62,
+        "activeEmptyPercent": 4.79,
+        "longestEmptySeconds": 18.73,
+        "resolved": 154,
+        "chainHits": 13,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 18.54,
+        "maxCores": 27,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1557,
+        "chainHits": 1023,
+        "cycles": 1
+      }
+    },
+    {
+      "build": "plasma",
+      "rhythm": "bright",
+      "seed": 20261015,
+      "before": {
+        "meanCores": 2.47,
+        "maxCores": 8,
+        "emptyPercent": 21.55,
+        "activeEmptyPercent": 8.53,
+        "longestEmptySeconds": 17.1,
+        "resolved": 161,
+        "chainHits": 19,
+        "cycles": 1
+      },
+      "after": {
+        "meanCores": 18.73,
+        "maxCores": 28,
+        "emptyPercent": 0,
+        "activeEmptyPercent": 0,
+        "longestEmptySeconds": 0.01,
+        "resolved": 1409,
+        "chainHits": 922,
+        "cycles": 1
+      }
+    }
+  ]
+}

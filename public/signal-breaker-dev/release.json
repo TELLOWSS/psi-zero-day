@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.63.0-afterglow",
-  "cacheName": "psi-signal-breaker-webpreview-v0.63.0-afterglow",
-  "fingerprint": "088dd797827ac197c68b9a30e4bc3ec2681de00c502dcb0aec5f0f9666723600",
+  "version": "0.64.0-afterglow-flow",
+  "cacheName": "psi-signal-breaker-webpreview-v0.64.0-afterglow-flow",
+  "fingerprint": "e4d80edb8c2fcad5abcfc6eebae0999ab9d96266309d1f88f9c14e57b1150253",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -686,13 +686,13 @@
     },
     {
       "path": "/signal-breaker-dev/rest.html",
-      "bytes": 10737,
-      "sha256": "49b79912c68906521154b80b82ce59c2147e110181fb8ea377ca58ecae20578f"
+      "bytes": 10772,
+      "sha256": "a78d0fe7083de4a3a35bde922ae9ffdd27f2e86a16b4eff9009debe24bb220f4"
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11509,
-      "sha256": "3618ffdec12cde5a20e62818787ff3b4867a215bdeb38282a918daa44382b5f2"
+      "bytes": 11514,
+      "sha256": "c0108089ea8777716b27fbac8b3dedc3807e0fbcdce9bae941a2ec3cc60a040b"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
@@ -876,8 +876,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/rest-engine.js",
-      "bytes": 9181,
-      "sha256": "c79960f00134fca445f91233cc412fcaa8f51978afcb6f2aaf668b35c5ddc1b8"
+      "bytes": 9855,
+      "sha256": "4dd428e42822dd50d45a79a580008af0e973b87f955fbd1d76826ca1d3993185"
     },
     {
       "path": "/signal-breaker-dev/src/rest-mode.css",
@@ -891,8 +891,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/rest-text.js",
-      "bytes": 5258,
-      "sha256": "7884cc299567e20c5a159398274b1a6a2393028324f58b88a2a7f3b665cc4f42"
+      "bytes": 5361,
+      "sha256": "5d55670bfed6e520f8da878560c017c6cb026d6b477787eb1c5c0a1b46df932e"
     },
     {
       "path": "/signal-breaker-dev/src/session-flow.js",

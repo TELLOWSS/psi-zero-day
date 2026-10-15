@@ -1,0 +1,113 @@
+{
+  "method": "Fixed 120Hz ordinary movement and real automated aiming/firing; no victories, health or kills injected. No-attack case uses normal safe returns.",
+  "rows": [
+    {
+      "build": "storm",
+      "rhythm": "calm",
+      "seconds": 1800,
+      "attack": true,
+      "maxCores": 18,
+      "maxShots": 8,
+      "snapshot": {
+        "mode": "rest",
+        "state": "playing",
+        "build": "storm",
+        "rhythm": "calm",
+        "actor": "player",
+        "cycle": 14,
+        "phase": "tidy",
+        "time": 1800.0000000091138,
+        "counts": {
+          "resolved": 11031,
+          "returned": 34,
+          "seconds": 1800.0000000091138
+        },
+        "cores": 14,
+        "shots": 2,
+        "boundaries": 14
+      },
+      "checkpointBytes": 99
+    },
+    {
+      "build": "singularity",
+      "rhythm": "bright",
+      "seconds": 3600,
+      "attack": true,
+      "maxCores": 28,
+      "maxShots": 9,
+      "snapshot": {
+        "mode": "rest",
+        "state": "playing",
+        "build": "singularity",
+        "rhythm": "bright",
+        "actor": "player",
+        "cycle": 29,
+        "phase": "tidy",
+        "time": 3599.999999989687,
+        "counts": {
+          "resolved": 26378,
+          "returned": 383,
+          "seconds": 3599.999999989687
+        },
+        "cores": 21,
+        "shots": 3,
+        "boundaries": 29
+      },
+      "checkpointBytes": 100
+    },
+    {
+      "build": "prism",
+      "rhythm": "calm",
+      "seconds": 7200,
+      "attack": true,
+      "maxCores": 18,
+      "maxShots": 9,
+      "snapshot": {
+        "mode": "rest",
+        "state": "playing",
+        "build": "prism",
+        "rhythm": "calm",
+        "actor": "player",
+        "cycle": 59,
+        "phase": "bloom",
+        "time": 7199.9999999373,
+        "counts": {
+          "resolved": 28719,
+          "returned": 164,
+          "seconds": 7199.9999999373
+        },
+        "cores": 9,
+        "shots": 6,
+        "boundaries": 59
+      },
+      "checkpointBytes": 100
+    },
+    {
+      "build": "plasma",
+      "rhythm": "bright",
+      "seconds": 7200,
+      "attack": false,
+      "maxCores": 28,
+      "maxShots": 0,
+      "snapshot": {
+        "mode": "rest",
+        "state": "playing",
+        "build": "plasma",
+        "rhythm": "bright",
+        "actor": "player",
+        "cycle": 57,
+        "phase": "flow",
+        "time": 7199.9999999373,
+        "counts": {
+          "resolved": 0,
+          "returned": 6245,
+          "seconds": 7199.9999999373
+        },
+        "cores": 24,
+        "shots": 0,
+        "boundaries": 57
+      },
+      "checkpointBytes": 96
+    }
+  ]
+}
