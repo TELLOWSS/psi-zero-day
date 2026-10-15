@@ -8,13 +8,13 @@
     "audio": [
       {
         "phase": "decoded",
-        "file": "control-resolve.ogg",
-        "duration": 0.41
+        "file": "control-barrier-clack.ogg",
+        "duration": 0.53
       },
       {
         "phase": "decoded",
-        "file": "control-barrier-clack.ogg",
-        "duration": 0.53
+        "file": "control-resolve.ogg",
+        "duration": 0.41
       },
       {
         "phase": "decoded",
@@ -23,7 +23,7 @@
       },
       {
         "phase": "launch",
-        "id": "9b36583c-e12b-45d6-8283-575cc00cab50:0:tower-1",
+        "id": "493c6d89-6fd2-4921-88ba-724a22d7b4ae:0:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 1,
@@ -32,7 +32,7 @@
       },
       {
         "phase": "impact",
-        "id": "9b36583c-e12b-45d6-8283-575cc00cab50:0:tower-1",
+        "id": "493c6d89-6fd2-4921-88ba-724a22d7b4ae:0:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 2,
@@ -41,7 +41,7 @@
       },
       {
         "phase": "launch",
-        "id": "9b36583c-e12b-45d6-8283-575cc00cab50:16:tower-1",
+        "id": "493c6d89-6fd2-4921-88ba-724a22d7b4ae:16:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 1,
@@ -50,7 +50,7 @@
       },
       {
         "phase": "impact",
-        "id": "9b36583c-e12b-45d6-8283-575cc00cab50:16:tower-1",
+        "id": "493c6d89-6fd2-4921-88ba-724a22d7b4ae:16:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 2,
@@ -75,8 +75,8 @@
     "audio": [
       {
         "phase": "decoded",
-        "file": "control-resolve.ogg",
-        "duration": 0.41
+        "file": "area-resolve.ogg",
+        "duration": 0.4691458333333333
       },
       {
         "phase": "decoded",
@@ -85,12 +85,12 @@
       },
       {
         "phase": "decoded",
-        "file": "area-resolve.ogg",
-        "duration": 0.4691458333333333
+        "file": "control-resolve.ogg",
+        "duration": 0.41
       },
       {
         "phase": "launch",
-        "id": "88a2885f-b53e-42a7-871b-ca99779fd13d:0:tower-1",
+        "id": "25dd804f-aa20-47de-a5ee-59d1782dcf99:0:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 1,
@@ -99,7 +99,7 @@
       },
       {
         "phase": "impact",
-        "id": "88a2885f-b53e-42a7-871b-ca99779fd13d:0:tower-1",
+        "id": "25dd804f-aa20-47de-a5ee-59d1782dcf99:0:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 2,
@@ -108,7 +108,7 @@
       },
       {
         "phase": "launch",
-        "id": "88a2885f-b53e-42a7-871b-ca99779fd13d:40:tower-1",
+        "id": "25dd804f-aa20-47de-a5ee-59d1782dcf99:40:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 1,
@@ -117,7 +117,7 @@
       },
       {
         "phase": "impact",
-        "id": "88a2885f-b53e-42a7-871b-ca99779fd13d:40:tower-1",
+        "id": "25dd804f-aa20-47de-a5ee-59d1782dcf99:40:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 2,
@@ -157,7 +157,7 @@
       },
       {
         "phase": "launch",
-        "id": "239bfda8-46a3-404c-b197-6e5ed550a206:3:tower-1",
+        "id": "9472791b-4809-47c0-8c88-fc004ced8eb0:3:tower-1",
         "family": "CONTROL",
         "level": "L1",
         "voices": 1,
@@ -166,7 +166,7 @@
       },
       {
         "phase": "impact",
-        "id": "239bfda8-46a3-404c-b197-6e5ed550a206:3:tower-1",
+        "id": "9472791b-4809-47c0-8c88-fc004ced8eb0:3:tower-1",
         "family": "CONTROL",
         "level": "L1",
         "voices": 2,
@@ -175,7 +175,7 @@
       },
       {
         "phase": "launch",
-        "id": "239bfda8-46a3-404c-b197-6e5ed550a206:23:tower-1",
+        "id": "9472791b-4809-47c0-8c88-fc004ced8eb0:23:tower-1",
         "family": "CONTROL",
         "level": "L1",
         "voices": 1,
@@ -184,7 +184,7 @@
       },
       {
         "phase": "impact",
-        "id": "239bfda8-46a3-404c-b197-6e5ed550a206:23:tower-1",
+        "id": "9472791b-4809-47c0-8c88-fc004ced8eb0:23:tower-1",
         "family": "CONTROL",
         "level": "L1",
         "voices": 2,
@@ -209,13 +209,13 @@
     "audio": [
       {
         "phase": "decoded",
-        "file": "control-barrier-clack.ogg",
-        "duration": 0.53
+        "file": "control-resolve.ogg",
+        "duration": 0.41
       },
       {
         "phase": "decoded",
-        "file": "control-resolve.ogg",
-        "duration": 0.41
+        "file": "control-barrier-clack.ogg",
+        "duration": 0.53
       },
       {
         "phase": "decoded",
@@ -224,7 +224,7 @@
       },
       {
         "phase": "launch",
-        "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:5:tower-1",
+        "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:5:tower-1",
         "family": "SENSOR",
         "level": "L1",
         "voices": 1,
@@ -233,7 +233,7 @@
       },
       {
         "phase": "impact",
-        "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:5:tower-1",
+        "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:5:tower-1",
         "family": "SENSOR",
         "level": "L1",
         "voices": 2,
@@ -242,7 +242,7 @@
       },
       {
         "phase": "launch",
-        "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:25:tower-1",
+        "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:25:tower-1",
         "family": "SENSOR",
         "level": "L1",
         "voices": 1,
@@ -251,7 +251,7 @@
       },
       {
         "phase": "impact",
-        "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:25:tower-1",
+        "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:25:tower-1",
         "family": "SENSOR",
         "level": "L1",
         "voices": 2,
@@ -291,7 +291,7 @@
       },
       {
         "phase": "launch",
-        "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:0:tower-1",
+        "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:0:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 1,
@@ -300,7 +300,7 @@
       },
       {
         "phase": "impact",
-        "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:0:tower-1",
+        "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:0:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 2,
@@ -309,7 +309,7 @@
       },
       {
         "phase": "launch",
-        "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:16:tower-1",
+        "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:16:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 2,
@@ -318,7 +318,7 @@
       },
       {
         "phase": "impact",
-        "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:16:tower-1",
+        "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:16:tower-1",
         "family": "PULSE",
         "level": "L1",
         "voices": 3,
@@ -343,13 +343,13 @@
     "audio": [
       {
         "phase": "decoded",
-        "file": "control-resolve.ogg",
-        "duration": 0.41
+        "file": "control-barrier-clack.ogg",
+        "duration": 0.53
       },
       {
         "phase": "decoded",
-        "file": "control-barrier-clack.ogg",
-        "duration": 0.53
+        "file": "control-resolve.ogg",
+        "duration": 0.41
       },
       {
         "phase": "decoded",
@@ -358,7 +358,7 @@
       },
       {
         "phase": "launch",
-        "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:0:tower-1",
+        "id": "d69f0339-6b6c-46f6-8dc8-cffb02e0dc97:0:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 1,
@@ -367,7 +367,7 @@
       },
       {
         "phase": "impact",
-        "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:0:tower-1",
+        "id": "d69f0339-6b6c-46f6-8dc8-cffb02e0dc97:0:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 2,
@@ -376,7 +376,7 @@
       },
       {
         "phase": "launch",
-        "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:40:tower-1",
+        "id": "d69f0339-6b6c-46f6-8dc8-cffb02e0dc97:40:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 2,
@@ -385,7 +385,7 @@
       },
       {
         "phase": "impact",
-        "id": "ee66b1f2-055b-41c4-b78b-c6a8f54b2be0:40:tower-1",
+        "id": "d69f0339-6b6c-46f6-8dc8-cffb02e0dc97:40:tower-1",
         "family": "BURST",
         "level": "L1",
         "voices": 3,

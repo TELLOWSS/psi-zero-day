@@ -686,6 +686,7 @@ export function DefenseGame({
   };
 
   const startWithSupport = (supportId: DefenseSupportId) => {
+    if(content.map.id==='ramp-01')audio.armAudio();
     audio.playCue('select');
     persistence.startWithSupport(supportId, false, content);
     radioUntilTickRef.current=0;

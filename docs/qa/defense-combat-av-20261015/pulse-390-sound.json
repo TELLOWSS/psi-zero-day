@@ -16,7 +16,7 @@
   },
   {
     "phase": "launch",
-    "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:0:tower-1",
+    "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:0:tower-1",
     "family": "PULSE",
     "level": "L1",
     "voices": 1,
@@ -25,7 +25,7 @@
   },
   {
     "phase": "impact",
-    "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:0:tower-1",
+    "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:0:tower-1",
     "family": "PULSE",
     "level": "L1",
     "voices": 2,
@@ -34,7 +34,7 @@
   },
   {
     "phase": "launch",
-    "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:16:tower-1",
+    "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:16:tower-1",
     "family": "PULSE",
     "level": "L1",
     "voices": 2,
@@ -43,7 +43,7 @@
   },
   {
     "phase": "impact",
-    "id": "d882da4e-e93d-46ce-a7cc-1f705ebd0b83:16:tower-1",
+    "id": "557f80de-abce-4db1-a5e7-b9255c4d66fe:16:tower-1",
     "family": "PULSE",
     "level": "L1",
     "voices": 3,

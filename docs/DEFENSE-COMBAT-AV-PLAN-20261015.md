@@ -30,7 +30,7 @@
 - `src/ui/DefenseCombatFX.tsx`, `src/ui/defense-combat-fx.css`에 4계열 실시간 광선/탄도/접촉점/해소 체크 연출을 연결했다. L3A에는 추가 잔광, L3B에는 집중광을 적용했다. 실제 진화 단계에서 표시하며 공격 규칙은 원래 엔진 정의를 따른다.
 - `src/app/defense-combat-mixer.ts`, `src/ui/useDefenseCombatAudio.ts`에 Web Audio 샘플 버스·필터·스테레오 패닝·컴프레서·발사/접촉 시간차를 구현했다. 총 8보이스에 예약된 접촉음도 포함한다. 계열별 75ms 최소 간격, 중복 엔진 ID 억제를 적용했다. 공개 기본판에서 기존 공통 공격음을 겹쳐 재생하지 않는다.
 - 원음 3개는 기존 `public/assets/defense/audio/g8a/{control-resolve,area-resolve,control-barrier-clack}.ogg`다. 새 AI 음원 생성이나 권리 취득을 주장하지 않는다. 원음 생성/승인 이력은 기존 `content/defense/g8a-premium-audio-production.json`과 상업 출시 감사가 별도 기준이다.
-- 전역 SOUND 설정을 사용한다. 무음으로 시작했더라도 다시 켤 때 사용자 클릭에서 오디오를 활성화한다. 일시정지·탭 숨김·화면 종료 시 예약 재생까지 정리한다.
+- 전역 SOUND 설정을 사용한다. 동료 선택 클릭부터 음원을 준비해 첫 발사 직전에 로딩이 시작되는 것을 피한다. 무음으로 시작했더라도 다시 켤 때 사용자 클릭에서 오디오를 활성화한다. 일시정지·탭 숨김·화면 종료 시 예약 재생까지 정리한다.
 - 검수 중 세로 화면에서 설정창이 원래 설정 버튼을 덮는 문제를 발견해 창 안에 명시적인 ‘현장으로 돌아가기’ 버튼을 추가했다.
 
 ## 완료 검증과 한계

@@ -219,14 +219,14 @@ Not implemented: HTMLMediaElement's pause() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
-Not implemented: HTMLMediaElement's pause() method
-Not implemented: HTMLMediaElement's pause() method
-Not implemented: HTMLMediaElement's pause() method
-Not implemented: HTMLMediaElement's pause() method
-Not implemented: HTMLMediaElement's pause() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's pause() method
+Not implemented: HTMLMediaElement's pause() method
+Not implemented: HTMLMediaElement's pause() method
+Not implemented: HTMLMediaElement's pause() method
+Not implemented: HTMLMediaElement's pause() method
 Not implemented: HTMLMediaElement's pause() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
@@ -364,6 +364,16 @@ Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
@@ -371,19 +381,19 @@ Not implemented: Window's scrollTo() method
 Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
-Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
-Not implemented: Window's scrollTo() method
-Not implemented: Window's scrollTo() method
-Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
-Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
-Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
 Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
@@ -402,20 +412,35 @@ Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
-Not implemented: Window's scrollTo() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: Window's scrollTo() method
 Not implemented: Window's scrollTo() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
 Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
+Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 Not implemented: HTMLMediaElement's play() method
 
  Test Files  360 passed | 1 skipped (361)
       Tests  2089 passed | 1 skipped (2090)
-   Start at  15:33:53
-   Duration  89.07s (tests 32%, environment 27%, transform 23%, import 16%, worker 1%)
+   Start at  15:38:46
+   Duration  82.94s (tests 33%, environment 27%, transform 22%, import 16%, worker 1%)
 
-    Isolate  361 workers spawned · ~229ms startup each (spawn + environment, per file)
-             at least ~41.09s faster with isolate: false — reuses workers across files instead of one per file
+    Isolate  361 workers spawned · ~212ms startup each (spawn + environment, per file)
+             at least ~38.13s faster with isolate: false — reuses workers across files instead of one per file

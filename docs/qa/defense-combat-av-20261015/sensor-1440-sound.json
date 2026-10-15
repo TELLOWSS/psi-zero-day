@@ -1,13 +1,13 @@
 [
   {
     "phase": "decoded",
-    "file": "control-barrier-clack.ogg",
-    "duration": 0.53
+    "file": "control-resolve.ogg",
+    "duration": 0.41
   },
   {
     "phase": "decoded",
-    "file": "control-resolve.ogg",
-    "duration": 0.41
+    "file": "control-barrier-clack.ogg",
+    "duration": 0.53
   },
   {
     "phase": "decoded",
@@ -16,7 +16,7 @@
   },
   {
     "phase": "launch",
-    "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:5:tower-1",
+    "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:5:tower-1",
     "family": "SENSOR",
     "level": "L1",
     "voices": 1,
@@ -25,7 +25,7 @@
   },
   {
     "phase": "impact",
-    "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:5:tower-1",
+    "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:5:tower-1",
     "family": "SENSOR",
     "level": "L1",
     "voices": 2,
@@ -34,7 +34,7 @@
   },
   {
     "phase": "launch",
-    "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:25:tower-1",
+    "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:25:tower-1",
     "family": "SENSOR",
     "level": "L1",
     "voices": 1,
@@ -43,7 +43,7 @@
   },
   {
     "phase": "impact",
-    "id": "398ebbb4-7ef3-4c5b-b80e-6c5dfe2a6183:25:tower-1",
+    "id": "168763d5-42b5-43da-a8c6-8ce56fd52181:25:tower-1",
     "family": "SENSOR",
     "level": "L1",
     "voices": 2,
