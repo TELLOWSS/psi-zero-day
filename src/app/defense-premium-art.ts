@@ -1,10 +1,12 @@
+import guard from '../../content/defense/guard-art-v1.json';
 import manifest from '../../content/defense/premium-art-v1.json';
 import type {DefenseEnemyId,DefenseLevelId,DefenseTowerId} from '../domain/defense';
 
 export const defensePremiumArt=manifest;
 export const DEFENSE_PREMIUM_HERO=manifest.assets.find(asset=>asset.id==='hero')!.uri;
 export function defensePremiumUri(id:string,mapId:string|undefined):string|null {
-  return mapId&&manifest.scope.includes(mapId)?manifest.assets.find(asset=>asset.id===id)?.uri??null:null;
+  if(id==='world'&&mapId?.startsWith('guard-gd-'))return guard.boards.find(b=>b.stageId.toLowerCase()===mapId.slice(6))?.uri??null;
+  return mapId&&(manifest.scope.includes(mapId)||mapId.startsWith('guard-gd-'))?manifest.assets.find(asset=>asset.id===id)?.uri??null:null;
 }
 export function defensePremiumTowerUri(tower:DefenseTowerId,level:DefenseLevelId,mapId:string|undefined){
   return defensePremiumUri(`${tower}.${level}`,mapId);

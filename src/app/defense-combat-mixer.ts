@@ -1,4 +1,5 @@
 import type {DefenseCombatShot,DefenseTowerId} from '../domain/defense';
+import supplied from '../../content/defense/guard-audio-v1.json';
 
 export const DEFENSE_COMBAT_VOICES=8;
 export const DEFENSE_COMBAT_SOUND_EVENT='psi:defense-combat-sound';
@@ -11,6 +12,7 @@ export const defenseCombatSoundProfiles:Record<DefenseTowerId,{file:string;rate:
 
 /** Bounded sample playback, independent of gameplay. No oscillator synthesis. */
 export class DefenseCombatMixer {
+ constructor(private readonly useSupplied=false){}
  private context:AudioContext|null=null;
  private bus:DynamicsCompressorNode|null=null;
  private buffers=new Map<string,AudioBuffer>();
@@ -18,25 +20,37 @@ export class DefenseCombatMixer {
  private last=new Map<DefenseTowerId,number>();
  private loading=false;
  private generation=0;
+ private onset=new Map<string,number>();
+ private normalization=new Map<string,number>();
+ private priority=new Map<AudioBufferSourceNode,number>();
  private report(detail:Record<string,unknown>){window.dispatchEvent(new CustomEvent(DEFENSE_COMBAT_SOUND_EVENT,{detail}));}
  arm(){
   if(!window.AudioContext)return;
   if(!this.context){
    this.context=new AudioContext();this.bus=this.context.createDynamicsCompressor();
    this.bus.threshold.value=-16;this.bus.knee.value=12;this.bus.ratio.value=5;
-   this.bus.attack.value=.003;this.bus.release.value=.12;this.bus.connect(this.context.destination);
+   this.bus.attack.value=this.useSupplied?.001:.003;this.bus.release.value=.12;
+   if(this.useSupplied){
+    this.bus.threshold.value=-18;this.bus.ratio.value=8;
+    const limiter=this.context.createWaveShaper(),curve=new Float32Array(2049);for(let i=0;i<curve.length;i++)curve[i]=Math.max(-.9,Math.min(.9,i/(curve.length-1)*2-1));limiter.curve=curve;limiter.oversample='2x';this.bus.connect(limiter).connect(this.context.destination);
+   }else this.bus.connect(this.context.destination);
   }
   if(this.context.state==='suspended')void this.context.resume().catch(()=>{});
   if(this.loading)return;this.loading=true;
   const context=this.context,generation=this.generation;
-  for(const file of new Set(Object.values(defenseCombatSoundProfiles).map(p=>p.file))){
-   void fetch(`/assets/defense/audio/g8a/${file}`).then(r=>{if(!r.ok)throw Error(`HTTP ${r.status}`);return r.arrayBuffer();})
+  const files=this.useSupplied?supplied.assets.filter(a=>a.role==='ONE_SHOT_SFX').map(a=>a.id):[...new Set(Object.values(defenseCombatSoundProfiles).map(p=>p.file))];
+  for(const file of files){
+   const uri=this.useSupplied?supplied.assets.find(a=>a.id===file)!.uri:`assets/defense/audio/g8a/${file}`;
+   void fetch('/'+uri).then(r=>{if(!r.ok)throw Error(`HTTP ${r.status}`);return r.arrayBuffer();})
     .then(bytes=>context.decodeAudioData(bytes)).then(buffer=>{
-     if(generation!==this.generation)return;this.buffers.set(file,buffer);this.report({phase:'decoded',file,duration:buffer.duration});
+     if(generation!==this.generation)return;this.buffers.set(file,buffer);
+     if(this.useSupplied){const data=buffer.getChannelData(0);let first=0;while(first<Math.min(data.length,buffer.sampleRate)&&Math.abs(data[first]!)<.003)first++;const offset=Math.max(0,first/buffer.sampleRate-.008);this.onset.set(file,offset);let power=0;const n=Math.min(data.length-first,Math.floor(buffer.sampleRate*.25));for(let i=0;i<n;i++)power+=data[first+i]!**2;this.normalization.set(file,Math.min(4,Math.max(.4,.12/Math.max(.02,Math.sqrt(power/Math.max(1,n))))));}
+     this.report({phase:'decoded',file,duration:buffer.duration,uri});
     }).catch(()=>{if(generation===this.generation)this.report({phase:'unavailable',file});});
   }
  }
  play(shot:DefenseCombatShot,pan:number){
+  if(this.useSupplied){this.playSuppliedShot(shot,pan);return;}
   const ctx=this.context,p=defenseCombatSoundProfiles[shot.towerId],buffer=this.buffers.get(p.file);
   if(!ctx||ctx.state!=='running'||!buffer||!this.bus)return;
   const now=ctx.currentTime;
@@ -59,6 +73,26 @@ export class DefenseCombatMixer {
    this.report({phase:impact?'impact':'launch',id:shot.id,family:shot.towerId,level:shot.levelId,voices:this.sources.size,rate,pan:stereo.pan.value});
   }
  }
- stop(){const count=this.sources.size;for(const source of this.sources){try{source.stop();}catch{/* already ended */}}this.sources.clear();this.last.clear();if(count)this.report({phase:'stopped',stopped:count,voices:0});}
+ private sample(id:string,gainValue:number,delay:number,duration:number,pan:number,rank:number,rate=1,detail:Record<string,unknown>={}){
+  const ctx=this.context,buffer=this.buffers.get(id);if(!ctx||ctx.state!=='running'||!buffer||!this.bus)return;
+  if(this.sources.size>=DEFENSE_COMBAT_VOICES){const victim=[...this.sources].find(s=>(this.priority.get(s)??0)<rank);if(!victim)return;try{victim.stop();}catch{}this.sources.delete(victim);this.priority.delete(victim);}
+  const source=ctx.createBufferSource(),gain=ctx.createGain(),stereo=ctx.createStereoPanner(),start=ctx.currentTime+delay,offset=this.onset.get(id)??0,seconds=Math.min(duration,buffer.duration-offset);
+  if(seconds<=0)return;source.buffer=buffer;source.playbackRate.value=rate;stereo.pan.value=Math.max(-.6,Math.min(.6,pan));
+  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(gainValue*(this.normalization.get(id)??1),start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+seconds/rate);
+  source.connect(gain).connect(stereo).connect(this.bus);this.sources.add(source);this.priority.set(source,rank);
+  source.onended=()=>{this.sources.delete(source);this.priority.delete(source);source.disconnect();gain.disconnect();stereo.disconnect();};source.start(start,offset,seconds);
+  this.report({phase:'sample',id,source:'user-supplied-binary',voices:this.sources.size,pan:stereo.pan.value,...detail});
+ }
+ private playSuppliedShot(shot:DefenseCombatShot,pan:number){
+  const ctx=this.context;if(!ctx||ctx.currentTime-(this.last.get(shot.towerId)??-99)<.075)return;this.last.set(shot.towerId,ctx.currentTime);
+  const family=shot.towerId,detail={shotId:shot.id,family,level:shot.levelId},rate=shot.levelId==='L3A'?1.04:shot.levelId==='L3B'?.97:1;
+  this.sample(`${family}_FIRE_AUDIO`,.3,0,.17,pan,3,rate,detail);
+  this.sample(`${family}_IMPACT_AUDIO`,.42,.10,.26,pan,4,rate,detail);
+  if(shot.targets.some(t=>t.resolved))this.sample(`${family}_RESOLVE_AUDIO`,.32,.13,.35,pan,5,1,detail);
+  const primary=shot.targets[0];if(primary)this.sample(`ENEMY_${primary.enemyId}_IMPACT_AUDIO`,.20,.11,.21,pan,2,1,detail);
+  this.sample(`${family}_TRAVEL_AUDIO`,.12,.025,.10,pan,1,rate,detail);
+ }
+ critical(id:string){this.sample(id,.5,0,1.2,0,9);}
+ stop(){const count=this.sources.size;for(const source of this.sources){try{source.stop();}catch{/* already ended */}}this.sources.clear();this.priority.clear();this.last.clear();if(count)this.report({phase:'stopped',stopped:count,voices:0});}
  dispose(){this.stop();this.generation++;this.buffers.clear();if(this.context)void this.context.close();this.context=null;this.bus=null;}
 }

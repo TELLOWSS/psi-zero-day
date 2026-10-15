@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "generator": "built-in image_gen",
+  "boards": [
+    {
+      "stageId": "GD-01",
+      "uri": "assets/defense/guard-v1/gd-01.webp",
+      "source": "C:/Users/user/.codex/generated_images/01a13458-6d9f-7992-9023-d99924880690/exec-87eab867-4f37-43a4-a236-5df858e0bf3a.png",
+      "width": 1600,
+      "height": 960,
+      "sha256": "719c797608ad17ab32a4d06118667ec3449a9b22d45dfacdbc004cda1198e5cd",
+      "bytes": 678318,
+      "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED"
+    },
+    {
+      "stageId": "GD-02",
+      "uri": "assets/defense/guard-v1/gd-02.webp",
+      "source": "C:/Users/user/.codex/generated_images/01a13458-6d9f-7992-9023-d99924880690/exec-6d428262-f10e-4535-b5e9-eb5022dd2db3.png",
+      "width": 1600,
+      "height": 960,
+      "sha256": "032b25628494c5fc24b8e92c84223df19b918bddfebe78c65651f5cfe2ed7833",
+      "bytes": 671900,
+      "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED"
+    },
+    {
+      "stageId": "GD-03",
+      "uri": "assets/defense/guard-v1/gd-03.webp",
+      "source": "C:/Users/user/.codex/generated_images/01a13458-6d9f-7992-9023-d99924880690/exec-4375ff95-76e3-4523-aeed-9d3a99596c17.png",
+      "width": 1600,
+      "height": 960,
+      "sha256": "77de08777395d9d4693406943b50bce9ef6919821b6c46e240e65753c0e1a07d",
+      "bytes": 701916,
+      "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED"
+    }
+  ]
+}

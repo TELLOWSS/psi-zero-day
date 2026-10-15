@@ -1,0 +1,290 @@
+[
+  {
+    "id": "BURST_FIRE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.11293469924059804,
+    "peak": 1.0554308891296387,
+    "decodedSamplesAtOrAboveOne": 2
+  },
+  {
+    "id": "BURST_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.1153916950676553,
+    "peak": 0.6308380961418152,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "BURST_RESOLVE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.06614451612908988,
+    "peak": 0.695548415184021,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "BURST_TRAVEL_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.009980406966253103,
+    "peak": 0.06693734228610992,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CONTROL_FIRE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.047287540437756063,
+    "peak": 0.8970699906349182,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CONTROL_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.02928234911992252,
+    "peak": 0.4392719864845276,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CONTROL_RESOLVE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.027305965095500196,
+    "peak": 0.8046615123748779,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CONTROL_TRAVEL_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.022017273079323618,
+    "peak": 0.6180168986320496,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CRITICAL_BOSS_ENTRY_AUDIO",
+    "duration": 6,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.07091824284396597,
+    "peak": 0.5248074531555176,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CRITICAL_BOSS_PHASE_AUDIO",
+    "duration": 4,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.13102378751426705,
+    "peak": 0.7394925355911255,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CRITICAL_BOSS_RESOLVE_AUDIO",
+    "duration": 8,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.2882675441647024,
+    "peak": 0.949715793132782,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CRITICAL_ESTOP_CONFIRMED_AUDIO",
+    "duration": 5,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.17022633486953093,
+    "peak": 0.9307174682617188,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "CRITICAL_LEAK_ALERT_AUDIO",
+    "duration": 4,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.29622342290028514,
+    "peak": 1.0226554870605469,
+    "decodedSamplesAtOrAboveOne": 67
+  },
+  {
+    "id": "ENEMY_ARMORED_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.008708711172051352,
+    "peak": 0.12651894986629486,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "ENEMY_BOSS_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.02243112848545272,
+    "peak": 0.29244160652160645,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "ENEMY_NORMAL_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.041790872731538135,
+    "peak": 0.6956555247306824,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "ENEMY_SWARM_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.030484796089530662,
+    "peak": 0.3856731653213501,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "ENEMY_SWIFT_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.07888890351483287,
+    "peak": 0.937712550163269,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "ENEMY_VEILED_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.07633098335432224,
+    "peak": 0.914635419845581,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "MUSIC_RAMP01_BED_FULL_MIX_AUDITION",
+    "duration": 60.39508333333333,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.18873208343243128,
+    "peak": 0.9761641621589661,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "MUSIC_RAMP01_BOSS_FULL_MIX_AUDITION",
+    "duration": 60.34285416666667,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.1956981718812135,
+    "peak": 1.0136356353759766,
+    "decodedSamplesAtOrAboveOne": 4
+  },
+  {
+    "id": "MUSIC_RAMP01_CODA_FULL_MIX_AUDITION",
+    "duration": 59.24570833333333,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.19811761855696147,
+    "peak": 0.9876614212989807,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "MUSIC_RAMP01_PRESSURE_FULL_MIX_AUDITION",
+    "duration": 61.59672916666667,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.19387052512160155,
+    "peak": 0.9804221391677856,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "MUSIC_RAMP01_RHYTHM_FULL_MIX_AUDITION",
+    "duration": 61.779583333333335,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.1927870296681085,
+    "peak": 1.041795015335083,
+    "decodedSamplesAtOrAboveOne": 2
+  },
+  {
+    "id": "PULSE_FIRE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.26864048435119126,
+    "peak": 1.0072382688522339,
+    "decodedSamplesAtOrAboveOne": 1
+  },
+  {
+    "id": "PULSE_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.041492861541555646,
+    "peak": 0.6827431917190552,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "PULSE_RESOLVE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.032696107058194514,
+    "peak": 0.5337566137313843,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "PULSE_TRAVEL_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.0104463358874131,
+    "peak": 0.10373912751674652,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "SENSOR_FIRE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.07299836952208248,
+    "peak": 0.5099955797195435,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "SENSOR_IMPACT_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.012158861977169911,
+    "peak": 0.05314778909087181,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "SENSOR_RESOLVE_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.023876892362969904,
+    "peak": 0.29540136456489563,
+    "decodedSamplesAtOrAboveOne": 0
+  },
+  {
+    "id": "SENSOR_TRAVEL_AUDIO",
+    "duration": 3,
+    "rate": 48000,
+    "channels": 2,
+    "rms": 0.10712852630018575,
+    "peak": 1.0848300457000732,
+    "decodedSamplesAtOrAboveOne": 10
+  }
+]

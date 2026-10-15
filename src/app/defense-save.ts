@@ -41,6 +41,8 @@ function validEnemy(value: unknown): value is DefenseEnemyState {
     && nonNegativeInteger(value.spawnSequence)
     && nonNegativeInteger(value.revealUntilTick)
     && Array.isArray(value.slowEffects) && value.slowEffects.every(validSlowEffect)
+    && (value.armorExposedUntilTick===undefined||nonNegativeInteger(value.armorExposedUntilTick))
+    && (value.armorExposeFraction===undefined||(finite(value.armorExposeFraction)&&value.armorExposeFraction>=0&&value.armorExposeFraction<=.75))
     && typeof value.bossPhaseTriggered === 'boolean'
     && nonNegativeInteger(value.bossArmorFromTick)
     && nonNegativeInteger(value.bossArmorUntilTick);
@@ -80,7 +82,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && Array.isArray(value.spawnedByGroup) && value.spawnedByGroup.every(nonNegativeInteger)
     && nonNegativeInteger(value.nextTowerSequence)
     && nonNegativeInteger(value.nextEnemySequence)
-    && (value.supportId === 'COORDINATOR' || value.supportId === 'OBSERVER')
+    && (value.supportId === 'COORDINATOR' || value.supportId === 'OBSERVER' || (String(value.scenarioId).startsWith('guard-gd-')&&(value.supportId==='REBAR_LEAD'||value.supportId==='ENGINEER')))
     && nonNegativeInteger(value.supportCooldownRemaining)
     && nonNegativeInteger(value.freezeMovementUntilTick)
     && (value.eStopCooldownUntilTick === undefined || (nonNegativeInteger(value.eStopCooldownUntilTick) && value.eStopCooldownUntilTick <= Number(value.tick) + 560))

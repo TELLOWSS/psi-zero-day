@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
+import {isGuardMap} from '../content/guard-campaign';
+import {useGuardScore} from './useGuardScore';
 import {useDefenseCombatAudio} from './useDefenseCombatAudio';
 import type { DefenseCombatShot,DefenseRunState } from '../domain/defense';
 import { premiumDefenseCueUri } from '../app/defense-premium-audio';
@@ -66,13 +68,16 @@ export function defenseResolveCues(previous: DefenseRunState, current: DefenseRu
   return [...(single ? ['single_resolve' as const] : []), ...(area ? ['area_resolve' as const] : [])];
 }
 
-export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null, shots:readonly DefenseCombatShot[] = []) {
+export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null, shots:readonly DefenseCombatShot[] = [],totalWaves=10) {
   const muted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
-  const armCombat=useDefenseCombatAudio(state,shots,muted,mapId==='ramp-01');
+  const supplied=isGuardMap(mapId);
+  const armScore=useGuardScore(state,mapId,muted,totalWaves);
+  const armCombat=useDefenseCombatAudio(state,shots,muted,mapId==='ramp-01'||supplied,supplied);
   const contextRef = useRef<AudioContext | null>(null);
   const previousRef = useRef<DefenseRunState | null>(null);
   const armedRef = useRef(false);
   const activeVoicesRef = useRef(0);
+  const cueElementsRef=useRef(new Set<HTMLAudioElement>()),cueGenerationRef=useRef(0);
   const premiumMix = useG8aPremiumMix(state, mapId, muted);
   const lastResolveTickRef = useRef<Record<'single_resolve' | 'area_resolve', number>>({
     single_resolve: -9999,
@@ -91,8 +96,9 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     armedRef.current = true;
     premiumMix.arm();
     armCombat();
+    armScore();
     if (!muted) ensureContext();
-  }, [ensureContext, muted, premiumMix.arm,armCombat]);
+  }, [ensureContext, muted, premiumMix.arm,armCombat,armScore]);
 
   const playOscillatorCue = useCallback((cue: DefenseAudioCue) => {
     const context = ensureContext();
@@ -121,15 +127,21 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     if (!armedRef.current || muted || typeof window === 'undefined') return;
     window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
 
+    if(supplied&&['leak','estop','single_resolve','area_resolve'].includes(cue))return;
     const premiumUri = (cue === 'estop' || cue === 'radio') ? null : premiumDefenseCueUri(cue);
     if (premiumUri && typeof Audio !== 'undefined') {
       const element = new Audio(premiumUri);
+      const generation=cueGenerationRef.current;
+      cueElementsRef.current.add(element);
+      const release=()=>cueElementsRef.current.delete(element);
+      element.addEventListener?.('ended',release,{once:true});element.addEventListener?.('error',release,{once:true});
       element.preload = 'auto';
       element.volume = 1;
       const playback = element.play();
       window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'premium-binary', uri: premiumUri } }));
       if (playback && typeof playback.catch === 'function') {
         void playback.catch((error: unknown) => {
+          release();if(generation!==cueGenerationRef.current)return;
           const failure = error instanceof Error ? { errorName: error.name, errorMessage: error.message } : { errorMessage: String(error) };
           window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: 'binary-playback-failed', ...failure } }));
           playOscillatorCue(cue);
@@ -140,7 +152,12 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
 
     window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: premiumUri ? 'audio-api-unavailable' : 'premium-binary-not-approved' } }));
     playOscillatorCue(cue);
-  }, [muted, playOscillatorCue]);
+  }, [muted, playOscillatorCue,supplied]);
+
+  useEffect(()=>{
+    if(!muted&&!state?.paused&&state)return;
+    cueGenerationRef.current++;for(const element of cueElementsRef.current)element.pause();cueElementsRef.current.clear();
+  },[muted,state?.paused,Boolean(state)]);
 
   useEffect(() => {
     const previous = previousRef.current;
@@ -159,14 +176,14 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     if (previous.status !== 'WON' && state.status === 'WON') playCue('win');
     if (previous.status !== 'LOST' && state.status === 'LOST') playCue('loss');
 
-    for (const cue of mapId==='ramp-01'?[]:defenseResolveCues(previous, state)) {
+    for (const cue of (mapId==='ramp-01'||supplied)?[]:defenseResolveCues(previous, state)) {
       if (state.tick - lastResolveTickRef.current[cue] < DEFENSE_RESOLVE_AUDIO_MIN_TICKS) continue;
       lastResolveTickRef.current[cue] = state.tick;
       playCue(cue);
     }
 
     previousRef.current = state;
-  }, [playCue, state,mapId]);
+  }, [playCue, state,mapId,supplied]);
 
   useEffect(() => {
     const onVisibility = () => {
@@ -179,6 +196,7 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
 
   useEffect(() => () => {
     armedRef.current = false;
+    cueGenerationRef.current++;for(const element of cueElementsRef.current)element.pause();cueElementsRef.current.clear();
     const context = contextRef.current;
     contextRef.current = null;
     activeVoicesRef.current = 0;
@@ -189,7 +207,7 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     muted,
     setMuted: (value:boolean) => {
       setAudioMuted(value);
-      if(!value){armedRef.current=true;ensureContext();armCombat(true);}
+      if(!value){armedRef.current=true;ensureContext();armCombat(true);armScore();}
     },
     armAudio,
     playCue,

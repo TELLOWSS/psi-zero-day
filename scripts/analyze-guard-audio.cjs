@@ -1,0 +1,8 @@
+const fs=require('node:fs'),path=require('node:path');const {chromium}=require(process.env.PSI_PLAYWRIGHT_MODULE||'playwright');
+const manifest=JSON.parse(fs.readFileSync('content/defense/guard-audio-v1.json','utf8'));
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true});try{
+ const page=await browser.newPage();await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:4176/');
+ const rows=await page.evaluate(async assets=>{const context=new AudioContext(),rows=[];try{for(const asset of assets){const response=await fetch('/'+asset.uri);if(!response.ok)throw Error(asset.id);const buffer=await context.decodeAudioData(await response.arrayBuffer());const data=buffer.getChannelData(0);let power=0,peak=0,overs=0;for(let i=0;i<data.length;i++){power+=data[i]*data[i];peak=Math.max(peak,Math.abs(data[i]));if(Math.abs(data[i])>=1)overs++;}rows.push({id:asset.id,duration:buffer.duration,rate:buffer.sampleRate,channels:buffer.numberOfChannels,rms:Math.sqrt(power/data.length),peak,decodedSamplesAtOrAboveOne:overs});}}finally{await context.close();}return rows;},manifest.assets);
+ const out=path.resolve(process.env.PSI_QA_OUTPUT||'docs/qa/guard-campaign-20261015');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'supplied-audio-analysis.json'),JSON.stringify(rows,null,2));
+ console.log(JSON.stringify({decoded:rows.length,music:rows.filter(r=>r.id.startsWith('MUSIC_')).length,silent:rows.filter(r=>r.rms<.00001).length}));if(rows.length!==32||rows.some(r=>r.rms<.00001))throw Error('Invalid supplied audio');
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});

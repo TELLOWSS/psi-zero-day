@@ -20,11 +20,12 @@ export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly Def
  return visible;
 }
 
-export function DefenseCombatFX({shots,content}:{shots:readonly DefenseCombatShot[];content:DefenseContent}){
+export function DefenseCombatFX({shots,content,rotated=false}:{shots:readonly DefenseCombatShot[];content:DefenseContent;rotated?:boolean}){
  return <g className="zb-combat-fx" aria-hidden="true">{shots.map(shot=>{
   const pad=content.map.pads.find(p=>p.id===shot.padId);if(!pad||!shot.targets.length)return null;
-  const origin=defenseVisualPadPoint(content.map.id,pad),sx=origin.x,sy=origin.y-30;
+  const origin=defenseVisualPadPoint(content.map.id,pad),mx=shot.towerId==='PULSE'?22:shot.towerId==='BURST'?15:0,my=shot.towerId==='SENSOR'?-38:-30,sx=origin.x+(rotated?my:mx),sy=origin.y+(rotated?-mx:my);
   const first=defenseVisualPositionAtDistance(content.map.id,content.map.path,shot.targets[0]!.distance);
+  const level=content.towers.find(t=>t.id===shot.towerId)!.levels.find(l=>l.id===shot.levelId)!;
   const arc=shot.towerId==='BURST',path=arc?`M${sx} ${sy} Q${(sx+first.x)/2} ${Math.min(sy,first.y)-65} ${first.x} ${first.y}`:`M${sx} ${sy} L${first.x} ${first.y}`;
   return <g key={shot.id} className={`zb-shot is-${shot.towerId.toLowerCase()} is-${shot.levelId.toLowerCase()}`} data-combat-shot={shot.id} data-combat-family={shot.towerId} data-combat-level={shot.levelId}>
    <path d={path} className="zb-shot-halo"/><path d={path} className="zb-shot-core"/>
@@ -32,6 +33,8 @@ export function DefenseCombatFX({shots,content}:{shots:readonly DefenseCombatSho
    <circle r={arc?5:3.5} className="zb-shot-projectile"><animateMotion dur=".10s" path={path} fill="freeze"/></circle>
    {shot.levelId==='L3A'?<path d={path} className="zb-shot-echo" transform="translate(0 5)"/>:null}
    {shot.levelId==='L3B'?<path d={path} className="zb-shot-echo" transform="translate(0 -3)"/>:null}
+   {shot.towerId==='BURST'?<circle cx={first.x} cy={first.y} r={level.splashRadius} className="guard-area-footprint"/>:null}
+   {shot.towerId==='CONTROL'?shot.targets.slice(1).map(hit=>{const at=defenseVisualPositionAtDistance(content.map.id,content.map.path,hit.distance);return <path key={hit.id} d={`M${sx} ${sy}L${at.x} ${at.y}`} className="guard-control-tether"/>;}):null}
    {shot.targets.map(hit=>{
     const at=defenseVisualPositionAtDistance(content.map.id,content.map.path,hit.distance);
     return <g key={hit.id} transform={`translate(${at.x} ${at.y})`} data-combat-impact={hit.id} data-combat-damage={hit.damage} data-combat-resolved={hit.resolved}>

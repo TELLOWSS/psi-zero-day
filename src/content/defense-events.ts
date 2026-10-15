@@ -1,3 +1,4 @@
+import {guardContents} from './guard-campaign';
 import rawEvents from '../../content/defense/events-v1.json';
 import rawCosmetics from '../../content/defense/cosmetics-v1.json';
 import ko from '../../content/localization/defense-ko.json';
@@ -208,6 +209,7 @@ export const defenseEvents = validateDefenseEvents(rawEvents);
 
 const contentByScenario = new Map<string, DefenseContent>([
   [zeroBreachContent.scenario.id, zeroBreachContent],
+  ...guardContents.map(c=>[c.scenario.id,c] as const),
   ...defenseEvents.map(event => [event.id, applyDefenseEvent(zeroBreachContent, event)] as const),
   ...siteDefenseContents.map(content => [content.scenario.id, content] as const),
   [remodelDefense.scenario.id, remodelDefense],

@@ -52,6 +52,7 @@ function writeLease(storage: Storage, id: string, now = Date.now()): boolean {
 export async function acquireDefenseTabGuard(
   onExternalSave: () => void,
   onLockLost: () => void,
+  watchedSaveKey=DEFENSE_SAVE_KEY,
 ): Promise<DefenseTabGuard> {
   const id = ownerId();
   const lockManager = (navigator as Navigator & { readonly locks?: LockManagerLike }).locks;
@@ -74,7 +75,7 @@ export async function acquireDefenseTabGuard(
     const ok = await acquired;
     if (ok) {
       const onStorage = (event: StorageEvent) => {
-        if (event.key === DEFENSE_SAVE_KEY) onExternalSave();
+        if (event.key === watchedSaveKey) onExternalSave();
       };
       window.addEventListener('storage', onStorage);
       return {
@@ -115,7 +116,7 @@ export async function acquireDefenseTabGuard(
   }, LEASE_HEARTBEAT_MS);
 
   const onStorage = (event: StorageEvent) => {
-    if (event.key === DEFENSE_SAVE_KEY) onExternalSave();
+    if (event.key === watchedSaveKey) onExternalSave();
     if (event.key === DEFENSE_TAB_LEASE_KEY) {
       const current = storageLease(storage);
       if (current && current.ownerId !== id) onLockLost();

@@ -38,7 +38,7 @@ describe('game hub navigation', () => {
       expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/new-psi-wordmark-stacked-chalk.svg');
       expect(host.querySelector('.commercial-title-wordmark source')?.getAttribute('srcset')).toBe('/assets/branding/new-psi-wordmark-wide-chalk.svg');
       act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
-      expect(defenseLaunches).toEqual(['training-ramp-v1']);
+      expect(defenseLaunches).toEqual(['guard-campaign']);
       expect(host.querySelector('.mode-preview-dialog')).toBeNull();
       act(() => host.querySelector<HTMLButtonElement>('.is-survivors-entry')!.click());
       expect(launches).toBe(1);

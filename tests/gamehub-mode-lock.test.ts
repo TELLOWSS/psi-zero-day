@@ -9,7 +9,7 @@ describe('commercial hub mode readiness',()=>{
     expect(hub).toContain('시그널 워치 (SURVIVORS)');
     expect(hub).toContain("setModePreview('defense')");
     expect(hub).toContain("setModePreview('story')");
-    expect(hub).toContain('onClick={() => onDefense(zeroBreachContent.scenario.id)}');
+    expect(hub).toContain('onClick={() => onDefense("guard-campaign")}');
     expect(hub).toContain('href="/signal-breaker-dev/index.html?entry=play"');
     expect(hub).toContain('스토리 모드 · 준비중');
     expect(hub).not.toContain('야간 긴급 순찰 (SURVIVORS)');

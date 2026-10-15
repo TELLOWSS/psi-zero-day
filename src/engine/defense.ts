@@ -56,10 +56,19 @@ function enemyVisible(enemy: DefenseEnemyState, definition: DefenseEnemyDefiniti
   return !definition.hidden || enemy.revealUntilTick > tick;
 }
 function effectiveArmor(enemy: DefenseEnemyState, definition: DefenseEnemyDefinition, tick: number): number {
-  if (definition.boss && definition.phase && tick >= enemy.bossArmorFromTick && tick < enemy.bossArmorUntilTick) {
-    return definition.phase.armor;
-  }
-  return definition.armor;
+  const armor=definition.boss&&definition.phase&&tick>=enemy.bossArmorFromTick&&tick<enemy.bossArmorUntilTick?definition.phase.armor:definition.armor;
+  return Math.max(0,armor-((enemy.armorExposedUntilTick??0)>tick?(enemy.armorExposeFraction??0):0));
+}
+
+function supportArmoredTarget(state:DefenseRunState,content:DefenseContent){
+  return state.enemies.filter(e=>e.hp>0&&enemyVisible(e,enemyDefinition(content,e.enemyId),state.tick)&&effectiveArmor(e,enemyDefinition(content,e.enemyId),state.tick)>0)
+    .sort((a,b)=>effectiveArmor(b,enemyDefinition(content,b.enemyId),state.tick)-effectiveArmor(a,enemyDefinition(content,a.enemyId),state.tick)||b.hp-a.hp||a.spawnSequence-b.spawnSequence)[0];
+}
+export function defenseSupportHasTarget(state:DefenseRunState,content:DefenseContent):boolean{
+  const support=content.supports.find(s=>s.id===state.supportId);
+  if(support?.armorExposeTicks)return !!supportArmoredTarget(state,content);
+  if(support?.readyOneTower)return state.towers.some(t=>t.attackCooldown>0);
+  return true;
 }
 function effectiveSlow(enemy: DefenseEnemyState, definition: DefenseEnemyDefinition, tick: number): number {
   let strongest = 0;
@@ -141,16 +150,20 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     if (state.status !== 'RUNNING' || state.paused) throw new Error('Support requires active combat');
     if (state.supportCooldownRemaining > 0) throw new Error('Support is cooling down');
     const support = content.supports.find(item => item.id === state.supportId)!;
+    if(!defenseSupportHasTarget(state,content))throw new Error('Support has no eligible target');
+    const armored=support.armorExposeTicks?supportArmoredTarget(state,content):null;
+    const readyTower=support.readyOneTower?[...state.towers].filter(t=>t.attackCooldown>0).sort((a,b)=>b.attackCooldown-a.attackCooldown||a.id.localeCompare(b.id))[0]:null;
     const untilReveal = state.tick + support.revealAllTicks;
     return {
       ...state,
       supportCooldownRemaining: support.cooldownTicks,
+      towers:readyTower?state.towers.map(t=>t.id===readyTower.id?{...t,attackCooldown:0}:t):state.towers,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + support.freezeMovementTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, untilReveal),
       rangeBonusUntilTick: Math.max(state.rangeBonusUntilTick, state.tick + support.rangeBonusTicks),
       enemies: support.revealAllTicks > 0
         ? state.enemies.map(enemy => ({ ...enemy, revealUntilTick: Math.max(enemy.revealUntilTick, untilReveal) }))
-        : state.enemies,
+        : armored?state.enemies.map(e=>e.id===armored.id?{...e,armorExposedUntilTick:state.tick+support.armorExposeTicks!,armorExposeFraction:support.armorExposeFraction!}:e):state.enemies,
     };
   }
   if (command.type === 'TriggerEStop') {

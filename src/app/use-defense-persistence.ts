@@ -7,7 +7,7 @@ import { applyDefenseCommand, createDefenseRun, defenseResult } from '../engine/
 import type { StoragePort } from '../platform/storage';
 import { browserLocalStoragePort } from '../platform/browser-storage';
 import {
-  applyDefenseOutcome, emptyDefenseSaveDocument, inspectDefenseSave, resumeDefenseRun,
+  DEFENSE_SAVE_KEY,applyDefenseOutcome, emptyDefenseSaveDocument, inspectDefenseSave, resumeDefenseRun,
   startCurrentVersionDocument, withDefenseActiveRun, writeDefenseSave,
 } from './defense-save';
 import { acquireDefenseTabGuard } from './defense-tab-guard';
@@ -46,6 +46,7 @@ export interface DefensePersistenceController {
   retrySave(): Promise<boolean>;
   reloadAfterConflict(): Promise<void>;
   exitToMain(): Promise<boolean>;
+  returnToOperations():Promise<boolean>;
 }
 
 function newRunId(): string {
@@ -62,6 +63,7 @@ export function useDefensePersistence(
   onExit: () => void,
   providedStorage?: StoragePort,
   resolveContent: (run: DefenseRunState) => DefenseContent = () => content,
+  watchedSaveKey=DEFENSE_SAVE_KEY,
 ): DefensePersistenceController {
   const [entry, setEntry] = useState<DefenseEntryState>({ kind: 'loading' });
   const [state, setStateInternal] = useState<DefenseRunState | null>(null);
@@ -232,6 +234,7 @@ export function useDefensePersistence(
           ? applyDefenseCommand(current, content, { type: 'SetPaused', paused: true })
           : current);
       },
+      watchedSaveKey,
     )).then(guard => {
       if (!guard) return;
       if (cancelled || !mountedRef.current) {
@@ -252,7 +255,7 @@ export function useDefensePersistence(
       guardReleaseRef.current?.();
       guardReleaseRef.current = null;
     };
-  }, [content, hydrate, setState]);
+  }, [content, hydrate, setState,watchedSaveKey]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -361,6 +364,22 @@ export function useDefensePersistence(
     await hydrate();
   }, [hydrate]);
 
+  const returnToOperations=useCallback(async():Promise<boolean>=>{
+    if(conflict)return false;
+    const run=stateRef.current;
+    if(run&&!finished(run)){
+      const paused=applyDefenseCommand(run,resolveContent(run),{type:'SetPaused',paused:true});
+      stateRef.current=paused;setStateInternal(paused);
+      if(!await persistRun(paused))return false;
+      setEntry({kind:'resume',run:paused,savedAt:new Date().toISOString()});
+    }else{
+      if(run)await settleFinishedRun(run);
+      if(!await saveDocument(documentRef.current))return false;
+      setEntry({kind:'select'});
+    }
+    stateRef.current=null;setStateInternal(null);setAwardedCosmeticIds([]);return true;
+  },[conflict,persistRun,resolveContent,saveDocument,settleFinishedRun]);
+
   const exitToMain = useCallback(async (): Promise<boolean> => {
     if (exitingRef.current) return false;
     exitingRef.current = true;
@@ -388,6 +407,6 @@ export function useDefensePersistence(
   return {
     entry, state, setState, document, saveStatus, saveError, lastSavedAt, conflict, awardedCosmeticIds,
     startWithSupport, resumeSavedRun, discardSavedRun, dispatch, retryAfterResult, retrySave,
-    reloadAfterConflict, exitToMain,
+    reloadAfterConflict, exitToMain,returnToOperations,
   };
 }

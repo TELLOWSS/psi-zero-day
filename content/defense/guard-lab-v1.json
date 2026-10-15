@@ -1,0 +1,10 @@
+{
+ "initialResource":10000,
+ "staticTicks":120,
+ "maximumTicks":240,
+ "waves":[{"id":1,"groups":[
+  {"enemy":"NORMAL","count":8,"startTick":0,"intervalTicks":12},
+  {"enemy":"ARMORED","count":3,"startTick":30,"intervalTicks":25},
+  {"enemy":"SWARM","count":10,"startTick":80,"intervalTicks":6}
+ ]}]
+}

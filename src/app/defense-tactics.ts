@@ -40,19 +40,38 @@ export function recommendDefenseAction(content: DefenseContent, state: DefenseRu
   const swarm = wave.groups.filter(group => group.enemy === 'SWARM').reduce((sum, group) => sum + group.count, 0) / total;
   const armored = wave.groups.some(group => ['ARMORED', 'BOSS'].includes(group.enemy));
   const fast = wave.groups.some(group => group.enemy === 'SWIFT');
+  const guard=content.map.id.startsWith('guard-gd-');
   const utility = (level: DefenseTowerLevelDefinition, padId: string) => {
     const coverage = defenseRouteCoverage(content, padId, level.range) / 100;
     const damage = level.damage * (armored && level.damageType !== 'PURE' ? .55 : 1);
-    const targets = 1 + Math.min(level.maxTargets - 1, swarm * 5);
-    const attack = damage * targets / (level.intervalTicks * content.tickMs / 1000);
+    const density=guard&&level.splashRadius>0?wave.groups.reduce((sum,g)=>{
+      const enemy=content.enemies.find(e=>e.id===g.enemy)!;
+      const spacing=Math.max(1,enemy.speed*g.intervalTicks*content.tickMs/1000);
+      return sum+Math.min(g.count,1+2*level.splashRadius/spacing)*g.count/total;
+    },0):1;
+    const targets = guard?Math.min(level.maxTargets,density):1 + Math.min(level.maxTargets - 1, swarm * 5);
+    const attack = guard?wave.groups.reduce((sum,g)=>{
+      const enemy=content.enemies.find(e=>e.id===g.enemy)!;
+      const hit=level.damageType==='PURE'?level.damage:Math.max(1,Math.floor(level.damage*(1-enemy.armor)));
+      const hitCount=Math.max(1,Math.ceil(enemy.hp/Math.max(1,hit)));
+      const spacing=Math.max(1,enemy.speed*g.intervalTicks*content.tickMs/1000);
+      const nearby=level.splashRadius>0?Math.min(level.maxTargets,1+Math.floor(2*level.splashRadius/spacing)):1;
+      return sum+enemy.hp/hitCount/(level.intervalTicks*content.tickMs/1000)*nearby*g.count/total;
+    },0):damage * targets / (level.intervalTicks * content.tickMs / 1000);
     const control = level.slowFraction * (fast ? 15 : 8) * Math.min(level.maxTargets, 2);
     const reveal = hidden && level.revealRadius > 0 ? 60 * defenseRouteCoverage(content,padId,level.revealRadius)/100 : 0;
-    return coverage * (attack + control) + reveal;
+    let entryFactor=1;
+    if(guard&&state.towers.length===0){
+      const pad=content.map.pads.find(p=>p.id===padId)!;let distance=0,first=Infinity;
+      for(let i=1;i<content.map.path.length;i++){const a=content.map.path[i-1]!,b=content.map.path[i]!,length=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(length/10);for(let n=0;n<=steps;n++){if(Math.hypot(a[0]+(b[0]-a[0])*n/steps-pad.x,a[1]+(b[1]-a[1])*n/steps-pad.y)<=level.range)first=Math.min(first,distance+length*n/steps);}distance+=length;}
+      entryFactor=Number.isFinite(first)?1/(1+first/500):0;
+    }
+    return (coverage * (attack + control) + reveal)*entryFactor;
   };
   const candidates: (DefenseAdvice & {score: number})[] = [];
   for (const definition of content.towers) {
     if (!content.scenario.availableTowers.includes(definition.id)) continue;
-    if (state.towers.length===0&&definition.id!=='PULSE'&&content.scenario.availableTowers.includes('PULSE')) continue;
+    if (state.towers.length===0&&definition.id!=='PULSE'&&content.scenario.availableTowers.includes('PULSE')&&(!guard||content.scenario.id==='guard-gd-01-v1')) continue;
     const level = definition.levels.find(item => item.id === 'L1');
     if (!level || state.resource < level.cost) continue;
     for (const pad of content.map.pads) {

@@ -140,7 +140,12 @@ export function validateDefenseContent(input: unknown): DefenseContent {
       || !stringValue(value.skillTextId)) { issues.push(`${path}: invalid support`); continue; }
     const keys = ['cooldownTicks','initialCooldownTicks','freezeMovementTicks','revealAllTicks','rangeBonus','rangeBonusTicks'] as const;
     if (keys.some(key => !nonNegative(value[key]))) { issues.push(`${path}: invalid support numeric value`); continue; }
+    if(value.armorExposeTicks!==undefined&&(!integer(value.armorExposeTicks)||value.armorExposeTicks<0))issues.push(path+': invalid expose duration');
+    if(value.armorExposeFraction!==undefined&&(!finite(value.armorExposeFraction)||value.armorExposeFraction<0||value.armorExposeFraction>.75))issues.push(path+': invalid armor reduction');
+    if(value.readyOneTower!==undefined&&typeof value.readyOneTower!=='boolean')issues.push(path+': invalid ready tower flag');
     supports.push({
+      ...(value.armorExposeTicks!==undefined?{armorExposeTicks:value.armorExposeTicks as number,armorExposeFraction:value.armorExposeFraction as number}:{}),
+      ...(value.readyOneTower===true?{readyOneTower:true}:{}),
       id: value.id, characterBinding: value.characterBinding as string | null,
       cooldownTicks: value.cooldownTicks as number, initialCooldownTicks: value.initialCooldownTicks as number,
       freezeMovementTicks: value.freezeMovementTicks as number, revealAllTicks: value.revealAllTicks as number,
@@ -166,7 +171,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   }
 
   uniqueIds(towers, 'towers', issues); uniqueIds(enemies, 'enemies', issues); uniqueIds(supports, 'supports', issues);
-  if (waves.length !== 10 || waves.some((wave, index) => wave.id !== index + 1)) issues.push('waves: ids must be exactly 1..10');
+  if (((record(input.scenario)&&String(input.scenario.id).startsWith('guard-gd-')) ? waves.length<6||waves.length>12 : waves.length!==10) || waves.some((wave, index) => wave.id !== index + 1)) issues.push('waves: ids must be exactly 1..10');
 
   if (!record(input.map) || !stringValue(input.map.id) || !stringValue(input.map.nameTextId)
     || !positive(input.map.width) || !positive(input.map.height) || !Array.isArray(input.map.path) || !Array.isArray(input.map.pads)) {
@@ -197,7 +202,8 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   const towerIds = new Set(towers.map(t => t.id)); const enemyIds = new Set(enemies.map(e => e.id)); const supportIds = new Set(supports.map(s => s.id));
   for (const wave of waves) for (const group of wave.groups) if (!enemyIds.has(group.enemy)) issues.push(`wave ${wave.id}: missing enemy ${group.enemy}`);
   const bossSpawns = waves.flatMap(w => w.groups).reduce((sum, group) => sum + (enemies.find(e => e.id === group.enemy)?.boss ? group.count : 0), 0);
-  if (bossSpawns !== 1) issues.push(`waves: expected exactly one boss spawn, got ${bossSpawns}`);
+  const guardCampaign=record(input.scenario)&&String(input.scenario.id).startsWith('guard-gd-');
+  if (guardCampaign?bossSpawns>1:bossSpawns!==1) issues.push(`waves: expected exactly one boss spawn, got ${bossSpawns}`);
 
   const targetModes = Array.isArray(input.targetModes) ? input.targetModes.filter((v): v is DefenseTargetMode => v === 'FIRST' || v === 'STRONG') : [];
   const speeds = Array.isArray(input.speeds) ? input.speeds.filter((v): v is number => v === 1 || v === 2) : [];

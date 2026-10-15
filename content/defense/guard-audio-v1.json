@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "status": "USER_SUPPLIED_RUNTIME_INTEGRATED_RIGHTS_NOT_VERIFIED",
+  "sourceZip": "C:/Users/user/Downloads/PSI_DEFENSE_AUDIO_32_GENERATED_20261015.zip",
+  "sourceZipSha256": "ba2ba6383bd53f069c9848005ef62977cf78545d78fe4b7c04694c820b7ceef9",
+  "musicPolicy": "ONE_FULL_MIX_AT_A_TIME_CROSSFADED_NOT_STEMS",
+  "assets": [
+    {
+      "id": "BURST_FIRE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/BURST_FIRE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "f25e36106365d49fbe7617aded8400c35520a29124f71b0371d6f2348bfc9b24",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "BURST_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/BURST_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "66afb9b1443f1c34ed2e74aced9e109f5ae2a3295fdc6b975dd0e6c35410e7c2",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "BURST_RESOLVE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/BURST_RESOLVE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "6155fe3c241d00a734796b3de35c04b924993e94e67db580bf88c7b9151154ae",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "BURST_TRAVEL_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/BURST_TRAVEL_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "d1832c04d2dc0f1952f36d802d457a015f51cfb374e570a2975891437a3cf408",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CONTROL_FIRE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CONTROL_FIRE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "46229e94b4bf90ab39accffc2f06a81a746e77f41499c65aae5d97a014d9c70b",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CONTROL_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CONTROL_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "9e04bbd17b050777f3e9fad61e83f11a7a9ad652cd513301fb755684ef204aad",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CONTROL_RESOLVE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CONTROL_RESOLVE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "9628de9b90e96a214403635bb36d44ce3c2f549dba252f6310fc914c86b27e92",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CONTROL_TRAVEL_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CONTROL_TRAVEL_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "3232112221b59302216f15cb62529cee52e175302b82fa36438c777ee20ff79e",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CRITICAL_BOSS_ENTRY_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CRITICAL_BOSS_ENTRY_AUDIO.mp3",
+      "bytes": 97009,
+      "sha256": "8bb7f519042288a4c55147d7d0ab893f2a83e691a5666d3516566ef2c0dc6432",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CRITICAL_BOSS_PHASE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CRITICAL_BOSS_PHASE_AUDIO.mp3",
+      "bytes": 65244,
+      "sha256": "1ff25a7d90ff8eab0cff3313eaf5270c871d730ed081a48860326223819f7ff1",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CRITICAL_BOSS_RESOLVE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CRITICAL_BOSS_RESOLVE_AUDIO.mp3",
+      "bytes": 129192,
+      "sha256": "2c6f7f64b9e4332f40ebfec916902a9c793ecef25853d2ec48d20976551b36bf",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CRITICAL_ESTOP_CONFIRMED_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CRITICAL_ESTOP_CONFIRMED_AUDIO.mp3",
+      "bytes": 81127,
+      "sha256": "d59f0324f09aa815a633ac38054a006f06ccaa02705de36eb48309360b243d60",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "CRITICAL_LEAK_ALERT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/CRITICAL_LEAK_ALERT_AUDIO.mp3",
+      "bytes": 65244,
+      "sha256": "eb6354d48944daaf4de0da2bff6cbd3676b206c9cf3ab1cc97cf0df30ec00ce8",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_ARMORED_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_ARMORED_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "02eec4a9787ed776d7f16a7777f7e483c3396403d494b5e7db76d39a9b8f0703",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_BOSS_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_BOSS_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "f25e9155eaa6339296cc082c980ed819abe25906726f5a102e00a9ef3e4c5014",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_NORMAL_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_NORMAL_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "2b77eeb0bbdefd965b84d31f2819d328a8f0ebc859b7379b0a21a1a879a331f8",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_SWARM_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_SWARM_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "21032d06fa0fca3f514e50f527f79298e4f6a79707d5cfa89670e6eb8fdaedfd",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_SWIFT_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_SWIFT_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "e6542e246a530c8568219901eb6796df7b71b8c2723d4e27ed0437b302e96a35",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "ENEMY_VEILED_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/ENEMY_VEILED_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "0558c1a4e0840d2971aa8bb7edc2792c882e78b3a2cab1bde91ea817b2d8aae9",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "MUSIC_RAMP01_BED_FULL_MIX_AUDITION",
+      "uri": "assets/defense/audio/guard-v1/MUSIC_RAMP01_BED_FULL_MIX_AUDITION.mp3",
+      "bytes": 1455604,
+      "sha256": "7893c775cbafd5c7966b7321e666406a039763118c45f519850e4082b3e3d966",
+      "role": "FULL_MIX_MUSIC"
+    },
+    {
+      "id": "MUSIC_RAMP01_BOSS_FULL_MIX_AUDITION",
+      "uri": "assets/defense/audio/guard-v1/MUSIC_RAMP01_BOSS_FULL_MIX_AUDITION.mp3",
+      "bytes": 1454350,
+      "sha256": "0d9ac08923b378713da6ca92904000f9b5875388e9997e43063c0a41e8236ffc",
+      "role": "FULL_MIX_MUSIC"
+    },
+    {
+      "id": "MUSIC_RAMP01_CODA_FULL_MIX_AUDITION",
+      "uri": "assets/defense/audio/guard-v1/MUSIC_RAMP01_CODA_FULL_MIX_AUDITION.mp3",
+      "bytes": 1428019,
+      "sha256": "1676186526303ea9c03c29b22838cb68cb54ae4ef7908613f31f99f2bfe078c9",
+      "role": "FULL_MIX_MUSIC"
+    },
+    {
+      "id": "MUSIC_RAMP01_PRESSURE_FULL_MIX_AUDITION",
+      "uri": "assets/defense/audio/guard-v1/MUSIC_RAMP01_PRESSURE_FULL_MIX_AUDITION.mp3",
+      "bytes": 1484443,
+      "sha256": "f9398e7c9a323bd7852a763b15b76cbab26e22f74dfe414a505e72f752b12c12",
+      "role": "FULL_MIX_MUSIC"
+    },
+    {
+      "id": "MUSIC_RAMP01_RHYTHM_FULL_MIX_AUDITION",
+      "uri": "assets/defense/audio/guard-v1/MUSIC_RAMP01_RHYTHM_FULL_MIX_AUDITION.mp3",
+      "bytes": 1488832,
+      "sha256": "5ad420256e75ae324164cb1523e7d5c44ef968021af9032c73e3cab1dcfa28d6",
+      "role": "FULL_MIX_MUSIC"
+    },
+    {
+      "id": "PULSE_FIRE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/PULSE_FIRE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "1f33a0490ecc3b6f7b82b7bc8b2819baccfb62bbd3024bd889557a274c2faee4",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "PULSE_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/PULSE_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "956bcc7e41f55a6a94cb87f62accf3a541c9ee5266675836ebf6d0f4ccb75828",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "PULSE_RESOLVE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/PULSE_RESOLVE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "e71e664b7e4b7c27b0bbeb416bf1b700eb30b3937069e33b90292aa7606fabec",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "PULSE_TRAVEL_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/PULSE_TRAVEL_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "1939b2add0ea5e17a00c343378fe0f7ee128c89b7e556d6a75cef6fdfe35e61a",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "SENSOR_FIRE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/SENSOR_FIRE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "1fa79597286bcfa51c5f9fb1ab10cf6dd811f71dbb145be4aafcaed966614dde",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "SENSOR_IMPACT_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/SENSOR_IMPACT_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "a82737f501a28d0624198385fd62a6a0643a74f870e7fece23c6dfd95c6e14b3",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "SENSOR_RESOLVE_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/SENSOR_RESOLVE_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "e06a55cb8679a22a9c2b1cec9530072afb23692ce72b886a7261c4e15533a951",
+      "role": "ONE_SHOT_SFX"
+    },
+    {
+      "id": "SENSOR_TRAVEL_AUDIO",
+      "uri": "assets/defense/audio/guard-v1/SENSOR_TRAVEL_AUDIO.mp3",
+      "bytes": 48944,
+      "sha256": "4c5a67b617c773297fd323ee1763e0a0b58f59f0b543653c31053e1867e305d6",
+      "role": "ONE_SHOT_SFX"
+    }
+  ]
+}

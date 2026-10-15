@@ -1,4 +1,6 @@
 export interface DefenseMapFrame {
+  readonly rotateClockwise?:boolean;
+  readonly worldHeight?:number;
   readonly x: number;
   readonly y: number;
   readonly width: number;
@@ -20,6 +22,7 @@ export function defenseMapFrame(
   mapWidth: number,
   mapHeight: number,
 ): DefenseMapFrame {
+  if(mapId.startsWith('guard-gd-')&&portrait)return {x:0,y:0,width:mapHeight,height:mapWidth,mode:'PORTRAIT_IMMERSION',rotateClockwise:true,worldHeight:mapHeight};
   if (mapId === 'map-apt-bottom-up-excavation-01') {
     return portrait ? G8A_PORTRAIT : G8A_LANDSCAPE;
   }
@@ -37,6 +40,7 @@ export function defenseMapPointPercent(
   x: number,
   y: number,
 ): { readonly left: number; readonly top: number; readonly visible: boolean } {
+  if(frame.rotateClockwise){const before=x;x=(frame.worldHeight??600)-y;y=before;}
   const left = (x - frame.x) / frame.width * 100;
   const top = (y - frame.y) / frame.height * 100;
   return {

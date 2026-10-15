@@ -248,7 +248,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   </Suspense>;
 
   if (inDefense) return <Suspense fallback={<GameplayChunkFallback />}>
-    <DefenseGame session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} />
+    <DefenseGame key={defenseScenarioId??"legacy"} session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} onPractice={()=>openDefense(zeroBreachContent.scenario.id)} />
   </Suspense>;
 
   if (loading) return <CinematicLoadingScreen
@@ -420,11 +420,11 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / BREAKER</em><strong className="commercial-title-mode-title">{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>각도를 바꿔, 흐름을 끊어라. · 수동 반사 아케이드</small></span>
           <b>›</b>
         </a>
-        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art" data-title-primary-cta="defense" type="button" onClick={() => onDefense(zeroBreachContent.scenario.id)}>
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art" data-title-primary-cta="defense" type="button" onClick={() => onDefense("guard-campaign")}>
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{defenseText('defense.tactics.hub_title')}</strong><small>{defenseText('defense.tactics.hub_body')}</small></span>
+          <span className="commercial-title-action-copy"><strong>{defenseText('guard.title')}</strong><small>{defenseText('guard.chapter_hint')}</small></span>
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
@@ -544,12 +544,12 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         </div>
         <div className="mode-preview-copy">
           <span>{modePreview==='defense'?'TACTICAL DEFENSE':'CINEMATIC STORY'}</span>
-          <h2 id="mode-preview-title">{modePreview==='defense'?'디펜스 · 현장 재구성':'스토리 모드'} <b>{modePreview==='defense'?'훈련':'준비중'}</b></h2>
+          <h2 id="mode-preview-title">{modePreview==='defense'?defenseText('guard.title'):'스토리 모드'} <b>{modePreview==='defense'?defenseText('guard.live'):'준비중'}</b></h2>
           <p>{modePreview==='defense'
             ? defenseText('defense.tactics.ready_body')
             : '현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.'}</p>
           <small>{defenseText('defense.tactics.playable')}</small>
-          {modePreview==='defense'&&onDefense?<button type="button" className="hub-primary" onClick={()=>onDefense(zeroBreachContent.scenario.id)}>{defenseText('defense.tactics.hub_title')}</button>:null}
+          {modePreview==='defense'&&onDefense?<button type="button" className="hub-primary" onClick={()=>onDefense("guard-campaign")}>{defenseText('defense.tactics.hub_title')}</button>:null}
           <Suspense fallback={null}><OperationHandoffDossier mode={modePreview}/></Suspense>
         </div>
       </section>

@@ -1,3 +1,5 @@
+import {GuardTowerLab} from './GuardTowerLab';
+import {isGuardMap} from '../content/guard-campaign';
 import type {DefenseContent, DefenseTowerState, DefenseCommand} from '../domain/defense';
 import {defenseText as t} from '../app/defense-text';
 import {defenseG8aTowerVisual, defenseTowerArtUri} from '../app/defense-visual-assets';
@@ -24,7 +26,7 @@ export function DefenseTechTree({content,tower,resource,advice,onCommand}: {
           {art?<img src={art} alt=""/>:null}
           <span className="zb-tech-label"><small>{level.id} · {t(active?'defense.tactics.current':passed?'defense.tactics.completed':next?'defense.tactics.available':'defense.tactics.unselected')}</small>
             <strong>{level.id.startsWith('L3')?t(`defense.tower.${tower.towerId}.${level.id}.name`):level.id==='L2'?`${t('defense.ui.upgrade')} L2 · ${t('defense.tactics.L2')}`:t('defense.tactics.L1')}</strong></span>
-          <span className="zb-tech-metrics">{t(level.damageType==='PURE'?'defense.tactics.pure':'defense.ui.damage')} {level.damage} · {t('defense.ui.interval')} {(level.intervalTicks*content.tickMs/1000).toFixed(2)}s<br/>
+          <span className="zb-tech-metrics">{isGuardMap(content.map.id)&&level.id.startsWith("L3")?<><em>{t(`guard.${tower.towerId}.${level.id}`)}</em><br/></>:null}{t(level.damageType==='PURE'?'defense.tactics.pure':'defense.ui.damage')} {level.damage} · {t('defense.ui.interval')} {(level.intervalTicks*content.tickMs/1000).toFixed(2)}s<br/>
             {t('defense.ui.range')} {level.range} · {t('defense.tactics.targets')} {level.maxTargets}
             {level.splashRadius>0?<><br/>{t('defense.tactics.radius')} {level.splashRadius}</>:null}
             {level.slowFraction>0?<><br/>{t('defense.tactics.slow')} {Math.round(level.slowFraction*100)}% · {(level.slowTicks*content.tickMs/1000).toFixed(1)}s</>:null}
@@ -34,6 +36,7 @@ export function DefenseTechTree({content,tower,resource,advice,onCommand}: {
         </button>;
       })}
     </div>
+    {isGuardMap(content.map.id)?<GuardTowerLab key={tower.id} content={content} tower={tower}/>:null}
     <p>{t('defense.tactics.cost_hint')} <b>R {tower.invested}</b> · {t('defense.tactics.resource')} <b>R {resource}</b></p>
   </section>;
 }

@@ -41,6 +41,6 @@ describe('DEF-HD01 master-world layout contract', () => {
     expect(source).toContain('className="zb-path-shoulder"');
     expect(source).toContain('className="zb-path-centerline"');
     expect(source).toContain('className="zb-pad-hardstand"');
-    expect(source).toContain('r="58"');
+    expect(source).toContain("r={isGuardMap(content.map.id)?level.revealRadius:58}");
   });
 });

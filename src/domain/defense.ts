@@ -72,6 +72,9 @@ export interface DefenseEnemyDefinition {
   readonly phase?: DefenseBossPhaseDefinition;
 }
 export interface DefenseSupportDefinition {
+  readonly armorExposeTicks?: number;
+  readonly armorExposeFraction?: number;
+  readonly readyOneTower?: boolean;
   readonly id: DefenseSupportId;
   readonly characterBinding: string | null;
   readonly cooldownTicks: number;
@@ -130,6 +133,8 @@ export interface DefenseSlowEffect {
   readonly endTick: number;
 }
 export interface DefenseEnemyState {
+  readonly armorExposedUntilTick?: number;
+  readonly armorExposeFraction?: number;
   readonly id: string;
   readonly enemyId: DefenseEnemyId;
   readonly hp: number;
