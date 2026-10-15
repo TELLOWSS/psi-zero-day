@@ -40,7 +40,7 @@ export function useDefenseTutorial(
   const releaseGuidePause = () => {
     if (!pausedByGuide.current) return;
     pausedByGuide.current = false;
-    setPaused(false);
+    // Closing a planning guide never starts the next wave behind the player's back.
   };
 
   useEffect(() => {

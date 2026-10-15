@@ -149,14 +149,15 @@ describe('ZERO BREACH Step 6 event entry UI', () => {
     await act(async () => root.unmount());
   });
 
-  it('allows the explicit LIVE SITE representative request without bypassing the normal selector lock', async () => {
+  it('rejects a direct event request when its training and story prerequisites are missing', async () => {
     const storage = new MemoryStorage();
     const state = episodeState(false);
     const { host, root } = await mount(state, storage, 'event-ramp-reconstruction-v1');
 
     const prep = host.querySelector('[data-defense-screen="support-select"]');
-    expect(prep?.getAttribute('data-scenario')).toBe('event-ramp-reconstruction-v1');
-    expect(host.querySelector('[data-defense-screen="scenario-select"]')).toBeNull();
+    expect(prep).toBeNull();
+    expect(host.querySelector('[data-defense-screen="scenario-select"]')).not.toBeNull();
+    expect((host.querySelector('[data-scenario="event-ramp-reconstruction-v1"]') as HTMLButtonElement).disabled).toBe(true);
 
     await act(async () => root.unmount());
 

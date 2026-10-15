@@ -75,11 +75,12 @@ describe('main title / loading / character production alignment', () => {
     expect(layout.composition.cast_mode).toBe('full_body_live_assets');
   });
 
-  it('keeps the LIVE SITE preview gated while defense is unfinished', () => {
+  it('opens only approved training and leaves the prerequisite-based live event behind its selector', () => {
     expect(gameHubSource).toContain('data-title-live-entry="DEF-CORE-01"');
     expect(gameHubSource).toContain("onClick={() => setModePreview('defense')}");
     expect(gameHubSource).not.toContain('onClick={() => onDefense(defenseEvents[0]?.id ?? null)}');
-    expect(gameHubSource).toContain('디펜스 모드 · 준비중');
+    expect(gameHubSource).toContain('onClick={() => onDefense(zeroBreachContent.scenario.id)}');
+    expect(gameHubSource).toContain('스토리 모드 · 준비중');
     expect(gameHubCss).toContain('.commercial-title-field-status.is-live-entry');
     expect(gameHubCss).toContain('.commercial-title-field-status-cta');
   });

@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-15",
+  "scope": "Public entry and mode previews; no hidden-route unlock, save injection, combat completion or native-device performance claim.",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "previews": [
+        {
+          "mode": "디펜스",
+          "text": "×\nTACTICAL DEFENSE\n디펜스 모드 준비중\n\n현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.",
+          "images": [
+            {
+              "src": "/mode-previews/defense-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        },
+        {
+          "mode": "스토리",
+          "text": "×\nCINEMATIC STORY\n스토리 모드 준비중\n\n현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.\n시그널 워치 · 순찰 인계함",
+          "images": [
+            {
+              "src": "/mode-previews/story-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        }
+      ],
+      "watchEntry": 1,
+      "breakerHref": "/signal-breaker-dev/index.html?entry=play",
+      "overflow": false,
+      "breaker": {
+        "title": "NEW-PSI : ZERO DAY | 오늘도 무사히 · 시그널 브레이커",
+        "lobbyVisible": true,
+        "overflow": false
+      }
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "errors": [],
+      "previews": [
+        {
+          "mode": "디펜스",
+          "text": "×\nTACTICAL DEFENSE\n디펜스 모드 준비중\n\n현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.",
+          "images": [
+            {
+              "src": "/mode-previews/defense-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        },
+        {
+          "mode": "스토리",
+          "text": "×\nCINEMATIC STORY\n스토리 모드 준비중\n\n현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.\n시그널 워치 · 순찰 인계함",
+          "images": [
+            {
+              "src": "/mode-previews/story-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        }
+      ],
+      "watchEntry": 1,
+      "breakerHref": "/signal-breaker-dev/index.html?entry=play",
+      "overflow": false,
+      "breaker": {
+        "title": "NEW-PSI : ZERO DAY | 오늘도 무사히 · 시그널 브레이커",
+        "lobbyVisible": true,
+        "overflow": false
+      }
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "previews": [
+        {
+          "mode": "디펜스",
+          "text": "×\nTACTICAL DEFENSE\n디펜스 모드 준비중\n\n현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.",
+          "images": [
+            {
+              "src": "/mode-previews/defense-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        },
+        {
+          "mode": "스토리",
+          "text": "×\nCINEMATIC STORY\n스토리 모드 준비중\n\n현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.\n\n곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.\n시그널 워치 · 순찰 인계함",
+          "images": [
+            {
+              "src": "/mode-previews/story-coming-soon-v2.webp",
+              "loaded": true
+            }
+          ]
+        }
+      ],
+      "watchEntry": 1,
+      "breakerHref": "/signal-breaker-dev/index.html?entry=play",
+      "overflow": false,
+      "breaker": {
+        "title": "NEW-PSI : ZERO DAY | 오늘도 무사히 · 시그널 브레이커",
+        "lobbyVisible": true,
+        "overflow": false
+      }
+    }
+  ]
+}

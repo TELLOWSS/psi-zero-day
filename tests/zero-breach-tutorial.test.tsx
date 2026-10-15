@@ -92,6 +92,7 @@ describe('ZERO BREACH step 4 first-run tutorial', () => {
     expect(host.querySelector('[data-tutorial-step="UPGRADE"]')).not.toBeNull();
     expect(buttonContaining(host, '재개')).toBeInstanceOf(HTMLButtonElement);
 
+    await click(host.querySelector('button[aria-label^="P1 ·"]')!);
     await click(buttonContaining(host, '강화 L2'));
     expect(host.querySelector('[data-tutorial-step="PREVIEW"]')).not.toBeNull();
     expect(host.textContent).toContain('다음 위험을 먼저 읽으세요');
@@ -99,6 +100,7 @@ describe('ZERO BREACH step 4 first-run tutorial', () => {
     await click(buttonContaining(host, '안내 완료'));
     expect(host.querySelector('.zb-tutorial')).toBeNull();
     expect(window.localStorage.getItem(DEFENSE_TUTORIAL_PREF_KEY)).toBe('seen');
+    expect(buttonContaining(host,'재개')).toBeInstanceOf(HTMLButtonElement);
 
     await click(buttonContaining(host, '설정'));
     await click(buttonContaining(host, '첫 게임 안내 다시 보기'));

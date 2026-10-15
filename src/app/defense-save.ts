@@ -83,6 +83,8 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && (value.supportId === 'COORDINATOR' || value.supportId === 'OBSERVER')
     && nonNegativeInteger(value.supportCooldownRemaining)
     && nonNegativeInteger(value.freezeMovementUntilTick)
+    && (value.eStopCooldownUntilTick === undefined || (nonNegativeInteger(value.eStopCooldownUntilTick) && value.eStopCooldownUntilTick <= Number(value.tick) + 560))
+    && (value.eStopActiveUntilTick === undefined || (nonNegativeInteger(value.eStopActiveUntilTick) && value.eStopActiveUntilTick <= Number(value.tick) + 70))
     && nonNegativeInteger(value.revealAllUntilTick)
     && nonNegativeInteger(value.rangeBonusUntilTick)
     && nonNegativeInteger(value.completedWaves)

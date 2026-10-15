@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import { act } from 'react';
+import { act, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { EpisodeSession } from '../src/app/episode-session';
@@ -22,13 +22,14 @@ function buttonContaining(host: HTMLElement, label: string): HTMLButtonElement {
   return button;
 }
 
-async function mount() {
+async function mount(strict=false) {
   const host = document.createElement('div');
   document.body.append(host);
   const root = createRoot(host);
   const onExit = vi.fn();
   await act(async () => {
-    root.render(<DefenseGame session={sessionStub()} onExit={onExit} />);
+    const game=<DefenseGame session={sessionStub()} onExit={onExit} />;
+    root.render(strict?<StrictMode>{game}</StrictMode>:game);
     for (let index = 0; index < 6; index += 1) await Promise.resolve();
   });
   return { host, root, onExit };
@@ -65,6 +66,12 @@ afterEach(() => {
 });
 
 describe('ZERO BREACH step 2 combat UI', () => {
+  it('acquires one tab lease under StrictMode instead of blocking its own first entry',async()=>{
+    const {host,root}=await mount(true);
+    expect(host.querySelectorAll('.zb-support-card')).toHaveLength(2);
+    expect(host.textContent).not.toContain('다른 탭에서');
+    await act(async()=>root.unmount());
+  });
   it('starts at the two-choice support screen and resolves real character adapters', async () => {
     const { host, root, onExit } = await mount();
 
@@ -196,7 +203,7 @@ describe('ZERO BREACH step 2 combat UI', () => {
     await act(async () => root.unmount());
   });
 
-  it('pauses on portrait orientation and shows an explicit rotate/exit guard', async () => {
+  it('lets portrait users play directly without a blocking rotate dialog', async () => {
     vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
       matches: query.includes('portrait'),
       media: query,
@@ -211,9 +218,10 @@ describe('ZERO BREACH step 2 combat UI', () => {
     const { host, root } = await mount();
     await click(host.querySelector('[data-support="COORDINATOR"]')!);
 
-    expect(host.querySelector('.zb-rotate')).not.toBeNull();
-    expect(host.textContent).toContain('가로 화면으로 돌려주세요');
-    expect(buttonContaining(host, '재개')).toBeInstanceOf(HTMLButtonElement);
+    expect(host.querySelector('.zb-rotate')).toBeNull();
+    expect(host.querySelector('[data-orientation="portrait"]')).not.toBeNull();
+    await click(buttonContaining(host,'웨이브 시작'));
+    expect(host.querySelector('[data-status="RUNNING"]')).not.toBeNull();
 
     await act(async () => root.unmount());
   });

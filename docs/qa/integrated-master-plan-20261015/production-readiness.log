@@ -1,0 +1,16 @@
+PSI : ZERO DAY / Episode 01 Phase D Production Readiness
+--------------------------------------------------------
+Immersive final backgrounds     READY    8/8 exact binaries
+Character performance wave      READY    5/5 exact binaries
+Production-v1 audio             READY    12/12 exact binaries
+Title-cast identity refresh     READY    8/8 new verified binaries
+Episode 01 runtime elements     READY    1/1 accepted final assets
+
+Background manifest: exact_archive_verified_github_ingested
+Performance manifest: generated_wave_01_ingested / verified_github_binary_ingest
+Audio manifest: production_v1_voice_lock
+Runtime scene-element scope: 1/118 catalog definitions are placed by Episode 01 events.
+Field Guide/future-campaign-only scene elements do not block the Episode 01 cinematic lock.
+
+Phase D production lock: BINARY-READY
+Next command: npm run phase-d:check

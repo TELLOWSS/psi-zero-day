@@ -419,11 +419,11 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / BREAKER</em><strong className="commercial-title-mode-title">{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>각도를 바꿔, 흐름을 끊어라. · 수동 반사 아케이드</small></span>
           <b>›</b>
         </a>
-        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art is-coming-soon" data-title-primary-cta="defense" type="button" onClick={() => setModePreview('defense')}>
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art" data-title-primary-cta="defense" type="button" onClick={() => onDefense(zeroBreachContent.scenario.id)}>
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
-          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
-          <span className="commercial-title-action-copy"><strong>디펜스 모드 · 준비중</strong><small>전술 방어선과 현장 개입 시스템을 최종 고도화하고 있습니다 · 탭하여 보기</small></span>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><strong>{defenseText('defense.tactics.hub_title')}</strong><small>{defenseText('defense.tactics.hub_body')}</small></span>
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
@@ -455,7 +455,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       data-title-role="live-briefing"
       data-title-live-entry="DEF-CORE-01"
       type="button"
-      aria-label="디펜스 모드 준비중 프리뷰 보기"
+      aria-label={defenseText('defense.tactics.preview')}
       onClick={() => setModePreview('defense')}
     >
       <div className="commercial-title-field-status-head">
@@ -468,7 +468,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         <span><i>02</i><b>CONTROL</b><small>유도 · 통로 분리</small></span>
         <span><i>03</i><b>PSI</b><small>약한 신호 읽기</small></span>
       </div>
-      <span className="commercial-title-field-status-cta">디펜스 모드 준비중 · 프리뷰 보기 <b aria-hidden="true">›</b></span>
+      <span className="commercial-title-field-status-cta">{defenseText('defense.tactics.preview')} <b aria-hidden="true">›</b></span>
       <p>현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.</p>
     </button> : null}
 
@@ -539,15 +539,16 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <section className={`mode-preview-dialog is-${modePreview}`} role="dialog" aria-modal="true" aria-labelledby="mode-preview-title" onMouseDown={event => event.stopPropagation()}>
         <button type="button" className="mode-preview-close" aria-label="프리뷰 닫기" onClick={() => setModePreview(null)}>×</button>
         <div className="mode-preview-visual">
-          <img src={MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 모드 준비중':'스토리 모드 준비중'} />
+          <img src={MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 현장 재구성':'스토리 모드 준비중'} />
         </div>
         <div className="mode-preview-copy">
           <span>{modePreview==='defense'?'TACTICAL DEFENSE':'CINEMATIC STORY'}</span>
-          <h2 id="mode-preview-title">{modePreview==='defense'?'디펜스 모드':'스토리 모드'} <b>준비중</b></h2>
+          <h2 id="mode-preview-title">{modePreview==='defense'?'디펜스 · 현장 재구성':'스토리 모드'} <b>{modePreview==='defense'?'훈련':'준비중'}</b></h2>
           <p>{modePreview==='defense'
-            ? '현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.'
+            ? defenseText('defense.tactics.ready_body')
             : '현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.'}</p>
-          <small>곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.</small>
+          <small>{defenseText('defense.tactics.playable')}</small>
+          {modePreview==='defense'&&onDefense?<button type="button" className="hub-primary" onClick={()=>onDefense(zeroBreachContent.scenario.id)}>{defenseText('defense.tactics.hub_title')}</button>:null}
           <Suspense fallback={null}><OperationHandoffDossier mode={modePreview}/></Suspense>
         </div>
       </section>

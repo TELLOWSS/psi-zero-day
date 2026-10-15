@@ -38,6 +38,9 @@ import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
 import { G8AActivityOverlay } from './G8AActivityOverlay';
 import { FieldHazardsOverlay } from './FieldHazardsOverlay';
 import {OperationHandoffDossier} from './OperationHandoffDossier';
+import {defensePlanningWave, recommendDefenseAction} from '../app/defense-tactics';
+import {DefenseTechTree} from './DefenseTechTree';
+import './defense-tactics.css';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -74,13 +77,6 @@ function recommendedTowerForLeaks(leaks: DefenseRunState['leakedByEnemy']): Defe
   if (enemy === 'SWARM') return 'BURST';
   if (enemy === 'SWIFT') return 'CONTROL';
   return 'PULSE';
-}
-
-function wavePreview(content: DefenseContent, state: DefenseRunState) {
-  const waveId = state.status === 'RUNNING'
-    ? Math.min(content.waves.length, state.waveId + 1)
-    : state.waveId;
-  return content.waves.find(wave => wave.id === waveId) ?? content.waves.at(-1)!;
 }
 
 function TowerGlyph({ content, tower }: { content: DefenseContent; tower: DefenseTowerState }) {
@@ -354,12 +350,11 @@ export function DefenseGame({
   const episodeState = session.getSnapshot?.().state ?? null;
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
-  const explicitLiveSiteRequest = requestedScenarioId === e1.id;
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
     || selectedScenarioId === remodelDefense.scenario.id
     || selectedScenarioId === dataCenterDefense.scenario.id
     || Boolean(selectedScenarioId && siteDefenseContentForScenario(selectedScenarioId))
-    || (selectedScenarioId === e1.id && (e1Availability.unlocked || explicitLiveSiteRequest));
+    || (selectedScenarioId === e1.id && e1Availability.unlocked);
   const content = state
     ? resolveDefenseContentForRun(state)
     : selectedScenarioAllowed && selectedScenarioId
@@ -379,7 +374,6 @@ export function DefenseGame({
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
-  const [forcePortraitPlay, setForcePortraitPlay] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
   const visualPath = defenseVisualPath(content.map.id, content.map.path);
@@ -407,7 +401,8 @@ export function DefenseGame({
   const supportCharacterId = state ? defenseSupportCharacterId(state.supportId) : null;
   const supportCharacter = supportCharacterId ? session.character(supportCharacterId) : null;
   const supportPortrait = supportCharacterId ? characterPortraitUri(supportCharacterId, id => session.assetUri(id)) : undefined;
-  const preview = state ? wavePreview(content, state) : null;
+  const preview = state ? defensePlanningWave(content, state) : null;
+  const advice = state ? recommendDefenseAction(content, state) : null;
   const result = state && (state.status === 'WON' || state.status === 'LOST') ? defenseResult(state) : null;
   const activeEvent = state?.eventId ? defenseEventById(state.eventId) : undefined;
   const leakedEntries = state
@@ -420,20 +415,7 @@ export function DefenseGame({
       : activeEvent.debriefTextIds.lose
     : null;
 
-  useEffect(() => {
-    if (!result || !result.won) return;
-    try {
-      const earnedFg = 10 + result.stars * 5;
-      const current = Number(localStorage.getItem('psi.fieldguide.points') || '0');
-      localStorage.setItem('psi.fieldguide.points', String(current + earnedFg));
-    } catch {
-      // ignore
-    }
-  }, [result?.won, result?.stars]);
-
   // Phase 2: Active E-Stop emergency brake & Tactical Radio Chatter (Tick-based, zero extra timers)
-  const eStopCooldownUntilTickRef = useRef<number>(0);
-  const eStopActiveUntilTickRef = useRef<number>(0);
   const radioUntilTickRef = useRef<number>(0);
   const [radioChatter, setRadioChatter] = useState<{
     speaker: string;
@@ -443,8 +425,8 @@ export function DefenseGame({
   } | null>(null);
   const lastReportedWaveRef = useRef<number>(0);
 
-  const eStopActive = state ? Math.max(0, ((eStopActiveUntilTickRef.current - state.tick) * content.tickMs) / 1000) : 0;
-  const eStopCooldown = state ? Math.max(0, ((eStopCooldownUntilTickRef.current - state.tick) * content.tickMs) / 1000) : 0;
+  const eStopActive = state ? Math.max(0, (((state.eStopActiveUntilTick??0) - state.tick) * content.tickMs) / 1000) : 0;
+  const eStopCooldown = state ? Math.max(0, (((state.eStopCooldownUntilTick??0) - state.tick) * content.tickMs) / 1000) : 0;
   const isRadioVisible = Boolean(radioChatter && state && state.tick < radioUntilTickRef.current);
 
   const triggerRadio = (speaker: string, role: string, text: string, portraitUri?: string) => {
@@ -459,12 +441,10 @@ export function DefenseGame({
 
   const triggerEStop = () => {
     if (!state || state.status !== 'RUNNING' || state.paused || eStopCooldown > 0) return;
-    eStopCooldownUntilTickRef.current = state.tick + 560;
-    eStopActiveUntilTickRef.current = state.tick + 70;
     dispatch({ type: 'TriggerEStop' });
     if (!audio.muted) audio.playCue('estop');
     const chiefPortrait = characterPortraitUri('yoon_sungho', id => session.assetUri(id));
-    triggerRadio('윤성호 소장', '현장 총괄 소장', '전 구역 긴급 E-STOP 발동! 전원 위험 반경에서 물러서고 상황 재정비하라!', chiefPortrait);
+    triggerRadio(session.character('yoon_sungho')?.name ?? '윤성호', session.character('yoon_sungho')?.role ?? '', t('defense.tactics.radio.estop'), chiefPortrait);
   };
 
   // Tactical Radio triggers when enemies first engage in wave 1 or periodic waves
@@ -475,9 +455,9 @@ export function DefenseGame({
     const foremanPortrait = characterPortraitUri('kang_taesik', id => session.assetUri(id));
     const engineerPortrait = characterPortraitUri('lee_jaehoon', id => session.assetUri(id));
     if (state.waveId === 1) {
-      triggerRadio('강태식 반장', '안전 총괄', '현장 작업선 접근 감지! 각 타워 제어 라인 통제 시작한다!', foremanPortrait);
+      triggerRadio(session.character('kang_taesik')?.name ?? '강태식', session.character('kang_taesik')?.role ?? '', t('defense.tactics.radio.first'), foremanPortrait);
     } else if (state.waveId % 3 === 0) {
-      triggerRadio('이재훈 대리', '품질안전', '진동 및 균열 계측치 상승 중. 위험 요소 누출 없도록 집중 대응 바람!', engineerPortrait);
+      triggerRadio(session.character('lee_jaehoon')?.name ?? '이재훈', session.character('lee_jaehoon')?.role ?? '', t('defense.tactics.radio.periodic'), engineerPortrait);
     }
   }, [state?.waveId, state?.status, state?.enemies.length]);
 
@@ -485,7 +465,7 @@ export function DefenseGame({
   useEffect(() => {
     if (effects.shieldHit && state && state.status === 'RUNNING') {
       const foremanPortrait = characterPortraitUri('kang_taesik', id => session.assetUri(id));
-      triggerRadio('강태식 반장', '안전 총괄', '외벽 쉴드 충격 감지! 차단벽 긴급 점검 및 타워 화력 집중하라!', foremanPortrait);
+      triggerRadio(session.character('kang_taesik')?.name ?? '강태식', session.character('kang_taesik')?.role ?? '', t('defense.tactics.radio.leak'), foremanPortrait);
     }
   }, [effects.shieldHit]);
 
@@ -524,6 +504,16 @@ export function DefenseGame({
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
     if (!state) return;
     try {
+      if (command.type === 'StartWave') {
+        if (state.paused) persistence.dispatch({type:'SetPaused',paused:false});
+        setSelectedPadId(null);
+        setSelectedTowerId(null);
+      }
+      if (command.type === 'SetPaused' && !command.paused) {
+        setSelectedPadId(null);
+        setSelectedTowerId(null);
+        setSettingsOpen(false);
+      }
       if (command.type === 'StartWave' || (command.type === 'SetPaused' && command.paused === false && state.status === 'RUNNING')) {
         audio.armAudio();
       }
@@ -542,7 +532,7 @@ export function DefenseGame({
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : t('defense.ui.command_error');
-      setNotice(message === 'Insufficient resource' ? t('defense.ui.no_resource') : message);
+      setNotice(message === 'Insufficient resource' ? t('defense.ui.no_resource') : message==='E-Stop is cooling down'?t('defense.tactics.cooldown'):message);
     }
   };
 
@@ -553,7 +543,8 @@ export function DefenseGame({
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (!state || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+      if (!state || event.repeat || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement
+        || (event.target instanceof HTMLElement && (event.target.isContentEditable || event.target.closest('button,select,a,summary')))) return;
 
       // Space: Toggle pause
       if (event.code === 'Space') {
@@ -661,6 +652,7 @@ export function DefenseGame({
 
   const choosePad = (padId: string) => {
     if (!state) return;
+    if (!state.paused && (state.status === 'RUNNING' || state.status === 'INTERMISSION')) persistence.dispatch({type:'SetPaused',paused:true});
     const tower = state.towers.find(item => item.padId === padId);
     setSelectedPadId(padId);
     setSelectedTowerId(tower?.id ?? null);
@@ -669,7 +661,9 @@ export function DefenseGame({
 
   const startWithSupport = (supportId: DefenseSupportId) => {
     audio.playCue('select');
-    persistence.startWithSupport(supportId, portrait, content);
+    persistence.startWithSupport(supportId, false, content);
+    radioUntilTickRef.current=0;
+    lastReportedWaveRef.current=0;
   };
 
   const retry = () => {
@@ -749,9 +743,11 @@ export function DefenseGame({
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
-      <span>{PRODUCTION_MAP ? 'G8-A · PRODUCTION MAP' : activeSiteMap ? 'G5 · 공정별 맵 체험' : content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
+      <span>{t('defense.tactics.simulation')}</span>
       <h2>{activeSiteMap ? activeSiteMap.label : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
-      <p>{PRODUCTION_MAP ? '순타 굴착 대표 맵을 실제 현장 월드 플레이트 위에서 검증합니다. 게임 좌표는 런타임 topology가 계속 권위값입니다.' : activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
+      <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.tactics.ready_body')}</p>
+      <small>{t('defense.tactics.boundary')}</small>
+      {BOARD_ART_URI?<img className="zb-prep-world" src={BOARD_ART_URI} alt={t('defense.tactics.world')}/>:null}
     </section>
     <section className="zb-support-grid">
       <OperationHandoffDossier mode="defense"/>
@@ -776,7 +772,7 @@ export function DefenseGame({
       <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`}><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
-      <div className="zb-status"><span>{statusLabel(state)}</span>{state.paused ? <b>PAUSED</b> : null}</div>
+      <div className="zb-status"><span>{statusLabel(state)}</span>{state.paused ? <b>{t('defense.tactics.hold')}</b> : null}</div>
       <button
         type="button"
         className="zb-hud-button"
@@ -791,9 +787,9 @@ export function DefenseGame({
           onClick={() => dispatch({ type: 'SetSpeed', speed: speed as 1 | 2 })}
         >{speed}×<kbd className="zb-hotkey">{speed}</kbd></button>)}
       </div>
+      <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => {if (!settingsOpen && !state.paused) dispatch({type:'SetPaused',paused:true});setSettingsOpen(open => !open);}}>{t('defense.tactics.settings')}</button>
       <button type="button" className="zb-exit" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
-    <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => setSettingsOpen(open => !open)}>설정</button>
     {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
       <button type="button" onClick={() => { tutorial.replay(); setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
       <button
@@ -804,12 +800,18 @@ export function DefenseGame({
       ><span>SOUND</span><b>{audio.muted ? 'OFF' : 'ON'}</b></button>
     </section> : null}
     <DefenseSaveStatus controller={persistence} />
-    <DefenseTutorial controller={tutorial} />
+    <section className="zb-tactics-strip" aria-label={t('defense.tactics.simulation')}>
+      <div><small>{t('defense.tactics.simulation')}</small><strong>{preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave')}</strong>
+      <span>{preview?.groups.map(group=>`${enemyName(content.map.id,group.enemy)} ×${group.count}`).join(' · ')}</span>
+      {isRadioVisible&&radioChatter?<span className="zb-radio-line" role="status">{radioChatter.speaker} · {radioChatter.text}</span>:null}</div>
+      {!result?<button type="button" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('defense.tactics.recommend')}{advice?` · ${advice.padId} · R ${advice.cost}`:''}</button>:null}
+    </section>
 
     <section className="zb-stage">
       <div
         className="zb-board-wrap"
         style={{
+          '--zb-board-aspect': String(mapFrame.width/mapFrame.height),
           '--zb-camera-scale': String(camera.scale),
           '--zb-camera-x': `${camera.focus.left}%`,
           '--zb-camera-y': `${camera.focus.top}%`,
@@ -934,7 +936,7 @@ export function DefenseGame({
           })}
         </div>
 
-        <aside className="zb-wave-preview">
+        <aside className="zb-wave-preview" hidden>
           <small>{state.status === 'RUNNING' ? t('defense.ui.next_wave') : t('defense.ui.current_wave')}</small>
           <strong>WAVE {preview?.id}</strong>
           <ul>
@@ -945,7 +947,7 @@ export function DefenseGame({
         </aside>
 
         <div className="zb-board-caption">
-          <span>{PRODUCTION_MAP ? 'G8-A · LIVE CONSTRUCTION SITE' : activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
+          <span>{t('defense.tactics.simulation')}</span>
           <b>{activeSiteMap?.label ?? t('defense.map.ramp-01.name')}</b>
         </div>
 
@@ -958,7 +960,7 @@ export function DefenseGame({
         {/* Phase 2: Active E-Stop Banner */}
         {eStopActive > 0 ? <div className="zb-estop-banner" role="alert" aria-live="assertive">
           <span>🚨</span>
-          <strong>현장 비상 정지(E-STOP) 발동 중! 전 구역 정지 ({eStopActive.toFixed(1)}s)</strong>
+          <strong>{t('defense.tactics.estop')} ({eStopActive.toFixed(1)}s)</strong>
         </div> : null}
 
         {/* Phase 2: Tactical Radio Chatter Walkie-Talkie HUD */}
@@ -968,7 +970,7 @@ export function DefenseGame({
             : <div className="zb-radio-portrait" />}
           <div className="zb-radio-content">
             <div className="zb-radio-header">
-              <span className="zb-radio-channel">CH-1 현장무전</span>
+              <span className="zb-radio-channel">{t('defense.tactics.radio.channel')}</span>
               <strong className="zb-radio-speaker">{radioChatter.speaker}</strong>
               <span className="zb-radio-role">{radioChatter.role}</span>
             </div>
@@ -982,7 +984,9 @@ export function DefenseGame({
 
     <footer className="zb-command">
       <section className="zb-selection">
-        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>동선을 확인하고 개입 지점을 선택하세요.</span></div> : null}
+        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>{advice?t(advice.reasonId):t('defense.tactics.no_advice')}</span></div> : null}
+        {selectedPad?<div className="zb-selection-heading"><small>{state.paused?t('defense.tactics.hold'):t('defense.tactics.advice_hint')}</small><button type="button" onClick={()=>{setSelectedPadId(null);setSelectedTowerId(null);}}>{t('defense.tactics.close')}</button></div>:null}
+        {selectedPad&&advice?.padId===selectedPad.id?<p className="zb-advice-reason">{t('defense.tactics.recommended')} · {towerName(content.map.id,advice.towerId)} · {t(advice.reasonId)}</p>:null}
 
         {selectedPad && !selectedPadTower ? <div className="zb-build-panel">
           <div className="zb-panel-heading"><span>{selectedPad.id}</span><strong>{t('defense.ui.select_tower')}</strong></div>
@@ -997,6 +1001,7 @@ export function DefenseGame({
                 key={towerId}
                 type="button"
                 disabled={disabled}
+                data-recommended={advice?.command.type==='Build'&&advice.padId===selectedPad.id&&advice.towerId===towerId?'true':undefined}
                 onClick={() => dispatch({ type: 'Build', padId: selectedPad.id, towerId })}
               >
                 {shopArtUri
@@ -1029,19 +1034,11 @@ export function DefenseGame({
             >{t(`defense.ui.target.${mode}`)}</button>)}
           </div>
           <div className="zb-upgrades">
-            {upgrades.map(level => <button
-              key={level.id}
-              type="button"
-              disabled={state.resource < level.cost}
-              onClick={() => dispatch({ type: 'Upgrade', towerInstanceId: selectedTower.id, levelId: level.id })}
-            >
-              <span>{level.id === 'L3A' || level.id === 'L3B' ? t(`defense.tower.${selectedTower.towerId}.${level.id}.name`) : `${t('defense.ui.upgrade')} ${level.id}`}<kbd className="zb-hotkey">U</kbd></span>
-              <b>R {level.cost}</b>
-            </button>)}
             <button className="zb-sell" type="button" onClick={() => dispatch({ type: 'Sell', towerInstanceId: selectedTower.id })}>
               <span>{t('defense.ui.sell')}<kbd className="zb-hotkey">S</kbd></span><b>R {refund}</b>
             </button>
           </div>
+          <DefenseTechTree content={content} tower={selectedTower} resource={state.resource} advice={advice} onCommand={dispatch}/>
         </div> : null}
       </section>
 
@@ -1061,7 +1058,7 @@ export function DefenseGame({
 
         {/* Phase 2: Active E-Stop Button */}
         <div className="zb-estop-action">
-          <span><small>EMERGENCY</small><strong>비상 정지 (E-STOP)</strong></span>
+          <span><small>E-STOP</small><strong>{t('defense.tactics.estop')}</strong></span>
           <button
             type="button"
             className="zb-estop-btn"
@@ -1080,6 +1077,11 @@ export function DefenseGame({
         >{t(state.status === 'READY' ? 'defense.ui.start_wave' : 'defense.ui.start_next')}<kbd className="zb-hotkey">Enter</kbd></button> : null}
         {notice ? <p className="zb-notice" role="status">{notice}</p> : null}
       </section>
+      <div className="zb-planning-notes">
+        <DefenseTutorial controller={tutorial}/>
+        {preview?.groups.some(group=>group.enemy==='BOSS')?<p className="zb-danger-note">{t('defense.tactics.boss')}</p>:preview?.groups.some(group=>group.enemy==='VEILED')?<p>{t('defense.tactics.hidden')}</p>:null}
+        {selectedPad&&state.paused?<p>{t('defense.tactics.hold_hint')}</p>:null}
+      </div>
     </footer>
 
     {result ? <section className={`zb-result ${result.won ? 'is-win' : 'is-loss'}`} role="dialog" aria-modal="true" aria-labelledby="zb-result-title" data-result-grade="COMMERCIAL_GFX_V1">
@@ -1094,8 +1096,12 @@ export function DefenseGame({
           <div><dt>{t('defense.ui.score')}</dt><dd>{result.score.toLocaleString()}</dd></div>
           <div><dt>{t('defense.ui.completed')}</dt><dd>{result.completedWaves} / 10</dd></div>
           <div><dt>{t('defense.ui.shield')}</dt><dd>{result.shield}</dd></div>
-          <div><dt>현장도감 연구</dt><dd>+{result.won ? 10 + result.stars * 5 : 2} FG</dd></div>
         </dl>
+        <section className="zb-tactics-debrief"><h3>{t('defense.tactics.review')}</h3><p>{t('defense.tactics.boundary')}</p>
+          <strong>{t('defense.tactics.loadout')}</strong><p>{state.towers.map(tower=>`${tower.padId} ${towerName(content.map.id,tower.towerId)} ${tower.levelId}`).join(' · ')||'—'}</p>
+          <strong>{t('defense.tactics.leaks')}</strong><p>{leakedEntries.length?leakedEntries.map(([id,count])=>`${enemyName(content.map.id,id)} ×${count}`).join(' · '):t('defense.tactics.no_leaks')}</p>
+          {leakedEntries.length?<p>{t('defense.tactics.recommended')} · {towerName(content.map.id,recommendedTowerId)} · {towerRole(content.map.id,recommendedTowerId)}</p>:null}
+        </section>
         {activeEvent && eventDebriefTextId ? <section className="zb-event-debrief" data-event-debrief={activeEvent.id}>
           <strong>{t(activeEvent.titleTextId)}</strong>
           <p>{t(eventDebriefTextId)}</p>
@@ -1128,16 +1134,5 @@ export function DefenseGame({
 
     <DefenseConflictOverlay controller={persistence} />
 
-    {portrait && !forcePortraitPlay && !oneStep.active ? <section className="zb-rotate" role="dialog" aria-modal="true">
-      <div>
-        <span aria-hidden="true">↻</span>
-        <h2>{t('defense.ui.rotate.title')}</h2>
-        <p>{t('defense.ui.rotate.body')}</p>
-        <div className="zb-rotate-actions">
-          <button type="button" className="zb-continue-portrait" onClick={() => setForcePortraitPlay(true)}>세로 모드로 계속 플레이</button>
-          <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
-        </div>
-      </div>
-    </section> : null}
   </main>;
 }

@@ -1,0 +1,140 @@
+
+> psi-zero-day@0.1.0 phase-d:check
+> npm run assets:production-check && npm run assets:character-replacement-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && node scripts/report-episode01-production-readiness.mjs --require-phase-d && npm run test:episode01-visual
+
+
+> psi-zero-day@0.1.0 assets:production-check
+> npm run assets:visual-contract && npm run assets:embedded && npm run assets:character-map-shape-check && node scripts/build-episode01-assets.mjs --production-check
+
+
+> psi-zero-day@0.1.0 assets:visual-contract
+> node scripts/check-visual-contract.mjs
+
+PSI : ZERO DAY — visual identity contract gate
+Cast: 8/8
+Visual direction: friendly 2.5D casual-strategy construction diorama
+Visual contract PASSED: cast identity, asset paths, and Foundation map lock are internally consistent.
+
+> psi-zero-day@0.1.0 assets:embedded
+> node scripts/materialize-embedded-media.mjs && node scripts/materialize-vehicle-overlap.mjs && node scripts/materialize-character-media.mjs
+
+Verified Foundation Production Master (3072x1728, 1,253,340 bytes).
+Verified material stack final WebP (768x581, 51,984 bytes).
+Verified access barrier final WebP (820x514, 55,802 bytes).
+Verified foundation blinding final WebP (768x576, 25,546 bytes).
+Verified foundation rebar final WebP (768x576, 35,778 bytes).
+Materialized vehicle overlap final WebP (768x512, 3,972 bytes).
+Verified choi-minseok-map (1024x1536, 202,410 bytes).
+Verified choi-minseok-portrait (1024x1024, 218,992 bytes).
+Verified kang-taesik-map (1024x1536, 216,506 bytes).
+Verified kang-taesik-portrait (1024x1024, 181,498 bytes).
+Verified lee-jaehoon-map (768x1024, 71,042 bytes).
+Verified lee-jaehoon-portrait (1024x1024, 145,550 bytes).
+Verified lim-junho-map (768x1024, 84,476 bytes).
+Verified lim-junho-portrait (1024x1024, 165,450 bytes).
+Verified oh-seungjae-map (1024x1536, 160,120 bytes).
+Verified oh-seungjae-portrait (1024x1024, 143,820 bytes).
+Verified player-map (768x1024, 77,050 bytes).
+Verified player-portrait (1024x1024, 162,794 bytes).
+Verified seo-jeongmin-map (768x1024, 65,344 bytes).
+Verified seo-jeongmin-portrait (1024x1024, 157,994 bytes).
+Verified yoon-sungho-map (1024x1536, 207,572 bytes).
+Verified yoon-sungho-portrait (1024x1024, 208,644 bytes).
+
+> psi-zero-day@0.1.0 assets:character-map-shape-check
+> node scripts/check-character-final-art-shape.mjs
+
+Episode 01 characters map final-art shape check passed (8 existing final map asset(s) inspected).
+Episode 01 production art is ready (17 final WebP assets).
+
+> psi-zero-day@0.1.0 assets:character-replacement-check
+> node scripts/check-character-replacement.mjs --require-new
+
+Character replacement status: 8/8 core portrait/map assets differ from legacy baseline.
+ - lee-jaehoon-map: new-candidate
+ - lee-jaehoon-portrait: new-candidate
+ - lim-junho-map: new-candidate
+ - lim-junho-portrait: new-candidate
+ - player-map: new-candidate
+ - player-portrait: new-candidate
+ - seo-jeongmin-map: new-candidate
+ - seo-jeongmin-portrait: new-candidate
+All core title-cast character binaries are new candidates. Run production and visual QA before marking integrated.
+
+> psi-zero-day@0.1.0 assets:scene-background-production-check
+> node scripts/check-scene-background-production.mjs --require-final
+
+FINAL gate_dawn          1920x1080
+FINAL ramp_entry         1920x1080
+FINAL work_yard          1920x1080
+FINAL concrete_pour      1920x1080
+FINAL inspection_zone    1920x1080
+FINAL site_office        1920x1080
+FINAL break_area         1920x1080
+FINAL home_night         1920x1080
+Episode 01 immersive backgrounds: 8/8 final WebP; 0 RC fallback.
+
+> psi-zero-day@0.1.0 assets:final-art-ingest-check
+> node scripts/check-final-art-ingest.mjs --require-final
+
+Episode 01 generated final-art ingest: 8/8 exact binaries present.
+READY   break-area.webp 186994 bytes
+READY   concrete-pour.webp 219648 bytes
+READY   gate-dawn.webp 164000 bytes
+READY   home-night.webp 76944 bytes
+READY   inspection-zone.webp 216202 bytes
+READY   ramp-entry.webp 229240 bytes
+READY   site-office.webp 89936 bytes
+READY   work-yard.webp 216874 bytes
+
+> psi-zero-day@0.1.0 assets:character-performance-wave-check
+> node scripts/stage-character-performance-wave.mjs --require-final
+
+[VERIFIED] ep01.character.player.performance.resolve -> assets/episode01/characters/performance/player-resolve.webp
+[VERIFIED] ep01.character.lee_jaehoon.performance.concern -> assets/episode01/characters/performance/lee-jaehoon-concern.webp
+[VERIFIED] ep01.character.kang_taesik.performance.conflict -> assets/episode01/characters/performance/kang-taesik-conflict.webp
+[VERIFIED] ep01.character.seo_jeongmin.performance.neutral -> assets/episode01/characters/performance/seo-jeongmin-neutral.webp
+[VERIFIED] ep01.character.lim_junho.performance.relief -> assets/episode01/characters/performance/lim-junho-relief.webp
+[READY] generated character performance wave 01 files and registry are verified.
+
+> psi-zero-day@0.1.0 audio:production-check
+> npm run audio:voice-materialize && node scripts/check-audio-production.mjs --require-final
+
+
+> psi-zero-day@0.1.0 audio:voice-materialize
+> node scripts/materialize-episode01-voice.mjs
+
+Episode 01 voice materialized: 4; pending embedded sources: 0.
+Episode 01 audio production: 12/12 final binaries present.
+PSI : ZERO DAY / Episode 01 Phase D Production Readiness
+--------------------------------------------------------
+Immersive final backgrounds     READY    8/8 exact binaries
+Character performance wave      READY    5/5 exact binaries
+Production-v1 audio             READY    12/12 exact binaries
+Title-cast identity refresh     READY    8/8 new verified binaries
+Episode 01 runtime elements     READY    1/1 accepted final assets
+
+Background manifest: exact_archive_verified_github_ingested
+Performance manifest: generated_wave_01_ingested / verified_github_binary_ingest
+Audio manifest: production_v1_voice_lock
+Runtime scene-element scope: 1/118 catalog definitions are placed by Episode 01 events.
+Field Guide/future-campaign-only scene elements do not block the Episode 01 cinematic lock.
+
+Phase D production lock: BINARY-READY
+Next command: npm run phase-d:check
+
+> psi-zero-day@0.1.0 test:episode01-visual
+> vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts tests/episode01-immersive-preload.test.ts tests/episode01-cinematic-trace.test.ts tests/episode01-character-blocking.test.ts tests/episode01-character-performance.test.ts tests/episode01-character-performance-assets.test.ts tests/episode01-memory-visuals.test.ts tests/episode01-location-coherence.test.ts tests/episode01-scene-background-production.test.ts tests/episode01-final-polish.test.ts tests/episode01-office-production.test.ts tests/episode01-day-result-production.test.ts tests/episode01-phase-c-integration.test.ts tests/episode01-final-playthrough-regression.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-zero-day-main
+
+
+ Test Files  15 passed (15)
+      Tests  117 passed (117)
+   Start at  12:17:37
+   Duration  3.49s (transform 77%, import 15%, tests 7%, worker 1%)
+
+  Transform  transforming modules took 3.80s · 77% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

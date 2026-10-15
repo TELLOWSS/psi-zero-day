@@ -1,0 +1,3 @@
+
+> psi-zero-day@0.1.0 typecheck
+> tsc --noEmit && tsc --project tsconfig.engine.json

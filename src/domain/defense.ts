@@ -159,6 +159,8 @@ export interface DefenseRunState {
   readonly supportId: DefenseSupportId;
   readonly supportCooldownRemaining: number;
   readonly freezeMovementUntilTick: number;
+  readonly eStopCooldownUntilTick?: number;
+  readonly eStopActiveUntilTick?: number;
   readonly revealAllUntilTick: number;
   readonly rangeBonusUntilTick: number;
   readonly completedWaves: number;

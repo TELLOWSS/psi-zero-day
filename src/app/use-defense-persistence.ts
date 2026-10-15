@@ -215,7 +215,9 @@ export function useDefensePersistence(
   useEffect(() => {
     mountedRef.current = true;
     let cancelled = false;
-    void acquireDefenseTabGuard(
+    // StrictMode probes mount/cleanup synchronously. Do not acquire a lease for
+    // the discarded mount: its pending lock could block the real mount itself.
+    void Promise.resolve().then(() => cancelled ? null : acquireDefenseTabGuard(
       () => {
         if (cancelled || !mountedRef.current) return;
         setConflict(true);
@@ -230,7 +232,8 @@ export function useDefensePersistence(
           ? applyDefenseCommand(current, content, { type: 'SetPaused', paused: true })
           : current);
       },
-    ).then(guard => {
+    )).then(guard => {
+      if (!guard) return;
       if (cancelled || !mountedRef.current) {
         guard.release();
         return;
@@ -328,7 +331,7 @@ export function useDefensePersistence(
     stateRef.current = next;
     setStateInternal(next);
     if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
-      || command.type === 'SetPaused' || command.type === 'StartWave') {
+      || command.type === 'SetPaused' || command.type === 'StartWave' || command.type === 'TriggerEStop') {
       void persistRun(next);
     }
     return next;

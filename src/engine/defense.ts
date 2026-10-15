@@ -155,9 +155,12 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
   }
   if (command.type === 'TriggerEStop') {
     if (state.status !== 'RUNNING' || state.paused) throw new Error('E-Stop requires active combat');
+    if ((state.eStopCooldownUntilTick ?? 0) > state.tick) throw new Error('E-Stop is cooling down');
     const freezeTicks = 70; // 3.5 seconds all-stop freeze at 50ms/tick
     return {
       ...state,
+      eStopCooldownUntilTick: state.tick + 560,
+      eStopActiveUntilTick: state.tick + freezeTicks,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + freezeTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, state.tick + freezeTicks),
       enemies: state.enemies.map(enemy => ({

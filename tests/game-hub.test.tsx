@@ -14,8 +14,9 @@ describe('game hub navigation', () => {
     const host = document.createElement('div');
     const root = createRoot(host);
     let launches = 0;
+    const defenseLaunches: (string|null|undefined)[]=[];
     try {
-      act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={() => { throw new Error('Unreleased mode must remain a preview'); }} />));
+      act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={id=>defenseLaunches.push(id)} />));
       const actions = host.querySelector('.commercial-title-actions')!;
       const breaker = host.querySelector<HTMLAnchorElement>('.is-breaker-entry')!;
       expect(breaker.getAttribute('href')).toBe('/signal-breaker-dev/index.html?entry=play');
@@ -37,7 +38,8 @@ describe('game hub navigation', () => {
       expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/new-psi-wordmark-stacked-chalk.svg');
       expect(host.querySelector('.commercial-title-wordmark source')?.getAttribute('srcset')).toBe('/assets/branding/new-psi-wordmark-wide-chalk.svg');
       act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
-      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      expect(defenseLaunches).toEqual(['training-ramp-v1']);
+      expect(host.querySelector('.mode-preview-dialog')).toBeNull();
       act(() => host.querySelector<HTMLButtonElement>('.is-survivors-entry')!.click());
       expect(launches).toBe(1);
     } finally { act(() => root.unmount()); }

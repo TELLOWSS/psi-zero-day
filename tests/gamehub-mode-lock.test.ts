@@ -5,11 +5,12 @@ describe('commercial hub mode readiness',()=>{
   const hub=readFileSync(new URL('../src/ui/GameHub.tsx',import.meta.url),'utf8');
   const css=readFileSync(new URL('../src/ui/shooting-entry.css',import.meta.url),'utf8');
 
-  it('keeps only Signal Watch playable while unfinished Defense and Story open previews',()=>{
+  it('opens the approved defense training, preserves Watch and Breaker entries, and keeps Story gated',()=>{
     expect(hub).toContain('시그널 워치 (SURVIVORS)');
     expect(hub).toContain("setModePreview('defense')");
     expect(hub).toContain("setModePreview('story')");
-    expect(hub).toContain('디펜스 모드 · 준비중');
+    expect(hub).toContain('onClick={() => onDefense(zeroBreachContent.scenario.id)}');
+    expect(hub).toContain('href="/signal-breaker-dev/index.html?entry=play"');
     expect(hub).toContain('스토리 모드 · 준비중');
     expect(hub).not.toContain('야간 긴급 순찰 (SURVIVORS)');
     expect(hub).not.toContain('현장 디펜스 시작');
@@ -26,7 +27,7 @@ describe('commercial hub mode readiness',()=>{
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
-    expect(hub).toContain('현재 플레이 가능 모드는 시그널 워치입니다.');
+    expect(hub).toContain("defenseText('defense.tactics.playable')");
     expect(hub).not.toContain('mode-preview-cta-correction');
     expect(hub).toContain('탭하여 보기');
     expect(css).not.toContain('.mode-preview-cta-correction');
