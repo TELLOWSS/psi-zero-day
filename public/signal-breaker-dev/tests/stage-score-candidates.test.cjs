@@ -1,0 +1,15 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+class MockMedia{constructor(path){this.src=path;this.paused=true;this.currentTime=0;this.playCount=0;this.pauseCount=0;this.volume=1;}
+ play(){this.paused=false;this.playCount++;return Promise.resolve();}
+ pause(){this.paused=true;this.pauseCount++;}}
+function director(){const window={Audio:MockMedia};vm.runInNewContext(fs.readFileSync(require.resolve('../src/premium-sound.js'),'utf8'),{window,Math,Date,Map,Set,performance:{now:()=>1000}});return {sound:new window.SignalBreakerPremiumSound.SoundDirector(),api:window.SignalBreakerPremiumSound};}
+const game=(id,episode=1,operation=true)=>({episode,veteran:episode>1,operation,state:'playing',config:{id,conveyor:false,tension:false},player:{life:5},time:0,tensionLockUntil:0});
+test('all 15 campaign stages have different loop candidate filenames',()=>{const {api}=director(),paths=[];for(let episode=1;episode<=3;episode++)for(let n=1;n<=5;n++){const p=api.scoreFor(game('CH-0'+n,episode));assert.match(p,new RegExp('ep0'+episode));assert.match(p,/\.ogg$/);paths.push(p);}assert.equal(new Set(paths).size,15);});
+test('non-campaign, invalid episode, and missing stage fall back',()=>{const {api}=director();for(const x of [game('CH-01',1,false),game('CH-01',0),game('CH-01',4),game('CH-99',2)])assert.match(api.scoreFor(x),/after-the-shift-v01\.mp3$/);});
+test('stage and episode selection switch audio while preserving pause resume',()=>{const {sound}=director();sound.setSession(true,true);sound.setScene(game('CH-01'),'player');assert.match(sound.music.src,/ch01_ricochet_candidate_v01\.ogg$/);const prev=sound.music.pauseCount;sound.setScene(game('CH-04',2),'player');assert.ok(sound.music.pauseCount>prev);assert.match(sound.music.src,/ch09_asymmetric_candidate_v01\.ogg$/);sound.setScene(game('CH-05',3),'player');assert.match(sound.music.src,/ch15_architect_candidate_v01\.ogg$/);sound.setSession(false,true);assert.equal(sound.music.paused,true);sound.setSession(true,true);assert.equal(sound.music.paused,false);});
+test('missing candidate uses legacy track and does not retry every frame',()=>{const {sound}=director();sound.setSession(true,true);sound.setScene(game('CH-03',2),'player');const failed=sound.music.src;sound.music.onerror();assert.match(sound.music.src,/after-the-shift-v01\.mp3$/);assert.equal(sound.failedMusic.has(failed),true);const current=sound.musicEpoch;sound.setScene(game('CH-03',2),'player');assert.equal(sound.musicEpoch,current);sound.setScene(game('CH-04',3),'player');assert.match(sound.music.src,/ch14_winch_candidate_v01\.ogg$/);});
+
+test('all 15 soundtrack Ogg files exist on disk with OggS signatures',()=>{const path=require('node:path');const {api}=director();for(let e=1;e<=3;e++)for(let n=1;n<=5;n++){const p=api.scoreFor(game('CH-0'+n,e)),filename=path.join(__dirname,'..',p);assert.ok(fs.existsSync(filename),p);assert.ok(fs.statSync(filename).size>100000,p);assert.equal(fs.readFileSync(filename).subarray(0,4).toString('ascii'),'OggS',p);}});
