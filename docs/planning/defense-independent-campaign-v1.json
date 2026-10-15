@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "status": "PLANNING_ONLY_NOT_RUNTIME_CONTENT",
+  "createdDate": "2026-10-15",
+  "baselineCommit": "020a070ff2cdaeab0d0f96e57b7ffa718bc7e439",
+  "defenseRuntimeBaselineCommit": "5e54c5a65f172fe9b0938f034ee83be107bec482",
+  "proposedTitle": "시그널 가드 — 오늘의 방어선",
+  "masterDocument": "../DEFENSE-INDEPENDENT-CAMPAIGN-MASTER-PLAN-20261015.md",
+  "launchPolicy": {
+    "storyRequired": false,
+    "otherModeRequired": false,
+    "threeStarsRequired": false,
+    "stageUnlockRequiresPaymentOrAd": false,
+    "unlock": "PREVIOUS_STAGE_CLEAR",
+    "verticalSliceStageIds": [
+      "GD-01",
+      "GD-02",
+      "GD-03"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "CH-01",
+      "title": "기초·반입선"
+    },
+    {
+      "id": "CH-02",
+      "title": "지하·시야와 통로"
+    },
+    {
+      "id": "CH-03",
+      "title": "기준층·연쇄 대응"
+    },
+    {
+      "id": "CH-04",
+      "title": "상부·완성된 방어선"
+    }
+  ],
+  "stages": [
+    {
+      "id": "GD-01",
+      "title": "첫 방어선",
+      "chapterId": "CH-01",
+      "proposedScenarioId": "guard-gd-01-v1",
+      "proposedMapId": "guard-ramp-entry-v1",
+      "prerequisiteStageIds": [],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 6,
+      "targetFirstClearMinutes": [
+        4,
+        5
+      ],
+      "primaryTacticalQuestion": "placement-basics",
+      "plannedMechanics": [],
+      "implementationMilestone": "P1",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-02",
+      "title": "병목의 리듬",
+      "chapterId": "CH-01",
+      "proposedScenarioId": "guard-gd-02-v1",
+      "proposedMapId": "guard-yard-bend-v1",
+      "prerequisiteStageIds": [
+        "GD-01"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 7,
+      "targetFirstClearMinutes": [
+        4,
+        6
+      ],
+      "primaryTacticalQuestion": "concentration-window",
+      "plannedMechanics": [
+        "staggered-swarm"
+      ],
+      "implementationMilestone": "P1",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-03",
+      "title": "반입선의 맥박",
+      "chapterId": "CH-01",
+      "proposedScenarioId": "guard-gd-03-v1",
+      "proposedMapId": "guard-crossing-entry-v1",
+      "prerequisiteStageIds": [
+        "GD-02"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 8,
+      "targetFirstClearMinutes": [
+        5,
+        7
+      ],
+      "primaryTacticalQuestion": "priority-and-support",
+      "plannedMechanics": [
+        "telegraphed-presentation-transition"
+      ],
+      "implementationMilestone": "P1",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-04",
+      "title": "어둠 속의 신호",
+      "chapterId": "CH-02",
+      "proposedScenarioId": "guard-gd-04-v1",
+      "proposedMapId": "guard-basement-light-v1",
+      "prerequisiteStageIds": [
+        "GD-03"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 7,
+      "targetFirstClearMinutes": [
+        5,
+        6
+      ],
+      "primaryTacticalQuestion": "information-and-coverage",
+      "plannedMechanics": [
+        "veiled-warning"
+      ],
+      "implementationMilestone": "P2",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-05",
+      "title": "두 개의 압력",
+      "chapterId": "CH-02",
+      "proposedScenarioId": "guard-gd-05-v1",
+      "proposedMapId": "guard-basement-two-routes-v1",
+      "prerequisiteStageIds": [
+        "GD-04"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 8,
+      "targetFirstClearMinutes": [
+        5,
+        7
+      ],
+      "primaryTacticalQuestion": "split-or-concentrate",
+      "plannedMechanics": [
+        "multi-route"
+      ],
+      "implementationMilestone": "P2",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-06",
+      "title": "차단과 개방",
+      "chapterId": "CH-02",
+      "proposedScenarioId": "guard-gd-06-v1",
+      "proposedMapId": "guard-basement-switch-v1",
+      "prerequisiteStageIds": [
+        "GD-05"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 9,
+      "targetFirstClearMinutes": [
+        6,
+        8
+      ],
+      "primaryTacticalQuestion": "reassess-placement",
+      "plannedMechanics": [
+        "multi-route",
+        "route-transition"
+      ],
+      "implementationMilestone": "P2",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-07",
+      "title": "높아지는 현장",
+      "chapterId": "CH-03",
+      "proposedScenarioId": "guard-gd-07-v1",
+      "proposedMapId": "guard-frame-perimeter-v1",
+      "prerequisiteStageIds": [
+        "GD-06"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 8,
+      "targetFirstClearMinutes": [
+        5,
+        7
+      ],
+      "primaryTacticalQuestion": "long-and-short-route",
+      "plannedMechanics": [
+        "multi-route"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-08",
+      "title": "교차하는 하중",
+      "chapterId": "CH-03",
+      "proposedScenarioId": "guard-gd-08-v1",
+      "proposedMapId": "guard-frame-convergence-v1",
+      "prerequisiteStageIds": [
+        "GD-07"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 9,
+      "targetFirstClearMinutes": [
+        6,
+        8
+      ],
+      "primaryTacticalQuestion": "core-or-swarm",
+      "plannedMechanics": [
+        "multi-route"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-09",
+      "title": "연쇄의 매듭",
+      "chapterId": "CH-03",
+      "proposedScenarioId": "guard-gd-09-v1",
+      "proposedMapId": "guard-frame-knot-v1",
+      "prerequisiteStageIds": [
+        "GD-08"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 10,
+      "targetFirstClearMinutes": [
+        6,
+        9
+      ],
+      "primaryTacticalQuestion": "supply-or-exposure",
+      "plannedMechanics": [
+        "chain-knot"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-10",
+      "title": "바람의 가장자리",
+      "chapterId": "CH-04",
+      "proposedScenarioId": "guard-gd-10-v1",
+      "proposedMapId": "guard-upper-edge-v1",
+      "prerequisiteStageIds": [
+        "GD-09"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 8,
+      "targetFirstClearMinutes": [
+        5,
+        7
+      ],
+      "primaryTacticalQuestion": "environment-window",
+      "plannedMechanics": [
+        "environment-timing"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-11",
+      "title": "마지막 교대",
+      "chapterId": "CH-04",
+      "proposedScenarioId": "guard-gd-11-v1",
+      "proposedMapId": "guard-upper-handoff-v1",
+      "prerequisiteStageIds": [
+        "GD-10"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 10,
+      "targetFirstClearMinutes": [
+        6,
+        9
+      ],
+      "primaryTacticalQuestion": "planned-tactical-change",
+      "plannedMechanics": [
+        "multi-route",
+        "route-transition"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    },
+    {
+      "id": "GD-12",
+      "title": "오늘의 방어선",
+      "chapterId": "CH-04",
+      "proposedScenarioId": "guard-gd-12-v1",
+      "proposedMapId": "guard-upper-final-v1",
+      "prerequisiteStageIds": [
+        "GD-11"
+      ],
+      "requiredStoryFactIds": [],
+      "requiredOtherModeRecords": [],
+      "plannedWaveCount": 12,
+      "targetFirstClearMinutes": [
+        7,
+        9
+      ],
+      "primaryTacticalQuestion": "combined-defense",
+      "plannedMechanics": [
+        "multi-route",
+        "route-transition",
+        "chain-knot"
+      ],
+      "implementationMilestone": "P3",
+      "status": "UNIMPLEMENTED",
+      "balanceStatus": "PROPOSED_REQUIRES_SIMULATION_AND_HUMAN_PLAYTEST",
+      "orientations": [
+        "portrait",
+        "landscape"
+      ]
+    }
+  ],
+  "preservedLegacyContent": {
+    "scenarioId": "training-ramp-v1",
+    "placement": "OPTIONAL_PRACTICE",
+    "autoGrantsCampaignClear": false,
+    "storyCaseId": "event-ramp-reconstruction-v1",
+    "storyCasePlacement": "OPTIONAL_CASE_RECONSTRUCTION",
+    "storyCaseUnlockUnchanged": true
+  }
+}

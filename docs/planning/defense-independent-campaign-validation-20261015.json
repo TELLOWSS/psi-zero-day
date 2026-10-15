@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-15",
+  "scope": "PLANNING_DATA_AND_DOCUMENTS_ONLY",
+  "baselineCommit": "020a070ff2cdaeab0d0f96e57b7ffa718bc7e439",
+  "chapters": 4,
+  "stages": 12,
+  "plannedWaves": 102,
+  "verticalSliceStageIds": [
+    "GD-01",
+    "GD-02",
+    "GD-03"
+  ],
+  "checks": {
+    "uniqueStageIds": true,
+    "acyclicUnlocks": true,
+    "linearOneClearProgression": true,
+    "noRequiredStoryFacts": true,
+    "noRequiredOtherModeRecords": true,
+    "sliceUsesSingleRoute": true,
+    "stageTableMatchesCatalog": true,
+    "relativeDocumentLinksExist": true,
+    "allStagesExplicitlyUnimplemented": true
+  },
+  "runtimeTestsRun": false
+}
