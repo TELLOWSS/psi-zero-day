@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-15",
+  "tests": {
+    "passed": 2130,
+    "skipped": 1
+  },
+  "typecheck": "PASS",
+  "build": "PASS",
+  "engineCampaigns": 18,
+  "pc": {
+    "viewport": [
+      1440,
+      900
+    ],
+    "stages": [
+      {
+        "stage": 4,
+        "status": "WON",
+        "shield": 13,
+        "purchases": 11
+      },
+      {
+        "stage": 5,
+        "status": "WON",
+        "shield": 14,
+        "purchases": 12
+      },
+      {
+        "stage": 6,
+        "status": "WON",
+        "shield": 20,
+        "purchases": 12
+      }
+    ],
+    "runtimeErrors": 0,
+    "alignmentWithin2px": true
+  },
+  "mobile": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "overflow": false,
+      "stages": [
+        {
+          "stage": 4,
+          "status": "WON",
+          "shield": "13",
+          "alignmentError": 0.5493569460958823,
+          "manualHold": true,
+          "purchases": 11
+        },
+        {
+          "stage": 5,
+          "status": "WON",
+          "shield": "14",
+          "alignmentError": 0.5208593743489149,
+          "manualHold": true,
+          "purchases": 12
+        },
+        {
+          "stage": 6,
+          "status": "WON",
+          "shield": "20",
+          "alignmentError": 0.5288469445045949,
+          "manualHold": true,
+          "purchases": 12
+        }
+      ]
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "errors": [],
+      "overflow": false,
+      "stages": [
+        {
+          "stage": 4,
+          "status": "WON",
+          "shield": "13",
+          "alignmentError": 0.5793235201840543,
+          "manualHold": true,
+          "purchases": 11
+        },
+        {
+          "stage": 5,
+          "status": "WON",
+          "shield": "14",
+          "alignmentError": 0.5364646540890147,
+          "manualHold": true,
+          "purchases": 12
+        },
+        {
+          "stage": 6,
+          "status": "WON",
+          "shield": "20",
+          "alignmentError": 0.5365078860609565,
+          "manualHold": true,
+          "purchases": 12
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "name": "pc",
+      "support": "COMMANDER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "support": "SIGNALER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "portrait",
+      "support": "COMMANDER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "portrait",
+      "support": "SIGNALER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "support": "COMMANDER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "support": "SIGNALER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "small-portrait",
+      "support": "COMMANDER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "small-portrait",
+      "support": "SIGNALER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "small-landscape",
+      "support": "COMMANDER",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "name": "small-landscape",
+      "support": "SIGNALER",
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}

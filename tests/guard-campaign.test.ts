@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {guardContents,guardStageUnlocked,guardSupportUnlocked} from '../src/content/guard-campaign';
+import {guardFoundationContents as guardContents,guardStageUnlocked,guardSupportUnlocked} from '../src/content/guard-campaign';
 import {advanceDefense,applyDefenseCommand,createDefenseRun,defenseResult} from '../src/engine/defense';
 import {recommendDefenseAction} from '../src/app/defense-tactics';
 import {decodeDefenseSave,encodeDefenseSave,emptyDefenseSaveDocument,applyDefenseOutcome} from '../src/app/defense-save';

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "pc",
+    "support": "COMMANDER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "pc",
+    "support": "SIGNALER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "portrait",
+    "support": "COMMANDER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "portrait",
+    "support": "SIGNALER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "landscape",
+    "support": "COMMANDER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "landscape",
+    "support": "SIGNALER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "small-portrait",
+    "support": "COMMANDER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "small-portrait",
+    "support": "SIGNALER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "small-landscape",
+    "support": "COMMANDER",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "name": "small-landscape",
+    "support": "SIGNALER",
+    "overflow": false,
+    "errors": []
+  }
+]

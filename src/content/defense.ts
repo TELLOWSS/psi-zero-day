@@ -24,9 +24,9 @@ const towerIdValue = (value: unknown): value is DefenseTowerId =>
 const enemyIdValue = (value: unknown): value is DefenseEnemyId =>
   value === 'NORMAL' || value === 'SWIFT' || value === 'ARMORED' || value === 'SWARM' || value === 'VEILED' || value === 'BOSS';
 const supportIdValue = (value: unknown): value is DefenseSupportId =>
-  value === 'COORDINATOR' || value === 'OBSERVER' || value === 'COMMANDER' || value === 'REBAR_LEAD' || value === 'ENGINEER';
+  value === 'COORDINATOR' || value === 'OBSERVER' || value === 'COMMANDER' || value === 'REBAR_LEAD' || value === 'ENGINEER'||value==='SIGNALER';
 const levelIdValue = (value: unknown): value is DefenseLevelId =>
-  value === 'L1' || value === 'L2' || value === 'L3A' || value === 'L3B';
+  value === 'L1' || value === 'L2' || value === 'L3A' || value === 'L3B'||value==='L4A'||value==='L4B';
 
 function uniqueIds(items: readonly { readonly id: string }[], label: string, issues: string[]) {
   const seen = new Set<string>();
@@ -227,6 +227,29 @@ export function validateDefenseContent(input: unknown): DefenseContent {
     ['defaultTargetMode', input.defaultTargetMode === 'FIRST' || input.defaultTargetMode === 'STRONG'],
   ] as const;
   for (const [key, ok] of requiredTop) if (!ok) issues.push(`${key}: invalid`);
+  const mechanics=['VOLLEY','PIERCE','WAVE','DELAY','LOCK','BOUNDARY','OBSERVATION','ANALYSIS'];
+  if(input.ultimateEnabled!==undefined&&typeof input.ultimateEnabled!=='boolean')issues.push('ultimateEnabled: invalid');
+  for(const t of towerInput)if(record(t)&&Array.isArray(t.levels))for(const l of t.levels)if(record(l)){
+    if(l.ultimate!==undefined&&(!mechanics.includes(String(l.ultimate))||!String(l.id).startsWith('L4')))issues.push('ultimate mechanic: invalid');
+    if(String(l.id).startsWith('L4')&&(!input.ultimateEnabled||!record(input.scenario)||!String(input.scenario.id).startsWith('guard-gd-')||!mechanics.includes(String(l.ultimate))))issues.push('ultimate: campaign-only');
+  }
+  for(const s of supportInput)if(record(s)){
+    if(s.relocation!==undefined&&typeof s.relocation!=='boolean')issues.push('relocation: invalid');
+    if((s.armorExposeTicks===undefined)!==(s.armorExposeFraction===undefined))issues.push('armor expose: incomplete pair');
+    if(s.directionalRange!==undefined){const d=s.directionalRange;if(!record(d)||!positive(d.bonus)||d.bonus>200||!positive(d.halfAngle)||d.halfAngle>Math.PI/2||!positive(d.durationTicks)||!integer(d.durationTicks))issues.push('directional range: invalid');}
+  }
+  if(map.routes!==undefined){
+    const checkRoutes=(routes:unknown,label:string):string[]=>{
+      if(!Array.isArray(routes)||routes.length<1||routes.length>2){issues.push(label+': invalid route list');return [];}
+      const ids:string[]=[];for(const route of routes){if(!record(route)||!stringValue(route.id)||!Array.isArray(route.path)||route.path.length<2){issues.push(label+': invalid route');continue;}ids.push(route.id);
+        const points=route.path;if(points.some(p=>!Array.isArray(p)||p.length!==2||!finite(p[0])||!finite(p[1])||p[0]<0||p[0]>width||p[1]<0||p[1]>height)){issues.push(label+': invalid geometry');continue;}
+        for(const pad of pads)for(let j=1;j<points.length;j++){const a=points[j-1] as number[],b=points[j] as number[];if(distanceToSegment(pad.x,pad.y,a[0]!,a[1]!,b[0]!,b[1]!)<24)issues.push(label+': pad overlaps route');}
+      }if(new Set(ids).size!==ids.length)issues.push(label+': duplicate route');return ids;
+    };
+    const ids=checkRoutes(map.routes,'map.routes');
+    if(map.transition!==undefined){const tr=map.transition;if(!record(tr)||!stringValue(tr.id)||!integer(tr.beforeWave)||tr.beforeWave<2||tr.beforeWave>waves.length)issues.push('map.transition: invalid');else{const after=checkRoutes(tr.routes,'map.transition.routes');if(ids.some(id=>!after.includes(id))||after.some(id=>!ids.includes(id)))issues.push('map.transition: route IDs must persist');}}
+    for(const wave of waveInput)if(record(wave)&&Array.isArray(wave.groups))for(const g of wave.groups)if(record(g)&&g.routeId!==undefined&&!ids.includes(String(g.routeId)))issues.push('wave route: unknown');
+  }else if(map.transition!==undefined)issues.push('map.transition: requires routes');
   if(input.preparationMode!==undefined&&input.preparationMode!=='MANUAL')issues.push('preparationMode: invalid');
   if(input.combatReportEnabled!==undefined&&typeof input.combatReportEnabled!=='boolean')issues.push('combatReportEnabled: invalid');
   if (speeds.length !== 2 || !speeds.includes(1) || !speeds.includes(2)) issues.push('speeds: must contain 1 and 2');

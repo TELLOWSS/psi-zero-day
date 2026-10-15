@@ -10,8 +10,9 @@ export function recordDefenseCombat(state:DefenseRunState,shots:readonly Defense
  for(const shot of shots){
   const damage=shot.targets.reduce((n,t)=>n+t.damage,0),resolved=shot.targets.filter(t=>t.resolved).length;
   const family=stats.byFamily[shot.towerId]??{damage:0,resolved:0,shots:0};
-  stats.byFamily[shot.towerId]={damage:family.damage+damage,resolved:family.resolved+resolved,shots:family.shots+1};
-  stats={...stats,damage:stats.damage+damage,resolved:stats.resolved+resolved,shots:stats.shots+1,
+  const count=shot.phase==='IMPACT'?0:1;
+  stats.byFamily[shot.towerId]={damage:family.damage+damage,resolved:family.resolved+resolved,shots:family.shots+count};
+  stats={...stats,damage:stats.damage+damage,resolved:stats.resolved+resolved,shots:stats.shots+count,
    bestClear:resolved>(stats.bestClear?.count??0)?{count:resolved,towerId:shot.towerId,levelId:shot.levelId,padId:shot.padId,waveId:state.waveId}:stats.bestClear};
  }
  return {...state,tacticalStats:stats};

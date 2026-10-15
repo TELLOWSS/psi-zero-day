@@ -12,10 +12,11 @@ export function guardLabContent(content:DefenseContent,fixture:GuardLabFixture='
 }
 export function createGuardLabRun(content:DefenseContent,towerId:DefenseTowerId,level:DefenseLevelId,fixture:GuardLabFixture='MIXED'){
  const simulation=guardLabContent(content,fixture);
- let run=createDefenseRun(simulation,'COORDINATOR','guard-lab');
+ let run=createDefenseRun(simulation,'COORDINATOR','guard-lab',{ultimateUnlocked:true});
  run=applyDefenseCommand(run,simulation,{type:'Build',padId:content.map.pads[0]!.id,towerId});
  if(level!=='L1')run=applyDefenseCommand(run,simulation,{type:'Upgrade',towerInstanceId:run.towers[0]!.id,levelId:'L2'});
  if(level.startsWith('L3'))run=applyDefenseCommand(run,simulation,{type:'Upgrade',towerInstanceId:run.towers[0]!.id,levelId:level});
+ if(level.startsWith('L4')){run=applyDefenseCommand(run,simulation,{type:'Upgrade',towerInstanceId:run.towers[0]!.id,levelId:level==='L4A'?'L3A':'L3B'});run=applyDefenseCommand(run,simulation,{type:'Upgrade',towerInstanceId:run.towers[0]!.id,levelId:level});}
  return applyDefenseCommand(run,simulation,{type:'StartWave'});
 }
 export function compareGuardBranches(content:DefenseContent,towerId:DefenseTowerId,fixture:GuardLabFixture){

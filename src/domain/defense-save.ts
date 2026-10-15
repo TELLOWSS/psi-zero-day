@@ -24,7 +24,7 @@ export interface DefenseSaveDocument {
 
 export interface DefenseSaveEnvelope {
   readonly namespace: 'defense';
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 1|2;
   readonly rulesVersion: string;
   readonly contentVersion: string;
   readonly buildVersion: string;

@@ -188,3 +188,9 @@
 }
 
 .zb-shell.zb-premium-deployment[data-map^="guard-gd-"] .zb-support-grid{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+.guard-spatial-controls{border:1px solid #6a919877;border-radius:10px;padding:8px;color:#d9eef0;font-size:12px}
+.guard-spatial-controls p{margin:5px 0;line-height:1.4}
+.guard-spatial-controls small{color:#f4d18c}
+.guard-spatial-controls select{min-height:44px;max-width:100%;padding:6px;border:1px solid #70949e;border-radius:8px;background:#112f3b;color:#effaff}
+.guard-spatial-controls button{min-height:44px;padding:8px;margin-left:6px}
+.guard-spatial-controls button:focus-visible,.guard-spatial-controls select:focus-visible{outline:3px solid #ffd38c;outline-offset:2px}

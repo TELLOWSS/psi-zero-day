@@ -6,6 +6,7 @@ import type {
 import type { StoragePort } from '../platform/storage';
 import {validDefenseTacticalStats,validDefenseTacticalReport} from './defense-tactical-validation';
 import {guardTacticalReport} from './guard-tactical-report';
+import {validDefenseP2State} from './defense-p2-save-validation';
 
 export const DEFENSE_SAVE_KEY = 'psi-zero-day.defense.save.v1';
 export const DEFENSE_SAVE_SCHEMA_VERSION = 1 as const;
@@ -40,6 +41,8 @@ function validEnemy(value: unknown): value is DefenseEnemyState {
     && ['NORMAL','SWIFT','ARMORED','SWARM','VEILED','BOSS'].includes(String(value.enemyId))
     && nonNegative(value.hp)
     && nonNegative(value.distance)
+    && (value.routeId===undefined||nonEmptyString(value.routeId))
+    && (value.lockedUntilTick===undefined||nonNegativeInteger(value.lockedUntilTick))
     && nonNegativeInteger(value.spawnSequence)
     && nonNegativeInteger(value.revealUntilTick)
     && Array.isArray(value.slowEffects) && value.slowEffects.every(validSlowEffect)
@@ -55,7 +58,10 @@ function validTower(value: unknown): value is DefenseTowerState {
     && nonEmptyString(value.id)
     && nonEmptyString(value.padId)
     && ['PULSE','BURST','CONTROL','SENSOR'].includes(String(value.towerId))
-    && ['L1','L2','L3A','L3B'].includes(String(value.levelId))
+    && ['L1','L2','L3A','L3B','L4A','L4B'].includes(String(value.levelId))
+    && (value.charge===undefined||nonNegativeInteger(value.charge))
+    && (value.analysisTicks===undefined||(nonNegativeInteger(value.analysisTicks)&&value.analysisTicks<=80))
+    && (value.analysisTargetId===undefined||value.analysisTargetId===null||nonEmptyString(value.analysisTargetId))
     && ['FIRST','STRONG'].includes(String(value.targetMode))
     && nonNegative(value.invested)
     && nonNegativeInteger(value.attackCooldown)
@@ -74,7 +80,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && typeof value.paused === 'boolean'
     && (value.speed === 1 || value.speed === 2)
     && nonNegativeInteger(value.tick)
-    && integer(value.waveId) && value.waveId >= 1 && value.waveId <= 10
+    && integer(value.waveId) && value.waveId >= 1 && value.waveId <= (String(value.scenarioId).startsWith('guard-gd-')?12:10)
     && nonNegativeInteger(value.waveTick)
     && nonNegativeInteger(value.intermissionRemaining)
     && nonNegative(value.shield)
@@ -84,7 +90,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && Array.isArray(value.spawnedByGroup) && value.spawnedByGroup.every(nonNegativeInteger)
     && nonNegativeInteger(value.nextTowerSequence)
     && nonNegativeInteger(value.nextEnemySequence)
-    && (value.supportId === 'COORDINATOR' || value.supportId === 'OBSERVER' || (String(value.scenarioId).startsWith('guard-gd-')&&(value.supportId==='REBAR_LEAD'||value.supportId==='ENGINEER')))
+    && (value.supportId === 'COORDINATOR' || value.supportId === 'OBSERVER' || (String(value.scenarioId).startsWith('guard-gd-')&&['REBAR_LEAD','ENGINEER','COMMANDER','SIGNALER'].includes(String(value.supportId))))
     && nonNegativeInteger(value.supportCooldownRemaining)
     && nonNegativeInteger(value.freezeMovementUntilTick)
     && (value.eStopCooldownUntilTick === undefined || (nonNegativeInteger(value.eStopCooldownUntilTick) && value.eStopCooldownUntilTick <= Number(value.tick) + 560))
@@ -93,7 +99,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && nonNegativeInteger(value.rangeBonusUntilTick)
     && nonNegativeInteger(value.completedWaves)
     && validLeakMap(value.leakedByEnemy)
-    && (value.tacticalStats===undefined||validDefenseTacticalStats(value.tacticalStats));
+    && (value.tacticalStats===undefined||validDefenseTacticalStats(value.tacticalStats))&&validDefenseP2State(value);
 }
 
 function validRecord(value: unknown): value is DefenseScenarioRecord {
@@ -172,7 +178,7 @@ export function encodeDefenseSave(
 ): string {
   const envelope: DefenseSaveEnvelope = {
     namespace: 'defense',
-    schemaVersion: DEFENSE_SAVE_SCHEMA_VERSION,
+    schemaVersion: content.rulesVersion==='guard-rules-2'?2:DEFENSE_SAVE_SCHEMA_VERSION,
     rulesVersion: content.rulesVersion,
     contentVersion: content.contentVersion,
     buildVersion: packageInfo.version,
@@ -189,7 +195,7 @@ export function decodeDefenseSave(raw: string): DefenseSaveEnvelope | null {
     const parsed: unknown = JSON.parse(raw);
     if (!record(parsed)
       || parsed.namespace !== 'defense'
-      || parsed.schemaVersion !== DEFENSE_SAVE_SCHEMA_VERSION
+      || (parsed.schemaVersion !== DEFENSE_SAVE_SCHEMA_VERSION&&parsed.schemaVersion!==2)
       || !nonEmptyString(parsed.rulesVersion)
       || !nonEmptyString(parsed.contentVersion)
       || !nonEmptyString(parsed.buildVersion)
@@ -198,6 +204,8 @@ export function decodeDefenseSave(raw: string): DefenseSaveEnvelope | null {
       || !nonEmptyString(parsed.checksum)
       || !isDefenseSaveDocument(parsed.payload)) return null;
     if (defensePayloadChecksum(parsed.payload) !== parsed.checksum) return null;
+    if(parsed.schemaVersion===2&&parsed.rulesVersion!=='guard-rules-2')return null;
+    if(parsed.schemaVersion===1&&parsed.payload.activeRun?.towers.some(t=>t.levelId.startsWith('L4')))return null;
     const envelope = parsed as unknown as DefenseSaveEnvelope;
     return { ...envelope, payload: normalizeDefenseSaveDocument(envelope.payload) };
   } catch {

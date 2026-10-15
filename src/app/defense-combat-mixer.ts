@@ -18,7 +18,7 @@ export class DefenseCombatMixer {
  private bus:DynamicsCompressorNode|null=null;
  private buffers=new Map<string,AudioBuffer>();
  private sources=new Set<AudioBufferSourceNode>();
- private last=new Map<DefenseTowerId,number>();
+ private last=new Map<string,number>();
  private loading=false;
  private generation=0;
  private onset=new Map<string,number>();
@@ -85,13 +85,13 @@ export class DefenseCombatMixer {
   this.report({phase:'sample',id,source:'user-supplied-binary',voices:this.sources.size,pan:stereo.pan.value,...detail});
  }
  private playSuppliedShot(shot:DefenseCombatShot,pan:number){
-  const ctx=this.context;if(!ctx||ctx.currentTime-(this.last.get(shot.towerId)??-99)<.075)return;this.last.set(shot.towerId,ctx.currentTime);
+  const ctx=this.context,key=shot.towerId+':'+(shot.phase??'CONTACT');if(!ctx||ctx.currentTime-(this.last.get(key)??-99)<.075)return;this.last.set(key,ctx.currentTime);
   const family=shot.towerId,envelope=guardSoundEnvelope(family,shot.levelId),rate=envelope.rate,detail={shotId:shot.id,family,level:shot.levelId,rate,attackWindow:envelope.attack,impactWindow:envelope.impact};
-  this.sample(`${family}_FIRE_AUDIO`,envelope.attackGain,0,envelope.attack,pan,3,rate,detail);
-  this.sample(`${family}_IMPACT_AUDIO`,envelope.impactGain,.10,envelope.impact,pan,4,rate,detail);
+  if(shot.phase!=='IMPACT')this.sample(`${family}_FIRE_AUDIO`,envelope.attackGain,0,envelope.attack,pan,3,rate,detail);
+  if(shot.phase!=='LAUNCH')this.sample(`${family}_IMPACT_AUDIO`,envelope.impactGain,shot.phase==='IMPACT'?0:.10,envelope.impact,pan,4,rate,detail);
   if(shot.targets.some(t=>t.resolved))this.sample(`${family}_RESOLVE_AUDIO`,.32,.13,.35,pan,5,1,detail);
   const primary=shot.targets[0];if(primary)this.sample(`ENEMY_${primary.enemyId}_IMPACT_AUDIO`,.20,.11,.21,pan,2,1,detail);
-  this.sample(`${family}_TRAVEL_AUDIO`,.12,.025,.10,pan,1,rate,detail);
+  if(shot.phase!=='IMPACT')this.sample(`${family}_TRAVEL_AUDIO`,.12,.025,.10,pan,1,rate,detail);
  }
  critical(id:string){this.sample(id,.5,0,1.2,0,9);}
  stop(){const count=this.sources.size;for(const source of this.sources){try{source.stop();}catch{/* already ended */}}this.sources.clear();this.priority.clear();this.last.clear();if(count)this.report({phase:'stopped',stopped:count,voices:0});}

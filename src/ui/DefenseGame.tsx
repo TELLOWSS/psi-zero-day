@@ -30,7 +30,10 @@ import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } fro
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import {GUARD_ENTRY,guardContents,guardStageIds,guardStageUnlocked,guardSupportUnlocked,isGuardMap,isGuardScenario} from '../content/guard-campaign';
+import {defenseEnemyPath,defenseRoutes,defenseBoundary,defenseObservationPoints} from '../engine/defense-geometry';
+import {GuardSpatialControls} from './GuardSpatialControls';
 import {guardStoragePort,GUARD_SAVE_KEY} from '../app/guard-storage';
+import {guardPersistenceContent} from '../app/guard-save-version';
 import {GuardCampaignHome} from './GuardCampaignHome';
 import {GuardWaveIntel} from './GuardWaveIntel';
 import {GuardTacticalDebrief} from './GuardTacticalDebrief';
@@ -224,7 +227,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
 
 function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { content: DefenseContent; enemy: DefenseRunState['enemies'][number]; state: DefenseRunState; isHit: boolean;counterRotate?:boolean }) {
   const definition = content.enemies.find(item => item.id === enemy.enemyId)!;
-  const pos = defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance);
+  const pos = defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,enemy,state), enemy.distance);
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
   const hidden = definition.hidden && enemy.revealUntilTick <= state.tick && state.revealAllUntilTick <= state.tick;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
@@ -352,9 +355,9 @@ function SupportCard({
       <small>{t(`defense.art.${supportId}`)}</small>
       <strong>{character?.name ?? t(`defense.support.${supportId}.suggestedName`)}</strong>
       <em>{character?.role ?? ''}</em>
-      <b>{t(isGuardMap(content.map.id)&&(supportId==='REBAR_LEAD'||supportId==='ENGINEER')?`guard.support.${supportId}`:`defense.support.${supportId}.skill`)}</b>
+      <b>{t(isGuardMap(content.map.id)&&!['COORDINATOR','OBSERVER'].includes(supportId)?`guard.support.${supportId}`:`defense.support.${supportId}.skill`)}</b>
       <span className="zb-support-effects">
-      {support.armorExposeTicks||support.readyOneTower?<em>{t(`guard.support.${supportId}.hint`)}</em>:null}
+      {support.armorExposeTicks||support.readyOneTower||support.relocation||support.directionalRange?<em>{t(`guard.support.${supportId}.hint`)}</em>:null}
       {support.freezeMovementTicks>0?<span>{t('defense.art.stop')} <b>{support.freezeMovementTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>:null}
       {support.revealAllTicks>0?<span>{t('defense.art.reveal')} <b>{support.revealAllTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>:null}
       {support.rangeBonus>0?<span>{t('defense.art.range')} <b>+{support.rangeBonus}</b></span>:null}
@@ -376,7 +379,7 @@ export function DefenseGame({
 }) {
   const campaignEntry=requestedScenarioId===GUARD_ENTRY;
   const campaignStorage=useMemo(()=>guardStoragePort(storage),[storage]);
-  const persistence = useDefensePersistence(zeroBreachContent, onExit, campaignEntry?campaignStorage:storage, resolveDefenseContentForRun,campaignEntry?GUARD_SAVE_KEY:undefined);
+  const persistence = useDefensePersistence(campaignEntry?guardPersistenceContent:zeroBreachContent, onExit, campaignEntry?campaignStorage:storage, resolveDefenseContentForRun,campaignEntry?GUARD_SAVE_KEY:undefined);
   const { state, setState } = persistence;
   const e1 = defenseEvents[0]!;
   const episodeState = session.getSnapshot?.().state ?? null;
@@ -412,7 +415,8 @@ export function DefenseGame({
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
-  const visualPath = defenseVisualPath(content.map.id, content.map.path);
+  const visualRoutes = defenseRoutes(content,state??undefined).map(route=>({...route,path:defenseVisualPath(content.map.id,route.path)}));
+  const visualPath = visualRoutes[0]!.path;
   const tutorial = useDefenseTutorial(state, content, paused => {
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
@@ -897,28 +901,12 @@ export function DefenseGame({
           <RemodelBoardOverlay state={remodelWorldState} />
           <DataCenterBoardOverlay state={dataCenterWorldState} />
           {content.map.id!=='ramp-01'&&!guard?<FieldHazardsOverlay mapId={content.map.id} isRunning={state.status === 'RUNNING'} />:null}
-          <polyline
-            points={visualPath.map(point => point.join(',')).join(' ')}
-            className="zb-path-shoulder"
-            fill="none"
-            aria-hidden="true"
-          />
-          <polyline
-            points={visualPath.map(point => point.join(',')).join(' ')}
-            className="zb-path-shadow"
-            fill="none"
-          />
-          <polyline
-            points={visualPath.map(point => point.join(',')).join(' ')}
-            className="zb-path"
-            fill="none"
-          />
-          <polyline
-            points={visualPath.map(point => point.join(',')).join(' ')}
-            className="zb-path-centerline"
-            fill="none"
-            aria-hidden="true"
-          />
+          {visualRoutes.map(route=>{const points=route.path.map(point=>point.join(',')).join(' ');return <g key={route.id} data-guard-route={route.id}>
+            <polyline points={points} className="zb-path-shoulder" fill="none" aria-hidden="true"/>
+            <polyline points={points} className="zb-path-shadow" fill="none" aria-hidden="true"/>
+            <polyline points={points} className="zb-path" fill="none" aria-hidden="true"/>
+            <polyline points={points} className="zb-path-centerline" fill="none" aria-hidden="true"/>
+          </g>;})}
           {content.map.id === G8A_MAP_ID
             ? <G8AActivityOverlay
               cameraMode={camera.mode}
@@ -944,6 +932,12 @@ export function DefenseGame({
             />
           </g>;
           })}
+          {guard?<g className="guard-spatial-fields" aria-hidden="true">{state.towers.map(tower=>{
+            const mechanic=content.towers.find(t=>t.id===tower.towerId)!.levels.find(l=>l.id===tower.levelId)!.ultimate;
+            if(mechanic==='BOUNDARY'){const line=defenseBoundary(content,state,tower);return <line key={tower.id} x1={line.a.x} y1={line.a.y} x2={line.b.x} y2={line.b.y} stroke="#6fffd6" strokeWidth={line.width*2} opacity=".3"/>;}
+            if(mechanic==='OBSERVATION')return <g key={tower.id}>{defenseObservationPoints(content,state,tower).map((p,i)=><circle key={i} cx={p.x} cy={p.y} r="110" fill="none" stroke="#d7b4ff" strokeDasharray="8 8" opacity=".5"/>)}</g>;
+            return null;
+          })}{state.pendingAttacks?.filter(a=>a.kind!=='VOLLEY').map(a=><circle key={a.id} cx={a.center.x} cy={a.center.y} r={a.kind==='WAVE'?Math.max(1,a.progressRadius):a.level.splashRadius} fill="none" stroke="#ffc67a" strokeWidth="4" strokeDasharray={a.kind==='DELAY'?'8 6':undefined}/> )}</g>:null}
           {state.freezeMovementUntilTick > state.tick ? <g className="zb-support-field is-coordinator" aria-hidden="true">
             <rect x="8" y="8" width="984" height="584" rx="20" />
             <path d="M120 300H880" />
@@ -953,7 +947,7 @@ export function DefenseGame({
             <circle cx="500" cy="300" r="130" />
           </g> : null}
           {effects.resolvedEnemyEchoes.map(echo => {
-            const pos = defenseVisualPositionAtDistance(content.map.id, content.map.path, echo.distance);
+            const pos = defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,echo,state), echo.distance);
             return <g key={`resolved-${echo.id}`} transform={`translate(${pos.x} ${pos.y})`} className="zb-resolve-burst" data-effect="resolve" aria-hidden="true">
               <circle r="10" />
               <path d="M-24 0H24M0-24V24M-17-17L17 17M17-17L-17 17" />
@@ -1093,20 +1087,22 @@ export function DefenseGame({
               <span>{t('defense.ui.sell')}<kbd className="zb-hotkey">S</kbd></span><b>R {refund}</b>
             </button>
           </div>
-          <DefenseTechTree content={content} tower={selectedTower} resource={state.resource} advice={advice} onCommand={dispatch}/>
+          <DefenseTechTree content={content} tower={selectedTower} resource={state.resource} advice={advice} onCommand={dispatch} ultimateAvailable={!!state.ultimateUnlocked&&!state.towers.some(t=>t.levelId.startsWith('L4'))}/>
         </div> : null}
       </section>
 
       <section className="zb-run-controls">
+        {guard?<GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>:null}
         {guard&&(state.status==='READY'||state.status==='INTERMISSION')?<p className="guard-preparation-hint">{t('guard.preparation.hint')}</p>:null}
         {guard&&preview&&(state.status==='READY'||state.status==='INTERMISSION')?<GuardWaveIntel key={`${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}}/>:null}
         <div className="zb-support-action">
           <VisualImage uri={supportPortrait} alt="" className="zb-support-mini" />
-          <span><small>{supportCharacter?.name ?? state.supportId}</small><strong>{t(guard&&(state.supportId==='REBAR_LEAD'||state.supportId==='ENGINEER')?`guard.support.${state.supportId}`:`defense.support.${state.supportId}.skill`)}</strong></span>
+          <span><small>{supportCharacter?.name ?? state.supportId}</small><strong>{t(guard&&!['COORDINATOR','OBSERVER'].includes(state.supportId)?`guard.support.${state.supportId}`:`defense.support.${state.supportId}.skill`)}</strong></span>
           <button
             type="button"
-            disabled={state.status !== 'RUNNING' || state.paused || state.supportCooldownRemaining > 0 || !defenseSupportHasTarget(state,content)}
+            disabled={state.status !== 'RUNNING' || state.paused || state.supportCooldownRemaining > 0 || !defenseSupportHasTarget(state,content)||state.supportId==='COMMANDER'||state.supportId==='SIGNALER'}
             onClick={() => dispatch({ type: 'UseSupport' })}
+            hidden={state.supportId==='COMMANDER'||state.supportId==='SIGNALER'}
           >
             {state.supportCooldownRemaining > 0 ? `${supportCooldownSeconds}s` : t(defenseSupportHasTarget(state,content)?'defense.ui.support':'guard.support.no_target')}
             {state.supportCooldownRemaining <= 0 ? <kbd className="zb-hotkey">Q</kbd> : null}
@@ -1130,6 +1126,7 @@ export function DefenseGame({
         {(state.status === 'READY' || state.status === 'INTERMISSION') ? <button
           className="zb-start-wave"
           type="button"
+          disabled={!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id)}
           onClick={() => dispatch({ type: 'StartWave' })}
         >{t(state.status === 'READY' ? 'defense.ui.start_wave' : 'defense.ui.start_next')}<kbd className="zb-hotkey">Enter</kbd></button> : null}
         {notice ? <p className="zb-notice" role="status">{notice}</p> : null}

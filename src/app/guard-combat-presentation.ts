@@ -1,7 +1,7 @@
 import presentation from '../../content/defense/guard-combat-presentation-v1.json';
 import type {DefenseCombatShot,DefensePoint,DefenseTowerId,DefenseLevelId} from '../domain/defense';
 export function guardMuzzleOffset(shot:DefenseCombatShot,rotated=false,targetIndex=0):DefensePoint{
- const origins=presentation.origins[`${shot.towerId}.${shot.levelId}`];
+ const origins=(presentation.origins as Record<string,number[][]>)[`${shot.towerId}.${shot.levelId}`]??[[.7,.35]];
  const hash=[...shot.id].reduce((n,c)=>(n*31+c.charCodeAt(0))>>>0,0);
  const at=origins[(hash+targetIndex)%origins.length]!,x=-54+at[0]!*108,y=-77+at[1]!*108;
  return rotated?{x:y,y:-x}:{x,y};

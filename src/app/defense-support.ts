@@ -6,6 +6,7 @@ export const DEFENSE_SUPPORT_CHARACTER_IDS: Readonly<Record<DefenseSupportId, st
   COMMANDER: 'player',
   REBAR_LEAD: 'yoon_sungho',
   ENGINEER: 'lee_jaehoon',
+  SIGNALER:'choi_minseok',
 });
 
 export function defenseSupportCharacterId(supportId: DefenseSupportId): string {

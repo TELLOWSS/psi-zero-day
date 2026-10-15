@@ -5,6 +5,7 @@ export interface DefenseResolvedEcho {
   readonly id: string;
   readonly enemyId: DefenseEnemyId;
   readonly distance: number;
+  readonly routeId?:string;
 }
 
 export interface DefensePresentationDelta {
@@ -32,7 +33,7 @@ export function defensePresentationDelta(
   const resolvedEnemyEchoes = current.resource > previous.resource && !shieldHit
     ? previous.enemies
       .filter(enemy => !currentIds.has(enemy.id))
-      .map(enemy => ({ id: enemy.id, enemyId: enemy.enemyId, distance: enemy.distance }))
+      .map(enemy => ({ id: enemy.id, enemyId: enemy.enemyId, distance: enemy.distance,...(enemy.routeId?{routeId:enemy.routeId}:{}) }))
     : [];
   return { damagedEnemyIds, shieldHit, resolvedEnemyEchoes };
 }

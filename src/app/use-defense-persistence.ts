@@ -292,7 +292,7 @@ export function useDefensePersistence(
   }, [persistRun, settleFinishedRun, state]);
 
   const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content) => {
-    let run = createDefenseRun(launchContent, supportId, newRunId());
+    let run = createDefenseRun(launchContent, supportId, newRunId(),{ultimateUnlocked:launchContent.ultimateEnabled&&documentRef.current.records.some(r=>r.scenarioId==='guard-gd-03-v1'&&r.clears>0)});
     if (portrait) run = applyDefenseCommand(run, launchContent, { type: 'SetPaused', paused: true });
     stateRef.current = run;
     previousRunRef.current = run;
@@ -334,7 +334,8 @@ export function useDefensePersistence(
     stateRef.current = next;
     setStateInternal(next);
     if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
-      || command.type === 'SetPaused' || command.type === 'StartWave' || command.type === 'TriggerEStop') {
+      || command.type === 'SetPaused' || command.type === 'StartWave' || command.type === 'TriggerEStop'
+      || command.type === 'ConfirmTransition' || command.type === 'RelocateTower' || command.type === 'UseSupport') {
       void persistRun(next);
     }
     return next;

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DefenseContent, DefensePoint, DefenseRunState } from '../domain/defense';
 import { defensePositionAtDistance } from '../engine/defense';
+import {defenseEnemyPath,defenseRoutes} from '../engine/defense-geometry';
 import { defenseMapFrame, defenseMapPointPercent } from '../app/defense-map-framing';
 import { defenseVisualPadPoint, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 
@@ -64,8 +65,8 @@ function controlThreat(
   let best: { enemyId: string; focus: DefensePoint; score: number } | null = null;
   for (const enemy of state.enemies) {
     if (enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED') continue;
-    const pos = defensePositionAtDistance(content.map.path, enemy.distance);
-    const visualPos = defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance);
+    const pos = defensePositionAtDistance(defenseEnemyPath(content,enemy,state), enemy.distance);
+    const visualPos = defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,enemy,state), enemy.distance);
     for (const control of controls) {
       const dx = pos.x - control.pad.x;
       const dy = pos.y - control.pad.y;
@@ -117,8 +118,8 @@ export function defenseCameraSignal(
       kind: 'APPROACH',
       enemyId: first?.id ?? null,
       focus: first
-        ? defenseVisualPositionAtDistance(content.map.id, content.map.path, first.distance)
-        : defenseVisualPositionAtDistance(content.map.id, content.map.path, 0),
+        ? defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,first,current), first.distance)
+        : defenseVisualPositionAtDistance(content.map.id, defenseRoutes(content,current)[0]!.path, 0),
       reason: 'WAVE_ENTRY',
     };
   }
@@ -128,7 +129,7 @@ export function defenseCameraSignal(
     return {
       kind: 'APPROACH',
       enemyId: newlySpawned.id,
-      focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, newlySpawned.distance),
+      focus: defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,newlySpawned,current), newlySpawned.distance),
       reason: 'RISK_ENTRY',
     };
   }
@@ -146,7 +147,7 @@ export function defenseCameraSignal(
         enemyId: enemy.id,
         focus: relationship?.enemyId === enemy.id
           ? relationship.focus
-          : defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance),
+          : defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,enemy,current), enemy.distance),
         reason: 'CONTROL_INTERVENTION',
       };
     }
@@ -159,7 +160,7 @@ export function defenseCameraSignal(
       return {
         kind: 'APPROACH',
         enemyId: currentVeiled.id,
-        focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, currentVeiled.distance),
+        focus: defenseVisualPositionAtDistance(content.map.id, defenseEnemyPath(content,currentVeiled,current), currentVeiled.distance),
         reason: 'VEILED_REVEAL',
       };
     }

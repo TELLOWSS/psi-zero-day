@@ -3,12 +3,18 @@ export type DefenseTargetMode = 'FIRST' | 'STRONG';
 export type DefenseStatus = 'READY' | 'RUNNING' | 'INTERMISSION' | 'WON' | 'LOST';
 export type DefenseTowerId = 'PULSE' | 'BURST' | 'CONTROL' | 'SENSOR';
 export type DefenseEnemyId = 'NORMAL' | 'SWIFT' | 'ARMORED' | 'SWARM' | 'VEILED' | 'BOSS';
-export type DefenseSupportId = 'COORDINATOR' | 'OBSERVER' | 'COMMANDER' | 'REBAR_LEAD' | 'ENGINEER';
-export type DefenseLevelId = 'L1' | 'L2' | 'L3A' | 'L3B';
+export type DefenseSupportId = 'COORDINATOR' | 'OBSERVER' | 'COMMANDER' | 'REBAR_LEAD' | 'ENGINEER' | 'SIGNALER';
+export type DefenseLevelId = 'L1' | 'L2' | 'L3A' | 'L3B' | 'L4A' | 'L4B';
+export type DefenseUltimateMechanic='VOLLEY'|'PIERCE'|'WAVE'|'DELAY'|'LOCK'|'BOUNDARY'|'OBSERVATION'|'ANALYSIS';
 
 export interface DefensePoint { readonly x: number; readonly y: number }
 /** Ephemeral engine output for presentation; never part of a saved run. */
 export interface DefenseCombatShot {
+  readonly phase?:'LAUNCH'|'IMPACT';
+  readonly mechanic?:DefenseUltimateMechanic;
+  readonly origin?:DefensePoint;
+  readonly targetPoint?:DefensePoint;
+  readonly radius?:number;
   readonly id: string;
   readonly towerId: DefenseTowerId;
   readonly levelId: DefenseLevelId;
@@ -28,13 +34,17 @@ export interface DefenseCombatFrame {
 }
 export interface DefensePad extends DefensePoint { readonly id: string }
 export interface DefenseMapDefinition {
+  readonly routes?:readonly DefenseRoute[];
+  readonly transition?:{readonly id:string;readonly beforeWave:number;readonly routes:readonly DefenseRoute[]};
   readonly id: string;
   readonly width: number;
   readonly height: number;
   readonly path: readonly (readonly [number, number])[];
   readonly pads: readonly DefensePad[];
 }
+export interface DefenseRoute {readonly id:string;readonly path:readonly (readonly [number,number])[]}
 export interface DefenseTowerLevelDefinition {
+  readonly ultimate?:DefenseUltimateMechanic;
   readonly id: DefenseLevelId;
   readonly from: DefenseLevelId | null;
   readonly cost: number;
@@ -72,6 +82,8 @@ export interface DefenseEnemyDefinition {
   readonly phase?: DefenseBossPhaseDefinition;
 }
 export interface DefenseSupportDefinition {
+  readonly relocation?:boolean;
+  readonly directionalRange?:{readonly bonus:number;readonly halfAngle:number;readonly durationTicks:number};
   readonly armorExposeTicks?: number;
   readonly armorExposeFraction?: number;
   readonly readyOneTower?: boolean;
@@ -85,6 +97,7 @@ export interface DefenseSupportDefinition {
   readonly rangeBonusTicks: number;
 }
 export interface DefenseSpawnGroup {
+  readonly routeId?:string;
   readonly enemy: DefenseEnemyId;
   readonly count: number;
   readonly startTick: number;
@@ -105,6 +118,7 @@ export interface DefenseScenarioDefinition {
   readonly eventContentVersion: string | null;
 }
 export interface DefenseContent {
+  readonly ultimateEnabled?:boolean;
   readonly preparationMode?: 'MANUAL';
   readonly combatReportEnabled?: boolean;
   readonly schemaVersion: 1;
@@ -135,6 +149,8 @@ export interface DefenseSlowEffect {
   readonly endTick: number;
 }
 export interface DefenseEnemyState {
+  readonly routeId?:string;
+  readonly lockedUntilTick?:number;
   readonly armorExposedUntilTick?: number;
   readonly armorExposeFraction?: number;
   readonly id: string;
@@ -149,6 +165,9 @@ export interface DefenseEnemyState {
   readonly bossArmorUntilTick: number;
 }
 export interface DefenseTowerState {
+  readonly charge?:number;
+  readonly analysisTargetId?:string|null;
+  readonly analysisTicks?:number;
   readonly id: string;
   readonly padId: string;
   readonly towerId: DefenseTowerId;
@@ -162,6 +181,12 @@ export type DefenseRunMode = 'TRAINING' | 'EVENT';
 export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
+  readonly ultimateUnlocked?:boolean;
+  readonly pendingAttacks?:readonly DefensePendingAttack[];
+  readonly mapPhase?:'INITIAL'|'SHIFTED';
+  readonly appliedTransitionIds?:readonly string[];
+  readonly redeploymentCredits?:number;
+  readonly guidance?:{readonly padId:string;readonly direction:DefensePoint;readonly untilTick:number;readonly bonus:number;readonly halfAngle:number};
   readonly tacticalStats?: DefenseTacticalStats;
   readonly runId: string;
   readonly mode: DefenseRunMode;
@@ -193,6 +218,23 @@ export interface DefenseRunState {
   readonly completedWaves: number;
   readonly leakedByEnemy: Readonly<Partial<Record<DefenseEnemyId, number>>>;
 }
+export interface DefensePendingAttack {
+ readonly id:string;
+ readonly kind:'VOLLEY'|'WAVE'|'DELAY';
+ readonly towerInstanceId:string;
+ readonly towerId:DefenseTowerId;
+ readonly levelId:DefenseLevelId;
+ readonly padId:string;
+ readonly origin:DefensePoint;
+ readonly center:DefensePoint;
+ readonly targetMode:DefenseTargetMode;
+ readonly level:DefenseTowerLevelDefinition;
+ readonly startedTick:number;
+ readonly dueTick:number;
+ readonly expiresTick:number;
+ readonly hitEnemyIds:readonly string[];
+ readonly progressRadius:number;
+}
 
 export interface DefenseFamilyStats {readonly damage:number;readonly resolved:number;readonly shots:number}
 export interface DefenseTacticalStats extends DefenseFamilyStats {
@@ -218,12 +260,14 @@ export interface DefenseTacticalReport {
 }
 
 export type DefenseCommand =
+  | {readonly type:'RelocateTower';readonly towerInstanceId:string;readonly padId:string}
+  | {readonly type:'ConfirmTransition'}
   | { readonly type: 'Build'; readonly padId: string; readonly towerId: DefenseTowerId }
   | { readonly type: 'Upgrade'; readonly towerInstanceId: string; readonly levelId: DefenseLevelId }
   | { readonly type: 'Sell'; readonly towerInstanceId: string }
   | { readonly type: 'SetTargetMode'; readonly towerInstanceId: string; readonly targetMode: DefenseTargetMode }
   | { readonly type: 'StartWave' }
-  | { readonly type: 'UseSupport' }
+  | { readonly type: 'UseSupport';readonly towerInstanceId?:string;readonly direction?:DefensePoint }
   | { readonly type: 'TriggerEStop' }
   | { readonly type: 'SetSpeed'; readonly speed: 1 | 2 }
   | { readonly type: 'SetPaused'; readonly paused: boolean };

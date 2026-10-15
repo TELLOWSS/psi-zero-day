@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import {guardContents} from '../src/content/guard-campaign';
+import {guardFoundationContents as guardContents} from '../src/content/guard-campaign';
 import {zeroBreachContent} from '../src/content/defense';
 import {createDefenseRun,applyDefenseCommand,advanceDefense,advanceDefenseWithCombat,defenseResult} from '../src/engine/defense';
 import {closeDefenseTacticalWave,withDefenseTacticalStats} from '../src/engine/defense-tactical-stats';
