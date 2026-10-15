@@ -4,6 +4,8 @@
 
 > 구현 추적: [P0/P1의 기존 16상태 계승·8분기 시연·첨부 32음원 적용](GUARD-CAMPAIGN-IMPLEMENTATION-20261015.md). 신규 L4 8종은 P2 범위이며 아직 미구현이다.
 
+> P1 후속: [5상황 실제 A/B 비교·16상태 발사 원점·분기 표현/음향·계열별 전투 기록](GUARD-GAMEPLAY-DEPTH-20261015.md).
+
 **범위: 기획 수정. 신규 진화·원화·음원·엔진 기능은 이번 작업에서 구현하지 않는다.** 현재 16개 타워 외형/실제 L3 분기와 후속 8개 최종 진화를 명확히 구분한다. 본 문서는 [독립 캠페인](DEFENSE-INDEPENDENT-CAMPAIGN-MASTER-PLAN-20261015.md), [캐릭터 구성](DEFENSE-CHARACTER-ROSTER-PLAN-20261015.md), [기존 전투 시청각](DEFENSE-COMBAT-AV-PLAN-20261015.md)을 함께 보강한다.
 
 ## 1. 목표: 실루엣만 봐도 내 선택을 알 수 있는 진화

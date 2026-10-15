@@ -1,0 +1,612 @@
+[
+  {
+    "name": "pc",
+    "width": 1440,
+    "height": 900,
+    "crew": [
+      {
+        "id": "COORDINATOR",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "OBSERVER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "REBAR_LEAD",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-map.webp?v=61a30d31aeed",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "ENGINEER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-map.webp?v=77c153a59b7e",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      }
+    ],
+    "trials": [
+      {
+        "fixture": "NORMAL",
+        "results": [
+          "L3A실제 누적 대응 308해소 6 / 10",
+          "L3B실제 누적 대응 152해소 2 / 10"
+        ]
+      },
+      {
+        "fixture": "SWARM",
+        "results": [
+          "L3A실제 누적 대응 576해소 32 / 32",
+          "L3B실제 누적 대응 288해소 16 / 32"
+        ]
+      },
+      {
+        "fixture": "ARMORED",
+        "results": [
+          "L3A실제 누적 대응 240해소 0 / 8",
+          "L3B실제 누적 대응 212해소 1 / 8"
+        ]
+      },
+      {
+        "fixture": "VEILED",
+        "results": [
+          "L3A실제 누적 대응 0해소 0 / 10",
+          "L3B실제 누적 대응 0해소 0 / 10"
+        ]
+      },
+      {
+        "fixture": "MIXED",
+        "results": [
+          "L3A실제 누적 대응 602해소 17 / 21",
+          "L3B실제 누적 대응 254해소 6 / 21"
+        ]
+      }
+    ],
+    "previews": [
+      {
+        "level": "L3A",
+        "damage": "실제 누적 대응 120",
+        "static": "false"
+      },
+      {
+        "level": "L3B",
+        "damage": "실제 누적 대응 140",
+        "static": "false"
+      }
+    ],
+    "checkpointTick": 8,
+    "resource": 110,
+    "overflow": false,
+    "legacyPreserved": true,
+    "audioPausedOnReturn": true,
+    "errors": []
+  },
+  {
+    "name": "portrait",
+    "width": 390,
+    "height": 844,
+    "crew": [
+      {
+        "id": "COORDINATOR",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "OBSERVER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "REBAR_LEAD",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-map.webp?v=61a30d31aeed",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "ENGINEER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-map.webp?v=77c153a59b7e",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      }
+    ],
+    "trials": [
+      {
+        "fixture": "NORMAL",
+        "results": [
+          "L3A실제 누적 대응 308해소 6 / 10",
+          "L3B실제 누적 대응 152해소 2 / 10"
+        ]
+      },
+      {
+        "fixture": "SWARM",
+        "results": [
+          "L3A실제 누적 대응 576해소 32 / 32",
+          "L3B실제 누적 대응 288해소 16 / 32"
+        ]
+      },
+      {
+        "fixture": "ARMORED",
+        "results": [
+          "L3A실제 누적 대응 240해소 0 / 8",
+          "L3B실제 누적 대응 212해소 1 / 8"
+        ]
+      },
+      {
+        "fixture": "VEILED",
+        "results": [
+          "L3A실제 누적 대응 0해소 0 / 10",
+          "L3B실제 누적 대응 0해소 0 / 10"
+        ]
+      },
+      {
+        "fixture": "MIXED",
+        "results": [
+          "L3A실제 누적 대응 602해소 17 / 21",
+          "L3B실제 누적 대응 254해소 6 / 21"
+        ]
+      }
+    ],
+    "previews": [
+      {
+        "level": "L3A",
+        "damage": "실제 누적 대응 120",
+        "static": "true"
+      },
+      {
+        "level": "L3B",
+        "damage": "실제 누적 대응 108",
+        "static": "true"
+      }
+    ],
+    "checkpointTick": 8,
+    "resource": 110,
+    "overflow": false,
+    "legacyPreserved": true,
+    "audioPausedOnReturn": true,
+    "errors": []
+  },
+  {
+    "name": "landscape",
+    "width": 844,
+    "height": 390,
+    "crew": [
+      {
+        "id": "COORDINATOR",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "OBSERVER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "REBAR_LEAD",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-map.webp?v=61a30d31aeed",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "ENGINEER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-map.webp?v=77c153a59b7e",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      }
+    ],
+    "trials": [
+      {
+        "fixture": "NORMAL",
+        "results": [
+          "L3A실제 누적 대응 308해소 6 / 10",
+          "L3B실제 누적 대응 152해소 2 / 10"
+        ]
+      },
+      {
+        "fixture": "SWARM",
+        "results": [
+          "L3A실제 누적 대응 576해소 32 / 32",
+          "L3B실제 누적 대응 288해소 16 / 32"
+        ]
+      },
+      {
+        "fixture": "ARMORED",
+        "results": [
+          "L3A실제 누적 대응 240해소 0 / 8",
+          "L3B실제 누적 대응 212해소 1 / 8"
+        ]
+      },
+      {
+        "fixture": "VEILED",
+        "results": [
+          "L3A실제 누적 대응 0해소 0 / 10",
+          "L3B실제 누적 대응 0해소 0 / 10"
+        ]
+      },
+      {
+        "fixture": "MIXED",
+        "results": [
+          "L3A실제 누적 대응 602해소 17 / 21",
+          "L3B실제 누적 대응 254해소 6 / 21"
+        ]
+      }
+    ],
+    "previews": [
+      {
+        "level": "L3A",
+        "damage": "실제 누적 대응 120",
+        "static": "true"
+      },
+      {
+        "level": "L3B",
+        "damage": "실제 누적 대응 108",
+        "static": "true"
+      }
+    ],
+    "checkpointTick": 8,
+    "resource": 110,
+    "overflow": false,
+    "legacyPreserved": true,
+    "audioPausedOnReturn": true,
+    "errors": []
+  },
+  {
+    "name": "small-portrait",
+    "width": 320,
+    "height": 568,
+    "crew": [
+      {
+        "id": "COORDINATOR",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "OBSERVER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "REBAR_LEAD",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-map.webp?v=61a30d31aeed",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "ENGINEER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-map.webp?v=77c153a59b7e",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      }
+    ],
+    "trials": [
+      {
+        "fixture": "NORMAL",
+        "results": [
+          "L3A실제 누적 대응 308해소 6 / 10",
+          "L3B실제 누적 대응 152해소 2 / 10"
+        ]
+      },
+      {
+        "fixture": "SWARM",
+        "results": [
+          "L3A실제 누적 대응 576해소 32 / 32",
+          "L3B실제 누적 대응 288해소 16 / 32"
+        ]
+      },
+      {
+        "fixture": "ARMORED",
+        "results": [
+          "L3A실제 누적 대응 240해소 0 / 8",
+          "L3B실제 누적 대응 212해소 1 / 8"
+        ]
+      },
+      {
+        "fixture": "VEILED",
+        "results": [
+          "L3A실제 누적 대응 0해소 0 / 10",
+          "L3B실제 누적 대응 0해소 0 / 10"
+        ]
+      },
+      {
+        "fixture": "MIXED",
+        "results": [
+          "L3A실제 누적 대응 602해소 17 / 21",
+          "L3B실제 누적 대응 254해소 6 / 21"
+        ]
+      }
+    ],
+    "previews": [
+      {
+        "level": "L3A",
+        "damage": "실제 누적 대응 120",
+        "static": "true"
+      },
+      {
+        "level": "L3B",
+        "damage": "실제 누적 대응 108",
+        "static": "true"
+      }
+    ],
+    "checkpointTick": 8,
+    "resource": 110,
+    "overflow": false,
+    "legacyPreserved": true,
+    "audioPausedOnReturn": true,
+    "errors": []
+  },
+  {
+    "name": "small-landscape",
+    "width": 568,
+    "height": 320,
+    "crew": [
+      {
+        "id": "COORDINATOR",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "OBSERVER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "REBAR_LEAD",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-map.webp?v=61a30d31aeed",
+            "width": 1024,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/yoon-sungho-portrait.webp?v=b9a33b02504a",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      },
+      {
+        "id": "ENGINEER",
+        "images": [
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-map.webp?v=77c153a59b7e",
+            "width": 768,
+            "loaded": "true"
+          },
+          {
+            "src": "./assets/episode01/characters/lee-jaehoon-portrait.webp?v=88f46e2cbf6e",
+            "width": 1024,
+            "loaded": "true"
+          }
+        ]
+      }
+    ],
+    "trials": [
+      {
+        "fixture": "NORMAL",
+        "results": [
+          "L3A실제 누적 대응 308해소 6 / 10",
+          "L3B실제 누적 대응 152해소 2 / 10"
+        ]
+      },
+      {
+        "fixture": "SWARM",
+        "results": [
+          "L3A실제 누적 대응 576해소 32 / 32",
+          "L3B실제 누적 대응 288해소 16 / 32"
+        ]
+      },
+      {
+        "fixture": "ARMORED",
+        "results": [
+          "L3A실제 누적 대응 240해소 0 / 8",
+          "L3B실제 누적 대응 212해소 1 / 8"
+        ]
+      },
+      {
+        "fixture": "VEILED",
+        "results": [
+          "L3A실제 누적 대응 0해소 0 / 10",
+          "L3B실제 누적 대응 0해소 0 / 10"
+        ]
+      },
+      {
+        "fixture": "MIXED",
+        "results": [
+          "L3A실제 누적 대응 602해소 17 / 21",
+          "L3B실제 누적 대응 254해소 6 / 21"
+        ]
+      }
+    ],
+    "previews": [
+      {
+        "level": "L3A",
+        "damage": "실제 누적 대응 120",
+        "static": "true"
+      },
+      {
+        "level": "L3B",
+        "damage": "실제 누적 대응 108",
+        "static": "true"
+      }
+    ],
+    "checkpointTick": 8,
+    "resource": 110,
+    "overflow": false,
+    "legacyPreserved": true,
+    "audioPausedOnReturn": true,
+    "errors": []
+  }
+]

@@ -5,6 +5,7 @@ import {defenseText as t} from '../app/defense-text';
 import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import art from '../../content/defense/guard-art-v1.json';
 import './guard-campaign.css';
+import {GuardTacticalDebrief} from './GuardTacticalDebrief';
 
 export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}:{document:DefenseSaveDocument;onSelect:(id:string,replace:boolean)=>void;onResume?:()=>void;onExit:()=>void;onPractice?:()=>void}){
  const [pending,setPending]=useState<string|null>(null);
@@ -22,7 +23,8 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
     const record=document.records.find(r=>r.scenarioId===content.scenario.id),unlocked=guardStageUnlocked(content.scenario.id,document),key=`guard.gd0${i+1}`;
     return <article key={key} className={unlocked?'is-unlocked':'is-locked'} data-guard-stage={content.scenario.id}>
      <img src={'/'+art.boards[i]!.uri} alt=""/><div><small>GD-0{i+1} · {content.waves.length}{t('guard.wave')} <span>{'★'.repeat(record?.bestStars??0)}</span></small>
-     <h3>{t(key+'.title')}</h3><p>{t(key+'.hint')}</p><button disabled={!unlocked} onClick={()=>active?setPending(content.scenario.id):onSelect(content.scenario.id,false)}>{t(unlocked?'guard.start':'guard.locked')}</button></div>
+     <h3>{t(key+'.title')}</h3><p>{t(key+'.hint')}</p><button disabled={!unlocked} onClick={()=>active?setPending(content.scenario.id):onSelect(content.scenario.id,false)}>{t(unlocked?'guard.start':'guard.locked')}</button>
+     {record?.lastTacticalReport?.contentVersion===content.contentVersion?<details className="guard-last-report"><summary>{t('guard.review.last')}</summary><GuardTacticalDebrief report={record.lastTacticalReport}/></details>:null}</div>
     </article>;
    })}</div>
   </section>

@@ -32,6 +32,10 @@ import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepO
 import {GUARD_ENTRY,guardContents,guardStageIds,guardStageUnlocked,guardSupportUnlocked,isGuardMap,isGuardScenario} from '../content/guard-campaign';
 import {guardStoragePort,GUARD_SAVE_KEY} from '../app/guard-storage';
 import {GuardCampaignHome} from './GuardCampaignHome';
+import {GuardWaveIntel} from './GuardWaveIntel';
+import {GuardTacticalDebrief} from './GuardTacticalDebrief';
+import {guardTacticalReport,guardDebriefAdvice} from '../app/guard-tactical-report';
+import {readGuardPlanningStyle,writeGuardPlanningStyle} from '../app/guard-planning-style';
 import { useDefenseAudio } from './useDefenseAudio';
 import {DefenseCombatFX,useDefenseCombatFX} from './DefenseCombatFX';
 import { useDefenseEffects } from './useDefenseEffects';
@@ -168,12 +172,12 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-tower-family={tower.towerId}
       data-premium-equipment={premium?'true':undefined}
     >
-      {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
-      {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
+      {firing && tower.towerId !== 'CONTROL'&&!isGuardMap(content.map.id) ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId === 'CONTROL'&&!isGuardMap(content.map.id) ? <g className="zb-control-intervention" aria-hidden="true">
         <ellipse cx="0" cy="20" rx="32" ry="9" />
         <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
       </g> : null}
-      {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
+      {firing && tower.towerId === 'BURST'&&!isGuardMap(content.map.id) ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
       {revealing ? <circle r={isGuardMap(content.map.id)?level.revealRadius:58} className={isGuardMap(content.map.id)?'guard-reveal-range':'zb-detect-pulse'} aria-hidden="true" /> : null}
       {premium?<ellipse cx="0" cy="20" rx="28" ry="8" className="zb-premium-contact" aria-hidden="true"/>:null}
       {premium&&firing&&content.map.id!=='ramp-01'&&!isGuardMap(content.map.id)?<g className={`zb-premium-discharge is-${tower.towerId.toLowerCase()}`} aria-hidden="true">
@@ -378,6 +382,7 @@ export function DefenseGame({
   const episodeState = session.getSnapshot?.().state ?? null;
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
+  const [planningStyle,setPlanningStyle]=useState(readGuardPlanningStyle);
   const selectedScenarioAllowed = (isGuardScenario(selectedScenarioId)&&guardStageUnlocked(selectedScenarioId!,persistence.document)) || selectedScenarioId === zeroBreachContent.scenario.id
     || selectedScenarioId === remodelDefense.scenario.id
     || selectedScenarioId === dataCenterDefense.scenario.id
@@ -414,7 +419,7 @@ export function DefenseGame({
   });
   const combatFrameRef=useRef<readonly DefenseCombatShot[]>([]);
   const combatShots=useDefenseCombatFX(state,combatFrameRef.current);
-  const audio = useDefenseAudio(state, content.map.id,combatFrameRef.current,content.waves.length);
+  const audio = useDefenseAudio(state, content.map.id,combatFrameRef.current,content.waves.length,portrait);
   const effects = useDefenseEffects(state);
   const camera = useDefenseCamera(state, content, portrait);
   const oneStep = useDefCoreOneStep({
@@ -435,7 +440,7 @@ export function DefenseGame({
   const supportCharacter = supportCharacterId ? session.character(supportCharacterId) : null;
   const supportPortrait = supportCharacterId ? characterPortraitUri(supportCharacterId, id => session.assetUri(id)) : undefined;
   const preview = state ? defensePlanningWave(content, state) : null;
-  const advice = state ? recommendDefenseAction(content, state) : null;
+  const advice = state ? recommendDefenseAction(content, state,guard?planningStyle:'BALANCED') : null;
   const result = state && (state.status === 'WON' || state.status === 'LOST') ? defenseResult(state) : null;
   const activeEvent = state?.eventId ? defenseEventById(state.eventId) : undefined;
   const leakedEntries = state
@@ -818,7 +823,7 @@ export function DefenseGame({
       <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`}><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
-      <div className="zb-status"><span>{statusLabel(state)}</span>{state.paused ? <b>{t('defense.tactics.hold')}</b> : null}</div>
+      <div className="zb-status"><span>{guard&&state.status==='INTERMISSION'?t('guard.preparation'):statusLabel(state)}</span>{state.paused ? <b>{t('defense.tactics.hold')}</b> : null}</div>
       <button
         type="button"
         className="zb-hud-button"
@@ -1093,6 +1098,8 @@ export function DefenseGame({
       </section>
 
       <section className="zb-run-controls">
+        {guard&&(state.status==='READY'||state.status==='INTERMISSION')?<p className="guard-preparation-hint">{t('guard.preparation.hint')}</p>:null}
+        {guard&&preview&&(state.status==='READY'||state.status==='INTERMISSION')?<GuardWaveIntel key={`${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}}/>:null}
         <div className="zb-support-action">
           <VisualImage uri={supportPortrait} alt="" className="zb-support-mini" />
           <span><small>{supportCharacter?.name ?? state.supportId}</small><strong>{t(guard&&(state.supportId==='REBAR_LEAD'||state.supportId==='ENGINEER')?`guard.support.${state.supportId}`:`defense.support.${state.supportId}.skill`)}</strong></span>
@@ -1148,11 +1155,17 @@ export function DefenseGame({
           <div><dt>{t('defense.ui.completed')}</dt><dd>{result.completedWaves} / {content.waves.length}</dd></div>
           <div><dt>{t('defense.ui.shield')}</dt><dd>{result.shield}</dd></div>
         </dl>
-        <section className="zb-tactics-debrief"><h3>{t('defense.tactics.review')}</h3><p>{t('defense.tactics.boundary')}</p>
+        <div className="zb-result-actions">
+          {guard&&result.won&&guardContents[guardIndex+1]?<button className="guard-next" disabled={persistence.saveStatus==='saving'||!persistence.document.records.some(r=>r.scenarioId===content.scenario.id&&r.clears>0)} onClick={()=>{persistence.retryAfterResult();setSelectedScenarioId(guardStageIds[guardIndex+1]!);}}>{t("guard.next")}</button>:null}
+          <button type="button" onClick={retry}>{t('defense.ui.retry')}</button>
+          <button type="button" onClick={() => { if(guard)void operations();else void persistence.exitToMain(); }}>{t(guard?'guard.home':activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
+        </div>
+        {guard&&state.tacticalStats?<details className="guard-result-review"><summary>{t('guard.review')} · {t('guard.review.resolved')} {state.tacticalStats.resolved}</summary><GuardTacticalDebrief report={guardTacticalReport(content,state)!} adviceId={guardDebriefAdvice(state)}/></details>:null}
+        {guard?<p className="guard-result-boundary">{t('defense.tactics.boundary')}</p>:<section className="zb-tactics-debrief"><h3>{t('defense.tactics.review')}</h3><p>{t('defense.tactics.boundary')}</p>
           <strong>{t('defense.tactics.loadout')}</strong><p>{state.towers.map(tower=>`${tower.padId} ${towerName(content.map.id,tower.towerId)} ${tower.levelId}`).join(' · ')||'—'}</p>
           <strong>{t('defense.tactics.leaks')}</strong><p>{leakedEntries.length?leakedEntries.map(([id,count])=>`${enemyName(content.map.id,id)} ×${count}`).join(' · '):t('defense.tactics.no_leaks')}</p>
           {leakedEntries.length?<p>{t('defense.tactics.recommended')} · {towerName(content.map.id,recommendedTowerId)} · {towerRole(content.map.id,recommendedTowerId)}</p>:null}
-        </section>
+        </section>}
         {activeEvent && eventDebriefTextId ? <section className="zb-event-debrief" data-event-debrief={activeEvent.id}>
           <strong>{t(activeEvent.titleTextId)}</strong>
           <p>{t(eventDebriefTextId)}</p>
@@ -1176,11 +1189,6 @@ export function DefenseGame({
               : id === content.scenario.threeStarCosmetic ? t('defense.save.reward.three') : t('defense.save.reward.first')}
           </span>)}
         </div> : null}
-        <div className="zb-result-actions">
-          {guard&&result.won&&guardContents[guardIndex+1]?<button className="guard-next" disabled={persistence.saveStatus==='saving'||!persistence.document.records.some(r=>r.scenarioId===content.scenario.id&&r.clears>0)} onClick={()=>{persistence.retryAfterResult();setSelectedScenarioId(guardStageIds[guardIndex+1]!);}}>{t("guard.next")}</button>:null}
-          <button type="button" onClick={retry}>{t('defense.ui.retry')}</button>
-          <button type="button" onClick={() => { if(guard)void operations();else void persistence.exitToMain(); }}>{t(guard?'guard.home':activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
-        </div>
       </div>
     </section> : null}
 

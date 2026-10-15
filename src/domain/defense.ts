@@ -105,6 +105,8 @@ export interface DefenseScenarioDefinition {
   readonly eventContentVersion: string | null;
 }
 export interface DefenseContent {
+  readonly preparationMode?: 'MANUAL';
+  readonly combatReportEnabled?: boolean;
   readonly schemaVersion: 1;
   readonly rulesVersion: string;
   readonly contentVersion: string;
@@ -160,6 +162,7 @@ export type DefenseRunMode = 'TRAINING' | 'EVENT';
 export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
+  readonly tacticalStats?: DefenseTacticalStats;
   readonly runId: string;
   readonly mode: DefenseRunMode;
   readonly variant: DefenseRunVariant;
@@ -189,6 +192,29 @@ export interface DefenseRunState {
   readonly rangeBonusUntilTick: number;
   readonly completedWaves: number;
   readonly leakedByEnemy: Readonly<Partial<Record<DefenseEnemyId, number>>>;
+}
+
+export interface DefenseFamilyStats {readonly damage:number;readonly resolved:number;readonly shots:number}
+export interface DefenseTacticalStats extends DefenseFamilyStats {
+ readonly initialLeaks:number;
+ readonly initialShield:number;
+ readonly trackedFromTick:number;
+ readonly supportUses:number;
+ readonly eStopUses:number;
+ readonly peakSignals:number;
+ readonly byFamily:Readonly<Partial<Record<DefenseTowerId,DefenseFamilyStats>>>;
+ readonly bestClear:{readonly count:number;readonly towerId:DefenseTowerId;readonly levelId:DefenseLevelId;readonly padId:string;readonly waveId:number}|null;
+ readonly waves:readonly {readonly waveId:number;readonly resolved:number;readonly leaks:number;readonly shieldLost:number}[];
+}
+
+export interface DefenseTacticalReport {
+ readonly runId:string;
+ readonly contentVersion:string;
+ readonly supportId:DefenseSupportId;
+ readonly won:boolean;
+ readonly shield:number;
+ readonly stats:DefenseTacticalStats;
+ readonly loadout:readonly Pick<DefenseTowerState,'padId'|'towerId'|'levelId'|'targetMode'>[];
 }
 
 export type DefenseCommand =

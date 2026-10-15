@@ -13,6 +13,9 @@ try{for(const [name,width,height] of [['pc',1440,900],['portrait',390,844],['lan
  await page.screenshot({path:path.join(out,`${name}-four-crew.png`)});await page.locator('[data-support="ENGINEER"]').click();
  const advice=page.locator('.zb-tactics-strip button');await advice.click();await page.locator('.zb-tower-shop button[data-recommended="true"]').click();
  const lab=page.locator('.guard-lab');await lab.locator('summary').click();
+ const trials=[];for(const fixture of ['NORMAL','SWARM','ARMORED','VEILED','MIXED']){await lab.locator(`[data-lab-fixture="${fixture}"]`).click();trials.push({fixture,results:await lab.locator('[data-lab-comparison]').allTextContents()});}
+ await lab.locator('[data-lab-fixture="ARMORED"]').click();
+ await lab.locator('.guard-lab-comparison').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,`${name}-branch-comparison.png`)});
  await page.waitForTimeout(800);
  const readRun=()=>page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('psi-zero-day.guard.save.v1')).payload));
  const before=await readRun();
@@ -35,5 +38,5 @@ try{for(const [name,width,height] of [['pc',1440,900],['portrait',390,844],['lan
  if(after.payload.activeRun.tick!==saved.payload.activeRun.tick||after.payload.activeRun.resource!==saved.payload.activeRun.resource)throw Error('Reload changed checkpoint');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),legacy=await page.evaluate(()=>localStorage.getItem('psi-zero-day.defense.save.v1'));
  if(overflow||legacy!=='legacy-preservation-sentinel'||errors.length)throw Error(name+' layout/save/runtime failure');
- results.push({name,width,height,crew,previews,checkpointTick:saved.payload.activeRun.tick,resource:saved.payload.activeRun.resource,overflow,legacyPreserved:true,audioPausedOnReturn,errors});fs.writeFileSync(path.join(out,'features-browser.json'),JSON.stringify(results,null,2));console.log(name,'PASS');await context.close();
+ results.push({name,width,height,crew,trials,previews,checkpointTick:saved.payload.activeRun.tick,resource:saved.payload.activeRun.resource,overflow,legacyPreserved:true,audioPausedOnReturn,errors});fs.writeFileSync(path.join(out,'features-browser.json'),JSON.stringify(results,null,2));console.log(name,'PASS');await context.close();
  }}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});

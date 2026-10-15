@@ -1,5 +1,7 @@
 # 시그널 가드 독립 작전 P0/P1 구현 기록
 
+> 후속 업데이트: [첫 구역 게임성 고도화](GUARD-GAMEPLAY-DEPTH-20261015.md) — 수동 준비, 3종 추천 설계, 5상황 분기 비교, 실제 전투/동료·도면 기록. 아래 검사 수치와 화면은 최초 구현 당시의 기준선이다.
+
 2026-10-15. 사용자가 첨부한 32개 음원을 사용하여 독립 디펜스 기획의 첫 제작 패키지를 구현했다. 기준 기획은 [독립 캠페인](DEFENSE-INDEPENDENT-CAMPAIGN-MASTER-PLAN-20261015.md), [동료 구성](DEFENSE-CHARACTER-ROSTER-PLAN-20261015.md), [타워 진화·시청각](DEFENSE-TOWER-EVOLUTION-AV-MASTER-PLAN-20261015.md)이다. 기획 전체 12작전·6명·L4가 모두 구현되었다는 의미가 아니다.
 
 ## 실제 제공 범위

@@ -68,11 +68,11 @@ export function defenseResolveCues(previous: DefenseRunState, current: DefenseRu
   return [...(single ? ['single_resolve' as const] : []), ...(area ? ['area_resolve' as const] : [])];
 }
 
-export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null, shots:readonly DefenseCombatShot[] = [],totalWaves=10) {
+export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null, shots:readonly DefenseCombatShot[] = [],totalWaves=10,portrait=false) {
   const muted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const supplied=isGuardMap(mapId);
   const armScore=useGuardScore(state,mapId,muted,totalWaves);
-  const armCombat=useDefenseCombatAudio(state,shots,muted,mapId==='ramp-01'||supplied,supplied);
+  const armCombat=useDefenseCombatAudio(state,shots,muted,mapId==='ramp-01'||supplied,supplied,portrait);
   const contextRef = useRef<AudioContext | null>(null);
   const previousRef = useRef<DefenseRunState | null>(null);
   const armedRef = useRef(false);

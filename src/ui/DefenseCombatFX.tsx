@@ -1,6 +1,8 @@
 import {useEffect,useRef,useState} from 'react';
 import type {DefenseCombatShot,DefenseContent,DefenseRunState} from '../domain/defense';
 import {defenseVisualPadPoint,defenseVisualPositionAtDistance} from '../app/defense-visual-projection';
+import {guardMuzzleOffset} from '../app/guard-combat-presentation';
+import {defenseText as t} from '../app/defense-text';
 import './defense-combat-fx.css';
 
 export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly DefenseCombatShot[]){
@@ -21,9 +23,11 @@ export function useDefenseCombatFX(state:DefenseRunState|null,shots:readonly Def
 }
 
 export function DefenseCombatFX({shots,content,rotated=false}:{shots:readonly DefenseCombatShot[];content:DefenseContent;rotated?:boolean}){
+ const guard=content.map.id.startsWith('guard-gd-');
+ const clearShot=guard?[...shots].filter(s=>s.targets.filter(hit=>hit.resolved).length>=3).sort((a,b)=>b.targets.filter(t=>t.resolved).length-a.targets.filter(t=>t.resolved).length)[0]?.id:undefined;
  return <g className="zb-combat-fx" aria-hidden="true">{shots.map(shot=>{
   const pad=content.map.pads.find(p=>p.id===shot.padId);if(!pad||!shot.targets.length)return null;
-  const origin=defenseVisualPadPoint(content.map.id,pad),mx=shot.towerId==='PULSE'?22:shot.towerId==='BURST'?15:0,my=shot.towerId==='SENSOR'?-38:-30,sx=origin.x+(rotated?my:mx),sy=origin.y+(rotated?-mx:my);
+  const origin=defenseVisualPadPoint(content.map.id,pad),mx=shot.towerId==='PULSE'?22:shot.towerId==='BURST'?15:0,my=shot.towerId==='SENSOR'?-38:-30,offset=guard?guardMuzzleOffset(shot,rotated):{x:rotated?my:mx,y:rotated?-mx:my},sx=origin.x+offset.x,sy=origin.y+offset.y;
   const first=defenseVisualPositionAtDistance(content.map.id,content.map.path,shot.targets[0]!.distance);
   const level=content.towers.find(t=>t.id===shot.towerId)!.levels.find(l=>l.id===shot.levelId)!;
   const arc=shot.towerId==='BURST',path=arc?`M${sx} ${sy} Q${(sx+first.x)/2} ${Math.min(sy,first.y)-65} ${first.x} ${first.y}`:`M${sx} ${sy} L${first.x} ${first.y}`;
@@ -31,10 +35,12 @@ export function DefenseCombatFX({shots,content,rotated=false}:{shots:readonly De
    <path d={path} className="zb-shot-halo"/><path d={path} className="zb-shot-core"/>
    <circle cx={sx} cy={sy} r="9" className="zb-shot-muzzle"/>
    <circle r={arc?5:3.5} className="zb-shot-projectile"><animateMotion dur=".10s" path={path} fill="freeze"/></circle>
-   {shot.levelId==='L3A'?<path d={path} className="zb-shot-echo" transform="translate(0 5)"/>:null}
-   {shot.levelId==='L3B'?<path d={path} className="zb-shot-echo" transform="translate(0 -3)"/>:null}
+   {!guard&&shot.levelId==='L3A'?<path d={path} className="zb-shot-echo" transform="translate(0 5)"/>:null}
+   {!guard&&shot.levelId==='L3B'?<path d={path} className="zb-shot-echo" transform="translate(0 -3)"/>:null}
    {shot.towerId==='BURST'?<circle cx={first.x} cy={first.y} r={level.splashRadius} className="guard-area-footprint"/>:null}
-   {shot.towerId==='CONTROL'?shot.targets.slice(1).map(hit=>{const at=defenseVisualPositionAtDistance(content.map.id,content.map.path,hit.distance);return <path key={hit.id} d={`M${sx} ${sy}L${at.x} ${at.y}`} className="guard-control-tether"/>;}):null}
+   {guard&&shot.towerId==='BURST'?<circle cx={first.x} cy={first.y} r={level.splashRadius} className="guard-branch-wave"/>:null}
+   {shot.towerId==='CONTROL'?shot.targets.slice(1).map((hit,index)=>{const at=defenseVisualPositionAtDistance(content.map.id,content.map.path,hit.distance),o=guard?guardMuzzleOffset(shot,rotated,index+1):offset;return <path key={hit.id} d={`M${origin.x+o.x} ${origin.y+o.y}L${at.x} ${at.y}`} className="guard-control-tether"/>;}):null}
+   {shot.id===clearShot?<g transform={`translate(${first.x} ${first.y})${rotated?' rotate(-90)':''}`}><text className="guard-clear-count" y="-30" textAnchor="middle">{t('guard.review.resolved')} ×{shot.targets.filter(hit=>hit.resolved).length}</text></g>:null}
    {shot.targets.map(hit=>{
     const at=defenseVisualPositionAtDistance(content.map.id,content.map.path,hit.distance);
     return <g key={hit.id} transform={`translate(${at.x} ${at.y})`} data-combat-impact={hit.id} data-combat-damage={hit.damage} data-combat-resolved={hit.resolved}>

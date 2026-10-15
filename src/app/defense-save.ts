@@ -4,6 +4,8 @@ import type {
   DefenseSaveEnvelope, DefenseSaveInspection, DefenseScenarioRecord, DefenseTowerState,
 } from '../domain';
 import type { StoragePort } from '../platform/storage';
+import {validDefenseTacticalStats,validDefenseTacticalReport} from './defense-tactical-validation';
+import {guardTacticalReport} from './guard-tactical-report';
 
 export const DEFENSE_SAVE_KEY = 'psi-zero-day.defense.save.v1';
 export const DEFENSE_SAVE_SCHEMA_VERSION = 1 as const;
@@ -90,11 +92,13 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && nonNegativeInteger(value.revealAllUntilTick)
     && nonNegativeInteger(value.rangeBonusUntilTick)
     && nonNegativeInteger(value.completedWaves)
-    && validLeakMap(value.leakedByEnemy);
+    && validLeakMap(value.leakedByEnemy)
+    && (value.tacticalStats===undefined||validDefenseTacticalStats(value.tacticalStats));
 }
 
 function validRecord(value: unknown): value is DefenseScenarioRecord {
   return record(value)
+    && (value.lastTacticalReport===undefined||validDefenseTacticalReport(value.lastTacticalReport))
     && nonEmptyString(value.scenarioId)
     && nonNegativeInteger(value.finishedRuns)
     && nonNegativeInteger(value.clears)
@@ -265,7 +269,9 @@ export function applyDefenseOutcome(
   }
 
   const previous = document.records.find(record => record.scenarioId === content.scenario.id);
+  const tacticalReport=guardTacticalReport(content,run);
   const record: DefenseScenarioRecord = {
+    ...(tacticalReport?{lastTacticalReport:tacticalReport}:{}),
     scenarioId: content.scenario.id,
     finishedRuns: (previous?.finishedRuns ?? 0) + 1,
     clears: (previous?.clears ?? 0) + (result.won ? 1 : 0),

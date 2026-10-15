@@ -2,6 +2,12 @@
  "initialResource":10000,
  "staticTicks":120,
  "maximumTicks":240,
+ "fixtures":{
+ "NORMAL":[{"enemy":"NORMAL","count":10,"startTick":0,"intervalTicks":20}],
+ "ARMORED":[{"enemy":"ARMORED","count":8,"startTick":0,"intervalTicks":25}],
+ "SWARM":[{"enemy":"SWARM","count":32,"startTick":0,"intervalTicks":5}],
+ "VEILED":[{"enemy":"VEILED","count":10,"startTick":0,"intervalTicks":20}]
+ },
  "waves":[{"id":1,"groups":[
   {"enemy":"NORMAL","count":8,"startTick":0,"intervalTicks":12},
   {"enemy":"ARMORED","count":3,"startTick":30,"intervalTicks":25},

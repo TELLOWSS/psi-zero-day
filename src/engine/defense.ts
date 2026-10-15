@@ -3,6 +3,7 @@ import type {
   DefensePoint, DefenseResult, DefenseRunState, DefenseSlowEffect, DefenseTargetMode,
   DefenseTowerDefinition, DefenseTowerLevelDefinition, DefenseTowerState,
 } from '../domain/defense';
+import {withDefenseTacticalStats,recordDefenseCombat,closeDefenseTacticalWave} from './defense-tactical-stats';
 
 const EPSILON = 1e-9;
 
@@ -117,7 +118,7 @@ export function createDefenseRun(content: DefenseContent, supportId: DefenseRunS
   const support = content.supports.find(item => item.id === supportId);
   if (!support) throw new Error(`Unknown support: ${supportId}`);
   const eventMode = content.scenario.eventId !== null;
-  return {
+  return withDefenseTacticalStats({
     runId,
     mode: eventMode ? 'EVENT' : 'TRAINING',
     variant: eventMode ? 'EVENT_MODIFIED' : 'STANDARD',
@@ -131,7 +132,7 @@ export function createDefenseRun(content: DefenseContent, supportId: DefenseRunS
     supportCooldownRemaining: support.initialCooldownTicks,
     freezeMovementUntilTick: 0, revealAllUntilTick: 0, rangeBonusUntilTick: 0, completedWaves: 0,
     leakedByEnemy: {},
-  };
+  },content);
 }
 
 export function applyDefenseCommand(state: DefenseRunState, content: DefenseContent, command: DefenseCommand): DefenseRunState {
@@ -151,12 +152,14 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     if (state.supportCooldownRemaining > 0) throw new Error('Support is cooling down');
     const support = content.supports.find(item => item.id === state.supportId)!;
     if(!defenseSupportHasTarget(state,content))throw new Error('Support has no eligible target');
+    state=withDefenseTacticalStats(state,content);
     const armored=support.armorExposeTicks?supportArmoredTarget(state,content):null;
     const readyTower=support.readyOneTower?[...state.towers].filter(t=>t.attackCooldown>0).sort((a,b)=>b.attackCooldown-a.attackCooldown||a.id.localeCompare(b.id))[0]:null;
     const untilReveal = state.tick + support.revealAllTicks;
     return {
       ...state,
       supportCooldownRemaining: support.cooldownTicks,
+      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1}}:{}),
       towers:readyTower?state.towers.map(t=>t.id===readyTower.id?{...t,attackCooldown:0}:t):state.towers,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + support.freezeMovementTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, untilReveal),
@@ -170,9 +173,11 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     if (state.status !== 'RUNNING' || state.paused) throw new Error('E-Stop requires active combat');
     if ((state.eStopCooldownUntilTick ?? 0) > state.tick) throw new Error('E-Stop is cooling down');
     const freezeTicks = 70; // 3.5 seconds all-stop freeze at 50ms/tick
+    state=withDefenseTacticalStats(state,content);
     return {
       ...state,
       eStopCooldownUntilTick: state.tick + 560,
+      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,eStopUses:state.tacticalStats.eStopUses+1}}:{}),
       eStopActiveUntilTick: state.tick + freezeTicks,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + freezeTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, state.tick + freezeTicks),
@@ -364,8 +369,9 @@ function cleanEffects(state: DefenseRunState): DefenseRunState {
   return { ...state, enemies: state.enemies.map(enemy => ({ ...enemy, slowEffects: enemy.slowEffects.filter(effect => effect.endTick > state.tick + 1) })) };
 }
 function beginIntermissionOrWin(state: DefenseRunState, content: DefenseContent): DefenseRunState {
-  if (state.shield <= 0) return { ...state, status: 'LOST', paused: false };
+  if (state.shield <= 0) return { ...closeDefenseTacticalWave(state), status: 'LOST', paused: false };
   if (!allSpawned(state, content) || state.enemies.length > 0) return state;
+  state=closeDefenseTacticalWave(state);
   const completedWaves = Math.max(state.completedWaves, state.waveId);
   const resource = state.resource + content.waveClearReward;
   if (state.waveId === content.waves.length) return { ...state, status: 'WON', completedWaves, resource, paused: false };
@@ -385,17 +391,19 @@ function tickCooldownsOnly(state: DefenseRunState): DefenseRunState {
 function tickDefenseFrame(state: DefenseRunState, content: DefenseContent): DefenseCombatFrame {
   if (state.paused || state.status === 'READY' || state.status === 'WON' || state.status === 'LOST') return {state,shots:[]};
   if (state.status === 'INTERMISSION') {
+    if(content.preparationMode==='MANUAL')return {state,shots:[]};
     let next = tickCooldownsOnly(state);
     next = { ...next, tick: next.tick + 1, intermissionRemaining: Math.max(0, next.intermissionRemaining - 1) };
     if (next.intermissionRemaining === 0) return {state:startWaveState(next, content),shots:[]};
     return {state:next,shots:[]};
   }
-  let next: DefenseRunState = { ...state, supportCooldownRemaining: decrementCooldown(state.supportCooldownRemaining) };
+  let next: DefenseRunState = { ...withDefenseTacticalStats(state,content), supportCooldownRemaining: decrementCooldown(state.supportCooldownRemaining) };
   next = spawnDue(next, content);
+  if(next.tacticalStats&&next.enemies.length>next.tacticalStats.peakSignals)next={...next,tacticalStats:{...next.tacticalStats,peakSignals:next.enemies.length}};
   next = moveAndLeak(next, content);
   next = revealEnemies(next, content);
   const combat = attackWithTowers(next, content);
-  next = combat.state;
+  next = recordDefenseCombat(combat.state,combat.shots);
   next = triggerBossPhase(next, content);
   next = cleanEffects(next);
   next = beginIntermissionOrWin(next, content);

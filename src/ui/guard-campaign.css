@@ -15,6 +15,27 @@
 .zb-shell[data-map^="guard-gd-"] .zb-support-effects>em{font-size:11px;color:#bcd7e0;line-height:1.5;font-style:normal}
 .guard-lab{border:1px solid #4e6a76;border-radius:12px;padding:10px;margin-top:12px;background:#0b202b}.guard-lab summary{cursor:pointer;font-weight:800;color:#f8cf88;min-height:44px;align-content:center}.guard-lab p{color:#bad2dc;font-size:12px}.guard-lab nav{display:flex;gap:6px;flex-wrap:wrap}.guard-lab button{min-height:44px;padding:7px 12px;background:#244553;color:#eaf6fa;border:1px solid #55717e;border-radius:8px}.guard-lab button[aria-pressed="true"]{background:#8a6226;color:#fff}.guard-lab svg{display:block;width:100%;max-height:240px;margin:8px 0;border-radius:8px}.guard-lab output{font-size:12px;color:#e5ce9f}
 .zb-shell[data-map^="guard-gd-"] .zb-start-wave{animation:none}
+.guard-preparation-hint{margin:0;color:#c3dbd7;font-size:12px;line-height:1.5;grid-column:1/-1}
+.guard-planning-styles{border:0;padding:0;margin:4px 0;display:flex;gap:5px;flex-wrap:wrap}.guard-planning-styles legend{font-size:12px;color:#efce8e;margin-bottom:7px}.guard-planning-styles button{min-height:44px;border:1px solid #56717c;border-radius:7px;padding:6px 9px;background:#193b48;color:#dcebed;font-size:12px}.guard-planning-styles button[aria-pressed="true"]{background:#dfb569;color:#122733;border-color:#f5d296}.guard-wave-intel>small{display:block;font-size:11px;color:#bed6da;line-height:1.5}
+.guard-wave-intel{grid-column:1/-1;border:1px solid #466674;border-radius:9px;padding:0 10px;background:#102b36}
+.guard-wave-intel summary,.guard-last-report>summary,.guard-review-blueprint summary,.guard-review-waves summary{min-height:44px;align-content:center;cursor:pointer;color:#f2cd8a;font-size:12px;font-weight:800}
+.guard-wave-intel p{font-size:11px;color:#a9c5d0;line-height:1.5}.guard-wave-intel ol{list-style:none;padding:0;margin:0 0 10px;display:grid;gap:10px}
+.guard-wave-intel li>div:first-child{display:flex;justify-content:space-between;gap:6px;font-size:12px}.guard-wave-intel li small{color:#bad0d5}.guard-wave-intel li>span{display:block;margin-top:4px;color:#a7c8ca;font-size:11px;line-height:1.5}
+.guard-wave-track{position:relative;overflow:hidden;height:5px;border-radius:3px;background:#284651;margin-top:5px}.guard-wave-track i{display:block;position:absolute;height:100%;background:#edc475;max-width:100%;border-radius:3px}
+.guard-lab-comparison{margin:8px 0;padding:10px;border:1px solid #3a5e6b;border-radius:8px}.guard-lab-comparison>strong,.guard-lab-comparison>small{display:block;font-size:12px;line-height:1.5}.guard-lab-comparison>small{font-size:11px;color:#a9c5d0}.guard-lab-comparison>div{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.guard-lab-comparison section{display:grid;gap:4px;padding:8px;border-radius:7px;background:#1e3c48;font-size:12px}.guard-lab-comparison section>b{color:#f5ce83}
+.guard-tactical-review{border:1px solid #4b6874;border-radius:12px;background:#0c2631;padding:12px;margin:12px 0;color:#dcebef;text-align:left;min-width:0}
+.guard-tactical-review header{display:grid;gap:5px}.guard-tactical-review header small{color:#a9c6cf;font-size:11px}.guard-tactical-review header strong{font-size:15px;color:#f4d291}
+.guard-review-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;font-size:12px}.guard-review-summary span{padding:6px 8px;background:#203e49;border-radius:6px}
+.guard-review-families{list-style:none;display:grid;gap:8px;padding:0;margin:12px 0}.guard-review-families li{display:grid;grid-template-columns:1fr auto;gap:4px;font-size:11px}.guard-review-families strong{font-size:12px}.guard-review-families progress{grid-column:1/-1;width:100%;height:5px;accent-color:#e8be70}
+.guard-tactical-review .guard-review-best,.guard-tactical-review .guard-review-advice{font-size:12px;line-height:1.7;min-height:0;margin:8px 0}.guard-review-best strong{color:#a4efdc}
+.guard-review-blueprint>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.guard-review-blueprint span{display:grid;min-width:0;text-align:center;font-size:11px}.guard-review-blueprint img{width:100%;height:64px;object-fit:contain}.guard-review-blueprint small{font-size:10px;color:#adc7d0}
+.guard-review-waves ol{list-style:none;padding:0;margin:0}.guard-review-waves li{display:flex;justify-content:space-between;font-size:11px;border-bottom:1px solid #284450;padding:5px 0}
+.guard-last-report{margin-top:8px}.guard-stage-grid .guard-tactical-review p{min-height:0;margin:8px 0}.guard-home .guard-tactical-review header strong{font-size:14px}
+.guard-result-review{margin-top:12px;border:1px solid #4b6975;border-radius:10px;padding:0 10px;text-align:left}.guard-result-review>summary{min-height:44px;align-content:center;cursor:pointer;font-size:13px;font-weight:800;color:#edce95}.guard-result-review .guard-tactical-review{border:0;padding:4px 0;margin:4px 0}.guard-result-boundary{font-size:11px;line-height:1.6;color:#a7c3cb}
+@media(orientation:landscape) and (max-height:600px){
+ .zb-shell[data-map^="guard-gd-"] .zb-result-keyart{height:64px;margin:-14px -18px 10px}
+ .zb-shell[data-map^="guard-gd-"] .zb-result-actions:has(.guard-next){grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 .guard-area-footprint{fill:none;stroke:#ffc17a;stroke-width:1.4;opacity:.45;stroke-dasharray:6 5}
 .guard-control-tether{fill:none;stroke:#7beedc;stroke-width:1.2;opacity:.7}
 .guard-reveal-range{fill:#ad8dff08;stroke:#c1a2ff;stroke-width:1;stroke-dasharray:5 7;opacity:.5}

@@ -1,4 +1,5 @@
 import type {DefenseCommand, DefenseContent, DefenseRunState, DefenseTowerId, DefenseTowerLevelDefinition} from '../domain/defense';
+import type {GuardPlanningStyle} from './guard-planning-style';
 
 /** Read-only advice. Commands are still validated and charged by the defense engine. */
 export function defensePlanningWave(content: DefenseContent, state: DefenseRunState) {
@@ -30,7 +31,7 @@ export interface DefenseAdvice {
   readonly reasonId: string;
 }
 
-export function recommendDefenseAction(content: DefenseContent, state: DefenseRunState): DefenseAdvice | null {
+export function recommendDefenseAction(content: DefenseContent, state: DefenseRunState,style:GuardPlanningStyle='BALANCED'): DefenseAdvice | null {
   if (state.status === 'WON' || state.status === 'LOST') return null;
   const wave = defensePlanningWave(content,state) ?? content.waves.find(item => item.id === state.waveId);
   if (!wave) return null;
@@ -71,7 +72,7 @@ export function recommendDefenseAction(content: DefenseContent, state: DefenseRu
   const candidates: (DefenseAdvice & {score: number})[] = [];
   for (const definition of content.towers) {
     if (!content.scenario.availableTowers.includes(definition.id)) continue;
-    if (state.towers.length===0&&definition.id!=='PULSE'&&content.scenario.availableTowers.includes('PULSE')&&(!guard||content.scenario.id==='guard-gd-01-v1')) continue;
+    if (state.towers.length===0&&definition.id!=='PULSE'&&content.scenario.availableTowers.includes('PULSE')&&(!guard||(content.scenario.id==='guard-gd-01-v1'&&style==='BALANCED'))) continue;
     const level = definition.levels.find(item => item.id === 'L1');
     if (!level || state.resource < level.cost) continue;
     for (const pad of content.map.pads) {
@@ -88,6 +89,10 @@ export function recommendDefenseAction(content: DefenseContent, state: DefenseRu
       candidates.push({command:{type:'Upgrade',towerInstanceId:tower.id,levelId:level.id},padId:tower.padId,towerId:tower.towerId,cost:level.cost,
         reasonId:'defense.tactics.reason.upgrade',score:(utility(level,tower.padId)-utility(before,tower.padId))/level.cost});
     }
+  }
+  if(guard&&style!=='BALANCED')for(const candidate of candidates){
+    const isArea=candidate.towerId==='BURST'||candidate.towerId==='CONTROL';
+    candidate.score*=style==='AREA_CONTROL'?(isArea?1.28:.94):(isArea?.94:1.28);
   }
   candidates.sort((a,b)=>b.score-a.score || a.cost-b.cost || a.padId.localeCompare(b.padId));
   const best = candidates[0];

@@ -1,5 +1,6 @@
 import type {DefenseCombatShot,DefenseTowerId} from '../domain/defense';
 import supplied from '../../content/defense/guard-audio-v1.json';
+import {guardSoundEnvelope} from './guard-combat-presentation';
 
 export const DEFENSE_COMBAT_VOICES=8;
 export const DEFENSE_COMBAT_SOUND_EVENT='psi:defense-combat-sound';
@@ -85,9 +86,9 @@ export class DefenseCombatMixer {
  }
  private playSuppliedShot(shot:DefenseCombatShot,pan:number){
   const ctx=this.context;if(!ctx||ctx.currentTime-(this.last.get(shot.towerId)??-99)<.075)return;this.last.set(shot.towerId,ctx.currentTime);
-  const family=shot.towerId,detail={shotId:shot.id,family,level:shot.levelId},rate=shot.levelId==='L3A'?1.04:shot.levelId==='L3B'?.97:1;
-  this.sample(`${family}_FIRE_AUDIO`,.3,0,.17,pan,3,rate,detail);
-  this.sample(`${family}_IMPACT_AUDIO`,.42,.10,.26,pan,4,rate,detail);
+  const family=shot.towerId,envelope=guardSoundEnvelope(family,shot.levelId),rate=envelope.rate,detail={shotId:shot.id,family,level:shot.levelId,rate,attackWindow:envelope.attack,impactWindow:envelope.impact};
+  this.sample(`${family}_FIRE_AUDIO`,envelope.attackGain,0,envelope.attack,pan,3,rate,detail);
+  this.sample(`${family}_IMPACT_AUDIO`,envelope.impactGain,.10,envelope.impact,pan,4,rate,detail);
   if(shot.targets.some(t=>t.resolved))this.sample(`${family}_RESOLVE_AUDIO`,.32,.13,.35,pan,5,1,detail);
   const primary=shot.targets[0];if(primary)this.sample(`ENEMY_${primary.enemyId}_IMPACT_AUDIO`,.20,.11,.21,pan,2,1,detail);
   this.sample(`${family}_TRAVEL_AUDIO`,.12,.025,.10,pan,1,rate,detail);

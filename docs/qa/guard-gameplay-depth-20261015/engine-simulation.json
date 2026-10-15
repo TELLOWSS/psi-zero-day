@@ -1,0 +1,3317 @@
+[
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "BALANCED",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2183,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 295,
+      "supportUses": 3,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 292
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "BALANCED",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2170,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 297,
+      "supportUses": 3,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 4997,
+          "resolved": 176,
+          "shots": 293
+        },
+        "CONTROL": {
+          "damage": 27,
+          "resolved": 0,
+          "shots": 4
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "BALANCED",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2183,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 295,
+      "supportUses": 0,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 292
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "BALANCED",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2155,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 294,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 291
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "AREA_CONTROL",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 16,
+    "ticks": 2374,
+    "peak": 10,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 4968,
+      "resolved": 172,
+      "shots": 79,
+      "supportUses": 3,
+      "eStopUses": 0,
+      "peakSignals": 10,
+      "byFamily": {
+        "BURST": {
+          "damage": 4968,
+          "resolved": 172,
+          "shots": 79
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 4,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P2:BURST:L3A",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "AREA_CONTROL",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 15,
+    "ticks": 2407,
+    "peak": 10,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 4954,
+      "resolved": 171,
+      "shots": 86,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 10,
+      "byFamily": {
+        "BURST": {
+          "damage": 4954,
+          "resolved": 171,
+          "shots": 86
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 11,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P2:BURST:L3A",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "AREA_CONTROL",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 15,
+    "ticks": 2407,
+    "peak": 10,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 4954,
+      "resolved": 171,
+      "shots": 86,
+      "supportUses": 0,
+      "eStopUses": 0,
+      "peakSignals": 10,
+      "byFamily": {
+        "BURST": {
+          "damage": 4954,
+          "resolved": 171,
+          "shots": 86
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 11,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P2:BURST:L3A",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "AREA_CONTROL",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 15,
+    "ticks": 2360,
+    "peak": 10,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 4954,
+      "resolved": 171,
+      "shots": 84,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 10,
+      "byFamily": {
+        "BURST": {
+          "damage": 4954,
+          "resolved": 171,
+          "shots": 84
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 11,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P2:BURST:L3A",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "PRECISION",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2183,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 295,
+      "supportUses": 3,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 292
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "PRECISION",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2170,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 297,
+      "supportUses": 3,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 4997,
+          "resolved": 176,
+          "shots": 293
+        },
+        "CONTROL": {
+          "damage": 27,
+          "resolved": 0,
+          "shots": 4
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "PRECISION",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2183,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 295,
+      "supportUses": 0,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 292
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-01-v1",
+    "style": "PRECISION",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 20,
+    "ticks": 2155,
+    "peak": 20,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 5024,
+      "resolved": 176,
+      "shots": 294,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 20,
+      "byFamily": {
+        "PULSE": {
+          "damage": 5006,
+          "resolved": 176,
+          "shots": 291
+        },
+        "CONTROL": {
+          "damage": 18,
+          "resolved": 0,
+          "shots": 3
+        }
+      },
+      "bestClear": {
+        "count": 1,
+        "towerId": "PULSE",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 1
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 22,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 54,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P8:BURST:L3A",
+      "P3:CONTROL:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "BALANCED",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 13,
+    "ticks": 3938,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6950,
+      "resolved": 225,
+      "shots": 255,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 5364,
+          "resolved": 178,
+          "shots": 96
+        },
+        "PULSE": {
+          "damage": 869,
+          "resolved": 27,
+          "shots": 90
+        },
+        "SENSOR": {
+          "damage": 717,
+          "resolved": 20,
+          "shots": 69
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 2
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 15,
+          "leaks": 3,
+          "shieldLost": 3
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L2",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L3A",
+      "P6:SENSOR:L1",
+      "P7:CONTROL:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "BALANCED",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 10,
+    "ticks": 3878,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6924,
+      "resolved": 222,
+      "shots": 225,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5740,
+          "resolved": 194,
+          "shots": 96
+        },
+        "PULSE": {
+          "damage": 747,
+          "resolved": 14,
+          "shots": 84
+        },
+        "SENSOR": {
+          "damage": 437,
+          "resolved": 14,
+          "shots": 45
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 6,
+          "shieldLost": 6
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "BALANCED",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 10,
+    "ticks": 3853,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6886,
+      "resolved": 222,
+      "shots": 208,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5873,
+          "resolved": 193,
+          "shots": 94
+        },
+        "PULSE": {
+          "damage": 594,
+          "resolved": 16,
+          "shots": 71
+        },
+        "SENSOR": {
+          "damage": 419,
+          "resolved": 13,
+          "shots": 43
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 6,
+          "shieldLost": 6
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "BALANCED",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 11,
+    "ticks": 3820,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6933,
+      "resolved": 223,
+      "shots": 212,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5939,
+          "resolved": 198,
+          "shots": 98
+        },
+        "PULSE": {
+          "damage": 580,
+          "resolved": 14,
+          "shots": 72
+        },
+        "SENSOR": {
+          "damage": 414,
+          "resolved": 11,
+          "shots": 42
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "AREA_CONTROL",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 13,
+    "ticks": 4164,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6965,
+      "resolved": 225,
+      "shots": 166,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 6769,
+          "resolved": 222,
+          "shots": 145
+        },
+        "SENSOR": {
+          "damage": 196,
+          "resolved": 3,
+          "shots": 21
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 7
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 15,
+          "leaks": 3,
+          "shieldLost": 3
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:BURST:L3A",
+      "P7:PULSE:L2",
+      "P4:SENSOR:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "AREA_CONTROL",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 10,
+    "ticks": 3878,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6924,
+      "resolved": 222,
+      "shots": 225,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5740,
+          "resolved": 194,
+          "shots": 96
+        },
+        "PULSE": {
+          "damage": 747,
+          "resolved": 14,
+          "shots": 84
+        },
+        "SENSOR": {
+          "damage": 437,
+          "resolved": 14,
+          "shots": 45
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 6,
+          "shieldLost": 6
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "AREA_CONTROL",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 10,
+    "ticks": 3853,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6886,
+      "resolved": 222,
+      "shots": 208,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5873,
+          "resolved": 193,
+          "shots": 94
+        },
+        "PULSE": {
+          "damage": 594,
+          "resolved": 16,
+          "shots": 71
+        },
+        "SENSOR": {
+          "damage": 419,
+          "resolved": 13,
+          "shots": 43
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 6,
+          "shieldLost": 6
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "AREA_CONTROL",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 11,
+    "ticks": 3820,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 6933,
+      "resolved": 223,
+      "shots": 212,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5939,
+          "resolved": 198,
+          "shots": 98
+        },
+        "PULSE": {
+          "damage": 580,
+          "resolved": 14,
+          "shots": 72
+        },
+        "SENSOR": {
+          "damage": 414,
+          "resolved": 11,
+          "shots": 42
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 20,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L2",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "PRECISION",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 18,
+    "ticks": 3666,
+    "peak": 17,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 7142,
+      "resolved": 229,
+      "shots": 262,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 17,
+      "byFamily": {
+        "BURST": {
+          "damage": 5242,
+          "resolved": 179,
+          "shots": 76
+        },
+        "PULSE": {
+          "damage": 1162,
+          "resolved": 35,
+          "shots": 120
+        },
+        "SENSOR": {
+          "damage": 738,
+          "resolved": 15,
+          "shots": 66
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P2",
+        "waveId": 2
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 18,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 21,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:PULSE:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L3A",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "PRECISION",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 18,
+    "ticks": 3589,
+    "peak": 17,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 7079,
+      "resolved": 229,
+      "shots": 267,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 17,
+      "byFamily": {
+        "BURST": {
+          "damage": 5159,
+          "resolved": 170,
+          "shots": 77
+        },
+        "PULSE": {
+          "damage": 1208,
+          "resolved": 39,
+          "shots": 123
+        },
+        "SENSOR": {
+          "damage": 712,
+          "resolved": 20,
+          "shots": 67
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 18,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 21,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:PULSE:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L3A",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "PRECISION",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 18,
+    "ticks": 3620,
+    "peak": 17,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 7097,
+      "resolved": 229,
+      "shots": 266,
+      "supportUses": 4,
+      "eStopUses": 0,
+      "peakSignals": 17,
+      "byFamily": {
+        "BURST": {
+          "damage": 5165,
+          "resolved": 172,
+          "shots": 77
+        },
+        "PULSE": {
+          "damage": 1163,
+          "resolved": 38,
+          "shots": 118
+        },
+        "SENSOR": {
+          "damage": 769,
+          "resolved": 19,
+          "shots": 71
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 18,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 21,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:PULSE:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L3A",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-02-v1",
+    "style": "PRECISION",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 18,
+    "ticks": 3586,
+    "peak": 18,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 7097,
+      "resolved": 229,
+      "shots": 262,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 18,
+      "byFamily": {
+        "BURST": {
+          "damage": 5253,
+          "resolved": 178,
+          "shots": 80
+        },
+        "PULSE": {
+          "damage": 1088,
+          "resolved": 34,
+          "shots": 113
+        },
+        "SENSOR": {
+          "damage": 756,
+          "resolved": 17,
+          "shots": 69
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 18,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 21,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 4,
+          "resolved": 44,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 32,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 50,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:PULSE:L3A",
+      "P3:PULSE:L3A",
+      "P4:SENSOR:L1",
+      "P1:SENSOR:L3A",
+      "P7:BURST:L1"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "BALANCED",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 8,
+    "ticks": 4778,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11175,
+      "resolved": 329,
+      "shots": 295,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9266,
+          "resolved": 281,
+          "shots": 126
+        },
+        "SENSOR": {
+          "damage": 1909,
+          "resolved": 48,
+          "shots": 169
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 2
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 8,
+          "shieldLost": 8
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L2",
+      "P8:PULSE:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "BALANCED",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 7,
+    "ticks": 4739,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11154,
+      "resolved": 328,
+      "shots": 302,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9267,
+          "resolved": 276,
+          "shots": 129
+        },
+        "SENSOR": {
+          "damage": 1887,
+          "resolved": 52,
+          "shots": 173
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 11,
+          "leaks": 9,
+          "shieldLost": 9
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L2",
+      "P8:PULSE:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "BALANCED",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 9,
+    "ticks": 4744,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11204,
+      "resolved": 330,
+      "shots": 299,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9348,
+          "resolved": 279,
+          "shots": 129
+        },
+        "SENSOR": {
+          "damage": 1856,
+          "resolved": 51,
+          "shots": 170
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 7,
+          "shieldLost": 7
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L2",
+      "P8:PULSE:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "BALANCED",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 9,
+    "ticks": 4772,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11211,
+      "resolved": 330,
+      "shots": 301,
+      "supportUses": 8,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9375,
+          "resolved": 280,
+          "shots": 134
+        },
+        "SENSOR": {
+          "damage": 1836,
+          "resolved": 50,
+          "shots": 167
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 7,
+          "shieldLost": 7
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L2",
+      "P8:PULSE:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "AREA_CONTROL",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 8,
+    "ticks": 4778,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11175,
+      "resolved": 329,
+      "shots": 295,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9270,
+          "resolved": 281,
+          "shots": 126
+        },
+        "SENSOR": {
+          "damage": 1905,
+          "resolved": 48,
+          "shots": 169
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 2
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 12,
+          "leaks": 8,
+          "shieldLost": 8
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L1",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "AREA_CONTROL",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 7,
+    "ticks": 4751,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11154,
+      "resolved": 328,
+      "shots": 302,
+      "supportUses": 6,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9290,
+          "resolved": 277,
+          "shots": 130
+        },
+        "SENSOR": {
+          "damage": 1864,
+          "resolved": 51,
+          "shots": 172
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 11,
+          "leaks": 9,
+          "shieldLost": 9
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L1",
+      "P8:BURST:L3A"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "AREA_CONTROL",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 9,
+    "ticks": 4702,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11204,
+      "resolved": 330,
+      "shots": 295,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9321,
+          "resolved": 279,
+          "shots": 128
+        },
+        "SENSOR": {
+          "damage": 1883,
+          "resolved": 51,
+          "shots": 167
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 7,
+          "shieldLost": 7
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3B",
+      "P8:BURST:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "AREA_CONTROL",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 9,
+    "ticks": 4710,
+    "peak": 19,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11211,
+      "resolved": 330,
+      "shots": 295,
+      "supportUses": 8,
+      "eStopUses": 0,
+      "peakSignals": 19,
+      "byFamily": {
+        "BURST": {
+          "damage": 9363,
+          "resolved": 280,
+          "shots": 133
+        },
+        "SENSOR": {
+          "damage": 1848,
+          "resolved": 50,
+          "shots": 162
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P2",
+        "waveId": 4
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 13,
+          "leaks": 7,
+          "shieldLost": 7
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P2:BURST:L3A",
+      "P5:BURST:L3A",
+      "P1:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3B",
+      "P8:BURST:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "PRECISION",
+    "support": "COORDINATOR",
+    "status": "WON",
+    "shield": 11,
+    "ticks": 5401,
+    "peak": 23,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11136,
+      "resolved": 332,
+      "shots": 708,
+      "supportUses": 7,
+      "eStopUses": 0,
+      "peakSignals": 23,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9086,
+          "resolved": 295,
+          "shots": 586
+        },
+        "BURST": {
+          "damage": 1181,
+          "resolved": 20,
+          "shots": 38
+        },
+        "SENSOR": {
+          "damage": 869,
+          "resolved": 17,
+          "shots": 84
+        }
+      },
+      "bestClear": {
+        "count": 3,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 7
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 15,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P5:BURST:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3A",
+      "P8:BURST:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "PRECISION",
+    "support": "OBSERVER",
+    "status": "WON",
+    "shield": 12,
+    "ticks": 5014,
+    "peak": 23,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11135,
+      "resolved": 333,
+      "shots": 703,
+      "supportUses": 7,
+      "eStopUses": 0,
+      "peakSignals": 23,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9129,
+          "resolved": 297,
+          "shots": 586
+        },
+        "BURST": {
+          "damage": 1136,
+          "resolved": 23,
+          "shots": 35
+        },
+        "SENSOR": {
+          "damage": 870,
+          "resolved": 13,
+          "shots": 82
+        }
+      },
+      "bestClear": {
+        "count": 3,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P5",
+        "waveId": 5
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 4,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P5:BURST:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3A",
+      "P8:SENSOR:L3B"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "PRECISION",
+    "support": "REBAR_LEAD",
+    "status": "WON",
+    "shield": 11,
+    "ticks": 5106,
+    "peak": 23,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11138,
+      "resolved": 332,
+      "shots": 702,
+      "supportUses": 5,
+      "eStopUses": 0,
+      "peakSignals": 23,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9073,
+          "resolved": 292,
+          "shots": 576
+        },
+        "BURST": {
+          "damage": 1120,
+          "resolved": 21,
+          "shots": 36
+        },
+        "SENSOR": {
+          "damage": 945,
+          "resolved": 19,
+          "shots": 90
+        }
+      },
+      "bestClear": {
+        "count": 3,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 7
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 15,
+          "leaks": 5,
+          "shieldLost": 5
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P5:BURST:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3A",
+      "P8:BURST:L2"
+    ]
+  },
+  {
+    "stage": "guard-gd-03-v1",
+    "style": "PRECISION",
+    "support": "ENGINEER",
+    "status": "WON",
+    "shield": 12,
+    "ticks": 5107,
+    "peak": 23,
+    "stats": {
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 11142,
+      "resolved": 333,
+      "shots": 708,
+      "supportUses": 9,
+      "eStopUses": 0,
+      "peakSignals": 23,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9073,
+          "resolved": 294,
+          "shots": 581
+        },
+        "BURST": {
+          "damage": 1128,
+          "resolved": 21,
+          "shots": 37
+        },
+        "SENSOR": {
+          "damage": 941,
+          "resolved": 18,
+          "shots": 90
+        }
+      },
+      "bestClear": {
+        "count": 3,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 16,
+          "leaks": 4,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 2,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 22,
+          "leaks": 2,
+          "shieldLost": 4
+        },
+        {
+          "waveId": 4,
+          "resolved": 60,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 34,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 42,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 63,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P2:PULSE:L3A",
+      "P5:BURST:L3A",
+      "P3:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P6:SENSOR:L3A",
+      "P8:SENSOR:L3B"
+    ]
+  }
+]

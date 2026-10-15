@@ -1,6 +1,7 @@
-import type { DefenseRunState } from './defense';
+import type { DefenseRunState,DefenseTacticalReport } from './defense';
 
 export interface DefenseScenarioRecord {
+  readonly lastTacticalReport?:DefenseTacticalReport;
   readonly scenarioId: string;
   readonly finishedRuns: number;
   readonly clears: number;

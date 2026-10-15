@@ -13,6 +13,7 @@ const waves=[
 ];
 const contents=layouts.map((layout,i)=>{
  const c=structuredClone(base);c.contentVersion='guard-foundation-1.0.0';c.balanceStatus='GUARD_FOUNDATION_CANDIDATE';c.initialResource=220;c.intermissionTicks=200;
+ c.preparationMode='MANUAL';c.combatReportEnabled=true;
  c.map={id:`guard-gd-0${i+1}`,nameTextId:`guard.gd0${i+1}.title`,width:1000,height:600,path:layout.path,pads:layout.pads.map(([x,y],n)=>({id:`P${n+1}`,x,y}))};
  c.waves=waves[i].map((groups,n)=>({id:n+1,groups}));
  c.supports.push({...structuredClone(c.supports[0]),id:'REBAR_LEAD',characterBinding:'yoon_sungho',skillTextId:'defense.support.REBAR_LEAD.skill',cooldownTicks:800,freezeMovementTicks:0,armorExposeTicks:80,armorExposeFraction:.35},

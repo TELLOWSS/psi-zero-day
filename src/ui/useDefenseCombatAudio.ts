@@ -1,16 +1,17 @@
 import {useCallback,useEffect,useRef} from 'react';
 import type {DefenseCombatShot,DefenseRunState} from '../domain/defense';
 import {DefenseCombatMixer} from '../app/defense-combat-mixer';
+import {defenseCombatPan} from '../app/guard-combat-presentation';
 
-export function useDefenseCombatAudio(state:DefenseRunState|null,shots:readonly DefenseCombatShot[],muted:boolean,enabled:boolean,supplied=false){
+export function useDefenseCombatAudio(state:DefenseRunState|null,shots:readonly DefenseCombatShot[],muted:boolean,enabled:boolean,supplied=false,portrait=false){
  const mixer=useRef<DefenseCombatMixer|null>(null),seen=useRef('');
  const previous=useRef<DefenseRunState|null>(null);
  const arm=useCallback((force=false)=>{if((muted&&!force)||!enabled)return;const instance=mixer.current??new DefenseCombatMixer(supplied);mixer.current=instance;instance.arm();},[muted,enabled,supplied]);
  useEffect(()=>{
   if(muted||!enabled||!state||state.paused||state.status==='READY'||state.status==='WON'||state.status==='LOST'||document.hidden){mixer.current?.stop();return;}
   if(!shots.length)return;const key=shots.map(s=>s.id).join('|');if(seen.current===key)return;seen.current=key;
-  for(const shot of shots)mixer.current?.play(shot,shot.targets[0]?shot.targets[0].point.x/1000*1.2-.6:0);
- },[state,shots,muted,enabled]);
+  for(const shot of shots)mixer.current?.play(shot,defenseCombatPan(shot,supplied&&portrait));
+ },[state,shots,muted,enabled,supplied,portrait]);
  useEffect(()=>{
   const before=previous.current;previous.current=state;if(!supplied||muted||!state||!before||before.runId!==state.runId||state.paused||document.hidden||(before.tick===state.tick&&before.status===state.status))return;
   if(state.shield<before.shield)mixer.current?.critical('CRITICAL_LEAK_ALERT_AUDIO');
