@@ -1,0 +1,23 @@
+{
+ "defense.art.title":"현장을 지킬 방어선을 설계하라",
+ "defense.art.subtitle":"SIGNAL / DEFENSE",
+ "defense.art.promise":"흐름을 읽고, 장비를 진화시키고, 위험의 연쇄를 끊어라.",
+ "defense.art.crew":"함께할 지원 동료",
+ "defense.art.crew_hint":"역할과 지원 효과를 확인한 뒤 출전하세요.",
+ "defense.art.COORDINATOR":"현장 지휘",
+ "defense.art.OBSERVER":"전술 관측",
+ "defense.art.COMMANDER":"작전 총괄",
+ "defense.art.REBAR_LEAD":"작업 통제",
+ "defense.art.ENGINEER":"공정 조율",
+ "defense.art.stop":"이동 정지",
+ "defense.art.reveal":"전체 탐지",
+ "defense.art.range":"대응 거리",
+ "defense.art.cooldown":"재사용",
+ "defense.art.seconds":"초",
+ "defense.art.operation":"작전 현장",
+ "defense.art.route":"8개 개입 지점 · 4종 장비 · 10웨이브",
+ "defense.art.tree":"장비 진화와 특화",
+ "defense.art.standard":"표준 · 개량 · 특화 A/B",
+ "defense.art.return":"현장 복귀 준비",
+ "defense.art.result":"이번 훈련의 기록"
+}

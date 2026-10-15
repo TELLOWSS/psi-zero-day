@@ -7,10 +7,10 @@ import { defenseBoardArtUri } from '../src/app/defense-visual-assets';
 import { zeroBreachContent } from '../src/content/defense';
 
 describe('DEF-HD01 HD board runtime ingest', () => {
-  it('selects the ingested HD construction-site world for ramp-01', () => {
+  it('preserves the previous HD ingest while selecting the new premium construction world for public ramp-01', () => {
     expect(artIngest.acceptanceState.assetBytesInRepository).toBe('PASS');
     expect(artIngest.backgroundCandidate.runtimeUri).toBe('assets/defense/board/ramp-01-hd01.webp');
-    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/premium-v1/world.webp');
   });
 
   it('keeps the ingested WebP bytes identical to the locked candidate', () => {

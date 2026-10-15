@@ -74,11 +74,11 @@ afterEach(() => {
 });
 
 describe('ZERO BREACH legacy SVG geometry baseline', () => {
-  it('keeps the HD board final while legacy SVG tower/enemy assets remain geometry-only', () => {
+  it('replaces the public board while keeping legacy SVG definitions as geometry-only references', () => {
     expect(defenseVisualProduction.status).toBe('LEGACY_GEOMETRY_ONLY');
     expect(defenseVisualProduction.assets.every(asset => asset.status === 'LEGACY_GEOMETRY_ONLY')).toBe(true);
 
-    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/premium-v1/world.webp');
     expect(defenseTowerArtUri('PULSE', 'L1')).toBe('assets/defense/towers/pulse-l1.svg');
     expect(defenseTowerArtUri('PULSE', 'L2')).toMatch(/pulse-l2\.svg$/);
     expect(defenseTowerArtUri('BURST', 'L1')).toMatch(/burst-l1\.svg$/);
@@ -106,25 +106,25 @@ describe('ZERO BREACH legacy SVG geometry baseline', () => {
     expect(normal).not.toMatch(/<text\b/i);
   });
 
-  it('uses the HD WebP board while legacy SVG actor art remains runtime-only until replacement', async () => {
+  it('uses the new raster board, shop, tower and enemy art in actual public combat without prototype fallbacks', async () => {
     const { host, root } = await mount();
     await click(host.querySelector('[data-support="COORDINATOR"]')!);
 
     const shell = host.querySelector('[data-defense-screen="combat"]');
-    expect(shell?.getAttribute('data-visual-version')).toBe(defenseVisualProduction.visualVersion);
+    expect(shell?.getAttribute('data-visual-version')).toBe('defense-premium-20261015-v1');
 
     const board = host.querySelector('image[data-production-board-art="ramp-01"]');
-    expect(board?.getAttribute('href')).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(board?.getAttribute('href')).toBe('assets/defense/premium-v1/world.webp');
 
     await click(host.querySelector('button[aria-label^="P1 ·"]')!);
     const shopPulse = host.querySelector('.zb-shop-production-art') as HTMLImageElement | null;
     expect(shopPulse).not.toBeNull();
-    expect(shopPulse?.getAttribute('src')).toContain('assets/defense/towers/pulse-l1.svg');
+    expect(shopPulse?.getAttribute('src')).toContain('assets/defense/premium-v1/pulse-l1.webp');
     expect(host.querySelector('[data-art-state="prototype"]')).toBeNull();
 
     await click(buttonContaining(host, '펄스 대응기'));
     expect(host.querySelector('g[data-production-tower-art="PULSE:L1"] image')?.getAttribute('href'))
-      .toBe('assets/defense/towers/pulse-l1.svg');
+      .toBe('assets/defense/premium-v1/pulse-l1.webp');
 
     await click(buttonContaining(host, '웨이브 시작'));
     await act(async () => {
@@ -132,7 +132,7 @@ describe('ZERO BREACH legacy SVG geometry baseline', () => {
       for (let index = 0; index < 5; index += 1) await Promise.resolve();
     });
     expect(host.querySelector('image[data-production-enemy-art="NORMAL"]')?.getAttribute('href'))
-      .toBe('assets/defense/enemies/normal.svg');
+      .toBe('assets/defense/premium-v1/normal.webp');
 
     await act(async () => root.unmount());
   });

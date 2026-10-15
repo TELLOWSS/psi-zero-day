@@ -1,0 +1,142 @@
+/* Final candidate art is integrated into real controls, never baked into a menu picture. */
+.zb-shell.zb-premium-deployment[data-defense-screen="support-select"]{position:relative;isolation:isolate;height:100dvh;min-height:0;overflow:auto;display:grid;grid-template-areas:"head head" "intro crew" "bottom bottom";grid-template-columns:minmax(320px,.85fr) minmax(460px,1.15fr);grid-template-rows:auto minmax(460px,1fr) auto;gap:22px;padding:22px max(28px,calc((100vw - 1400px)/2));background:#0b1b25}
+.zb-deployment-keyart{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;pointer-events:none}
+.zb-premium-deployment:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#07141ef2 0%,#0a1926ba 40%,#07182175 70%,#06121bba),linear-gradient(0deg,#081821ed,transparent 70%);pointer-events:none}
+.zb-premium-deployment .zb-prep-header{grid-area:head;padding:0;border:0;min-width:0;display:flex;align-items:center;gap:12px;background:transparent}
+.zb-premium-deployment .zb-prep-header>div{flex:1;min-width:0}
+.zb-premium-deployment .zb-prep-header small{color:#eac17e;letter-spacing:.12em;font-size:10px}
+.zb-premium-deployment .zb-prep-header h1{font-size:23px;margin:6px 0;color:#eef2ed}
+.zb-premium-deployment .zb-prep-header button{min-height:44px;font-size:13px;border:1px solid #7b929580;background:#102b37ca;color:#e8edeb;border-radius:9px;padding:8px 14px}
+.zb-premium-deployment .zb-deployment-copy{grid-area:intro;margin:0;padding:10px 24px 24px 0;max-width:none;align-self:center;border:0;background:transparent}
+.zb-deployment-copy>span{font-size:13px;letter-spacing:.2em;color:#efc17f}
+.zb-premium-deployment .zb-deployment-copy h2{font-size:clamp(30px,3.7vw,54px);line-height:1.15;word-break:keep-all;letter-spacing:-.04em;color:#fcf1dc;margin:20px 0;text-shadow:0 4px 32px #0008}
+.zb-premium-deployment .zb-deployment-copy>p{font-size:16px;color:#cbdddb;line-height:1.8;max-width:420px}
+.zb-deployment-operation{border-left:3px solid #e9bf79;padding:10px 15px;margin:24px 0;display:grid;gap:6px;background:linear-gradient(90deg,#153844c9,transparent)}
+.zb-deployment-operation strong{color:#edc18c;font-size:12px}
+.zb-deployment-operation span{font-size:21px;color:#f1eee5}
+.zb-deployment-operation small{font-size:13px;color:#b7cbcc}
+.zb-premium-deployment .zb-simulation-boundary{display:block;color:#9ab2b8;font-size:12px;max-width:400px;line-height:1.7}
+.zb-premium-deployment .zb-support-grid{grid-area:crew;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-content:center;align-items:stretch;padding:0;margin:0;max-width:none}
+.zb-crew-heading{grid-column:1/-1;color:#eef2eb}
+.zb-crew-heading h2{font-size:20px;margin:0 0 5px}
+.zb-crew-heading p{color:#b3ced0;font-size:13px;margin:0 0 4px}
+.zb-premium-deployment .zb-support-card{position:relative;display:flex;flex-direction:column;text-align:left;align-items:stretch;gap:0;padding:0;min-width:0;min-height:420px;overflow:hidden;border:1px solid #8ba7aa66;border-radius:16px;background:linear-gradient(160deg,#345563d6,#152b37f2 55%,#091a25f2);box-shadow:0 18px 40px #0004;cursor:pointer;transition:transform .2s,border-color .2s}
+.zb-premium-deployment .zb-support-card[data-support="OBSERVER"]{background:linear-gradient(160deg,#40505bd9,#202d3cf2 55%,#0b1928f2)}
+.zb-premium-deployment .zb-support-card:hover,.zb-premium-deployment .zb-support-card:focus-visible{transform:translateY(-4px);border-color:#f0c579;box-shadow:0 18px 50px #0e34477a;outline:2px solid #e3bd79;outline-offset:3px}
+.zb-premium-deployment .zb-support-fullbody{position:relative;display:block;width:100%;height:242px;min-height:0;object-fit:contain;object-position:center bottom;padding:8px 10px 0;background:radial-gradient(ellipse at 50% 100%,#80d1d31a,transparent 70%);filter:drop-shadow(0 12px 12px #0006)}
+.zb-premium-deployment .zb-support-portrait{position:absolute;width:38px;height:38px;left:12px;top:12px;object-fit:cover;object-position:50% 20%;border:1px solid #d9be81;border-radius:50%;opacity:.9;background:#1b333f}
+.zb-premium-deployment .zb-support-card>span{position:relative;display:flex;flex-direction:column;align-self:stretch;width:100%;box-sizing:border-box;gap:5px;padding:14px 16px;min-height:144px;flex:1;border-top:1px solid #8caba72b;background:linear-gradient(180deg,#112835bb,#0a1c26ee)}
+.zb-premium-deployment .zb-support-card>span>small{font-size:11px;color:#e5bd7c;letter-spacing:.08em}
+.zb-premium-deployment .zb-support-card>span>strong{font-size:25px;color:#fff0d8;line-height:1.2}
+.zb-premium-deployment .zb-support-card>span>em{font-size:12px;color:#b3c7c8;font-style:normal}
+.zb-premium-deployment .zb-support-card>span>b{font-size:14px;color:#d7e8df;font-weight:600;margin:3px 0}
+.zb-support-effects{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px}
+.zb-premium-deployment .zb-support-effects>span{display:flex;align-items:baseline;justify-content:space-between;gap:5px;font-size:11px;color:#99b8c0;line-height:1.5;white-space:nowrap}
+.zb-premium-deployment .zb-support-effects b{display:inline;font-size:12px;margin:0;color:#f0d8a7;white-space:nowrap}
+.zb-premium-deployment .zb-support-card>i{position:relative;margin:0;padding:13px 10px;min-height:44px;text-align:center;font-size:15px;font-style:normal;font-weight:800;color:#15262a;background:linear-gradient(110deg,#f1c577,#d99b45);border:0;border-radius:0}
+.zb-deployment-bottom{grid-area:bottom;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;padding-bottom:10px}
+.zb-deployment-bottom>details{border:1px solid #66868d77;border-radius:10px;background:#0b202bd9;padding:12px;min-width:0}
+.zb-deployment-bottom summary{font-size:13px;color:#dfd7bc;cursor:pointer;min-height:24px}
+.zb-deployment-bottom .operation-handoff-dossier{margin:0}
+.zb-deployment-equipment{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:12px}
+.zb-deployment-equipment>div{display:grid;gap:5px;text-align:center;min-width:0}
+.zb-deployment-equipment img{width:100%;height:76px;object-fit:contain}
+.zb-deployment-equipment strong{font-size:12px;color:#f0dcb4}
+.zb-deployment-equipment small{font-size:11px;color:#a4c3c6;line-height:1.4}
+
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"]{background:radial-gradient(ellipse at 45% 40%,#243844,#0b1c28 74%)}
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"] .zb-board-wrap{border:1px solid #859b9866;box-shadow:0 18px 42px #0005,0 0 36px #6ebbad0a;background:#23333c}
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"] .zb-board-production-art{filter:saturate(.86) contrast(1.03) brightness(.94)}
+.zb-shell[data-map="ramp-01"] .zb-path-shoulder{stroke:#2a3435;stroke-width:64;opacity:.36}
+.zb-shell[data-map="ramp-01"] .zb-path-shadow{stroke:#d1c09c;stroke-width:47;opacity:.13}
+.zb-shell[data-map="ramp-01"] .zb-path{stroke:#182a30;stroke-width:41;opacity:.25}
+.zb-shell[data-map="ramp-01"] .zb-path-centerline{stroke:#f3cd78;stroke-width:2.2;stroke-dasharray:8 20;opacity:.7}
+.zb-shell[data-map="ramp-01"][data-status="RUNNING"] .zb-path-centerline{animation:zb-signal-flow 3.8s linear infinite}
+.zb-shell[data-map="ramp-01"] .zb-pad-hardstand{fill:#142a3170;stroke:#d3b77966;stroke-dasharray:none}
+.zb-shell[data-map="ramp-01"] .zb-pad-mark{fill:#142b3460;stroke:#f2ce8799;stroke-width:1.6}
+.zb-shell[data-map="ramp-01"] .zb-pad-mark.is-occupied{opacity:.22}
+.zb-shell[data-map="ramp-01"] .zb-pad-mark.is-selected{stroke:#b2fff1;stroke-width:3;fill:#5bd7c130}
+.zb-premium-contact{fill:#000;opacity:.38;filter:blur(2px)}
+.zb-shell .zb-tower[data-premium-equipment="true"] .zb-tower-production-image{filter:drop-shadow(0 4px 3px #0007)}
+.zb-premium-level rect{fill:#122d35e8;stroke:#e2bd7680;stroke-width:.8}
+.zb-premium-level text{fill:#f7d9a6;font-size:10px;font-weight:800;letter-spacing:.06em}
+.zb-premium-discharge{fill:none;stroke:#a5fff1;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 5px #6cf6e4);animation:zb-discharge .14s ease-out both}
+.zb-premium-discharge circle{fill:#e5fff9;stroke-width:0;opacity:.8}
+.zb-premium-discharge.is-burst{stroke:#ffd28a;filter:drop-shadow(0 0 7px #ffb940)}
+.zb-premium-discharge.is-control{stroke:#8deecb}
+.zb-premium-discharge.is-sensor{stroke:#d0b4ff;filter:drop-shadow(0 0 5px #c09cff)}
+.zb-shell[data-map="ramp-01"] .zb-enemy-production-image{filter:drop-shadow(0 3px 3px #0008)}
+.zb-shell[data-map="ramp-01"] .zb-enemy-swift .zb-enemy-production-image{filter:drop-shadow(-4px 1px 3px #f5b24a55)}
+.zb-shell[data-map="ramp-01"] .zb-enemy-veiled.is-hidden .zb-enemy-production-image{opacity:.42;filter:drop-shadow(0 0 5px #bc8efb55)}
+.zb-shell[data-map="ramp-01"] .zb-enemy.is-hit .zb-enemy-production-image{filter:brightness(1.65) drop-shadow(0 0 4px #ffd78caa)}
+.zb-shell[data-map="ramp-01"] .zb-enemy-boss.has-boss-armor .zb-enemy-production-image{filter:drop-shadow(0 0 6px #ffad3699)}
+.zb-shell[data-map="ramp-01"] .zb-resolve-burst{color:#ffe4ad;filter:drop-shadow(0 0 5px #ffca6b99)}
+.zb-shell[data-map="ramp-01"] .zb-resolve-burst circle{stroke:#ffe2ac;stroke-width:2;fill:#ffbc4320}
+.zb-shell[data-map="ramp-01"] .zb-impact-ring{stroke:#f9dc99;stroke-width:2.5;fill:#ffd87925}
+.zb-shell[data-map="ramp-01"] .zb-shop-production-art{width:58px;height:58px;object-fit:contain}
+.zb-shell[data-map="ramp-01"] .zb-tech-nodes img{height:94px;filter:drop-shadow(0 5px 5px #0006)}
+.zb-shell[data-map="ramp-01"] .zb-tech-nodes button{background:linear-gradient(145deg,#274650,#122a37);border-color:#769b9a80}
+.zb-shell[data-map="ramp-01"] .zb-tech-nodes button[data-tree-state="current"]{background:linear-gradient(140deg,#345d5a,#193d43);border-color:#dfc18b}
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"][data-orientation="portrait"] .zb-hud .zb-meter{flex-direction:column;gap:2px;min-height:44px}
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"][data-orientation="portrait"] .zb-hud .zb-meter span{font-size:10px;white-space:nowrap}
+.zb-shell[data-defense-screen="combat"][data-map="ramp-01"][data-orientation="portrait"] .zb-hud .zb-meter strong{white-space:nowrap}
+.zb-result-keyart{position:relative;height:116px;overflow:hidden;margin:-28px -30px 20px;border-bottom:1px solid #bfa16670}
+.zb-result-keyart img{width:100%;height:100%;object-fit:cover;object-position:center 52%;filter:brightness(.72)}
+.zb-result-keyart span{position:absolute;bottom:14px;left:28px;font-size:13px;color:#ffe1a8;letter-spacing:.1em;text-shadow:0 2px 6px #000}
+.zb-shell .zb-result>div{border-color:#c6ae7a85;background:linear-gradient(145deg,#193847f7,#0b202bf7)}
+@keyframes zb-signal-flow{to{stroke-dashoffset:-112}}
+@keyframes zb-discharge{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
+@media(max-width:900px){
+ .zb-shell.zb-premium-deployment[data-defense-screen="support-select"]{grid-template-areas:"head" "intro" "crew" "bottom";grid-template-columns:1fr;grid-template-rows:auto auto auto auto;gap:16px;padding:14px 18px}
+ .zb-premium-deployment .zb-prep-header h1{font-size:18px}
+ .zb-premium-deployment .zb-prep-header small{font-size:8px;letter-spacing:0}
+ .zb-premium-deployment .zb-prep-header button{font-size:12px;padding:6px 9px}
+ .zb-premium-deployment .zb-deployment-copy{padding:10px 0;margin:0}
+ .zb-premium-deployment .zb-deployment-copy h2{font-size:32px;max-width:500px;margin:10px 0}
+ .zb-premium-deployment .zb-deployment-copy>p{font-size:14px;margin:8px 0;line-height:1.5}
+ .zb-deployment-operation{margin:10px 0;padding:6px 10px;gap:3px}
+ .zb-deployment-operation strong{display:none}
+ .zb-deployment-operation span{font-size:16px}
+ .zb-deployment-operation small{font-size:12px}
+ .zb-premium-deployment .zb-simulation-boundary{font-size:11px;max-width:none}
+ .zb-premium-deployment .zb-support-grid{gap:10px}
+ .zb-crew-heading h2{font-size:18px}
+ .zb-crew-heading p{font-size:12px}
+ .zb-premium-deployment .zb-support-card{min-height:0}
+ .zb-premium-deployment .zb-support-fullbody{height:200px;padding:8px 4px 0}
+ .zb-premium-deployment .zb-support-card>span{padding:10px;min-height:138px}
+ .zb-premium-deployment .zb-support-card>span>strong{font-size:22px}
+ .zb-premium-deployment .zb-support-card>span>b{font-size:13px}
+ .zb-premium-deployment .zb-support-card>i{font-size:13px;padding:11px 5px}
+ .zb-support-effects{grid-template-columns:1fr;gap:1px}
+ .zb-deployment-bottom{grid-template-columns:1fr;gap:8px}
+ .zb-shell[data-map="ramp-01"] .zb-tech-nodes img{height:64px}
+}
+@media(max-width:430px){
+ .zb-shell.zb-premium-deployment[data-defense-screen="support-select"]{padding:12px;gap:10px}
+ .zb-premium-deployment .zb-prep-header{gap:6px;flex-wrap:wrap}
+ .zb-premium-deployment .zb-prep-header>div{flex-basis:100%}
+ .zb-premium-deployment .zb-prep-header>div small{display:none}
+ .zb-premium-deployment .zb-prep-header h1{font-size:20px;margin:0 0 4px}
+ .zb-premium-deployment .zb-deployment-copy h2{font-size:28px;margin:6px 0}
+ .zb-premium-deployment .zb-deployment-copy>span{font-size:11px}
+ .zb-premium-deployment .zb-support-fullbody{height:162px}
+ .zb-premium-deployment .zb-support-portrait{width:28px;height:28px;left:8px;top:8px}
+ .zb-premium-deployment .zb-support-card>span>em{font-size:11px}
+ .zb-premium-deployment .zb-support-card>span>small{font-size:10px}
+ .zb-premium-deployment .zb-support-card>span{padding:9px;min-height:142px}
+ .zb-shell[data-map="ramp-01"] .zb-tech-nodes img{height:64px}
+}
+@media(orientation:landscape) and (max-height:600px){
+ .zb-shell.zb-premium-deployment[data-defense-screen="support-select"]{grid-template-areas:"head head" "intro crew" "bottom bottom";grid-template-columns:minmax(180px,.7fr) minmax(300px,1.3fr);grid-template-rows:auto auto auto;gap:12px;padding:12px}
+ .zb-premium-deployment .zb-prep-header>div{flex-basis:auto}
+ .zb-premium-deployment .zb-deployment-copy h2{font-size:28px}
+ .zb-premium-deployment .zb-support-fullbody{height:142px}
+ .zb-premium-deployment .zb-support-card>span{min-height:124px}
+ .zb-premium-deployment .zb-support-card>span>strong{font-size:20px}
+ .zb-premium-deployment .zb-support-card>span>em{font-size:10px}
+ .zb-shell[data-map="ramp-01"] .zb-tech-nodes img{height:54px}
+}
+@media(prefers-reduced-motion:reduce){
+ .zb-premium-deployment *,.zb-shell[data-map="ramp-01"] .zb-path-centerline,.zb-premium-discharge{animation:none!important;transition:none!important}
+}

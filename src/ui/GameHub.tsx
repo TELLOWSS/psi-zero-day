@@ -29,6 +29,7 @@ import {
   defenseEventAvailabilityFromState, readE1UnlockNoticeSeen, writeE1UnlockNoticeSeen,
 } from '../app/defense-story-bridge';
 import { zeroBreachContent } from '../content/defense';
+import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import { defenseEvents } from '../content/defense-events';
 import { browserLocalStoragePort } from '../platform/browser-storage';
 
@@ -43,7 +44,7 @@ const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
 const OperationHandoffDossier = lazy(() => import('./OperationHandoffDossier').then(module => ({default:module.OperationHandoffDossier})));
 const MODE_PREVIEW_ART = {
   signal: SIGNAL_WATCH_KEY_ART,
-  defense: '/mode-previews/defense-coming-soon-v2.webp',
+  defense: `/${DEFENSE_PREMIUM_HERO}`,
   story: '/mode-previews/story-coming-soon-v2.webp',
 } as const;
 type ModePreviewKind = keyof typeof MODE_PREVIEW_ART;

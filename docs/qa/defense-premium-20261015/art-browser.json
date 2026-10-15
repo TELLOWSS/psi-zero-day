@@ -1,0 +1,172 @@
+{
+  "assets": [
+    {
+      "id": "PULSE.L1",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/pulse-l1.webp"
+    },
+    {
+      "id": "PULSE.L2",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/pulse-l2.webp"
+    },
+    {
+      "id": "PULSE.L3A",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/pulse-l3a.webp"
+    },
+    {
+      "id": "PULSE.L3B",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/pulse-l3b.webp"
+    },
+    {
+      "id": "BURST.L1",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/burst-l1.webp"
+    },
+    {
+      "id": "BURST.L2",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/burst-l2.webp"
+    },
+    {
+      "id": "BURST.L3A",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/burst-l3a.webp"
+    },
+    {
+      "id": "BURST.L3B",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/burst-l3b.webp"
+    },
+    {
+      "id": "CONTROL.L1",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/control-l1.webp"
+    },
+    {
+      "id": "CONTROL.L2",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/control-l2.webp"
+    },
+    {
+      "id": "CONTROL.L3A",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/control-l3a.webp"
+    },
+    {
+      "id": "CONTROL.L3B",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/control-l3b.webp"
+    },
+    {
+      "id": "SENSOR.L1",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/sensor-l1.webp"
+    },
+    {
+      "id": "SENSOR.L2",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/sensor-l2.webp"
+    },
+    {
+      "id": "SENSOR.L3A",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/sensor-l3a.webp"
+    },
+    {
+      "id": "SENSOR.L3B",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/sensor-l3b.webp"
+    },
+    {
+      "id": "NORMAL",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/normal.webp"
+    },
+    {
+      "id": "SWIFT",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/swift.webp"
+    },
+    {
+      "id": "ARMORED",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/armored.webp"
+    },
+    {
+      "id": "SWARM",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/swarm.webp"
+    },
+    {
+      "id": "VEILED",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/veiled.webp"
+    },
+    {
+      "id": "BOSS",
+      "width": 368,
+      "height": 368,
+      "uri": "assets/defense/premium-v1/boss.webp"
+    },
+    {
+      "id": "world",
+      "width": 1619,
+      "height": 971,
+      "uri": "assets/defense/premium-v1/world.webp"
+    },
+    {
+      "id": "hero",
+      "width": 1672,
+      "height": 941,
+      "uri": "assets/defense/premium-v1/hero.webp"
+    }
+  ],
+  "crew": [
+    {
+      "support": "COORDINATOR",
+      "body": "./assets/episode01/characters/kang-taesik-map.webp?v=7ba8a41c20cf",
+      "portrait": "./assets/episode01/characters/kang-taesik-portrait.webp?v=3c668afbb4e3",
+      "text": "현장 지휘\n강태식\n형틀반장\n작업 흐름 정리\n이동 정지\n3초\n재사용\n45초\n이 동료와 출전"
+    },
+    {
+      "support": "OBSERVER",
+      "body": "./assets/episode01/characters/lim-junho-map.webp?v=f8e4b106be57",
+      "portrait": "./assets/episode01/characters/lim-junho-portrait.webp?v=ffdb164ab030",
+      "text": "전술 관측\n임준호\n신입근로자\n전 구역 확인\n전체 탐지\n8초\n대응 거리\n+30\n재사용\n40초\n이 동료와 출전"
+    }
+  ],
+  "shop": [
+    "assets/defense/premium-v1/pulse-l1.webp",
+    "assets/defense/premium-v1/burst-l1.webp",
+    "assets/defense/premium-v1/control-l1.webp",
+    "assets/defense/premium-v1/sensor-l1.webp"
+  ],
+  "pageErrors": [],
+  "legacyDecorativeOverlays": 0,
+  "board": "assets/defense/premium-v1/world.webp",
+  "reducedMotion": "none"
+}

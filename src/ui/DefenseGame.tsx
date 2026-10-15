@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
-import { characterPortraitUri } from '../app/episode-visual-assets';
+import { characterPortraitUri,characterMapUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseControlTowerProductionEntry, defenseEnemyArtUri, defenseG8aTowerVisual, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defensePulseTowerProductionEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
@@ -41,6 +41,8 @@ import {OperationHandoffDossier} from './OperationHandoffDossier';
 import {defensePlanningWave, recommendDefenseAction} from '../app/defense-tactics';
 import {DefenseTechTree} from './DefenseTechTree';
 import './defense-tactics.css';
+import {defensePremiumArt,DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
+import './defense-premium.css';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -153,12 +155,14 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     </g>;
   }
 
-  const artUri = defenseTowerArtUri(tower.towerId, tower.levelId);
+  const artUri = defenseTowerArtUri(tower.towerId, tower.levelId,content.map.id);
+  const premium=artUri?.includes('/premium-v1/')??false;
   if (artUri) {
     return <g
       className={`zb-tower zb-tower-production${firing ? ' is-firing' : ''}`}
       data-production-tower-art={`${tower.towerId}:${tower.levelId}`}
       data-tower-family={tower.towerId}
+      data-premium-equipment={premium?'true':undefined}
     >
       {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
       {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
@@ -167,15 +171,21 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       </g> : null}
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
       {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
+      {premium?<ellipse cx="0" cy="20" rx="28" ry="8" className="zb-premium-contact" aria-hidden="true"/>:null}
+      {premium&&firing?<g className={`zb-premium-discharge is-${tower.towerId.toLowerCase()}`} aria-hidden="true">
+        <path d="M21-29L49-16M25-34L57-26M20-39L47-45"/>
+        <circle cx="30" cy="-31" r="9"/>
+      </g>:null}
       <image
         href={artUri}
-        x="-64"
-        y="-98"
-        width="128"
-        height="128"
+        x={premium?-54:-64}
+        y={premium?-77:-98}
+        width={premium?108:128}
+        height={premium?108:128}
         preserveAspectRatio="xMidYMid meet"
         className="zb-tower-production-image"
       />
+      {premium?<g className="zb-premium-level" aria-hidden="true"><rect x="-20" y="24" width="40" height="15" rx="5"/><text y="35" textAnchor="middle">{tower.levelId}</text></g>:null}
     </g>;
   }
   return <g
@@ -214,7 +224,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
   const g8aDump = content.map.id === G8A_MAP_ID ? defenseSwiftPqAsset() : null;
   const swiftPq = enemy.enemyId === 'SWIFT' ? g8aDump : null;
-  const artUri = defenseEnemyArtUri(enemy.enemyId);
+  const artUri = defenseEnemyArtUri(enemy.enemyId,content.map.id);
   const g8aRiskActor = content.map.id === G8A_MAP_ID;
   const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.75;
   const g8aVehicleRisk = enemy.enemyId === 'SWIFT' || enemy.enemyId === 'ARMORED';
@@ -315,22 +325,32 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
 }
 
 function SupportCard({
-  session, supportId, onChoose,
+  session, supportId, onChoose,content,
 }: {
   session: EpisodeSession;
   supportId: DefenseSupportId;
   onChoose: () => void;
+  content:DefenseContent;
 }) {
   const characterId = defenseSupportCharacterId(supportId);
   const character = session.character(characterId);
   const portrait = characterPortraitUri(characterId, id => session.assetUri(id));
+  const body=characterMapUri(characterId,id=>session.assetUri(id));
+  const support=content.supports.find(item=>item.id===supportId)!;
   return <button className="zb-support-card" type="button" onClick={onChoose} data-support={supportId}>
+    <VisualImage uri={body} alt="" className="zb-support-fullbody"/>
     <VisualImage uri={portrait} alt="" className="zb-support-portrait" />
     <span>
-      <small>{supportId}</small>
+      <small>{t(`defense.art.${supportId}`)}</small>
       <strong>{character?.name ?? t(`defense.support.${supportId}.suggestedName`)}</strong>
       <em>{character?.role ?? ''}</em>
       <b>{t(`defense.support.${supportId}.skill`)}</b>
+      <span className="zb-support-effects">
+      {support.freezeMovementTicks>0?<span>{t('defense.art.stop')} <b>{support.freezeMovementTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>:null}
+      {support.revealAllTicks>0?<span>{t('defense.art.reveal')} <b>{support.revealAllTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>:null}
+      {support.rangeBonus>0?<span>{t('defense.art.range')} <b>+{support.rangeBonus}</b></span>:null}
+      <span>{t('defense.art.cooldown')} <b>{support.cooldownTicks*content.tickMs/1000}{t('defense.art.seconds')}</b></span>
+      </span>
     </span>
     <i>{t('defense.ui.support.choose')}</i>
   </button>;
@@ -736,34 +756,39 @@ export function DefenseGame({
     </section>
   </main>;
 
-  if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select" data-scenario={content.scenario.id} data-map={content.map.id}>
+  if (!state) return <main className="zb-shell zb-prep zb-premium-deployment" data-defense-screen="support-select" data-scenario={content.scenario.id} data-map={content.map.id}>
+    <img className="zb-deployment-keyart" src={DEFENSE_PREMIUM_HERO} alt="" aria-hidden="true"/>
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.ui.hub.title')}</h1></div>
       <button type="button" onClick={() => setSelectedScenarioId(null)}>{t('defense.scenario.back')}</button>
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
-    <section className="zb-prep-copy">
-      <span>{t('defense.tactics.simulation')}</span>
-      <h2>{activeSiteMap ? activeSiteMap.label : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
-      <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.tactics.ready_body')}</p>
-      <small>{t('defense.tactics.boundary')}</small>
-      {BOARD_ART_URI?<img className="zb-prep-world" src={BOARD_ART_URI} alt={t('defense.tactics.world')}/>:null}
+    <section className="zb-prep-copy zb-deployment-copy">
+      <span>{t('defense.art.subtitle')}</span>
+      <h2>{t('defense.art.title')}</h2>
+      <p>{t('defense.art.promise')}</p>
+      <div className="zb-deployment-operation"><strong>{t('defense.art.operation')}</strong><span>{activeSiteMap?.label??(content.scenario.eventId?t(defenseEventById(content.scenario.eventId)?.titleTextId??'defense.event.e1.title'):t('defense.map.ramp-01.name'))}</span><small>{t('defense.art.route')}</small>
+        {content.scenario.eventId?<p>{t(defenseEventById(content.scenario.eventId)?.briefingTextId??'defense.event.e1.briefing')}</p>:null}
+      </div>
+      <small className="zb-simulation-boundary">{t('defense.tactics.boundary')}</small>
     </section>
     <section className="zb-support-grid">
-      <OperationHandoffDossier mode="defense"/>
+      <header className="zb-crew-heading"><h2>{t('defense.art.crew')}</h2><p>{t('defense.art.crew_hint')}</p></header>
       {SUPPORT_IDS.map(id => <SupportCard
         key={id}
         session={session}
         supportId={id}
         onChoose={() => startWithSupport(id)}
+        content={content}
       />)}
     </section>
+    <section className="zb-deployment-bottom"><details><summary>{t('defense.art.tree')} · {t('defense.art.standard')}</summary><div className="zb-deployment-equipment">{TOWER_IDS.map(id=><div key={id}><img src={defenseTowerArtUri(id,'L3A',content.map.id)??undefined} alt=""/><strong>{towerName(content.map.id,id)}</strong><small>{towerRole(content.map.id,id)}</small></div>)}</div></details><OperationHandoffDossier mode="defense"/></section>
   </main>;
 
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={content.map.id==='ramp-01'?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
@@ -843,7 +868,7 @@ export function DefenseGame({
           <SiteProcessMapBoardOverlay mapId={content.map.id} />
           <RemodelBoardOverlay state={remodelWorldState} />
           <DataCenterBoardOverlay state={dataCenterWorldState} />
-          <FieldHazardsOverlay mapId={content.map.id} isRunning={state.status === 'RUNNING'} />
+          {content.map.id!=='ramp-01'?<FieldHazardsOverlay mapId={content.map.id} isRunning={state.status === 'RUNNING'} />:null}
           <polyline
             points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path-shoulder"
@@ -996,7 +1021,7 @@ export function DefenseGame({
               const level = definition.levels.find(item => item.id === 'L1')!;
               const disabled = state.resource < level.cost;
               const shopArtUri = defenseG8aTowerVisual(content.map.id, towerId, 'L1')?.uri
-                ?? defenseTowerArtUri(towerId, 'L1');
+                ?? defenseTowerArtUri(towerId, 'L1',content.map.id);
               return <button
                 key={towerId}
                 type="button"
@@ -1086,6 +1111,7 @@ export function DefenseGame({
 
     {result ? <section className={`zb-result ${result.won ? 'is-win' : 'is-loss'}`} role="dialog" aria-modal="true" aria-labelledby="zb-result-title" data-result-grade="COMMERCIAL_GFX_V1">
       <div>
+        <div className="zb-result-keyart" aria-hidden="true"><img src={DEFENSE_PREMIUM_HERO} alt=""/><span>{t('defense.art.result')}</span></div>
         <div className="zb-result-head">
           <span className="zb-result-kicker">{t('defense.ui.result')}</span>
           <div className="zb-result-stars" aria-hidden="true">{[1,2,3].map(star => <span key={star} className={star <= result.stars ? 'is-earned' : ''}>★</span>)}</div>

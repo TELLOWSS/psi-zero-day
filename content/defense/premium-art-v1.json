@@ -1,0 +1,521 @@
+{
+  "schemaVersion": 1,
+  "visualVersion": "defense-premium-20261015-v1",
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "scope": [
+    "ramp-01"
+  ],
+  "generator": "built-in image_gen",
+  "sources": {
+    "towers": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+    "hazards": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+    "world": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-979563bf-193c-4480-a9f5-6ae117a38972.png",
+    "hero": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-061bfecf-b656-4469-9119-0aef5c6e4afa.png"
+  },
+  "assets": [
+    {
+      "id": "PULSE.L1",
+      "uri": "assets/defense/premium-v1/pulse-l1.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 49290,
+      "sha256": "8722873defae1be55a9b62258395bce3f242114d00d05bba7d3abc185c3a3286",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 55,
+        "top": 41,
+        "width": 228,
+        "height": 249
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 227,
+        "bottom": 248
+      }
+    },
+    {
+      "id": "PULSE.L2",
+      "uri": "assets/defense/premium-v1/pulse-l2.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 55384,
+      "sha256": "a6bdc0cb00610dba510ef7030735c82b392665d56d6121a3a34b44106c3be639",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 341,
+        "top": 31,
+        "width": 276,
+        "height": 262
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 275,
+        "bottom": 261
+      }
+    },
+    {
+      "id": "PULSE.L3A",
+      "uri": "assets/defense/premium-v1/pulse-l3a.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 53698,
+      "sha256": "add25822c44c26859bd67d883c9c3a9d025ab401b1a45fb465ec7427bb701de2",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 647,
+        "top": 28,
+        "width": 245,
+        "height": 263
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 244,
+        "bottom": 262
+      }
+    },
+    {
+      "id": "PULSE.L3B",
+      "uri": "assets/defense/premium-v1/pulse-l3b.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 52540,
+      "sha256": "77d3a874c683f6ab8b1d6f145b36317e49aac0e56a27ceae117df6960f225ad0",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 920,
+        "top": 25,
+        "width": 310,
+        "height": 268
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 309,
+        "bottom": 267
+      }
+    },
+    {
+      "id": "BURST.L1",
+      "uri": "assets/defense/premium-v1/burst-l1.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 57444,
+      "sha256": "5c3d01d9e46736e0d7167353047b4a6d6298d777dfbfe3c6f8c66e4695d43940",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 34,
+        "top": 320,
+        "width": 247,
+        "height": 271
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 246,
+        "bottom": 270
+      }
+    },
+    {
+      "id": "BURST.L2",
+      "uri": "assets/defense/premium-v1/burst-l2.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 57490,
+      "sha256": "822a77b27585770620c78a3c4c25ebb1e57cddf6269e8a806e252764e3f9ac0d",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 331,
+        "top": 319,
+        "width": 274,
+        "height": 262
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 273,
+        "bottom": 261
+      }
+    },
+    {
+      "id": "BURST.L3A",
+      "uri": "assets/defense/premium-v1/burst-l3a.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 59166,
+      "sha256": "3f204c12951cc729da3fbc203a98a71dc9543a8d6930ca97412e982ae960e3aa",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 633,
+        "top": 309,
+        "width": 264,
+        "height": 273
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 263,
+        "bottom": 272
+      }
+    },
+    {
+      "id": "BURST.L3B",
+      "uri": "assets/defense/premium-v1/burst-l3b.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 56148,
+      "sha256": "d4c143177a4b6d824a6a49c28da9de0020ffd604ac1f8552c15dea7d89632762",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 952,
+        "top": 315,
+        "width": 271,
+        "height": 269
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 270,
+        "bottom": 268
+      }
+    },
+    {
+      "id": "CONTROL.L1",
+      "uri": "assets/defense/premium-v1/control-l1.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 45838,
+      "sha256": "eac2bd69fce8953f35036656d6fe4a5a16f9d009903744d02d550f953e505833",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 13,
+        "top": 628,
+        "width": 278,
+        "height": 243
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 277,
+        "bottom": 242
+      }
+    },
+    {
+      "id": "CONTROL.L2",
+      "uri": "assets/defense/premium-v1/control-l2.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 55858,
+      "sha256": "b4dd405673c7178f1b14267b8783a468a10bdc4dc3a5b5b4d80efed7f2501100",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 322,
+        "top": 607,
+        "width": 272,
+        "height": 258
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 271,
+        "bottom": 257
+      }
+    },
+    {
+      "id": "CONTROL.L3A",
+      "uri": "assets/defense/premium-v1/control-l3a.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 50516,
+      "sha256": "0dce46b882c1ef9988219d100da4cab9caf081ac53896aacd955d23d241d170d",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 614,
+        "top": 593,
+        "width": 306,
+        "height": 291
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 305,
+        "bottom": 290
+      }
+    },
+    {
+      "id": "CONTROL.L3B",
+      "uri": "assets/defense/premium-v1/control-l3b.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 53318,
+      "sha256": "44763b84d3721b310608792902ffba2c0f230a0f0a887d5b57e16aaf78fa5329",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 927,
+        "top": 591,
+        "width": 315,
+        "height": 264
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 314,
+        "bottom": 263
+      }
+    },
+    {
+      "id": "SENSOR.L1",
+      "uri": "assets/defense/premium-v1/sensor-l1.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 38382,
+      "sha256": "66306597e9790d826cec5e0c1c1773d4aad46cbc37f35fc34ae97327b7690fc0",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 25,
+        "top": 874,
+        "width": 250,
+        "height": 350
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 249,
+        "bottom": 349
+      }
+    },
+    {
+      "id": "SENSOR.L2",
+      "uri": "assets/defense/premium-v1/sensor-l2.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 47432,
+      "sha256": "9f381faa07dcbfff3f2e904f0d7e44b5eccc9312e06ae13ff2112c1d1630971a",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 326,
+        "top": 870,
+        "width": 265,
+        "height": 356
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 264,
+        "bottom": 355
+      }
+    },
+    {
+      "id": "SENSOR.L3A",
+      "uri": "assets/defense/premium-v1/sensor-l3a.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 52448,
+      "sha256": "f064d47da0c206a623334b4043e657d2196d882289fa8095cabff229ba47a1e0",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 639,
+        "top": 884,
+        "width": 283,
+        "height": 341
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 282,
+        "bottom": 340
+      }
+    },
+    {
+      "id": "SENSOR.L3B",
+      "uri": "assets/defense/premium-v1/sensor-l3b.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 47710,
+      "sha256": "30511ba78a5c7a7b0fee61847e0545c9b731f7caa68bd07de764b834d1ea597d",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-6e716135-7ec3-44be-b6ed-84a7eaa044ec.png",
+      "sourceRect": {
+        "left": 971,
+        "top": 872,
+        "width": 263,
+        "height": 353
+      },
+      "visibleBounds": {
+        "left": 0,
+        "top": 0,
+        "right": 262,
+        "bottom": 352
+      }
+    },
+    {
+      "id": "NORMAL",
+      "uri": "assets/defense/premium-v1/normal.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 52366,
+      "sha256": "5ed2cbcc0f77beee923c0e2322f7734e8ac708fd67c81f68f5d77eee09d9e7a3",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 40,
+        "top": 40,
+        "width": 450,
+        "height": 430
+      },
+      "visibleBounds": {
+        "left": 14,
+        "top": 14,
+        "right": 438,
+        "bottom": 408
+      }
+    },
+    {
+      "id": "SWIFT",
+      "uri": "assets/defense/premium-v1/swift.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 38954,
+      "sha256": "5528e1ab2d54d89f5cfb9abeb944ca70685ff50f082c3d7770ff7cad511ee32a",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 530,
+        "top": 35,
+        "width": 500,
+        "height": 435
+      },
+      "visibleBounds": {
+        "left": 13,
+        "top": 12,
+        "right": 494,
+        "bottom": 417
+      }
+    },
+    {
+      "id": "ARMORED",
+      "uri": "assets/defense/premium-v1/armored.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 53252,
+      "sha256": "c7b21fe0349acdd24acafbacc708be737c2cea98ead48f8ce3e4335cdb9beadd",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 1045,
+        "top": 18,
+        "width": 450,
+        "height": 470
+      },
+      "visibleBounds": {
+        "left": 11,
+        "top": 11,
+        "right": 432,
+        "bottom": 456
+      }
+    },
+    {
+      "id": "SWARM",
+      "uri": "assets/defense/premium-v1/swarm.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 69802,
+      "sha256": "3749db4d42b80febb3565971586643a24798f1af9e7468a5e162a053cd49fe3a",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 60,
+        "top": 480,
+        "width": 455,
+        "height": 470
+      },
+      "visibleBounds": {
+        "left": 13,
+        "top": 13,
+        "right": 444,
+        "bottom": 454
+      }
+    },
+    {
+      "id": "VEILED",
+      "uri": "assets/defense/premium-v1/veiled.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 54820,
+      "sha256": "7afbe99d8691dc691359970d382f21c4cc09bb67c4b507bba842d8d555bcb4d6",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 550,
+        "top": 480,
+        "width": 430,
+        "height": 475
+      },
+      "visibleBounds": {
+        "left": 12,
+        "top": 9,
+        "right": 416,
+        "bottom": 461
+      }
+    },
+    {
+      "id": "BOSS",
+      "uri": "assets/defense/premium-v1/boss.webp",
+      "width": 368,
+      "height": 368,
+      "alpha": true,
+      "bytes": 66810,
+      "sha256": "fcde5ebc775c83fa09a85552d17504d72893b59c0caed09fcbd22e30f6465367",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-69798012-3ff9-4b12-bd98-d20698cd0610.png",
+      "sourceRect": {
+        "left": 1004,
+        "top": 480,
+        "width": 520,
+        "height": 490
+      },
+      "visibleBounds": {
+        "left": 8,
+        "top": 10,
+        "right": 512,
+        "bottom": 481
+      }
+    },
+    {
+      "id": "world",
+      "uri": "assets/defense/premium-v1/world.webp",
+      "width": 1619,
+      "height": 971,
+      "alpha": false,
+      "bytes": 657852,
+      "sha256": "92f0f2bbcde4ca4a108dd90c578110d064d45315f3646dcb4465aedd6379d9f7",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-979563bf-193c-4480-a9f5-6ae117a38972.png"
+    },
+    {
+      "id": "hero",
+      "uri": "assets/defense/premium-v1/hero.webp",
+      "width": 1672,
+      "height": 941,
+      "alpha": false,
+      "bytes": 390454,
+      "sha256": "25985bf3e0b3f097ea08dd4b6e1fc670fcb633ea955e22c1e01859bf1e9ca98d",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a13458-6d9f-7992-9023-d99924880690\\exec-061bfecf-b656-4469-9119-0aef5c6e4afa.png"
+    }
+  ]
+}

@@ -22,7 +22,7 @@ describe('commercial hub mode readiness',()=>{
 
   it('wires three distinct authored mode artworks and a full preview dialog',()=>{
     expect(hub).toContain("signal: SIGNAL_WATCH_KEY_ART");
-    expect(hub).toContain("/mode-previews/defense-coming-soon-v2.webp");
+    expect(hub).toContain('defense: `/${DEFENSE_PREMIUM_HERO}`');
     expect(hub).toContain("/mode-previews/story-coming-soon-v2.webp");
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');

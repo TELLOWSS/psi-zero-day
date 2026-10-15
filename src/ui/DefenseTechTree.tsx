@@ -17,7 +17,7 @@ export function DefenseTechTree({content,tower,resource,advice,onCommand}: {
         const next=level.from===current.id;
         const passed=(level.id==='L1'&&current.id!=='L1')||(level.id==='L2'&&current.id.startsWith('L3'));
         const recommended=advice?.command.type==='Upgrade'&&advice.command.towerInstanceId===tower.id&&advice.command.levelId===level.id;
-        const art=defenseG8aTowerVisual(content.map.id,tower.towerId,level.id)?.uri??defenseTowerArtUri(tower.towerId,level.id);
+        const art=defenseG8aTowerVisual(content.map.id,tower.towerId,level.id)?.uri??defenseTowerArtUri(tower.towerId,level.id,content.map.id);
         return <button key={level.id} type="button" data-level={level.id} data-tree-state={active?'current':passed?'completed':next?'available':'locked'}
           aria-current={active?'step':undefined} disabled={!next||resource<level.cost} data-recommended={recommended?'true':undefined}
           onClick={()=>onCommand({type:'Upgrade',towerInstanceId:tower.id,levelId:level.id})}>

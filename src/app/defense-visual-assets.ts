@@ -8,6 +8,7 @@ import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import veiledFinalRaw from '../../content/defense/g8a-veiled-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
+import {defensePremiumUri,defensePremiumTowerUri,defensePremiumHazardUri} from './defense-premium-art';
 
 interface DefenseVisualAsset {
   readonly assetId: string;
@@ -347,6 +348,8 @@ function asset(id: string): DefenseVisualAsset | null {
 
 
 export function defenseBoardArtUri(mapId: string): string | null {
+  const premium=defensePremiumUri('world',mapId);
+  if(premium)return premium;
   if (mapId === 'map-apt-bottom-up-excavation-01') {
     const finalWorld = defenseG8aWorldFinalAsset();
     if (finalWorld) return finalWorld.uri;
@@ -363,11 +366,15 @@ export function defenseBoardArtUri(mapId: string): string | null {
   return asset(`defense.board.${mapId}`)?.uri ?? null;
 }
 
-export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLevelId): string | null {
+export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLevelId, mapId?:string): string | null {
+  const premium=defensePremiumTowerUri(towerId,levelId,mapId);
+  if(premium)return premium;
   return asset(`defense.tower.${towerId}.${levelId}`)?.uri ?? null;
 }
 
-export function defenseEnemyArtUri(enemyId: DefenseEnemyId): string | null {
+export function defenseEnemyArtUri(enemyId: DefenseEnemyId,mapId?:string): string | null {
+  const premium=defensePremiumHazardUri(enemyId,mapId);
+  if(premium)return premium;
   if (enemyId === 'VEILED') {
     const finalVeiled = defenseG8aVeiledFinalAsset();
     if (finalVeiled) return finalVeiled.uri;

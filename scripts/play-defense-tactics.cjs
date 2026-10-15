@@ -9,7 +9,7 @@ const out=path.resolve(process.env.PSI_QA_OUTPUT || 'docs/qa/defense-tactics-202
   const skip=page.getByRole('button',{name:'안내 건너뛰기',exact:true});if(await skip.isVisible())await skip.click();
   await page.locator('.zb-speed button').nth(1).click();
   await page.clock.install();await page.clock.pauseAt(Date.now()+100);
-  const row={name,support,errors,purchases:[],waves:[],steps:0};let captured=false;
+  const row={name,support,errors,purchases:[],waves:[],steps:0,seenThreats:[]};let captured=false,bossCaptured=false;const seenThreats=new Set();
   for(let step=0;step<700;step++){
    const shell=page.locator('[data-defense-screen="combat"]'),status=await shell.getAttribute('data-status');
    if(status==='WON'||status==='LOST'){row.status=status;row.shield=await shell.getAttribute('data-shield');break;}
@@ -26,11 +26,14 @@ const out=path.resolve(process.env.PSI_QA_OUTPUT || 'docs/qa/defense-tactics-202
     await page.locator('.zb-start-wave').click();
    }
    const supportButton=page.locator('.zb-support-action button');if(await supportButton.isEnabled())await supportButton.click();
-   if(!captured&&Number(await shell.getAttribute('data-wave'))>=5){await page.screenshot({path:path.join(out,`${name}-actual-combat.png`)});captured=true;}
+   for(const id of await page.locator('.zb-enemy').evaluateAll(xs=>xs.map(x=>x.getAttribute('data-enemy'))))seenThreats.add(id);
+   if(!captured&&Number(await shell.getAttribute('data-wave'))>=5&&await page.locator('.zb-enemy').count()>0){await page.screenshot({path:path.join(out,`${name}-actual-combat.png`)});captured=true;}
+   if(!bossCaptured&&await page.locator('.zb-enemy[data-enemy="BOSS"]').count()>0){await page.screenshot({path:path.join(out,`${name}-actual-boss.png`)});bossCaptured=true;}
    await page.clock.runFor(1000);row.steps++;
   }
   await page.screenshot({path:path.join(out,`${name}-actual-result.png`)});
   row.resultText=await page.locator('.zb-result').innerText();
+  row.seenThreats=[...seenThreats];
   await page.clock.runFor(100);
   row.saved=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('psi-zero-day.defense.save.v1'));return {records:s?.document?.records??s?.payload?.records,keys:Object.keys(s||{})};});
   rows.push(row);fs.writeFileSync(path.join(out,'natural-play.json'),JSON.stringify(rows,null,2));
