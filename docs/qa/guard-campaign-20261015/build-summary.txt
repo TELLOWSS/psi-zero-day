@@ -15,7 +15,7 @@ dist/assets/episode-session-LbujHSFU.js                      444.03 kB │ gzip:
 dist/assets/PatrolSurvivorsGame-CzgXzhTQ.js                  586.47 kB │ gzip: 189.23 kB
 
 ✓ built in 4.51s
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
