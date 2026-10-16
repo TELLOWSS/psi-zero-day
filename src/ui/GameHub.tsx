@@ -357,7 +357,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art="cinematic-dawn-v1">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <img src="/assets/branding/home-v2/site-at-dawn.png" alt="" width="1672" height="941" fetchPriority="high" decoding="async" className="commercial-title-backdrop" />
+    <img src="/assets/branding/home-v2/psi-site-overview-20261017.avif" alt="" width="1280" height="720" fetchPriority="high" decoding="async" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
     <div className="commercial-title-sun-glow" aria-hidden="true" />
