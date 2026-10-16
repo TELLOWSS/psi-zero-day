@@ -1,6 +1,8 @@
 import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
+import './hub-premium.css';
+import homePremiumArt from '../../content/episode01/home-premium-art-v4.json';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -354,10 +356,13 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
-  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art="cinematic-dawn-v1">
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art="premium-hero-v4">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <img src="/assets/branding/home-v2/psi-site-overview-20261017.avif" alt="" width="1280" height="720" fetchPriority="high" decoding="async" className="commercial-title-backdrop" />
+    <picture className="premium-title-picture">
+      <source media="(orientation: portrait) and (max-width: 1050px)" srcSet={homePremiumArt.assets.portrait.uri}/>
+      <img src={homePremiumArt.assets.wide.uri} alt="" width={homePremiumArt.assets.wide.width} height={homePremiumArt.assets.wide.height} fetchPriority="high" decoding="async" className="commercial-title-backdrop"/>
+    </picture>
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
     <div className="commercial-title-sun-glow" aria-hidden="true" />
@@ -394,6 +399,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
+      {onDefense?<button type="button" className="premium-hero-start" onClick={()=>onDefense('guard-campaign')}><span>{defenseText('guard.title')} · {defenseText('guard.start')}</span><HubIcon kind="play"/></button>:null}
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
       </div>
 

@@ -1,5 +1,5 @@
 /* Final key art owns the scene; shared covers provide a clear, quiet game library. */
-:root .commercial-title-home[data-title-layout='MODE_SELECT_V11'][data-home-art='cinematic-dawn-v1']{
+:root .commercial-title-home[data-title-layout='MODE_SELECT_V11'][data-home-art='premium-hero-v4']{
  background:#0a151c!important;padding:24px clamp(20px,4.5vw,80px) 48px!important;isolation:isolate;
  & .commercial-title-backdrop{height:min(850px,100dvh)!important;object-fit:cover;object-position:70% 36%;opacity:1;filter:none!important;animation:none!important;transform:none!important;z-index:-3}
  & .commercial-title-grade{height:100dvh!important;background:linear-gradient(0deg,#0a151c 0%,#0a151ce0 12%,#0a151c10 57%),linear-gradient(90deg,#06131cc9 0%,#06131c8c 35%,#06131c00 75%)!important;z-index:-2}
@@ -76,5 +76,5 @@
  }
  @media(prefers-reduced-motion:reduce){& .commercial-title-actions .commercial-title-action.has-mode-art,& .commercial-title-action.has-mode-art .commercial-title-action-art{transition:none!important;transform:none!important}}
 }
-:root.psi-title-motion-off .commercial-title-home[data-home-art='cinematic-dawn-v1'] .commercial-title-actions .commercial-title-action.has-mode-art,
-:root.psi-title-motion-off .commercial-title-home[data-home-art='cinematic-dawn-v1'] .commercial-title-action.has-mode-art .commercial-title-action-art{transition:none!important;transform:none!important}
+:root.psi-title-motion-off .commercial-title-home[data-home-art='premium-hero-v4'] .commercial-title-actions .commercial-title-action.has-mode-art,
+:root.psi-title-motion-off .commercial-title-home[data-home-art='premium-hero-v4'] .commercial-title-action.has-mode-art .commercial-title-action-art{transition:none!important;transform:none!important}

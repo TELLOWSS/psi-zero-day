@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/HOME-PREMIUM-ART-PROMPTS-20261017.json",
+  "assets": {
+    "wide": {
+      "uri": "/assets/branding/home-premium-v4/wide.webp",
+      "width": 1672,
+      "height": 940,
+      "bytes": 383822,
+      "sha256": "6158f740cbba88e64c840d2526899ad46fd8b6041fbf3748fe902c20e52e33b3"
+    },
+    "portrait": {
+      "uri": "/assets/branding/home-premium-v4/portrait.webp",
+      "width": 940,
+      "height": 1672,
+      "bytes": 418604,
+      "sha256": "2b3d78e40219263452a18e0c6bc26dcd358023be9baf3ba7937d6f14853c8f7b"
+    }
+  }
+}

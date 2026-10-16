@@ -1,0 +1,149 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 212.23923444976077,
+      "y": 273.6,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 257.7248803827751,
+      "y": 320.72,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/wide.webp",
+      "w": 1672,
+      "h": 940
+    },
+    "face": {
+      "x": 416.38331914893615,
+      "y": 80.96000000000001,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/wide.webp",
+      "w": 1672,
+      "h": 940
+    },
+    "face": {
+      "x": 616.12,
+      "y": 102.30980861244021,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 499.20000000000005,
+      "y": 519.1026382978723,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/wide.webp",
+      "w": 1672,
+      "h": 940
+    },
+    "face": {
+      "x": 1059.2272340425532,
+      "y": 220.8,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-premium-v4/wide.webp",
+      "w": 1672,
+      "h": 940
+    },
+    "face": {
+      "x": 1401.6,
+      "y": 230.35406698564594,
+      "overlapping": []
+    },
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  }
+]
