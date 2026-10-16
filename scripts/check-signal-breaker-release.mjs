@@ -10,13 +10,13 @@ const worker=fs.readFileSync(path.join(app,'service-worker.js'),'utf8');
 const cacheName=worker.match(/const CACHE = '([^']+)'/)[1];
 const assets=worker.match(/const ASSETS = \[([^\]]+)\]/)[1];
 const paths=new Set(['/signal-breaker-dev/index.html','/signal-breaker-dev/service-worker.js','/signal-breaker-dev/art/production-v7.json']);
-for(const match of assets.matchAll(/'([^']+)'/g))paths.add(new URL(match[1],'https://release.invalid/signal-breaker-dev/').pathname.replace(/\/$/,'/index.html'));
+for(const match of assets.matchAll(/['"]([^'"]+)['"]/g))paths.add(new URL(match[1],'https://release.invalid/signal-breaker-dev/').pathname.replace(/\/$/,'/index.html'));
 // Stage soundtracks are verified with release hashes but loaded on demand.
 const RELEASE_SOUNDTRACKS=["/signal-breaker-dev/audio/ep01/ch01_ricochet_candidate_v01.ogg","/signal-breaker-dev/audio/ep01/ch02_belt_candidate_v01.ogg","/signal-breaker-dev/audio/ep01/ch03_unfinished_candidate_v01.ogg","/signal-breaker-dev/audio/ep01/ch04_steel_candidate_v01.ogg","/signal-breaker-dev/audio/ep01/ch05_relay_candidate_v01.ogg","/signal-breaker-dev/audio/ep02/ch06_point_contact_candidate_v01.ogg","/signal-breaker-dev/audio/ep02/ch07_ratchet_candidate_v01.ogg","/signal-breaker-dev/audio/ep02/ch08_glass_candidate_v01.ogg","/signal-breaker-dev/audio/ep02/ch09_asymmetric_candidate_v01.ogg","/signal-breaker-dev/audio/ep02/ch10_manual_override_candidate_v01.ogg","/signal-breaker-dev/audio/ep03/ch11_brushed_steel_candidate_v01.ogg","/signal-breaker-dev/audio/ep03/ch12_gantry_candidate_v01.ogg","/signal-breaker-dev/audio/ep03/ch13_perimeter_candidate_v01.ogg","/signal-breaker-dev/audio/ep03/ch14_winch_candidate_v01.ogg","/signal-breaker-dev/audio/ep03/ch15_architect_candidate_v01.ogg"];
 for(const pathname of RELEASE_SOUNDTRACKS)paths.add(pathname);
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const files=[...paths].sort().map(url=>{const bytes=fs.readFileSync(path.join(root,url));return {path:url,bytes:bytes.length,sha256:sha(bytes)};});
-const expected={schemaVersion:1,version:'0.66.1-stage-audio',cacheName,fingerprint:sha(JSON.stringify(files)),files};
+const expected={schemaVersion:1,version:'0.67.0-raid-monitor',cacheName,fingerprint:sha(JSON.stringify(files)),files};
 const target=path.join(app,'release.json');
 if(process.argv.includes('--write'))fs.writeFileSync(target,JSON.stringify(expected,null,2)+'\n');
 assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),expected,'Release metadata is stale; run node scripts/check-signal-breaker-release.mjs --write');

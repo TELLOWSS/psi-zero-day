@@ -56,7 +56,7 @@ function drawCanvas(c,stage){
 class PremiumArt{
  // Final raster bodies use the existing world origin; physics and relay nodes remain engine-owned.
  bossMotion(b,time,options={}){
-  const warning=b.warningUntil>time,exposed=b.phase==='exposed';
+  const warning=b.warningUntil>time,exposed=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed');
   const stopped=this.reducedMotion||options.secured||options.direction===0||b.phase==='resolved'||b.phase==='defeated';
   const speed=warning?1.7:exposed?.45:1;
   const direction=options.direction===-1?-1:1,controlled=b.mistUntil>time;
@@ -132,7 +132,7 @@ class PremiumArt{
   this.bossImages=this.bossImages||{};
   const image=this.bossImages[source]||root.PSIPresentationAssets.image(source);this.bossImages[source]=image;
   if(!image?.complete||!image.naturalWidth)return false;
-  const [w,maxH]=size,h=Math.min(maxH,w*image.naturalHeight/image.naturalWidth),exposed=b.phase==='exposed',warning=b.warningUntil>time;
+  const [w,maxH]=size,h=Math.min(maxH,w*image.naturalHeight/image.naturalWidth),exposed=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),warning=b.warningUntil>time;
   c.save();
   // Shadow and light are local to the apparatus, never a second collision silhouette.
   glow(c,b.x,b.y,w*.52,exposed?'#f8c67429':warning?'#ef785924':'#65b7c511');
@@ -223,7 +223,7 @@ class PremiumArt{
  // the delivery conveyor controller has its own silhouette, moving blast doors and warning lamps.
  deliveryBoss(c,b,time){
   if(this.bossBody(c,b,time))return true;
-  const opened=b.phase==='exposed',rearming=b.phase==='rearming',gate=b.gatePhase||1,danger=b.warningUntil>time,beat=this.reducedMotion?0:time;
+  const opened=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),rearming=b.phase==='rearming',gate=b.gatePhase||1,danger=b.warningUntil>time,beat=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);glow(c,0,0,142,rearming?'#fbb06a55':opened?'#ffda8e55':'#7dd7ea22');
   path(c,[[-114,-48],[-81,-84],[85,-84],[114,-45],[114,52],[80,79],[-82,79],[-114,52]],'#1a3443','#95b8c4',4);
   rect(c,-96,-68,192,15,gate>=4?'#79564b':'#314e59','#b7d7d9',1.4);
@@ -246,7 +246,7 @@ class PremiumArt{
  // variable rotation and outward opening core. Rendered procedurally for offline performance.
  conveyorBoss(c,b,time,direction){
   if(this.bossBody(c,b,time,{direction}))return true;
-  const open=b.phase==='exposed',warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
+  const open=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,146,shift?'#fdb57555':warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
   path(c,[[-131,-34],[-110,-78],[-42,-87],[25,-72],[104,-84],[132,-44],[131,60],[-124,60]],'#172f40','#87a9ae',4);
@@ -280,7 +280,7 @@ class PremiumArt{
  // Pure Canvas vector geometry, keeping responsive draw budget bounded.
  extractionBoss(c,b,time,gate){
   if(this.bossBody(c,b,time))return true;
-  const open=b.phase==='exposed',purging=b.phase==='purging',warning=b.warningUntil>time,controlled=b.mistUntil>time,filter=b.filterStage||b.loadStage||1,t=this.reducedMotion?0:time;
+  const open=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),purging=b.phase==='purging',warning=b.warningUntil>time,controlled=b.mistUntil>time,filter=b.filterStage||b.loadStage||1,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,163,purging?'#bbffca56':controlled?'#9cf1d848':warning?'#f7b57445':'#a3d7e42b');
   path(c,[[-68,-97],[24,-112],[73,-75],[84,35],[55,67],[-56,67],[-83,23]],'#23434a','#b7d1cb',4);
@@ -307,7 +307,7 @@ class PremiumArt{
  // CH04 distinct counterweight/tension-drum profile; independent of three preceding boss silhouettes.
  tensionBoss(c,b,time,secured){
   if(this.bossBody(c,b,time,{secured}))return true;
-  const opened=b.phase==='exposed',warning=b.warningUntil>time,t=this.reducedMotion?0:time;
+  const opened=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),warning=b.warningUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,154,secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
   // Hoist head, sheave frame and separate hanging counterweights.
@@ -334,7 +334,7 @@ class PremiumArt{
  // CH05 finale: multi-circuit command center with rotating armature and three live channels.
  gridBoss(c,b,time){
   if(this.bossBody(c,b,time))return true;
-  const open=b.phase==='exposed',critical=b.combatTier===2,warning=b.warningUntil>time,isolated=b.scannedUntil>time,t=this.reducedMotion?0:time;
+  const open=(b.raid?['BURST','STAGGER'].includes(b.raid.state):b.phase==='exposed'),critical=b.combatTier===2,warning=b.warningUntil>time,isolated=b.scannedUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
   glow(c,0,0,182,critical?'#fc78ae49':isolated?'#a8f6d54c':'#bdabfb38');
   // Spoked outer cradle is unlike the conveyor, extraction chimney or hoist pulley.

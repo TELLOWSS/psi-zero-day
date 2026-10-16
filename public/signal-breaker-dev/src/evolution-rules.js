@@ -69,6 +69,6 @@ function contact(g,s,c){
  return true;
 }
 function limit(g){return 135-stage(g)*5-(g.wave-1)*10;}
-function step(g){if(g.veteran&&g.state==='playing'&&g.pressureWarningWave!==g.wave&&limit(g)-(g.time-g.waveStart.time)<=8){g.pressureWarningWave=g.wave;g.event('pressuretimewarning',g.player.x,g.player.y,Math.max(0,Math.ceil(limit(g)-(g.time-g.waveStart.time))));}if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
+function step(g){if(g.boss?.raid)return;if(g.veteran&&g.state==='playing'&&g.pressureWarningWave!==g.wave&&limit(g)-(g.time-g.waveStart.time)<=8){g.pressureWarningWave=g.wave;g.event('pressuretimewarning',g.player.x,g.player.y,Math.max(0,Math.ceil(limit(g)-(g.time-g.waveStart.time))));}if(g.veteran&&g.state==='playing'&&g.time-g.waveStart.time>limit(g)){g.event('pressuretimeout',g.player.x,g.player.y);g.failureReason='pressure';g.finish(false);}}
 return {preferredFrame,recommendation,RECIPES,BRANCHES,canEvolve,canAdvance,advance,restore,reset,armor,active,identity,fire,shotBuild,progress,selectFrame,evolve,damage,hit,contact,limit,step};
 });

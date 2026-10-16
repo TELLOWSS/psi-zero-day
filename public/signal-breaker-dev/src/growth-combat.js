@@ -12,7 +12,7 @@ function install(Game){
  proto.equipmentTier=function(key=this.weapon){return Math.round(clamp(this.talentStats?.weaponLevels?.[key]||1,1,4));};
  proto.growthDamage=function(shot,armored=false){const stats=this.growthStats(shot.kind);return (1+clamp(stats.pulseImpact,0,3))*(armored?Math.max(1,clamp(stats.armorPierceMultiplier||1,1,2)):1);};
  proto.damagePlayer=function(kind,x=this.player.x,y=this.player.y,source='core'){
-  if(this.lab||this.godMode||this.player.invuln>0||kind==='power'&&this.growthStats().powerImmunity>0)return false;
+  if(this.lab&&!this.raidPractice||this.godMode||this.player.invuln>0||kind==='power'&&this.growthStats().powerImmunity>0)return false;
   this.lastDamage={kind,source,time:this.time};this.player.life--;this.player.invuln=1.8;this.shake=7;
   if(this.player.life===1&&this.talentStats?.emergencyShield&&!this.growthState.emergencyUsed){this.growthState.emergencyUsed=true;this.player.invuln=3;this.event('emergencyshield',x,y,3,kind);}
   this.event('hurt',x,y,this.player.life,kind);if(this.player.life<=0)this.finish(false);return true;

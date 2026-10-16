@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.66.1-stage-audio",
-  "cacheName": "psi-signal-breaker-webpreview-v0.66.1-stage-audio",
-  "fingerprint": "7e76d9019a353562d3cad1ddf1764f49899d726b2720c162ddde45903c969fac",
+  "version": "0.67.0-raid-monitor",
+  "cacheName": "psi-signal-breaker-raid-v2-20261016",
+  "fingerprint": "19709b0c2b11b846c06d1a1e1aa44623bb897b8f59a1824dd1b8efdac43d5b0d",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -761,8 +761,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 27672,
-      "sha256": "44b44ff1078b880d8900a9c0f296ad621a6cf7855b18f7c7d161c74deebb34a2"
+      "bytes": 28070,
+      "sha256": "26a2464300324fc1edc463fe3c871d940d75f3a53cb65e6864e270c5426908bc"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -776,18 +776,58 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11637,
-      "sha256": "fa35805607742772a7fdca21a6d7eccab4697d1b7224120822ec3f8c5a938e2e"
+      "bytes": 11860,
+      "sha256": "7f5701b415eb0b939774f453429cb25183d064d79278fe58c2432b5ad69d274a"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 165354,
-      "sha256": "9768a11b621ce086fac120a677ebe3fcfbf026a4ffea154c9ac35785a254cef4"
+      "bytes": 167353,
+      "sha256": "3ac1554d9b0cb5aa9652116925eabbddbdf108e53c0db80394b95df74fd539e1"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
       "bytes": 3355,
       "sha256": "088629bf6dbd7067f76295ded9a9d392e23d479bea837aa67765498ec4233d2b"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-counter-resolver.js",
+      "bytes": 946,
+      "sha256": "f4a547bc50d93e094ac49f7b1c5173fbc7bde1a45297805838803f63ed0fb274"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-encounter-registry.js",
+      "bytes": 1542,
+      "sha256": "0701b15ab853464200fddedafb06ba2a4142e94d5c036d3625d1ea469236f2e8"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-mastery-record.js",
+      "bytes": 2360,
+      "sha256": "376e660a3cfb6dca5052332bc9b9da0546c9120ad27a244e84f31c7ba12703bf"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-pattern-machine.js",
+      "bytes": 6637,
+      "sha256": "d9dbb568f710fc55ef26966366b7f086df7771c8150fd3369e4bcc9e2025c90b"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-raid-advisor.js",
+      "bytes": 1476,
+      "sha256": "ba519c75533854807702ef63737b8a695d5fe1f0c3edabd55e1a28a1144b1aa9"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-raid-telegraph.js",
+      "bytes": 1546,
+      "sha256": "728e5a1ec200cedcfe492cd466b782bb765bd250f4a828b0415de0374171866c"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-raid-ui.js",
+      "bytes": 10874,
+      "sha256": "c27372bee9769a2a06198983324feac7b39305fe9f825f836553ffdbe5b57fa3"
+    },
+    {
+      "path": "/signal-breaker-dev/src/boss-raid.css",
+      "bytes": 3187,
+      "sha256": "659cb2c9c1849a7a4b1fa302ea2228ac36ce02478e5521382da66c95dfe9d8a8"
     },
     {
       "path": "/signal-breaker-dev/src/burst-rules.js",
@@ -846,8 +886,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/engine.js",
-      "bytes": 67552,
-      "sha256": "bd157d36546f4326ce169a9bf4f5e19bc7ac2211efc464b9b2239fdd1917856e"
+      "bytes": 70437,
+      "sha256": "c1ddda3731a13505d33507623b82196d75824d3b1356bd4b59b2fe006d615979"
     },
     {
       "path": "/signal-breaker-dev/src/episode-three.js",
@@ -861,8 +901,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/evolution-rules.js",
-      "bytes": 8717,
-      "sha256": "5a68fe47300e71ae86545da4f4c594b7db0d37fefc963de966a12a7bc3319c7a"
+      "bytes": 8740,
+      "sha256": "9120997030bb2bb76ed2e3c0f4ae4b4cabd18be7cbe78785a9af80148b7a60cc"
     },
     {
       "path": "/signal-breaker-dev/src/firing-pose.js",
@@ -876,8 +916,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/growth-combat.js",
-      "bytes": 12997,
-      "sha256": "173a2006652c0e26bbb38d6b2e93af2c8d2ddd3d9280a52e33ea3d92a165069f"
+      "bytes": 13017,
+      "sha256": "a55fb04d9a28b281099b64560c17bd7dfea1ff46606be96922d11bbab294094d"
     },
     {
       "path": "/signal-breaker-dev/src/landscape-immersion.css",
@@ -891,8 +931,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 57529,
-      "sha256": "60cc3cd1f72c6294108b97d758f79cec191b21b5f03d50a3db0786c885d01315"
+      "bytes": 62355,
+      "sha256": "81e544dc0f725ba67e07dc78ae31cc5dae7cf7da655ce68a030384aacadb77f9"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -926,13 +966,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
-      "bytes": 51194,
-      "sha256": "289f749d56c318fddfd36f17d493950ddd693cc06a1bed08ac9e01eceb489262"
+      "bytes": 51558,
+      "sha256": "1b0e58fef31f556edb777a773f873c678f073c376a5f05ef5800b4e374a56fe6"
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
-      "bytes": 17107,
-      "sha256": "1b42cb68300cc1b22eed5e4f1689f5f583e200a91aa07c8108e2263e6315d272"
+      "bytes": 17701,
+      "sha256": "82112a0eee2ef5761a6e79a80a8bcf32e2905dba8f7a9842cc9fd9bf075e6898"
     },
     {
       "path": "/signal-breaker-dev/src/psi-rpg-art.css",

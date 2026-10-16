@@ -8,6 +8,7 @@ class Element {
  constructor(tag='div'){this.tag=tag;this.dataset={};this.children=[];this.style={setProperty(k,v){this[k]=v}};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
  addEventListener(n,fn){(this.listeners[n]??=[]).push(fn)}
  append(...es){this.children.push(...es)}appendChild(el){this.children.push(el)}replaceChildren(...es){this.children=es}
+ before(){}
  getBoundingClientRect(){return {left:0,top:0,width:1100,height:620}}getContext(){return proxyContext}
  setAttribute(name,value){this[name]=value;}
  removeAttribute(name){delete this[name];}
@@ -15,7 +16,7 @@ class Element {
  setPointerCapture(){}trigger(n,e={}){for(const cb of this.listeners[n]||[])cb(e)}
 }
 const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}})}, {get:(obj,key)=>key in obj?obj[key]:()=>{},set:(obj,key,v)=>(obj[key]=v,true)});
-const elements={};const document={baseURI:'https://game.test/signal-breaker-dev/index.html',querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
+const elements={};const document={baseURI:'https://game.test/signal-breaker-dev/index.html',querySelectorAll:()=>[],querySelector:()=>new Element(),createTextNode:t=>({textContent:t}),hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
 for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
 global.location={search:'?entry=prepare'};
@@ -33,6 +34,8 @@ vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-sound.js'),'utf8')
 window.SignalBreakerEndingPerformanceContent=require('../src/ending-performance-content.js');
 for(const file of ['ending-performance.js','ending-voice.js'])vm.runInThisContext(fs.readFileSync(path.join(dir,'src',file),'utf8'),{filename:file});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-player.js'),'utf8'),{filename:'src/ending-player.js'});
+for(const [name,file]of[['SignalBreakerRaidRegistry','boss-encounter-registry'],['SignalBreakerRaidMastery','boss-mastery-record'],['SignalBreakerRaidAdvisor','boss-raid-advisor']])window[name]=require('../src/'+file+'.js');
+for(const [name,file]of[['SignalBreakerRaidUI','boss-raid-ui'],['SignalBreakerRaidTelegraph','boss-raid-telegraph']]){vm.runInThisContext(fs.readFileSync(path.join(dir,'src',file+'.js'),'utf8'),{filename:file});window[name]=global[name];}
 vm.runInThisContext(src,{filename:'src/app.js'});
 // Visual settings and focus screen must be operable without rerunning the game.
 elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textContent,window.SignalBreakerText['breaker.quality.balanced']);
@@ -41,7 +44,7 @@ elements.motionBtn.trigger('click');assert.equal(elements.motionBtn.textContent,
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
-const findChild=(root,id)=>root.children.find(el=>el.id===id)||root.children.map(el=>findChild(el,id)).find(Boolean);
+const findChild=(root,id)=>(root.children||[]).find(el=>el.id===id)||(root.children||[]).map(el=>findChild(el,id)).find(Boolean);
 const startButton=findChild(elements.overlayInner,'overlayPrimary');assert.ok(startButton,'ready overlay has start action');startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 // Combined main-branch regression: stage completion cannot consume AUTO, start the next stage,
 // or skip loadout preparation. The two independently reviewed PRs must work together.

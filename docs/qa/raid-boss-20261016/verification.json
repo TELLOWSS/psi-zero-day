@@ -1,0 +1,13 @@
+{
+  "release": "0.67.0-raid-monitor",
+  "rootAppTests": {"passed": 2158, "existingSkipped": 1},
+  "breakerTests": {"passed": 356, "failed": 0},
+  "typecheck": "PASS",
+  "productionBuild": "PASS",
+  "browser": "4 viewport profiles; real pointer anchor collision, counter success, weakpoint window and manual primary selection",
+  "browserSetup": "Isolated save fixture exposes previously encountered practice phases; no campaign completion fabricated",
+  "offline": "Installed service worker, disabled network, reloaded and opened raid monitor settings",
+  "humanPlaytest": "NOT_PERFORMED",
+  "androidPhysicalDevices": "NOT_PERFORMED",
+  "newBossArtAndAnimationProductionLock": "NOT_CLAIMED"
+}
