@@ -1,0 +1,4116 @@
+[
+  {
+    "style": "BALANCED",
+    "support": "COORDINATOR",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 878,
+      "supportUses": 8,
+      "eStopUses": 4,
+      "peakSignals": 50,
+      "byFamily": {
+        "PULSE": {
+          "damage": 8435,
+          "resolved": 268,
+          "shots": 523
+        },
+        "SENSOR": {
+          "damage": 1499,
+          "resolved": 25,
+          "shots": 133
+        },
+        "BURST": {
+          "damage": 3240,
+          "resolved": 96,
+          "shots": 60
+        },
+        "CONTROL": {
+          "damage": 3874,
+          "resolved": 90,
+          "shots": 162
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 1,
+          "tick": 201
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 2,
+          "tick": 761
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 2,
+          "tick": 900
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 3,
+          "tick": 1321
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 3,
+          "tick": 1800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 4,
+          "tick": 2700
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 6,
+          "tick": 3600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 7,
+          "tick": 4500
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 8,
+          "tick": 5400
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 9,
+          "tick": 6300
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 9,
+          "tick": 6448
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 5900,
+          "resolved": 225,
+          "shots": 389
+        },
+        "SENSOR:L1": {
+          "damage": 192,
+          "resolved": 0,
+          "shots": 24
+        },
+        "BURST:L2": {
+          "damage": 1356,
+          "resolved": 43,
+          "shots": 31
+        },
+        "SENSOR:L2": {
+          "damage": 625,
+          "resolved": 9,
+          "shots": 55
+        },
+        "CONTROL:L1": {
+          "damage": 54,
+          "resolved": 0,
+          "shots": 6
+        },
+        "CONTROL:L2": {
+          "damage": 93,
+          "resolved": 1,
+          "shots": 7
+        },
+        "SENSOR:L3A": {
+          "damage": 682,
+          "resolved": 16,
+          "shots": 54
+        },
+        "CONTROL:L3B": {
+          "damage": 3727,
+          "resolved": 89,
+          "shots": 149
+        },
+        "PULSE:L1": {
+          "damage": 27,
+          "resolved": 1,
+          "shots": 4
+        },
+        "PULSE:L2": {
+          "damage": 401,
+          "resolved": 10,
+          "shots": 30
+        },
+        "BURST:L3A": {
+          "damage": 480,
+          "resolved": 24,
+          "shots": 8
+        },
+        "PULSE:L3B": {
+          "damage": 2107,
+          "resolved": 32,
+          "shots": 100
+        },
+        "BURST:L4A": {
+          "damage": 1404,
+          "resolved": 29,
+          "shots": 21
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 1
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L2",
+      "P7:SENSOR:L3A",
+      "P3:CONTROL:L3B",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "BALANCED",
+    "support": "OBSERVER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 18,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17006,
+      "resolved": 478,
+      "shots": 905,
+      "supportUses": 9,
+      "eStopUses": 3,
+      "peakSignals": 47,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9055,
+          "resolved": 291,
+          "shots": 551
+        },
+        "SENSOR": {
+          "damage": 3309,
+          "resolved": 48,
+          "shots": 272
+        },
+        "BURST": {
+          "damage": 4642,
+          "resolved": 139,
+          "shots": 82
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 55,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 2,
+          "tick": 642
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 2,
+          "tick": 800
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1364
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 4,
+          "tick": 2400
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 5,
+          "tick": 3200
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 6,
+          "tick": 4000
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 8,
+          "tick": 4800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 5600
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 6381
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 6400
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "ARMORED",
+          "routeId": "main",
+          "waveId": 4,
+          "tick": 2937,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P3",
+            "tick": 2657,
+            "point": {
+              "x": 590,
+              "y": 239.25
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 6303,
+          "resolved": 229,
+          "shots": 400
+        },
+        "SENSOR:L1": {
+          "damage": 96,
+          "resolved": 0,
+          "shots": 12
+        },
+        "BURST:L2": {
+          "damage": 1595,
+          "resolved": 59,
+          "shots": 47
+        },
+        "SENSOR:L2": {
+          "damage": 414,
+          "resolved": 8,
+          "shots": 38
+        },
+        "SENSOR:L3A": {
+          "damage": 2799,
+          "resolved": 40,
+          "shots": 222
+        },
+        "PULSE:L2": {
+          "damage": 651,
+          "resolved": 21,
+          "shots": 44
+        },
+        "BURST:L3A": {
+          "damage": 1004,
+          "resolved": 32,
+          "shots": 13
+        },
+        "PULSE:L3B": {
+          "damage": 2101,
+          "resolved": 41,
+          "shots": 107
+        },
+        "BURST:L4A": {
+          "damage": 2043,
+          "resolved": 48,
+          "shots": 22
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "BALANCED",
+    "support": "REBAR_LEAD",
+    "budget": 480,
+    "status": "WON",
+    "shield": 18,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17036,
+      "resolved": 478,
+      "shots": 821,
+      "supportUses": 9,
+      "eStopUses": 3,
+      "peakSignals": 44,
+      "byFamily": {
+        "PULSE": {
+          "damage": 6162,
+          "resolved": 238,
+          "shots": 386
+        },
+        "SENSOR": {
+          "damage": 3400,
+          "resolved": 68,
+          "shots": 297
+        },
+        "BURST": {
+          "damage": 7432,
+          "resolved": 172,
+          "shots": 131
+        },
+        "CONTROL": {
+          "damage": 42,
+          "resolved": 0,
+          "shots": 7
+        }
+      },
+      "bestClear": {
+        "count": 5,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P4",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 55,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "ARMORED",
+          "routeId": "main",
+          "waveId": 4,
+          "tick": 2960,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P3",
+            "tick": 2680,
+            "point": {
+              "x": 590,
+              "y": 239.25
+            }
+          }
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 1,
+          "tick": 1
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 622
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 801
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1362
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1601
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 4,
+          "tick": 2401
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 5,
+          "tick": 3201
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 7,
+          "tick": 4036
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 8,
+          "tick": 4918
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 5744
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 6368
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 6544
+        }
+      ],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 6162,
+          "resolved": 238,
+          "shots": 386
+        },
+        "SENSOR:L1": {
+          "damage": 144,
+          "resolved": 0,
+          "shots": 18
+        },
+        "BURST:L2": {
+          "damage": 2647,
+          "resolved": 91,
+          "shots": 67
+        },
+        "SENSOR:L2": {
+          "damage": 400,
+          "resolved": 6,
+          "shots": 36
+        },
+        "SENSOR:L3A": {
+          "damage": 2856,
+          "resolved": 62,
+          "shots": 243
+        },
+        "BURST:L1": {
+          "damage": 14,
+          "resolved": 0,
+          "shots": 1
+        },
+        "BURST:L3A": {
+          "damage": 3591,
+          "resolved": 75,
+          "shots": 44
+        },
+        "BURST:L4A": {
+          "damage": 1180,
+          "resolved": 6,
+          "shots": 19
+        },
+        "CONTROL:L3B": {
+          "damage": 42,
+          "resolved": 0,
+          "shots": 7
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P4:BURST:L3A",
+      "P6:SENSOR:L3A",
+      "P8:CONTROL:L3B"
+    ]
+  },
+  {
+    "style": "BALANCED",
+    "support": "ENGINEER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 18,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17020,
+      "resolved": 478,
+      "shots": 1013,
+      "supportUses": 12,
+      "eStopUses": 3,
+      "peakSignals": 44,
+      "byFamily": {
+        "PULSE": {
+          "damage": 9283,
+          "resolved": 327,
+          "shots": 643
+        },
+        "SENSOR": {
+          "damage": 3521,
+          "resolved": 44,
+          "shots": 283
+        },
+        "BURST": {
+          "damage": 4216,
+          "resolved": 107,
+          "shots": 87
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 55,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "ARMORED",
+          "routeId": "main",
+          "waveId": 4,
+          "tick": 2980,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P3",
+            "tick": 2700,
+            "point": {
+              "x": 590,
+              "y": 239.25
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 8925,
+          "resolved": 318,
+          "shots": 618
+        },
+        "SENSOR:L1": {
+          "damage": 96,
+          "resolved": 0,
+          "shots": 12
+        },
+        "BURST:L2": {
+          "damage": 1504,
+          "resolved": 55,
+          "shots": 52
+        },
+        "SENSOR:L2": {
+          "damage": 400,
+          "resolved": 6,
+          "shots": 36
+        },
+        "SENSOR:L3A": {
+          "damage": 3025,
+          "resolved": 38,
+          "shots": 235
+        },
+        "PULSE:L2": {
+          "damage": 358,
+          "resolved": 9,
+          "shots": 25
+        },
+        "BURST:L3A": {
+          "damage": 910,
+          "resolved": 27,
+          "shots": 12
+        },
+        "BURST:L4A": {
+          "damage": 1802,
+          "resolved": 25,
+          "shots": 23
+        }
+      },
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 11
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 613
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 2,
+          "tick": 642
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 2,
+          "tick": 1213
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 1382
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 1813
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 4,
+          "tick": 2413
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 5,
+          "tick": 3013
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 5,
+          "tick": 3613
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 7,
+          "tick": 4213
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 7,
+          "tick": 4813
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 8,
+          "tick": 5413
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6013
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6520
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6613
+        }
+      ],
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P4:PULSE:L3A",
+      "P6:PULSE:L3A",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "BALANCED",
+    "support": "COMMANDER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 18,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17020,
+      "resolved": 478,
+      "shots": 932,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 47,
+      "byFamily": {
+        "PULSE": {
+          "damage": 8822,
+          "resolved": 292,
+          "shots": 563
+        },
+        "SENSOR": {
+          "damage": 3391,
+          "resolved": 53,
+          "shots": 277
+        },
+        "BURST": {
+          "damage": 4807,
+          "resolved": 133,
+          "shots": 92
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 55,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "ARMORED",
+          "routeId": "main",
+          "waveId": 4,
+          "tick": 3079,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P3",
+            "tick": 2799,
+            "point": {
+              "x": 590,
+              "y": 239.25
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 6620,
+          "resolved": 246,
+          "shots": 443
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "BURST:L2": {
+          "damage": 1658,
+          "resolved": 57,
+          "shots": 55
+        },
+        "SENSOR:L2": {
+          "damage": 472,
+          "resolved": 6,
+          "shots": 42
+        },
+        "SENSOR:L3A": {
+          "damage": 2855,
+          "resolved": 47,
+          "shots": 227
+        },
+        "PULSE:L2": {
+          "damage": 696,
+          "resolved": 16,
+          "shots": 44
+        },
+        "BURST:L3A": {
+          "damage": 1050,
+          "resolved": 34,
+          "shots": 14
+        },
+        "PULSE:L3B": {
+          "damage": 1506,
+          "resolved": 30,
+          "shots": 76
+        },
+        "BURST:L4A": {
+          "damage": 2099,
+          "resolved": 42,
+          "shots": 23
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 2,
+          "tick": 730
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 3,
+          "tick": 1470
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 9,
+          "tick": 6603
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3A",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "BALANCED",
+    "support": "SIGNALER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 18,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17020,
+      "resolved": 478,
+      "shots": 932,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 47,
+      "byFamily": {
+        "PULSE": {
+          "damage": 8822,
+          "resolved": 292,
+          "shots": 563
+        },
+        "SENSOR": {
+          "damage": 3391,
+          "resolved": 53,
+          "shots": 277
+        },
+        "BURST": {
+          "damage": 4807,
+          "resolved": 133,
+          "shots": 92
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P5",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 55,
+          "leaks": 1,
+          "shieldLost": 2
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "ARMORED",
+          "routeId": "main",
+          "waveId": 4,
+          "tick": 3079,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P3",
+            "tick": 2799,
+            "point": {
+              "x": 590,
+              "y": 239.25
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "PULSE:L3A": {
+          "damage": 6620,
+          "resolved": 246,
+          "shots": 443
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "BURST:L2": {
+          "damage": 1658,
+          "resolved": 57,
+          "shots": 55
+        },
+        "SENSOR:L2": {
+          "damage": 472,
+          "resolved": 6,
+          "shots": 42
+        },
+        "SENSOR:L3A": {
+          "damage": 2855,
+          "resolved": 47,
+          "shots": 227
+        },
+        "PULSE:L2": {
+          "damage": 696,
+          "resolved": 16,
+          "shots": 44
+        },
+        "BURST:L3A": {
+          "damage": 1050,
+          "resolved": 34,
+          "shots": 14
+        },
+        "PULSE:L3B": {
+          "damage": 1506,
+          "resolved": 30,
+          "shots": 76
+        },
+        "BURST:L4A": {
+          "damage": 2099,
+          "resolved": 42,
+          "shots": 23
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 2,
+          "tick": 730
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 3,
+          "tick": 1470
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 9,
+          "tick": 6603
+        }
+      ]
+    },
+    "loadout": [
+      "P1:PULSE:L3A",
+      "P5:BURST:L4A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P3:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3A",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "COORDINATOR",
+    "budget": 480,
+    "status": "WON",
+    "shield": 19,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17035,
+      "resolved": 478,
+      "shots": 682,
+      "supportUses": 8,
+      "eStopUses": 3,
+      "peakSignals": 43,
+      "byFamily": {
+        "BURST": {
+          "damage": 10208,
+          "resolved": 345,
+          "shots": 157
+        },
+        "PULSE": {
+          "damage": 5300,
+          "resolved": 113,
+          "shots": 391
+        },
+        "SENSOR": {
+          "damage": 1527,
+          "resolved": 20,
+          "shots": 134
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 35,
+          "leaks": 1,
+          "shieldLost": 1
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 2,
+          "tick": 564
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 2,
+          "tick": 900
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 3,
+          "tick": 1124
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 4,
+          "tick": 1800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 5,
+          "tick": 2700
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 6,
+          "tick": 3600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 7,
+          "tick": 4500
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 8,
+          "tick": 5400
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 9,
+          "tick": 6252
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 9,
+          "tick": 6300
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "VEILED",
+          "routeId": "main",
+          "waveId": 3,
+          "tick": 1761,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P5",
+            "tick": 1727,
+            "point": {
+              "x": 889.75,
+              "y": 300
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 6219,
+          "resolved": 203,
+          "shots": 99
+        },
+        "PULSE:L2": {
+          "damage": 834,
+          "resolved": 26,
+          "shots": 79
+        },
+        "SENSOR:L1": {
+          "damage": 122,
+          "resolved": 1,
+          "shots": 16
+        },
+        "SENSOR:L2": {
+          "damage": 610,
+          "resolved": 11,
+          "shots": 59
+        },
+        "SENSOR:L3A": {
+          "damage": 795,
+          "resolved": 8,
+          "shots": 59
+        },
+        "PULSE:L3A": {
+          "damage": 3057,
+          "resolved": 71,
+          "shots": 249
+        },
+        "PULSE:L3B": {
+          "damage": 1409,
+          "resolved": 16,
+          "shots": 63
+        },
+        "BURST:L3A": {
+          "damage": 3146,
+          "resolved": 128,
+          "shots": 44
+        },
+        "BURST:L4A": {
+          "damage": 843,
+          "resolved": 14,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3A",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "OBSERVER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 494,
+      "supportUses": 8,
+      "eStopUses": 3,
+      "peakSignals": 30,
+      "byFamily": {
+        "BURST": {
+          "damage": 11995,
+          "resolved": 383,
+          "shots": 159
+        },
+        "PULSE": {
+          "damage": 3880,
+          "resolved": 72,
+          "shots": 224
+        },
+        "SENSOR": {
+          "damage": 1173,
+          "resolved": 24,
+          "shots": 111
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 1,
+          "tick": 401
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 2,
+          "tick": 800
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1168
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 4,
+          "tick": 2400
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 5,
+          "tick": 3200
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 7,
+          "tick": 4000
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 8,
+          "tick": 4800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 5600
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 5911
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 2563,
+          "resolved": 73,
+          "shots": 42
+        },
+        "PULSE:L1": {
+          "damage": 149,
+          "resolved": 8,
+          "shots": 26
+        },
+        "SENSOR:L1": {
+          "damage": 72,
+          "resolved": 5,
+          "shots": 10
+        },
+        "SENSOR:L2": {
+          "damage": 818,
+          "resolved": 13,
+          "shots": 77
+        },
+        "PULSE:L2": {
+          "damage": 468,
+          "resolved": 20,
+          "shots": 51
+        },
+        "BURST:L3A": {
+          "damage": 8489,
+          "resolved": 290,
+          "shots": 105
+        },
+        "SENSOR:L3A": {
+          "damage": 283,
+          "resolved": 6,
+          "shots": 24
+        },
+        "PULSE:L3B": {
+          "damage": 3263,
+          "resolved": 44,
+          "shots": 147
+        },
+        "BURST:L4A": {
+          "damage": 943,
+          "resolved": 20,
+          "shots": 12
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3B",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:SENSOR:L3A",
+      "P8:SENSOR:L3B"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "REBAR_LEAD",
+    "budget": 480,
+    "status": "WON",
+    "shield": 19,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17047,
+      "resolved": 478,
+      "shots": 674,
+      "supportUses": 8,
+      "eStopUses": 3,
+      "peakSignals": 35,
+      "byFamily": {
+        "BURST": {
+          "damage": 10578,
+          "resolved": 338,
+          "shots": 154
+        },
+        "PULSE": {
+          "damage": 5036,
+          "resolved": 123,
+          "shots": 392
+        },
+        "SENSOR": {
+          "damage": 1433,
+          "resolved": 17,
+          "shots": 128
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 35,
+          "leaks": 1,
+          "shieldLost": 1
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "VEILED",
+          "routeId": "main",
+          "waveId": 3,
+          "tick": 1766,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P7",
+            "tick": 1688,
+            "point": {
+              "x": 800,
+              "y": 246.75
+            }
+          }
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 1,
+          "tick": 1
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 577
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 801
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1137
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1617
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 4,
+          "tick": 2417
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 5,
+          "tick": 3217
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 7,
+          "tick": 4017
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 8,
+          "tick": 4817
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 5617
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 6150
+        }
+      ],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5750,
+          "resolved": 182,
+          "shots": 89
+        },
+        "PULSE:L1": {
+          "damage": 105,
+          "resolved": 5,
+          "shots": 15
+        },
+        "SENSOR:L1": {
+          "damage": 136,
+          "resolved": 0,
+          "shots": 17
+        },
+        "PULSE:L2": {
+          "damage": 672,
+          "resolved": 23,
+          "shots": 65
+        },
+        "SENSOR:L2": {
+          "damage": 673,
+          "resolved": 7,
+          "shots": 62
+        },
+        "PULSE:L3A": {
+          "damage": 2397,
+          "resolved": 52,
+          "shots": 213
+        },
+        "SENSOR:L3A": {
+          "damage": 624,
+          "resolved": 10,
+          "shots": 49
+        },
+        "BURST:L3A": {
+          "damage": 3719,
+          "resolved": 134,
+          "shots": 50
+        },
+        "PULSE:L3B": {
+          "damage": 1862,
+          "resolved": 43,
+          "shots": 99
+        },
+        "BURST:L4A": {
+          "damage": 1109,
+          "resolved": 22,
+          "shots": 15
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L2",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "ENGINEER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 691,
+      "supportUses": 11,
+      "eStopUses": 3,
+      "peakSignals": 35,
+      "byFamily": {
+        "BURST": {
+          "damage": 10593,
+          "resolved": 345,
+          "shots": 164
+        },
+        "PULSE": {
+          "damage": 4887,
+          "resolved": 109,
+          "shots": 385
+        },
+        "SENSOR": {
+          "damage": 1568,
+          "resolved": 25,
+          "shots": 142
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5724,
+          "resolved": 179,
+          "shots": 101
+        },
+        "PULSE:L1": {
+          "damage": 167,
+          "resolved": 7,
+          "shots": 25
+        },
+        "SENSOR:L1": {
+          "damage": 184,
+          "resolved": 1,
+          "shots": 23
+        },
+        "PULSE:L2": {
+          "damage": 514,
+          "resolved": 17,
+          "shots": 48
+        },
+        "SENSOR:L2": {
+          "damage": 623,
+          "resolved": 9,
+          "shots": 59
+        },
+        "SENSOR:L3A": {
+          "damage": 761,
+          "resolved": 15,
+          "shots": 60
+        },
+        "PULSE:L3A": {
+          "damage": 2415,
+          "resolved": 52,
+          "shots": 223
+        },
+        "BURST:L3A": {
+          "damage": 3923,
+          "resolved": 147,
+          "shots": 48
+        },
+        "PULSE:L3B": {
+          "damage": 1791,
+          "resolved": 33,
+          "shots": 89
+        },
+        "BURST:L4A": {
+          "damage": 946,
+          "resolved": 19,
+          "shots": 15
+        }
+      },
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 7
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 401
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 607
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 1140
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 1207
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 4,
+          "tick": 1807
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 4,
+          "tick": 2407
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 5,
+          "tick": 3007
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 6,
+          "tick": 3607
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 7,
+          "tick": 4207
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 8,
+          "tick": 4807
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 5407
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6007
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6190
+        }
+      ],
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "COMMANDER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 702,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 35,
+      "byFamily": {
+        "BURST": {
+          "damage": 10489,
+          "resolved": 341,
+          "shots": 163
+        },
+        "PULSE": {
+          "damage": 4971,
+          "resolved": 112,
+          "shots": 394
+        },
+        "SENSOR": {
+          "damage": 1588,
+          "resolved": 26,
+          "shots": 145
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5685,
+          "resolved": 180,
+          "shots": 100
+        },
+        "PULSE:L1": {
+          "damage": 172,
+          "resolved": 6,
+          "shots": 26
+        },
+        "SENSOR:L1": {
+          "damage": 184,
+          "resolved": 1,
+          "shots": 23
+        },
+        "PULSE:L2": {
+          "damage": 570,
+          "resolved": 19,
+          "shots": 52
+        },
+        "SENSOR:L2": {
+          "damage": 623,
+          "resolved": 9,
+          "shots": 59
+        },
+        "SENSOR:L3A": {
+          "damage": 781,
+          "resolved": 16,
+          "shots": 63
+        },
+        "PULSE:L3A": {
+          "damage": 2504,
+          "resolved": 54,
+          "shots": 228
+        },
+        "BURST:L3A": {
+          "damage": 3864,
+          "resolved": 141,
+          "shots": 49
+        },
+        "PULSE:L3B": {
+          "damage": 1725,
+          "resolved": 33,
+          "shots": 88
+        },
+        "BURST:L4A": {
+          "damage": 940,
+          "resolved": 20,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 1,
+          "tick": 401
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 3,
+          "tick": 1140
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 9,
+          "tick": 6246
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "AREA_CONTROL",
+    "support": "SIGNALER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 702,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 35,
+      "byFamily": {
+        "BURST": {
+          "damage": 10489,
+          "resolved": 341,
+          "shots": 163
+        },
+        "PULSE": {
+          "damage": 4971,
+          "resolved": 112,
+          "shots": 394
+        },
+        "SENSOR": {
+          "damage": 1588,
+          "resolved": 26,
+          "shots": 145
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 6
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5685,
+          "resolved": 180,
+          "shots": 100
+        },
+        "PULSE:L1": {
+          "damage": 172,
+          "resolved": 6,
+          "shots": 26
+        },
+        "SENSOR:L1": {
+          "damage": 184,
+          "resolved": 1,
+          "shots": 23
+        },
+        "PULSE:L2": {
+          "damage": 570,
+          "resolved": 19,
+          "shots": 52
+        },
+        "SENSOR:L2": {
+          "damage": 623,
+          "resolved": 9,
+          "shots": 59
+        },
+        "SENSOR:L3A": {
+          "damage": 781,
+          "resolved": 16,
+          "shots": 63
+        },
+        "PULSE:L3A": {
+          "damage": 2504,
+          "resolved": 54,
+          "shots": 228
+        },
+        "BURST:L3A": {
+          "damage": 3864,
+          "resolved": 141,
+          "shots": 49
+        },
+        "PULSE:L3B": {
+          "damage": 1725,
+          "resolved": 33,
+          "shots": 88
+        },
+        "BURST:L4A": {
+          "damage": 940,
+          "resolved": 20,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 1,
+          "tick": 401
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 3,
+          "tick": 1140
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 9,
+          "tick": 6246
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P5:BURST:L4A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "COORDINATOR",
+    "budget": 480,
+    "status": "WON",
+    "shield": 19,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17046,
+      "resolved": 478,
+      "shots": 746,
+      "supportUses": 7,
+      "eStopUses": 2,
+      "peakSignals": 39,
+      "byFamily": {
+        "BURST": {
+          "damage": 8121,
+          "resolved": 285,
+          "shots": 100
+        },
+        "SENSOR": {
+          "damage": 1406,
+          "resolved": 37,
+          "shots": 125
+        },
+        "PULSE": {
+          "damage": 7519,
+          "resolved": 156,
+          "shots": 521
+        }
+      },
+      "bestClear": {
+        "count": 8,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 8
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 39,
+          "leaks": 1,
+          "shieldLost": 1
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 1,
+          "tick": 301
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 2,
+          "tick": 900
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COORDINATOR",
+          "waveId": 3,
+          "tick": 962
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 4,
+          "tick": 1800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 5,
+          "tick": 2700
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 6,
+          "tick": 3600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 8,
+          "tick": 4500
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "COORDINATOR",
+          "waveId": 9,
+          "tick": 5400
+        }
+      ],
+      "routeLeaks": [
+        {
+          "enemyId": "VEILED",
+          "routeId": "main",
+          "waveId": 5,
+          "tick": 3243,
+          "point": {
+            "x": 1000,
+            "y": 300
+          },
+          "firstContact": {
+            "padId": "P5",
+            "tick": 3203,
+            "point": {
+              "x": 870.25,
+              "y": 300
+            }
+          }
+        }
+      ],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5349,
+          "resolved": 168,
+          "shots": 69
+        },
+        "SENSOR:L1": {
+          "damage": 72,
+          "resolved": 0,
+          "shots": 9
+        },
+        "PULSE:L3A": {
+          "damage": 4034,
+          "resolved": 95,
+          "shots": 353
+        },
+        "SENSOR:L3A": {
+          "damage": 1186,
+          "resolved": 31,
+          "shots": 102
+        },
+        "SENSOR:L2": {
+          "damage": 148,
+          "resolved": 6,
+          "shots": 14
+        },
+        "PULSE:L2": {
+          "damage": 327,
+          "resolved": 8,
+          "shots": 26
+        },
+        "PULSE:L3B": {
+          "damage": 1890,
+          "resolved": 27,
+          "shots": 84
+        },
+        "BURST:L3A": {
+          "damage": 2772,
+          "resolved": 117,
+          "shots": 31
+        },
+        "PULSE:L4A": {
+          "damage": 1268,
+          "resolved": 26,
+          "shots": 58
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:PULSE:L4A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "OBSERVER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 636,
+      "supportUses": 8,
+      "eStopUses": 3,
+      "peakSignals": 33,
+      "byFamily": {
+        "BURST": {
+          "damage": 10774,
+          "resolved": 344,
+          "shots": 157
+        },
+        "PULSE": {
+          "damage": 4949,
+          "resolved": 109,
+          "shots": 366
+        },
+        "SENSOR": {
+          "damage": 1325,
+          "resolved": 26,
+          "shots": 113
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 1,
+          "tick": 0
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 1,
+          "tick": 301
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 2,
+          "tick": 800
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1030
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 3,
+          "tick": 1600
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 4,
+          "tick": 2400
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 5,
+          "tick": 3200
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 7,
+          "tick": 4000
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 8,
+          "tick": 4800
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 5600
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "OBSERVER",
+          "waveId": 9,
+          "tick": 5910
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5901,
+          "resolved": 186,
+          "shots": 96
+        },
+        "PULSE:L3A": {
+          "damage": 2906,
+          "resolved": 84,
+          "shots": 261
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "SENSOR:L3A": {
+          "damage": 1110,
+          "resolved": 22,
+          "shots": 91
+        },
+        "SENSOR:L2": {
+          "damage": 151,
+          "resolved": 4,
+          "shots": 14
+        },
+        "PULSE:L1": {
+          "damage": 36,
+          "resolved": 1,
+          "shots": 6
+        },
+        "PULSE:L2": {
+          "damage": 331,
+          "resolved": 4,
+          "shots": 23
+        },
+        "PULSE:L3B": {
+          "damage": 1676,
+          "resolved": 20,
+          "shots": 76
+        },
+        "BURST:L3A": {
+          "damage": 3916,
+          "resolved": 139,
+          "shots": 47
+        },
+        "BURST:L4A": {
+          "damage": 957,
+          "resolved": 19,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:BURST:L4A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "REBAR_LEAD",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 771,
+      "supportUses": 8,
+      "eStopUses": 3,
+      "peakSignals": 33,
+      "byFamily": {
+        "BURST": {
+          "damage": 7944,
+          "resolved": 286,
+          "shots": 103
+        },
+        "PULSE": {
+          "damage": 6029,
+          "resolved": 140,
+          "shots": 444
+        },
+        "SENSOR": {
+          "damage": 2850,
+          "resolved": 49,
+          "shots": 212
+        },
+        "CONTROL": {
+          "damage": 225,
+          "resolved": 4,
+          "shots": 12
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 1,
+          "tick": 1
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 562
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 2,
+          "tick": 801
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1122
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 3,
+          "tick": 1601
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 4,
+          "tick": 2401
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 7,
+          "tick": 3601
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 8,
+          "tick": 4541
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 5401
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 6025
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "REBAR_LEAD",
+          "waveId": 9,
+          "tick": 6201
+        }
+      ],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5136,
+          "resolved": 169,
+          "shots": 71
+        },
+        "PULSE:L3A": {
+          "damage": 4307,
+          "resolved": 110,
+          "shots": 356
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "SENSOR:L3A": {
+          "damage": 1645,
+          "resolved": 32,
+          "shots": 136
+        },
+        "SENSOR:L2": {
+          "damage": 43,
+          "resolved": 1,
+          "shots": 4
+        },
+        "PULSE:L2": {
+          "damage": 241,
+          "resolved": 9,
+          "shots": 18
+        },
+        "SENSOR:L3B": {
+          "damage": 132,
+          "resolved": 3,
+          "shots": 7
+        },
+        "PULSE:L3B": {
+          "damage": 1481,
+          "resolved": 21,
+          "shots": 70
+        },
+        "BURST:L3A": {
+          "damage": 2808,
+          "resolved": 117,
+          "shots": 32
+        },
+        "CONTROL:L3B": {
+          "damage": 225,
+          "resolved": 4,
+          "shots": 12
+        },
+        "SENSOR:L4A": {
+          "damage": 966,
+          "resolved": 13,
+          "shots": 57
+        }
+      },
+      "sensorWarnings": 2,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:SENSOR:L4A",
+      "P7:SENSOR:L3B",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3A",
+      "P8:CONTROL:L3B"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "ENGINEER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 679,
+      "supportUses": 11,
+      "eStopUses": 3,
+      "peakSignals": 34,
+      "byFamily": {
+        "BURST": {
+          "damage": 10472,
+          "resolved": 328,
+          "shots": 153
+        },
+        "PULSE": {
+          "damage": 4939,
+          "resolved": 115,
+          "shots": 384
+        },
+        "SENSOR": {
+          "damage": 1637,
+          "resolved": 36,
+          "shots": 142
+        }
+      },
+      "bestClear": {
+        "count": 6,
+        "towerId": "BURST",
+        "levelId": "L2",
+        "padId": "P1",
+        "waveId": 2
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5814,
+          "resolved": 179,
+          "shots": 92
+        },
+        "PULSE:L3A": {
+          "damage": 2850,
+          "resolved": 75,
+          "shots": 266
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "SENSOR:L3A": {
+          "damage": 1382,
+          "resolved": 29,
+          "shots": 115
+        },
+        "SENSOR:L2": {
+          "damage": 191,
+          "resolved": 7,
+          "shots": 19
+        },
+        "PULSE:L1": {
+          "damage": 32,
+          "resolved": 0,
+          "shots": 5
+        },
+        "PULSE:L2": {
+          "damage": 289,
+          "resolved": 5,
+          "shots": 21
+        },
+        "BURST:L3A": {
+          "damage": 3795,
+          "resolved": 132,
+          "shots": 49
+        },
+        "PULSE:L3B": {
+          "damage": 1768,
+          "resolved": 35,
+          "shots": 92
+        },
+        "BURST:L4A": {
+          "damage": 863,
+          "resolved": 17,
+          "shots": 12
+        }
+      },
+      "supportEvents": [
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 7
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 301
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 1,
+          "tick": 607
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 998
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 3,
+          "tick": 1207
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 4,
+          "tick": 1807
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 4,
+          "tick": 2407
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 5,
+          "tick": 3007
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 6,
+          "tick": 3607
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 7,
+          "tick": 4207
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 8,
+          "tick": 4807
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 5407
+        },
+        {
+          "kind": "SUPPORT",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6007
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "ENGINEER",
+          "waveId": 9,
+          "tick": 6023
+        }
+      ],
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:BURST:L4A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "COMMANDER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 688,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 33,
+      "byFamily": {
+        "BURST": {
+          "damage": 10240,
+          "resolved": 335,
+          "shots": 153
+        },
+        "PULSE": {
+          "damage": 5088,
+          "resolved": 117,
+          "shots": 390
+        },
+        "SENSOR": {
+          "damage": 1720,
+          "resolved": 27,
+          "shots": 145
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5730,
+          "resolved": 186,
+          "shots": 91
+        },
+        "PULSE:L3A": {
+          "damage": 2894,
+          "resolved": 74,
+          "shots": 267
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "SENSOR:L3A": {
+          "damage": 1407,
+          "resolved": 22,
+          "shots": 114
+        },
+        "SENSOR:L2": {
+          "damage": 249,
+          "resolved": 5,
+          "shots": 23
+        },
+        "PULSE:L1": {
+          "damage": 31,
+          "resolved": 1,
+          "shots": 5
+        },
+        "PULSE:L2": {
+          "damage": 334,
+          "resolved": 5,
+          "shots": 24
+        },
+        "BURST:L3A": {
+          "damage": 3570,
+          "resolved": 129,
+          "shots": 48
+        },
+        "PULSE:L3B": {
+          "damage": 1829,
+          "resolved": 37,
+          "shots": 94
+        },
+        "BURST:L4A": {
+          "damage": 940,
+          "resolved": 20,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 1,
+          "tick": 301
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 3,
+          "tick": 1000
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "COMMANDER",
+          "waveId": 9,
+          "tick": 6066
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:BURST:L4A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  },
+  {
+    "style": "PRECISION",
+    "support": "SIGNALER",
+    "budget": 480,
+    "status": "WON",
+    "shield": 20,
+    "stats": {
+      "tickMs": 50,
+      "detailTrackedFromTick": 0,
+      "trackedFromTick": 0,
+      "initialLeaks": 0,
+      "initialShield": 20,
+      "damage": 17048,
+      "resolved": 479,
+      "shots": 688,
+      "supportUses": 0,
+      "eStopUses": 3,
+      "peakSignals": 33,
+      "byFamily": {
+        "BURST": {
+          "damage": 10240,
+          "resolved": 335,
+          "shots": 153
+        },
+        "PULSE": {
+          "damage": 5088,
+          "resolved": 117,
+          "shots": 390
+        },
+        "SENSOR": {
+          "damage": 1720,
+          "resolved": 27,
+          "shots": 145
+        }
+      },
+      "bestClear": {
+        "count": 7,
+        "towerId": "BURST",
+        "levelId": "L3A",
+        "padId": "P1",
+        "waveId": 9
+      },
+      "waves": [
+        {
+          "waveId": 1,
+          "resolved": 28,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 2,
+          "resolved": 48,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 3,
+          "resolved": 36,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 4,
+          "resolved": 56,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 5,
+          "resolved": 40,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 6,
+          "resolved": 88,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 7,
+          "resolved": 30,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 8,
+          "resolved": 74,
+          "leaks": 0,
+          "shieldLost": 0
+        },
+        {
+          "waveId": 9,
+          "resolved": 79,
+          "leaks": 0,
+          "shieldLost": 0
+        }
+      ],
+      "routeLeaks": [],
+      "byLevel": {
+        "BURST:L2": {
+          "damage": 5730,
+          "resolved": 186,
+          "shots": 91
+        },
+        "PULSE:L3A": {
+          "damage": 2894,
+          "resolved": 74,
+          "shots": 267
+        },
+        "SENSOR:L1": {
+          "damage": 64,
+          "resolved": 0,
+          "shots": 8
+        },
+        "SENSOR:L3A": {
+          "damage": 1407,
+          "resolved": 22,
+          "shots": 114
+        },
+        "SENSOR:L2": {
+          "damage": 249,
+          "resolved": 5,
+          "shots": 23
+        },
+        "PULSE:L1": {
+          "damage": 31,
+          "resolved": 1,
+          "shots": 5
+        },
+        "PULSE:L2": {
+          "damage": 334,
+          "resolved": 5,
+          "shots": 24
+        },
+        "BURST:L3A": {
+          "damage": 3570,
+          "resolved": 129,
+          "shots": 48
+        },
+        "PULSE:L3B": {
+          "damage": 1829,
+          "resolved": 37,
+          "shots": 94
+        },
+        "BURST:L4A": {
+          "damage": 940,
+          "resolved": 20,
+          "shots": 14
+        }
+      },
+      "sensorWarnings": 3,
+      "sensorInterruptions": 2,
+      "supportEvents": [
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 1,
+          "tick": 301
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 3,
+          "tick": 1000
+        },
+        {
+          "kind": "E_STOP",
+          "supportId": "SIGNALER",
+          "waveId": 9,
+          "tick": 6066
+        }
+      ]
+    },
+    "loadout": [
+      "P1:BURST:L3A",
+      "P3:PULSE:L3A",
+      "P2:SENSOR:L3A",
+      "P5:BURST:L4A",
+      "P7:SENSOR:L3A",
+      "P4:PULSE:L3B",
+      "P6:PULSE:L3B",
+      "P8:SENSOR:L3A"
+    ]
+  }
+]

@@ -118,6 +118,7 @@ export interface DefenseScenarioDefinition {
   readonly eventContentVersion: string | null;
 }
 export interface DefenseContent {
+  readonly sensorPressure?:{readonly waves:readonly number[];readonly warningTicks:number;readonly activeTicks:number};
   readonly ultimateEnabled?:boolean;
   readonly preparationMode?: 'MANUAL';
   readonly combatReportEnabled?: boolean;
@@ -149,6 +150,7 @@ export interface DefenseSlowEffect {
   readonly endTick: number;
 }
 export interface DefenseEnemyState {
+  readonly sensorPressure?:{readonly phase:'SEEK'|'WARNING'|'ACTIVE'|'SPENT';readonly remainingTicks:number;readonly targetTowerId:string|null;readonly targetPadId:string|null};
   readonly firstContact?:{readonly padId:string;readonly tick:number;readonly point:DefensePoint};
   readonly routeId?:string;
   readonly lockedUntilTick?:number;
@@ -182,6 +184,7 @@ export type DefenseRunMode = 'TRAINING' | 'EVENT';
 export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
+  readonly sensorPressureEnabled?:boolean;
   readonly lastTowerPurchase?: {readonly towerInstanceId:string;readonly padId:string;readonly tick:number;readonly waveId:number;readonly status:DefenseStatus};
   readonly ultimateUnlocked?:boolean;
   readonly pendingAttacks?:readonly DefensePendingAttack[];
@@ -240,6 +243,8 @@ export interface DefensePendingAttack {
 
 export interface DefenseFamilyStats {readonly damage:number;readonly resolved:number;readonly shots:number}
 export interface DefenseTacticalStats extends DefenseFamilyStats {
+ readonly sensorWarnings?:number;
+ readonly sensorInterruptions?:number;
  readonly tickMs?:number;
  readonly detailTrackedFromTick?:number;
  readonly byLevel?:Readonly<Record<string,DefenseFamilyStats>>;

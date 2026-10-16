@@ -1,3 +1,4 @@
+import {updateDefenseSensorPressure,defenseSensorBlocked,defensePressureCore} from './defense-sensor-pressure';
 import type {
   DefenseCombatFrame, DefenseCombatShot, DefenseCommand, DefenseContent, DefenseEnemyDefinition, DefenseEnemyState, DefenseLevelId,
   DefensePoint, DefenseResult, DefenseRunState, DefenseSlowEffect, DefenseTargetMode,
@@ -103,6 +104,7 @@ export function createDefenseRun(content: DefenseContent, supportId: DefenseRunS
   const eventMode = content.scenario.eventId !== null;
   return withDefenseTacticalStats({
     ...(content.ultimateEnabled?{ultimateUnlocked:options?.ultimateUnlocked===true,pendingAttacks:[],mapPhase:'INITIAL' as const,appliedTransitionIds:[],redeploymentCredits:0}:{}),
+    ...(content.sensorPressure?{sensorPressureEnabled:true}:{}),
     runId,
     mode: eventMode ? 'EVENT' : 'TRAINING',
     variant: eventMode ? 'EVENT_MODIFIED' : 'STANDARD',
@@ -254,10 +256,12 @@ function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunSt
     const group = wave.groups[groupIndex]!;
     let count = spawned[groupIndex] ?? 0;
     while (count < group.count && group.startTick + count * group.intervalTicks === state.waveTick) {
-      const definition = enemyDefinition(content, group.enemy);
+      const core=defensePressureCore(content,state.waveId,groupIndex,count,state.sensorPressureEnabled===true);
+      const definition = enemyDefinition(content, core?'ARMORED':group.enemy);
       enemies.push({
         ...(content.map.routes?{routeId:group.routeId??content.map.routes[0]!.id}:{}),
-        id: `enemy-${nextSequence}`, enemyId: group.enemy, hp: definition.hp, distance: 0,
+        id: `enemy-${nextSequence}`, enemyId: definition.id, hp: definition.hp, distance: 0,
+        ...(core?{sensorPressure:{phase:'SEEK' as const,remainingTicks:0,targetTowerId:null,targetPadId:null}}:{}),
         spawnSequence: nextSequence, revealUntilTick: state.tick < state.revealAllUntilTick ? state.revealAllUntilTick : 0,
         slowEffects: [], bossPhaseTriggered: false, bossArmorFromTick: 0, bossArmorUntilTick: 0,
       });
@@ -298,7 +302,7 @@ function revealEnemies(state: DefenseRunState, content: DefenseContent): Defense
     const tower = towers[i]!;
     const level = towerLevel(content, tower.towerId, tower.levelId);
     let revealCooldown = decrementCooldown(tower.revealCooldown);
-    if (level.revealIntervalTicks > 0 && revealCooldown === 0) {
+    if (level.revealIntervalTicks > 0 && revealCooldown === 0 && !defenseSensorBlocked(state,tower)) {
       const center = towerPoint(content, tower); const radius = level.revealRadius + bonus; const radiusSq = radius * radius;
       enemies = enemies.map(enemy => {
         const point = enemyPositions.get(enemy.id)!;
@@ -430,6 +434,7 @@ function tickDefenseFrame(state: DefenseRunState, content: DefenseContent): Defe
   if(next.tacticalStats&&next.enemies.length>next.tacticalStats.peakSignals)next={...next,tacticalStats:{...next.tacticalStats,peakSignals:next.enemies.length}};
   if(content.ultimateEnabled)next=updateDefenseUltimateFields(next,content);
   next = moveAndLeak(next, content);
+  next = updateDefenseSensorPressure(next,content);
   next = revealEnemies(next, content);
   if(content.ultimateEnabled)next=updateDefenseAnalysis(next,content);
   const pending=content.ultimateEnabled?resolveDefensePending(next,content):{state:next,shots:[]};next=pending.state;

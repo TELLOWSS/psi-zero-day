@@ -5,6 +5,8 @@ const point=(v:unknown)=>record(v)&&number(v.x)&&number(v.y)&&v.x<=1000&&v.y<=60
 const strings=(v:unknown)=>Array.isArray(v)&&v.every(x=>typeof x==='string')&&new Set(v).size===v.length;
 const mechanics=['VOLLEY','PIERCE','WAVE','DELAY','LOCK','BOUNDARY','OBSERVATION','ANALYSIS'];
 export function validDefenseP2State(v:Record<string,unknown>){
+ if(v.sensorPressureEnabled!==undefined&&typeof v.sensorPressureEnabled!=='boolean')return false;
+ if((v.enemies as {sensorPressure?:unknown}[]).some(e=>e.sensorPressure)&&v.sensorPressureEnabled!==true)return false;
  const guard=String(v.scenarioId).startsWith('guard-gd-');
  if(!guard)return !(v.towers as {levelId:string}[]).some(t=>t.levelId.startsWith('L4'))&&v.pendingAttacks===undefined&&v.guidance===undefined;
  if(v.ultimateUnlocked!==undefined&&typeof v.ultimateUnlocked!=='boolean')return false;

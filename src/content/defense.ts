@@ -267,6 +267,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
     || !nullableString(scenario.eventId) || !nullableString(scenario.eventContentVersion)
     || ((scenario.eventId === null) !== (scenario.eventContentVersion === null))) issues.push('scenario: invalid');
 
+  if(input.sensorPressure!==undefined){const p=input.sensorPressure;if(!record(p)||!Array.isArray(p.waves)||!p.waves.length||p.waves.length>3||new Set(p.waves).size!==p.waves.length||!p.waves.every(w=>integer(w)&&w>=1&&w<=3)||![p.warningTicks,p.activeTicks].every(n=>integer(n)&&n>=20&&n<=200)||!enemyInput.some(e=>record(e)&&e.id==='ARMORED')||!String((input.scenario as Record<string,unknown>)?.id).startsWith('guard-'))issues.push('sensorPressure: invalid rule');}
   if (issues.length) throw new DefenseContentError(issues);
   return input as unknown as DefenseContent;
 }

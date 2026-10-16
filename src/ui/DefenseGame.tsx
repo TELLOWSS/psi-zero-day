@@ -1,3 +1,5 @@
+import {defensePressureWaveGroups} from '../engine/defense-sensor-pressure';
+import {GuardSensorPressureOverlay,guardPressureReadout} from './GuardSensorPressure';
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
@@ -490,6 +492,15 @@ export function DefenseGame({
     portraitUri?: string;
     text: string;
   } | null>(null);
+  const pressureCuesRef=useRef(new Set<string>());
+  useEffect(()=>{
+   if(!state||state.paused||state.status!=='RUNNING')return;
+   for(const e of state.enemies){const phase=e.sensorPressure?.phase;if(phase!=='WARNING'&&phase!=='ACTIVE')continue;
+    const key=state.runId+':'+e.id+':'+phase;if(pressureCuesRef.current.has(key))continue;
+    pressureCuesRef.current.add(key);if(pressureCuesRef.current.size>32)pressureCuesRef.current.delete(pressureCuesRef.current.values().next().value!);
+    if(!audio.muted)audio.playCue(phase==='WARNING'?'warning':'radio');
+   }
+  },[state?.tick,state?.paused,state?.status,state?.runId,audio.muted]);
   const lastReportedWaveRef = useRef<number>(0);
 
   const eStopActive = state ? Math.max(0, (((state.eStopActiveUntilTick??0) - state.tick) * content.tickMs) / 1000) : 0;
@@ -901,18 +912,19 @@ export function DefenseGame({
       {guard?<button type="button" className="guard-menu-operations" onClick={()=>{void operations();}}>{t('guard.home')}</button>:null}
     </section> : null}
     <DefenseSaveStatus controller={persistence} />
-    <section className="zb-tactics-strip" aria-label={t('defense.tactics.simulation')}>
+    <section className={`zb-tactics-strip${guardPressureReadout(state,content)?' has-sensor-pressure':''}`} aria-label={t('defense.tactics.simulation')}>
+      {guardPressureReadout(state,content)?<strong className="guard-pressure-banner" role="status" aria-live="polite" aria-atomic="true">{guardPressureReadout(state,content)}</strong>:null}
       {guard?<GuardBattleFeedback state={state} shots={combatFrameRef.current}/>:null}
       {guard?<GuardWaveMeter content={content} state={state}/>:null}
-      <div className="guard-next-intel"><small>{guard?`GD-0${guardIndex+1} · ${t(guardKey+'.title')}`:t('defense.tactics.simulation')}</small><strong>{preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave')}</strong>
-      <span>{preview?.groups.map(group=>`${enemyName(content.map.id,group.enemy)} ×${group.count}`).join(' · ')}</span>
+      <div className="guard-next-intel"><small>{guard?`GD-0${guardIndex+1} · ${t(guardKey+'.title')}`:t('defense.tactics.simulation')}</small><strong>{guardPressureReadout(state,content)??(preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave'))}</strong>
+      <span>{(preview?defensePressureWaveGroups(content,preview,state.sensorPressureEnabled===true):[]).map(group=>`${group.pressureCore?t('guard.pressure.core'):enemyName(content.map.id,group.enemy)} ×${group.count}`).join(' · ')}</span>
       {isRadioVisible&&radioChatter?<span className="zb-radio-line" role="status">{radioChatter.speaker} · {radioChatter.text}</span>:null}</div>
       {!result?<button type="button" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('defense.tactics.recommend')}{advice?` · ${advice.padId} · R ${advice.cost}`:''}</button>:null}
     </section>
 
     {guardMobile&&mobileInfoOpen?<GuardMobileInfo onClose={()=>setMobileInfoOpen(false)}>
       <GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>
-      {preview?<GuardWaveIntel key={`mobile-${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}} initiallyOpen/>:null}
+      {preview?<GuardWaveIntel pressureEnabled={state.sensorPressureEnabled===true} key={`mobile-${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}} initiallyOpen/>:null}
       <DefenseTutorial controller={tutorial}/><p>{t('guard.purchase.hint')}</p>
     </GuardMobileInfo>:null}
     <section className="zb-stage" ref={boardFit.ref}>
@@ -1012,6 +1024,7 @@ export function DefenseGame({
           })}
           {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} content={content} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} counterRotate={!!mapFrame.rotateClockwise} />)}
           {(content.map.id==='ramp-01'||guard)?<DefenseCombatFX shots={combatShots} content={content} rotated={!!mapFrame.rotateClockwise}/>:null}
+          {guard?<GuardSensorPressureOverlay content={content} state={state} rotated={!!mapFrame.rotateClockwise}/>:null}
           {guard?<GuardEvolutionFX content={content} state={state} rotated={!!mapFrame.rotateClockwise}/>:null}
           </g>
         </svg>

@@ -14,6 +14,7 @@ export function validDefenseTacticalStats(v:unknown):v is DefenseTacticalStats{
  if(v.tickMs!==undefined&&(!count(v.tickMs)||v.tickMs<1||v.tickMs>1000))return false;
  if(v.detailTrackedFromTick!==undefined&&!count(v.detailTrackedFromTick))return false;
  if(v.byLevel!==undefined&&(!record(v.byLevel)||Object.keys(v.byLevel).length>24||Object.entries(v.byLevel).some(([key,value])=>{const [t,l,...rest]=key.split(':');return rest.length>0||!tower(t)||!level(l)||!family(value);})))return false;
+ if(['sensorWarnings','sensorInterruptions'].some(k=>v[k]!==undefined&&!count(v[k])))return false;
  const best=v.bestClear;
  if(best!==null&&(!record(best)||!count(best.count)||!tower(best.towerId)||!level(best.levelId)||typeof best.padId!=='string'||!count(best.waveId)))return false;
  if(!Array.isArray(v.waves)||v.waves.length>12||!v.waves.every(w=>record(w)&&['waveId','resolved','leaks','shieldLost'].every(k=>count(w[k]))))return false;

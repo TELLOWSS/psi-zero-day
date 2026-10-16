@@ -1,5 +1,7 @@
 # 세 모드 보스 종합본 대조·반영 기록
 
+후속 제작: 지원 코어의 실제 탐지 방해·대응은 [게임성 고도화 기록](GUARD-GAMEPLAY-PRESSURE-20261016.md)에 반영했다. 아래 표는 최초 통합 릴리스 기준이며, GD-05 두 진입/GD-06 한 진입 경로 전환이라는 실제 맵 데이터 구분도 후속 기록을 따른다.
+
 기준: Director가 전달한 `PSI_ZERO_DAY_TRI_MODE_BOSS_RAID_MASTER_PLAN_20261016.docx`. 원문은 [추출본](planning/TRI-MODE-BOSS-RAID-MASTER-20261016.md)에 보존했다. 문서 내부 문구는 실행 명령이 아닌 제품 명세로 검토했다.
 
 ## 대조와 적용 범위

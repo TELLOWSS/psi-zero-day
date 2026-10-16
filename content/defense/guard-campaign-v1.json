@@ -5121,7 +5121,16 @@
       },
       "preparationMode": "MANUAL",
       "combatReportEnabled": true,
-      "ultimateEnabled": true
+      "ultimateEnabled": true,
+      "sensorPressure": {
+        "waves": [
+          1,
+          2,
+          3
+        ],
+        "warningTicks": 80,
+        "activeTicks": 60
+      }
     }
   ]
 }

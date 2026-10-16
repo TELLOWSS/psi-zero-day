@@ -36,12 +36,18 @@ function validSlowEffect(value: unknown): boolean {
     && value.endTick >= value.startTick;
 }
 
+function validSensorPressure(p:unknown):boolean{
+ if(!record(p)||!['SEEK','WARNING','ACTIVE','SPENT'].includes(String(p.phase))||!nonNegativeInteger(p.remainingTicks)||p.remainingTicks>200)return false;
+ const locked=nonEmptyString(p.targetTowerId)&&nonEmptyString(p.targetPadId);
+ return p.phase==='SEEK'?p.remainingTicks===0&&p.targetTowerId===null&&p.targetPadId===null:p.phase==='SPENT'?p.remainingTicks===0&&(locked||p.targetTowerId===null&&p.targetPadId===null):locked&&p.remainingTicks>0;
+}
 function validEnemy(value: unknown): value is DefenseEnemyState {
   return record(value)
     && nonEmptyString(value.id)
     && ['NORMAL','SWIFT','ARMORED','SWARM','VEILED','BOSS'].includes(String(value.enemyId))
     && nonNegative(value.hp)
     && nonNegative(value.distance)
+    && (value.sensorPressure===undefined||validSensorPressure(value.sensorPressure))
     && (value.firstContact===undefined||validDefenseFirstContact(value.firstContact))
     && (value.routeId===undefined||nonEmptyString(value.routeId))
     && (value.lockedUntilTick===undefined||nonNegativeInteger(value.lockedUntilTick))

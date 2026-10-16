@@ -107,6 +107,8 @@ describe('Guard underground release contracts',()=>{
      for(let n=0;n<40;n++){const a=recommendDefenseAction(content,run);if(!a)break;run=applyDefenseCommand(run,content,a.command);}
      run=applyDefenseCommand(run,content,{type:'StartWave'});
     }
+    // A real emergency-stop command counters new warnings or a boss near the exit.
+    if(content.sensorPressure&&run.status==='RUNNING'&&(run.eStopCooldownUntilTick??0)<=run.tick&&(run.enemies.some(e=>e.sensorPressure?.phase==='WARNING')||run.enemies.some(e=>e.enemyId==='BOSS'&&e.distance>1000)))run=applyDefenseCommand(run,content,{type:'TriggerEStop'});
     if(run.supportCooldownRemaining===0&&support!=='COMMANDER'&&support!=='SIGNALER'){try{run=applyDefenseCommand(run,content,{type:'UseSupport'});}catch{}}
     if(ticks%100===0&&run.status==='RUNNING'){const a=recommendDefenseAction(content,run);if(a)run=applyDefenseCommand(run,content,a.command);}
     run=advanceDefense(run,content);

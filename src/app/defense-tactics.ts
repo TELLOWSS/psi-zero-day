@@ -1,3 +1,4 @@
+import {defensePressureWaveGroups} from '../engine/defense-sensor-pressure';
 import type {DefenseCommand, DefenseContent, DefenseRunState, DefenseTowerId, DefenseTowerLevelDefinition} from '../domain/defense';
 import type {GuardPlanningStyle} from './guard-planning-style';
 import {defenseRoutes,defensePositionAtDistance,defensePathLength} from '../engine/defense-geometry';
@@ -36,23 +37,24 @@ export function recommendDefenseAction(content: DefenseContent, state: DefenseRu
   if (state.status === 'WON' || state.status === 'LOST') return null;
   const wave = defensePlanningWave(content,state) ?? content.waves.find(item => item.id === state.waveId);
   if (!wave) return null;
-  const total = wave.groups.reduce((sum, group) => sum + group.count, 0) || 1;
+  const groups=defensePressureWaveGroups(content,wave,state.sensorPressureEnabled===true);
+  const total = groups.reduce((sum, group) => sum + group.count, 0) || 1;
   const hidden = content.waves.filter(item=>item.id>=wave.id&&item.id<=wave.id+1)
     .some(item=>item.groups.some(group=>content.enemies.find(enemy=>enemy.id===group.enemy)?.hidden));
-  const swarm = wave.groups.filter(group => group.enemy === 'SWARM').reduce((sum, group) => sum + group.count, 0) / total;
-  const armored = wave.groups.some(group => ['ARMORED', 'BOSS'].includes(group.enemy));
-  const fast = wave.groups.some(group => group.enemy === 'SWIFT');
+  const swarm = groups.filter(group => group.enemy === 'SWARM').reduce((sum, group) => sum + group.count, 0) / total;
+  const armored = groups.some(group => ['ARMORED', 'BOSS'].includes(group.enemy));
+  const fast = groups.some(group => group.enemy === 'SWIFT');
   const guard=content.map.id.startsWith('guard-gd-');
   const utility = (level: DefenseTowerLevelDefinition, padId: string) => {
     const coverage = defenseRouteCoverage(content, padId, level.range,state) / 100;
     const damage = level.damage * (armored && level.damageType !== 'PURE' ? .55 : 1);
-    const density=guard&&level.splashRadius>0?wave.groups.reduce((sum,g)=>{
+    const density=guard&&level.splashRadius>0?groups.reduce((sum,g)=>{
       const enemy=content.enemies.find(e=>e.id===g.enemy)!;
       const spacing=Math.max(1,enemy.speed*g.intervalTicks*content.tickMs/1000);
       return sum+Math.min(g.count,1+2*level.splashRadius/spacing)*g.count/total;
     },0):1;
     const targets = guard?Math.min(level.maxTargets,density):1 + Math.min(level.maxTargets - 1, swarm * 5);
-    const attack = guard?wave.groups.reduce((sum,g)=>{
+    const attack = guard?groups.reduce((sum,g)=>{
       const enemy=content.enemies.find(e=>e.id===g.enemy)!;
       const hit=level.damageType==='PURE'?level.damage:Math.max(1,Math.floor(level.damage*(1-enemy.armor)));
       const hitCount=Math.max(1,Math.ceil(enemy.hp/Math.max(1,hit)));
