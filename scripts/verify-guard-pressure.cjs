@@ -2,21 +2,30 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const base=process.env.PSI_PREVIEW_URL||'http://127.0.0.1:4178',out=process.env.PSI_QA_OUTPUT||'docs/qa/guard-pressure-20261016';fs.mkdirSync(out,{recursive:true});
 const seed=fs.readFileSync('docs/qa/guard-pressure-20261016/prepared-run.json','utf8');
 (async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];
- try{for(const [width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024],[1440,900]]){
-  const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce',serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+ try{for(const [width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024],[1440,900]].filter(([w])=>!process.env.PSI_QA_WIDTH||w===Number(process.env.PSI_QA_WIDTH))){
+  const reducedMotion=process.env.PSI_QA_MOTION||'reduce';
+  const context=await browser.newContext({viewport:{width,height},reducedMotion,serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
   await context.addInitScript(save=>{if(!localStorage.getItem('pressure.qa')){localStorage.setItem('pressure.qa','1');localStorage.setItem('psi-zero-day.guard.save.v2',save);localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');}},seed);
   const saved=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('psi-zero-day.guard.save.v2')).payload.activeRun);
   const settled=async predicate=>{for(let n=0;n<40;n++){const value=await saved();if(predicate(value))return value;await new Promise(r=>setTimeout(r,25));}throw Error('Save did not settle');};
   console.log(width,'loading');await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-defense-entry').click();await page.getByRole('button',{name:'중단한 작전 이어하기',exact:true}).click();await page.locator('[data-defense-screen="combat"]').waitFor();
   await page.clock.install();await page.clock.pauseAt(Date.now()+50);await page.locator('.zb-start-wave').click();await page.clock.runFor(250);
   await page.locator('[data-pressure-phase="WARNING"]').first().waitFor();await page.locator('.zb-hud-button').click();let run=await settled(r=>r.paused&&r.enemies.some(e=>e.sensorPressure));const core=run.enemies.find(e=>e.sensorPressure);assert.equal(core.sensorPressure.phase,'WARNING');assert.equal(core.sensorPressure.targetPadId,'P2');
-  assert(await page.locator('.guard-pressure-banner').isVisible());assert((await page.locator('.guard-pressure-banner').innerText()).includes('방해 예고'));assert(await page.locator('[data-pressure-phase="WARNING"]').count()>0);await page.screenshot({path:path.join(out,`warning-${width}.png`)});
+  assert(await page.locator('.guard-pressure-banner').isVisible());assert((await page.locator('.guard-pressure-banner').innerText()).includes('방해 예고'));assert(await page.locator('[data-pressure-phase="WARNING"]').count()>0);
+  const coreUri=await page.locator('[data-pressure-core="WARNING"] image').getAttribute('href');
+  assert.equal(coreUri,'assets/defense/guard-pressure-v1/support-core.webp');
+  const decoded=await page.evaluate(async uri=>{const r=await fetch(uri);if(!r.ok)throw Error('Core art HTTP '+r.status);const bitmap=await createImageBitmap(await r.blob());const result={width:bitmap.width,height:bitmap.height};bitmap.close();return result;},coreUri);
+  assert.deepEqual(decoded,{width:384,height:384});
+  assert.equal(await page.locator('.guard-pressure-dial').getAttribute('data-pressure-remaining'),String(core.sensorPressure.remainingTicks));
+  if(reducedMotion==='reduce')assert.equal(await page.locator('.guard-pressure-link-signal').evaluate(e=>getComputedStyle(e).animationName),'none');
+  else assert.equal(await page.locator('.guard-pressure-link-signal').evaluate(e=>getComputedStyle(e).animationPlayState),'paused');
+  await page.screenshot({path:path.join(out,`warning-${width}.png`)});
   await page.locator('.zb-hud-button').click();await page.clock.runFor(4000);await page.locator('[data-pressure-phase="ACTIVE"]').first().waitFor();await page.locator('.zb-hud-button').click();run=await settled(r=>r.paused&&r.enemies.find(e=>e.id===core.id)?.sensorPressure?.phase==='ACTIVE');assert.equal(run.tacticalStats.sensorInterruptions,1);assert(await page.locator('.guard-pressure-banner').isVisible());assert((await page.locator('.guard-pressure-banner').innerText()).includes('일시 중단'));await page.screenshot({path:path.join(out,`active-${width}.png`)});
   const remaining=run.enemies.find(e=>e.id===core.id).sensorPressure.remainingTicks;await page.clock.runFor(3000);assert.equal((await saved()).enemies.find(e=>e.id===core.id).sensorPressure.remainingTicks,remaining);
   await context.setOffline(true);
   await page.locator('.zb-pad-hit').filter({hasText:'P2'}).click();const controls=page.locator('.zb-command .guard-spatial-controls');await controls.locator('select').first().selectOption('P4');const before=(await saved()).resource;await controls.locator('[data-guard-relocate]').click();
   await page.locator('.zb-hud-button').click();await page.clock.runFor(100);await page.locator('.zb-hud-button').click();run=await settled(r=>r.paused&&r.enemies.find(e=>e.id===core.id)?.sensorPressure?.phase==='SPENT');assert.equal(run.towers.find(t=>t.id===core.sensorPressure.targetTowerId).padId,'P4');assert.equal(run.resource,before);assert(run.supportCooldownRemaining>0);assert.equal(run.enemies.find(e=>e.id===core.id).sensorPressure.phase,'SPENT');
   await page.screenshot({path:path.join(out,`counter-${width}.png`)});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(errors,[]);
-  rows.push({width,height,base,normalBudget:true,warning:true,actualSuppression:true,pauseFrozen:true,manualRelocationCancels:true,offlineCounter:true,resourceUnchanged:true,supportCooldownSpent:true,errors});fs.writeFileSync(path.join(out,'browser.json'),JSON.stringify(rows,null,2));console.log(width,height,'PASS');await context.close();
+  rows.push({width,height,base,reducedMotion,coreUri,decoded,actualTickDial:true,animationPreferenceRespected:true,normalBudget:true,warning:true,actualSuppression:true,pauseFrozen:true,manualRelocationCancels:true,offlineCounter:true,resourceUnchanged:true,supportCooldownSpent:true,errors});fs.writeFileSync(path.join(out,'browser.json'),JSON.stringify(rows,null,2));console.log(width,height,'PASS');await context.close();
  }}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,3000))]);}
 })().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

@@ -1,4 +1,5 @@
 import {defensePressureWaveGroups} from '../engine/defense-sensor-pressure';
+import pressureArt from '../../content/defense/guard-pressure-art-v1.json';
 import {GuardSensorPressureOverlay,guardPressureReadout} from './GuardSensorPressure';
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -247,14 +248,15 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
   const g8aDump = content.map.id === G8A_MAP_ID ? defenseSwiftPqAsset() : null;
   const swiftPq = enemy.enemyId === 'SWIFT' ? g8aDump : null;
-  const artUri = defenseEnemyArtUri(enemy.enemyId,content.map.id);
+  const pressureCore = isGuardMap(content.map.id) && state.sensorPressureEnabled === true && !!enemy.sensorPressure;
+  const artUri = pressureCore ? pressureArt.core.uri : defenseEnemyArtUri(enemy.enemyId,content.map.id);
   const g8aRiskActor = content.map.id === G8A_MAP_ID;
   const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.75;
   const g8aVehicleRisk = enemy.enemyId === 'SWIFT' || enemy.enemyId === 'ARMORED';
   const hpWidth = g8aRiskActor ? 28 : 44;
-  const hpY = g8aRiskActor ? (g8aVehicleRisk ? 31 : 8) : -31;
-  const artSize = definition.boss ? 92 : 60;
-  const artY = definition.boss ? -60 : -39;
+  const hpY = pressureCore ? -52 : g8aRiskActor ? (g8aVehicleRisk ? 31 : 8) : -31;
+  const artSize = pressureCore ? 78 : definition.boss ? 92 : 60;
+  const artY = pressureCore ? -49 : definition.boss ? -60 : -39;
   const vehicleState = enemy.enemyId === 'SWIFT'
     ? slowed ? 'BRAKE' : isHit ? 'THREAT' : 'CRUISE'
     : undefined;
@@ -262,6 +264,7 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
     transform={`translate(${pos.x} ${pos.y})${counterRotate?" rotate(-90)":""}`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}${(enemy.armorExposedUntilTick??0)>state.tick?' is-exposed':''}`}
     data-enemy={enemy.enemyId}
+    data-pressure-core={pressureCore ? enemy.sensorPressure!.phase : undefined}
     style={isGuardMap(content.map.id)?{'--guard-motion-phase':`-${(enemy.spawnSequence%7)*.17}s`} as CSSProperties:undefined}
     data-distance={enemy.distance.toFixed(3)}
     data-motion-vehicle={enemy.enemyId === 'SWIFT' ? 'SWIFT' : undefined}

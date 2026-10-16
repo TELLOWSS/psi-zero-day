@@ -1,0 +1,24 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "base": "http://127.0.0.1:4178",
+    "reducedMotion": "no-preference",
+    "coreUri": "assets/defense/guard-pressure-v1/support-core.webp",
+    "decoded": {
+      "width": 384,
+      "height": 384
+    },
+    "actualTickDial": true,
+    "animationPreferenceRespected": true,
+    "normalBudget": true,
+    "warning": true,
+    "actualSuppression": true,
+    "pauseFrozen": true,
+    "manualRelocationCancels": true,
+    "offlineCounter": true,
+    "resourceUnchanged": true,
+    "supportCooldownSpent": true,
+    "errors": []
+  }
+]

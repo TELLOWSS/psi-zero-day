@@ -21,6 +21,23 @@
 .zb-shell[data-map^="guard-gd-"][data-battle-paused="true"] .guard-risk-suspension,
 .zb-shell[data-map^="guard-gd-"][data-battle-paused="true"] .guard-risk-aura *{animation-play-state:paused}
 .zb-shell[data-map^="guard-gd-"] .zb-board-production-art{image-rendering:auto}
+.guard-pressure-state{--pressure:#ffd084;--pressure-shadow:#101c24}
+.guard-pressure-state.is-active{--pressure:#ff9da3}
+.guard-pressure-state.is-seek{--pressure:#bcd5d5}
+.guard-pressure-link-shadow{stroke:var(--pressure-shadow);stroke-width:5;opacity:.85}
+.guard-pressure-link-signal{stroke:var(--pressure);stroke-width:1.5;stroke-dasharray:7 8;animation:guard-pressure-transmit 1.2s linear infinite}
+.guard-pressure-state.is-active .guard-pressure-link-signal{stroke-dasharray:2 5;animation-duration:.65s}
+.guard-pressure-brackets,.guard-pressure-target-corners{fill:none;stroke:var(--pressure);stroke-width:1.6;stroke-linecap:square}
+.guard-pressure-state.is-seek .guard-pressure-brackets{opacity:.5}
+.guard-pressure-nameplate rect,.guard-pressure-time rect{fill:#101f27;fill-opacity:.96;stroke:var(--pressure);stroke-width:1}
+.guard-pressure-nameplate circle{fill:var(--pressure)}
+.guard-pressure-nameplate text{fill:#fff1d6;font-size:13px;font-weight:800;paint-order:stroke;stroke:#101f27;stroke-width:1}
+.guard-pressure-dial-track{fill:none;stroke:#07131e;stroke-width:5;opacity:.85}
+.guard-pressure-dial{fill:none;stroke:var(--pressure);stroke-width:3;stroke-linecap:round}
+.guard-pressure-time text{fill:var(--pressure);font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
+.zb-shell[data-battle-paused="true"] .guard-pressure-instruments *{animation-play-state:paused}
+@keyframes guard-pressure-transmit{to{stroke-dashoffset:-30}}
+@media(prefers-reduced-motion:reduce){.guard-pressure-instruments *{animation:none!important}}
 @keyframes guard-worklight{0%,100%{opacity:.75}50%{opacity:1}}
 @keyframes guard-circuit{from{stroke-dashoffset:0}to{stroke-dashoffset:-72}}
 @keyframes guard-core-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.2px)}}

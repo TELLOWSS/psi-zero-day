@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/GUARD-PRESSURE-ART-PROMPT-20261017.json",
+  "core": {
+    "uri": "assets/defense/guard-pressure-v1/support-core.webp",
+    "width": 384,
+    "height": 384,
+    "bytes": 53450,
+    "sha256": "b083375058e087f45c47cfacc02ba72a4f604a8468e0029955363b4112c1c4bf",
+    "transparent": true
+  }
+}
