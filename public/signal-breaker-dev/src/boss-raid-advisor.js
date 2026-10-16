@@ -6,9 +6,9 @@
   if(!s||mode==='off'||s.state==='FINISHER')return null;const danger=s.state==='WARNING'&&s.trueSignal&&Math.abs(playerX-s.laneX)<=s.half+24;
   if(mode==='essential'&&!danger)return null;
   let key=s.state==='WARNING'?!s.trueSignal?'hold':danger?'move':s.requireEvade&&!s.evaded?'move':'counter.'+s.counter:s.state==='SUPPORT'?'support':s.state==='BURST'?'burst':s.state==='STAGGER'?'stagger':s.state==='RECOVERY'?'retry':s.state==='TRANSITION'?'phase':'prepare';
-  const direction=danger?(s.laneX<550?'right':s.laneX>550?'left':playerX<s.laneX?'left':'right'):null;
+  const direction=danger?(s.laneX-s.half-24<57?'right':s.laneX+s.half+24>1043?'left':playerX<=s.laneX?'left':'right'):null;
   const seconds=Math.max(0,s.remaining),priority=danger?3:s.state==='WARNING'&&s.trueSignal?2:1;
-  return {textId:'breaker.monitor.'+key,direction,seconds,priority,progress:Math.min(1,seconds/(s.warningDuration||2)),cue:['WARNING','BURST','SUPPORT'].includes(s.state)?[s.pattern,s.attempts,s.state,s.trueSignal,Math.ceil(seconds)].join(':'):null};
+  return {textId:'breaker.monitor.'+key,direction,seconds,priority,progress:Math.min(1,seconds/(s.warningDuration||2)),cue:['WARNING','BURST','SUPPORT'].includes(s.state)?[s.pattern,s.attempts,s.state,s.trueSignal,priority,key,direction,Math.ceil(seconds)].join(':'):null};
  }
  return {settings,advice};
 });

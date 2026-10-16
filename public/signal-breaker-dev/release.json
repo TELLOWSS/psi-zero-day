@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.67.0-raid-monitor",
   "cacheName": "psi-signal-breaker-raid-v2-20261016",
-  "fingerprint": "19709b0c2b11b846c06d1a1e1aa44623bb897b8f59a1824dd1b8efdac43d5b0d",
+  "fingerprint": "bb2fa6d345331d93194b737facaaca8c9ef5409ed9f3ec88de9554195512e3b9",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -811,8 +811,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-advisor.js",
-      "bytes": 1476,
-      "sha256": "ba519c75533854807702ef63737b8a695d5fe1f0c3edabd55e1a28a1144b1aa9"
+      "bytes": 1520,
+      "sha256": "96846a114de518ce0622a9054c6650e695b10fe5d5aa710672e92b84941cc1e1"
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-telegraph.js",

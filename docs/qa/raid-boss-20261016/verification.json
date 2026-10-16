@@ -1,7 +1,7 @@
 {
   "release": "0.67.0-raid-monitor",
   "rootAppTests": {"passed": 2158, "existingSkipped": 1},
-  "breakerTests": {"passed": 356, "failed": 0},
+  "breakerTests": {"passed": 357, "failed": 0},
   "typecheck": "PASS",
   "productionBuild": "PASS",
   "browser": "4 viewport profiles; real pointer anchor collision, counter success, weakpoint window and manual primary selection",
