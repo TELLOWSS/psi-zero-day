@@ -1,0 +1,44 @@
+{
+  "source": "trimode-browser.log",
+  "checks": [
+    "WATCH ready UI opens shared intel",
+    "GD06 normally generated checkpoint after W3",
+    "W4 preparation 4s timer does not advance combat",
+    "W5 requires real manual confirmation",
+    "one relocation credit",
+    "actual Guard observation visible in Breaker, Watch remains unseen",
+    "no browser runtime errors"
+  ],
+  "profiles": [
+    {
+      "width": 320,
+      "height": 568,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "passed": true
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "passed": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "passed": true
+    }
+  ]
+}

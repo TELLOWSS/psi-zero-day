@@ -148,7 +148,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     state=withDefenseTacticalStats(state,content);
     return {...state,towers:state.towers.map(t=>t.id===tower.id?{...t,padId:command.padId}:t),redeploymentCredits:credit?(state.redeploymentCredits??0)-1:state.redeploymentCredits,
      supportCooldownRemaining:credit?state.supportCooldownRemaining:support!.cooldownTicks,
-     ...(state.tacticalStats&&!credit?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1}}:{})};
+     ...(state.tacticalStats&&!credit?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1,supportEvents:[...(state.tacticalStats.supportEvents??[]),{kind: 'SUPPORT' as const,supportId:state.supportId,waveId:state.waveId,tick:state.tick}].slice(-24)}}:{})};
   }
   if (command.type === 'SetSpeed') {
     if (!content.speeds.includes(command.speed)) throw new Error('Unsupported speed');
@@ -168,7 +168,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
       const tower=state.towers.find(t=>t.id===command.towerInstanceId),point=command.direction;if(!tower||!point||!Number.isFinite(point.x)||!Number.isFinite(point.y)||point.x<0||point.x>content.map.width||point.y<0||point.y>content.map.height)throw Error('Choose tower and direction');
       const origin=defenseTowerPoint(content,tower);if(distanceSquared(origin,point)<1)throw Error('Direction is too close');
       state=withDefenseTacticalStats(state,content);
-      return {...state,supportCooldownRemaining:support.cooldownTicks,guidance:{padId:tower.padId,direction:point,untilTick:state.tick+support.directionalRange.durationTicks,bonus:support.directionalRange.bonus,halfAngle:support.directionalRange.halfAngle},...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1}}:{})};
+      return {...state,supportCooldownRemaining:support.cooldownTicks,guidance:{padId:tower.padId,direction:point,untilTick:state.tick+support.directionalRange.durationTicks,bonus:support.directionalRange.bonus,halfAngle:support.directionalRange.halfAngle},...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1,supportEvents:[...(state.tacticalStats.supportEvents??[]),{kind: 'SUPPORT' as const,supportId:state.supportId,waveId:state.waveId,tick:state.tick}].slice(-24)}}:{})};
     }
     if(!defenseSupportHasTarget(state,content))throw new Error('Support has no eligible target');
     state=withDefenseTacticalStats(state,content);
@@ -178,7 +178,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     return {
       ...state,
       supportCooldownRemaining: support.cooldownTicks,
-      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1}}:{}),
+      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,supportUses:state.tacticalStats.supportUses+1,supportEvents:[...(state.tacticalStats.supportEvents??[]),{kind: 'SUPPORT' as const,supportId:state.supportId,waveId:state.waveId,tick:state.tick}].slice(-24)}}:{}),
       towers:readyTower?state.towers.map(t=>t.id===readyTower.id?{...t,attackCooldown:0}:t):state.towers,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + support.freezeMovementTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, untilReveal),
@@ -196,7 +196,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
     return {
       ...state,
       eStopCooldownUntilTick: state.tick + 560,
-      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,eStopUses:state.tacticalStats.eStopUses+1}}:{}),
+      ...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,eStopUses:state.tacticalStats.eStopUses+1,supportEvents:[...(state.tacticalStats.supportEvents??[]),{kind: 'E_STOP' as const,supportId:state.supportId,waveId:state.waveId,tick:state.tick}].slice(-24)}}:{}),
       eStopActiveUntilTick: state.tick + freezeTicks,
       freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + freezeTicks),
       revealAllUntilTick: Math.max(state.revealAllUntilTick, state.tick + freezeTicks),
@@ -270,6 +270,7 @@ function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunSt
 
 function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRunState {
   let shield = state.shield;
+  const routeLeaks=[...(state.tacticalStats?.routeLeaks??[])];
   const leakedByEnemy: Partial<Record<DefenseEnemyState['enemyId'], number>> = { ...(state.leakedByEnemy ?? {}) };
   const moved: DefenseEnemyState[] = [];
   for (const enemy of state.enemies) {
@@ -280,11 +281,12 @@ function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRu
     if (distance + EPSILON >= defensePathLength(defenseEnemyPath(content,enemy,state))) {
       shield = Math.max(0, shield - definition.leak);
       leakedByEnemy[enemy.enemyId] = (leakedByEnemy[enemy.enemyId] ?? 0) + 1;
+      routeLeaks.push({enemyId:enemy.enemyId,routeId:enemy.routeId??'main',waveId:state.waveId,tick:state.tick,point:defenseEnemyPosition(content,{...enemy,distance},state),...(enemy.firstContact?{firstContact:enemy.firstContact}:{})});
       continue;
     }
     moved.push({ ...enemy, distance });
   }
-  return { ...state, shield, enemies: moved, leakedByEnemy };
+  return { ...state, shield, enemies: moved, leakedByEnemy,...(state.tacticalStats?{tacticalStats:{...state.tacticalStats,routeLeaks:routeLeaks.slice(-24)}}:{}) };
 }
 
 function revealEnemies(state: DefenseRunState, content: DefenseContent): DefenseRunState {

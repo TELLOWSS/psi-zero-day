@@ -16,7 +16,7 @@ const RELEASE_SOUNDTRACKS=["/signal-breaker-dev/audio/ep01/ch01_ricochet_candida
 for(const pathname of RELEASE_SOUNDTRACKS)paths.add(pathname);
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const files=[...paths].sort().map(url=>{const bytes=fs.readFileSync(path.join(root,url));return {path:url,bytes:bytes.length,sha256:sha(bytes)};});
-const expected={schemaVersion:1,version:'0.67.0-raid-monitor',cacheName,fingerprint:sha(JSON.stringify(files)),files};
+const expected={schemaVersion:1,version:'0.68.0-trimode-intel',cacheName,fingerprint:sha(JSON.stringify(files)),files};
 const target=path.join(app,'release.json');
 if(process.argv.includes('--write'))fs.writeFileSync(target,JSON.stringify(expected,null,2)+'\n');
 assert.deepEqual(JSON.parse(fs.readFileSync(target,'utf8')),expected,'Release metadata is stale; run node scripts/check-signal-breaker-release.mjs --write');

@@ -1,4 +1,5 @@
 import packageInfo from '../../package.json';
+import {validDefenseFirstContact} from './defense-tactical-validation';
 import type {
   DefenseContent, DefenseEnemyState, DefenseOutcomeApplication, DefenseRunState, DefenseSaveDocument,
   DefenseSaveEnvelope, DefenseSaveInspection, DefenseScenarioRecord, DefenseTowerState,
@@ -41,6 +42,7 @@ function validEnemy(value: unknown): value is DefenseEnemyState {
     && ['NORMAL','SWIFT','ARMORED','SWARM','VEILED','BOSS'].includes(String(value.enemyId))
     && nonNegative(value.hp)
     && nonNegative(value.distance)
+    && (value.firstContact===undefined||validDefenseFirstContact(value.firstContact))
     && (value.routeId===undefined||nonEmptyString(value.routeId))
     && (value.lockedUntilTick===undefined||nonNegativeInteger(value.lockedUntilTick))
     && nonNegativeInteger(value.spawnSequence)

@@ -1,0 +1,26 @@
+{
+  "sourceDocument": "PSI_ZERO_DAY_TRI_MODE_BOSS_RAID_MASTER_PLAN_20261016.docx",
+  "sourceSHA256": "556a54e44adeeb57ba3f8a35865133c2c4c09da108cb924c9d730de552372c38",
+  "release": "0.68.0-trimode-intel",
+  "fingerprint": "927cf41e76ad004fbaa351692d26288fad2ede40254a1cf598255d527f0de773",
+  "releaseAssets": 214,
+  "tests": {
+    "rootPassed": 2163,
+    "rootPreexistingSkipped": 1,
+    "breakerPassed": 357,
+    "typecheck": true,
+    "productionBuild": true
+  },
+  "flows": {
+    "sixViewportEvidence": "flow-summary.json",
+    "actualManualCounterFourViewports": "breaker-browser.json",
+    "intelFocusKeyboardSixViewports": "intel-browser.json",
+    "offlineReload": "offline.json",
+    "sameBudgetThreeGD06Blueprints": "simulation.json"
+  },
+  "limits": [
+    "W2: remaining dedicated Watch boss production",
+    "G2: further chapter boss design and GD07-12 production",
+    "P1: physical Android, low-end devices, five-person fun review and art/audio production lock"
+  ]
+}

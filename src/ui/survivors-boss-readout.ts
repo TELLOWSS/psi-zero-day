@@ -9,5 +9,6 @@ export function bossCombatReadout(h: Readonly<Hazard>): string {
   const core=bossCoreStatus(h);return core==='active'?text.status[h.motion?.phase??'approach']:text.core[core];
 }
 export function bossCombatHint(h: Readonly<Hazard>): string {
+  if(h.bossGameplay?.gangform?.step==='drop_zone'&&h.bossGameplay.combatPhase==='weak_point')return text.gangformIntervention;
   return h.bossGameplay?text.combatHint[h.bossGameplay.combatPhase]:bossCoreStatus(h)==='interlocked'?text.interlock:text.hint[h.type];
 }

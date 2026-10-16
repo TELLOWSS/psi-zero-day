@@ -1,3 +1,4 @@
+import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
@@ -410,6 +411,11 @@ export function DefenseGame({
       ? defenseContentForScenario(selectedScenarioId)
       : zeroBreachContent;
   const guard=isGuardMap(content.map.id);
+  useEffect(()=>{
+   if(content.scenario.id!=='guard-gd-06-v1'||!state)return;
+   if(state.waveId>=5&&state.status!=='READY')recordEncounterIntel('guard','GD-06','observed');
+   if(state.status==='WON'&&state.mapPhase==='SHIFTED')recordEncounterIntel('guard','GD-06','verified');
+  },[content.scenario.id,state?.waveId,state?.status,state?.mapPhase]);
   const guardIndex=guardStageIds.indexOf(content.scenario.id);
   const guardKey=`guard.gd0${guardIndex+1}`;
   const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
@@ -1219,6 +1225,7 @@ export function DefenseGame({
           <button type="button" onClick={retry}>{t('defense.ui.retry')}</button>
           <button type="button" onClick={() => { if(guard)void operations();else void persistence.exitToMain(); }}>{t(guard?'guard.home':activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
         </div>
+        {guard?<button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button>:null}
         {guard&&state.tacticalStats?<details className="guard-result-review"><summary>{t('guard.review')} · {t('guard.review.resolved')} {state.tacticalStats.resolved}</summary><GuardTacticalDebrief report={guardTacticalReport(content,state)!} adviceId={guardDebriefAdvice(state)}/></details>:null}
         {guard?<p className="guard-result-boundary">{t('defense.tactics.boundary')}</p>:<section className="zb-tactics-debrief"><h3>{t('defense.tactics.review')}</h3><p>{t('defense.tactics.boundary')}</p>
           <strong>{t('defense.tactics.loadout')}</strong><p>{state.towers.map(tower=>`${tower.padId} ${towerName(content.map.id,tower.towerId)} ${tower.levelId}`).join(' · ')||'—'}</p>

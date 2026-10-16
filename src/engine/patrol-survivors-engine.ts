@@ -2014,7 +2014,7 @@ export class SurvivorsEngine {
       if(h.bossGameplay){
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
-        if(tickGangform(h,player,dt))continue;
+        if(tickGangform(h,player,dt,this.state.terrain??[]))continue;
         if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
       }
       if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
@@ -2139,7 +2139,7 @@ export class SurvivorsEngine {
         }
       }
       for(const h of hazards){
-        const zone=hitGangformZone(h,p,previous);
+        const zone=hitGangformZone(h,p,previous,this.state.player);
         if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
       }
       if(p.duration<=0||p.pierce<=0)continue;

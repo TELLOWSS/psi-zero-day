@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.67.0-raid-monitor",
-  "cacheName": "psi-signal-breaker-raid-v2-20261016",
-  "fingerprint": "bb2fa6d345331d93194b737facaaca8c9ef5409ed9f3ec88de9554195512e3b9",
+  "version": "0.68.0-trimode-intel",
+  "cacheName": "psi-signal-breaker-trimode-v1-20261016",
+  "fingerprint": "927cf41e76ad004fbaa351692d26288fad2ede40254a1cf598255d527f0de773",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -53,6 +53,16 @@
       "path": "/assets/shared/signal-breaker-actors.js",
       "bytes": 103913,
       "sha256": "b375446b90d6933f5e223f43d86a51ad59e52753e35f495b6a08ca05fa506360"
+    },
+    {
+      "path": "/assets/shared/signal-encounter-intel-v1.js",
+      "bytes": 4879,
+      "sha256": "2460f8c79d8813c9a995fbc859f3798bfff6e1f7f1a3e8882ebcee6e25427a70"
+    },
+    {
+      "path": "/assets/shared/signal-encounter-intel.css",
+      "bytes": 1319,
+      "sha256": "eeae0661fc96fe6009731052efc09e8e68cd01bd30c25f5b32e81b9a4e4b8351"
     },
     {
       "path": "/assets/survivors/graphics-v1/actors/kang_taesik-east-v1.png",
@@ -761,8 +771,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 28070,
-      "sha256": "26a2464300324fc1edc463fe3c871d940d75f3a53cb65e6864e270c5426908bc"
+      "bytes": 28211,
+      "sha256": "d2ecad63f25bb87a13239dfc4910441fded6d60a223528a38b165644547ce8da"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -776,13 +786,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11860,
-      "sha256": "7f5701b415eb0b939774f453429cb25183d064d79278fe58c2432b5ad69d274a"
+      "bytes": 11959,
+      "sha256": "6c4eb5013f640a485831e30142ea5c2d5a12c0f2c696d0153da19700ab82935b"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 167353,
-      "sha256": "3ac1554d9b0cb5aa9652116925eabbddbdf108e53c0db80394b95df74fd539e1"
+      "bytes": 167542,
+      "sha256": "3d566c336bd2da3accac5092992d63b0d0c1174aa97d5e53b99d84050a706286"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -821,8 +831,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-ui.js",
-      "bytes": 10874,
-      "sha256": "c27372bee9769a2a06198983324feac7b39305fe9f825f836553ffdbe5b57fa3"
+      "bytes": 11143,
+      "sha256": "1784f74a46e073433512242bfa67e742f2aa5f6aee1769e495a853256dcfce59"
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid.css",

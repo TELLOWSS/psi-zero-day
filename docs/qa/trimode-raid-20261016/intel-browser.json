@@ -1,0 +1,59 @@
+{
+  "rows": [
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 320,
+      "height": 568,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    },
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 390,
+      "height": 844,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    },
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 568,
+      "height": 320,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    },
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 844,
+      "height": 390,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    },
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 768,
+      "height": 1024,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    },
+    {
+      "base": "http://127.0.0.1:4178",
+      "width": 1440,
+      "height": 900,
+      "titleVisible": true,
+      "initialScroll": 0,
+      "closeTarget44": true,
+      "keyboardClose": true
+    }
+  ],
+  "errors": []
+}

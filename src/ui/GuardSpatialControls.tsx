@@ -1,3 +1,4 @@
+import {GuardRaidBriefing} from './GuardRaidBriefing';
 import {useState} from 'react';
 import type {DefenseCommand,DefenseContent,DefenseRunState,DefenseTowerState} from '../domain/defense';
 import {defenseText as t} from '../app/defense-text';
@@ -5,6 +6,7 @@ import {defenseText as t} from '../app/defense-text';
 export function GuardSpatialControls({content,state,selectedTower,onCommand}:{content:DefenseContent;state:DefenseRunState;selectedTower:DefenseTowerState|null;onCommand:(command:DefenseCommand)=>void}){
  const [destination,setDestination]=useState(''),[direction,setDirection]=useState('E');
  const transition=content.map.transition,needsTransition=state.status==='INTERMISSION'&&transition?.beforeWave===state.waveId&&!state.appliedTransitionIds?.includes(transition.id);
+ const warnTransition=!!transition&&state.mapPhase!=='SHIFTED'&&['READY','INTERMISSION'].includes(state.status)&&state.waveId>=transition.beforeWave-1;
  const support=content.supports.find(s=>s.id===state.supportId)!;
  const credit=state.status==='INTERMISSION'&&(state.redeploymentCredits??0)>0;
  const pads=content.map.pads.filter(p=>!state.towers.some(t=>t.padId===p.id));
@@ -13,10 +15,11 @@ export function GuardSpatialControls({content,state,selectedTower,onCommand}:{co
  const offsets:Record<string,readonly [number,number]>={N:[0,-100],E:[100,0],S:[0,100],W:[-100,0]};
  const offset=offsets[direction]!;
  if(state.status==='RUNNING'&&!selectedTower)return null;
- if(!needsTransition&&!selectedTower&&!credit)return null;
+ if(!warnTransition&&!needsTransition&&!selectedTower&&!credit)return null;
  return <section className="guard-spatial-controls">
   <small>{t(state.ultimateUnlocked?'guard.ultimate.slot':'guard.ultimate.locked')}</small>
   {transition&&state.mapPhase!=='SHIFTED'?<p>{t('guard.transition.warning')}</p>:null}
+  {warnTransition?<GuardRaidBriefing key={state.waveId} content={content} state={state}/>:null}
   {needsTransition?<button data-guard-transition onClick={()=>onCommand({type:'ConfirmTransition'})}>{t('guard.transition.confirm')}</button>:null}
   {support.relocation||credit?<div><p>{t(credit?'guard.relocate.credit':'guard.relocate.hint')}</p>
    <select aria-label={t('guard.relocate.destination')} value={destinationId??''} onChange={e=>setDestination(e.target.value)}>{pads.map(p=><option key={p.id} value={p.id}>{p.id}</option>)}</select>

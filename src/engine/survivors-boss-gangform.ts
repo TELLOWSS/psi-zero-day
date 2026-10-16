@@ -1,7 +1,22 @@
 import type {Hazard,PlayerStats,Projectile} from '../domain/patrol-survivors';
 import {sweptCircle} from './survivors-simulation';
+import type {TerrainObject} from '../domain/survivors-terrain';
+import {terrainContains} from './survivors-terrain';
 
-export function tickGangform(h: Hazard, player: PlayerStats, dt: number): boolean {
+export const GANGFORM_INTERVENTION_RADIUS=76;
+/** Locked, separated targets leave room for a deliberate move between interventions. */
+function controlPoints(player:PlayerStats,terrain:readonly TerrainObject[]){
+ const candidates=[-170,170,-340,340].map(offset=>({x:Math.max(80,Math.min(1320,player.x+offset)),y:Math.max(80,Math.min(820,player.y))}));
+ candidates.push(...[200,450,700,950,1200].flatMap(x=>[180,450,720].map(y=>({x,y}))));
+ const points: Array<{x:number;y:number;radius:number;hp:number;maxHp:number}>=[];
+ for(const point of candidates){
+  if(terrain.some(o=>terrainContains(o,point,52))||points.some(p=>Math.hypot(p.x-point.x,p.y-point.y)<200))continue;
+  points.push({...point,radius:38,hp:60,maxHp:60});if(points.length===2)break;
+ }
+ return points;
+}
+
+export function tickGangform(h: Hazard, player: PlayerStats, dt: number, terrain:readonly TerrainObject[]=[]): boolean {
  const p=h.bossGameplay;if(p?.patternId!=='PENDULUM_DEBRIS'||p.combatPhase!=='pattern')return false;
  const g=p.gangform??(p.gangform={step:'pendulum_warning',remaining:1.2,anchorX:Math.max(170,Math.min(1230,h.x)),anchorY:h.y,zones:[]});
  h.vx=0;h.vy=0;h.y=g.anchorY;
@@ -14,11 +29,11 @@ export function tickGangform(h: Hazard, player: PlayerStats, dt: number): boolea
  if(g.step==='pendulum_warning'){g.step='pendulum';g.remaining=3;}
  else if(g.step==='pendulum'){
   g.step='debris_warning';g.remaining=1.2;
-  g.zones=[-64,64].map(offset=>({x:Math.max(60,Math.min(1340,player.x+offset)),y:Math.max(60,Math.min(840,player.y)),radius:38,hp:60,maxHp:60}));
+  g.zones=controlPoints(player,terrain);
  }else if(g.step==='debris_warning'){g.step='debris';g.remaining=.4;}
  else if(g.step==='debris'){
-  g.step='drop_zone';p.cycleCount++;p.combatPhase='weak_point';p.remaining=8;
-  if(h.motion){h.motion.phase='cooldown';h.motion.timer=8;}
+  g.step='drop_zone';p.cycleCount++;p.combatPhase='weak_point';p.remaining=12;
+  if(h.motion){h.motion.phase='cooldown';h.motion.timer=12;}
  }
  return true;
 }
@@ -30,11 +45,11 @@ export function gangformContact(h: Readonly<Hazard>, player: {x:number;y:number}
 }
 
 /** Both spatial targets must be hit; body DPS and passive gear do not solve this pattern. */
-export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:number;y:number}): {x:number;y:number}|undefined {
+export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:number;y:number}, player?: {x:number;y:number}): {x:number;y:number}|undefined {
  const p=h.bossGameplay,g=p?.gangform;
  if(p?.combatPhase!=='weak_point'||!g||g.step!=='drop_zone'||!Number.isFinite(projectile.damage)||projectile.damage<=0)return;
- const z=g.zones.find(z=>z.hp>0&&sweptCircle(previous.x,previous.y,projectile.x,projectile.y,z.x,z.y,z.radius+projectile.radius));
- if(!z)return;
+ const z=g.zones.find(z=>z.hp>0);
+ if(!z||!player||Math.hypot(player.x-z.x,player.y-z.y)>GANGFORM_INTERVENTION_RADIUS||!sweptCircle(previous.x,previous.y,projectile.x,projectile.y,z.x,z.y,z.radius+projectile.radius))return;
  z.hp=Math.max(0,z.hp-projectile.damage);projectile.pierce--;projectile.duration=0;
  if(g.zones.length===2&&g.zones.every(z=>z.hp===0)){
   p.signatureResolvedThisCycle=true;p.combatPhase='burst';p.remaining=0;p.burstRemaining=4.5;
@@ -42,8 +57,8 @@ export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:
  return z;
 }
 
-export function gangformTarget(h: Hazard, x: number, y: number): Hazard {
+export function gangformTarget(h: Hazard, _x: number, _y: number): Hazard {
  const p=h.bossGameplay,g=p?.gangform;if(p?.combatPhase!=='weak_point'||!g)return h;
- const z=g.zones.filter(z=>z.hp>0).sort((a,b)=>(a.x-x)**2+(a.y-y)**2-((b.x-x)**2+(b.y-y)**2))[0];
+ const z=g.zones.find(z=>z.hp>0);
  return z?{...h,x:z.x,y:z.y}:h;
 }

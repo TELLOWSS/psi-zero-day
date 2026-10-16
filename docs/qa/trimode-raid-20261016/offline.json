@@ -1,0 +1,8 @@
+{
+  "base": "http://127.0.0.1:4178",
+  "offlineReload": true,
+  "newRaidModulesCached": true,
+  "newRunAndMonitorAvailable": true,
+  "cacheFiles": 198,
+  "errors": []
+}

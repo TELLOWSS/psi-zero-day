@@ -11,3 +11,6 @@ public/signal-breaker-dev/src/*.css text eol=lf
 public/signal-breaker-dev/*.json text eol=lf
 public/signal-breaker-dev/art/*.json text eol=lf
 public/signal-breaker-dev/*.webmanifest text eol=lf
+
+public/assets/shared/signal-encounter-intel*.js text eol=lf
+public/assets/shared/signal-encounter-intel*.css text eol=lf

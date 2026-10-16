@@ -1,3 +1,4 @@
+import {encounterIntelTitle,openEncounterIntel} from '../app/signal-encounter-intel';
 import {useState} from 'react';
 import type {DefenseSaveDocument} from '../domain';
 import {guardContents,guardStageUnlocked} from '../content/guard-campaign';
@@ -16,7 +17,7 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
  const next=guardContents.find(c=>guardStageUnlocked(c.scenario.id,document)&&!document.records.some(r=>r.scenarioId===c.scenario.id&&r.clears>0));
  return <main className="guard-home" data-defense-screen="guard-home">
   <header className="guard-home-hero" style={{backgroundImage:`linear-gradient(90deg,#071b27ed,#071b2755),url(/${DEFENSE_PREMIUM_HERO})`}}>
-   <nav><span>SIGNAL GUARD</span><button onClick={onExit}>{t('guard.hub')}</button></nav>
+   <nav><span>SIGNAL GUARD</span><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><button onClick={onExit}>{t('guard.hub')}</button></nav>
    <small>{t('guard.subtitle')}</small><h1>{t('guard.title')}</h1><p>{t('guard.promise')}</p>
    {active&&onResume?<button className="guard-primary" onClick={onResume}>{t('guard.resume')}</button>:null}
    {!active&&next?<button className="guard-primary" onClick={()=>onSelect(next.scenario.id,false)}>{t('guard.next')} · {t(`guard.gd0${guardContents.indexOf(next)+1}.title`)}</button>:null}

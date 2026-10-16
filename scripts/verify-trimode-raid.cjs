@@ -1,0 +1,33 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{chromium}=require('playwright');
+const base=process.env.PSI_PREVIEW_URL||'http://127.0.0.1:4176',out=process.env.PSI_QA_OUTPUT||'docs/qa/trimode-raid-20261016';fs.mkdirSync(out,{recursive:true});
+const checkpoint=fs.readFileSync('docs/qa/trimode-raid-20261016/gd06-after-wave3.json','utf8');
+const profiles=[[320,568],[390,844],[568,320],[844,390],[768,1024],[1440,900]];
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];
+ try{for(const [width,height] of profiles){
+  const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce',serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+  await context.addInitScript(save=>{if(!localStorage.getItem('trimode.qa')){localStorage.setItem('trimode.qa','1');localStorage.setItem('psi-zero-day.guard.save.v2',save);localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');}},checkpoint);
+  console.log(width,height,'loading');await page.goto(base+'/',{waitUntil:'domcontentloaded'});console.log(width,'root loaded');await page.locator('.is-survivors-entry').click();console.log(width,'watch clicked');await page.locator('.survivors-ready-dialog').waitFor();console.log(width,'watch ready');
+  await page.locator('.survivors-ready-dialog').getByRole('button',{name:'현장 신호 도감',exact:true}).click();
+  const intel=page.locator('#signalEncounterIntel');await intel.waitFor();assert.equal(await intel.locator('article').count(),3);assert.equal(await intel.getByText('미관측',{exact:true}).count(),3);
+  console.log(width,'intel open');const titleBox=await intel.locator('h2').boundingBox();const box=await intel.boundingBox();assert(titleBox.y>=box.y&&titleBox.y+titleBox.height<=box.y+100);assert(box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1);
+  await page.screenshot({path:path.join(out,`intel-${width}.png`)});await intel.getByRole('button',{name:'현장으로 돌아가기',exact:true}).click();assert(await page.locator('.survivors-ready-dialog').isVisible());
+  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-defense-entry').click();console.log(width,'guard home');await page.getByRole('button',{name:'중단한 작전 이어하기',exact:true}).click();console.log(width,'guard resumed');await page.locator('[data-defense-screen="combat"]').waitFor();
+  const shell=page.locator('[data-defense-screen="combat"]');const before=await shell.getAttribute('data-tick');
+  const mobile=await page.locator('.guard-mobile-intel-toggle').isVisible();if(mobile)await page.locator('.guard-mobile-intel-toggle').click();
+  const briefing=page.locator('.guard-raid-briefing:visible').first();await briefing.waitFor();assert(await briefing.locator('svg').isVisible());await page.waitForTimeout(4300);assert.equal(await shell.getAttribute('data-tick'),before);assert.equal(await shell.getAttribute('data-status'),'INTERMISSION');
+  assert((await briefing.innerText()).includes('수동 전환 대기'));await page.screenshot({path:path.join(out,`guard-w4-${width}.png`)});
+  if(mobile)await page.locator('.guard-mobile-info-panel header button').click();
+  await page.clock.install();await page.clock.pauseAt(Date.now()+50);await page.locator('.zb-start-wave').click();
+  for(let i=0;i<180&&await shell.getAttribute('data-status')==='RUNNING';i++)await page.clock.runFor(1000);
+  assert.equal(await shell.getAttribute('data-wave'),'5');assert.equal(await shell.getAttribute('data-status'),'INTERMISSION');assert(await page.locator('.zb-start-wave').isDisabled());
+  if(mobile)await page.locator('.guard-mobile-intel-toggle').click();const transition=page.locator('[data-guard-transition]:visible').first();await transition.click();
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('psi-zero-day.guard.save.v2')).payload.activeRun.mapPhase==='SHIFTED');
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi-zero-day.guard.save.v2')).payload.activeRun);assert.equal(saved.redeploymentCredits,1);assert.equal(saved.tick,Number(await shell.getAttribute('data-tick')));
+  assert.equal(await page.evaluate(()=>SignalEncounterIntel.read().guard.mastery),'observed');assert.equal(await page.evaluate(()=>SignalEncounterIntel.read().watch.mastery),'unseen');
+  await page.screenshot({path:path.join(out,`guard-w5-${width}.png`)});
+  await page.clock.resume();await page.goto(base+'/signal-breaker-dev/index.html',{waitUntil:'domcontentloaded'});await page.locator('#heroStartBtn').click();await page.locator('.raid-tools-shell summary').click();await page.locator('#encounterIntelButton').click();await intel.waitFor();
+  assert((await intel.innerText()).includes('관측함'));assert.equal(await page.evaluate(()=>SignalEncounterIntel.read().breaker.mastery),'unseen');
+  await page.screenshot({path:path.join(out,`breaker-intel-${width}.png`)});assert.deepEqual(errors,[]);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  rows.push({width,height,base,actualEngineCheckpoint:'GD06 after W3, normal budget',watchReadyIntel:true,preparationTimerDoesNotAdvanceCombat:true,manualW5:true,oneRelocationCredit:true,sharedObservationOnly:true,errors});fs.writeFileSync(path.join(out,'trimode-browser.json'),JSON.stringify(rows,null,2));console.log(width,height,'PASS');await context.close();
+ }}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,3000))]);}
+})().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

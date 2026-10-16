@@ -1,4 +1,5 @@
 import type {Hazard} from '../domain/patrol-survivors';
+import {GANGFORM_INTERVENTION_RADIUS} from '../engine/survivors-boss-gangform';
 import {drawProp} from './survivors-equipment-art';
 
 /** Functional warning geometry uses the same locked zones as engine collision. */
@@ -11,14 +12,17 @@ export function drawGangformPattern(ctx:CanvasRenderingContext2D,h:Readonly<Haza
   ctx.strokeRect(g.anchorX-110-h.radius,g.anchorY-h.radius-14,220+h.radius*2,(h.radius+14)*2);
  }
  ctx.setLineDash([]);
- for(const z of g.zones){
+ for(const [index,z] of g.zones.entries()){
   if(z.hp<=0)continue;
   const weak=p.combatPhase==='weak_point',fall=g.step==='debris';
   ctx.fillStyle=weak?'rgba(34,211,238,.18)':fall?'rgba(239,68,68,.35)':'rgba(245,158,11,.18)';
   ctx.strokeStyle=weak?'#67e8f9':fall?'#f87171':'#fbbf24';
   ctx.beginPath();ctx.arc(z.x,z.y,z.radius,0,Math.PI*2);ctx.fill();ctx.stroke();
   if(weak){
-   drawProp(ctx,atlas,3,z.x,z.y,36);
+   const active=g.zones.find(zone=>zone.hp>0)===z;
+   ctx.save();ctx.globalAlpha=active?1:.35;ctx.setLineDash(active?[8,6]:[2,10]);
+   ctx.beginPath();ctx.arc(z.x,z.y,GANGFORM_INTERVENTION_RADIUS,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+   drawProp(ctx,atlas,3,z.x,z.y,36);ctx.fillStyle='#ecfeff';ctx.font='bold 22px sans-serif';ctx.textAlign='center';ctx.fillText(String(index+1),z.x,z.y-48);ctx.restore();
    ctx.fillStyle='#164e63';ctx.fillRect(z.x-24,z.y+43,48,4);ctx.fillStyle='#67e8f9';ctx.fillRect(z.x-24,z.y+43,48*z.hp/z.maxHp,4);
   }else{
    const elevation=g.step==='debris_warning'?70:70*g.remaining/.4;

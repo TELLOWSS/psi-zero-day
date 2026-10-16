@@ -1,0 +1,62 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "base": "http://127.0.0.1:4178",
+    "loaded": true,
+    "selectedDifficulty": true,
+    "journalOnlySeen": true,
+    "practice": true,
+    "pauseFrozen": true,
+    "monitorModes": true,
+    "supportSelection": true,
+    "realPointerCounter": true,
+    "noSaveRewards": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "base": "http://127.0.0.1:4178",
+    "loaded": true,
+    "selectedDifficulty": true,
+    "journalOnlySeen": true,
+    "practice": true,
+    "pauseFrozen": true,
+    "monitorModes": true,
+    "supportSelection": true,
+    "realPointerCounter": true,
+    "noSaveRewards": true,
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "base": "http://127.0.0.1:4178",
+    "loaded": true,
+    "selectedDifficulty": true,
+    "journalOnlySeen": true,
+    "practice": true,
+    "pauseFrozen": true,
+    "monitorModes": true,
+    "supportSelection": true,
+    "realPointerCounter": true,
+    "noSaveRewards": true,
+    "errors": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "base": "http://127.0.0.1:4178",
+    "loaded": true,
+    "selectedDifficulty": true,
+    "journalOnlySeen": true,
+    "practice": true,
+    "pauseFrozen": true,
+    "monitorModes": true,
+    "supportSelection": true,
+    "realPointerCounter": true,
+    "noSaveRewards": true,
+    "errors": []
+  }
+]

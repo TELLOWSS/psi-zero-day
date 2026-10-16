@@ -240,5 +240,18 @@
   "guard.mobile.select_equipment": "장비 선택",
   "guard.mobile.selection_actions": "배치·전투 조작",
   "guard.mobile.transition": "통로 전환",
-  "guard.mobile.reading": "전술 검토 · 시간 정지"
+  "guard.mobile.reading": "전술 검토 · 시간 정지",
+  "guard.raid.briefing": "경로 전환 브리핑",
+  "guard.raid.preview": "전환 후 경로 · 현재 타워 사거리",
+  "guard.raid.preparation": "4초 예고는 준비 화면의 안내입니다. 확인 후 직접 전환하세요. 준비 시간 동안 전투 시계는 멈춥니다.",
+  "guard.raid.ready": "경로 확인 · 수동 전환 대기",
+  "guard.raid.route": "진입로",
+  "guard.raid.leaks": "실제 누출 경로 · 최근 24건",
+  "guard.raid.first": "첫 유효 피해 접촉",
+  "guard.raid.noContact": "유효 접촉 없음",
+  "guard.raid.supports": "지원 사용 시점 · 최근 24건",
+  "guard.raid.partial": "기록 확장 이전 구간은 복원하지 않습니다.",
+  "guard.raid.levels": "단계별 실제 기여",
+  "guard.raid.clock": "전투 시각",
+  "guard.raid.tick": "틱"
 }

@@ -1,3 +1,4 @@
+import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import type {Hazard} from '../domain/patrol-survivors';
 import {safetyWalkway} from '../domain/survivors-safety-walkway';
 import workerRouteText from '../../content/localization/survivors-worker-route-ko.json';
@@ -1824,6 +1825,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           perfectEvents:[...engine.state.signatureMastery.perfectEvents],
           notice:engine.state.signatureMastery.notice?{...engine.state.signatureMastery.notice}:undefined,
         }:undefined);
+        if(engine.state.stageId==='stage_14'){
+          if(engine.state.hazards.some(h=>h.isStageBoss&&h.bossGameplay?.gangform))recordEncounterIntel('watch','stage_14','observed');
+          if(engine.state.stageBossNeutralized)recordEncounterIntel('watch','stage_14','verified');
+        }
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
@@ -3724,7 +3729,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab}>
-            <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
+            <div className="survivors-preflight-top"><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
               <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
@@ -4136,7 +4141,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && !showContainerShop && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title">일시 정지</h2>
+            <h2 className="survivors-modal-title">일시 정지</h2><button type="button" className="survivors-btn-secondary" onClick={openEncounterIntel}>{encounterIntelTitle}</button>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
             <details className="survivors-session-settings"><summary>{safeSupplyText.customization}</summary>
               <SurvivorsDisplaySettings settings={displaySettings} onChange={changeDisplaySettings} saved={displaySaved}/><SurvivorsFeelSettings value={feelSettings} onChange={setFeelSettings}/>
