@@ -73,7 +73,7 @@
   font-size:15px!important;font-weight:800!important;line-height:1.5!important;opacity:1!important;cursor:pointer!important;
 }
 #root main.game-frame[data-story-player="cinematic"] .continue-button kbd{color:inherit!important}
-.story-reading-position{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;color:#cedbdc;font-size:12px}.story-reading-position button{min-height:32px;padding:4px 10px;border:1px solid #607d89;border-radius:6px;background:#19313d;color:#eef3e8;cursor:pointer}.story-reading-position button:disabled{visibility:hidden}
+.story-reading-position{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;color:#cedbdc;font-size:12px}.story-reading-position button{min-height:44px;padding:4px 10px;border:1px solid #607d89;border-radius:6px;background:#19313d;color:#eef3e8;cursor:pointer}.story-reading-position button:disabled{visibility:hidden}
 #root main.game-frame[data-story-player="cinematic"] .choice-content {
   display:flex!important;flex:1!important;flex-direction:column!important;gap:12px!important;min-height:0!important;overflow:hidden!important;
 }
@@ -91,10 +91,11 @@
 .story-background-error{position:absolute;z-index:50;left:16px;top:25%;max-width:min(360px,calc(100% - 32px));padding:16px;box-sizing:border-box;background:#142b35f5;border:1px solid #edca80;border-radius:10px;color:#fff2d4;pointer-events:auto!important}.story-background-error p{font-size:14px;line-height:1.7}.story-background-error button{min-height:44px;margin-top:12px;padding:8px 14px;background:#efd192;color:#12212b;border:0;border-radius:6px;cursor:pointer;pointer-events:auto!important}
 #root main.game-frame[data-story-player="cinematic"] .game-footer{position:absolute!important;inset:auto 0 0!important;height:28px!important;min-height:0!important;padding:4px 16px!important;box-sizing:border-box;background:#0b1b24!important;color:#cdd9da!important;z-index:66!important}
 #root main.game-frame[data-story-player="cinematic"] .story-context-panel{position:absolute!important;top:122px!important;right:12px!important;z-index:62!important;font-size:12px}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel[open]{z-index:90!important}
 @media(max-width:600px){
   .story-current-scene{top:68px;left:12px;max-width:calc(100% - 240px);padding:6px 8px}.story-current-scene strong{font-size:12px}.story-current-scene span{font-size:10px}
   #root main.game-frame[data-story-player="cinematic"] .game-header .time-marker,#root main.game-frame[data-story-player="cinematic"] .header-episode{display:none!important}
-  #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) .play-panel{padding:12px!important;height:max(310px,40dvh)!important}
+  #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) .play-panel{padding:12px!important;height:max(330px,40dvh)!important}
   #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) .play-panel .dialogue-text{font-size:calc(1rem * var(--story-font-scale))!important;line-height:1.75!important}
   #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) .play-panel:has(.choice-content){height:max(310px,49dvh)!important}
   .story-reading-guide{gap:3px}.story-reading-guide strong,.story-reading-guide span{width:100%}
@@ -115,5 +116,5 @@
   #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) .play-panel .continue-button{min-height:44px!important;padding:6px 14px!important}
   #root main.game-frame[data-story-player="cinematic"] .story-context-panel{top:96px!important}
   #root main.game-frame[data-story-player="cinematic"] .story-reading-position{position:absolute;bottom:18px;left:14px;right:245px;z-index:1;font-size:10px}
-  #root main.game-frame[data-story-player="cinematic"] .story-reading-position button{min-height:32px}
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-position button{min-height:44px}
 }
