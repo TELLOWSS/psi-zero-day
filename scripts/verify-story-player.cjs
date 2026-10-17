@@ -1,7 +1,8 @@
 // Automated usability regression, not a manual narrative playtest.
 const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),{chromium}=require('playwright');
 const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4178',out='artifacts/story-player';fs.mkdirSync(out,{recursive:true});
-const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_09_evening']);
+const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_08g_tbm_field_gap','e01_08o_record_pressure','e01_09_evening']);
+const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_08g_tbm_field_gap','e01_08o_record_pressure','e01_09_evening']);
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];let currentPage;
  try{for(const [width,height,policy]of [[390,844,'first'],[844,390,'last'],[1440,900,'first']]){
@@ -14,6 +15,7 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
    await page.locator('[data-story-player="cinematic"]').waitFor();
    const scene=page.locator('.episode-immersive-scene'),event=await scene.getAttribute('data-event'),node=await scene.getAttribute('data-node');seen.add(event);
    await page.waitForFunction(()=>{const image=document.querySelector('.episode-immersive-background');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0&&Number(getComputedStyle(image).opacity)>.95;},{},{timeout:15000});
+   if(cinemaEvents.has(event))a(await page.locator('.episode-immersive-background').evaluate(image=>image.currentSrc.includes('-cinema.webp')&&image.naturalWidth===1920&&image.naturalHeight===1080),'new cinematic plate missing or fallback used: '+event);
    const area=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});a(area.width>area.viewportWidth*.8&&area.height>area.viewportHeight*.5,'scene has no readable world area: '+event+' '+JSON.stringify(area));
    const text=page.locator('.dialogue-text');
    if(await text.count())a(await text.evaluate(el=>{for(let e=el;e&&e!==document.body;e=e.parentElement)if(Number(getComputedStyle(e).opacity)<.95)return false;return getComputedStyle(el).color==='rgb(245, 243, 233)';}),'dialogue dimmed: '+event);
@@ -24,7 +26,13 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();a(box&&box.height>=44&&box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1,'primary action clipped: '+event);
    const hit=await button.evaluate(el=>{const r=el.getBoundingClientRect(),target=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return target===el||el.contains(target);});a(hit,'primary action covered: '+event);
    trace.push({event,node,kind:count?'choice':'continue',text:await button.innerText(),dialogue:await text.count()?await text.innerText():null,backgroundVisible:true,buttonReachable:true});
-   if(capture.has(event)&&!screens.has(event)){await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);}
+   if(capture.has(event)&&!screens.has(event)){
+    await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);
+    const composition=await page.evaluate(()=>{const dock=document.querySelector('.play-panel').getBoundingClientRect();return [...document.querySelectorAll('.episode-immersive-character')].map(actor=>{const box=actor.getBoundingClientRect(),image=actor.querySelector('img');return {character:actor.dataset.character,top:box.top,bottom:box.bottom,height:box.height,dockTop:dock.top,decoded:!!image&&image.complete&&image.naturalWidth>0};});});
+    a(composition.length>0&&composition.every(actor=>actor.decoded&&actor.height>70&&actor.top+Math.min(60,actor.height*.3)<actor.dockTop),'cast has no visible head region above reading dock: '+event+' '+JSON.stringify(composition));
+    fs.writeFileSync(path.join(out,`${width}-${event}-composition.json`),JSON.stringify(composition,null,2));
+    await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);
+   }
    if(count&&!screens.has('decision')){await page.screenshot({path:path.join(out,`${width}-decision.png`)});screens.add('decision');}
    await button.click({timeout:3000});
    // Allow React to commit the next reader state; no voice skip and no DOM click shortcut.
