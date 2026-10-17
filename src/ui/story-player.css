@@ -691,3 +691,10 @@
 /* The earlier optional rotation helper covers half the scene on old cached bundles.
    New builds recommend landscape in the home tile, not in-play popups. */
 #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
+
+
+/* Director screenshot follow-up: a sole protagonist must never resemble a ghost. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character{
+  opacity:1!important;visibility:visible!important;
+  filter:drop-shadow(0 14px 15px rgba(1,10,16,.84))!important;
+}

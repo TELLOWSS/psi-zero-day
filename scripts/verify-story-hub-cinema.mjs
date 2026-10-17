@@ -31,6 +31,12 @@ try{
    await page.locator('button.is-story-entry').click();
    await page.locator('.episode-cold-open-cta').click();
    const story=page.locator('[data-story-player="cinematic"]');await story.waitFor();
+   // A "screen rendered" without its decoded scene plate is NOT a valid screenshot.
+   await page.waitForFunction(()=>{
+     const bg=document.querySelector('.episode-immersive-background');
+     return bg instanceof HTMLImageElement&&bg.complete&&bg.naturalWidth>0&&
+       Number(getComputedStyle(bg).opacity)>.95;
+   },null,{timeout:20000});
    const look=await page.evaluate(()=>{
      const box=s=>document.querySelector(s)?.getBoundingClientRect();
      const panel=box('.play-panel'),text=document.querySelector('.dialogue-text');
