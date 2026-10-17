@@ -19,6 +19,7 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    if(cinemaEvents.has(event))a(await page.locator('.episode-immersive-background').evaluate(image=>image.currentSrc.includes('-cinema.webp')&&image.naturalWidth===1920&&image.naturalHeight===1080),'new cinematic plate missing or fallback used: '+event);
    const area=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});a(area.width>area.viewportWidth*.8&&area.height>area.viewportHeight*.5,'scene has no readable world area: '+event+' '+JSON.stringify(area));
    const text=page.locator('.dialogue-text');
+   if(await text.count())a(!/^\\d{1,2}:\\d{2}\\.$/u.test((await text.innerText()).trim()),'bare timestamp node shown without contextual scene title: '+event);
    if(await text.count())a(await text.evaluate(el=>{for(let e=el;e&&e!==document.body;e=e.parentElement)if(Number(getComputedStyle(e).opacity)<.95)return false;return getComputedStyle(el).color==='rgb(245, 243, 233)';}),'dialogue dimmed: '+event);
    // Speaker/reader controls may be temporarily suppressed during fully directed
    // presentation beats. The opening-mode toggle and reading action are checked
@@ -85,7 +86,17 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
   const ep2=page.locator('.story-chapter-card.is-next');
   a(await ep2.isVisible(),'completed Episode 01 did not unlock next chapter');
   await ep2.click();
-  await page.locator('[data-episode02-stage="0"]').waitFor();
+  const ep2Root=page.locator('[data-episode02-stage="0"]');
+  await ep2Root.waitFor({state:'attached',timeout:15000});
+  const ep2Visibility=await ep2Root.evaluate(el=>{
+   const rect=el.getBoundingClientRect(),styles=getComputedStyle(el);
+   return {display:styles.display,visibility:styles.visibility,opacity:styles.opacity,
+     width:rect.width,height:rect.height,scrollWidth:el.scrollWidth,
+     parentDisplay:getComputedStyle(el.parentElement).display,htmlClass:el.parentElement?.className};
+  });
+  await page.screenshot({path:path.join(out,width+'-episode02-visibility.png')});
+  a(ep2Visibility.display!=='none'&&ep2Visibility.visibility!=='hidden'&&ep2Visibility.width>width*.6&&ep2Visibility.height>height*.6,
+     'EP02 must actually occupy the viewport after internal chapter navigation '+JSON.stringify(ep2Visibility));
   await page.screenshot({path:path.join(out,width+'-episode02-within-story.png')});
   rows.push({width,height,policy,events:seen.size,errors,trace});fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({base,scope:'automated visible-background and reachable-action regression; not manual narrative review',rows},null,2));console.log('PASS story player',width,height,seen.size,'events with visible backgrounds and reachable controls');await context.close();
  }}catch(error){if(currentPage&&!currentPage.isClosed())await currentPage.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}finally{await browser.close();}

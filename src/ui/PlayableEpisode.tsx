@@ -736,6 +736,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
               voicePlaying={directedCampaign && voiceLocked}
               pageDialogue={directedCampaign}
               cinematicDialogue={directedCampaign}
+              sceneTitle={snapshot.eventTitle}
               onReadAdvance={directedCampaign?stopVoice:undefined}
               dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}

@@ -124,3 +124,11 @@ it('keeps the timestamp attached to the first spoken/narrated beat rather than a
  expect(line).toMatch(/^\d{1,2}:\d{2}\./);
  expect(line.length).toBeGreaterThan(10);
 });
+
+it('never shows a standalone timestamp without its authored scene context',()=>{
+  const session=EpisodeSession.directed();session.start(0);
+  act(()=>root.render(<PlayableEpisode session={session}/>));
+  click(host.querySelector('.episode-cold-open-cta'));
+  const line=host.querySelector('.dialogue-text')?.textContent||'';
+  expect(line.trim()).not.toMatch(/^\\d{1,2}:\\d{2}\\.$/);
+});
