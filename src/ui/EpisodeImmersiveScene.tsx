@@ -364,6 +364,7 @@ export function EpisodeImmersiveScene({
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
         data-speaker={speakerId === characterId || undefined}
+        data-framed-subject={scene.subject_character_id === characterId || undefined}
         data-character={characterId}
         data-relationship-cue={relationshipCue}
         data-blocking-side={blocking?.side}

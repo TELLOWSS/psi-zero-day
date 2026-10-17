@@ -561,3 +561,18 @@
 @media(prefers-reduced-motion:reduce){
  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{transition:none!important}
 }
+
+
+/* Identify the photographed protagonist even during silent RESULT narration. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-framed-subject="true"]{
+  opacity:1!important;z-index:24!important;
+  filter:drop-shadow(0 15px 17px #06141f99)!important;
+}
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="5"] .episode-immersive-character[data-character="player"]:not([data-speaker="true"]):not([data-framed-subject="true"]){
+    opacity:.23!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-framed-subject="true"]{
+    transform:translateY(5%) scale(1.03)!important;
+  }
+}
