@@ -42,6 +42,16 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
     await toggle.click();
     a.equal(await mode.getAttribute('data-story-reading-mode'),'cinema','cinema mode did not restore');
     a.equal(await scene.getAttribute('data-node'),nodeBefore,'mode toggle advanced the engine');
+    const peek=page.locator('.story-scene-peek');
+    await peek.click();
+    a.equal(await mode.getAttribute('data-story-focus'),'true','scene focus did not reveal the whole frame');
+    a(await page.locator('.play-panel').evaluate(el=>getComputedStyle(el).visibility==='hidden'),'subtitle still covers focused scene');
+    a.equal(await page.locator('.dialogue-text').textContent(),textBefore,'scene focus changed the story page');
+    const focusWorld=await page.locator('.episode-immersive-scene').boundingBox();
+    a(focusWorld&&focusWorld.y<=1&&focusWorld.height>=height-1,'focus mode did not fill the screen: '+JSON.stringify(focusWorld));
+    await peek.click();
+    a.equal(await mode.getAttribute('data-story-focus'),null,'scene focus did not restore subtitles');
+    a.equal(await scene.getAttribute('data-node'),nodeBefore,'scene focus mutated story engine');
     a.equal(await page.locator('.dialogue-text').innerText(),textBefore,'mode toggle skipped authored text');
    }
    a.equal(await page.locator('.strategy-shell').count(),0,'story reader unexpectedly requires a tactical map');

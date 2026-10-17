@@ -85,3 +85,21 @@ it('starts in cinematic subtitle mode and expands reading without advancing or r
   expect(host.querySelector('.dialogue-text')?.textContent).toBe(page);
   expect(session.getSnapshot()).toBe(before);
 });
+
+
+it('unobstructed scene focus preserves the current page and engine, restores on Escape',()=>{
+  const session=EpisodeSession.directed();session.start(0);
+  act(()=>root.render(<PlayableEpisode session={session}/>));
+  click(host.querySelector('.episode-cold-open-cta'));
+  const before=session.getSnapshot(), text=host.querySelector('.dialogue-text')!.textContent;
+  const button=host.querySelector<HTMLButtonElement>('.story-scene-peek')!;
+  expect(button).not.toBeNull();
+  click(button);
+  expect(host.querySelector('[data-story-focus=true]')).not.toBeNull();
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(text);
+  expect(session.getSnapshot()).toBe(before);
+  act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true})));
+  expect(host.querySelector('[data-story-focus=true]')).toBeNull();
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(text);
+  expect(session.getSnapshot()).toBe(before);
+});

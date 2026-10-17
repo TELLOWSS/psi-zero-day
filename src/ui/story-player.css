@@ -322,3 +322,42 @@
   #root main.game-frame[data-story-player="cinematic"] .play-panel,
   #root main.game-frame[data-story-player="cinematic"] .story-view-toggle{transition:none!important}
 }
+
+
+/* Presentation-only scene focus: show the entire world, with no save/engine mutation. */
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+  position:absolute!important;bottom:calc(var(--story-dock-height) + 40px)!important;
+  right:max(14px,env(safe-area-inset-right))!important;z-index:97!important;
+  min-height:44px!important;min-width:94px!important;padding:8px 12px!important;
+  border:1px solid #b3c8c2aa!important;border-radius:999px!important;
+  background:#081f2bba!important;color:#fff1cc!important;
+  font:inherit!important;font-size:12px!important;font-weight:750!important;
+  letter-spacing:.01em;cursor:pointer;box-shadow:0 3px 16px #0005;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:focus-visible{
+  outline:3px solid #ffe2a0!important;outline-offset:2px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+  bottom:calc(36px + env(safe-area-inset-bottom))!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .episode-immersive-scene{
+  inset:0!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .play-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-header,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-footer,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-current-scene,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-context-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-reader-open,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-manual-open{
+  opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+    bottom:calc(var(--story-dock-height) + 10px)!important;
+    padding:5px 10px!important;min-width:88px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+    bottom:calc(32px + env(safe-area-inset-bottom))!important;
+  }
+}
