@@ -21,6 +21,24 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    const text=page.locator('.dialogue-text');
    if(await text.count())a(await text.evaluate(el=>{for(let e=el;e&&e!==document.body;e=e.parentElement)if(Number(getComputedStyle(e).opacity)<.95)return false;return getComputedStyle(el).color==='rgb(245, 243, 233)';}),'dialogue dimmed: '+event);
    a((await page.locator('.story-reading-guide').innerText()).trim().length>8,'no next-action guidance');
+   if(step===0){
+    const mode=page.locator('[data-story-player="cinematic"]');
+    a.equal(await mode.getAttribute('data-story-reading-mode'),'cinema','default must be cinematic subtitles');
+    const textBefore=await page.locator('.dialogue-text').innerText();
+    const nodeBefore=await scene.getAttribute('data-node');
+    const compact=await page.locator('.play-panel').boundingBox();
+    a(compact&&compact.height<= (height<=440?105:130),'subtitle dock is not compact: '+JSON.stringify(compact));
+    const toggle=page.locator('.story-view-toggle');
+    await toggle.click();
+    a.equal(await mode.getAttribute('data-story-reading-mode'),'read','read mode not activated');
+    const expanded=await page.locator('.play-panel').boundingBox();
+    a(expanded&&expanded.height>compact.height,'read mode did not expand the subtitle dock');
+    a.equal(await page.locator('.dialogue-text').innerText(),textBefore,'read mode changed unread dialogue');
+    await toggle.click();
+    a.equal(await mode.getAttribute('data-story-reading-mode'),'cinema','cinema mode did not restore');
+    a.equal(await scene.getAttribute('data-node'),nodeBefore,'mode toggle advanced the engine');
+    a.equal(await page.locator('.dialogue-text').innerText(),textBefore,'mode toggle skipped authored text');
+   }
    a.equal(await page.locator('.strategy-shell').count(),0,'story reader unexpectedly requires a tactical map');
    const choices=page.locator('.choice-panel button:not(:disabled)'),count=await choices.count();
    const button=count?choices.nth(policy==='last'?count-1:0):page.locator('.continue-button');
