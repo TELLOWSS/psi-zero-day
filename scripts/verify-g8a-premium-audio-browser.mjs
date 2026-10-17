@@ -191,8 +191,16 @@ async function enterPersistedRun(cdp,name){
   await trustedClick(cdp,"document.querySelector('button.is-defense-entry:not(:disabled)')",'GUARD hub entry');
   await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=\"guard-home\"]'))");
   await trustedClick(cdp,"document.querySelector('[data-defense-screen=\"guard-home\"] footer button')",'training practice entry');
-  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=save-resume]'))");
-  await trustedClick(cdp,"document.querySelector('[data-defense-screen=save-resume] .zb-save-actions button.is-primary')",'resume saved standard training');
+  // A valid saved legacy scenario may differ from the now-default training-ramp-v1.
+  // Preserve the fixture's original scenario via the product's conflict recovery;
+  // never discard or replace an existing run to satisfy an audio test.
+  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=save-resume], [data-defense-screen=requested-scenario-conflict]'))");
+  const hasConflict=await evaluate(cdp,"Boolean(document.querySelector('[data-defense-screen=requested-scenario-conflict]'))");
+  if(hasConflict){
+    await trustedClick(cdp,"[...document.querySelectorAll('[data-defense-screen=requested-scenario-conflict] button')].find(b => b.textContent.includes('기존 훈련 이어하기'))",'resume original saved scenario');
+  }else{
+    await trustedClick(cdp,"document.querySelector('[data-defense-screen=save-resume] .zb-save-actions button.is-primary')",'resume saved standard training');
+  }
   await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
 }
 async function armByResume(cdp){
