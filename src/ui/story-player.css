@@ -3,6 +3,7 @@
 #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) {
   --ink:#f5f3e9;
   --paper:#101e27;
+  --story-dock-height:clamp(220px,27dvh,260px);
   display:block!important;
   width:100%!important;
   height:100dvh!important;
@@ -10,6 +11,50 @@
   aspect-ratio:auto!important;
   color:#f5f3e9;
   background:#10202a;
+}
+/* Keep faces and the worksite above the reading dock. Older scene-specific
+   blocking was authored for a different panel geometry. */
+#root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:clamp(260px,31dvh,340px)}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+  inset:72px 0 calc(var(--story-dock-height) - 54px)!important;
+  width:100%!important;height:auto!important;transform:none!important;z-index:15!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+  top:0!important;bottom:0!important;left:auto!important;right:auto!important;
+  width:26%!important;height:100%!important;max-height:none!important;min-height:0!important;
+  transform:none!important;opacity:.86!important;filter:drop-shadow(0 12px 16px #07141d55)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:5%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:27%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:25%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:3%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-5{left:38%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{opacity:1!important;z-index:20!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character img{
+  width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;
+  transform:none!important;opacity:1!important;filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-background{
+  object-position:50% 44%!important;transform:none!important;filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-atmosphere{opacity:.22!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-grade{opacity:.25!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-props{opacity:.35!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-speaker-tag,
+#root main.game-frame[data-story-player="cinematic"] .episode-scene-minimap{display:none!important}
+@media(max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"]{--story-dock-height:max(280px,34dvh)}
+  #root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:max(310px,49dvh)}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:88px 0 calc(var(--story-dock-height) - 40px)!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{width:42%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:-7%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:15%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:13%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:-9%!important}
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"],#root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:60dvh}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:0 0 auto!important;height:130px!important}
 }
 #root main.game-frame[data-story-player="cinematic"] .game-header {
   position:absolute!important;inset:0 0 auto!important;height:56px!important;
@@ -118,4 +163,238 @@
   #root main.game-frame[data-story-player="cinematic"] .story-context-panel{top:96px!important}
   #root main.game-frame[data-story-player="cinematic"] .story-reading-position{position:absolute;bottom:18px;left:14px;right:245px;z-index:1;font-size:10px}
   #root main.game-frame[data-story-player="cinematic"] .story-reading-position button{min-height:44px}
+}
+
+
+/* CINEMA / READ: subtitles are a temporary overlay, not a permanent dialogue wall.
+   Choice moments intentionally expand, and no script auto-advances dialogue or choices. */
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]{
+  --story-dock-height:112px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]{
+  --story-dock-height:clamp(190px,24dvh,260px);
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"]{
+  --story-dock-height:clamp(190px,29dvh,290px);
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide{
+  display:flex;align-items:center;flex-wrap:nowrap;min-height:44px;gap:8px;position:relative;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide strong{
+  flex:0 1 auto;min-width:0;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide span{
+  flex:1 1 auto;min-width:0;text-align:right;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-view-toggle{
+  flex:0 0 auto;min-height:44px;padding:7px 12px;border:1px solid #c4d4d49a;
+  border-radius:999px;background:#09202bbc;color:#f9ebc6;
+  font:inherit;font-size:12px;font-weight:750;white-space:nowrap;cursor:pointer;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-view-toggle:focus-visible{
+  outline:3px solid #ffe29e;outline-offset:2px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+  left:max(0px,env(safe-area-inset-left))!important;right:max(0px,env(safe-area-inset-right))!important;
+  bottom:28px!important;top:auto!important;width:auto!important;
+  height:112px!important;max-height:calc(100dvh - 78px)!important;min-height:0!important;
+  margin:0!important;padding:7px 12px!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:linear-gradient(0deg,rgba(3,12,19,.93) 0%,rgba(6,18,27,.68) 59%,rgba(8,23,32,0) 100%)!important;
+  backdrop-filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide{
+  height:44px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide span{display:none!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide strong{
+  max-width:calc(100% - 112px);font-size:13px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-view-toggle{
+  margin-left:auto;background:#081923a9;border-color:#93b3b966;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .presentation-area{
+  gap:0!important;overflow:visible!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-content{
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  gap:10px!important;min-height:0!important;max-height:none!important;
+  overflow:visible!important;flex:1 1 auto!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+  flex:1 1 0!important;width:0!important;max-width:none!important;
+  height:auto!important;max-height:50px!important;min-height:0!important;
+  margin:0!important;padding:0 2px!important;overflow:auto!important;
+  font-size:calc(15px * var(--story-font-scale))!important;
+  line-height:1.5!important;text-align:center!important;
+  text-shadow:0 2px 5px #000,0 0 14px #000a;
+  scrollbar-width:thin;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .continue-button{
+  flex:0 0 46px!important;align-self:center!important;
+  width:46px!important;min-width:46px!important;max-width:46px!important;
+  height:46px!important;min-height:46px!important;padding:0!important;margin:0!important;
+  gap:0!important;border-radius:50%!important;
+  font-size:0!important;background:#f1dbaed9!important;
+  box-shadow:0 2px 12px #0006!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .continue-button kbd{display:none!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .continue-button span{
+  font-size:20px!important;line-height:1!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-position{
+  position:absolute!important;top:7px!important;right:120px!important;bottom:auto!important;left:auto!important;
+  width:auto!important;min-height:44px!important;gap:5px!important;z-index:2;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-position button{
+  border:0!important;background:#0c2635a8!important;font-size:11px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+  height:clamp(190px,24dvh,260px)!important;
+  max-height:calc(100dvh - 100px)!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+  height:clamp(190px,29dvh,290px)!important;
+  max-height:calc(100dvh - 90px)!important;
+  padding:10px 16px!important;background:#0c1d27ec!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel{
+  gap:7px!important;min-height:0!important;align-content:start!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel button{
+  min-height:54px!important;padding:8px 12px!important;
+  background:#173544e8!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-content{gap:6px!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"] .dialogue-text{
+  overflow:auto!important;scrollbar-width:thin;
+}
+@media(max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:112px!important;max-height:calc(100dvh - 74px)!important;padding:7px 10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .play-panel .dialogue-text{
+    font-size:calc(14px * var(--story-font-scale))!important;line-height:1.45!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+    height:clamp(220px,31dvh,300px)!important;max-height:calc(100dvh - 110px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+    height:clamp(188px,25dvh,240px)!important;max-height:calc(100dvh - 105px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-guide span{
+    display:none!important;
+  }
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]{
+    --story-dock-height:96px;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]{
+    --story-dock-height:clamp(132px,43dvh,174px);
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"]{
+    --story-dock-height:clamp(148px,45dvh,190px);
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:96px!important;max-height:calc(100dvh - 72px)!important;
+    padding:3px 12px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+    height:clamp(132px,43dvh,174px)!important;max-height:calc(100dvh - 92px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+    height:clamp(148px,45dvh,190px)!important;max-height:calc(100dvh - 84px)!important;
+    padding:6px 12px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .play-panel .dialogue-text{
+    max-height:41px!important;font-size:calc(13px * var(--story-font-scale))!important;line-height:1.45!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-guide strong{font-size:12px!important}
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel button{
+    min-height:46px!important;padding:5px 8px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-content>h2{
+    font-size:14px!important;line-height:1.3!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #root main.game-frame[data-story-player="cinematic"] .play-panel,
+  #root main.game-frame[data-story-player="cinematic"] .story-view-toggle{transition:none!important}
+}
+
+
+/* Presentation-only scene focus: show the entire world, with no save/engine mutation. */
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+  position:absolute!important;bottom:calc(var(--story-dock-height) + 40px)!important;
+  right:max(14px,env(safe-area-inset-right))!important;z-index:97!important;
+  min-height:44px!important;min-width:94px!important;padding:8px 12px!important;
+  border:1px solid #b3c8c2aa!important;border-radius:999px!important;
+  background:#081f2bba!important;color:#fff1cc!important;
+  font:inherit!important;font-size:12px!important;font-weight:750!important;
+  letter-spacing:.01em;cursor:pointer;box-shadow:0 3px 16px #0005;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:focus-visible{
+  outline:3px solid #ffe2a0!important;outline-offset:2px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+  bottom:calc(36px + env(safe-area-inset-bottom))!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .episode-immersive-scene{
+  inset:0!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .play-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-header,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-footer,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-current-scene,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-context-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-reader-open,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-manual-open{
+  opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+    bottom:calc(var(--story-dock-height) + 10px)!important;
+    padding:5px 10px!important;min-width:88px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+    bottom:calc(32px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+
+/* Camera grammar: landscape is encouraged without locking orientation; portrait is an authored frame. */
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint {
+  position:absolute!important;top:114px!important;left:50%!important;transform:translateX(-50%)!important;
+  z-index:78!important;box-sizing:border-box;width:min(460px,calc(100vw - 24px))!important;
+  display:none;align-items:center;gap:10px;padding:8px 10px;
+  border:1px solid #bfcbb867;border-radius:12px;background:#071b26d9;color:#eaf0e9;
+  box-shadow:0 5px 20px #0006;font-size:12px;line-height:1.55;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint b{color:#f0d18e}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint button{
+  border:1px solid #e2cfaa88;border-radius:8px;background:#163342;color:#f9edda;
+  min-height:44px;min-width:92px;padding:5px 8px;font:inherit;font-weight:750;cursor:pointer;
+}
+@media(orientation:portrait){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:flex}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-background{
+    object-fit:cover!important;object-position:52% 35%!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:25;
+    background:linear-gradient(90deg,rgba(3,13,19,.22),transparent 28%,transparent 72%,rgba(3,13,19,.22));
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:65px 0 calc(var(--story-dock-height) - 45px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+    background:linear-gradient(90deg,#091c2cca,#091c2c48)!important;
+  }
+}
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{top:106px!important}
+}
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
 }

@@ -104,6 +104,10 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   const [voiceLocked, setVoiceLocked] = useState(false);
   const [voiceSubtitle, setVoiceSubtitle] = useState<string | null>(null);
   const [readerSettings,setReaderSettings]=useState(loadStoryReader);
+  // Presentation-only preference. Toggling this never dispatches an engine event.
+  const [storyViewMode,setStoryViewMode]=useState<'cinema'|'read'>('cinema');
+  const [sceneFocus,setSceneFocus]=useState(false);
+  const [orientationHintDismissed,setOrientationHintDismissed]=useState(false);
   const [readerPaused,setReaderPaused]=useState(false);
   const [readerSaved,setReaderSaved]=useState(true);
   const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
@@ -115,6 +119,16 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   const { playUiCue, playPresentationCue, playVoiceCue, stopVoice, cancelPresentation } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape});
   const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
   useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
+  // Cinematic hold: screen-only inspection; reset automatically on every engine step.
+  useEffect(()=>{setSceneFocus(false);},[snapshot.revision]);
+  useEffect(()=>{
+    if(!sceneFocus)return;
+    const dismiss=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){event.preventDefault();setSceneFocus(false);}
+    };
+    window.addEventListener('keydown',dismiss);
+    return ()=>window.removeEventListener('keydown',dismiss);
+  },[sceneFocus]);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -538,8 +552,19 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
     data-story-player={directedCampaign && isPlaying ? 'cinematic' : undefined}
+    data-story-reading-mode={directedCampaign && isPlaying ? storyViewMode : undefined}
+    data-story-focus={directedCampaign && isPlaying && sceneFocus && (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ? 'true' : undefined}
+    data-story-decision={directedCampaign && presentation?.type === 'SHOW_CHOICE' ? 'true' : undefined}
   >
     <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
+    {directedCampaign&&isPlaying&&!strategyActive&&!showColdOpen&&!orientationHintDismissed?<aside className="story-orientation-hint" aria-label="화면 방향 선택 안내"><span><b>더 넓은 시네마 화면</b> · 가로로 돌리면 현장과 인물을 더 넓게 볼 수 있습니다. 세로 화면도 그대로 지원합니다.</span><button type="button" onClick={()=>setOrientationHintDismissed(true)}>이대로 감상</button></aside>:null}
+    {directedCampaign && isPlaying && !strategyActive &&
+      (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ?
+      <button className="story-scene-peek" type="button" aria-pressed={sceneFocus}
+        aria-label={sceneFocus?'자막과 게임 조작 복원':'대사 위치를 유지하고 장면 전체 감상'}
+        onClick={()=>setSceneFocus(value=>!value)}>
+        {sceneFocus?'자막 복원':'장면 감상'}
+      </button>:null}
     {(!readerSaved||saveHealth!=='ok')&&<p className="story-save-warning" role="status">{t(saveHealth==='preserved'?'story.reader.preserved':'story.reader.unsaved')}</p>}
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
@@ -644,9 +669,15 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
-          {directedCampaign ? <div className="story-reading-guide" role="status">
+          {directedCampaign ? <div className="story-reading-guide">
             <strong>{person ? formatCharacterIdentity(person) : t('ui.narration')}</strong>
             <span>{t(presentation?.type === 'SHOW_CHOICE' ? 'story.player.choose' : voiceLocked ? 'story.player.listening' : 'story.player.read')}</span>
+            <button className="story-view-toggle" type="button"
+              aria-pressed={storyViewMode === 'read'}
+              aria-label={storyViewMode === 'cinema' ? '전체 읽기 모드로 전환' : '영화 자막 모드로 전환'}
+              onClick={() => setStoryViewMode(mode => mode === 'cinema' ? 'read' : 'cinema')}>
+              {storyViewMode === 'cinema' ? '읽기 확대' : '영화 자막'}
+            </button>
           </div> : null}
           {voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
           {directedCampaign&&voiceLocked&&voiceSubtitle?<p className="story-voice-caption" aria-live="off">{voiceSubtitle}</p>:null}
@@ -706,6 +737,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
               interactionLocked={voiceLocked && !directedCampaign}
               voicePlaying={directedCampaign && voiceLocked}
               pageDialogue={directedCampaign}
+              cinematicDialogue={directedCampaign}
               onReadAdvance={directedCampaign?stopVoice:undefined}
               dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}

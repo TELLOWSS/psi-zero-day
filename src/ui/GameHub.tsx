@@ -44,6 +44,8 @@ import { browserLocalStoragePort } from '../platform/browser-storage';
 type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
+const loadEpisode02Cinema = () => import('./Episode02Cinema');
+const Episode02Cinema = lazy(() => loadEpisode02Cinema().then(module=>({default:module.Episode02Cinema})));
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
 const loadDefenseGame = () => import('./DefenseGame');
@@ -160,6 +162,7 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' | 
 /** Navigation is presentation state; all run mutations remain in EpisodeSession/CoreEngine. */
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
+  const [inEpisode02,setInEpisode02]=useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
   const [survivorsLoading, setSurvivorsLoading] = useState(false);
@@ -260,6 +263,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     <DefenseGame key={defenseScenarioId??"legacy"} session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} onPractice={()=>openDefense(zeroBreachContent.scenario.id)} />
   </Suspense>;
 
+  if(inEpisode02 && (snapshot.phase==='complete'||snapshot.state?.flags.episode01_completed===true))return <Suspense fallback={<GameplayChunkFallback />}>
+    <Episode02Cinema onExit={()=>setInEpisode02(false)} carryover={snapshot.state?.flags??{}} />
+  </Suspense>;
+
   if (loading) return <CinematicLoadingScreen
     backgroundUri={cinematicBackground}
     preloadUris={preloadUris}
@@ -297,15 +304,17 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   return <GameHub
     session={session}
     onPlay={play}
+    onEpisode02={()=>setInEpisode02(true)}
     onNewGame={newGame}
     onDefense={scenarioId => openDefense(scenarioId ?? null)}
     onSurvivors={() => setSurvivorsLoading(true)}
   />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
+export function GameHub({ session, onPlay, onEpisode02, onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
+  onEpisode02?: () => void;
   onNewGame: () => void;
   onDefense?: (scenarioId?: string | null) => void;
   onSurvivors?: () => void;
@@ -449,6 +458,18 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <em>{snapshot.completed}/{snapshot.total}</em>
           <b>›</b>
         </button>
+        {onEpisode02 ? <button className="commercial-title-action is-episode02-entry has-mode-art"
+          type="button" disabled={snapshot.phase!=='complete'&&snapshot.state?.flags.episode01_completed!==true}
+          aria-label={snapshot.phase==='complete'||snapshot.state?.flags.episode01_completed===true?'에피소드 2 첫 양중 시네마틱 플레이 시작':'에피소드 1 완료 후 에피소드 2 잠금 해제'}
+          onClick={onEpisode02}>
+          <VisualImage uri={episode01BackgroundUri(resolve)} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <span className="commercial-title-action-shade" aria-hidden="true" />
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">STORY / EPISODE 02 · OPENING SLICE</em>
+            <strong className="commercial-title-mode-title">첫 양중 — 도면과 현장 사이 <span className="commercial-title-badge-new">EP.02</span></strong>
+            <small>{snapshot.phase==='complete'||snapshot.state?.flags.episode01_completed===true?'어제의 기록이 오늘의 판단으로 돌아옵니다. 오프닝 2장면 플레이':'EP.01을 완료하면 다음 날 첫 양중이 해금됩니다.'}</small>
+          </span><b>›</b>
+        </button>:null}
         <button className="commercial-title-action is-sub-entry" type="button" onClick={() => setPage('site')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
           <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>{siteOperationsText.entryHint}</small></span>

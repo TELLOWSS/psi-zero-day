@@ -6,16 +6,16 @@ import { episode01ChoiceVisual } from '../app/episode01-choice-visual';
 import {useState} from 'react';
 
 /** Reading pages do not advance the engine or commit a choice. */
-export function storyReadingPages(text:string):string[]{
+export function storyReadingPages(text:string,maxChars=70):string[]{
   const pages:string[]=[];let page='';
   for(const paragraph of text.split(/\n+/).filter(Boolean)){
     const sentences=paragraph.split(/(?<=[.!?。…])\s+/u);
     for(const sentence of sentences){
-      if(page&&page.length+sentence.length>70){pages.push(page);page='';}
-      if(sentence.length<=70){page+=(page?'\n':'')+sentence;continue;}
+      if(page&&page.length+sentence.length>maxChars){pages.push(page);page='';}
+      if(sentence.length<=maxChars){page+=(page?'\n':'')+sentence;continue;}
       // Long authored sentences wrap at word boundaries, retaining their words and punctuation.
       for(const word of sentence.split(/\s+/)){
-        if(page&&page.length+word.length>70){pages.push(page);page='';}
+        if(page&&page.length+word.length>maxChars){pages.push(page);page='';}
         page+=(page?' ':'')+word;
       }
     }
@@ -23,12 +23,12 @@ export function storyReadingPages(text:string):string[]{
   if(page)pages.push(page);return pages.length?pages:[''];
 }
 
-function DialogueContent({p,t,send,previousAvailable,onPrevious,interactionLocked,voicePlaying,dialogueOverrideText,pageDialogue,onReadAdvance}:{
+function DialogueContent({p,t,send,previousAvailable,onPrevious,interactionLocked,voicePlaying,dialogueOverrideText,pageDialogue,cinematicDialogue,onReadAdvance}:{
   p:Extract<PresentationCommand,{type:'SHOW_DIALOGUE'|'SHOW_RESULT'}>;t:Translate;send:(command:EngineCommand)=>void;
   previousAvailable:boolean;onPrevious?:()=>void;interactionLocked:boolean;voicePlaying:boolean;
-  dialogueOverrideText:string|null;pageDialogue:boolean;onReadAdvance?:()=>void;
+  dialogueOverrideText:string|null;pageDialogue:boolean;cinematicDialogue:boolean;onReadAdvance?:()=>void;
 }){
-  const text=dialogueOverrideText??t(p.text_id),pages=pageDialogue?storyReadingPages(text):[text];
+  const text=dialogueOverrideText??t(p.text_id),pages=pageDialogue?storyReadingPages(text,cinematicDialogue?38:70):[text];
   const [page,setPage]=useState(0),index=Math.min(page,pages.length-1),more=index<pages.length-1;
   return <div className={`dialogue-content ${textStyle(p.text_id)??''}`}>
     <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id)==='note'?'ui.record':p.type==='SHOW_DIALOGUE'?'ui.dialogue':'ui.narration')}</span>{previousAvailable&&onPrevious?<button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button>:null}</div>
@@ -76,7 +76,7 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   })}</div>;
 }
 
-export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, voicePlaying = false, dialogueOverrideText = null, pageDialogue=false, onReadAdvance }: {
+export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, voicePlaying = false, dialogueOverrideText = null, pageDialogue=false, cinematicDialogue=false, onReadAdvance }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   eventId?: string | null;
@@ -87,6 +87,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
   interactionLocked?: boolean;
   voicePlaying?: boolean;
   pageDialogue?:boolean;
+  cinematicDialogue?:boolean;
   onReadAdvance?:()=>void;
   dialogueOverrideText?: string | null;
 }) {
@@ -101,7 +102,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
       <h2>{t(p.text_id)}</h2>
       <ChoiceButtons p={p} t={t} send={send} eventId={eventId} onChoicePreview={onChoicePreview} />
     </div>;
-    if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <DialogueContent key={`${p.instance_id}/${p.node_id}`} p={p} t={t} send={send} previousAvailable={previousAvailable} onPrevious={onPrevious} interactionLocked={interactionLocked} voicePlaying={voicePlaying} dialogueOverrideText={dialogueOverrideText} pageDialogue={pageDialogue} onReadAdvance={onReadAdvance}/>;
+    if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <DialogueContent key={`${p.instance_id}/${p.node_id}`} p={p} t={t} send={send} previousAvailable={previousAvailable} onPrevious={onPrevious} interactionLocked={interactionLocked} voicePlaying={voicePlaying} dialogueOverrideText={dialogueOverrideText} pageDialogue={pageDialogue} cinematicDialogue={cinematicDialogue} onReadAdvance={onReadAdvance}/>;
     return <div className="cue-placeholder" key={`cue.${index}`} role="status">
       <span>{t('ui.cue_placeholder')}</span>
       {'asset_id' in p && p.type !== 'AUDIO_CUE' ? <VisualImage uri={assetUri(p.asset_id)} alt="" /> : null}

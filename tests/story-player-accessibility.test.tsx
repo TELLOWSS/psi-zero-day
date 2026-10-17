@@ -61,3 +61,58 @@ it('reports failed background loading and retries without changing the story or 
   expect(host.querySelector('.episode-immersive-background')?.getAttribute('src')).toBe(source);
   expect(session.getSnapshot()).toBe(before);
 });
+
+
+it('starts in cinematic subtitle mode and expands reading without advancing or resetting its page',()=>{
+  const session=EpisodeSession.directed();session.start(0);
+  act(()=>root.render(<PlayableEpisode session={session}/>));
+  click(host.querySelector('.episode-cold-open-cta'));
+  const before=session.getSnapshot(),frame=host.querySelector('[data-story-player="cinematic"]')!;
+  const original=host.querySelector('.dialogue-text')!.textContent;
+  expect(frame.getAttribute('data-story-reading-mode')).toBe('cinema');
+  const toggle=host.querySelector<HTMLButtonElement>('.story-view-toggle')!;
+  expect(toggle.getAttribute('aria-pressed')).toBe('false');
+  click(toggle);
+  expect(frame.getAttribute('data-story-reading-mode')).toBe('read');
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(original);
+  expect(session.getSnapshot()).toBe(before);
+  expect(host.querySelector('.story-view-toggle')?.getAttribute('aria-pressed')).toBe('true');
+  click(host.querySelector('.continue-button'));
+  const page=host.querySelector('.dialogue-text')!.textContent;
+  expect(page).not.toBe(original);
+  click(host.querySelector('.story-view-toggle'));
+  expect(frame.getAttribute('data-story-reading-mode')).toBe('cinema');
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(page);
+  expect(session.getSnapshot()).toBe(before);
+});
+
+
+it('unobstructed scene focus preserves the current page and engine, restores on Escape',()=>{
+  const session=EpisodeSession.directed();session.start(0);
+  act(()=>root.render(<PlayableEpisode session={session}/>));
+  click(host.querySelector('.episode-cold-open-cta'));
+  const before=session.getSnapshot(), text=host.querySelector('.dialogue-text')!.textContent;
+  const button=host.querySelector<HTMLButtonElement>('.story-scene-peek')!;
+  expect(button).not.toBeNull();
+  click(button);
+  expect(host.querySelector('[data-story-focus=true]')).not.toBeNull();
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(text);
+  expect(session.getSnapshot()).toBe(before);
+  act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true})));
+  expect(host.querySelector('[data-story-focus=true]')).toBeNull();
+  expect(host.querySelector('.dialogue-text')?.textContent).toBe(text);
+  expect(session.getSnapshot()).toBe(before);
+});
+
+
+it('offers optional landscape viewing without locking the portrait narrative or mutating the run',()=>{
+ const session=EpisodeSession.directed();session.start(0);
+ act(()=>root.render(<PlayableEpisode session={session}/>));
+ click(host.querySelector('.episode-cold-open-cta'));
+ const before=session.getSnapshot();
+ const guide=host.querySelector('.story-orientation-hint');
+ expect(guide?.textContent).toContain('가로로 돌리면');
+ click(host.querySelector('.story-orientation-hint button'));
+ expect(host.querySelector('.story-orientation-hint')).toBeNull();
+ expect(session.getSnapshot()).toBe(before);
+});

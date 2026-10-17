@@ -44,6 +44,7 @@ describe('Episode 01 final polish contract', () => {
     expect([
       'exact_archive_verified_pending_github_binary_ingest',
       'exact_archive_verified_github_ingested',
+      'versioned_cinema_candidates_ingested',
     ]).toContain(ingest.status);
     expect(ingest.verification.exact_asset_count).toBe(8);
   });
@@ -71,7 +72,7 @@ describe('Episode 01 final polish contract', () => {
     expect(html).toContain('data-character-blocking="true"');
     expect(html).toContain('data-character-performance="true"');
     expect(html).toContain('data-background-source="final"');
-    expect(html).toContain('work-yard.webp');
+    expect(html).toContain(catalog.backgrounds.work_yard.final_path);
   });
 
   it('reports final background source when the production slot resolves', () => {
