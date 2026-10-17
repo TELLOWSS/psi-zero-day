@@ -37,9 +37,9 @@ function DialogueContent({p,t,send,previousAvailable,onPrevious,interactionLocke
       <button type="button" disabled={index===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>{t('story.player.previousPage')}</button>
       <span>{index+1} / {pages.length}</span>
     </div>:null}
-    <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked||undefined}
+    <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked||undefined} aria-description={voicePlaying?t('story.player.listening'):undefined}
       onClick={event=>{if(interactionLocked||event.detail>=2)return;onReadAdvance?.();if(more)setPage(index+1);else send({type:'advance_event',instance_id:p.instance_id,node_id:p.node_id});}}>
-      {t(more?(voicePlaying?'story.player.nextPageVoice':'story.player.nextPage'):(voicePlaying?'story.player.continueVoice':'ui.continue'))}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
+      {t(more?'story.player.nextPage':'ui.continue')}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
     </button>
   </div>;
 }

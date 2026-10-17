@@ -24,7 +24,7 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();a(box&&box.height>=44&&box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1,'primary action clipped: '+event);
    const hit=await button.evaluate(el=>{const r=el.getBoundingClientRect(),target=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return target===el||el.contains(target);});a(hit,'primary action covered: '+event);
    trace.push({event,node,kind:count?'choice':'continue',text:await button.innerText(),dialogue:await text.count()?await text.innerText():null,backgroundVisible:true,buttonReachable:true});
-   if(capture.has(event)&&!screens.has(event)){await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);}
+   if(capture.has(event)&&!screens.has(event)){await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);}
    if(count&&!screens.has('decision')){await page.screenshot({path:path.join(out,`${width}-decision.png`)});screens.add('decision');}
    await button.click({timeout:3000});
    // Allow React to commit the next reader state; no voice skip and no DOM click shortcut.
