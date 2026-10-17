@@ -103,3 +103,16 @@ it('unobstructed scene focus preserves the current page and engine, restores on 
   expect(host.querySelector('.dialogue-text')?.textContent).toBe(text);
   expect(session.getSnapshot()).toBe(before);
 });
+
+
+it('offers optional landscape viewing without locking the portrait narrative or mutating the run',()=>{
+ const session=EpisodeSession.directed();session.start(0);
+ act(()=>root.render(<PlayableEpisode session={session}/>));
+ click(host.querySelector('.episode-cold-open-cta'));
+ const before=session.getSnapshot();
+ const guide=host.querySelector('.story-orientation-hint');
+ expect(guide?.textContent).toContain('가로로 돌리면');
+ click(host.querySelector('.story-orientation-hint button'));
+ expect(host.querySelector('.story-orientation-hint')).toBeNull();
+ expect(session.getSnapshot()).toBe(before);
+});
