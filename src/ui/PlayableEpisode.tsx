@@ -571,7 +571,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
     </div> : null}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <button type="button" className="game-manual-open" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
+    <button type="button" className="game-manual-open" aria-label="게임 설명서" title="게임 설명서" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}

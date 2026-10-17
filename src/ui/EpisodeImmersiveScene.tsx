@@ -137,6 +137,7 @@ export function EpisodeImmersiveScene({
 
   return <figure
     className="episode-immersive-scene"
+    data-cast-count={scene.cast.length}
     data-camera={scene.camera}
     data-focus={scene.focus}
     data-tone={scene.tone}

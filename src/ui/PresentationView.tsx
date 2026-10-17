@@ -28,7 +28,7 @@ function DialogueContent({p,t,send,previousAvailable,onPrevious,interactionLocke
   previousAvailable:boolean;onPrevious?:()=>void;interactionLocked:boolean;voicePlaying:boolean;
   dialogueOverrideText:string|null;pageDialogue:boolean;cinematicDialogue:boolean;onReadAdvance?:()=>void;
 }){
-  const text=dialogueOverrideText??t(p.text_id),pages=pageDialogue?storyReadingPages(text,cinematicDialogue?38:70):[text];
+  const text=dialogueOverrideText??t(p.text_id),pages=pageDialogue?storyReadingPages(text,cinematicDialogue?30:70):[text];
   const [page,setPage]=useState(0),index=Math.min(page,pages.length-1),more=index<pages.length-1;
   return <div className={`dialogue-content ${textStyle(p.text_id)??''}`}>
     <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id)==='note'?'ui.record':p.type==='SHOW_DIALOGUE'?'ui.dialogue':'ui.narration')}</span>{previousAvailable&&onPrevious?<button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button>:null}</div>

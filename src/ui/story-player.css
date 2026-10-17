@@ -398,3 +398,166 @@
 @media(orientation:landscape) and (max-height:440px){
   #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
 }
+
+
+/* Director QA pass 2026-10-18: nine Android portrait captures.
+   Goal: a readable scene, one visual protagonist, daylight chronology, fewer UI occluders.
+   These rules override the legacy equal-weight 5-actor blocking ONLY in story mode. */
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open,
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open {
+  top:62px!important;bottom:auto!important;width:46px!important;height:46px!important;
+  min-width:46px!important;max-width:46px!important;min-height:46px!important;
+  padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  border-radius:50%!important;background:#081b27d4!important;
+  border:1px solid #9db3bd88!important;box-shadow:0 3px 12px #0005!important;
+  color:#f5e8ca!important;font-size:0!important;z-index:83!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open{right:72px!important}
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open{right:16px!important}
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open::after{
+  content:"Aa";font-size:16px!important;font-weight:850;line-height:1;
+}
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open::after{
+  content:"?";font-size:21px!important;font-weight:850;line-height:1;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+  max-width:calc(100% - 150px)!important;
+  border-radius:0 8px 8px 0;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel{
+  top:115px!important;right:14px!important;z-index:83!important;
+  max-width:min(330px,calc(100vw - 28px))!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel:not([open]) summary{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:46px!important;height:44px!important;min-height:44px!important;padding:0!important;
+  border-radius:22px!important;font-size:0!important;line-height:1!important;
+  background:#09212bb8!important;border:1px solid #aec4c190!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel:not([open]) summary::after{
+  content:"기록";font-size:11px!important;color:#f4dfb6!important;font-weight:850;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel[open]{
+  padding:12px!important;max-height:58dvh!important;overflow:auto!important;
+  background:#0b222ef0!important;border:1px solid #b9c3b88c;border-radius:12px;
+}
+/* Show deliberate character hierarchy instead of a flat row of equally large cutouts. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+  opacity:.63!important;transition:opacity .32s ease,filter .32s ease!important;
+  filter:drop-shadow(0 13px 12px #03151e88)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{
+  opacity:1!important;z-index:24!important;
+  filter:drop-shadow(0 13px 17px #02131aa8)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-blocking-depth="background"]:not([data-speaker="true"]){
+  opacity:.42!important;filter:brightness(.78) drop-shadow(0 8px 8px #06121c66)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-character="player"]:not([data-speaker="true"]){
+  opacity:.43!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-props{
+  opacity:.16!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-props,
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-props{
+  opacity:.36!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-evidence-board{
+  opacity:.35!important;
+}
+/* 09:24, 09:45 and 10:02 must not read as 18:00.
+   Lighting-grade correction pending an approved NEW daylight pour master plate. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:is(
+ [data-event="e01_06_pump_arrival"],
+ [data-event="e01_07_first_pour"],
+ [data-event="e01_08_reactions"]
+) .episode-immersive-background{
+  filter:brightness(1.22) saturate(.72) contrast(.92) hue-rotate(13deg)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:is(
+ [data-event="e01_06_pump_arrival"],
+ [data-event="e01_07_first_pour"],
+ [data-event="e01_08_reactions"]
+)::before {
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(170,204,226,.29) 0%,rgba(171,205,229,.10) 45%,transparent 76%);
+  mix-blend-mode:screen;
+}
+/* 2-3 lines must remain fully readable even with speaker, page indicator and next key. */
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]){
+  --story-dock-height:128px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+  height:128px!important;max-height:calc(100dvh - 86px)!important;
+  padding:6px 11px 9px!important;overflow:visible!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-content{
+  min-height:60px!important;align-items:center!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+  max-height:74px!important;min-height:0!important;overflow-y:auto!important;
+  line-height:1.5!important;white-space:pre-line!important;text-wrap:pretty;
+  scrollbar-width:thin;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+  right:12px!important;min-width:84px!important;opacity:.78;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:hover,
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:focus-visible{opacity:1}
+@media(orientation:portrait) and (max-width:600px) {
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+    max-width:calc(100% - 86px)!important;top:64px!important;left:10px!important;
+    padding:6px 9px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reader-open{top:64px!important;right:64px!important}
+  #root main.game-frame[data-story-player="cinematic"] .game-manual-open{top:64px!important;right:10px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene strong{font-size:12px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-context-panel{
+    top:117px!important;right:10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:104px 0 calc(var(--story-dock-height) - 73px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+    width:43%!important;transform:translateY(4%) scale(.91)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{
+    transform:translateY(5%) scale(1.03)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:-9%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:12%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:10%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:-13%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-5{left:37%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-1{left:3%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-2{left:auto!important;right:0!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-psi-trace,
+  #root main.game-frame[data-story-player="cinematic"] .episode-scene-minimap{display:none!important}
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:128px!important;padding:4px 10px 9px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+    font-size:calc(14px * var(--story-font-scale))!important;max-height:64px!important;
+    line-height:1.43!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide{height:39px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-position{
+    top:2px!important;right:100px!important;bottom:auto!important;
+  }
+}
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]){
+    --story-dock-height:96px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:96px!important;max-height:calc(100dvh - 72px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{max-height:43px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-reader-open,
+  #root main.game-frame[data-story-player="cinematic"] .game-manual-open{top:48px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{max-width:calc(100% - 170px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{transition:none!important}
+}
