@@ -65,3 +65,14 @@
 - 10:20 점검: 과도한 붉은 사각 HUD와 큰 제목이 배경과 인물을 가림 → 위험 감지 관련 정보와 선택 로직은 유지하되 거대한 ::before 사각 프레임 제거·상단 텍스트 축소·경계표시 선명도 절제.
 - 하나의 장면에 보조 출연자 전체를 반투명 중첩하는 구형 기법 폐기. 감독 기준 2-shot과 스피커 기준을 scene renderer에서 결정. 원본 사건의 cast 명단·오디오·세이브·선택 로직 불변.
 - 리그레션 검사: 페이지 시퀀스 별 실제 렌더 인물 최대 2명, 두 사람 모두 opacity>.95, Map full-body 자산, 이미지 decode success. 지면 합성과 반응 표정의 최종 미술 Production Lock은 아직 미승인.
+
+
+## 6차 사용자 실제 캡처 10매 — 2026-10-18
+- 14:20 WORKFACE와 16:42 OFFICE 선택 화면: 긴 3개 선택지의 텍스트가 버튼 높이를 넘어서 서로 겹치는 중대 판독성 결함. 디렉터 모드 선택지가 모두 가변 높이 카드를 사용하고 선택 패널 내부 스크롤을 허용하도록 CSS 계약을 변경했다.
+- 세로 390×844: 선택지는 1열, 각 번호 고정 폭, 문장 길이별 66px 이상 가변 높이; 가로 844×390: 현장 영상 왼쪽을 남기고 오른쪽 선택 패널 자체가 스크롤되도록 수정했다.
+- 17:18 DAY01 MEMORY: 4개 회상 이미지와 작은 결과 텍스트의 경쟁 완화. 세로에서 2×2 회상 영상 그룹 배치, 의미 기록은 상태/결과 창에서 보존하고 비주얼 중복 표시를 제한했다.
+- EP01 26-event full UI browser walk in prior head passed across 320,390,568,844,1440, but empty-cast e01_09_evening was incorrectly treated as a required actor. Corrected test to permit intentionally empty film scenes.
+- Test contract now checks choice buttons do not overlap and each choice text fits within its own action card, 390/844/1440 through full playable route.
+- OPEN ART LOCK: 09:45 POUR shows dusk sky while clock reads morning; do not falsely classify CSS hue changes as new correct 09:45 daylight production art. Need genuine daylight pump/scene background and film color continuity.
+- OPEN ART LOCK: 08:05 ramp and other scenes still show soft/fading legs from source character alpha. Original source asset correction remains required for cinema-grade compositing.
+- Final user-facing PREVIEW should be called final-ready only after full branch QA, EP02 post-completion scene visibility, and physical Android compositor playback.
