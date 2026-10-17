@@ -194,7 +194,28 @@ async function enterPersistedRun(cdp,name){
   // A valid saved legacy scenario may differ from the now-default training-ramp-v1.
   // Preserve the fixture's original scenario via the product's conflict recovery;
   // never discard or replace an existing run to satisfy an audio test.
-  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=save-resume], [data-defense-screen=requested-scenario-conflict]'))");
+  // Never silently substitute a new training run: the 5 audio test fixtures
+  // must resume their original scenario. Capture the actual route on failure.
+  try {
+    await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=save-resume], [data-defense-screen=requested-scenario-conflict]'))");
+  } catch(error) {
+    const actual=await evaluate(cdp,`(()=>{
+      let fixture=null;
+      try {const raw=localStorage.getItem('psi-zero-day.defense.save.v1');
+        if(raw){const envelope=JSON.parse(raw);
+          fixture={schemaVersion:envelope.schemaVersion,rulesVersion:envelope.rulesVersion,
+            contentVersion:envelope.contentVersion,scenarioId:envelope.payload?.activeRun?.scenarioId};
+        }
+      }catch{}
+      return {screen:[...document.querySelectorAll('[data-defense-screen]')].map(e=>({
+          id:e.getAttribute('data-defense-screen'),text:(e.innerText||'').slice(0,350)})),
+        loading:!!document.querySelector('.gameplay-chunk-fallback'),
+        guardHome:!!document.querySelector('.guard-home'),
+        hub:!!document.querySelector('.commercial-title-home'),
+        fixture};
+    })()`);
+    throw new Error(name+': persisted G8-A entry not reached: '+JSON.stringify(actual)+' / '+String(error));
+  }
   const hasConflict=await evaluate(cdp,"Boolean(document.querySelector('[data-defense-screen=requested-scenario-conflict]'))");
   if(hasConflict){
     await trustedClick(cdp,"[...document.querySelectorAll('[data-defense-screen=requested-scenario-conflict] button')].find(b => b.textContent.includes('기존 훈련 이어하기'))",'resume original saved scenario');
