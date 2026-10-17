@@ -747,3 +747,13 @@
 #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::before,
 #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::after,
 #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline>i{opacity:.2!important}
+
+
+/* Authoring contract and camera exposure are distinct. Keep the complete character
+   cast in the DOM for plot continuity, but never render ghost extras into a shot. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character:not([data-on-camera="true"]){
+ opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-on-camera="true"]{
+ opacity:1!important;visibility:visible!important;
+}

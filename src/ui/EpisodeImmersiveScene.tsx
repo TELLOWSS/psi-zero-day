@@ -150,6 +150,7 @@ export function EpisodeImmersiveScene({
   return <figure
     className="episode-immersive-scene"
     data-cast-count={stagedCast.length}
+    data-authored-cast-count={scene.cast.length}
     data-director-cast="two-shot-20261018"
     data-camera={scene.camera}
     data-focus={scene.focus}
@@ -362,7 +363,9 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {stagedCast.map((characterId, index) => {
+      {scene.cast.map((characterId, index) => {
+        const cameraIndex = stagedCast.indexOf(characterId);
+        const onCamera = cameraIndex >= 0;
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
         const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
         const performance = episode01CharacterPerformance(scene.event_id, scene.node_id, characterId, speakerId, relationshipCue);
@@ -373,7 +376,8 @@ export function EpisodeImmersiveScene({
         const characterFallbackUri = undefined;
         return <div
         key={characterId}
-        className={`episode-immersive-character cast-${index + 1}`}
+        className={`episode-immersive-character ${onCamera ? `cast-${cameraIndex + 1}` : 'cast-extra'}`}
+        data-on-camera={onCamera || undefined}
         data-speaker={speakerId === characterId || undefined}
         data-framed-subject={scene.subject_character_id === characterId || undefined}
         data-character={characterId}
@@ -383,7 +387,8 @@ export function EpisodeImmersiveScene({
         data-expression={performance?.expression}
         data-pose={performance?.pose}
         data-presence-motion={performance?.motion}
-        data-performance-asset="map-fallback"
+        data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
+        data-expression-source={performanceAsset?.uri}
         data-expressive-crop-suppressed={performanceAsset?.using_expression_asset || undefined}
       >
         <VisualImage uri={characterUri} fallbackUri={characterFallbackUri} alt="" />

@@ -62,14 +62,17 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
     await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);
     const composition=await page.evaluate(()=>{const dock=document.querySelector('.play-panel').getBoundingClientRect();return [...document.querySelectorAll('.episode-immersive-character')].map(actor=>{const box=actor.getBoundingClientRect(),image=actor.querySelector('img');return {character:actor.dataset.character,top:box.top,bottom:box.bottom,height:box.height,dockTop:dock.top,decoded:!!image&&image.complete&&image.naturalWidth>0};});});
     if(composition.some(actor=>!actor.decoded))throw new Error('Director shot has undecoded character: '+event);
-    if(composition.length>2)throw new Error('Cinematic beat has ghost-prone background crowd: '+event+' '+JSON.stringify(composition));
     const shotStyles=await page.locator('.episode-immersive-character').evaluateAll(nodes=>nodes.map(node=>({
       opacity:Number(getComputedStyle(node).opacity),
       visibility:getComputedStyle(node).visibility,
-      asset:node.getAttribute('data-performance-asset')
+      onCamera:node.getAttribute('data-on-camera')==='true',
+      cropSuppressed:node.querySelector('img')?.getAttribute('src')!==node.getAttribute('data-expression-source')
     })));
-    a(shotStyles.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.asset==='map-fallback'),
+    const active=shotStyles.filter(actor=>actor.onCamera);
+    a(active.length>=1&&active.length<=2&&active.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.cropSuppressed),
       'ghost actor / bust sprite in film frame: '+event+' '+JSON.stringify(shotStyles));
+    a(shotStyles.filter(actor=>!actor.onCamera).every(actor=>actor.visibility==='hidden'),
+      'background cast leaked into shot: '+event);
     const expectedCast=castPlan[event]?.cast;
     a(Array.isArray(expectedCast),'missing scene cast contract: '+event);
     if(expectedCast.length===0){
