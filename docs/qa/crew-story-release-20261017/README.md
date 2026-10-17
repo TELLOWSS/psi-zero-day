@@ -1,5 +1,13 @@
 # Crew / story release verification
 
+## Verification scope correction
+
+The run below is automated smoke/regression evidence, not a direct narrative playtest or approval of story-mode quality. The script skipped voice playback and progressed by a fixed priority of enabled controls, including the first available choice. It did not read the story, judge the choices in context, or assess the experience of listening, reading, and deciding. A completed 26-event traversal cannot certify that experience.
+
+The previous release summary overstated the scope by presenting automated completion as comprehensive story-mode verification. That overall approval is withdrawn. Direct playtesting remains incomplete. The captured PC dialogue is extremely dim in one image; whether this is only a transition/voice-lock state or a persistent reading defect was not established before release.
+
+On attempting direct verification after the user's correction, the computer-use inventory returned no connected browsers or apps. No direct playtest was performed in that attempt. Do not count that attempt as evidence.
+
 Verified source commit: `637b76916b2221cf1cc2d69ad2f2a793013ec563`.
 
 [GitHub Actions run](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39029570082) completed successfully on 2026-10-17. Full screenshots and logs are available in its `crew-story-sync-evidence` artifact (14-day retention); selected evidence is preserved in this directory.

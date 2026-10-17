@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { CharacterGrowthView } from '../app/character-growth';
 import type { CharacterLoadoutView, EquipmentSlot } from '../app/character-loadout';
@@ -30,7 +30,7 @@ export function visualAssetTier(uri?: string | null): VisualAssetTier | undefine
   return 'other';
 }
 
-interface VisualImageProps { uri?: string | null; fallbackUri?: string; alt: string; className?: string; loading?:'lazy'|'eager' }
+interface VisualImageProps { uri?: string | null; fallbackUri?: string; alt: string; className?: string; loading?:'lazy'|'eager'; onUnavailable?:()=>void }
 
 export function VisualImage(props: VisualImageProps) {
   const uri = props.uri ? resolveCharacterBrandingUri(props.uri) : props.uri;
@@ -38,10 +38,11 @@ export function VisualImage(props: VisualImageProps) {
   return <ResolvedImage key={JSON.stringify([uri, fallbackUri])} {...props} uri={uri} fallbackUri={fallbackUri} />;
 }
 
-function ResolvedImage({ uri, fallbackUri, alt, className, loading }: VisualImageProps) {
+function ResolvedImage({ uri, fallbackUri, alt, className, loading, onUnavailable }: VisualImageProps) {
   const [failed, setFailed] = useState<readonly string[]>([]);
   const [loaded, setLoaded] = useState<string | null>(null);
   const activeUri = [uri, fallbackUri].find(candidate => candidate && !failed.includes(candidate));
+  useEffect(() => { if (!activeUri) onUnavailable?.(); }, [activeUri, onUnavailable]);
   if (!activeUri) return null;
   const src = /^(?:https?:|data:)/.test(activeUri) ? activeUri : `${import.meta.env.BASE_URL}${activeUri.replace(/^\/?(?:public\/)?/, '')}`;
   return <img

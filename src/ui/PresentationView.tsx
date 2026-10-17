@@ -36,7 +36,7 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   })}</div>;
 }
 
-export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, dialogueOverrideText = null }: {
+export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, voicePlaying = false, dialogueOverrideText = null }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   eventId?: string | null;
@@ -45,6 +45,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
   previousAvailable?: boolean;
   onPrevious?: () => void;
   interactionLocked?: boolean;
+  voicePlaying?: boolean;
   dialogueOverrideText?: string | null;
 }) {
   return <>{commands.map((p, index) => {
@@ -65,7 +66,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
       </p>
       <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked || undefined}
         onClick={e => { if (!interactionLocked && e.detail < 2) send({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }); }}>
-        {t('ui.continue')}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
+        {t(voicePlaying ? 'story.player.continueVoice' : 'ui.continue')}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
       </button>
     </div>;
     return <div className="cue-placeholder" key={`cue.${index}`} role="status">

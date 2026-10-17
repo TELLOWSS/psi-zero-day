@@ -2,7 +2,7 @@ name: Verify crew and story synchronization
 
 on:
   push:
-    branches: [sync/crew-story-20261017]
+    branches: [sync/crew-story-20261017, fix/story-player-20261017]
   workflow_dispatch:
 
 permissions:
@@ -48,6 +48,7 @@ jobs:
             if [ "$ready" -ne 1 ]; then cat /tmp/psi-preview.log /tmp/psi-dev.log; exit 1; fi
           done
           node scripts/verify-story-integration.cjs
+          node scripts/verify-story-player.cjs
           node tests/browser/story-recovery.cjs
           node scripts/verify-crew-motion.cjs
       - name: Upload verification evidence
@@ -59,5 +60,6 @@ jobs:
             artifacts/story-integration-local/
             artifacts/story-recovery/
             artifacts/crew-motion/
+            artifacts/story-player/
           if-no-files-found: warn
           retention-days: 14

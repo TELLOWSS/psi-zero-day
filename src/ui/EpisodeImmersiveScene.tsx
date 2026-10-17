@@ -15,6 +15,7 @@ import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals'
 import type { Episode01DayResultProduction } from '../app/episode01-day-result-production';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
+import {useState} from 'react';
 
 const EPISODE01_MEMORY_FRAMES = [
   { assetId: 'ep01.scene_bg.ramp_entry', fallback: 'assets/episode01/cg/ramp-entry-rc.svg' },
@@ -115,11 +116,14 @@ export function EpisodeImmersiveScene({
   readonly memoryVisualPlan?: Episode01MemoryVisualPlan;
   readonly dayResultProduction?: Episode01DayResultProduction;
 }) {
+  const [failedBackground,setFailedBackground]=useState<string|null>(null);
+  const [backgroundAttempt,setBackgroundAttempt]=useState(0);
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   useEpisode01ScenePreload(eventId, resolve);
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const finalBackground = resolvedBackground ?? scene.background_final_uri;
+  const backgroundUri=finalBackground ?? scene.background_uri;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
@@ -191,7 +195,11 @@ export function EpisodeImmersiveScene({
     data-dayresult-carryover={dayResultProduction?.carryover_key}
     key={scene.background_asset_id ?? scene.background_uri}
   >
-    <VisualImage uri={finalBackground ?? scene.background_uri} fallbackUri={finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
+    <VisualImage key={`${backgroundUri}:${backgroundAttempt}`} uri={backgroundUri} fallbackUri={finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" onUnavailable={()=>setFailedBackground(backgroundUri)} />
+    {failedBackground===backgroundUri ? <div className="story-background-error" role="alert">
+      <p>{t('story.player.backgroundMissing')}</p>
+      <button type="button" onClick={()=>{setFailedBackground(null);setBackgroundAttempt(value=>value+1);}}>{t('story.player.retryBackground')}</button>
+    </div> : null}
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
     {momentOverlay ? <div className="episode-immersive-moment-overlay" data-moment={momentOverlay} aria-hidden="true">
       <span className="moment-mark moment-a" />

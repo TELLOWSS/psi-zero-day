@@ -30,6 +30,7 @@ import '../ui/phase-d-screenshot-polish.css';
 import '../ui/strategy-layout-recovery.css';
 import '../ui/defense-game.css';
 import '../ui/tactical-ui.css';
+import '../ui/story-player.css';
 import {BRAND_NAME,GAME_TITLE} from './brand';
 import {readEpisodeSaveHealth,setEpisodeSaveHealth} from './episode-save-health';
 

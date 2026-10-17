@@ -129,15 +129,19 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
-  const activeEventId = activeInstance?.event_id ?? null;
+  const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
+  const finishedFieldEvent = directedCampaign && isPlaying && !activeInstance
+    ? snapshot.state?.event_runtime.finished_instances.at(-1) : undefined;
+  const activeEventId = activeInstance?.event_id ?? finishedFieldEvent?.event_id ?? null;
   const activeVoiceCue = presentation && 'node_id' in presentation
     ? episode01VoiceCue(activeEventId, presentation.node_id, presentation.type)
     : undefined;
-  const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const showColdOpen = directedCampaign && snapshot.phase==='playing' && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
   const storyDirection = episode01StoryDirection(activeEventId);
   const productionScene = episode01ProductionScene(storyDirection?.preset);
-  const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
+  // The directed story exposes engine choices in the same reading dock in every scene.
+  // Spatial map controls remain available in the original strategy presentation.
+  const strategyActive = !directedCampaign && isPlaying && strategy !== null && productionScene === 'STRATEGY';
   const stopWorkProduction = productionScene === 'STOP_WORK' ? episode01StopWorkProduction(activeEventId) : undefined;
   const fieldProduction = productionScene === 'FIELD' ? episode01FieldProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const tbmProduction = productionScene === 'TBM' ? episode01TbmProduction(activeEventId, activeInstance?.current_node_id) : undefined;
@@ -421,7 +425,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         }
       }
       if (e.repeat) { if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); return; }
-      if (voiceLocked && (e.key === 'Enter' || e.code === 'Space' || /^[1-4]$/.test(e.key))) {
+      if (voiceLocked && !directedCampaign && (e.key === 'Enter' || e.code === 'Space' || /^[1-4]$/.test(e.key))) {
         e.preventDefault();
         return;
       }
@@ -429,24 +433,30 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); continueMapOutcome(); }
         return;
       }
+      if (finishedFieldEvent && !presentation && (e.key === 'Enter' || e.code === 'Space')) {
+        if (target?.closest('button') && !target.closest('.continue-button')) return;
+        e.preventDefault();stopVoice();session.confirmFieldOutcome(finishedFieldEvent.instance_id,snapshot.revision);return;
+      }
       if (snapshot.phase !== 'playing' || !presentation || !('node_id' in presentation)) return;
       if (presentation.type === 'SHOW_CHOICE' && /^[1-4]$/.test(e.key)) {
         e.preventDefault();
         const choice = presentation.choices[Number(e.key) - 1];
         if (choice?.enabled) {
+          if (directedCampaign) stopVoice();
           playUiCue('execute');
           chooseEvent(presentation.instance_id, presentation.node_id, choice.choice_id);
         }
       } else if (presentation.type !== 'SHOW_CHOICE' && (e.key === 'Enter' || e.code === 'Space')) {
         if (target?.closest('button') && !target.closest('.continue-button')) return;
         e.preventDefault();
+        if (directedCampaign) stopVoice();
         playUiCue('continue');
         session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen,readerPaused,showColdOpen]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen,readerPaused,showColdOpen,directedCampaign,stopVoice,finishedFieldEvent]);
 
   const fallbackBasePortraitUri = person ? characterPortraitUri(person.id, resolveAsset) : undefined;
   const basePortraitUri = portrait?.kind === 'asset'
@@ -526,6 +536,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
+    data-story-player={directedCampaign && isPlaying ? 'cinematic' : undefined}
   >
     <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
     {(!readerSaved||saveHealth!=='ok')&&<p className="story-save-warning" role="status">{t(saveHealth==='preserved'?'story.reader.preserved':'story.reader.unsaved')}</p>}
@@ -608,6 +619,9 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         memoryVisualPlan={memoryVisualPlan}
         dayResultProduction={dayResultProduction}
       />
+      {directedCampaign && cinematicBeat ? <aside className="story-current-scene" aria-label={t('story.player.scene')}>
+        <span>{cinematicBeat.time} · {cinematicBeat.zone}</span><strong>{snapshot.eventTitle}</strong>
+      </aside> : null}
       {['e01_04_junho_signal','e01_05_command','e01_06_pump_arrival','e01_08e_responsibility_clash','e01_08n_instruction_return','e01_09_evening','e01_10_next_day_tease'].includes(activeEventId??'')?<details className="story-context-panel"><summary>{t('story.context.open')}</summary>
           <StoryEvidence eventId={activeEventId} state={snapshot.state} t={t}/>
           {activeEventId==='e01_04_junho_signal'&&onWatch?<div className="story-mode-link"><p>{t('story.bridge.watch')}</p><button type="button" onClick={onWatch}>{t('story.bridge.watchAction')}</button><small>{t('story.bridge.optional')}</small></div>:null}
@@ -629,6 +643,10 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
+          {directedCampaign ? <div className="story-reading-guide" role="status">
+            <strong>{person ? formatCharacterIdentity(person) : t('ui.narration')}</strong>
+            <span>{t(presentation?.type === 'SHOW_CHOICE' ? 'story.player.choose' : voiceLocked ? 'story.player.listening' : 'story.player.read')}</span>
+          </div> : null}
           {voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
           {directedCampaign&&voiceLocked&&voiceSubtitle?<p className="story-voice-caption" aria-live="off">{voiceSubtitle}</p>:null}
           {activeVoiceCue?.countdown_label ? <div className="episode-voice-countdown" aria-label={activeVoiceCue.countdown_label}>
@@ -671,6 +689,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
               commands={snapshot.presentation}
               t={t}
               send={command => {
+                if (directedCampaign) stopVoice();
                 if (command.type === 'choose_event') {
                   playUiCue('execute');
                   chooseEvent(command.instance_id, command.node_id, command.choice_id);
@@ -683,9 +702,17 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
               eventId={activeEventId}
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
-              interactionLocked={voiceLocked}
+              interactionLocked={voiceLocked && !directedCampaign}
+              voicePlaying={directedCampaign && voiceLocked}
               dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}
+          {finishedFieldEvent && !presentation ? <div className="story-field-confirm">
+            <p>{t('story.player.applied')}</p>
+            <button className="continue-button" type="button" onClick={() => {
+              stopVoice();
+              session.confirmFieldOutcome(finishedFieldEvent.instance_id, snapshot.revision);
+            }}>{t('story.player.afterAction')} <span aria-hidden="true">→</span></button>
+          </div> : null}
         </div>
       </section>
       {historyOpen ? <dialog ref={historyDialog} onClose={()=>setHistoryOpen(false)} className="presentation-history-drawer" aria-label={t('ui.previous_view.title')}>
