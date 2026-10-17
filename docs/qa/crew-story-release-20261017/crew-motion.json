@@ -1,0 +1,37 @@
+[
+  {
+    "id": "player",
+    "directions": 8,
+    "poses": 4,
+    "frames": 160,
+    "identity": "single-authored-frame"
+  },
+  {
+    "id": "kang_taesik",
+    "directions": 8,
+    "poses": 4,
+    "frames": 160,
+    "identity": "single-authored-frame"
+  },
+  {
+    "id": "yoon_sungho",
+    "directions": 8,
+    "poses": 4,
+    "frames": 160,
+    "identity": "single-authored-frame"
+  },
+  {
+    "id": "lee_jaehoon",
+    "directions": 8,
+    "poses": 4,
+    "frames": 160,
+    "identity": "single-authored-frame"
+  },
+  {
+    "id": "lim_junho",
+    "directions": 8,
+    "poses": 4,
+    "frames": 160,
+    "identity": "single-authored-frame"
+  }
+]

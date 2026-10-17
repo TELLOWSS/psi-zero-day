@@ -1,0 +1,65 @@
+{
+  "base": "http://127.0.0.1:4178",
+  "rows": [
+    {
+      "width": 320,
+      "height": 568,
+      "events": 26,
+      "manualColdOpen": false,
+      "readerSettings": true,
+      "pausedAudio": true,
+      "resumed": false,
+      "completed": true,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "events": 26,
+      "manualColdOpen": true,
+      "readerSettings": true,
+      "pausedAudio": true,
+      "resumed": true,
+      "completed": true,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "events": 26,
+      "manualColdOpen": false,
+      "readerSettings": true,
+      "pausedAudio": true,
+      "resumed": false,
+      "completed": true,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "events": 26,
+      "manualColdOpen": false,
+      "readerSettings": true,
+      "pausedAudio": true,
+      "resumed": false,
+      "completed": true,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "events": 26,
+      "manualColdOpen": false,
+      "readerSettings": true,
+      "pausedAudio": true,
+      "resumed": false,
+      "completed": true,
+      "errors": [],
+      "failed": []
+    }
+  ]
+}
