@@ -4,7 +4,6 @@ import {episode02OpeningEvents,episode02Messages} from '../content/episode02';
 import './episode02-cinema.css';
 
 /** EP02 opening slice: a separate resumable player, never mutating the EP01 engine/save. */
-type Route='plan_route'|'field_route'|'shared_route';
 interface Node {node_id:string;type:string;text_id:string;next_node_id?:string;speaker_role_id?:string;choice_ids?:string[]}
 interface Choice {choice_id:string;text_id:string;next_node_id:string;requirements?:readonly {kind:string;flag_id?:string;equals?:string}[];effects?:{flags?:Record<string,string|boolean>}}
 interface Event {event_id:string;entry_node_id:string;dialogue:readonly Node[];choices:readonly Choice[]}
