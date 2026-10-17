@@ -927,7 +927,7 @@ export function DefenseGame({
 
     {guardMobile&&mobileInfoOpen?<GuardMobileInfo onClose={()=>setMobileInfoOpen(false)}>
       <GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>
-      {preview?<GuardWaveIntel pressureEnabled={state.sensorPressureEnabled===true} key={`mobile-${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}} initiallyOpen/>:null}
+      {preview?<GuardWaveIntel pressureEnabled={state.sensorPressureEnabled===true} key={`mobile-${state.waveId}:${state.status}`} content={content} state={state} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}} initiallyOpen/>:null}
       <DefenseTutorial controller={tutorial}/><p>{t('guard.purchase.hint')}</p>
     </GuardMobileInfo>:null}
     <section className="zb-stage" ref={boardFit.ref}>
@@ -1153,8 +1153,11 @@ export function DefenseGame({
               type="button"
               className={selectedTower.targetMode === mode ? 'is-active' : ''}
               onClick={() => dispatch({ type: 'SetTargetMode', towerInstanceId: selectedTower.id, targetMode: mode })}
+              aria-pressed={selectedTower.targetMode===mode}
+              title={mode==='THREAT'?t('guard.target.THREAT.hint'):undefined}
             >{t(`defense.ui.target.${mode}`)}</button>)}
           </div>
+          {guard?<p className="guard-target-hint">{t('guard.target.THREAT.hint')}</p>:null}
           <div className="zb-upgrades">
             <button className="zb-sell" type="button" onClick={() => dispatch({ type: 'Sell', towerInstanceId: selectedTower.id })}>
               <span>{t('defense.ui.sell')}<kbd className="zb-hotkey">S</kbd></span><b>R {refund}</b>
@@ -1173,7 +1176,7 @@ export function DefenseGame({
         </>:null}
         {guard?<GuardSpatialControls content={content} state={state} selectedTower={selectedTower} onCommand={dispatch}/>:null}
         {guard&&(state.status==='READY'||state.status==='INTERMISSION')?<p className="guard-preparation-hint">{t('guard.preparation.hint')}</p>:null}
-        {guard&&preview&&(state.status==='READY'||state.status==='INTERMISSION')?<GuardWaveIntel key={`${state.waveId}:${state.status}`} content={content} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}}/>:null}
+        {guard&&!guardMobile&&preview&&(state.status==='READY'||state.status==='INTERMISSION')?<GuardWaveIntel pressureEnabled={state.sensorPressureEnabled===true} key={`${state.waveId}:${state.status}`} content={content} state={state} wave={preview} style={planningStyle} onStyle={value=>{setPlanningStyle(value);writeGuardPlanningStyle(value);}}/>:null}
         <div className="zb-support-action">
           <VisualImage uri={supportPortrait} alt="" className="zb-support-mini" />
           <span><small>{supportCharacter?.name ?? state.supportId}</small><strong>{t(guard&&!['COORDINATOR','OBSERVER'].includes(state.supportId)?`guard.support.${state.supportId}`:`defense.support.${state.supportId}.skill`)}</strong></span>

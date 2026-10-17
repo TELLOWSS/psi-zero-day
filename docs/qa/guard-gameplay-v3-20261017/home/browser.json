@@ -1,0 +1,177 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 212.23923444976077,
+      "y": 273.6,
+      "overlapping": [],
+      "helmetX": 240.5741626794258,
+      "helmetY": 219.6,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 257.7248803827751,
+      "y": 320.72,
+      "overlapping": [],
+      "helmetX": 290.9397129186603,
+      "helmetY": 257.42,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/wide.webp",
+      "w": 1672,
+      "h": 941
+    },
+    "face": {
+      "x": 416.3633581296493,
+      "y": 128.96,
+      "overlapping": [],
+      "helmetX": 436.3776068012753,
+      "helmetY": 77.92,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": false,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/wide.webp",
+      "w": 1672,
+      "h": 941
+    },
+    "face": {
+      "x": 616.12,
+      "y": 150.35019138755982,
+      "overlapping": [],
+      "helmetX": 643.128,
+      "helmetY": 81.47484449760765,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": false,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/portrait.webp",
+      "w": 940,
+      "h": 1672
+    },
+    "face": {
+      "x": 499.20000000000005,
+      "y": 519.1026382978723,
+      "overlapping": [],
+      "helmetX": 552.96,
+      "helmetY": 416.64817021276593,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/wide.webp",
+      "w": 1672,
+      "h": 941
+    },
+    "face": {
+      "x": 1059.1727948990435,
+      "y": 268.8,
+      "overlapping": [],
+      "helmetX": 1113.7571094580235,
+      "helmetY": 129.6,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "image": {
+      "src": "http://127.0.0.1:4178/assets/branding/home-psi-v5/wide.webp",
+      "w": 1672,
+      "h": 941
+    },
+    "face": {
+      "x": 1401.6,
+      "y": 278.44593301435407,
+      "overlapping": [],
+      "helmetX": 1463.04,
+      "helmetY": 121.76267942583732,
+      "helmetOverlapping": []
+    },
+    "originalPSIMarkDecoded": true,
+    "startInFirstViewport": true,
+    "keyboardFocus": true,
+    "guardEntry": true,
+    "watchEntry": true,
+    "breakerEntry": true,
+    "storyGated": true,
+    "errors": []
+  }
+]

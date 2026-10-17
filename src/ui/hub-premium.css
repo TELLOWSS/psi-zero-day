@@ -2,29 +2,25 @@
 :root .commercial-title-home[data-title-layout='MODE_SELECT_V11'][data-home-art='premium-hero-v4']{
  & .premium-title-picture{display:contents}
  & .psi-original-lockup{display:flex!important;align-items:flex-end;gap:18px;width:100%;text-shadow:0 2px 15px #041320}
- & .psi-original-lockup .psi-original-emblem{display:block;flex:none;width:72px!important;height:108px!important;aspect-ratio:2/3!important;box-sizing:content-box;padding:7px 10px 5px;border-radius:7px;background:#f6f8fb;object-fit:contain;filter:none}
+ & .psi-original-lockup .psi-original-emblem{display:block;flex:none;width:72px!important;height:108px!important;aspect-ratio:2/3!important;box-sizing:content-box;padding:7px 10px 5px;border-radius:7px;background:transparent;object-fit:contain;filter:none}
  & .psi-original-game-name{padding-bottom:12px;color:#f4f5ed;font-size:32px;font-weight:800;letter-spacing:.06em;white-space:nowrap}
  & .commercial-title-sun-glow{display:none!important}
  & .commercial-title-backdrop{top:48px!important;height:min(960px,110svh)!important;object-position:70% 15%}
  & .hub-cinematic-intro{min-height:510px;padding-top:48px;padding-bottom:36px}
+ & .commercial-title-actions .is-defense-entry{order:-1}
  & .commercial-title-subcopy{display:none!important}
- & .premium-hero-start{display:flex;align-items:center;justify-content:space-between;gap:28px;min-height:54px;width:min(340px,100%);margin-top:24px;padding:15px 20px;border:1px solid #ffe3a4;border-radius:6px;background:linear-gradient(110deg,#ffe0a3,#d8ac64);color:#142329;font:inherit;font-size:15px;font-weight:850;text-shadow:none;box-shadow:0 7px 24px #060e1c55;cursor:pointer}
- & .premium-hero-start svg{width:19px;height:19px;flex:none}
- & .premium-hero-start:hover{background:#ffe7b6}
- & .premium-hero-start:focus-visible{outline:3px solid #fff4cf;outline-offset:5px}
  & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:216px!important;padding-top:94px!important}
  @media(min-width:1700px){& .hub-cinematic-intro{min-height:560px}}
  @media(orientation:portrait) and (max-width:1050px){
   & .commercial-title-backdrop{top:0!important;height:max(720px,100svh)!important;object-position:60% top}
   & .commercial-title-grade{height:max(720px,100svh)!important;background:linear-gradient(0deg,#0a151c 0%,#0a151c99 16%,#0a151c00 55%),linear-gradient(90deg,#06131c45,transparent 85%)!important}
-  & .hub-cinematic-intro{min-height:min(650px,calc(100svh - 100px));max-width:none;padding:8px 0 22px;justify-content:flex-start}
+  & .hub-cinematic-intro{min-height:min(590px,calc(100svh - 230px));max-width:none;padding:8px 0 22px;justify-content:flex-start}
   & .psi-original-lockup{gap:14px}
   & .psi-original-lockup .psi-original-emblem{width:60px!important;height:90px!important;padding:5px 8px}
   & .psi-original-game-name{font-size:23px;padding-bottom:5px}
   & .commercial-title-logo{width:220px!important}
   & .hub-home-name{font-size:17px}
   & .commercial-title-copy h1{max-width:min(200px,55vw);font-size:22px!important;line-height:1.35!important;margin-top:10px!important}
-  & .premium-hero-start{margin-top:auto;max-width:340px;min-height:54px}
   & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:150px!important;padding-top:22px!important}
  }
  @media(orientation:landscape) and (max-height:600px){
@@ -34,6 +30,5 @@
   & .hub-cinematic-intro{min-height:235px;padding:18px 0 24px;max-width:60%}
   & .commercial-title-logo{width:190px!important}
   & .commercial-title-copy h1{font-size:20px!important}
-  & .premium-hero-start{min-height:48px;margin-top:14px;width:300px;max-width:100%;padding:11px 15px;font-size:13px}
  }
 }

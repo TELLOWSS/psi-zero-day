@@ -1,7 +1,8 @@
 import {updateDefenseSensorPressure,defenseSensorBlocked,defensePressureCore} from './defense-sensor-pressure';
+import {compareDefenseTargets} from './defense-targeting';
 import type {
   DefenseCombatFrame, DefenseCombatShot, DefenseCommand, DefenseContent, DefenseEnemyDefinition, DefenseEnemyState, DefenseLevelId,
-  DefensePoint, DefenseResult, DefenseRunState, DefenseSlowEffect, DefenseTargetMode,
+  DefensePoint, DefenseResult, DefenseRunState, DefenseSlowEffect,
   DefenseTowerDefinition, DefenseTowerLevelDefinition, DefenseTowerState,
 } from '../domain/defense';
 import {withDefenseTacticalStats,recordDefenseCombat,closeDefenseTacticalWave} from './defense-tactical-stats';
@@ -66,10 +67,6 @@ function remainingDistance(enemy: DefenseEnemyState, pathLength: number): number
 }
 function compareFirst(a: DefenseEnemyState, b: DefenseEnemyState, content:DefenseContent,state:DefenseRunState): number {
   return remainingDistance(a, defensePathLength(defenseEnemyPath(content,a,state))) - remainingDistance(b,defensePathLength(defenseEnemyPath(content,b,state))) || a.spawnSequence - b.spawnSequence || (a.id<b.id?-1:a.id>b.id?1:0);
-}
-function compareTarget(a: DefenseEnemyState, b: DefenseEnemyState, mode: DefenseTargetMode, content:DefenseContent,state:DefenseRunState): number {
-  if (mode === 'STRONG') return b.hp - a.hp || compareFirst(a, b, content,state);
-  return compareFirst(a, b, content,state);
 }
 function towerPoint(content: DefenseContent, tower: DefenseTowerState): DefensePoint {
   const pad = content.map.pads.find(item => item.id === tower.padId);
@@ -340,7 +337,7 @@ function attackWithTowers(state: DefenseRunState, content: DefenseContent): Defe
         if (!enemyVisible(enemy, definition, state.tick)) return false;
         const point = defenseEnemyPosition(content,enemy,state);
         return distanceSquared(center, point) <= radiusSq + EPSILON||defenseGuidanceContains(state,tower,center,point,radius);
-      }).sort((a, b) => compareTarget(a, b, tower.targetMode, content,state));
+      }).sort((a, b) => compareDefenseTargets(a, b, tower.targetMode, content,state));
       const target = candidates[0];
       if (target) {
         if(level.ultimate){

@@ -8,7 +8,7 @@ export function validDefenseP2State(v:Record<string,unknown>){
  if(v.sensorPressureEnabled!==undefined&&typeof v.sensorPressureEnabled!=='boolean')return false;
  if((v.enemies as {sensorPressure?:unknown}[]).some(e=>e.sensorPressure)&&v.sensorPressureEnabled!==true)return false;
  const guard=String(v.scenarioId).startsWith('guard-gd-');
- if(!guard)return !(v.towers as {levelId:string}[]).some(t=>t.levelId.startsWith('L4'))&&v.pendingAttacks===undefined&&v.guidance===undefined;
+ if(!guard)return !(v.towers as {levelId:string;targetMode:string}[]).some(t=>t.levelId.startsWith('L4')||t.targetMode==='THREAT')&&v.pendingAttacks===undefined&&v.guidance===undefined;
  if(v.ultimateUnlocked!==undefined&&typeof v.ultimateUnlocked!=='boolean')return false;
  if(v.mapPhase!==undefined&&!['INITIAL','SHIFTED'].includes(String(v.mapPhase)))return false;
  if(v.redeploymentCredits!==undefined&&(!count(v.redeploymentCredits)||v.redeploymentCredits>1))return false;
@@ -18,7 +18,7 @@ export function validDefenseP2State(v:Record<string,unknown>){
   if(!Array.isArray(v.pendingAttacks)||v.pendingAttacks.length>8)return false;
   if(!v.pendingAttacks.every(a=>{
    if(!record(a)||!['VOLLEY','WAVE','DELAY'].includes(String(a.kind))||!['id','towerInstanceId','padId'].every(k=>typeof a[k]==='string')||!['PULSE','BURST','CONTROL','SENSOR'].includes(String(a.towerId))||!['L4A','L4B'].includes(String(a.levelId)))return false;
-   if(!point(a.origin)||!point(a.center)||!['FIRST','STRONG'].includes(String(a.targetMode))||!['startedTick','dueTick','expiresTick'].every(k=>count(a[k]))||Number(a.startedTick)>Number(a.dueTick)||Number(a.dueTick)>Number(a.expiresTick)||!number(a.progressRadius)||!strings(a.hitEnemyIds)||(a.hitEnemyIds as unknown[]).length>12)return false;
+   if(!point(a.origin)||!point(a.center)||!['FIRST','STRONG','THREAT'].includes(String(a.targetMode))||!['startedTick','dueTick','expiresTick'].every(k=>count(a[k]))||Number(a.startedTick)>Number(a.dueTick)||Number(a.dueTick)>Number(a.expiresTick)||!number(a.progressRadius)||!strings(a.hitEnemyIds)||(a.hitEnemyIds as unknown[]).length>12)return false;
    const l=a.level;if(!record(l)||l.id!==a.levelId||!['damage','intervalTicks','range','splashRadius','maxTargets','slowFraction','slowTicks','revealRadius','revealIntervalTicks','revealTicks','cost'].every(k=>number(l[k]))||!mechanics.includes(String(l.ultimate))||!['PHYSICAL','PURE'].includes(String(l.damageType)))return false;
    return Number(l.maxTargets)<=12&&Number(l.intervalTicks)>0&&Number(a.progressRadius)<=Number(l.splashRadius);
   }))return false;

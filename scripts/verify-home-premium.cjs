@@ -8,12 +8,15 @@ try{for(const[width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024]
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('[data-home-art="premium-hero-v4"]').waitFor();
  const hero=page.locator('.commercial-title-backdrop');await hero.evaluate(e=>e.decode());
  const emblem=page.locator('.psi-original-emblem');await emblem.evaluate(e=>e.decode());
- assert.equal(await emblem.getAttribute('src'),'/assets/branding/home-psi-v5/psi-original.svg');
+ assert.equal(await emblem.getAttribute('src'),'/assets/branding/home-psi-v5/psi-original-on-dark.svg');
  await page.locator('.commercial-title-action-art').evaluateAll(es=>Promise.all(es.map(e=>e.decode())));
  const image=await hero.evaluate(e=>({src:e.currentSrc,w:e.naturalWidth,h:e.naturalHeight}));
  const portrait=height>width&&width<=1050;assert(image.src.endsWith(portrait?'/portrait.webp':'/wide.webp'));
- const start=page.locator('.premium-hero-start'),box=await start.boundingBox();
- assert(box&&box.height>=44&&box.x>=0&&box.x+box.width<=width+1&&box.y>=0&&box.y+box.height<=height+1,'Hero start outside viewport '+JSON.stringify({width,height,box}));
+ assert.equal(await page.locator('.premium-hero-start').count(),0);
+ assert.equal(await emblem.evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+ const start=page.locator('.is-defense-entry'),box=await start.boundingBox();
+ const startInFirstViewport=!!box&&box.y>=0&&box.y+box.height<=height+1;
+ assert(box&&box.height>=44&&box.x>=0&&box.x+box.width<=width+1&&(!portrait||startInFirstViewport),'Guard card clipped '+JSON.stringify({width,height,box}));
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  const face=await hero.evaluate((e,portrait)=>{
   const b=e.getBoundingClientRect(),s=getComputedStyle(e),pos=s.objectPosition.split(' ').map(p=>parseFloat(p)/100),scale=Math.max(b.width/e.naturalWidth,b.height/e.naturalHeight);
@@ -32,7 +35,7 @@ try{for(const[width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024]
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch').waitFor({timeout:60000});
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-story-entry').click();await page.locator('.mode-preview-dialog').waitFor();assert((await page.locator('.mode-preview-dialog').innerText()).includes('준비중'));await page.locator('.mode-preview-close').click();
  await page.locator('.is-breaker-entry').click();await page.waitForFunction(()=>typeof SignalBreakerQA!=='undefined');assert(page.url().includes('entry=play'));
- assert.deepEqual(errors,[]);rows.push({width,height,image,face,originalPSIMarkDecoded:true,startInFirstViewport:true,keyboardFocus:true,guardEntry:true,watchEntry:true,breakerEntry:true,storyGated:true,errors});
+ assert.deepEqual(errors,[]);rows.push({width,height,image,face,originalPSIMarkDecoded:true,startInFirstViewport,keyboardFocus:true,guardEntry:true,watchEntry:true,breakerEntry:true,storyGated:true,errors});
  fs.writeFileSync(path.join(out,'browser.json'),JSON.stringify(rows,null,2));console.log(width,height,'PASS');await context.close();
 }}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,3000))]);}
 })().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

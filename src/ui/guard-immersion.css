@@ -115,3 +115,8 @@
 :root .zb-shell[data-map^='guard-gd-'] .zb-tactics-strip.has-sensor-pressure>.guard-next-intel,
 :root .zb-shell[data-map^='guard-gd-'] .zb-tactics-strip.has-sensor-pressure>.guard-battle-feedback{display:none!important}
 .guard-pressure-banner{display:block;flex:1;min-width:0;font-size:13px;font-weight:800;line-height:1.3;white-space:normal;overflow-wrap:anywhere;color:#ffe3b0;border-left:3px solid #fbbf24;padding-left:8px}
+.guard-preparation-check{padding:10px 12px;margin:10px 0;border:1px solid #7ec9be50;border-radius:8px;background:#102e35;color:#e4eee7}
+.guard-preparation-check ul{list-style:none;padding:0;margin:8px 0;font-size:12px;line-height:1.7}
+.guard-preparation-check em{margin-left:7px;color:#ffd28d;font-style:normal;font-weight:700}
+.guard-preparation-check small,.guard-target-hint{display:block;font-size:11px;line-height:1.6;color:#b9ced1;white-space:normal;overflow-wrap:anywhere}
+.zb-target-mode{flex-wrap:wrap}

@@ -1,5 +1,5 @@
 export type DefenseDamageType = 'PHYSICAL' | 'PURE';
-export type DefenseTargetMode = 'FIRST' | 'STRONG';
+export type DefenseTargetMode = 'FIRST' | 'STRONG' | 'THREAT';
 export type DefenseStatus = 'READY' | 'RUNNING' | 'INTERMISSION' | 'WON' | 'LOST';
 export type DefenseTowerId = 'PULSE' | 'BURST' | 'CONTROL' | 'SENSOR';
 export type DefenseEnemyId = 'NORMAL' | 'SWIFT' | 'ARMORED' | 'SWARM' | 'VEILED' | 'BOSS';

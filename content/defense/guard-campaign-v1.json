@@ -19,7 +19,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "id": "guard-gd-01",
@@ -803,7 +804,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "id": "guard-gd-02",
@@ -1604,7 +1606,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "id": "guard-gd-03",
@@ -2446,7 +2449,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "path": [
@@ -3265,7 +3269,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "path": [
@@ -4206,7 +4211,8 @@
       "defaultTargetMode": "FIRST",
       "targetModes": [
         "FIRST",
-        "STRONG"
+        "STRONG",
+        "THREAT"
       ],
       "map": {
         "path": [

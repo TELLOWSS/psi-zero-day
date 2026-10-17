@@ -1,10 +1,11 @@
 import type {DefenseCombatShot,DefenseContent,DefenseEnemyState,DefensePendingAttack,DefensePoint,DefenseRunState,DefenseTowerLevelDefinition,DefenseTowerState} from '../domain/defense';
-import {defenseBoundary,defenseDistanceSquared,defenseEnemyPath,defenseEnemyPosition,defenseGuidanceContains,defensePathLength,defenseSegmentDistance,defenseTowerPoint} from './defense-geometry';
+import {defenseBoundary,defenseDistanceSquared,defenseEnemyPosition,defenseGuidanceContains,defenseSegmentDistance,defenseTowerPoint} from './defense-geometry';
+import {compareDefenseTargets} from './defense-targeting';
+import type {DefenseTargetMode} from '../domain/defense';
 
 const visible=(e:DefenseEnemyState,c:DefenseContent,tick:number)=>!c.enemies.find(d=>d.id===e.enemyId)!.hidden||e.revealUntilTick>tick;
-function ordered(enemies:readonly DefenseEnemyState[],state:DefenseRunState,content:DefenseContent,mode:'FIRST'|'STRONG'){
- const remaining=(e:DefenseEnemyState)=>defensePathLength(defenseEnemyPath(content,e,state))-e.distance;
- return [...enemies].sort((a,b)=>(mode==='STRONG'?b.hp-a.hp:0)||remaining(a)-remaining(b)||a.spawnSequence-b.spawnSequence||(a.id<b.id?-1:1));
+function ordered(enemies:readonly DefenseEnemyState[],state:DefenseRunState,content:DefenseContent,mode:DefenseTargetMode){
+ return [...enemies].sort((a,b)=>compareDefenseTargets(a,b,mode,content,state));
 }
 export function ultimateHit(enemy:DefenseEnemyState,content:DefenseContent,tick:number,level:DefenseTowerLevelDefinition,source:string,multiplier=1){
  const definition=content.enemies.find(e=>e.id===enemy.enemyId)!,armorBase=definition.boss&&definition.phase&&tick>=enemy.bossArmorFromTick&&tick<enemy.bossArmorUntilTick?definition.phase.armor:definition.armor;

@@ -205,7 +205,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   const guardCampaign=record(input.scenario)&&String(input.scenario.id).startsWith('guard-gd-');
   if (guardCampaign?bossSpawns>1:bossSpawns!==1) issues.push(`waves: expected exactly one boss spawn, got ${bossSpawns}`);
 
-  const targetModes = Array.isArray(input.targetModes) ? input.targetModes.filter((v): v is DefenseTargetMode => v === 'FIRST' || v === 'STRONG') : [];
+  const targetModes = Array.isArray(input.targetModes) ? input.targetModes.filter((v): v is DefenseTargetMode => v === 'FIRST' || v === 'STRONG' || (guardCampaign&&v === 'THREAT')) : [];
   const speeds = Array.isArray(input.speeds) ? input.speeds.filter((v): v is number => v === 1 || v === 2) : [];
   const scenario = record(input.scenario) ? input.scenario : {};
   const rawAvailableTowers = Array.isArray(scenario.availableTowers) ? scenario.availableTowers : [];
@@ -253,7 +253,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   if(input.preparationMode!==undefined&&input.preparationMode!=='MANUAL')issues.push('preparationMode: invalid');
   if(input.combatReportEnabled!==undefined&&typeof input.combatReportEnabled!=='boolean')issues.push('combatReportEnabled: invalid');
   if (speeds.length !== 2 || !speeds.includes(1) || !speeds.includes(2)) issues.push('speeds: must contain 1 and 2');
-  if (targetModes.length !== 2 || !targetModes.includes('FIRST') || !targetModes.includes('STRONG')) issues.push('targetModes: must contain FIRST and STRONG');
+  if (targetModes.length < 2 || targetModes.length > (guardCampaign?3:2) || new Set(targetModes).size!==targetModes.length || (Array.isArray(input.targetModes)&&targetModes.length!==input.targetModes.length) || !targetModes.includes('FIRST') || !targetModes.includes('STRONG')) issues.push('targetModes: must contain FIRST and STRONG; THREAT is optional for Guard');
 
   const supportResetWaveIds = Array.isArray(scenario.supportResetWaveIds) ? scenario.supportResetWaveIds : [];
   if (supportResetWaveIds.some(id => !integer(id) || id < 1 || id > waves.length)

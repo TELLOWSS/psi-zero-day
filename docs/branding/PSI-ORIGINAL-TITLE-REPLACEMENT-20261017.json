@@ -5,7 +5,7 @@
   "scope": "MAIN_TITLE_MARK_AND_MAIN_CHARACTER_HELMET_ONLY",
   "supersedesTitleFiles": ["/assets/branding/new-psi-wordmark-stacked-chalk.svg", "/assets/branding/new-psi-wordmark-wide-chalk.svg"],
   "assetManifest": "content/episode01/home-psi-art-v5.json",
-  "runtimeMark": "/assets/branding/home-psi-v5/psi-original.svg",
+  "runtimeMark": "/assets/branding/home-psi-v5/psi-original-on-dark.svg",
   "companyNameFromReference": "PSI",
   "legacyAssetBytesPreserved": true,
   "trademarkClearance": "NOT_CONFIRMED"

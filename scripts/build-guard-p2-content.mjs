@@ -6,7 +6,7 @@ const data={
  CONTROL:[{damage:14,intervalTicks:32,range:165,splashRadius:65,maxTargets:3,slowFraction:.65,slowTicks:40,ultimate:'LOCK'},{damage:9,intervalTicks:24,range:165,splashRadius:110,maxTargets:7,slowFraction:.4,slowTicks:40,ultimate:'BOUNDARY'}],
  SENSOR:[{damage:20,intervalTicks:18,range:195,revealRadius:220,revealIntervalTicks:20,revealTicks:80,ultimate:'OBSERVATION'},{damage:35,intervalTicks:15,range:175,revealRadius:175,revealIntervalTicks:20,revealTicks:70,ultimate:'ANALYSIS'}]
 };
-for(const c of foundation){c.contentVersion='guard-underground-2.0.0';c.rulesVersion='guard-rules-2';c.ultimateEnabled=true;
+for(const c of foundation){c.contentVersion='guard-underground-2.0.0';c.rulesVersion='guard-rules-2';c.ultimateEnabled=true;c.targetModes=['FIRST','STRONG','THREAT'];
  c.supports=c.supports.filter(s=>s.id!=='COMMANDER'&&s.id!=='SIGNALER');
  c.supports.push({...structuredClone(c.supports[0]),id:'COMMANDER',characterBinding:'player',skillTextId:'guard.support.COMMANDER',freezeMovementTicks:0,cooldownTicks:900,relocation:true},
  {...structuredClone(c.supports[0]),id:'SIGNALER',characterBinding:'choi_minseok',skillTextId:'guard.support.SIGNALER',freezeMovementTicks:0,cooldownTicks:800,directionalRange:{bonus:90,halfAngle:Math.PI/6,durationTicks:120}});

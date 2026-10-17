@@ -22,5 +22,5 @@ export function validDefenseTacticalStats(v:unknown):v is DefenseTacticalStats{
 }
 export function validDefenseTacticalReport(v:unknown):v is DefenseTacticalReport{
  return record(v)&&typeof v.runId==='string'&&typeof v.contentVersion==='string'&&['COORDINATOR','OBSERVER','REBAR_LEAD','ENGINEER','COMMANDER','SIGNALER'].includes(String(v.supportId))&&typeof v.won==='boolean'&&count(v.shield)&&validDefenseTacticalStats(v.stats)
-  &&Array.isArray(v.loadout)&&v.loadout.length<=8&&v.loadout.every(t=>record(t)&&typeof t.padId==='string'&&tower(t.towerId)&&level(t.levelId)&&['FIRST','STRONG'].includes(String(t.targetMode)));
+  &&Array.isArray(v.loadout)&&v.loadout.length<=8&&v.loadout.every(t=>record(t)&&typeof t.padId==='string'&&tower(t.towerId)&&level(t.levelId)&&['FIRST','STRONG','THREAT'].includes(String(t.targetMode)));
 }

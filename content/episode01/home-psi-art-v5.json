@@ -4,7 +4,7 @@
   "generator": "built-in image_gen",
   "prompt": "docs/branding/HOME-PSI-ART-PROMPTS-20261017.json",
   "mark": {
-    "uri": "/assets/branding/home-psi-v5/psi-original.svg",
+    "uri": "/assets/branding/home-psi-v5/psi-original-on-dark.svg",
     "companyName": "PSI",
     "source": "docs/branding/psi-original-reference-20261017.png",
     "method": "SVG traced from user reference; geometry, blue shield, concentric eye and PSI retained"

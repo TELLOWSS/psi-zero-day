@@ -70,7 +70,7 @@ function validTower(value: unknown): value is DefenseTowerState {
     && (value.charge===undefined||nonNegativeInteger(value.charge))
     && (value.analysisTicks===undefined||(nonNegativeInteger(value.analysisTicks)&&value.analysisTicks<=80))
     && (value.analysisTargetId===undefined||value.analysisTargetId===null||nonEmptyString(value.analysisTargetId))
-    && ['FIRST','STRONG'].includes(String(value.targetMode))
+    && ['FIRST','STRONG','THREAT'].includes(String(value.targetMode))
     && nonNegative(value.invested)
     && nonNegativeInteger(value.attackCooldown)
     && nonNegativeInteger(value.revealCooldown);
