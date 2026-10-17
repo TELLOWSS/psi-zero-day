@@ -37,3 +37,22 @@
   & .commercial-title-copy h1{font-size:20px!important}
  }
 }
+
+
+/* Android QA 390x844: single STORY entry must be above the first fold.
+   Previous hero reserved ~590px of almost empty portrait space. */
+@media(max-width:600px) and (orientation:portrait){
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
+    min-height:170px!important;height:auto!important;padding:12px 0 14px!important;
+    justify-content:flex-start!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions.is-defense-first{
+    margin-top:0!important;gap:10px!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions .commercial-title-action.is-story-entry{
+    order:-2!important;border-color:#ddc28f88!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions .commercial-title-action.is-defense-entry{
+    order:-1!important;
+  }
+}

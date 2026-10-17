@@ -10,6 +10,10 @@ export function storyReadingPages(text:string,maxChars=70):string[]{
   const pages:string[]=[];let page='';
   for(const paragraph of text.split(/\n+/).filter(Boolean)){
     const sentences=paragraph.split(/(?<=[.!?。…])\s+/u);
+    // Timestamp punctuation is not a cinematic cut. Never strand "06:27." alone.
+    if(sentences.length>1 && /^\d{1,2}:\d{2}\.$/u.test(sentences[0]??'')){
+      sentences.splice(0,2,`${sentences[0]} ${sentences[1]}`);
+    }
     for(const sentence of sentences){
       if(page&&page.length+sentence.length>maxChars){pages.push(page);page='';}
       if(sentence.length<=maxChars){page+=(page?'\n':'')+sentence;continue;}

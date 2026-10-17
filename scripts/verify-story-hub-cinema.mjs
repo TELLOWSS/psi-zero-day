@@ -18,6 +18,8 @@ try{
    await page.goto(root,{waitUntil:'domcontentloaded'});
    await page.locator('button.is-story-entry').waitFor();
    const entryCount=await page.locator('button.is-story-entry').count();
+   const entryBox=await page.locator('button.is-story-entry').boundingBox();
+   if(width===390&&(!entryBox||entryBox.y>height*.70))throw new Error('Story tile is below first mobile fold: '+JSON.stringify(entryBox));
    const splitCount=await page.locator('button.is-episode02-entry').count();
    if(entryCount!==1||splitCount!==0)throw new Error('Story must have one campaign tile: '+entryCount+'/'+splitCount);
    await page.screenshot({path:path.join(out,width+'x'+height+'-single-story-hub.png')});
@@ -28,12 +30,16 @@ try{
      const box=s=>document.querySelector(s)?.getBoundingClientRect();
      const panel=box('.play-panel'),text=document.querySelector('.dialogue-text');
      const actor=document.querySelectorAll('.episode-immersive-character').length;
+     const actorBox=box('.episode-immersive-character');const sceneBox=box('.episode-immersive-scene');
      return {panelHeight:panel?.height,textHeight:text?.clientHeight,textScroll:text?.scrollHeight,
        sceneHeight:box('.episode-immersive-scene')?.height,
        toggle:!!document.querySelector('.story-view-toggle'),
-       actors:actor,overflow:document.documentElement.scrollWidth>innerWidth+2};
+       actors:actor,actorY:actorBox?.top,sceneY:sceneBox?.top,
+       popup:!!document.querySelector('.story-orientation-hint'),
+       overflow:document.documentElement.scrollWidth>innerWidth+2};
    });
-   if(!look.toggle||look.panelHeight> Math.max(height<=440?120:150,150) || look.overflow)throw new Error('Cinema UI contract '+JSON.stringify(look));
+   if(!look.toggle||look.panelHeight> Math.max(height<=440?120:150,150) || look.overflow||look.popup)throw new Error('Cinema UI contract '+JSON.stringify(look));
+   if(height<=440 && (look.actorY??0)<(look.sceneY??0)+35)throw new Error('Landscape cast is floating near the header '+JSON.stringify(look));
    if((look.textScroll??0)>(look.textHeight??0)+2)throw new Error('Subtitle page was clipped '+JSON.stringify(look));
    await page.screenshot({path:path.join(out,width+'x'+height+'-story-cinema.png')});
    rows.push({width,height,entryCount,splitCount,look,errors});

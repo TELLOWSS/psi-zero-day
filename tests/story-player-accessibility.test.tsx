@@ -105,14 +105,22 @@ it('unobstructed scene focus preserves the current page and engine, restores on 
 });
 
 
-it('offers optional landscape viewing without locking the portrait narrative or mutating the run',()=>{
+it('keeps portrait story unobstructed by orientation popups or forced rotation',()=>{
  const session=EpisodeSession.directed();session.start(0);
  act(()=>root.render(<PlayableEpisode session={session}/>));
  click(host.querySelector('.episode-cold-open-cta'));
  const before=session.getSnapshot();
- const guide=host.querySelector('.story-orientation-hint');
- expect(guide?.textContent).toContain('가로로 돌리면');
- click(host.querySelector('.story-orientation-hint button'));
  expect(host.querySelector('.story-orientation-hint')).toBeNull();
+ expect(host.querySelector('.story-reading-guide')).not.toBeNull();
  expect(session.getSnapshot()).toBe(before);
+});
+
+
+it('keeps the timestamp attached to the first spoken/narrated beat rather than a one-token page',()=>{
+ const session=EpisodeSession.directed();session.start(0);
+ act(()=>root.render(<PlayableEpisode session={session}/>));
+ click(host.querySelector('.episode-cold-open-cta'));
+ const line=host.querySelector('.dialogue-text')?.textContent||'';
+ expect(line).toMatch(/^\d{1,2}:\d{2}\./);
+ expect(line.length).toBeGreaterThan(10);
 });
