@@ -9,7 +9,7 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
   currentPage=page;
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.is-story-entry').click();await page.locator('.episode-cold-open-cta').click({timeout:30000});
-  for(let step=0;step<250;step++){
+  for(let step=0;step<650;step++){
    if(await page.locator('.phase-complete').count())break;
    await page.locator('[data-story-player="cinematic"]').waitFor();
    const scene=page.locator('.episode-immersive-scene'),event=await scene.getAttribute('data-event'),node=await scene.getAttribute('data-node');seen.add(event);

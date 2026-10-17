@@ -449,6 +449,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
       } else if (presentation.type !== 'SHOW_CHOICE' && (e.key === 'Enter' || e.code === 'Space')) {
         if (target?.closest('button') && !target.closest('.continue-button')) return;
         e.preventDefault();
+        if(directedCampaign){focusRef.current?.querySelector<HTMLButtonElement>('.continue-button')?.click();return;}
         if (directedCampaign) stopVoice();
         playUiCue('continue');
         session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
@@ -704,6 +705,8 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
               onChoicePreview={setChoicePreviewId}
               interactionLocked={voiceLocked && !directedCampaign}
               voicePlaying={directedCampaign && voiceLocked}
+              pageDialogue={directedCampaign}
+              onReadAdvance={directedCampaign?stopVoice:undefined}
               dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}
           {finishedFieldEvent && !presentation ? <div className="story-field-confirm">

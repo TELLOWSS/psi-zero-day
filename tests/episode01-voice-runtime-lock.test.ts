@@ -24,8 +24,8 @@ describe('Episode 01 voice runtime production lock', () => {
     expect(playable).toContain("if (voiceLocked && !directedCampaign && (e.key === 'Enter' || e.code === 'Space'");
     expect(playable).toContain('if (directedCampaign) stopVoice();');
     expect(presentation).toContain('disabled={interactionLocked}');
-    expect(presentation).toContain('aria-busy={interactionLocked || undefined}');
-    expect(presentation).toContain('dialogueOverrideText ?? t(p.text_id)');
+    expect(presentation).toContain('aria-busy={interactionLocked||undefined}');
+    expect(presentation).toContain('dialogueOverrideText??t(p.text_id)');
   });
 
   it('ducks only presentation audio during voice and always releases the gameplay lock on failure/end', () => {

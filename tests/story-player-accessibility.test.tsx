@@ -21,7 +21,7 @@ it.each(['first','last'])('offers explicit controls throughout the 26-event %s-c
   act(()=>root.render(<PlayableEpisode session={session}/>));
   click(host.querySelector('.episode-cold-open-cta'));
   const seen=new Set<string>();let decisions=0;
-  for(let step=0;step<250&&session.getSnapshot().phase==='playing';step++){
+  for(let step=0;step<650&&session.getSnapshot().phase==='playing';step++){
     const snapshot=session.getSnapshot(),event=snapshot.state?.event_runtime.active_instance?.event_id;
     if(event)seen.add(event);
     expect(host.querySelector('[data-story-player="cinematic"]')).not.toBeNull();
@@ -35,6 +35,19 @@ it.each(['first','last'])('offers explicit controls throughout the 26-event %s-c
   }
   expect(session.getSnapshot().phase).toBe('complete');expect(seen.size).toBe(26);
   expect(decisions).toBeGreaterThan(5);
+},20000);
+
+it('keeps the engine on the current dialogue until its final reading page',()=>{
+  const session=EpisodeSession.directed();session.start(0);
+  act(()=>root.render(<PlayableEpisode session={session}/>));click(host.querySelector('.episode-cold-open-cta'));
+  const before=session.getSnapshot(),first=host.querySelector('.dialogue-text')!.textContent;
+  expect(host.querySelector('.continue-button')?.textContent).toContain('다음 문장');
+  click(host.querySelector('.continue-button'));
+  expect(session.getSnapshot()).toBe(before);
+  expect(host.querySelector('.dialogue-text')!.textContent).not.toBe(first);
+  click(host.querySelector('.story-reading-position button'));
+  expect(host.querySelector('.dialogue-text')!.textContent).toBe(first);
+  expect(session.getSnapshot()).toBe(before);
 });
 
 it('reports failed background loading and retries without changing the story or save state',()=>{

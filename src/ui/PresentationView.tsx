@@ -3,6 +3,46 @@ import type { PresentationCommand } from '../domain';
 import type { Translate } from '../localization/translator';
 import { textStyle, VisualImage } from './VisualSlot';
 import { episode01ChoiceVisual } from '../app/episode01-choice-visual';
+import {useState} from 'react';
+
+/** Reading pages do not advance the engine or commit a choice. */
+export function storyReadingPages(text:string):string[]{
+  const pages:string[]=[];let page='';
+  for(const paragraph of text.split(/\n+/).filter(Boolean)){
+    const sentences=paragraph.split(/(?<=[.!?。…])\s+/u);
+    for(const sentence of sentences){
+      if(page&&page.length+sentence.length>70){pages.push(page);page='';}
+      if(sentence.length<=70){page+=(page?'\n':'')+sentence;continue;}
+      // Long authored sentences wrap at word boundaries, retaining their words and punctuation.
+      for(const word of sentence.split(/\s+/)){
+        if(page&&page.length+word.length>70){pages.push(page);page='';}
+        page+=(page?' ':'')+word;
+      }
+    }
+  }
+  if(page)pages.push(page);return pages.length?pages:[''];
+}
+
+function DialogueContent({p,t,send,previousAvailable,onPrevious,interactionLocked,voicePlaying,dialogueOverrideText,pageDialogue,onReadAdvance}:{
+  p:Extract<PresentationCommand,{type:'SHOW_DIALOGUE'|'SHOW_RESULT'}>;t:Translate;send:(command:EngineCommand)=>void;
+  previousAvailable:boolean;onPrevious?:()=>void;interactionLocked:boolean;voicePlaying:boolean;
+  dialogueOverrideText:string|null;pageDialogue:boolean;onReadAdvance?:()=>void;
+}){
+  const text=dialogueOverrideText??t(p.text_id),pages=pageDialogue?storyReadingPages(text):[text];
+  const [page,setPage]=useState(0),index=Math.min(page,pages.length-1),more=index<pages.length-1;
+  return <div className={`dialogue-content ${textStyle(p.text_id)??''}`}>
+    <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id)==='note'?'ui.record':p.type==='SHOW_DIALOGUE'?'ui.dialogue':'ui.narration')}</span>{previousAvailable&&onPrevious?<button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button>:null}</div>
+    <p className="dialogue-text" data-reading-page={pageDialogue?index+1:undefined} data-voice-caption={dialogueOverrideText!==null?'active':undefined}>{pages[index]}</p>
+    {pageDialogue?<div className="story-reading-position" aria-label={t('story.player.readingProgress')}>
+      <button type="button" disabled={index===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>{t('story.player.previousPage')}</button>
+      <span>{index+1} / {pages.length}</span>
+    </div>:null}
+    <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked||undefined}
+      onClick={event=>{if(interactionLocked||event.detail>=2)return;onReadAdvance?.();if(more)setPage(index+1);else send({type:'advance_event',instance_id:p.instance_id,node_id:p.node_id});}}>
+      {t(more?(voicePlaying?'story.player.nextPageVoice':'story.player.nextPage'):(voicePlaying?'story.player.continueVoice':'ui.continue'))}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
+    </button>
+  </div>;
+}
 
 function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   p: Extract<PresentationCommand, { type: 'SHOW_CHOICE' }>;
@@ -36,7 +76,7 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   })}</div>;
 }
 
-export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, voicePlaying = false, dialogueOverrideText = null }: {
+export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, voicePlaying = false, dialogueOverrideText = null, pageDialogue=false, onReadAdvance }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   eventId?: string | null;
@@ -46,6 +86,8 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
   onPrevious?: () => void;
   interactionLocked?: boolean;
   voicePlaying?: boolean;
+  pageDialogue?:boolean;
+  onReadAdvance?:()=>void;
   dialogueOverrideText?: string | null;
 }) {
   return <>{commands.map((p, index) => {
@@ -59,16 +101,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
       <h2>{t(p.text_id)}</h2>
       <ChoiceButtons p={p} t={t} send={send} eventId={eventId} onChoicePreview={onChoicePreview} />
     </div>;
-    if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <div className={`dialogue-content ${textStyle(p.text_id) ?? ''}`} key={`${p.instance_id}/${p.node_id}`}>
-      <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>{previousAvailable && onPrevious ? <button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button> : null}</div>
-      <p className="dialogue-text" data-voice-caption={dialogueOverrideText !== null ? 'active' : undefined}>
-        {dialogueOverrideText ?? t(p.text_id)}
-      </p>
-      <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked || undefined}
-        onClick={e => { if (!interactionLocked && e.detail < 2) send({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }); }}>
-        {t(voicePlaying ? 'story.player.continueVoice' : 'ui.continue')}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
-      </button>
-    </div>;
+    if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <DialogueContent key={`${p.instance_id}/${p.node_id}`} p={p} t={t} send={send} previousAvailable={previousAvailable} onPrevious={onPrevious} interactionLocked={interactionLocked} voicePlaying={voicePlaying} dialogueOverrideText={dialogueOverrideText} pageDialogue={pageDialogue} onReadAdvance={onReadAdvance}/>;
     return <div className="cue-placeholder" key={`cue.${index}`} role="status">
       <span>{t('ui.cue_placeholder')}</span>
       {'asset_id' in p && p.type !== 'AUDIO_CUE' ? <VisualImage uri={assetUri(p.asset_id)} alt="" /> : null}
