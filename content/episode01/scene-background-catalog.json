@@ -26,7 +26,8 @@
       "used_by": [
         "e01_03_plan_breaks",
         "e01_04_junho_signal",
-        "e01_08a_reporting_return"
+        "e01_08a_reporting_return",
+        "e01_05_command"
       ]
     },
     "work_yard": {
@@ -35,12 +36,12 @@
       "rc_path": "assets/episode01/cg/work-yard-rc.svg",
       "used_by": [
         "e01_02_meet_kang",
-        "e01_05_command",
         "e01_08g_tbm_field_gap",
         "e01_08h_tbm_return",
         "e01_08i_restart_pressure",
         "e01_08j_restart_return",
-        "e01_08m_instruction_cascade"
+        "e01_08m_instruction_cascade",
+        "e01_08_reactions"
       ]
     },
     "concrete_pour": {
@@ -49,8 +50,7 @@
       "rc_path": "assets/episode01/cg/concrete-pour-rc.svg",
       "used_by": [
         "e01_06_pump_arrival",
-        "e01_07_first_pour",
-        "e01_08_reactions"
+        "e01_07_first_pour"
       ]
     },
     "inspection_zone": {
