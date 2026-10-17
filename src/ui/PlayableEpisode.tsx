@@ -107,6 +107,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   // Presentation-only preference. Toggling this never dispatches an engine event.
   const [storyViewMode,setStoryViewMode]=useState<'cinema'|'read'>('cinema');
   const [sceneFocus,setSceneFocus]=useState(false);
+  const [orientationHintDismissed,setOrientationHintDismissed]=useState(false);
   const [readerPaused,setReaderPaused]=useState(false);
   const [readerSaved,setReaderSaved]=useState(true);
   const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
@@ -556,6 +557,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
     data-story-decision={directedCampaign && presentation?.type === 'SHOW_CHOICE' ? 'true' : undefined}
   >
     <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
+    {directedCampaign&&isPlaying&&!strategyActive&&!showColdOpen&&!orientationHintDismissed?<aside className="story-orientation-hint" aria-label="화면 방향 선택 안내"><span><b>더 넓은 시네마 화면</b> · 가로로 돌리면 현장과 인물을 더 넓게 볼 수 있습니다. 세로 화면도 그대로 지원합니다.</span><button type="button" onClick={()=>setOrientationHintDismissed(true)}>이대로 감상</button></aside>:null}
     {directedCampaign && isPlaying && !strategyActive &&
       (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ?
       <button className="story-scene-peek" type="button" aria-pressed={sceneFocus}

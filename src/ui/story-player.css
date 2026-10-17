@@ -361,3 +361,40 @@
     bottom:calc(32px + env(safe-area-inset-bottom))!important;
   }
 }
+
+
+/* Camera grammar: landscape is encouraged without locking orientation; portrait is an authored frame. */
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint {
+  position:absolute!important;top:114px!important;left:50%!important;transform:translateX(-50%)!important;
+  z-index:78!important;box-sizing:border-box;width:min(460px,calc(100vw - 24px))!important;
+  display:none;align-items:center;gap:10px;padding:8px 10px;
+  border:1px solid #bfcbb867;border-radius:12px;background:#071b26d9;color:#eaf0e9;
+  box-shadow:0 5px 20px #0006;font-size:12px;line-height:1.55;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint b{color:#f0d18e}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint button{
+  border:1px solid #e2cfaa88;border-radius:8px;background:#163342;color:#f9edda;
+  min-height:44px;min-width:92px;padding:5px 8px;font:inherit;font-weight:750;cursor:pointer;
+}
+@media(orientation:portrait){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:flex}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-background{
+    object-fit:cover!important;object-position:52% 35%!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:25;
+    background:linear-gradient(90deg,rgba(3,13,19,.22),transparent 28%,transparent 72%,rgba(3,13,19,.22));
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:65px 0 calc(var(--story-dock-height) - 45px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+    background:linear-gradient(90deg,#091c2cca,#091c2c48)!important;
+  }
+}
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{top:106px!important}
+}
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
+}
