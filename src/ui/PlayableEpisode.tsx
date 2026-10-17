@@ -87,7 +87,7 @@ function initialPaidItemWallet() {
   catch { return emptyPaidItemWallet(); }
 }
 
-export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { session: EpisodeSession; onReturn?: () => void;onWatch?:()=>void;onGuard?:()=>void }) {
+export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onGuard }: { session: EpisodeSession; onReturn?: () => void;onNextEpisode?:()=>void;onWatch?:()=>void;onGuard?:()=>void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [showManual, setShowManual] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
@@ -778,6 +778,9 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         <p>{t('ui.review.hint')}</p>
         <EpisodeRecord entries={session.review()} t={t} />
       </section>
+      {onNextEpisode?<button className="story-next-episode" type="button" onClick={onNextEpisode}>
+        <span>DAY 02 · 이어지는 사건</span><strong>두 번째 날 · 첫 양중 오프닝으로</strong><b aria-hidden="true">→</b>
+      </button>:null}
       <p className="replay-hint">{t('ui.review.replay')}</p>
       <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
     </section> : <section className="complete-screen" role="alert"><p>{t('ui.error')}</p><button className="primary-button" type="button" onClick={() => session.restart(snapshot.revision)}>{t('ui.restart')}</button></section>}
