@@ -22,7 +22,10 @@ describe('commercial hub mode readiness',()=>{
   it('wires three distinct authored mode artworks and a full preview dialog',()=>{
     expect(hub).toContain("signal: SIGNAL_WATCH_KEY_ART");
     expect(hub).toContain('defense: `/${DEFENSE_PREMIUM_HERO}`');
-    expect(hub).toContain('uri={episode01BackgroundUri(resolve)}');
+    // Single STORY mode uses the verified gate still, checked by browser decode QA.
+    expect(hub).toContain('src="/assets/episode01/cg/gate-dawn.webp"');
+    expect(hub).toContain('className="commercial-title-action is-story-entry has-mode-art"');
+    expect(hub).not.toContain('is-episode02-entry');
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
