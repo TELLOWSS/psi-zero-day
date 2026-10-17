@@ -1,3 +1,4 @@
+import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth,setEpisodeSaveHealth} from '../app/episode-save-health';
 import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
@@ -5,6 +6,7 @@ import './hub-premium.css';
 import homePremiumArt from '../../content/episode01/home-new-psi-art-v7.json';
 import {prepareSitePatrol} from '../app/site-patrol-access';
 import siteOperationsText from '../../content/localization/site-operations-ko.json';
+import {HubPlayFirst} from './HubPlayFirst';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -51,7 +53,7 @@ const OperationHandoffDossier = lazy(() => import('./OperationHandoffDossier').t
 const MODE_PREVIEW_ART = {
   signal: SIGNAL_WATCH_KEY_ART,
   defense: `/${DEFENSE_PREMIUM_HERO}`,
-  story: '/mode-previews/story-coming-soon-v2.webp',
+  story: '/assets/branding/home-new-psi-v7/wide.webp',
 } as const;
 type ModePreviewKind = keyof typeof MODE_PREVIEW_ART;
 const PatrolSurvivorsGame = lazy(() => loadSurvivorsGame().then(module => ({ default: module.PatrolSurvivorsGame })));
@@ -228,6 +230,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setLoading(true);
   };
   const newGame = () => {
+    setEpisodeSaveHealth('ok');
     const current = session.getSnapshot();
     if (current.phase !== 'start') session.restart(current.revision);
     void loadPlayableEpisode();
@@ -262,17 +265,11 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     preloadUris={preloadUris}
     crew={loadingCrew}
     onComplete={enterGame}
+    onExit={()=>setLoading(false)}
   />;
 
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
-    <PlayableEpisode session={session} onReturn={() => setInGame(false)} />
-    <button
-      className="game-defense-toggle"
-      type="button"
-      onMouseEnter={() => { void loadDefenseGame(); }}
-      onFocus={() => { void loadDefenseGame(); }}
-      onClick={() => openDefense()}
-    >{defenseText('defense.ui.hub.title')}</button>
+    <PlayableEpisode session={session} onReturn={() => setInGame(false)} onWatch={()=>setSurvivorsLoading(true)} onGuard={()=>openDefense('guard-campaign')} />
     {e1UnlockNotice ? <aside className="game-defense-unlock" role="status" aria-live="polite">
       <small>{defenseText('defense.event.new')}</small>
       <strong>{defenseText('defense.event.e1.title')}</strong>
@@ -306,7 +303,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   />;
 }
 
-export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDefense, onSurvivors }: {
+export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
@@ -314,6 +311,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
   onSurvivors?: () => void;
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
+  const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const [showSongPlayer, setShowSongPlayer] = useState(false);
   const [showManual, setShowManual] = useState(false);
@@ -325,6 +323,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
   const [motionEnabled, setMotionEnabled] = useState(true);
   const [castQuotesEnabled, setCastQuotesEnabled] = useState(true);
   const t = session.t;
+  const playFirst=typeof window!=='undefined'&&new URLSearchParams(window.location.search).get('main')==='play-first';
   const resolve = (id: string) => session.assetUri(id);
   const journey = projectEpisodeJourney(snapshot.state);
   const activeStep = journey.find(step => step.status === 'current') ?? journey[journey.length - 1]!;
@@ -358,13 +357,13 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
-  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art="premium-hero-v4">
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art={playFirst?'play-first-v3':'premium-hero-v4'}>
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <picture className="premium-title-picture">
+    {!playFirst?<picture className="premium-title-picture">
       <source media="(orientation: portrait) and (max-width: 1050px)" srcSet={homePremiumArt.assets.portrait.uri}/>
       <img src={homePremiumArt.assets.wide.uri} alt="" width={homePremiumArt.assets.wide.width} height={homePremiumArt.assets.wide.height} fetchPriority="high" decoding="async" className="commercial-title-backdrop"/>
-    </picture>
+    </picture>:null}
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
     <div className="commercial-title-sun-glow" aria-hidden="true" />
@@ -388,7 +387,9 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
 
     <button type="button" className="work-stop-song-open" onClick={() => setShowSongPlayer(true)}>♫ {workStopSongText('open')}</button>
 
-    <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
+    {playFirst?<HubPlayFirst t={t} onGuard={onDefense?()=>onDefense('guard-campaign'):undefined} onWatch={onSurvivors} onStory={()=>setModePreview('story')}/>:null}
+
+    {!playFirst?<section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <div className="hub-cinematic-intro">
       <div className="commercial-title-logo" data-title-rank="primary" role="img" aria-label={GAME_TITLE}>
         <div className="commercial-title-wordmark psi-original-lockup">
@@ -437,15 +438,15 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD</em><strong className="commercial-title-mode-title">{defenseText('guard.title')}</strong><small>{defenseText('guard.hub.description')}</small></span>
           <b>›</b>
         </button> : null}
-        <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
-          <img src={MODE_PREVIEW_ART.story} alt="" aria-hidden="true" className="commercial-title-action-art" />
+        <button className="commercial-title-action is-story-entry has-mode-art" type="button" onClick={onPlay}>
+          <VisualImage uri={episode01BackgroundUri(resolve)} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
-          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy">
-            <em className="breaker-brand-line">STORY / EPISODE 01</em><strong className="commercial-title-mode-title">스토리 모드 <span className="commercial-title-badge-new">준비중</span></strong>
-            <small>사람·증거·판단이 연결되는 본편 시네마틱을 완성하고 있습니다 · 탭하여 보기</small>
+            <em className="breaker-brand-line">STORY / EPISODE 01</em><strong className="commercial-title-mode-title">{t('story.entry.title')} <span className="commercial-title-badge-new">EP.01</span></strong>
+            <small>{t(snapshot.phase==='start'?'story.entry.begin':'story.entry.continue')}</small>
           </span>
-          <em>EP.01</em>
+          <em>{snapshot.completed}/{snapshot.total}</em>
           <b>›</b>
         </button>
         <button className="commercial-title-action is-sub-entry" type="button" onClick={() => setPage('site')}>
@@ -459,7 +460,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         <div className="chapter-record-path">{journey.map((step,index)=><button key={step.id} type="button" data-status={step.status} aria-pressed={detail.id===step.id} onClick={()=>setSelectedStep(step.id)}><VisualImage uri={characterPortraitUri(step.character,resolve)} alt=""/><span><small>{String(index+1).padStart(2,'0')} · {t(step.status === 'done' ? 'ui.hub.step.done' : 'ui.title.archive.preview')}</small><strong>{t(step.title)}</strong></span></button>)}</div>
         <div className="chapter-record-detail" aria-live="polite"><VisualImage uri={characterHighResPortraitUri(detail.character,resolve)} fallbackUri={characterPortraitUri(detail.character,resolve)} alt=""/><div><small>{t(detail.status === 'done' ? 'ui.hub.step.done' : 'ui.title.archive.preview')}</small><h3>{t(detail.title)}</h3><p>{t(detail.hint)}</p>{review.some(entry=>entry.event_id===detail.completion)?<EpisodeRecord entries={review.filter(entry=>entry.event_id===detail.completion)} t={t}/>:<p className="chapter-record-empty">{t('ui.title.archive.empty')}</p>}<button type="button" onClick={()=>setPage('map')}>진행 경로 상세 ↗</button></div></div>
       </section>
-    </section>
+    </section>:null}
 
     {onDefense ? <button
       className="commercial-title-field-status is-live-entry"
@@ -504,7 +505,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     </div>
 
     <section className="commercial-title-features" data-title-role="secondary-features" aria-label={t('ui.title.features')}>
-      <button type="button" onClick={() => setModePreview('story')}>
+      <button type="button" onClick={onPlay}>
         <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
         <span className="commercial-title-feature-shade" aria-hidden="true" />
         <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div><b>›</b>
@@ -546,21 +547,23 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <span>NEW PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
     </button>
 
+    {(snapshot.phase!=='start'||saveHealth==='preserved')&&page==='home'?<button className="story-restart-entry" type="button" onClick={()=>setModePreview('story')}>{t('story.entry.restartMenu')}</button>:null}
+    {saveHealth==='preserved'?<p role="status" className="story-save-warning">{t('story.reader.preserved')}</p>:null}
     {modePreview ? <div className="mode-preview-backdrop" role="presentation" onMouseDown={() => setModePreview(null)}>
       <section className={`mode-preview-dialog is-${modePreview}`} role="dialog" aria-modal="true" aria-labelledby="mode-preview-title" onMouseDown={event => event.stopPropagation()}>
         <button type="button" className="mode-preview-close" aria-label="프리뷰 닫기" onClick={() => setModePreview(null)}>×</button>
         <div className="mode-preview-visual">
-          <img src={MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 현장 재구성':'스토리 모드 준비중'} />
+          <img src={modePreview==='story'?episode01BackgroundUri(resolve):MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 현장 재구성':t('story.entry.title')} />
         </div>
         <div className="mode-preview-copy">
           <span>{modePreview==='defense'?'TACTICAL DEFENSE':'CINEMATIC STORY'}</span>
-          <h2 id="mode-preview-title">{modePreview==='defense'?defenseText('guard.title'):'스토리 모드'} <b>{modePreview==='defense'?defenseText('guard.live'):'준비중'}</b></h2>
+          <h2 id="mode-preview-title">{modePreview==='defense'?defenseText('guard.title'):'스토리 모드'} <b>{modePreview==='defense'?defenseText('guard.live'):'EP.01'}</b></h2>
           <p>{modePreview==='defense'
             ? defenseText('defense.tactics.ready_body')
-            : '현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.'}</p>
+            : t('story.entry.description')}</p>
           <small>{defenseText('defense.tactics.playable')}</small>
           {modePreview==='defense'&&onDefense?<button type="button" className="hub-primary" onClick={()=>onDefense("guard-campaign")}>{defenseText('defense.tactics.hub_title')}</button>:null}
-          <Suspense fallback={null}><OperationHandoffDossier mode={modePreview}/></Suspense>
+          {modePreview==='story'&&<><button className="hub-primary" type="button" onClick={onPlay}>{t('story.entry.continue')}</button><p>{t('story.entry.restartWarning')}</p><button type="button" onClick={onNewGame}>{t('story.entry.restart')}</button></>}<Suspense fallback={null}><OperationHandoffDossier mode={modePreview}/></Suspense>
         </div>
       </section>
     </div> : null}
@@ -625,7 +628,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           </button>)}
         </div>
         <section className="hub-route-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(detail.character, resolve)} alt="" /><div><small>{t(`ui.hub.step.${detail.status}`)}</small><h2>{t(detail.title)}</h2><p>{t(detail.hint)}</p>{detail.status === 'locked' ? <p>{t('ui.hub.locked_hint')}</p> : null}</div>
-          <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
+          <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{t(snapshot.phase==='start'?'story.entry.begin':'story.entry.continue')}</button>
         </section>
       </> : page === 'people' ? <div className="hub-people">
         <div className="hub-section-title"><span className="hub-kicker">FIELD TEAM / 08</span><h1>{t('ui.hub.people')}</h1><p>{t('ui.hub.people.intro')}</p></div>
@@ -636,7 +639,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       </div> : page === 'guide' ? <RecoverableFieldGuide session={session} onHome={() => setPage('home')} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
-        <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
+        <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{t(snapshot.phase==='start'?'story.entry.begin':'story.entry.continue')}</button>
       </div>}
     </section>
     <footer className="hub-footer"><span>{GAME_TITLE}</span><span>{t('ui.hub.footer')}</span><small>EPISODE 01 · {t('ep01.title')}</small></footer>

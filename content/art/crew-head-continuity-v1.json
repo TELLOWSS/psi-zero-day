@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "grid": [
+    4,
+    2
+  ],
+  "directions": [
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE"
+  ],
+  "items": [
+    {
+      "id": "choi_minseok",
+      "source": "exec-35dacafb-1f7d-4f0d-981a-24fed5b8a6d6.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character choi_minseok. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/choi-minseok-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/choi_minseok.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "9b6fe1e28fc8c5cc3e9ffd5a4eef0f7dcbcdc48d6e88fcdc1306ce288186de26"
+    },
+    {
+      "id": "kang_taesik",
+      "source": "exec-ebeb2fe3-ff68-43e9-b252-d799bf168cb1.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character kang_taesik. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view. Thick dark moustache ONLY, clean-shaven chin, absolutely no gray beard.  Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/kang-taesik-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/kang_taesik.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "5488c57bb8cb8ba080cb8a693e42fbf592ccfd39c040d51289c640a696c3c2af"
+    },
+    {
+      "id": "lee_jaehoon",
+      "source": "exec-f368cc50-1e48-401b-88ea-897343c9186f.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character lee_jaehoon. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/lee-jaehoon-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/lee_jaehoon.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "de09b9e6f37541d1e00d529c754ee5b6badc29021db4ba0f2c815cd0de92f13c"
+    },
+    {
+      "id": "lim_junho",
+      "source": "exec-9dc47474-21f6-48c9-9f72-a8229ad92f66.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character lim_junho. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/lim-junho-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/lim_junho.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "29a11579469207325b5d6b81baf951fee4eeb0c06abac73579e719c1b01df557"
+    },
+    {
+      "id": "oh_seungjae",
+      "source": "exec-eb623cdf-33bf-46dc-97ae-983ffea65341.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character oh_seungjae. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/oh-seungjae-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/oh_seungjae.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "a39ce2c0c847faa7cb6728b124c980ad655285b3e95a7b50a3e488e47c96dc59"
+    },
+    {
+      "id": "player",
+      "source": "exec-0899e38a-46b7-44d7-bfa6-2dec56fc5414.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character player. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.  Adult woman, mature face and low brown ponytail consistent in all views. Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/player-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/player.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "5c19cd9d643ef8a160f18019ce35bad0037e420ba7db10a9ab0d357598d6bb27"
+    },
+    {
+      "id": "seo_jeongmin",
+      "source": "exec-74634aa1-a60e-4858-b9b3-e759063738f9.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character seo_jeongmin. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/seo-jeongmin-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/seo_jeongmin.webp",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "1344d075665e7851768b8277e453f3bd8cec4af96afb4e431d47754ebc505621"
+    },
+    {
+      "id": "yoon_sungho",
+      "source": "exec-0bdc1fea-31c4-45b0-bdfa-d91fabe67d02.png",
+      "prompt": "FINAL PRODUCTION sprite atlas for the SINGLE adult NEW-PSI character yoon_sungho. IMAGE 1 is the immutable canonical identity and helmet/uniform reference; IMAGE 2 exact approved corporate decal. Create ONE transparent head-turnaround sprite sheet, EXACTLY FOUR EQUAL COLUMNS by TWO EQUAL ROWS, 8 equal cells, one complete head and short neck per cell. Landscape canvas. NO TORSOS, shoulders, hands, objects, labels, numbers, borders or background. Preserve exact face identity, age, gender, haircut, facial hair, helmet shell color, stripes, harness chin strap, eyes and premium painted game style from image 1 in EVERY view.   Heads all same physical scale, full helmet and hair, cropped below neck, centered in their own cells, generous alpha gutters. ORDER reading left to right: ROW 1 [0: strict RIGHT PROFILE facing east, 1: front three-quarter facing down-right/southeast, 2: FRONT face toward viewer/south, 3: front three-quarter facing down-left/southwest]; ROW 2 [4: strict LEFT PROFILE facing west, 5: rear three-quarter facing up-left/northwest, 6: BACK of head/north, 7: rear three-quarter facing up-right/northeast]. Only ONE head in each cell. Front helmet decal MUST be ONE horizontal row: exact blue asymmetric shield and white concentric eye on LEFT, navy NEW-PSI lettering immediately on RIGHT. Never stack shield above lettering. Identical modest print size and placement on the actual front-right helmet panel for every angle; foreshorten and naturally occlude it in profile/rear views. Never print it on the back or rotate logo toward camera when head is facing away. No extra logos. True transparent alpha background throughout all gutters and around neck/hair, no studio aura, glow, floor or shadow. Clean professional animation atlas, not a concept sheet.",
+      "reference": "assets/episode01/characters/new-psi-crew-v2/yoon-sungho-portrait.webp",
+      "uri": "assets/episode01/characters/crew-heads-v1/yoon_sungho.webp",
+      "width": 1774,
+      "height": 887,
+      "sha256": "1a91b43c50dc97da6b6b0d13ab00cb28fe805642ab6124953fd1ee964e240210"
+    }
+  ]
+}

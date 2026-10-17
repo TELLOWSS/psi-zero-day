@@ -1,3 +1,4 @@
+import {storyPresentationTime} from '../app/story-canonical-time';
 import type { FlagMap } from '../domain';
 import { episode01InstructionRealityChain } from '../app/episode01-instruction-reality-chain';
 
@@ -15,7 +16,7 @@ export function EpisodeInstructionRealityChain({ eventId, flags, t }: {
     </header>
     <ol className="instruction-reality-timeline">
       {model.stages.map(stage => <li key={stage.time} data-state={stage.state}>
-        <time>{stage.time}</time><span>{t(stage.label_text_id)}</span>
+        <time>{storyPresentationTime(stage.time)}</time><span>{t(stage.label_text_id)}</span>
       </li>)}
     </ol>
     <div className="instruction-reality-cards">

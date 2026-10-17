@@ -1,0 +1,63 @@
+name: Verify crew and story synchronization
+
+on:
+  push:
+    branches: [sync/crew-story-20261017]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Full regression
+        run: npm test -- --maxWorkers=2
+      - name: Production build
+        run: npm run build
+      - name: Install browser test dependency and Korean font
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts playwright@1.56.1
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          echo "CHROME_BIN=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - name: Story playthrough, recovery, and crew motion
+        shell: bash
+        run: |
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4178 --strictPort > /tmp/psi-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4180 --strictPort > /tmp/psi-dev.log 2>&1 &
+          DEV_PID=$!
+          trap 'kill "$PREVIEW_PID" "$DEV_PID" 2>/dev/null || true' EXIT
+          for port in 4178 4180; do
+            ready=0
+            for attempt in $(seq 1 60); do
+              if curl -fsS "http://127.0.0.1:$port/" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            if [ "$ready" -ne 1 ]; then cat /tmp/psi-preview.log /tmp/psi-dev.log; exit 1; fi
+          done
+          node scripts/verify-story-integration.cjs
+          node tests/browser/story-recovery.cjs
+          node scripts/verify-crew-motion.cjs
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crew-story-sync-evidence
+          path: |
+            artifacts/story-integration-local/
+            artifacts/story-recovery/
+            artifacts/crew-motion/
+          if-no-files-found: warn
+          retention-days: 14

@@ -31,8 +31,8 @@ describe('game hub navigation', () => {
       expect(host.querySelectorAll('.chapter-record-path button')[4]?.getAttribute('aria-pressed')).toBe('true');
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
-      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/new-psi-helmets-v1/player-map.webp');
-      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/new-psi-helmets-v1/player-map.webp');
+      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/new-psi-crew-v2/player-map.webp');
+      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/new-psi-crew-v2/player-map.webp');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('role')).toBe('img');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('aria-label')).toBe('NEW PSI : ZERO DAY');
       expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/home-new-psi-v6/shield.svg');
@@ -59,7 +59,7 @@ describe('game hub navigation', () => {
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
       click('.commercial-title-features button:first-child');
-      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      expect(host.querySelector('.mode-preview-dialog')).toBeNull();
       expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
       click('.chapter-record-detail button');
       expect(host.querySelector('.hub-page-map')).not.toBeNull();

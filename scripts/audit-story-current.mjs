@@ -5,6 +5,9 @@ const server=await createServer({server:{middlewareMode:true},appType:'custom',l
 try{
  const {EpisodeSession}=await server.ssrLoadModule('/src/app/episode-session.ts');
  const {createEpisode01Registry}=await server.ssrLoadModule('/src/content/episode01.ts');
+ const {episodeCinematicBeat}=await server.ssrLoadModule('/src/app/episode-cinematic-beats.ts');
+ const {storySoundscape}=await server.ssrLoadModule('/src/app/story-soundscape.ts');
+ const {episode01StoryDirection}=await server.ssrLoadModule('/src/app/episode01-story-director.ts');
  const registry=createEpisode01Registry('directed'),content=registry.getValidatedContent();
  const paths=[];
  for(const policy of ['first','last','listen','schedule']){
@@ -12,7 +15,7 @@ try{
   for(let step=0;step<700&&session.getSnapshot().phase==='playing';step++){
    const s=session.getSnapshot(),p=s.presentation.find(x=>'node_id'in x),event=s.state?.event_runtime.active_instance?.event_id;
    if(!p){const f=s.state?.event_runtime.finished_instances.at(-1);if(!f||!session.confirmFieldOutcome(f.instance_id,s.revision)){trace.push({event,blocked:true});break;}continue;}
-   const row={event,node:p.node_id,type:p.type,text:p.text_id?session.t(p.text_id):'',clock:s.state?.clock,commands:s.presentation.map(x=>x.type)};
+   const row={event,speaker:'speaker_character_id' in p?p.speaker_character_id:null,beat:episodeCinematicBeat(event),roomtone:storySoundscape(event),direction:episode01StoryDirection(event)?.preset,node:p.node_id,type:p.type,text:p.text_id?session.t(p.text_id):'',clock:s.state?.clock,commands:s.presentation.map(x=>x.type)};
    if(p.type==='SHOW_CHOICE'){
     const enabled=p.choices.filter(c=>c.enabled);const ids=enabled.map(x=>x.id??x.choice_id);row.choices=ids;
     const preferred=policy==='listen'?['follow_junho','listen_more','ask_minseok','assign_crew','inspection_sequence_agreement','report_verify_timeline','tbm_change_control','restart_verify_controls','stopwork_protect_process','instruction_reconstruct_chain','record_preserve_timeline','field_note']:policy==='schedule'?['coordinate_schedule','dismiss','keep_schedule','force_clear','inspection_quick_photo','report_one_sided','tbm_form_first','restart_follow_verbal','stopwork_ignore_social','instruction_accept_top','record_minimize_scope','family']:[];

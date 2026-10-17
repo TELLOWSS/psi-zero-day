@@ -5,30 +5,30 @@ describe('commercial hub mode readiness',()=>{
   const hub=readFileSync(new URL('../src/ui/GameHub.tsx',import.meta.url),'utf8');
   const css=readFileSync(new URL('../src/ui/shooting-entry.css',import.meta.url),'utf8');
 
-  it('opens the approved defense training, preserves Watch and Breaker entries, and keeps Story gated',()=>{
+  it('opens the approved defense training, preserves Watch and Breaker entries, and opens the approved story episode',()=>{
     expect(hub).toContain('시그널 워치 (SURVIVORS)');
     expect(hub).toContain("setModePreview('defense')");
     expect(hub).toContain("setModePreview('story')");
     expect(hub).toContain('onClick={() => onDefense("guard-campaign")}');
     expect(hub).toContain('href="/signal-breaker-dev/index.html?entry=play"');
-    expect(hub).toContain('스토리 모드 · 준비중');
+    expect(hub).toContain("'story.entry.begin'");
     expect(hub).not.toContain('야간 긴급 순찰 (SURVIVORS)');
     expect(hub).not.toContain('현장 디펜스 시작');
-    expect(hub).not.toContain('onClick={onPlay}');
+    expect(hub).toContain('onClick={onPlay}');
     expect(hub).toContain('onPracticeScenario={id=>onDefense?.(id)}');
-    expect((hub.match(/setModePreview\('story'\)/g)??[]).length).toBeGreaterThanOrEqual(3);
+    expect((hub.match(/setModePreview\('story'\)/g)??[]).length).toBeGreaterThanOrEqual(1);
   });
 
   it('wires three distinct authored mode artworks and a full preview dialog',()=>{
     expect(hub).toContain("signal: SIGNAL_WATCH_KEY_ART");
     expect(hub).toContain('defense: `/${DEFENSE_PREMIUM_HERO}`');
-    expect(hub).toContain("/mode-previews/story-coming-soon-v2.webp");
+    expect(hub).toContain('uri={episode01BackgroundUri(resolve)}');
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
     expect(hub).toContain("defenseText('defense.tactics.playable')");
     expect(hub).not.toContain('mode-preview-cta-correction');
-    expect(hub).toContain('탭하여 보기');
+    expect(hub).toContain("t('story.entry.title')");
     expect(css).not.toContain('.mode-preview-cta-correction');
   });
 });

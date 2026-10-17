@@ -1,4 +1,10 @@
 import { GameManual, gameManualText } from './GameManual';
+import './story-novel.css';
+import {StoryEvidence} from './StoryEvidence';
+import {StoryReaderControls} from './StoryReaderControls';
+import {loadStoryReader,saveStoryReader,type StoryReaderSettings} from '../app/story-reader-settings';
+import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth} from '../app/episode-save-health';
+import {storySoundscape} from '../app/story-soundscape';
 import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
@@ -81,7 +87,7 @@ function initialPaidItemWallet() {
   catch { return emptyPaidItemWallet(); }
 }
 
-export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession; onReturn?: () => void }) {
+export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { session: EpisodeSession; onReturn?: () => void;onWatch?:()=>void;onGuard?:()=>void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [showManual, setShowManual] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
@@ -97,9 +103,18 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const [historyOpen, setHistoryOpen] = useState(false);
   const [voiceLocked, setVoiceLocked] = useState(false);
   const [voiceSubtitle, setVoiceSubtitle] = useState<string | null>(null);
+  const [readerSettings,setReaderSettings]=useState(loadStoryReader);
+  const [readerPaused,setReaderPaused]=useState(false);
+  const [readerSaved,setReaderSaved]=useState(true);
+  const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
+  const voicePlayed=useRef(new Set<string>());
+  const historyDialog=useRef<HTMLDialogElement>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const { playUiCue, playPresentationCue, playVoiceCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
+  const soundscape=storySoundscape(snapshot.state?.event_runtime.active_instance?.event_id);
+  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice, cancelPresentation } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape});
+  const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
+  useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -119,6 +134,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     ? episode01VoiceCue(activeEventId, presentation.node_id, presentation.type)
     : undefined;
   const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
+  const showColdOpen = directedCampaign && snapshot.phase==='playing' && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
   const storyDirection = episode01StoryDirection(activeEventId);
   const productionScene = episode01ProductionScene(storyDirection?.preset);
   const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
@@ -312,8 +328,9 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     const key = `${runIdentity}:${activeEventId}`;
     if (playedSceneCues.current.has(key)) return;
     playedSceneCues.current.add(key);
-    playPresentationCue(cue);
+    if(cue.asset_id!==soundscape?.asset_id)playPresentationCue(cue);
   }, [activeEventId, runIdentity, playPresentationCue]);
+  useEffect(()=>()=>cancelPresentation(),[activeEventId,cancelPresentation]);
   useEffect(() => {
     if (!activeEventId || !runIdentity || !presentation || !('node_id' in presentation)) return;
     const cue = episodePresentationNodeCue(activeEventId, presentation.node_id, presentation.type);
@@ -329,6 +346,9 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       setVoiceSubtitle(null);
       return;
     }
+    const voiceKey=`${runIdentity}:${activeVoiceCue.event_id}:${activeVoiceCue.node_id}`;
+    if(voicePlayed.current.has(voiceKey)){setVoiceLocked(false);setVoiceSubtitle(null);return;}
+    voicePlayed.current.add(voiceKey);
     setVoiceLocked(true);
     setVoiceSubtitle('');
     return playVoiceCue(
@@ -367,7 +387,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     };
     setPresentationHistory(previous => {
       if (previous.at(-1)?.key === key) return previous;
-      return Object.freeze([...previous, entry].slice(-20));
+      return Object.freeze([...previous, entry].slice(-100));
     });
   }, [presentation, snapshot.eventTitle, person?.id, t]);
   useEffect(() => {
@@ -384,6 +404,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   }, [strategyOutcome?.key, playUiCue]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if(readerPaused||historyOpen||showColdOpen)return;
       const target = e.target instanceof Element ? e.target : null;
       if (target?.closest('input, textarea, select, summary, [contenteditable="true"], .debug-panel')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
@@ -425,7 +446,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen,readerPaused,showColdOpen]);
 
   const fallbackBasePortraitUri = person ? characterPortraitUri(person.id, resolveAsset) : undefined;
   const basePortraitUri = portrait?.kind === 'asset'
@@ -449,15 +470,15 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     : null;
   const previousHistoryEntries = presentationHistory
     .filter(entry => entry.key !== currentHistoryKey)
-    .slice(-8)
+    .slice(-100)
     .reverse();
-  const showColdOpen = directedCampaign && isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
   const dismissColdOpen = useCallback(() => {
     setColdOpenDismissed(true);
     playUiCue('continue');
   }, [playUiCue]);
 
   return <main
+    style={{'--story-font-scale':readerSettings.fontScale} as import('react').CSSProperties}
     className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActive && (strategyActions.length || mapOutcomeActive) ? ' strategy-action-active' : ''}`}
     data-story-act={storyDirection?.act_id}
     data-story-beat={storyDirection?.beat}
@@ -506,6 +527,8 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
   >
+    <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
+    {(!readerSaved||saveHealth!=='ok')&&<p className="story-save-warning" role="status">{t(saveHealth==='preserved'?'story.reader.preserved':'story.reader.unsaved')}</p>}
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
@@ -585,6 +608,13 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         memoryVisualPlan={memoryVisualPlan}
         dayResultProduction={dayResultProduction}
       />
+      {['e01_04_junho_signal','e01_05_command','e01_06_pump_arrival','e01_08e_responsibility_clash','e01_08n_instruction_return','e01_09_evening','e01_10_next_day_tease'].includes(activeEventId??'')?<details className="story-context-panel"><summary>{t('story.context.open')}</summary>
+          <StoryEvidence eventId={activeEventId} state={snapshot.state} t={t}/>
+          {activeEventId==='e01_04_junho_signal'&&onWatch?<div className="story-mode-link"><p>{t('story.bridge.watch')}</p><button type="button" onClick={onWatch}>{t('story.bridge.watchAction')}</button><small>{t('story.bridge.optional')}</small></div>:null}
+          {activeEventId==='e01_05_command'&&onGuard?<div className="story-mode-link"><p>{t('story.bridge.guard')}</p><button type="button" onClick={onGuard}>{t('story.bridge.guardAction')}</button><small>{t('story.bridge.optional')}</small></div>:null}
+          {activeEventId==='e01_08e_responsibility_clash'?<details className="story-mode-link"><summary>{t('story.bridge.breakerAction')}</summary><p>{t('story.bridge.breaker')}</p><a href="/signal-breaker-dev/index.html?entry=play" target="_blank" rel="noopener">{t('story.bridge.breakerOpen')}</a><small>{t('story.bridge.optional')}</small></details>:null}
+          <small>{t('story.bridge.optional')}</small>
+      </details>:null}
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
         {person ? <CharacterCard
           person={person}
@@ -599,6 +629,8 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
+          {voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
+          {directedCampaign&&voiceLocked&&voiceSubtitle?<p className="story-voice-caption" aria-live="off">{voiceSubtitle}</p>:null}
           {activeVoiceCue?.countdown_label ? <div className="episode-voice-countdown" aria-label={activeVoiceCue.countdown_label}>
             <span aria-hidden="true">T−</span><strong>{activeVoiceCue.countdown_label}</strong>
           </div> : null}
@@ -652,11 +684,11 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
               interactionLocked={voiceLocked}
-              dialogueOverrideText={voiceLocked ? voiceSubtitle : null}
+              dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}
         </div>
       </section>
-      {historyOpen ? <aside className="presentation-history-drawer" role="dialog" aria-modal="true" aria-label={t('ui.previous_view.title')}>
+      {historyOpen ? <dialog ref={historyDialog} onClose={()=>setHistoryOpen(false)} className="presentation-history-drawer" aria-label={t('ui.previous_view.title')}>
         <header><div><span>{t('ui.previous_view.eyebrow')}</span><strong>{t('ui.previous_view.title')}</strong></div><button type="button" onClick={() => setHistoryOpen(false)} aria-label={t('ui.previous_view.close')}>×</button></header>
         <div className="presentation-history-list">
           {previousHistoryEntries.length ? previousHistoryEntries.map(entry => <article key={entry.key}>
@@ -664,7 +696,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
             <p>{entry.text}</p>
           </article>) : <p className="presentation-history-empty">{t('ui.previous_view.empty')}</p>}
         </div>
-      </aside> : null}
+      </dialog> : null}
       {showColdOpen ? <EpisodeColdOpen
         backgroundUri={resolveAsset('ep01.scene_bg.inspection_zone')}
         playerUri={resolveAsset('ep01.character.player.performance.resolve') ?? characterMapUri('player', resolveAsset)}

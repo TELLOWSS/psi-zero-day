@@ -24,6 +24,7 @@ import recordUiKo from '../../content/localization/record-ui-ko.json';
 import psiUiKo from '../../content/localization/psi-ui-ko.json';
 import productUiKo from '../../content/localization/product-ui-ko.json';
 import storyDirectorKo from '../../content/localization/story-director-ko.json';
+import storyNovelKo from '../../content/localization/story-novel-ko.json';
 
 export interface SessionSnapshot {
   readonly revision: number;
@@ -45,6 +46,7 @@ export class EpisodeSession {
   readonly #content: ValidatedContent;
   readonly #options: NewRunOptions;
   readonly #bounds: ProgressBounds;
+  readonly #mode: Episode01PlayStructureMode;
   readonly #listeners = new Set<() => void>();
   #engine: CoreEngine | null = null;
   #busy = false;
@@ -57,6 +59,7 @@ export class EpisodeSession {
     mode: Episode01PlayStructureMode = 'legacy',
   ) {
     this.#registry = createEpisode01Registry(mode);
+    this.#mode = mode;
     this.#content = this.#registry.getValidatedContent();
     this.t = createTranslator([{ locale: 'ko', messages: {
       ...this.#content.localizations[0]!.messages,
@@ -68,6 +71,7 @@ export class EpisodeSession {
       ...psiUiKo.messages,
       ...productUiKo.messages,
       ...storyDirectorKo.messages,
+      ...storyNovelKo.messages,
     } }], 'ko');
     this.#options = freezeData(copyData(options));
     this.#bounds = freezeData(copyData(bounds));
@@ -230,7 +234,7 @@ export class EpisodeSession {
       dialogue: state ? getDialogueView(state, this.#content) : null, relationshipFeedback: feedback,
       eventTitle: this.t(event?.title_text_id ?? 'ep01.title'), chapterTitle: this.t(event?.chapter_text_id ?? 'ep01.chapter'),
       completed: state?.event_runtime.completion_history.length ?? 0,
-      total: state ? episode01ExpectedRunTotal(state) : 10 });
+      total: state ? episode01ExpectedRunTotal(state) : this.#mode==='directed'?26:10 });
   }
   #settle(): void {
     const engine = this.#engine!;
@@ -241,9 +245,14 @@ export class EpisodeSession {
         const candidates = eventCandidates(state, this.#content, this.#options.chapter_id!);
         if (candidates.length !== 1) throw new Error('Expected one eligible episode event');
         const candidate = candidates[0]!;
-        const clocks = config.clock_before as Record<string, GameTime>;
+        const clocks = (this.#mode === 'directed' ? {
+          ...config.clock_before,
+          e01_07_first_pour: {day:1,slot:'MORNING'},
+          e01_08e_responsibility_clash: {day:1,slot:'AFTERNOON'},
+        } : config.clock_before) as Record<string, GameTime>;
         const time = clocks[candidate.event_id];
-        if (time && (time.day !== state.clock.day || time.slot !== state.clock.slot)) {
+        const slots = ['PRE_WORK','MORNING','AFTERNOON','EVENING'];
+        if (time && (time.day > state.clock.day || (time.day === state.clock.day && slots.indexOf(time.slot) > slots.indexOf(state.clock.slot)))) {
           engine.dispatch({ type: 'advance_slot' }); continue;
         }
         engine.dispatch({ type: 'start_event', event_id: candidate.event_id, instance_id: `run.${candidate.event_id}`,

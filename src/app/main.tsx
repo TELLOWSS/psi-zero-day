@@ -31,6 +31,7 @@ import '../ui/strategy-layout-recovery.css';
 import '../ui/defense-game.css';
 import '../ui/tactical-ui.css';
 import {BRAND_NAME,GAME_TITLE} from './brand';
+import {readEpisodeSaveHealth,setEpisodeSaveHealth} from './episode-save-health';
 
 const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
@@ -69,18 +70,23 @@ async function bootstrap() {
     if (saved) {
       const restored = saved.content_version === session.contentVersion
         && session.resume(saved.payload, session.getSnapshot().revision);
-      if (!restored) saveModule.clearEpisodeSave(storage);
+      if (!restored) setEpisodeSaveHealth('preserved');
+    }
+    else {
+      try {if(storage.getItem(saveModule.EPISODE01_SAVE_KEY))setEpisodeSaveHealth('preserved');}catch{setEpisodeSaveHealth('unavailable');}
     }
 
     session.subscribe(() => {
       const snapshot = session.getSnapshot();
+      if(readEpisodeSaveHealth()==='preserved')return;
       if ((snapshot.phase === 'playing' || snapshot.phase === 'complete') && snapshot.state) {
-        saveModule.saveEpisodeState(storage!, snapshot.state);
+        setEpisodeSaveHealth(saveModule.saveEpisodeState(storage!, snapshot.state)?'ok':'failed');
       } else if (snapshot.phase === 'start') {
         saveModule.clearEpisodeSave(storage!);
       }
     });
   }
+  else setEpisodeSaveHealth('unavailable');
 
   document.title = session.t('ui.brand');
   mount.replaceChildren();

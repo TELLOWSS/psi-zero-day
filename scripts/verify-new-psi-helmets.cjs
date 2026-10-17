@@ -1,6 +1,6 @@
 const {chromium}=require(process.env.PSI_PLAYWRIGHT_MODULE||'playwright');
 const a=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const helmets=require('../content/art/character-helmets-new-psi-v1.json');const branded=uri=>helmets.items.find(x=>x.originalUri===uri)?.uri??uri;
+const helmets=require('../content/art/character-crew-continuity-v2.json');const branded=uri=>helmets.items.find(x=>x.originalUri===uri)?.uri??uri;
 const cast=JSON.parse(fs.readFileSync('content/episode01/character-art-production.json','utf8')).characters;
 const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4173',out=path.resolve(process.env.PSI_QA_OUTPUT||'artifacts/character-identity');fs.mkdirSync(out,{recursive:true});
 const pathname=uri=>new URL(uri,base).pathname;

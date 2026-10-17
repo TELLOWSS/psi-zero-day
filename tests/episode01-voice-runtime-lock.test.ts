@@ -14,12 +14,12 @@ describe('Episode 01 voice runtime production lock', () => {
     }
   });
 
-  it('locks dialogue advance while reviewed voice is active and restores authored text afterward', () => {
+  it('locks dialogue advance while reviewed voice is active and keeps novel text readable with separate voice captions', () => {
     const playable = readFileSync('src/ui/PlayableEpisode.tsx', 'utf8');
     const presentation = readFileSync('src/ui/PresentationView.tsx', 'utf8');
 
     expect(playable).toContain('interactionLocked={voiceLocked}');
-    expect(playable).toContain('dialogueOverrideText={voiceLocked ? voiceSubtitle : null}');
+    expect(playable).toContain('dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}');
     expect(playable).toContain('activeVoiceCue?.countdown_label');
     expect(playable).toContain("if (voiceLocked && (e.key === 'Enter' || e.code === 'Space'");
     expect(presentation).toContain('disabled={interactionLocked}');

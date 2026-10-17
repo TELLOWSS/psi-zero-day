@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import helmets from '../content/art/character-helmets-new-psi-v1.json';
+import helmets from '../content/art/character-crew-continuity-v2.json';
 import {resolveCharacterBrandingUri,characterBrandingAssetUri} from '../src/app/character-branding';
 import {EpisodeSession} from '../src/app/episode-session';
 

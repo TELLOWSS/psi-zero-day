@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { VisualImage } from './VisualSlot';
 
 export function EpisodeColdOpen({
@@ -16,11 +15,6 @@ export function EpisodeColdOpen({
   readonly t: (id: string) => string;
   readonly onComplete: () => void;
 }) {
-  useEffect(() => {
-    const timer = window.setTimeout(onComplete, 6200);
-    return () => window.clearTimeout(timer);
-  }, [onComplete]);
-
   return <section className="episode-cold-open" role="dialog" aria-modal="true" aria-label={t('story.ep01.prologue.title')}>
     <VisualImage uri={backgroundUri} alt="" className="episode-cold-open-bg" />
     <div className="episode-cold-open-grade" aria-hidden="true" />
@@ -38,7 +32,7 @@ export function EpisodeColdOpen({
       <i />
       <span>{t('story.ep01.prologue.rewind')}</span>
     </div>
-    <button className="primary-button episode-cold-open-cta" type="button" onClick={onComplete}>
+    <button autoFocus className="primary-button episode-cold-open-cta" type="button" onClick={onComplete}>
       {t('story.ep01.prologue.cta')}<span aria-hidden="true">→</span>
     </button>
   </section>;

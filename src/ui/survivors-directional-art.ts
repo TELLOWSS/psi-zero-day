@@ -1,4 +1,6 @@
 import {authoredBootSoles} from './survivors-authored-joints';
+import {identityFrameWeights} from './survivors-identity-frame';
+import {loadCrewHeadAtlas,applyCrewHead} from './crew-head-continuity';
 import type {SpritePose} from './survivors-sprite-motion';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import {actorTorsoPoint} from './survivors-rig-renderer';
@@ -72,6 +74,7 @@ export async function loadAuthoredDirectionalActor(actor:HTMLImageElement,id:str
  const urls=[...new Set(layouts.flatMap(l=>[l.src,...l.frames.flatMap(f=>f.src?[f.src]:[])]))];
  const images=new Map(await Promise.all(urls.map(src=>new Promise<[string,HTMLImageElement]>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve([src,image]);image.onerror=reject;image.src=src;}))));
  const referenceHeight=Math.max(...layouts.map(l=>l.frames[0]!.height)),cells:Cell[]=[];
+ const crewHead=await loadCrewHeadAtlas(id);
  for(let direction=0;direction<8;direction++){
   const layout=layouts[direction]!;
   for(let frame=0;frame<20;frame++){
@@ -79,6 +82,7 @@ export async function loadAuthoredDirectionalActor(actor:HTMLImageElement,id:str
    const canvas=document.createElement('canvas');canvas.width=rect.width;canvas.height=rect.height;
    canvas.dataset.contactSheet=rect.src??layout.src;canvas.dataset.contactFrame=String(frame);
    const paint=canvas.getContext('2d',{willReadFrequently:true})!;if(rect.mirror){paint.translate(canvas.width,0);paint.scale(-1,1);}paint.drawImage(image,rect.x,rect.y,rect.width,rect.height,0,0,rect.width,rect.height);paint.setTransform(1,0,0,1,0,0);
+   if(crewHead&&!applyCrewHead(canvas,crewHead,direction,scale))throw Error('Head continuity failed: '+id+':'+direction+':'+frame);
    const pixels=paint.getImageData(0,0,rect.width,rect.height).data;
    let sum=0,count=0,coreWidth=0,rows=0;
    for(let y=Math.floor(rect.height*.46);y<rect.height*.58;y++){
@@ -221,7 +225,7 @@ function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  let contact=sheet.authored?authoredMotionWeights(pose):sheet.contact?contactFrameWeights(pose.contactCycle??pose.authoredCycle??pose.cycle,pose.gaitBlend,Boolean(pose.turning),pose.visualAngle??(pose.direction??2)*Math.PI/4):undefined;
  if(contact&&!sheet.authored&&sheet.characterId==='player'&&!pose.moving&&!pose.turning){const gesture=directionalPoseWeights(pose).find(s=>s.frame>=10);if(gesture){const direction=Math.round((pose.visualAngle??(pose.direction??2)*Math.PI/4)/(Math.PI/4)+8)%8;contact=[...contact.map(s=>({...s,weight:s.weight*(1-gesture.weight)})),{direction,frame:gesture.frame===10?6:7,weight:gesture.weight}].filter(s=>s.weight>0);}}
  const direction=contact?contact.reduce((a,b)=>a.weight>=b.weight?a:b).direction:pose.direction??2;
- const weights:Frame['weights']=contact??directionalPoseWeights(pose);
+ const weights:Frame['weights']=identityFrameWeights(contact??directionalPoseWeights(pose));
  const shape={width:0,height:0,anchor:0,coreWidth:0};
  for(const sample of weights){const c=sheet.cells[(sample.direction??direction)*sheetStride(sheet)+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;shape.coreWidth+=(c.coreWidth??c.width*.5)*sample.weight;}
  const strongest=weights.reduce((a,b)=>a.weight>=b.weight?a:b);
@@ -230,6 +234,7 @@ function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
 }
 export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
  const frame=cell(actor,pose);if(!frame)return false;
+ ctx.canvas.dataset.actorIdentity='single-authored-frame';
  const sheet=frame.sheet,key=frame.direction+':'+frame.weights.map(w=>w.direction+':'+w.frame+':'+w.weight).join(',');
  if(sheet.key!==key){
   const composite=sheet.composite,paint=composite.getContext('2d')!;

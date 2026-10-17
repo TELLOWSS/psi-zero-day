@@ -17,10 +17,12 @@ describe('localized growth presentation without state changes',()=>{
  it('selects the approved focused portrait only for matching player growth',()=>{
   const person={id:'player',name:'주인공',role:'안전관리자'},focused=projectCharacterGrowth({'growth.player':'focused'},'player')!;
   const render=(id:string,view=focused)=>renderToStaticMarkup(<CharacterCard person={{...person,id}} portraitUri="assets/episode01/characters/player-portrait.webp" growth={view}/>);
-  expect(render('player')).toContain('player-focused-portrait-v1.png');
+  expect(render('player')).toContain('data-focused-portrait="true"');
+  expect(render('player')).toContain('new-psi-crew-v2/player-portrait.webp');
   expect(render('lim_junho')).not.toContain('player-focused-portrait-v1.png');
   for(const stage of ['initial','skilled','invalid'])expect(render('player',projectCharacterGrowth({'growth.player':stage},'player')!)).not.toContain('player-focused-portrait-v1.png');
-  expect(render('player',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).toContain('player-skilled-portrait-v1.png');
+  expect(render('player',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).toContain('data-growth-stage="skilled"');
+  expect(render('player',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).toContain('new-psi-crew-v2/player-portrait.webp');
   expect(render('lim_junho',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).not.toContain('player-skilled-portrait-v1.png');
  });
 });

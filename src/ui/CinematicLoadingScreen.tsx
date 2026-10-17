@@ -1,25 +1,32 @@
 import { useEffect, useMemo, useState } from 'react';
 import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
+import storyCopy from '../../content/localization/story-novel-ko.json';
 
 export function CinematicLoadingScreen({
   backgroundUri,
   preloadUris,
   crew = [],
   onComplete,
+  onExit,
 }: {
   readonly backgroundUri?: string;
   readonly preloadUris: readonly string[];
   readonly crew?: readonly { readonly id: string; readonly uri?: string; readonly name: string; readonly role: string }[];
   readonly onComplete: () => void;
+  readonly onExit?:()=>void;
 }) {
   const [progress, setProgress] = useState(6);
   const [assetsReady, setAssetsReady] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const [failedAssets,setFailedAssets]=useState<readonly string[]>([]);
+  const [attempt,setAttempt]=useState(0);
   const uniqueUris = useMemo(() => [...new Set(preloadUris.filter(Boolean))], [preloadUris]);
 
   useEffect(() => {
     let cancelled = false;
-    const fallback = window.setTimeout(() => !cancelled && setAssetsReady(true), 2200);
+    const pending=new Set(uniqueUris),failures:string[]=[];
+    setFailedAssets([]);setAssetsReady(false);setProgress(6);
+    const fallback = window.setTimeout(() => {if(!cancelled){cancelled=true;setFailedAssets([...pending]);setAssetsReady(false);}}, 12000);
     if (!uniqueUris.length) {
       setAssetsReady(true);
       return () => window.clearTimeout(fallback);
@@ -28,18 +35,18 @@ export function CinematicLoadingScreen({
     Promise.allSettled(uniqueUris.map(uri => new Promise<void>(resolve => {
       const image = new Image();
       image.decoding = 'async';
-      image.onload = () => resolve();
-      image.onerror = () => resolve();
+      image.onload = () => {pending.delete(uri);resolve();};
+      image.onerror = () => {pending.delete(uri);failures.push(uri);resolve();};
       image.src = uri;
     }))).then(() => {
-      if (!cancelled) setAssetsReady(true);
+      if (!cancelled) {window.clearTimeout(fallback);setFailedAssets(failures);setAssetsReady(failures.length===0);}
     });
 
     return () => {
       cancelled = true;
       window.clearTimeout(fallback);
     };
-  }, [uniqueUris]);
+  }, [uniqueUris,attempt]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -55,11 +62,11 @@ export function CinematicLoadingScreen({
   }, [assetsReady]);
 
   useEffect(() => {
-    if (progress < 100) return;
+    if (progress < 100 || !assetsReady || failedAssets.length) return;
     setExiting(true);
     const done = window.setTimeout(onComplete, 620);
     return () => window.clearTimeout(done);
-  }, [progress, onComplete]);
+  }, [progress, onComplete,assetsReady,failedAssets.length]);
 
   const status = progress < 32
     ? '현장 자산을 확인하고 있습니다.'
@@ -98,6 +105,7 @@ export function CinematicLoadingScreen({
         <strong>{progress}%</strong>
       </div>
       <p>{status}</p>
+      {failedAssets.length>0?<div className="story-loading-recovery" role="alert"><p>{storyCopy.messages['story.loading.missing']}</p><button type="button" onClick={()=>setAttempt(value=>value+1)}>{storyCopy.messages['story.loading.retry']}</button>{onExit&&<button type="button" onClick={onExit}>{storyCopy.messages['story.loading.back']}</button>}</div>:null}
     </section>
 
     {crew.length ? <section className="cinematic-loading-team" aria-label="현장 투입 인원">
