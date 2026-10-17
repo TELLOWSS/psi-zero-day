@@ -191,8 +191,8 @@ async function enterPersistedRun(cdp,name){
   await trustedClick(cdp,"document.querySelector('button.is-defense-entry:not(:disabled)')",'GUARD hub entry');
   await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=\"guard-home\"]'))");
   await trustedClick(cdp,"document.querySelector('[data-defense-screen=\"guard-home\"] footer button')",'training practice entry');
-  await waitFor(cdp,`Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`);
-  await clickText(cdp,'이어서 훈련');
+  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=\\"save-resume\\"]'))");
+  await trustedClick(cdp,"document.querySelector('[data-defense-screen=\\"save-resume\\"] .zb-save-actions button.is-primary')",'resume saved standard training');
   await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
 }
 async function armByResume(cdp){
