@@ -555,7 +555,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
     data-story-focus={directedCampaign && isPlaying && sceneFocus && (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ? 'true' : undefined}
     data-story-decision={directedCampaign && presentation?.type === 'SHOW_CHOICE' ? 'true' : undefined}
   >
-    <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
+    {isPlaying ? <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/> : null}
     {directedCampaign && isPlaying && !strategyActive &&
       (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ?
       <button className="story-scene-peek" type="button" aria-pressed={sceneFocus}
@@ -569,7 +569,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
     </div> : null}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <button type="button" className="game-manual-open" aria-label="게임 설명서" title="게임 설명서" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
+    {isPlaying ? <button type="button" className="game-manual-open" aria-label="게임 설명서" title="게임 설명서" onClick={() => setShowManual(true)}>{gameManualText('open')}</button> : null}
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}
@@ -597,7 +597,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10" /></svg>
       </button> : null}
       <div className="hud-brand"><strong>{t('ui.brand')}</strong><small>{t('ui.tagline')}</small></div>
-      <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
+      <div className="day-marker"><span>{t('ui.day')}</span><strong>{snapshot.phase === 'complete' ? '01' : String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
       {previousHistoryEntries.length > 0 ? <button
         className="gameplay-history-button"
@@ -766,22 +766,31 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
         t={t}
         onComplete={dismissColdOpen}
       /> : null}
-    </> : snapshot.phase === 'complete' ? <section className="complete-screen">
-      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
+    </> : snapshot.phase === 'complete' ? <section className="complete-screen story-complete-director">
+      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p>
+      <h1>{t('ep01.title')}</h1>
       <p className="end-line">{t('ui.end_hint')}</p>
-      <div className="episode-completion-carryover">
-        <EpisodeDayCarryover eventId="e01_10_next_day_tease" flags={snapshot.state?.flags} t={t} />
-      </div>
-      <section className="episode-review" aria-label={t('ui.review.title')}>
-        <h2>{t('ui.review.title')}</h2>
-        <p>{t('ui.review.hint')}</p>
-        <EpisodeRecord entries={session.review()} t={t} />
-      </section>
-      {onNextEpisode?<button className="story-next-episode" type="button" onClick={onNextEpisode}>
+      {onNextEpisode ? <button className="story-next-episode" type="button" onClick={onNextEpisode}>
         <span>DAY 02 · 이어지는 사건</span><strong>두 번째 날 · 첫 양중 오프닝으로</strong><b aria-hidden="true">→</b>
-      </button>:null}
+      </button> : null}
+      <details className="story-completion-details">
+        <summary>어제 선택의 영향 확인</summary>
+        <div className="episode-completion-carryover">
+          <EpisodeDayCarryover eventId="e01_10_next_day_tease" flags={snapshot.state?.flags} t={t} />
+        </div>
+      </details>
+      <details className="story-completion-details">
+        <summary>DAY 01 전체 선택 기록</summary>
+        <section className="episode-review" aria-label={t('ui.review.title')}>
+          <h2>{t('ui.review.title')}</h2>
+          <p>{t('ui.review.hint')}</p>
+          <EpisodeRecord entries={session.review()} t={t} />
+        </section>
+      </details>
       <p className="replay-hint">{t('ui.review.replay')}</p>
-      <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
+      <button className="primary-button" type="button" onClick={e => {
+        if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); }
+      }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
     </section> : <section className="complete-screen" role="alert"><p>{t('ui.error')}</p><button className="primary-button" type="button" onClick={() => session.restart(snapshot.revision)}>{t('ui.restart')}</button></section>}
     <footer className="game-footer"><div className="progress-block"><span>{t('ui.progress')}</span>
       <progress aria-label={t('ui.progress')} value={snapshot.phase === 'complete' ? snapshot.total : snapshot.completed} max={snapshot.total} /></div>
