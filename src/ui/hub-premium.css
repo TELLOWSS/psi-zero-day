@@ -43,7 +43,8 @@
    Previous hero reserved ~590px of almost empty portrait space. */
 @media(max-width:600px) and (orientation:portrait){
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
-    min-height:170px!important;height:auto!important;padding:12px 0 14px!important;
+    min-height:clamp(620px,80svh,920px)!important;height:auto!important;
+    padding:12px 0 16px!important;
     justify-content:flex-start!important;
   }
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions.is-defense-first{
@@ -55,4 +56,73 @@
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions .commercial-title-action.is-defense-entry{
     order:-1!important;
   }
+}
+
+
+/* MAIN ART RESTORATION — 2026-10-18
+ * Never shrink the original NEW-PSI heroine background merely to force all mode
+ * tiles into the first viewport. Deliberately reserve a cinematic hero screen,
+ * then offer an explicit scroll-to-modes action. */
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"]{
+  --home-art-exposure:1;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
+  box-sizing:border-box!important;position:relative!important;
+  min-height:clamp(550px,68svh,820px)!important;
+  padding-top:clamp(38px,6svh,90px)!important;
+  padding-bottom:72px!important;
+  justify-content:flex-start!important;align-items:flex-start!important;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-backdrop{
+  opacity:1!important;filter:none!important;
+  object-fit:cover!important;object-position:60% top!important;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-grade{
+  opacity:1!important;
+  background:linear-gradient(180deg,rgba(4,14,21,.28) 0%,transparent 33%,transparent 70%,rgba(4,14,21,.46) 100%),
+             linear-gradient(90deg,rgba(4,14,21,.42) 0%,rgba(4,14,21,.10) 53%,transparent 86%)!important;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  position:absolute;bottom:14px;left:0;z-index:4;
+  min-height:44px;padding:9px 16px;border:1px solid #e4d0a19e;
+  border-radius:999px;background:#09212dc7;color:#fff3d9!important;
+  font-size:13px;font-weight:790;letter-spacing:.01em;text-decoration:none;
+  box-shadow:0 4px 20px #0005;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes span{
+  font-size:19px;line-height:1;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes:focus-visible{
+  outline:3px solid #f8dfa1;outline-offset:3px;
+}
+:root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] #psi-game-modes{
+  position:relative;scroll-margin-top:12px!important;
+}
+@media(orientation:portrait) and (max-width:600px){
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
+    min-height:clamp(620px,80svh,920px)!important;
+    padding:12px 0 72px!important;justify-content:flex-start!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-backdrop{
+    height:100svh!important;min-height:100svh!important;object-position:55% top!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-grade{
+    height:100svh!important;
+    background:linear-gradient(180deg,#07141e38 0%,transparent 32%,transparent 70%,#07141e85 100%),
+               linear-gradient(90deg,#07141e4f,transparent 73%)!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-actions.is-defense-first{
+    margin-top:10px!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes{
+    bottom:15px;left:0;font-size:13px;
+  }
+}
+@media(orientation:landscape) and (max-height:600px){
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
+    min-height:clamp(280px,77svh,480px)!important;
+    padding:18px 0 63px!important;
+  }
+  :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes{bottom:8px}
 }

@@ -19,7 +19,25 @@ try{
    await page.locator('button.is-story-entry').waitFor();
    const entryCount=await page.locator('button.is-story-entry').count();
    const entryBox=await page.locator('button.is-story-entry').boundingBox();
-   if(width===390&&(!entryBox||entryBox.y>height*.70))throw new Error('Story tile is below first mobile fold: '+JSON.stringify(entryBox));
+   // Director-led home: its portrait key art must own the first viewport.
+   // Navigation lives on a real 44px scroll CTA; never squash key art for the tile.
+   if(width===390){
+     const hero=await page.locator('.hub-cinematic-intro').boundingBox();
+     const reveal=page.locator('.hub-reveal-modes');
+     const revealBox=await reveal.boundingBox();
+     if(!hero||hero.height<height*.75)throw new Error('Main heroine key art was covered by premature mode cards: '+JSON.stringify(hero));
+     if(!entryBox||entryBox.y<height*.72)throw new Error('Mode cards obscure the portrait key art: '+JSON.stringify(entryBox));
+     if(!revealBox||revealBox.height<44||revealBox.y+revealBox.height>height+2)throw new Error('Accessible game selection scroll cue missing: '+JSON.stringify(revealBox));
+     const backdrop=await page.locator('.commercial-title-backdrop').evaluate(async img=>{
+       await img.decode();
+       return {width:img.naturalWidth,height:img.naturalHeight,opacity:Number(getComputedStyle(img).opacity)};
+     });
+     if(backdrop.width<900||backdrop.height<1500||backdrop.opacity<.98)throw new Error('Premium portrait background missing: '+JSON.stringify(backdrop));
+     await page.screenshot({path:path.join(out,'390x844-art-first-before-menu.png')});
+     await reveal.click();
+     const modeBox=await page.locator('#psi-game-modes').boundingBox();
+     if(!modeBox||modeBox.y>height*.60||modeBox.y+modeBox.height<0)throw new Error('Game choice scroll link did not bring actions into view '+JSON.stringify(modeBox));
+   }
    const splitCount=await page.locator('button.is-episode02-entry').count();
    const art=await page.locator('button.is-story-entry img.commercial-title-action-art').evaluate(async img=>{
      await img.decode();

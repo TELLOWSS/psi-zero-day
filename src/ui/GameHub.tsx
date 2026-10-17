@@ -434,9 +434,10 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
+      <a className="hub-reveal-modes" href="#psi-game-modes" aria-label="게임 선택 영역으로 이동">게임 선택 <span aria-hidden="true">↓</span></a>
       </div>
 
-      <div className="commercial-title-actions is-defense-first">
+      <div id="psi-game-modes" className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
           className="commercial-title-action is-survivors-entry has-mode-art"
           type="button"
