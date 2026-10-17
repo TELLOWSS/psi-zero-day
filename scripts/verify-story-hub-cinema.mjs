@@ -26,14 +26,14 @@ try{
      const reveal=page.locator('.hub-reveal-modes');
      const revealBox=await reveal.boundingBox();
      if(!hero||hero.height<height*.75)throw new Error('Main heroine key art was covered by premature mode cards: '+JSON.stringify(hero));
-     if(!entryBox||entryBox.y<height*.72)throw new Error('Mode cards obscure the portrait key art: '+JSON.stringify(entryBox));
+     if(!entryBox||entryBox.y<height*.985)throw new Error('Mode cards enter first screen and cover the portrait key art: '+JSON.stringify(entryBox));
      if(!revealBox||revealBox.height<44||revealBox.y+revealBox.height>height+2)throw new Error('Accessible game selection scroll cue missing: '+JSON.stringify(revealBox));
      const backdrop=await page.locator('.commercial-title-backdrop').evaluate(async img=>{
        await img.decode();
        return {width:img.naturalWidth,height:img.naturalHeight,opacity:Number(getComputedStyle(img).opacity)};
      });
      if(backdrop.width<900||backdrop.height<1500||backdrop.opacity<.98)throw new Error('Premium portrait background missing: '+JSON.stringify(backdrop));
-     await page.screenshot({path:path.join(out,'390x844-art-first-before-menu.png')});
+     await page.screenshot({path:path.join(out,'390x844-art-first-before-menu.png'),animations:'disabled'});
      await reveal.click();
      const modeBox=await page.locator('#psi-game-modes').boundingBox();
      if(!modeBox||modeBox.y>height*.60||modeBox.y+modeBox.height<0)throw new Error('Game choice scroll link did not bring actions into view '+JSON.stringify(modeBox));
@@ -45,7 +45,7 @@ try{
    });
    if(!art.src.endsWith('/gate-dawn.webp')||art.width<1200||art.height<700)throw new Error('Story campaign card art missing '+JSON.stringify(art));
    if(entryCount!==1||splitCount!==0)throw new Error('Story must have one campaign tile: '+entryCount+'/'+splitCount);
-   await page.screenshot({path:path.join(out,width+'x'+height+'-single-story-hub.png')});
+   await page.screenshot({path:path.join(out,width+'x'+height+'-single-story-hub.png'),animations:'disabled'});
    await page.locator('button.is-story-entry').click();
    await page.locator('.episode-cold-open-cta').click();
    const story=page.locator('[data-story-player="cinematic"]');await story.waitFor();
@@ -70,7 +70,7 @@ try{
    if(!look.toggle||look.panelHeight> Math.max(height<=440?120:150,150) || look.overflow||look.popup)throw new Error('Cinema UI contract '+JSON.stringify(look));
    if(height<=440 && (look.actorY??0)<(look.sceneY??0)+35)throw new Error('Landscape cast is floating near the header '+JSON.stringify(look));
    if((look.textScroll??0)>(look.textHeight??0)+2)throw new Error('Subtitle page was clipped '+JSON.stringify(look));
-   await page.screenshot({path:path.join(out,width+'x'+height+'-story-cinema.png')});
+   await page.screenshot({path:path.join(out,width+'x'+height+'-story-cinema.png'),animations:'disabled'});
    rows.push({width,height,entryCount,splitCount,look,errors});
    if(errors.length)throw new Error('Browser errors: '+errors.join('; '));
    console.log('PASS unified story '+width+'x'+height);
