@@ -101,7 +101,7 @@
 }
 @media(orientation:portrait) and (max-width:600px){
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
-    min-height:clamp(620px,80svh,920px)!important;
+    min-height:max(570px,calc(100svh - 60px))!important;
     padding:12px 0 72px!important;justify-content:flex-start!important;
   }
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .commercial-title-backdrop{
