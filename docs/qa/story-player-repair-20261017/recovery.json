@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:4178",
+  "rows": [
+    "corrupt original preserved until explicit restart",
+    "quota warning retains playable current session",
+    "missing required art blocks entry; retry recovers without advancing save",
+    {
+      "optionalWatchAndGuardReturnPreserveState": true,
+      "syntheticReceiptVariants": [
+        "watch:verified-clear",
+        "guard:incomplete",
+        "breaker:observed"
+      ]
+    }
+  ]
+}
