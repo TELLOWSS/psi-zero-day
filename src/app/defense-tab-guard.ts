@@ -130,7 +130,7 @@ export async function acquireDefenseTabGuard(
   const onStorage = (event: StorageEvent) => {
     if (event.key === watchedSaveKey) onExternalSave();
     if (event.key === leaseKey) {
-      const current = storageLease(storage);
+      const current = storageLease(storage, Date.now(), leaseKey);
       if (current && current.ownerId !== id) onLockLost();
     }
   };
