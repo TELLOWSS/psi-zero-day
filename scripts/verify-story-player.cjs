@@ -20,7 +20,12 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    const area=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});a(area.width>area.viewportWidth*.8&&area.height>area.viewportHeight*.5,'scene has no readable world area: '+event+' '+JSON.stringify(area));
    const text=page.locator('.dialogue-text');
    if(await text.count())a(await text.evaluate(el=>{for(let e=el;e&&e!==document.body;e=e.parentElement)if(Number(getComputedStyle(e).opacity)<.95)return false;return getComputedStyle(el).color==='rgb(245, 243, 233)';}),'dialogue dimmed: '+event);
-   a((await page.locator('.story-reading-guide').innerText()).trim().length>8,'no next-action guidance');
+   a(await page.locator('.story-reading-guide').evaluate(el=>{
+    const speaker=el.querySelector('strong'),control=el.querySelector('.story-view-toggle');
+    const box=control?.getBoundingClientRect();
+    return Boolean(speaker?.textContent?.trim()&&control?.textContent?.trim()
+      &&box&&box.height>=44&&box.width>40&&getComputedStyle(control).visibility==='visible');
+   }),'visible speaker and cinema/read control missing');
    if(step===0){
     const mode=page.locator('[data-story-player="cinematic"]');
     a.equal(await mode.getAttribute('data-story-reading-mode'),'cinema','default must be cinematic subtitles');
