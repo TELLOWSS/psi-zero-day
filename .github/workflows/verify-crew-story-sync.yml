@@ -65,5 +65,6 @@ jobs:
             artifacts/story-player/
             public/assets/episode01/cg/*-cinema.webp
             content/episode01/assets.json
+            content/episode01/final-art-ingest-manifest.json
           if-no-files-found: warn
           retention-days: 14

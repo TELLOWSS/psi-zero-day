@@ -10,13 +10,13 @@
     "generation_limit_before_selection": 3
   },
   "final_art_batch": {
-    "status": "exact_archive_verified_github_ingested",
+    "status": "versioned_cinema_candidates_ingested",
     "ingest_manifest": "content/episode01/final-art-ingest-manifest.json",
     "archive_filename": "PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip",
     "archive_sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb",
     "required_surfaces": 8,
     "repository_binaries_present": 8,
-    "note": "The exact eight-file archive is checksum-verified and all eight contracted WebPs are committed in GitHub. Runtime resolves the final WebP backgrounds, with RC SVG retained only as a fallback path."
+    "note": "Eight active production slots include four 2026-10-17 cinematic successors. Archive fields retain historical baseline provenance only. Current exact binaries are tracked in the ingest manifest; visual lock requires separate review."
   },
   "production_surfaces": [
     {
@@ -43,7 +43,7 @@
       "key": "ramp_entry",
       "asset_id": "ep01.scene_bg.ramp_entry",
       "surface": "ramp_entry",
-      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "final_path": "assets/episode01/cg/ramp-entry-cinema.webp",
       "rc_path": "assets/episode01/cg/ramp-entry-rc.svg",
       "used_by": [
         "e01_03_plan_breaks",
@@ -63,7 +63,7 @@
       "key": "work_yard",
       "asset_id": "ep01.scene_bg.work_yard",
       "surface": "work_yard",
-      "final_path": "assets/episode01/cg/work-yard.webp",
+      "final_path": "assets/episode01/cg/work-yard-cinema.webp",
       "rc_path": "assets/episode01/cg/work-yard-rc.svg",
       "used_by": [
         "e01_02_meet_kang",
@@ -127,7 +127,7 @@
       "key": "site_office",
       "asset_id": "ep01.scene_bg.site_office",
       "surface": "site_office",
-      "final_path": "assets/episode01/cg/site-office.webp",
+      "final_path": "assets/episode01/cg/site-office-cinema.webp",
       "rc_path": "assets/episode01/cg/site-office-rc.svg",
       "used_by": [
         "e01_08e_responsibility_clash",
@@ -168,7 +168,7 @@
       "key": "home_night",
       "asset_id": "ep01.scene_bg.home_night",
       "surface": "home_night",
-      "final_path": "assets/episode01/cg/home-night.webp",
+      "final_path": "assets/episode01/cg/home-night-cinema.webp",
       "rc_path": "assets/episode01/cg/home-night-rc.svg",
       "used_by": [
         "e01_09_evening"
