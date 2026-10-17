@@ -458,7 +458,7 @@ export function GameHub({ session, onPlay, onEpisode02, onNewGame, onDefense, on
           <em>{snapshot.completed}/{snapshot.total}</em>
           <b>›</b>
         </button>
-        {onEpisode02 ? <button className="commercial-title-action is-story-entry is-episode02-entry has-mode-art"
+        {onEpisode02 ? <button className="commercial-title-action is-episode02-entry has-mode-art"
           type="button" disabled={snapshot.phase!=='complete'&&snapshot.state?.flags.episode01_completed!==true}
           aria-label={snapshot.phase==='complete'||snapshot.state?.flags.episode01_completed===true?'에피소드 2 첫 양중 시네마틱 플레이 시작':'에피소드 1 완료 후 에피소드 2 잠금 해제'}
           onClick={onEpisode02}>
