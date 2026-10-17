@@ -1,0 +1,28 @@
+.survivors-ultimate-brief{margin:12px 0;padding:14px 16px;border:1px solid #e6b76e70;border-radius:10px;background:#302719;color:#ffdf9b}
+.survivors-ultimate-brief p{margin:7px 0;color:#d5e2e2;font-size:13px;line-height:1.65}
+.survivors-ultimate-brief small{color:#ffdc94;font-size:12px}
+.survivors-container .survivors-ultimate-control .survivors-ultimate-btn{width:176px;height:72px;min-width:0;padding:9px 12px 13px;border-radius:12px;flex-direction:row;gap:8px;animation:none;transform:none}
+.survivors-container .survivors-ultimate-control .survivors-ultimate-info{align-items:flex-start;min-width:0;margin:0;line-height:1.4}
+.survivors-container .survivors-ultimate-control .survivors-ultimate-info strong{display:block;font-size:13px;color:#ffe5ac;white-space:nowrap}
+.survivors-container .survivors-ultimate-control .survivors-ultimate-info small{font-size:11px}
+.survivors-container .survivors-ultimate-control .survivors-ultimate-info em{font-size:9px;font-style:normal;color:#c2d2dc}
+.survivors-ultimate-meter{position:absolute;left:10px;right:10px;bottom:7px;height:4px;background:#07121e;border-radius:4px;overflow:hidden}
+.survivors-ultimate-meter i{display:block;height:100%;background:#e8b654}
+.survivors-ultimate-btn.is-ready .survivors-ultimate-meter i{background:#fff0b5}
+.survivors-ultimate-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.survivors-ultimate-coach-backdrop{position:absolute;inset:0;z-index:170;display:flex;align-items:center;justify-content:center;padding:16px;background:#030b13bd;backdrop-filter:blur(3px);box-sizing:border-box;touch-action:auto}
+.survivors-ultimate-coach{width:min(440px,100%);max-height:calc(100dvh - 32px);overflow-y:auto;box-sizing:border-box;padding:24px;border:1px solid #f0c477;border-radius:16px;background:linear-gradient(145deg,#1f3540,#10212c);color:#edf4f0;box-shadow:0 20px 65px #0007}
+.survivors-ultimate-coach h2{font-size:24px;line-height:1.35;margin:12px 0}
+.survivors-ultimate-coach p{font-size:14px;line-height:1.7;color:#c8dbe0}
+.survivors-ultimate-coach small{display:block;font-size:11px;line-height:1.6;color:#b3cbd0}
+.survivors-ultimate-coach .survivors-ultimate-coach-keys{font-size:12px;color:#ffdf9a}
+.survivors-ultimate-coach button{display:block;width:100%;min-height:48px;margin:9px 0;padding:12px;border:1px solid #9ab4ba66;border-radius:8px;background:#223b46;color:#edf4f0;font:inherit;font-size:14px;cursor:pointer}
+.survivors-ultimate-coach button.is-primary{background:#f0ca82;color:#172735;font-weight:800;border-color:#ffe0a5}
+.survivors-ultimate-coach button:focus-visible,.survivors-ultimate-btn:focus-visible{outline:3px solid #fff1be;outline-offset:3px}
+@media(max-width:900px),(max-height:600px){
+ .survivors-container.is-combat .survivors-ultimate-control .survivors-ultimate-btn{width:148px;height:64px;padding:7px 9px 12px;gap:6px}
+ .survivors-container.is-combat .survivors-ultimate-control .survivors-ultimate-info strong{display:block;font-size:11px}
+ .survivors-container.is-combat .survivors-ultimate-control .survivors-ultimate-info small{font-size:10px}
+ .survivors-container .survivors-ultimate-control .survivors-ultimate-icon{font-size:22px}
+}
+@media(max-height:450px){.survivors-ultimate-coach{padding:16px}.survivors-ultimate-coach h2{font-size:20px;margin:7px 0}.survivors-ultimate-coach p{font-size:12px;line-height:1.5;margin:7px 0}.survivors-ultimate-coach button{margin:6px 0}}

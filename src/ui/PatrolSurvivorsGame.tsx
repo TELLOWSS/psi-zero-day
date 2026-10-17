@@ -1,4 +1,8 @@
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
+import {SurvivorsUltimateBrief,SurvivorsUltimateCoach,SurvivorsUltimateControl} from './SurvivorsUltimateControl';
+import {readUltimateLesson,rememberUltimateUse,ultimateReadiness} from './survivors-ultimate-learning';
+import ultimateText from '../../content/localization/survivors-ultimate-ko.json';
+import './survivors-ultimate-learning.css';
 import type {Hazard} from '../domain/patrol-survivors';
 import {safetyWalkway} from '../domain/survivors-safety-walkway';
 import workerRouteText from '../../content/localization/survivors-worker-route-ko.json';
@@ -682,6 +686,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Ultimate Director Roar & Boss Alert Mirrors
   const [ultimateCharge, setUltimateCharge] = useState(0);
+  const [ultimateMaxCharge,setUltimateMaxCharge]=useState(100);
+  const [ultimateLearned,setUltimateLearned]=useState(readUltimateLesson);
+  const [ultimateCoachOpen,setUltimateCoachOpen]=useState(false);
+  const ultimateCoachOfferedRef=useRef(false),ultimateReadyAnnouncedRef=useRef(false),ultimateCoachSoundRef=useRef(false);
   const [directorCutinPhase, setDirectorCutinPhase] = useState<'none' | 'cutin' | 'shout' | 'invert' | 'recovering'>('none');
   const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string; equipmentId?: PerkId } | null>(null);
   const [bossAlert, setBossAlert] = useState<string | null>(null);
@@ -692,7 +700,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Wave Progression & Container Shop
   const [showContainerShop, setShowContainerShop] = useState(false);
-  storeOpenRef.current=showRdModal || showArsenalModal || showContainerShop;
+  storeOpenRef.current=showRdModal || showArsenalModal || showContainerShop || ultimateCoachOpen;
   const [containerShopWave, setContainerShopWave] = useState(1);
   const [availableContainerShopWave, setAvailableContainerShopWave] = useState<number | null>(null);
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
@@ -840,11 +848,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => { audioRef.current.setMuted(audioMuted); if ((phase === 'paused'&&!accountabilityCase)||phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase, accountabilityCase]);
 
   // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
-  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution' | 'mastery', position?: { x: number; y: number }) => {
+  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution' | 'mastery' | 'ultimate_ready', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
       const ctx = audioRef.current.getContext();
       if (!ctx) return;
+      if(type==='ultimate_ready'){
+        [659.25,987.77].forEach((frequency,index)=>{
+          const osc=ctx.createOscillator(),gain=ctx.createGain(),time=ctx.currentTime+index*.12;
+          osc.type='sine';osc.frequency.setValueAtTime(frequency,time);
+          gain.gain.setValueAtTime(.001,time);gain.gain.linearRampToValueAtTime(.16,time+.02);gain.gain.exponentialRampToValueAtTime(.001,time+.3);
+          if(!audioRef.current.track(osc,gain,3))return;
+          osc.connect(gain);audioRef.current.connectSfx(osc,gain,position,engineRef.current?.state.player);osc.start(time);osc.stop(time+.31);
+        });return;
+      }
       if (type === 'evolution') {
         const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.evolution');
         if(cue)void audioRef.current.auditionCue(cue,3);
@@ -1089,6 +1106,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setScore(0);
     setKills(0);
     setUltimateCharge(0);
+    setUltimateMaxCharge(engine.state.maxUltimateCharge);
+    setUltimateCoachOpen(false);ultimateCoachOfferedRef.current=false;ultimateReadyAnnouncedRef.current=false;
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
@@ -1159,19 +1178,41 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const startGame = () => beginPatrol();
 
   // Trigger Director Roaring Shout Ultimate
-  const handleTriggerDirectorShout = () => {
+  const handleTriggerDirectorShout = (fromCoach=false) => {
     const engine = engineRef.current;
     if (!engine) return;
     if (engine.state.ultimateCharge < engine.state.maxUltimateCharge) return;
-
+    if(fromCoach&&ultimateCoachOpen&&engine.state.phase==='paused')engine.setPaused(false);
     const ok = engine.triggerDirectorShout();
     if (ok) {
-
+      rememberUltimateUse();setUltimateLearned(true);setUltimateCoachOpen(false);
+      setUltimateCharge(0);setDirectorCutinPhase(engine.state.directorCutinPhase);setPhase('playing');
       screenShakeRef.current = 24;
       spawnParticles(engine.state.player.x, engine.state.player.y, '#f59e0b', 40, 160, 5);
       spawnFloating(engine.state.player.x, engine.state.player.y - 40, combatText.shout_activated, '#f59e0b', true);
+    }else if(fromCoach){
+      engine.setPaused(true);setPhase('paused');
     }
   };
+  const skipUltimateCoach=()=>{
+    setUltimateCoachOpen(false);keysRef.current={};touchVectorRef.current={x:0,y:0};
+    engineRef.current?.setPaused(false);setPhase('playing');lastTimeRef.current=performance.now();
+  };
+  useEffect(()=>{
+    const engine=engineRef.current;
+    if(!ultimateReadiness(ultimateCharge,ultimateMaxCharge).ready){ultimateReadyAnnouncedRef.current=false;return;}
+    if(!engine||phase!=='playing'||engine.state.phase!=='playing'||storeOpenRef.current||accountabilityCaseRef.current||directorCutinPhase!=='none'||engine.state.bossAlertTimer>0||(engine.state.bossEncounter&&engine.state.bossEncounter.phase!=='combat'))return;
+    if(ultimateReadyAnnouncedRef.current)return;
+    ultimateReadyAnnouncedRef.current=true;
+    if(!ultimateLearned&&!readUltimateLesson()&&!ultimateCoachOfferedRef.current){
+      ultimateCoachOfferedRef.current=true;keysRef.current={};touchVectorRef.current={x:0,y:0};touchIdRef.current=null;touchCenterRef.current=null;
+      setJoystickVisual(previous=>({...previous,visible:false}));engine.setPaused(true);setPhase('paused');setUltimateCoachOpen(true);
+    }else playSfx('ultimate_ready');
+  },[ultimateCharge,ultimateMaxCharge,phase,directorCutinPhase,gameTime,ultimateLearned,playSfx]);
+  useEffect(()=>{
+    if(!ultimateCoachOpen){ultimateCoachSoundRef.current=false;return;}
+    if(!ultimateCoachSoundRef.current){ultimateCoachSoundRef.current=true;playSfx('ultimate_ready');}
+  },[ultimateCoachOpen,playSfx]);
 
   // Perk Selection handler
   const handleSelectPerk = (perkId: PerkId) => {
@@ -1252,7 +1293,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if ((e.code === 'Space' || e.code === 'KeyF') && !e.repeat) {
         const engine = engineRef.current;
         if (engine && engine.state.phase === 'playing') {
-          if (engine.state.ultimateCharge >= engine.state.maxUltimateCharge) {
+          if (e.code === 'KeyF') {
+            e.preventDefault();
             inputActionsRef.current.shout();
           } else if (e.code === 'Space') {
             engine.triggerPlayerDash();
@@ -1812,6 +1854,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setLevel(engine.state.level);
         setGameTime(Math.floor(engine.state.gameTime));
         setUltimateCharge(Math.floor(engine.state.ultimateCharge));
+        setUltimateMaxCharge(engine.state.maxUltimateCharge);
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
@@ -3660,25 +3703,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       })()}
       {phase==='playing'&&(engineRef.current?.state.terrainGift?.remaining??0)>0&&<aside className="survivors-terrain-gift" role="status">{terrainText.cleanupGift} +{engineRef.current?.state.terrainGift?.credits} PSI<small>{terrainText.cleanupGiftNote}</small></aside>}
       {phase==='playing'&&<SurvivorsTerrainCleanup status={engineRef.current?.terrainCleanupStatus()??null} onClear={()=>engineRef.current?.clearTerrain()}/>}
-      {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
-      {phase === 'playing' && (
-        <div className="survivors-ultimate-control">
-          <button
-            type="button"
-            className={`survivors-ultimate-btn ${!encounterLocked && ultimateCharge >= 100 ? 'is-ready' : ''}`}
-            onClick={handleTriggerDirectorShout}
-            disabled={encounterLocked || ultimateCharge < 100 || directorCutinPhase !== 'none'}
-            aria-label="현장소장 사자후 궁극기 발동"
-          >
-            <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as CSSProperties} />
-            <span className="survivors-ultimate-icon">📢</span>
-            <div className="survivors-ultimate-info">
-              <strong>소장 샤우팅</strong>
-              <small>{!encounterLocked && ultimateCharge >= 100 ? <><span>READY</span><kbd className="survivors-ultimate-key">F/Space</kbd></> : `${ultimateCharge}%`}</small>
-            </div>
-          </button>
-        </div>
-      )}
+      {phase==='playing'&&<SurvivorsUltimateControl charge={ultimateCharge} max={ultimateMaxCharge} locked={encounterLocked||directorCutinPhase!=='none'} onActivate={()=>handleTriggerDirectorShout()}/>}
+      {ultimateCoachOpen&&<SurvivorsUltimateCoach onActivate={()=>handleTriggerDirectorShout(true)} onSkip={skipUltimateCoach}/>}
 
       {/* Edge cut-in preserves the actor and shout without covering the workface. */}
       {directorCutinPhase !== 'none' && (
@@ -3765,6 +3791,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 : <button type="button" onClick={openStore}>{storeText.briefBrowse}</button>}
             </aside>
             <SurvivorsOperationBrief characterId={selectedChar} stage={PATROL_STAGES[selectedStage]}/>
+            <SurvivorsUltimateBrief/>
             {accountabilityMemory(accountability)&&<aside className="survivors-story-brief"><strong>{accountabilityText.memory}</strong><p>{accountabilityMemory(accountability)}</p></aside>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar} legacy={Object.values(stageStars).some(stars=>stars[0])}/>
             <section className="survivors-mission-brief" aria-label={combatText.mission_title}>
@@ -3896,7 +3923,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             <div className="survivors-controls-guide" hidden={preflightTab!=='settings'}>
               <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
-              <div>⚡ <strong>소장 샤우팅</strong>: <kbd>Space</kbd> / <kbd>F</kbd> (전화면 1.5초 시공간 정지 & 전리품 흡수)</div>
+              <div><strong>{ultimateText.separateControls}</strong><p>{ultimateText.briefBody}</p></div>
               <div>💼 <strong>보유 안전 크레딧</strong>: <strong>{psiCredits.toLocaleString()} PSI</strong></div>
               <div className="survivors-store-loadout" aria-label={storeText.status}>{storeInventory.equipped.length ? storeInventory.equipped.map(id => <span key={id}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===id)!}/>{storeText.items[id as keyof typeof storeText.items].name}</span>) : storeText.empty}</div>
             </div>
@@ -4138,7 +4165,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* PAUSE MODAL */}
-      {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && !showContainerShop && (
+      {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && !showContainerShop && !ultimateCoachOpen && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2><button type="button" className="survivors-btn-secondary" onClick={openEncounterIntel}>{encounterIntelTitle}</button>

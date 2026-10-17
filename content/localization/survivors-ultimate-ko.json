@@ -1,0 +1,20 @@
+{
+ "title":"궁극기 · 사자후",
+ "label":"현장소장 사자후 궁극기 발동",
+ "charge":"충전",
+ "charging":"통제·기록 수집으로 충전",
+ "ready":"궁극기 준비 완료",
+ "activate":"궁극기 발동",
+ "tap":"눌러서 발동 · PC F",
+ "locked":"연출 종료 후 사용",
+ "briefTitle":"위급할 때, 사자후 궁극기",
+ "briefBody":"위험 신호를 통제하고 안전 기록을 모으면 충전됩니다. 100%가 되면 F 또는 화면의 궁극기 버튼을 눌러 위험 신호를 크게 제압하고 흩어진 기록을 끌어오세요.",
+ "separateControls":"궁극기 F · 긴급 회피 Space / Shift",
+ "coachTitle":"첫 궁극기가 준비됐습니다",
+ "coachPaused":"사용법을 확인하는 동안 순찰이 잠시 멈췄습니다.",
+ "coachBody":"사자후는 위험 신호를 크게 제압하고 기록을 끌어오는 궁극기입니다. 지금 직접 발동해 보거나, 충전을 보관하고 순찰을 이어갈 수 있습니다.",
+ "coachAction":"지금 사자후 발동",
+ "coachSkip":"충전 보관 · 순찰 계속",
+ "coachKeyboard":"F 또는 발동 버튼 · 회피는 Space / Shift",
+ "coachClose":"Escape로 충전을 보관하고 계속합니다."
+}
