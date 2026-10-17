@@ -363,7 +363,7 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {scene.cast.map((characterId, index) => {
+      {scene.cast.map(characterId => {
         const cameraIndex = stagedCast.indexOf(characterId);
         const onCamera = cameraIndex >= 0;
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
