@@ -54,6 +54,16 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    }
    a.equal(await page.locator('.strategy-shell').count(),0,'story reader unexpectedly requires a tactical map');
    const choices=page.locator('.choice-panel button:not(:disabled)'),count=await choices.count();
+   if(count){
+    const cards=await page.locator('.choice-panel button').evaluateAll(nodes=>nodes.map(node=>{
+      const r=node.getBoundingClientRect(),inner=node.querySelector('.choice-text');
+      const t=inner?.getBoundingClientRect();
+      return {top:r.top,bottom:r.bottom,height:r.height,textBottom:t?.bottom,textTop:t?.top,
+        scrollHeight:inner?.scrollHeight,clientHeight:inner?.clientHeight};
+    }));
+    a(cards.every((row,i)=>row.height>=44&&row.textBottom<=row.bottom+3&&row.textTop>=row.top-3&&row.scrollHeight<=row.clientHeight+3&&(!i||row.top>=cards[i-1].bottom-2)),
+      'choice text clipped or choice cards overlap at '+width+' '+event+' '+JSON.stringify(cards));
+   }
    const button=count?choices.nth(policy==='last'?count-1:0):page.locator('.continue-button');
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();a(box&&box.height>=44&&box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1,'primary action clipped: '+event);
    const hit=await button.evaluate(el=>{const r=el.getBoundingClientRect(),target=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return target===el||el.contains(target);});a(hit,'primary action covered: '+event);
@@ -69,7 +79,8 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
       cropSuppressed:node.querySelector('img')?.getAttribute('src')!==node.getAttribute('data-expression-source')
     })));
     const active=shotStyles.filter(actor=>actor.onCamera);
-    a(active.length>=1&&active.length<=2&&active.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.cropSuppressed),
+    const expectsActors=(castPlan[event]?.cast?.length??0)>0;
+    a((!expectsActors&&active.length===0)||(expectsActors&&active.length>=1&&active.length<=2&&active.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.cropSuppressed)),
       'ghost actor / bust sprite in film frame: '+event+' '+JSON.stringify(shotStyles));
     a(shotStyles.filter(actor=>!actor.onCamera).every(actor=>actor.visibility==='hidden'),
       'background cast leaked into shot: '+event);
