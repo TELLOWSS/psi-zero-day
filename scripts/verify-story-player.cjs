@@ -105,6 +105,10 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
     await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);
    }
    if(count&&!screens.has('decision')){await page.screenshot({path:path.join(out,`${width}-decision.png`)});screens.add('decision');}
+   if(count&&['e01_08g_tbm_field_gap','e01_08o_record_pressure','e01_08e_responsibility_clash'].includes(event)&&!screens.has(event+'-decision')){
+    await page.screenshot({path:path.join(out,`${width}-${event}-decision.png`)});
+    screens.add(event+'-decision');
+   }
    await button.click({timeout:3000});
    // Allow React to commit the next reader state; no voice skip and no DOM click shortcut.
    await page.waitForTimeout(140);
