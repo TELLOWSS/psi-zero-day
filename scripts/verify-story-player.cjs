@@ -3,9 +3,10 @@ const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/str
 const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4178',out='artifacts/story-player';fs.mkdirSync(out,{recursive:true});
 const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_09_evening']);
 (async()=>{
- const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];
+ const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];let currentPage;
  try{for(const [width,height,policy]of [[390,844,'first'],[844,390,'last'],[1440,900,'first']]){
   const context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[],trace=[],seen=new Set(),screens=new Set();
+  currentPage=page;
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.is-story-entry').click();await page.locator('.episode-cold-open-cta').click({timeout:30000});
   for(let step=0;step<250;step++){
@@ -13,7 +14,7 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
    await page.locator('[data-story-player="cinematic"]').waitFor();
    const scene=page.locator('.episode-immersive-scene'),event=await scene.getAttribute('data-event'),node=await scene.getAttribute('data-node');seen.add(event);
    await page.waitForFunction(()=>{const image=document.querySelector('.episode-immersive-background');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0&&Number(getComputedStyle(image).opacity)>.95;},{},{timeout:15000});
-   const visible=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return r.width>innerWidth*.8&&r.height>innerHeight*.5;});a(visible,'scene has no readable world area: '+event);
+   const area=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});a(area.width>area.viewportWidth*.8&&area.height>area.viewportHeight*.5,'scene has no readable world area: '+event+' '+JSON.stringify(area));
    const text=page.locator('.dialogue-text');
    if(await text.count())a(await text.evaluate(el=>{for(let e=el;e&&e!==document.body;e=e.parentElement)if(Number(getComputedStyle(e).opacity)<.95)return false;return getComputedStyle(el).color==='rgb(245, 243, 233)';}),'dialogue dimmed: '+event);
    a((await page.locator('.story-reading-guide').innerText()).trim().length>8,'no next-action guidance');
@@ -31,5 +32,5 @@ const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signa
   }
   a.equal(await page.locator('.phase-complete').count(),1,'story did not finish');a.equal(seen.size,26);a.deepEqual(errors,[]);
   rows.push({width,height,policy,events:seen.size,errors,trace});fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({base,scope:'automated visible-background and reachable-action regression; not manual narrative review',rows},null,2));console.log('PASS story player',width,height,seen.size,'events with visible backgrounds and reachable controls');await context.close();
- }}finally{await browser.close();}
+ }}catch(error){if(currentPage&&!currentPage.isClosed())await currentPage.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});
