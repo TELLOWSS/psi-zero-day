@@ -1,9 +1,12 @@
 /* Dedicated scene composition: typography and controls leave the heroine's face clear. */
 :root .commercial-title-home[data-title-layout='MODE_SELECT_V11'][data-home-art='premium-hero-v4']{
  & .premium-title-picture{display:contents}
- & .psi-original-lockup{display:flex!important;align-items:flex-end;gap:18px;width:100%;text-shadow:0 2px 15px #041320}
- & .psi-original-lockup .psi-original-emblem{display:block;flex:none;width:72px!important;height:108px!important;aspect-ratio:2/3!important;box-sizing:content-box;padding:7px 10px 5px;border-radius:7px;background:transparent;object-fit:contain;filter:none}
- & .psi-original-game-name{padding-bottom:12px;color:#f4f5ed;font-size:32px;font-weight:800;letter-spacing:.06em;white-space:nowrap}
+ & .psi-original-lockup{display:flex!important;align-items:center;gap:20px;width:max-content;max-width:100%;text-shadow:0 2px 15px #041320}
+ & .psi-original-emblem-surface{display:grid;place-items:center;flex:none;box-sizing:border-box;width:100px;height:116px;padding:15px 18px;border:1px solid #e4eaf064;border-radius:20px;background:linear-gradient(140deg,#edf7ff38,#c6e5ff14);backdrop-filter:blur(14px);box-shadow:inset 0 1px #fff4,0 12px 30px #00102150}
+ & .psi-original-lockup .psi-original-emblem{display:block;width:100%!important;height:100%!important;aspect-ratio:6/7!important;padding:0!important;background:transparent;border-radius:0;object-fit:contain;filter:drop-shadow(0 3px 6px #001c3880)}
+ & .psi-original-title-stack{display:flex;flex-direction:column;gap:8px;min-width:0}
+ & .psi-original-brand-name{color:#cce7f8;font-size:16px;font-weight:700;letter-spacing:.24em;line-height:1.1;white-space:nowrap}
+ & .psi-original-game-name{display:block;padding:0;color:#fff7e6;font-size:clamp(29px,3.5vw,48px);font-weight:850;letter-spacing:.035em;white-space:nowrap;line-height:1.05}
  & .commercial-title-sun-glow{display:none!important}
  & .commercial-title-backdrop{top:48px!important;height:min(960px,110svh)!important;object-position:70% 15%}
  & .hub-cinematic-intro{min-height:510px;padding-top:48px;padding-bottom:36px}
@@ -15,18 +18,20 @@
   & .commercial-title-backdrop{top:0!important;height:max(720px,100svh)!important;object-position:60% top}
   & .commercial-title-grade{height:max(720px,100svh)!important;background:linear-gradient(0deg,#0a151c 0%,#0a151c99 16%,#0a151c00 55%),linear-gradient(90deg,#06131c45,transparent 85%)!important}
   & .hub-cinematic-intro{min-height:min(590px,calc(100svh - 230px));max-width:none;padding:8px 0 22px;justify-content:flex-start}
-  & .psi-original-lockup{gap:14px}
-  & .psi-original-lockup .psi-original-emblem{width:60px!important;height:90px!important;padding:5px 8px}
-  & .psi-original-game-name{font-size:23px;padding-bottom:5px}
-  & .commercial-title-logo{width:220px!important}
+  & .psi-original-lockup{gap:12px}
+  & .psi-original-emblem-surface{width:66px;height:78px;padding:10px 12px;border-radius:14px}
+  & .psi-original-brand-name{font-size:12px;letter-spacing:.2em}
+  & .psi-original-game-name{font-size:25px;padding:0}
+  & .commercial-title-logo{width:250px!important}
   & .hub-home-name{font-size:17px}
   & .commercial-title-copy h1{max-width:min(200px,55vw);font-size:22px!important;line-height:1.35!important;margin-top:10px!important}
   & .commercial-title-actions .commercial-title-action.has-mode-art{min-height:150px!important;padding-top:22px!important}
  }
  @media(orientation:landscape) and (max-height:600px){
   & .psi-original-lockup{gap:12px}
-  & .psi-original-lockup .psi-original-emblem{width:42px!important;height:63px!important;padding:3px 6px}
-  & .psi-original-game-name{font-size:20px;padding-bottom:4px}
+  & .psi-original-emblem-surface{width:54px;height:64px;padding:8px 10px;border-radius:12px}
+  & .psi-original-brand-name{font-size:10px}
+  & .psi-original-game-name{font-size:22px;padding:0}
   & .hub-cinematic-intro{min-height:235px;padding:18px 0 24px;max-width:60%}
   & .commercial-title-logo{width:190px!important}
   & .commercial-title-copy h1{font-size:20px!important}

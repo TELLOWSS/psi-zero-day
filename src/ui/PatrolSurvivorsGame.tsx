@@ -1,6 +1,6 @@
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import {SurvivorsUltimateBrief,SurvivorsUltimateCoach,SurvivorsUltimateControl} from './SurvivorsUltimateControl';
-import {readUltimateLesson,rememberUltimateUse,ultimateReadiness} from './survivors-ultimate-learning';
+import {readUltimateLesson,readUltimateLessonSeen,rememberUltimateLessonShown,rememberUltimateUse,shouldOfferUltimateLesson,ultimateReadiness} from './survivors-ultimate-learning';
 import ultimateText from '../../content/localization/survivors-ultimate-ko.json';
 import './survivors-ultimate-learning.css';
 import type {Hazard} from '../domain/patrol-survivors';
@@ -10,6 +10,8 @@ import {SurvivorsPinballUnlockPreview} from './SurvivorsPinballCustomization';
 import {PINBALL_TABLE_IDS,pinballTableProgress} from '../domain/survivors-pinball-tables';
 import {drawEquipmentAura} from './survivors-equipment-aura';
 import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
+import {SurvivorsWorksiteBrief} from './SurvivorsWorksiteBrief';
+import {readRequestedSitePatrolStage,clearRequestedSitePatrolStage} from '../app/site-patrol-access';
 import {SurvivorsOperationStoryResult} from './SurvivorsOperationStory';
 import {operationHandoff} from '../domain/survivors-operation-handoff';
 import {saveOperationHandoff} from './survivors-operation-handoff-store';
@@ -468,12 +470,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [selectedDifficulty, setSelectedDifficulty] = useState<PatrolDifficulty>('standard');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>(() => {
     try {
-      return resumePatrolStage(localStorage.getItem(LAST_PATROL_STAGE_KEY),
+      return readRequestedSitePatrolStage()??resumePatrolStage(localStorage.getItem(LAST_PATROL_STAGE_KEY),
         parseSave(localStorage.getItem(STORAGE_KEY_UNLOCKED_STAGES)),
         parseSave(localStorage.getItem(STORAGE_KEY_STAGE_STARS)));
     } catch { return 'stage_01'; }
   });
   const [loadedGround, setLoadedGround] = useState<string | null>(null);
+  useEffect(()=>{clearRequestedSitePatrolStage(selectedStage);},[selectedStage]);
   const [failedGround, setFailedGround] = useState<string | null>(null);
   const [groundRetry, setGroundRetry] = useState(0);
   useEffect(() => {
@@ -1107,7 +1110,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setKills(0);
     setUltimateCharge(0);
     setUltimateMaxCharge(engine.state.maxUltimateCharge);
-    setUltimateCoachOpen(false);ultimateCoachOfferedRef.current=false;ultimateReadyAnnouncedRef.current=false;
+    setUltimateCoachOpen(false);ultimateReadyAnnouncedRef.current=false;
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
@@ -1204,8 +1207,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if(!engine||phase!=='playing'||engine.state.phase!=='playing'||storeOpenRef.current||accountabilityCaseRef.current||directorCutinPhase!=='none'||engine.state.bossAlertTimer>0||(engine.state.bossEncounter&&engine.state.bossEncounter.phase!=='combat'))return;
     if(ultimateReadyAnnouncedRef.current)return;
     ultimateReadyAnnouncedRef.current=true;
-    if(!ultimateLearned&&!readUltimateLesson()&&!ultimateCoachOfferedRef.current){
-      ultimateCoachOfferedRef.current=true;keysRef.current={};touchVectorRef.current={x:0,y:0};touchIdRef.current=null;touchCenterRef.current=null;
+    if(shouldOfferUltimateLesson(engine.state.stageId,ultimateLearned||readUltimateLesson(),ultimateCoachOfferedRef.current||readUltimateLessonSeen())){
+      ultimateCoachOfferedRef.current=true;rememberUltimateLessonShown();keysRef.current={};touchVectorRef.current={x:0,y:0};touchIdRef.current=null;touchCenterRef.current=null;
       setJoystickVisual(previous=>({...previous,visible:false}));engine.setPaused(true);setPhase('paused');setUltimateCoachOpen(true);
     }else playSfx('ultimate_ready');
   },[ultimateCharge,ultimateMaxCharge,phase,directorCutinPhase,gameTime,ultimateLearned,playSfx]);
@@ -3791,6 +3794,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 : <button type="button" onClick={openStore}>{storeText.briefBrowse}</button>}
             </aside>
             <SurvivorsOperationBrief characterId={selectedChar} stage={PATROL_STAGES[selectedStage]}/>
+            <SurvivorsWorksiteBrief stage={PATROL_STAGES[selectedStage]}/>
             <SurvivorsUltimateBrief/>
             {accountabilityMemory(accountability)&&<aside className="survivors-story-brief"><strong>{accountabilityText.memory}</strong><p>{accountabilityMemory(accountability)}</p></aside>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar} legacy={Object.values(stageStars).some(stars=>stars[0])}/>
@@ -4177,6 +4181,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls}</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
+            {engineRef.current&&<SurvivorsWorksiteBrief stage={engineRef.current.state.stage} hazards={engineRef.current.state.interactiveHazards} terrain={engineRef.current.state.terrain}/>}
             <div className="survivors-actions-row">
               {availableContainerShopWave!==null&&<button type="button" className="survivors-btn-primary" onClick={openContainerShop}>WAVE {availableContainerShopWave} 정비 보급 열기</button>}
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>{storeText.shopEntry}</button>

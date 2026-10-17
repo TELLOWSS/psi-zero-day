@@ -57,7 +57,7 @@ describe('brand production slot audit contract', () => {
     expect(approval.trademarkClearance).toBe('NOT_CONFIRMED');
     expect(approval.approvedRuntimeFiles).toHaveLength(4);
     const replacement = JSON.parse(readFileSync(contract.titleMarkReplacement, 'utf8'));
-    expect(replacement.authority).toBe('USER_REQUEST_ORIGINAL_PSI_MARK_AND_HELMET_BRANDING_20261017');
+    expect(replacement.authority).toBe('USER_REQUEST_NEW_PSI_MAIN_AND_HELMET_BRANDING_20261017');
     expect(existsSync(replacement.reference)).toBe(true);
     for (const file of approval.approvedRuntimeFiles) {
       const delivery = readFileSync(resolve('public', file.uri.slice(1)));
@@ -68,7 +68,7 @@ describe('brand production slot audit contract', () => {
     }
     const current = JSON.parse(readFileSync(replacement.assetManifest,'utf8'));
     expect(current.mark.uri).toBe(replacement.runtimeMark);
-    expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain('home-psi-art-v5.json');
+    expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain('home-new-psi-art-v6.json');
     expect(existsSync('public'+replacement.runtimeMark)).toBe(true);
   });
 

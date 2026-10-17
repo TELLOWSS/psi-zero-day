@@ -1,19 +1,17 @@
 import type {TerrainObject} from '../domain/survivors-terrain';
 import type {PatrolStageDefinition} from '../domain/patrol-survivors';
+import {worksiteFootprints} from '../domain/survivors-worksite';
 type Point={x:number;y:number};
 export function createTerrain(stage:PatrolStageDefinition):TerrainObject[] {
- const shift=(stage.stageNumber-1)%3*32;
- const objects:TerrainObject[]=[
-  {id:'terrain_left',kind:'pillar',x:380,y:360+shift,width:90,height:90,hp:1,maxHp:1},
-  {id:'terrain_right',kind:'pillar',x:930,y:490-shift,width:90,height:90,hp:1,maxHp:1},
-  {id:'terrain_cover',kind:'cover',x:520,y:90,width:140,height:56,hp:1,maxHp:1},
-  {id:'terrain_rubble',kind:'rubble',x:760,y:660,width:110,height:64,hp:80,maxHp:80},
- ];
+ const ids=['terrain_left','terrain_right','terrain_cover','terrain_rubble'];
+ const objects:TerrainObject[]=worksiteFootprints(stage.stageNumber).map((o,i)=>({...o,id:ids[i]!,hp:o.kind==='rubble'?80:1,maxHp:o.kind==='rubble'?80:1}));
  // Authored targets and the central start/extraction corridor always remain clear.
  const placed:TerrainObject[]=[];
  for(const object of objects){
-  const candidates=[object,...[120,260,420,920,1100,1200].flatMap(x=>[90,290,490,720].map(y=>({...object,x,y})))];
+  const candidates=[object,...[120,260,420,920,1100,1200].flatMap(x=>[90,290,490,720].map(y=>({...object,x:x+(stage.stageNumber%11-5)*3,y:y+(stage.stageNumber%13-6)*3})))];
   const selected=candidates.find(o=>
+   o.x>=40&&o.y>=40&&o.x+o.width<=1360&&o.y+o.height<=840&&
+   (o.x+o.width+24<660||o.x-24>740)&&
    !stage.hazards.some(h=>Math.hypot(h.x-(o.x+o.width/2),h.y-(o.y+o.height/2))<Math.min(32,h.radius)+Math.hypot(o.width,o.height)/2+20)&&
    !placed.some(p=>o.x<p.x+p.width+50&&o.x+o.width+50>p.x&&o.y<p.y+p.height+50&&o.y+o.height+50>p.y));
   if(selected)placed.push(selected);

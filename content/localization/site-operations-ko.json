@@ -1,0 +1,15 @@
+{
+ "brand":"NEW-PSI · FIELD OPERATIONS","linked":"연결된 순찰 구역","open":"이 현장 순찰 준비","locked":"이전 구역을 완수하면 열립니다","view":"현장·공정 도면은 순찰 준비와 일시정지 화면에서 확인합니다.","entryHint":"공정별 작업면 · 실제 배치 도면 · 현장 순찰","scopeTitle":"공정별 플레이","scope":"연결된 순찰은 기존 구역 해금 조건을 따릅니다. 대표 디펜스 맵은 아래의 선행조건을 확인한 뒤 체험할 수 있습니다.","noDefense":"이 공정의 플레이는 위의 연결된 순찰 구역에서 진행합니다. 공정별 전용 디펜스는 아직 제공하지 않습니다.","priority":"현장 위험 우선순위","map":"디펜스 배치 도면","phases":{"prepare":"진입","operate":"작업","handover":"인계"},
+ "operations":{
+  "apt-new-bottom-up-excavation":{"stage":"stage_01","name":"서측 게이트 및 지상 복합 하역장"},
+  "apt-new-bottom-up-rc-frame":{"stage":"stage_03","name":"45층 초고층 메가 골조 슬래브"},
+  "apt-new-top-down-under-slab":{"stage":"stage_21","name":"역타 지하 작업면 진입"},
+  "apt-new-top-down-concurrent":{"stage":"stage_24","name":"지하·지상 동시 작업"},
+  "apt-remodel-survey":{"stage":"stage_06","name":"리모델링 사전 조사·전원 차단"},
+  "apt-remodel-selective-demolition":{"stage":"stage_07","name":"리모델링 선택 철거"},
+  "apt-remodel-old-new-connection":{"stage":"stage_08","name":"기존·신설 구조 접합"},
+  "data-center-mep":{"stage":"stage_09","name":"데이터센터 MEP 설치"},
+  "data-center-electrical-ups":{"stage":"stage_43","name":"UPS 장비 반입"},
+  "data-center-commissioning":{"stage":"stage_46","name":"시운전 작업면 사전 확인"}
+ }
+}

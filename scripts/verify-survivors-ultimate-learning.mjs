@@ -38,6 +38,10 @@ try{
   assert.equal(await page.evaluate(()=>window.qaEngine.state.ultimateCharge),before.charge);
   await page.keyboard.press('Space');
   assert.equal(await page.evaluate(()=>window.qaEngine.state.ultimateCharge),before.charge,'Space never consumes ultimate');
+  if(width===1440){
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.2);
+   await page.evaluate(()=>window.qaEngine.state.ultimateCharge=window.qaEngine.state.maxUltimateCharge);await page.waitForFunction(()=>!document.querySelector('.survivors-ultimate-btn')?.disabled);assert.equal(await coach.count(),0,'skipped lesson is also offered only once');
+  }
   const button=page.locator('.survivors-ultimate-btn');await button.waitFor();
   const hud=await button.evaluate(el=>{const r=el.getBoundingClientRect(),label=el.querySelector('strong');return{x:r.x,y:r.y,w:r.width,h:r.height,label:getComputedStyle(label).display,overflow:document.documentElement.scrollWidth>innerWidth};});
   assert.ok(hud.x>=0&&hud.x+hud.w<=width+1&&hud.y>=0&&hud.y+hud.h<=height+1&&!hud.overflow);assert.notEqual(hud.label,'none');
@@ -54,8 +58,11 @@ try{
   if(width===1440){
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.2);
    await page.evaluate(()=>window.qaEngine.state.ultimateCharge=window.qaEngine.state.maxUltimateCharge);await page.waitForFunction(()=>!document.querySelector('.survivors-ultimate-btn')?.disabled);assert.equal(await coach.count(),0,'successful-use memory survives reload');
-   await page.evaluate(()=>localStorage.removeItem('psi.survivors.ultimate-lesson.v1'));await page.reload({waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.2);
+   await page.evaluate(()=>{localStorage.removeItem('psi.survivors.ultimate-lesson.v1');localStorage.removeItem('psi.survivors.ultimate-lesson.v2');});await page.reload({waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.2);
    await page.evaluate(()=>window.qaEngine.state.ultimateCharge=window.qaEngine.state.maxUltimateCharge);await coach.waitFor();await page.getByRole('button',{name:'지금 사자후 발동',exact:true}).click();await page.waitForFunction(()=>window.qaEngine.state.directorCutinPhase==='cutin');assert.equal(await page.evaluate(()=>window.qaEngine.state.ultimateCharge),0);assert.equal(await page.evaluate(()=>localStorage.getItem('psi.survivors.ultimate-lesson.v1')),'used');
+   await page.evaluate(()=>{localStorage.removeItem('psi.survivors.ultimate-lesson.v1');localStorage.removeItem('psi.survivors.ultimate-lesson.v2');localStorage.setItem('psi.survivors.unlocked_stages',JSON.stringify(['stage_01','stage_02']));localStorage.setItem('psi.survivors.last_played_stage','stage_02');});
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.2);assert.equal(await page.evaluate(()=>window.qaEngine.state.stageId),'stage_02');
+   await page.evaluate(()=>window.qaEngine.state.ultimateCharge=window.qaEngine.state.maxUltimateCharge);await page.waitForFunction(()=>!document.querySelector('.survivors-ultimate-btn')?.disabled);assert.equal(await coach.count(),0,'stage two never pauses for ultimate learning');assert.equal(await page.evaluate(()=>window.qaEngine.state.phase),'playing');
   }
   assert.deepEqual(errors,[]);rows.push({width,height,frozen:true,skipPreservesCharge:true,spaceSeparated:true,actualCast:true,learned:true,hud,errors,pass:true});
   await context.close();

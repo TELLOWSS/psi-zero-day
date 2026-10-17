@@ -1,0 +1,8 @@
+.survivors-worksite-brief{margin:12px 0;padding:10px 14px;border:1px solid #739b9766;border-radius:10px;background:#11282c;color:#d7e6df}
+.survivors-worksite-brief>summary{min-height:44px;align-content:center;cursor:pointer;font-size:13px;font-weight:700;color:#dcead6}
+.survivors-worksite-brief figure{margin:10px 0}.survivors-worksite-brief svg{display:block;width:100%;max-height:300px;aspect-ratio:14/9;background:#152b30;border-radius:8px}
+.survivors-worksite-brief figcaption,.survivors-worksite-brief p{font-size:11px;line-height:1.7;color:#b9d2cc}
+.survivors-worksite-process{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:14px 0}
+.survivors-worksite-process li{border-top:2px solid #a5c4a3;padding:8px 0;font-size:12px;line-height:1.6}.survivors-worksite-process strong{display:block;color:#ffdc98}.survivors-worksite-process span{overflow-wrap:anywhere}
+.survivors-worksite-targets{font-size:12px;line-height:1.7;padding-left:24px;columns:2}
+@media(max-width:480px){.survivors-worksite-process{grid-template-columns:1fr;gap:0}.survivors-worksite-process li{display:flex;gap:12px}.survivors-worksite-process strong{flex:none}.survivors-worksite-targets{columns:1}}

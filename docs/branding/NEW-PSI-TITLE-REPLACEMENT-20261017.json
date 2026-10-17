@@ -1,0 +1,14 @@
+{
+ "authority":"USER_REQUEST_NEW_PSI_MAIN_AND_HELMET_BRANDING_20261017",
+ "userRequest":"현재 컨셉을 NEW-PSI로 잡았으니 NEW를 붙여주는게 좋겠어. 메인화면구성(이미지 캐릭터 안전모 포함)",
+ "reference":"docs/branding/psi-original-reference-20261017.png",
+ "scope":"MAIN_TITLE_MARK_LOCKUP_AND_MAIN_CHARACTER_HELMET_ONLY",
+ "supersedesRecord":"docs/branding/PSI-ORIGINAL-TITLE-REPLACEMENT-20261017.json",
+ "supersedesTitleFiles":["/assets/branding/new-psi-wordmark-stacked-chalk.svg","/assets/branding/new-psi-wordmark-wide-chalk.svg","/assets/branding/home-psi-v5/psi-original-on-dark.svg"],
+ "assetManifest":"content/episode01/home-new-psi-art-v6.json",
+ "runtimeMark":"/assets/branding/home-new-psi-v6/shield.svg",
+ "companyName":"NEW-PSI",
+ "originalShieldRetained":true,
+ "legacyAssetBytesPreserved":true,
+ "trademarkClearance":"NOT_CONFIRMED"
+}

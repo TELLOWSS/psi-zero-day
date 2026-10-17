@@ -1,0 +1,13 @@
+{
+ "title":"현장·공정 도면", "layout":"실제 배치 확인", "note":"실제 장애물과 통제 대상의 위치입니다. 중앙 통로를 확보하고 작업반경 바깥에서 접근하세요.", "liveNote":"일시정지 시점의 실제 상태입니다. 적색은 경고·가동 중, 초록은 격리 완료입니다. 양중 중지는 잠시 유지되며 재개될 수 있습니다.", "states":{"idle":"대기","warning":"경고","active":"가동 중","cooldown":"일시 중지","destroyed":"격리 완료"}, "legend":"초록: 중앙 통로 · 황색: 통제 대상 · 회색: 구조물/엄폐 · 청록: 정리 가능한 적치물", "controls":"통제 대상", "route":"중앙 통로", "prepare":"진입", "operate":"작업", "handover":"인계",
+ "families":{
+  "logistics":{"name":"반입·물류 현장","prepare":"차량과 보행 동선 분리","operate":"반입 경로에서 측면 회피","handover":"통로 확보 후 다음 팀 진입"},
+  "excavation":{"name":"굴착·지하 작업면","prepare":"진입로와 설비 위치 확인","operate":"엄폐물을 이용해 운반체 통제","handover":"양중·전원 통제 상태 확인"},
+  "structure":{"name":"골조·접합 공정","prepare":"기둥 사이 이동 여유 확인","operate":"양중 경고 후 작업반경 이탈","handover":"교차 작업 전 통제 완료"},
+  "curing":{"name":"양생·동절기 작업면","prepare":"설비와 보행 통로 구분","operate":"차단 대상을 나눠서 접근","handover":"회복 여력과 통로 유지"},
+  "plant":{"name":"설비·시운전 현장","prepare":"전원과 설비 반입 위치 확인","operate":"설비 사이에서 차단·격리","handover":"잔여 위험 확인 후 인계"},
+  "remodel":{"name":"기존 구조·리모델링","prepare":"기존 설비와 적치물 확인","operate":"잔재를 정리해 측면 통로 개방","handover":"기존·신설 작업 경계 확인"},
+  "elevated":{"name":"고소·상부 공정","prepare":"양중 위치와 중앙 통로 확인","operate":"교차 작업반경을 차례로 통제","handover":"다음 작업면 진입 여유 확보"},
+  "finish":{"name":"마감·최종 인계","prepare":"잔여 적치물과 차단 대상 확인","operate":"정리와 격리로 이동 여유 확보","handover":"통제 기록과 완료 상태 인계"}
+ }
+}

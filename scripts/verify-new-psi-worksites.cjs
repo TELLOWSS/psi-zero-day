@@ -1,0 +1,20 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{chromium}=require('playwright');
+const base=process.env.PSI_PREVIEW_URL||'http://127.0.0.1:4178',out=process.env.PSI_QA_OUTPUT||'artifacts/new-psi-worksites/local';fs.mkdirSync(out,{recursive:true});
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true}),rows=[];
+try{for(const [n,width,height]of[[1,390,844],[2,1440,900],[3,844,390],[4,390,844],[5,1440,900],[7,390,844],[15,844,390],[20,1440,900],[42,390,844]]){
+ const id='stage_'+String(n).padStart(2,'0'),context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await context.addInitScript(id=>{localStorage.setItem('psi.survivors.unlocked_stages',JSON.stringify(Array.from({length:50},(_,i)=>'stage_'+String(i+1).padStart(2,'0'))));localStorage.setItem('psi.survivors.last_played_stage',id);},id);
+ await page.route('**/assets/*.js',async route=>{const response=await route.fetch(),body=await response.text(),pattern=/update\([^)]*\)\{(?=if\(this\.state\.phase!==[^;]{0,45}this\.accumulator=0)/g;if(!pattern.test(body)){await route.fulfill({response,body});return;}pattern.lastIndex=0;assert.equal([...body.matchAll(pattern)].length,1);await route.fulfill({response,body:body.replace(pattern,m=>`${m}window.worksiteEngine=this;`)});});
+ await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();
+ let diagram=page.locator('.survivors-worksite-brief');await diagram.locator('summary').click();
+ const family=await diagram.getAttribute('data-worksite-family');const floor=await diagram.locator('svg image').getAttribute('href');
+ const decoded=await page.evaluate(async uri=>{const response=await fetch(uri);if(!response.ok)throw Error('floor HTTP '+response.status);const image=await createImageBitmap(await response.blob());const size=[image.width,image.height];image.close();return size;},floor);assert(decoded.every(n=>n>0));
+ const readFootprints=()=>diagram.locator('[data-terrain-id]').evaluateAll(es=>es.map(e=>({id:e.getAttribute('data-terrain-id'),x:Number(e.getAttribute('x')),y:Number(e.getAttribute('y')),width:Number(e.getAttribute('width')),height:Number(e.getAttribute('height'))})));
+ const preview=await readFootprints();assert.equal(preview.length,4);await diagram.locator('svg').screenshot({path:path.join(out,`${id}-plan.png`)});
+ await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.worksiteEngine?.state.gameTime>.2);
+ const actual=await page.evaluate(()=>({stage:window.worksiteEngine.state.stageId,terrain:window.worksiteEngine.state.terrain.map(({id,x,y,width,height})=>({id,x,y,width,height}))}));assert.equal(actual.stage,id);assert.deepEqual(actual.terrain,preview);
+ await page.keyboard.press('KeyD');await new Promise(r=>setTimeout(r,300));await page.keyboard.up('KeyD');await page.keyboard.press('KeyP');
+ await page.waitForFunction(()=>window.worksiteEngine.state.phase==='paused');diagram=page.locator('.survivors-worksite-brief');await diagram.locator('summary').click();assert.deepEqual(await readFootprints(),actual.terrain);
+ const states=await diagram.locator('[data-control-state]').evaluateAll(es=>es.map(e=>e.getAttribute('data-control-state')));assert(states.length>0);await diagram.locator('svg').screenshot({path:path.join(out,`${id}-live.png`)});
+ assert.deepEqual(errors,[]);rows.push({id,width,height,family,floor,decoded,previewMatchesActual:true,liveMatchesActual:true,errors,pass:true});fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(rows,null,2));console.log(id,'PASS');await context.close();
+}}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,3000))]);}})().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

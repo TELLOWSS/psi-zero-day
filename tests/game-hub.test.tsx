@@ -35,7 +35,8 @@ describe('game hub navigation', () => {
       expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/player-map.webp');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('role')).toBe('img');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('aria-label')).toBe('NEW PSI : ZERO DAY');
-      expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/home-psi-v5/psi-original-on-dark.svg');
+      expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/home-new-psi-v6/shield.svg');
+      expect(host.querySelector('[data-title-rank="brand"]')?.textContent).toBe('NEW-PSI');
       expect(host.querySelector('.psi-original-game-name')?.textContent).toBe('ZERO DAY');
       act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
       expect(defenseLaunches).toEqual(['guard-campaign']);

@@ -3,10 +3,19 @@ import {act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {describe,it,expect,vi} from 'vitest';
 import {SurvivorsUltimateCoach,SurvivorsUltimateControl} from '../src/ui/SurvivorsUltimateControl';
-import {readUltimateLesson,rememberUltimateUse,ultimateReadiness,ULTIMATE_LESSON_KEY} from '../src/ui/survivors-ultimate-learning';
+import {readUltimateLesson,rememberUltimateUse,ultimateReadiness,ULTIMATE_LESSON_KEY,readUltimateLessonSeen,rememberUltimateLessonShown,shouldOfferUltimateLesson,ULTIMATE_LESSON_SEEN_KEY} from '../src/ui/survivors-ultimate-learning';
 import {SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
 describe('ultimate discovery and explicit activation',()=>{
+ it('offers the learning pause only once in stage one, including when skipped',()=>{
+  localStorage.removeItem(ULTIMATE_LESSON_KEY);localStorage.removeItem(ULTIMATE_LESSON_SEEN_KEY);
+  expect(shouldOfferUltimateLesson('stage_01',false,readUltimateLessonSeen())).toBe(true);
+  expect(shouldOfferUltimateLesson('stage_02',false,false)).toBe(false);
+  expect(shouldOfferUltimateLesson('stage_50',false,false)).toBe(false);
+  rememberUltimateLessonShown();expect(readUltimateLessonSeen()).toBe(true);
+  expect(readUltimateLesson()).toBe(false);expect(shouldOfferUltimateLesson('stage_01',false,readUltimateLessonSeen())).toBe(false);
+  localStorage.removeItem(ULTIMATE_LESSON_SEEN_KEY);
+ });
  it('uses the engine maximum and rejects invalid readiness',()=>{
   expect(ultimateReadiness(75,150)).toEqual({ready:false,percent:50});
   expect(ultimateReadiness(200,150)).toEqual({ready:true,percent:100});

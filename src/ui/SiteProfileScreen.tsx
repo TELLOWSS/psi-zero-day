@@ -12,6 +12,10 @@ import { applyRemodelAction, remodelCanLaunchDefense, remodelRiskContext } from 
 import { readDataCenterState, resetDataCenterState, writeDataCenterState } from '../app/data-center-state';
 import { readRemodelState, resetRemodelState, writeRemodelState } from '../app/remodel-state';
 import { readSiteProfilePreference, writeSiteProfilePreference } from '../app/site-profile-preference';
+import {SiteOperationVisual} from './SiteOperationVisual';
+import {sitePatrolStage} from '../app/site-patrol-access';
+import {stageArtProfile} from './survivors-stage-art';
+import siteCopy from '../../content/localization/site-operations-ko.json';
 
 const PROJECT_LABEL: Record<ProjectArchetype, string> = {
   APT_NEW_BUILD: '공동주택 신축',
@@ -123,9 +127,10 @@ const DATA_CENTER_PHASE_LABELS = {
   COMPLETE: '검증 완료',
 } as const;
 
-export function SiteProfileScreen({ onBack, onPracticeScenario }: {
+export function SiteProfileScreen({ onBack, onPracticeScenario, onPatrol }: {
   readonly onBack: () => void;
   readonly onPracticeScenario: (scenarioId: string) => void;
+  readonly onPatrol?:(profileId:string)=>void;
 }) {
   const [profileId, setProfileId] = useState(() => readSiteProfilePreference());
   const [context, setContext] = useState(() => ({
@@ -224,7 +229,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
   return <section className="site-profile-screen" data-site-profile={selected.id}>
     <header className="site-profile-head">
       <div>
-        <small>G4 · SITE-PROFILE-01</small>
+        <small>{siteCopy.brand}</small>
         <h1>현장 · 공정</h1>
         <p>현장 종류와 공법, 현재 공정이 바뀌면 먼저 읽어야 할 위험도 달라집니다.</p>
       </div>
@@ -242,6 +247,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
               aria-pressed={profile.id === selected.id}
               onClick={() => choose(profile.id)}
             >
+              {sitePatrolStage(profile.id)&&<img src={stageArtProfile(sitePatrolStage(profile.id)!).ground} alt="" loading="lazy"/>}
               <strong>{profile.label.replace(PROJECT_LABEL[group.project] + ' · ', '')}</strong>
               <small>{MAP_HINT[profile.mapFamily] ?? profile.mapFamily}</small>
             </button>)}
@@ -250,8 +256,9 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
       </section>
 
       <aside className="site-profile-priority">
+        <SiteOperationVisual profileId={runtimeProfile.id} onPatrol={onPatrol}/>
         <div className="site-profile-priority-head">
-          <span>PSI RISK PRIORITY</span>
+          <span>{siteCopy.priority}</span>
           <b>GAME PRIORITY · NOT LEGAL RA</b>
         </div>
         <h2>{isDataCenterRepresentative ? runtimeProfile.label : selected.label}</h2>
@@ -267,7 +274,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
 
         {processMap ? <section className="site-process-preview" aria-label="대표 공정 맵 미리보기">
           <div className="site-process-preview-head">
-            <div><small>{isDataCenterRepresentative ? 'G7 · ENERGY / COMMISSIONING PROOF' : isRemodelRepresentative ? 'G6 · REMODEL RUNTIME PROOF' : 'G5 · TOPOLOGY PROOF'}</small><strong>{processMap.label}</strong></div>
+            <div><small>{siteCopy.map}</small><strong>{processMap.label}</strong></div>
             <button
               type="button"
               disabled={!practiceScenarioId || (isRemodelRepresentative && !remodelReady) || (isDataCenterRepresentative && !dataCenterReady)}
@@ -319,9 +326,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
             <span data-kind="visibility">시야제한</span>
           </div>
         </section> : <section className="site-process-preview is-pending">
-          <small>NEXT MAP GATE</small>
-          <strong>대표 맵 제작 대기</strong>
-          <p>G5는 순타 굴착과 역타 슬래브 하부굴착 두 맵만 먼저 검증합니다. 리모델링과 데이터센터 전용 맵은 G6/G7에서 순차 제작합니다.</p>
+          <p>{siteCopy.noDefense}</p>
         </section>}
 
         {isDataCenterRepresentative ? <section className="data-center-runtime-panel" data-data-center-phase={dataCenterState.phase}>
@@ -393,12 +398,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
         </div>}
 
         <div className="site-profile-gate-note">
-          <b>현재 Gate</b>
-          <p>{isDataCenterRepresentative
-            ? 'G7은 MEP → 전기/UPS → 통전 → 통합시운전으로 에너지 상태가 바뀔 때 위험 우선순위와 디펜스 진입 조건이 어떻게 재정렬되는지 검증합니다.'
-            : isRemodelRepresentative
-              ? 'G6는 기존 구조 조사·차단·임시지지·선택철거·접합 상태가 위험우선순위와 디펜스 진입 조건을 바꾸는지 검증합니다.'
-              : 'G5 대표 순타/역타 맵은 topology/runtime proof까지 잠겼습니다. 대표 리모델링과 데이터센터 공정은 G6/G7에서 이어집니다.'}</p>
+          <b>{siteCopy.scopeTitle}</b><p>{siteCopy.scope}</p>
         </div>
       </aside>
     </div>

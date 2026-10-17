@@ -8,7 +8,9 @@ try{for(const[width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024]
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('[data-home-art="premium-hero-v4"]').waitFor();
  const hero=page.locator('.commercial-title-backdrop');await hero.evaluate(e=>e.decode());
  const emblem=page.locator('.psi-original-emblem');await emblem.evaluate(e=>e.decode());
- assert.equal(await emblem.getAttribute('src'),'/assets/branding/home-psi-v5/psi-original-on-dark.svg');
+ assert.equal(await emblem.getAttribute('src'),'/assets/branding/home-new-psi-v6/shield.svg');
+ assert.equal(await page.locator('.psi-original-brand-name').innerText(),'NEW-PSI');
+ const glass=await page.locator('.psi-original-emblem-surface').evaluate(e=>({background:getComputedStyle(e).backgroundImage,border:getComputedStyle(e).borderTopColor}));assert(glass.background.includes('gradient'));assert.notEqual(glass.border,'rgba(0, 0, 0, 0)');
  await page.locator('.commercial-title-action-art').evaluateAll(es=>Promise.all(es.map(e=>e.decode())));
  const image=await hero.evaluate(e=>({src:e.currentSrc,w:e.naturalWidth,h:e.naturalHeight}));
  const portrait=height>width&&width<=1050;assert(image.src.endsWith(portrait?'/portrait.webp':'/wide.webp'));

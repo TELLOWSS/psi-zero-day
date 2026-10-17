@@ -1,0 +1,17 @@
+{
+ "generator":"built-in image_gen",
+ "intent":"precise object/text edit of existing production artwork",
+ "wide":{
+  "input":"public/assets/branding/home-psi-v5/wide.webp",
+  "output":"public/assets/branding/home-new-psi-v6/wide.webp",
+  "generatedSource":"exec-094205eb-74d3-4174-bf25-46bda29cc83c.png",
+  "prompt":"Edit target: the supplied landscape production game key art. Make exactly one localized branding change: on the adult woman's white safety helmet, preserve the original blue asymmetric shield/concentric eye emblem unchanged and replace the small printed company name below that emblem from 'PSI' to the exact crisp uppercase text 'NEW-PSI'. The complete company name must be on the helmet, dark navy lettering, plausible factory printed decal following helmet perspective, clear and legible, no added UI text elsewhere. Preserve the entire original image, face identity, attractive adult woman, hairstyle, anatomy, pose, fitted navy workwear, full body safety harness, all personal protective equipment, helmet shape and blue band, background cranes, robot, dusk lighting, palette, framing, cinematic detail and existing aspect ratio. This is a precise object/text edit, not a redesign. Deliver final production artwork."
+ },
+ "portrait":{
+  "input":"public/assets/branding/home-psi-v5/portrait.webp",
+  "output":"public/assets/branding/home-new-psi-v6/portrait.webp",
+  "generatedSource":"exec-ff2078ce-c5e0-438f-9704-042a4fdf42fb.png",
+  "prompt":"Edit target: supplied portrait production game key art. Make exactly one localized branding change: on the adult woman's white safety helmet retain the original blue asymmetric shield/concentric eye emblem and replace small printed 'PSI' under the emblem with exact uppercase 'NEW-PSI'. Clear dark navy factory decal with natural helmet perspective. No text elsewhere. Preserve original entire composition and original portrait aspect ratio, face identity, mature attractive adult heroine, hairstyle, anatomy, gesture, fitted navy workwear, full body safety harness, PPE, helmet shape and blue band, twilight construction workface, cranes, robot, background, cinematic lighting, painting detail and palette. Precise branding edit only, no redesign. Deliver final production artwork."
+ },
+ "integration":"WebP quality 94 effort 6, no crop or compositing. SVG preserves original shield geometry; translucent support is native UI. Binary integrity is not human visual production approval."
+}

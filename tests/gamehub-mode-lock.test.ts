@@ -15,8 +15,7 @@ describe('commercial hub mode readiness',()=>{
     expect(hub).not.toContain('야간 긴급 순찰 (SURVIVORS)');
     expect(hub).not.toContain('현장 디펜스 시작');
     expect(hub).not.toContain('onClick={onPlay}');
-    expect(hub).not.toContain('onPracticeScenario={scenarioId => onDefense');
-    expect(hub).toContain("onPracticeScenario={() => setModePreview('defense')}");
+    expect(hub).toContain('onPracticeScenario={id=>onDefense?.(id)}');
     expect((hub.match(/setModePreview\('story'\)/g)??[]).length).toBeGreaterThanOrEqual(3);
   });
 

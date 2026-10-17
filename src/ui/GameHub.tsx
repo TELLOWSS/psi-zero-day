@@ -2,7 +2,9 @@ import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
 import './hub-premium.css';
-import homePremiumArt from '../../content/episode01/home-psi-art-v5.json';
+import homePremiumArt from '../../content/episode01/home-new-psi-art-v6.json';
+import {prepareSitePatrol} from '../app/site-patrol-access';
+import siteOperationsText from '../../content/localization/site-operations-ko.json';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -388,11 +390,10 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <div className="hub-cinematic-intro">
-      <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
       <div className="commercial-title-logo" data-title-rank="primary" role="img" aria-label={GAME_TITLE}>
         <div className="commercial-title-wordmark psi-original-lockup">
-          <img src={homePremiumArt.mark.uri} alt="" width="180" height="270" className="psi-original-emblem"/>
-          <span className="psi-original-game-name" aria-hidden="true">ZERO DAY</span>
+          <span className="psi-original-emblem-surface"><img src={homePremiumArt.mark.uri} alt="" width="180" height="210" className="psi-original-emblem"/></span>
+          <span className="psi-original-title-stack" aria-hidden="true"><span className="psi-original-brand-name" data-title-rank="brand">{homePremiumArt.mark.companyName}</span><span className="psi-original-game-name">ZERO DAY</span></span>
         </div>
       </div>
       <p className="hub-home-name">{t('ui.hub.home_name')}</p>
@@ -449,7 +450,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         </button>
         <button className="commercial-title-action is-sub-entry" type="button" onClick={() => setPage('site')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
-          <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
+          <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>{siteOperationsText.entryHint}</small></span>
           <b>›</b>
         </button>
       </div>
@@ -613,7 +614,8 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
       {page === 'site' ? <SiteProfileScreen
         onBack={() => setPage('home')}
-        onPracticeScenario={() => setModePreview('defense')}
+        onPracticeScenario={id=>onDefense?.(id)}
+        onPatrol={onSurvivors?id=>{if(prepareSitePatrol(id))onSurvivors();}:undefined}
       /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
