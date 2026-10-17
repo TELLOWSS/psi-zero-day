@@ -471,7 +471,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art" type="button" onClick={onPlay}>
-          <VisualImage uri={episode01BackgroundUri(resolve)} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <img src="/assets/episode01/cg/gate-dawn.webp" alt="" aria-hidden="true" className="commercial-title-action-art" loading="eager" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy">

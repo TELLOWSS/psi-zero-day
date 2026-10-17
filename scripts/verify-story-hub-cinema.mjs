@@ -21,6 +21,11 @@ try{
    const entryBox=await page.locator('button.is-story-entry').boundingBox();
    if(width===390&&(!entryBox||entryBox.y>height*.70))throw new Error('Story tile is below first mobile fold: '+JSON.stringify(entryBox));
    const splitCount=await page.locator('button.is-episode02-entry').count();
+   const art=await page.locator('button.is-story-entry img.commercial-title-action-art').evaluate(async img=>{
+     await img.decode();
+     return {src:new URL(img.src).pathname,width:img.naturalWidth,height:img.naturalHeight};
+   });
+   if(!art.src.endsWith('/gate-dawn.webp')||art.width<1200||art.height<700)throw new Error('Story campaign card art missing '+JSON.stringify(art));
    if(entryCount!==1||splitCount!==0)throw new Error('Story must have one campaign tile: '+entryCount+'/'+splitCount);
    await page.screenshot({path:path.join(out,width+'x'+height+'-single-story-hub.png')});
    await page.locator('button.is-story-entry').click();
