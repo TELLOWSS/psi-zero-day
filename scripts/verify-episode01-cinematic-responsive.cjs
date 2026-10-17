@@ -65,7 +65,8 @@ async function verifyStage(page, width, height, expectedEvent) {
   assert(details.sceneHeight >= height * .5, 'Story world too small: '+JSON.stringify(details));
   assert(details.textVisible, 'Cinematic dialogue not readable: '+JSON.stringify(details));
   assert(details.actionReachable, 'Reading/choice action not reachable: '+JSON.stringify(details));
-  assert(details.image.endsWith(expectedEvent === 'e01_02_meet_kang' ?
+  const backgroundPath = new URL(details.image).pathname;
+  assert(backgroundPath.endsWith(expectedEvent === 'e01_02_meet_kang' ?
     '/work-yard-cinema.webp' : '/gate-dawn.webp'), 'Wrong background: '+details.image);
   return details;
 }
