@@ -1,6 +1,7 @@
 // Automated usability regression, not a manual narrative playtest.
 const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),{chromium}=require('playwright');
 const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4178',out='artifacts/story-player';fs.mkdirSync(out,{recursive:true});
+const castPlan=JSON.parse(fs.readFileSync(path.join(__dirname,'../content/episode01/immersive-scenes.json'),'utf8')).events;
 const capture=new Set(['e01_01_arrival','e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_08g_tbm_field_gap','e01_08o_record_pressure','e01_09_evening']);
 const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_responsibility_clash','e01_08g_tbm_field_gap','e01_08o_record_pressure','e01_09_evening']);
 (async()=>{
@@ -29,7 +30,13 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    if(capture.has(event)&&!screens.has(event)){
     await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);
     const composition=await page.evaluate(()=>{const dock=document.querySelector('.play-panel').getBoundingClientRect();return [...document.querySelectorAll('.episode-immersive-character')].map(actor=>{const box=actor.getBoundingClientRect(),image=actor.querySelector('img');return {character:actor.dataset.character,top:box.top,bottom:box.bottom,height:box.height,dockTop:dock.top,decoded:!!image&&image.complete&&image.naturalWidth>0};});});
-    a(composition.length>0&&composition.every(actor=>actor.decoded&&actor.height>70&&actor.top+Math.min(60,actor.height*.3)<actor.dockTop),'cast has no visible head region above reading dock: '+event+' '+JSON.stringify(composition));
+    const expectedCast=castPlan[event]?.cast;
+    a(Array.isArray(expectedCast),'missing scene cast contract: '+event);
+    if(expectedCast.length===0){
+     a.equal(composition.length,0,'intentional empty-cast scene contains unexpected actor: '+event);
+    }else{
+     a(composition.length>0&&composition.every(actor=>actor.decoded&&actor.height>70&&actor.top+Math.min(60,actor.height*.3)<actor.dockTop),'cast has no visible head region above reading dock: '+event+' '+JSON.stringify(composition));
+    }
     fs.writeFileSync(path.join(out,`${width}-${event}-composition.json`),JSON.stringify(composition,null,2));
     await page.screenshot({path:path.join(out,`${width}-${event}.png`)});screens.add(event);
    }
