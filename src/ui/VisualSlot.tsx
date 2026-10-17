@@ -29,13 +29,13 @@ export function visualAssetTier(uri?: string | null): VisualAssetTier | undefine
   return 'other';
 }
 
-interface VisualImageProps { uri?: string | null; fallbackUri?: string; alt: string; className?: string }
+interface VisualImageProps { uri?: string | null; fallbackUri?: string; alt: string; className?: string; loading?:'lazy'|'eager' }
 
 export function VisualImage(props: VisualImageProps) {
   return <ResolvedImage key={JSON.stringify([props.uri, props.fallbackUri])} {...props} />;
 }
 
-function ResolvedImage({ uri, fallbackUri, alt, className }: VisualImageProps) {
+function ResolvedImage({ uri, fallbackUri, alt, className, loading }: VisualImageProps) {
   const [failed, setFailed] = useState<readonly string[]>([]);
   const [loaded, setLoaded] = useState<string | null>(null);
   const activeUri = [uri, fallbackUri].find(candidate => candidate && !failed.includes(candidate));
@@ -46,6 +46,8 @@ function ResolvedImage({ uri, fallbackUri, alt, className }: VisualImageProps) {
     className={className}
     src={src}
     alt={alt}
+    loading={loading}
+    decoding="async"
     data-asset-tier={visualAssetTier(activeUri)}
     data-loaded={loaded === activeUri}
     onLoad={() => setLoaded(activeUri)}

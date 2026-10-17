@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/FIELD-STUDIO-PROMPTS-20261017.json",
+  "mark": {
+    "uri": "/assets/branding/home-new-psi-v6/shield.svg",
+    "companyName": "NEW-PSI",
+    "source": "docs/branding/psi-original-reference-20261017.png",
+    "method": "Original shield retained; company name is accessible native type outside emblem"
+  },
+  "assets": {
+    "wide": {
+      "uri": "/assets/branding/home-new-psi-v7/wide.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 351094,
+      "sha256": "2872f66cfbd4c3ceb3f0919c06129a8b0deea3fc9a053cef851e2232aa23e2b1",
+      "source": "exec-d6de9e01-5103-421f-8551-cb86945dd142.png"
+    },
+    "portrait": {
+      "uri": "/assets/branding/home-new-psi-v7/portrait.webp",
+      "width": 940,
+      "height": 1672,
+      "bytes": 365966,
+      "sha256": "8915c4c1e0fbf306e931df7b627aec5ece2c4e75c6f6c471743ce0a268e93402",
+      "source": "exec-05d26113-aeab-4151-89aa-cb1bb6a646a7.png"
+    }
+  }
+}

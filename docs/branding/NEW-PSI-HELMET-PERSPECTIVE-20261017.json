@@ -1,0 +1,12 @@
+{
+ "authority":"USER_REQUEST_NEW_PSI_MAIN_AND_HELMET_BRANDING_20261017",
+ "refinementAuthority":"USER_REQUEST_HELMET_ANGLE_AND_BALANCE_CORRECTION_20261017",
+ "userRequest":"안전모 로고가 캐릭터의 각도와 균형감이 맞지가 않은데 확인검증하여 개선해줘",
+ "reference":"docs/branding/psi-original-reference-20261017.png",
+ "scope":"MAIN_CHARACTER_HELMET_DECAL_PERSPECTIVE_AND_SCALE",
+ "supersedesRecord":"docs/branding/NEW-PSI-TITLE-REPLACEMENT-20261017.json",
+ "supersedesTitleFiles":["/assets/branding/new-psi-wordmark-stacked-chalk.svg","/assets/branding/new-psi-wordmark-wide-chalk.svg","/assets/branding/home-psi-v5/psi-original-on-dark.svg"],
+ "assetManifest":"content/episode01/home-new-psi-art-v7.json",
+ "runtimeMark":"/assets/branding/home-new-psi-v6/shield.svg",
+ "companyName":"NEW-PSI","originalShieldRetained":true,"legacyAssetBytesPreserved":true,"trademarkClearance":"NOT_CONFIRMED"
+}

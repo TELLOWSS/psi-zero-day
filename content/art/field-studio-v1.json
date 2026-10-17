@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/FIELD-STUDIO-PROMPTS-20261017.json",
+  "scenes": {
+    "newBuild": {
+      "uri": "/assets/field-studio-v1/new-build.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 511814,
+      "sha256": "ddd9ecefe7d3637057a9ae804879fc232a77db8ce4bed202912d4a487fdd4553",
+      "source": "exec-32551dd5-6cf1-4329-a6b0-334aaaeefe1c.png"
+    },
+    "remodel": {
+      "uri": "/assets/field-studio-v1/remodel.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 565562,
+      "sha256": "5b8302c71d9d101cd98596d55391a840d27fbf92a9f5bc586c29ee1a87ae5e74",
+      "source": "exec-084cb656-e3f4-4f12-9f8b-f5f4eeaac458.png"
+    },
+    "dataCenter": {
+      "uri": "/assets/field-studio-v1/data-center.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 476164,
+      "sha256": "9af5ad21c3bc8a6d748f7aabec62287fbb5ee19a538e27816a546d33c6fd254b",
+      "source": "exec-5a25ac58-bae8-4711-a1d5-28f0e101533d.png"
+    }
+  }
+}

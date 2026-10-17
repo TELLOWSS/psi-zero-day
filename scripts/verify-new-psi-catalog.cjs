@@ -8,7 +8,7 @@ try{for(const[width,height]of[[390,844],[844,390],[1440,900]]){
  const buttons=page.locator('.site-profile-group button');assert.equal(await buttons.count(),profiles.length);
  const checks=[];
  for(let i=0;i<profiles.length;i++){
-  await buttons.nth(i).click();const visual=page.locator('.site-operation-visual'),expected=operations[profiles[i].id];assert.equal(await visual.getAttribute('data-patrol-stage'),expected.stage);await visual.locator('img').evaluate(e=>e.decode());
+  await buttons.nth(i).click();const visual=page.locator('.site-operation-visual'),expected=operations[profiles[i].id];assert.equal(await visual.getAttribute('data-patrol-stage'),expected.stage);await visual.locator('figure img').evaluate(e=>e.decode());assert((await visual.locator('figure img').getAttribute('src')).includes('/assets/field-studio-v1/'));
   assert((await visual.innerText()).includes(expected.name));assert.equal(await visual.locator('button').isDisabled(),expected.stage!=='stage_01');
   assert.equal(await page.locator('.site-profile-screen').innerText().then(t=>t.includes('대표 맵 제작 대기')),false);
   const overflow=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+1;}).slice(0,12).map(e=>({class:e.className,width:e.getBoundingClientRect().width,right:e.getBoundingClientRect().right})));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),JSON.stringify(overflow));checks.push({profile:profiles[i].id,stage:expected.stage,locked:expected.stage!=='stage_01'});

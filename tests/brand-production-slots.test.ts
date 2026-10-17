@@ -68,7 +68,7 @@ describe('brand production slot audit contract', () => {
     }
     const current = JSON.parse(readFileSync(replacement.assetManifest,'utf8'));
     expect(current.mark.uri).toBe(replacement.runtimeMark);
-    expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain('home-new-psi-art-v6.json');
+    expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain(replacement.assetManifest.split('/').at(-1));
     expect(existsSync('public'+replacement.runtimeMark)).toBe(true);
   });
 

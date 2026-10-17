@@ -13,8 +13,7 @@ import { readDataCenterState, resetDataCenterState, writeDataCenterState } from 
 import { readRemodelState, resetRemodelState, writeRemodelState } from '../app/remodel-state';
 import { readSiteProfilePreference, writeSiteProfilePreference } from '../app/site-profile-preference';
 import {SiteOperationVisual} from './SiteOperationVisual';
-import {sitePatrolStage} from '../app/site-patrol-access';
-import {stageArtProfile} from './survivors-stage-art';
+import {siteStudioArt} from './field-studio-art';
 import siteCopy from '../../content/localization/site-operations-ko.json';
 
 const PROJECT_LABEL: Record<ProjectArchetype, string> = {
@@ -247,7 +246,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario, onPatrol }: {
               aria-pressed={profile.id === selected.id}
               onClick={() => choose(profile.id)}
             >
-              {sitePatrolStage(profile.id)&&<img src={stageArtProfile(sitePatrolStage(profile.id)!).ground} alt="" loading="lazy"/>}
+              <img src={siteStudioArt(profile.projectArchetype).uri} alt="" loading="lazy"/>
               <strong>{profile.label.replace(PROJECT_LABEL[group.project] + ' · ', '')}</strong>
               <small>{MAP_HINT[profile.mapFamily] ?? profile.mapFamily}</small>
             </button>)}

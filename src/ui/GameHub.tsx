@@ -2,7 +2,7 @@ import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
 import './hub-premium.css';
-import homePremiumArt from '../../content/episode01/home-new-psi-art-v6.json';
+import homePremiumArt from '../../content/episode01/home-new-psi-art-v7.json';
 import {prepareSitePatrol} from '../app/site-patrol-access';
 import siteOperationsText from '../../content/localization/site-operations-ko.json';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';

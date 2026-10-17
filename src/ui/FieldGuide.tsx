@@ -1,12 +1,15 @@
 import { GameManual, gameManualText } from './GameManual';
 import { readFgPoints, subscribeUnifiedMeta } from '../app/unified-meta-bridge';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import catalog from '../../content/episode01/scene-element-catalog.json';
 import legalBasis from '../../content/episode01/field-guide-legal-basis.json';
 import { VisualImage } from './VisualSlot';
 import { FieldGuideArt } from './FieldGuideArt';
 import './field-guide.css';
+import './field-guide-studio.css';
+import studioCopy from '../../content/localization/field-guide-studio-ko.json';
+import studioArt from '../../content/art/field-studio-v1.json';
 
 type GuideMeta = {
   id: string;
@@ -83,8 +86,7 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
     data-guide-presentation={guideVisual?.presentation}
     data-guide-focus={guideVisual?.focus}
   >
-    {uri ? <VisualImage uri={uri} alt={alt} className="field-guide-image" /> : null}
-    <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />
+    {uri ? <VisualImage uri={uri} alt={alt} className="field-guide-image" loading={alt?'eager':'lazy'} /> : <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />}
   </div>;
 }
 
@@ -104,7 +106,12 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
   useEffect(() => subscribeUnifiedMeta(() => setFgPoints(readFgPoints())), []);
 
   const [section, setSection] = useState(sections[0] ?? '');
-  const visible = entries.filter(([, entry]) => !section || entry.field_guide?.section === section);
+  const [query,setQuery]=useState('');
+  const normalized=query.normalize('NFKC').toLocaleLowerCase().trim();
+  const visible = entries.filter(([id, entry]) => (!section || entry.field_guide?.section === section)&&(!normalized||`${session.t(`ui.guide.${id}.title`)} ${session.t(`ui.guide.${id}.body`)} ${entry.field_guide?.id??''}`.normalize('NFKC').toLocaleLowerCase().includes(normalized)));
+  const detailRef=useRef<HTMLElement>(null),dialogRef=useRef<HTMLDialogElement>(null);
+  const [enlarged,setEnlarged]=useState(false);
+  useEffect(()=>{if(!enlarged)return;const dialog=dialogRef.current,source=document.activeElement;dialog?.showModal();return()=>{dialog?.close();if(source instanceof HTMLElement&&source.isConnected)source.focus();};},[enlarged]);
   const [selected, setSelected] = useState(visible[0]?.[0] ?? entries[0]?.[0] ?? '');
   const activeVisible = visible.some(([id]) => id === selected) ? selected : visible[0]?.[0] ?? selected;
   const [key, entry] = entries.find(([id]) => id === activeVisible) ?? entries[0]!;
@@ -114,31 +121,19 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
 
   return <div className="field-guide">
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <button type="button" className="hub-primary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
-    <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.8rem' }}>
+    <header className="field-guide-masthead">
+      <img src={studioArt.scenes.newBuild.uri} alt="" className="field-guide-scene"/>
       <div>
-        <span className="hub-kicker">FIELD GUIDE / {entries.length}</span>
+        <span className="hub-kicker">{studioCopy.brand} / {entries.length}</span>
         <h1>{session.t('ui.guide.title')}</h1>
         <p>{session.t('ui.guide.intro')}</p>
       </div>
-      <div style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        background: 'rgba(2, 132, 199, 0.2)',
-        border: '1px solid #0284c7',
-        padding: '0.4rem 0.9rem',
-        borderRadius: '999px',
-        color: '#38bdf8',
-        fontSize: '0.9rem',
-        fontWeight: 'bold',
-      }}>
-        <span>🔬 현장도감 연구 데이터:</span>
-        <strong style={{ color: '#fff', fontSize: '1.05rem' }}>{fgPoints} FG</strong>
-      </div>
+      <div className="field-guide-header-actions"><span className="field-guide-research">{studioCopy.research}<strong>{fgPoints} FG</strong></span><button type="button" onClick={() => setShowManual(true)}>{gameManualText('open')}</button></div>
     </header>
+    <div className="field-guide-toolbar"><label><span>{studioCopy.search}</span><input type="search" aria-label={studioCopy.search} value={query} placeholder={studioCopy.searchPlaceholder} onChange={e=>{setQuery(e.target.value);setSection('');}}/></label><span role="status">{studioCopy.results} <strong>{visible.length}</strong> / {entries.length}</span></div>
 
     <nav className="field-guide-sections" aria-label="현장 도감 공정 섹션">
+      <button type="button" aria-pressed={!section} onClick={()=>setSection('')}>{studioCopy.all}</button>
       {sections.map(name => <button
         type="button"
         key={name}
@@ -156,7 +151,7 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
         type="button"
         key={id}
         aria-pressed={id === activeVisible}
-        onClick={() => setSelected(id)}
+        onClick={() => {setSelected(id);detailRef.current?.scrollTo?.({top:0});}}
       >
         <GuideVisual session={session} entry={item} itemKey={id} alt="" />
         <span>
@@ -166,9 +161,10 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
       </button>)}
     </div>
 
-    <article className="field-guide-detail" aria-live="polite">
+    {visible.length?<article ref={detailRef} className="field-guide-detail" aria-live="polite">
       <div className="field-guide-preview">
         <GuideVisual session={session} entry={entry} itemKey={key} alt={title} />
+        <button className="field-guide-enlarge" type="button" onClick={()=>setEnlarged(true)}>{studioCopy.enlarge}</button>
       </div>
       <div className="field-guide-copy">
         {meta ? <div className="field-guide-meta">
@@ -202,35 +198,11 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
           <small className="field-guide-legal-note">{session.t('ui.guide.legal.notice')}</small>
         </section> : null}
 
-        {/* TRIAD GAMEPLAY UNIFICATION PANEL */}
-        <section className="field-guide-triad-integration" aria-label="3대 게임플레이 일체화 연계 효과" style={{
-          marginTop: '1.2rem',
-          padding: '1rem',
-          background: 'rgba(15, 23, 42, 0.75)',
-          border: '1px solid rgba(56, 189, 248, 0.3)',
-          borderRadius: '8px',
-        }}>
-          <h3 style={{ fontSize: '0.95rem', color: '#38bdf8', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span>🔗</span> 4위 1체 시스템 연계 효과
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.6rem', fontSize: '0.85rem' }}>
-            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
-              <strong style={{ color: '#fbbf24', display: 'block', marginBottom: '0.2rem' }}>📖 스토리 모드</strong>
-              <span style={{ color: '#cbd5e1' }}>에피소드 {meta?.episode ?? '01'} 현장 실무 및 갈등 조정 시 핵심 하한선 근거로 적용</span>
-            </div>
-            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
-              <strong style={{ color: '#34d399', display: 'block', marginBottom: '0.2rem' }}>📢 순찰 슈팅</strong>
-              <span style={{ color: '#cbd5e1' }}>순찰 중 관련 위험 요소 즉각 탐지 및 계도력 +15% 시너지</span>
-            </div>
-            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
-              <strong style={{ color: '#60a5fa', display: 'block', marginBottom: '0.2rem' }}>🛡️ 전술 디펜스</strong>
-              <span style={{ color: '#cbd5e1' }}>고위험 공정 방어선 내 가설 방호벽/차단 센서로 전술 배치</span>
-            </div>
-          </div>
-        </section>
+        <section className="field-guide-triad-integration" aria-label={studioCopy.uses}><h3>{studioCopy.uses}</h3><div>{(['story','watch','guard'] as const).map(mode=><p key={mode}><strong>{studioCopy[mode]}</strong><span>{studioCopy[`${mode}Hint`]}</span></p>)}</div></section>
 
         <small>{session.t('ui.guide.note')}</small>
       </div>
-    </article>
+    </article>:<div className="field-guide-empty" role="status"><h2>{studioCopy.empty}</h2><p>{studioCopy.emptyHint}</p></div>}
+    {enlarged&&<dialog ref={dialogRef} className="field-guide-lightbox" aria-label={`${title} · ${studioCopy.enlarge}`} onCancel={()=>setEnlarged(false)}><header><h2>{title}</h2><button type="button" onClick={()=>setEnlarged(false)}>{studioCopy.close}</button></header><GuideVisual session={session} entry={entry} itemKey={key} alt={title}/><p>{studioCopy.imageNote}</p></dialog>}
   </div>;
 }

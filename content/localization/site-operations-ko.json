@@ -1,4 +1,5 @@
 {
+ "sceneAlt":"선택한 현장 유형의 공정 분위기를 보여주는 장면","actualPlan":"실제 순찰 배치 도면 보기","planNote":"위의 장면은 현장 분위기 원화이며, 이 도면이 연결된 순찰 구역의 실제 바닥입니다.",
  "brand":"NEW-PSI · FIELD OPERATIONS","linked":"연결된 순찰 구역","open":"이 현장 순찰 준비","locked":"이전 구역을 완수하면 열립니다","view":"현장·공정 도면은 순찰 준비와 일시정지 화면에서 확인합니다.","entryHint":"공정별 작업면 · 실제 배치 도면 · 현장 순찰","scopeTitle":"공정별 플레이","scope":"연결된 순찰은 기존 구역 해금 조건을 따릅니다. 대표 디펜스 맵은 아래의 선행조건을 확인한 뒤 체험할 수 있습니다.","noDefense":"이 공정의 플레이는 위의 연결된 순찰 구역에서 진행합니다. 공정별 전용 디펜스는 아직 제공하지 않습니다.","priority":"현장 위험 우선순위","map":"디펜스 배치 도면","phases":{"prepare":"진입","operate":"작업","handover":"인계"},
  "operations":{
   "apt-new-bottom-up-excavation":{"stage":"stage_01","name":"서측 게이트 및 지상 복합 하역장"},
