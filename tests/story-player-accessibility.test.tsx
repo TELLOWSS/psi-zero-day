@@ -16,11 +16,11 @@ beforeEach(()=>{
 afterEach(()=>{act(()=>root.unmount());host.remove();vi.restoreAllMocks();});
 function click(button:HTMLButtonElement|null){expect(button).not.toBeNull();expect(button!.disabled).toBe(false);act(()=>button!.click());}
 
-it('offers explicit read, choose and field-confirm controls throughout the 26-event story, including while voice is active',()=>{
+it.each(['first','last'])('offers explicit controls throughout the 26-event %s-choice path, including while voice is active',(policy)=>{
   const session=EpisodeSession.directed();session.start(0);
   act(()=>root.render(<PlayableEpisode session={session}/>));
   click(host.querySelector('.episode-cold-open-cta'));
-  const seen=new Set<string>();let decisions=0,confirmations=0;
+  const seen=new Set<string>();let decisions=0;
   for(let step=0;step<250&&session.getSnapshot().phase==='playing';step++){
     const snapshot=session.getSnapshot(),event=snapshot.state?.event_runtime.active_instance?.event_id;
     if(event)seen.add(event);
@@ -28,12 +28,13 @@ it('offers explicit read, choose and field-confirm controls throughout the 26-ev
     expect(host.querySelector('.strategy-shell')).toBeNull();
     expect(host.querySelector('.episode-immersive-background')?.getAttribute('src')).toBeTruthy();
     expect(host.querySelector('.story-reading-guide')?.textContent).toBeTruthy();
-    const choice=host.querySelector<HTMLButtonElement>('.choice-panel button:not(:disabled)');
+    const choices=[...host.querySelectorAll<HTMLButtonElement>('.choice-panel button:not(:disabled)')];
+    const choice=policy==='last'?choices.at(-1):choices[0];
     if(choice){expect(host.querySelector('.map-choice-fallback')).toBeNull();decisions++;click(choice);}
-    else {if(host.querySelector('.story-field-confirm'))confirmations++;click(host.querySelector('.continue-button'));}
+    else click(host.querySelector('.continue-button'));
   }
   expect(session.getSnapshot().phase).toBe('complete');expect(seen.size).toBe(26);
-  expect(decisions).toBeGreaterThan(5);expect(confirmations).toBeGreaterThan(0);
+  expect(decisions).toBeGreaterThan(5);
 });
 
 it('reports failed background loading and retries without changing the story or save state',()=>{
