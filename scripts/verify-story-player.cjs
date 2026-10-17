@@ -76,6 +76,17 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    await page.waitForTimeout(140);
   }
   a.equal(await page.locator('.phase-complete').count(),1,'story did not finish');a.equal(seen.size,26);a.deepEqual(errors,[]);
+  // End-of-Day must lead to a SINGLE campaign chapter gate, not a second home tile.
+  await page.locator('.gameplay-home-button').click();
+  a.equal(await page.locator('button.is-story-entry').count(),1,'story home must have one entry');
+  a.equal(await page.locator('button.is-episode02-entry').count(),0,'Episode 02 must not split from story mode');
+  await page.locator('button.is-story-entry').click();
+  await page.locator('.story-chapter-gate').waitFor();
+  const ep2=page.locator('.story-chapter-card.is-next');
+  a(await ep2.isVisible(),'completed Episode 01 did not unlock next chapter');
+  await ep2.click();
+  await page.locator('[data-episode02-stage="0"]').waitFor();
+  await page.screenshot({path:path.join(out,width+'-episode02-within-story.png')});
   rows.push({width,height,policy,events:seen.size,errors,trace});fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({base,scope:'automated visible-background and reachable-action regression; not manual narrative review',rows},null,2));console.log('PASS story player',width,height,seen.size,'events with visible backgrounds and reachable controls');await context.close();
  }}catch(error){if(currentPage&&!currentPage.isClosed())await currentPage.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});
