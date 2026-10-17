@@ -1,0 +1,18 @@
+{
+  "actors": [
+    "player",
+    "kang_taesik",
+    "yoon_sungho",
+    "lee_jaehoon",
+    "lim_junho",
+    "safety_monitor"
+  ],
+  "checks": [
+    "offline reload",
+    "all six actor portrait and authored animation dependencies",
+    "offline character selection",
+    "recommendation saved offline",
+    "each selected actor ready in actual combat"
+  ],
+  "errors": []
+}

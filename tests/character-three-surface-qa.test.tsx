@@ -52,6 +52,6 @@ describe('four-character Main Loading MAP QA contract',()=>{
   it('cache-busts replacement art with the manifest hash so a same-path WebP refresh is visible immediately',()=>{
     const session=new EpisodeSession();
     expect(session.assetUri('ep01.character.player.map'))
-      .toMatch(/^assets\/episode01\/characters\/player-map\.webp\?v=[a-f0-9]{12}$/);
+      .toMatch(/^assets\/episode01\/characters\/new-psi-helmets-v1\/player-map\.webp\?v=[a-f0-9]{12}$/);
   });
 });

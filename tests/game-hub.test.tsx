@@ -31,8 +31,8 @@ describe('game hub navigation', () => {
       expect(host.querySelectorAll('.chapter-record-path button')[4]?.getAttribute('aria-pressed')).toBe('true');
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
-      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/player-map.webp');
-      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/player-map.webp');
+      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/new-psi-helmets-v1/player-map.webp');
+      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/new-psi-helmets-v1/player-map.webp');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('role')).toBe('img');
       expect(host.querySelector('.commercial-title-logo')?.getAttribute('aria-label')).toBe('NEW PSI : ZERO DAY');
       expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/home-new-psi-v6/shield.svg');
@@ -76,7 +76,7 @@ describe('game hub navigation', () => {
       const selectedImage = guideButtons[0]!.querySelector('img')?.getAttribute('src');
       act(() => guideButtons[0]!.click());
       expect(host.querySelector('.field-guide-detail h2')?.textContent?.trim().length).toBeGreaterThan(0);
-      expect(host.querySelector('.field-guide-preview img')?.getAttribute('src')).toBe(selectedImage);
+      expect(host.querySelector('.field-guide-preview img')?.getAttribute('src')).toBe(selectedImage?.replace('-thumb.webp','.webp'));
       expect(host.querySelectorAll('.field-guide-list .field-guide-visual').length).toBeGreaterThanOrEqual(10);
       expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
     } finally { act(() => root.unmount()); }

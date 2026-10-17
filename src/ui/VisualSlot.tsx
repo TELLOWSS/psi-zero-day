@@ -5,6 +5,7 @@ import type { CharacterLoadoutView, EquipmentSlot } from '../app/character-loado
 import visuals from '../../content/episode01/visuals.json';
 import { formatCharacterIdentity } from '../app/character-label';
 import {characterGrowthExpressionLabel} from '../app/character-growth-label';
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 
 interface CharacterVisualPlan { accent?: string }
 export function characterVisual(id: string): CharacterVisualPlan | undefined {
@@ -32,7 +33,9 @@ export function visualAssetTier(uri?: string | null): VisualAssetTier | undefine
 interface VisualImageProps { uri?: string | null; fallbackUri?: string; alt: string; className?: string; loading?:'lazy'|'eager' }
 
 export function VisualImage(props: VisualImageProps) {
-  return <ResolvedImage key={JSON.stringify([props.uri, props.fallbackUri])} {...props} />;
+  const uri = props.uri ? resolveCharacterBrandingUri(props.uri) : props.uri;
+  const fallbackUri = props.fallbackUri ? resolveCharacterBrandingUri(props.fallbackUri) : undefined;
+  return <ResolvedImage key={JSON.stringify([uri, fallbackUri])} {...props} uri={uri} fallbackUri={fallbackUri} />;
 }
 
 function ResolvedImage({ uri, fallbackUri, alt, className, loading }: VisualImageProps) {

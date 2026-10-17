@@ -4,6 +4,7 @@ import {loadDirectionalActor,drawDirectionalBody,directionalSocket,directionalHa
 import {actorTorsoPoint} from './survivors-rig-renderer';
 import {BreakerAimMotion,equippedToolPose} from './signal-breaker-actor-motion';
 import {SpriteMotionTracker} from './survivors-sprite-motion';
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 
 /** Reuse WATCH presentation; breaker physics remains the only position owner. */
 export const characters=[
@@ -13,10 +14,10 @@ export const characters=[
  {id:'lee_jaehoon',textId:'breaker.actor.lee',src:'/assets/episode01/characters/lee-jaehoon-map.webp'},
  {id:'lim_junho',textId:'breaker.actor.lim',src:'/assets/episode01/characters/lim-junho-map.webp'},
  {id:'safety_monitor',textId:'breaker.actor.monitor',src:'/assets/survivors/safety-monitor-v2.webp'}
-] as const;
+].map(character=>({...character,src:resolveCharacterBrandingUri(character.src).split('?')[0]!}));
 export const characterIdentity=identity;
 export function createActor(characterId='player'){
- const character=characters.find(c=>c.id===characterId)??characters[0];
+ const character=characters.find(c=>c.id===characterId)??characters[0]!;
  const cache=(window as Window & {PSIPresentationAssets?:{image:(url:string)=>HTMLImageElement}}).PSIPresentationAssets;const tools=cache?.image(new URL('art/breaker-six-tools-ui-v4.webp',document.baseURI).href);
  const tracker=new SpriteMotionTracker(),aimMotion=new BreakerAimMotion();let lastMotion:unknown=null,lastEquipment:unknown=null;const image=new Image();let ready=false,failed=false;
  image.onload=()=>{void loadDirectionalActor(image).then(value=>{ready=value;failed=!value;}).catch(()=>{failed=true;});};

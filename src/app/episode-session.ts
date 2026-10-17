@@ -9,6 +9,7 @@ import type { EngineCommand, NewRunOptions, ProgressBounds } from '../engine';
 import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
 import { fieldSupportItem } from './field-support-items';
+import { characterBrandingAssetUri } from './character-branding';
 import { isStrategyFieldActionEvent } from './strategy-actions';
 import { projectStrategyView } from './strategy-view';
 import { projectEpisodeReview } from './episode-review';
@@ -94,6 +95,8 @@ export class EpisodeSession {
     return c ? Object.freeze({ id: c.id, name: this.t(c.name_text_id), role: this.t(c.role_text_id), trade: this.t(c.trade_text_id) }) : undefined;
   }
   assetUri(id: string): string | undefined {
+    const branded = characterBrandingAssetUri(id);
+    if (branded) return branded;
     const variant = this.#registry.getAsset(id)?.variants[0];
     if (!variant?.uri) return undefined;
     const fingerprint = variant.hash?.slice(0, 12);

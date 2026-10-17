@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import {SurvivorsUltimateBrief,SurvivorsUltimateCoach,SurvivorsUltimateControl} from './SurvivorsUltimateControl';
 import {readUltimateLesson,readUltimateLessonSeen,rememberUltimateLessonShown,rememberUltimateUse,shouldOfferUltimateLesson,ultimateReadiness} from './survivors-ultimate-learning';
@@ -329,7 +330,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const prof = CHARACTER_PROFILES[cId];
       if (prof?.portraitUri) {
         const img = new Image();
-        img.src = prof.portraitUri;
+        img.src = resolveCharacterBrandingUri(prof.portraitUri);
         img.onload = () => {
           spritesRef.current.characters[cId] = img;
         };
@@ -342,11 +343,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     pImg.onload = () => { spritesRef.current.playerYoon = pImg; };
 
     const parkImg = new Image();
-    parkImg.src = '/assets/episode01/characters/kang-taesik-portrait.webp';
+    parkImg.src = resolveCharacterBrandingUri('/assets/episode01/characters/kang-taesik-portrait.webp');
     parkImg.onload = () => { spritesRef.current.playerPark = parkImg; };
 
     const jungImg = new Image();
-    jungImg.src = '/assets/episode01/characters/player-portrait.webp';
+    jungImg.src = resolveCharacterBrandingUri('/assets/episode01/characters/player-portrait.webp');
     jungImg.onload = () => { spritesRef.current.playerJung = jungImg; };
 
     const mImg = new Image();
@@ -3810,7 +3811,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               return (
                 <div className="survivors-monarch-hero-banner" style={{ borderColor: activeChar.color }}>
                   <img
-                    src={activeChar.heroBannerUri || activeChar.portraitUri}
+                    src={resolveCharacterBrandingUri(activeChar.heroBannerUri || activeChar.portraitUri)}
                     alt={activeChar.name}
                     className="survivors-monarch-hero-img"
                   />
@@ -3911,7 +3912,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         boxShadow: selectedChar === char.id ? `0 0 16px ${char.color}` : undefined,
                       }}
                     >
-                      <img src={char.portraitUri} alt={char.name} className={`survivors-char-portrait-thumb ${char.id === 'safety_monitor' ? 'is-fullbody' : ''}`} />
+                      <img src={resolveCharacterBrandingUri(char.portraitUri)} alt={char.name} className={`survivors-char-portrait-thumb ${char.id === 'safety_monitor' ? 'is-fullbody' : ''}`} />
                       <span className="survivors-char-avatar-badge">{char.avatar}</span>
                     </div>
                     <strong style={{ color: char.color }}>{char.name}</strong>

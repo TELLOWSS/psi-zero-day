@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "version": "0.68.0-trimode-intel",
-  "cacheName": "psi-signal-breaker-trimode-v1-20261016",
-  "fingerprint": "927cf41e76ad004fbaa351692d26288fad2ede40254a1cf598255d527f0de773",
+  "cacheName": "psi-signal-breaker-helmets-v1-20261017",
+  "fingerprint": "c65fc8c21b3941d38099fc3071be4c4821a4b0df6ecd484546d53631cae1b447",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -23,6 +23,46 @@
       "path": "/assets/episode01/characters/lim-junho-map.webp",
       "bytes": 84476,
       "sha256": "f8e4b106be57942d9408f866ac4fc5a609ab6226a3d37679a457032b106722ae"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-map.webp",
+      "bytes": 247532,
+      "sha256": "d49f938edc5e3aea06be15d41d208056817ecdecdeea7c2b736a52111947551c"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-supportive.webp",
+      "bytes": 254740,
+      "sha256": "08fe10e979c6d453730283369b254c4c69d70c9417c3aabf25c2b68f7ff0101d"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-map.webp",
+      "bytes": 157388,
+      "sha256": "66f8385632e2ed19fb53dab3dc27fff94e472386994807d45e52b138abf31bdd"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-map.webp",
+      "bytes": 180968,
+      "sha256": "c4c062137a8cccf5427f667a0ddc472dafef01e811345e5145bce92a136cda57"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-performance-relief.webp",
+      "bytes": 193498,
+      "sha256": "8b3afe3c3af51190a8b67f04c1f9b95e0a458bd91e52bc939e13090d6cb8085a"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/player-map.webp",
+      "bytes": 173766,
+      "sha256": "28731fe892131bc7423e0823698e6e03090a2adba17d197b5094ae0a335fb270"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-appreciative.webp",
+      "bytes": 320306,
+      "sha256": "9c59d5bffa0230cb1e25693cc290f1b0689b375bb20484489585c6a47aa3dac8"
+    },
+    {
+      "path": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-map.webp",
+      "bytes": 236272,
+      "sha256": "e5bb06ed6dfef1411d5311ab69f1a1811fe41b15c38029e28c8ff60d043369c9"
     },
     {
       "path": "/assets/episode01/characters/performance/lim-junho-relief.webp",
@@ -51,8 +91,8 @@
     },
     {
       "path": "/assets/shared/signal-breaker-actors.js",
-      "bytes": 103913,
-      "sha256": "b375446b90d6933f5e223f43d86a51ad59e52753e35f495b6a08ca05fa506360"
+      "bytes": 138310,
+      "sha256": "7222dd3091a9b127c458405fd9c253fc765164f43aa44a5f8855f2eb22fcd559"
     },
     {
       "path": "/assets/shared/signal-encounter-intel-v1.js",
@@ -786,8 +826,8 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 11959,
-      "sha256": "6c4eb5013f640a485831e30142ea5c2d5a12c0f2c696d0153da19700ab82935b"
+      "bytes": 12573,
+      "sha256": "a769d1262995015ad77f02ab09347939de0911e7b85706658e4e2177899e695e"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
@@ -871,8 +911,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance-content.js",
-      "bytes": 3374,
-      "sha256": "fc9b20c64cd4d7f38577ab0e299da136c92c3d6b4c4bd0bc0f083a1c23aaf4a8"
+      "bytes": 3450,
+      "sha256": "ee9fd54d98f57d34b0e5c3bcb8018970284d37cb46ecd763dacafdb4bdd492e2"
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance.js",

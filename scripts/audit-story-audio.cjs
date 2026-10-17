@@ -1,0 +1,8 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{chromium}=require('playwright');
+const base=process.env.PSI_QA_BASE_URL||'http://127.0.0.1:4178',out=process.env.PSI_QA_OUTPUT||'artifacts/story-audio';
+const assets=JSON.parse(fs.readFileSync('content/episode01/assets.json','utf8')).assets.filter(x=>x.type==='audio').map(x=>({id:x.asset_id,uri:x.variants[0].uri}));
+(async()=>{const b=await chromium.launch({executablePath:process.env.CHROME_BIN,headless:true});try{
+ const p=await b.newPage();await p.goto(base,{waitUntil:'domcontentloaded'});
+ const rows=await p.evaluate(async assets=>{const ctx=new AudioContext(),rows=[];try{for(const a of assets){const r=await fetch('/'+a.uri);if(!r.ok)throw Error(a.uri+' HTTP '+r.status);const buf=await ctx.decodeAudioData(await r.arrayBuffer());let peak=0,energy=0,samples=0;for(let c=0;c<buf.numberOfChannels;c++){const channel=buf.getChannelData(c);for(const v of channel){peak=Math.max(peak,Math.abs(v));energy+=v*v;samples++;}}rows.push({...a,duration:buf.duration,channels:buf.numberOfChannels,sampleRate:buf.sampleRate,peak,rms:Math.sqrt(energy/samples),decoded:true});}}finally{await ctx.close();}return rows;},assets);
+ assert.equal(rows.length,12);assert(rows.every(x=>x.duration>0&&x.peak>0));fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'audio-technical.json'),JSON.stringify({base,method:'Browser decode and signal statistics only; no perceptual listening approval',rows},null,2));console.log('PASS',rows.length,'audio decodes');
+}finally{await Promise.race([b.close(),new Promise(r=>setTimeout(r,3000))]);}})().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

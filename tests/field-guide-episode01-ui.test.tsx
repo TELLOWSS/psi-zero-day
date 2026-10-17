@@ -6,6 +6,7 @@ import type { EpisodeSession } from '../src/app/episode-session';
 import assets from '../content/episode01/assets.json';
 import catalog from '../content/episode01/scene-element-catalog.json';
 import { FieldGuide } from '../src/ui/FieldGuide';
+import restored from '../content/art/field-guide-restoration-v4.json';
 
 const keys = [
   'site_gate',
@@ -46,6 +47,8 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
     for (const key of keys) {
       const entry = guide.elements[key];
       expect(entry.field_guide.episode).toBe('EP01');
+      const replacement=(restored.items as Record<string,{thumbnail:string}>)[key];
+      if(replacement){expect(srcs.some(src=>src.endsWith(replacement.thumbnail))).toBe(true);continue;}
 
       const directPath = entry.field_guide_visual?.asset_path;
       if (directPath) {
@@ -72,8 +75,8 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
 
     expect(guide.elements.site_gate.field_guide_visual.presentation).toBe('production_realistic_v2');
     expect(guide.elements.pedestrian_gate.field_guide_visual.presentation).toBe('production_realistic_v2');
-    expect(srcs.some(src => src.endsWith('assets/episode01/field-guide/site-gate-final.webp'))).toBe(true);
-    expect(srcs.some(src => src.endsWith('assets/episode01/field-guide/pedestrian-gate-final.webp'))).toBe(true);
+    expect(srcs.some(src => src.endsWith(restored.items.site_gate.thumbnail))).toBe(true);
+    expect(srcs.some(src => src.endsWith(restored.items.pedestrian_gate.thumbnail))).toBe(true);
     expect(srcs.some(src => src.endsWith('assets/episode01/cg/gate-dawn.webp'))).toBe(false);
     expect(host.textContent).toContain('FG001');
     expect(host.textContent).toContain('FG010');

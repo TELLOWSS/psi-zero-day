@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import type { DefenseCameraMode } from './useDefenseCamera';
 
 const WORKERS = [
@@ -80,7 +81,7 @@ export function G8AActivityOverlay({
         <g className={`zb-worker-motion ${worker.className}`}>
           <ellipse cx="0" cy="3.5" rx={worker.width * 0.39} ry="3.2" className="zb-worker-shadow" />
           <image
-            href={worker.href}
+            href={resolveCharacterBrandingUri(worker.href)}
             x={-worker.width / 2}
             y={-worker.height + 4}
             width={worker.width}

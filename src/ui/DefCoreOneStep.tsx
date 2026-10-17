@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import contractRaw from '../../content/defense/def-core-01.json';
 import type { DefenseRunState } from '../domain/defense';
@@ -525,7 +526,7 @@ export function DefCoreOneStepBoardOverlay({
       <path d="M59 321h20M154 321h20" />
     </g>
     <image
-      href="assets/episode01/characters/choi-minseok-map.webp"
+      href={resolveCharacterBrandingUri('assets/episode01/characters/choi-minseok-map.webp')}
       x="146"
       y="252"
       width="38"
@@ -534,7 +535,7 @@ export function DefCoreOneStepBoardOverlay({
       className="def-core-marshal"
     />
     {worldResult === 'REINFORCED_CONTROL' ? <image
-      href="assets/episode01/characters/choi-minseok-map.webp"
+      href={resolveCharacterBrandingUri('assets/episode01/characters/choi-minseok-map.webp')}
       x="196"
       y="258"
       width="34"

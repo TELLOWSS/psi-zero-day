@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import { useEffect, useRef, useState } from 'react';
 import text from '../../content/localization/survivors-accountability-ko.json';
 import type { ACCOUNTABILITY_CASES } from '../app/survivors-accountability';
@@ -31,7 +32,7 @@ export function SurvivorsAccountabilityEvent({incident,state,portraitUri,onDecid
       }
     }}>
       <header><small>{text.title}</small><h2 id="accountability-title">{incident.title}</h2><span>{text.worker}</span></header>
-      <div className="accountability-dialogue-row"><img src={portraitUri} alt={text.foreman}/><p className="accountability-dialogue">{incident.line}</p></div>
+      <div className="accountability-dialogue-row"><img src={resolveCharacterBrandingUri(portraitUri)} alt={text.foreman}/><p className="accountability-dialogue">{incident.line}</p></div>
       <p className="accountability-policy">{text.policy}</p>
       <p className="accountability-record">{text.warning}: {state.warnings}/3 · {state.access==='held'?text.held:state.access==='excluded'?text.excluded:text.evidenceHint}</p>
       {!result ? <>

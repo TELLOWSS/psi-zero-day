@@ -1,0 +1,126 @@
+{
+  "base": "http://127.0.0.1:4178",
+  "method": "Browser decode and signal statistics only; no perceptual listening approval",
+  "rows": [
+    {
+      "id": "ep01.audio.concrete_pour",
+      "uri": "assets/episode01/audio/concrete-pour.ogg",
+      "duration": 7.8,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.3622506558895111,
+      "rms": 0.09913598672338701,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.gate_queue",
+      "uri": "assets/episode01/audio/gate-queue.ogg",
+      "duration": 6.4,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.360668420791626,
+      "rms": 0.10494851875222924,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.home_night",
+      "uri": "assets/episode01/audio/home-night.ogg",
+      "duration": 6.5,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.18031634390354156,
+      "rms": 0.0807245161897111,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.office_report_roomtone",
+      "uri": "assets/episode01/audio/office-report-roomtone.ogg",
+      "duration": 6.3,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.2194279283285141,
+      "rms": 0.06881409689792381,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.pump_engine_boom",
+      "uri": "assets/episode01/audio/pump-engine-boom.ogg",
+      "duration": 7.2,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.37248682975769043,
+      "rms": 0.10303842991456137,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.radio_burst",
+      "uri": "assets/episode01/audio/radio-burst.ogg",
+      "duration": 1.22,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.4451536238193512,
+      "rms": 0.05301438982403344,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.stopwork_silence_drop",
+      "uri": "assets/episode01/audio/stopwork-silence-drop.ogg",
+      "duration": 2.6,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.3131270706653595,
+      "rms": 0.09044739714289761,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.voice_junho_signal",
+      "uri": "assets/episode01/audio/voice-junho-signal.ogg",
+      "duration": 10.56,
+      "channels": 1,
+      "sampleRate": 48000,
+      "peak": 0.8765077590942383,
+      "rms": 0.12233054723468134,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.voice_kang_first_contact",
+      "uri": "assets/episode01/audio/voice-kang-first-contact.ogg",
+      "duration": 16.8,
+      "channels": 1,
+      "sampleRate": 48000,
+      "peak": 0.8859421610832214,
+      "rms": 0.12397104256999823,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.voice_lee_delay",
+      "uri": "assets/episode01/audio/voice-lee-delay.ogg",
+      "duration": 11.16,
+      "channels": 1,
+      "sampleRate": 48000,
+      "peak": 0.8542280197143555,
+      "rms": 0.12010645309536706,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.voice_oh_record_judgment",
+      "uri": "assets/episode01/audio/voice-oh-record-judgment.ogg",
+      "duration": 14.12,
+      "channels": 1,
+      "sampleRate": 48000,
+      "peak": 0.8494542837142944,
+      "rms": 0.1003275215074469,
+      "decoded": true
+    },
+    {
+      "id": "ep01.audio.workface_pressure",
+      "uri": "assets/episode01/audio/workface-pressure.ogg",
+      "duration": 4.8,
+      "channels": 2,
+      "sampleRate": 48000,
+      "peak": 0.35809266567230225,
+      "rms": 0.0789980409679678,
+      "decoded": true
+    }
+  ]
+}

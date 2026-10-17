@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import {defensePressureWaveGroups} from '../engine/defense-sensor-pressure';
 import pressureArt from '../../content/defense/guard-pressure-art-v1.json';
 import {GuardSensorPressureOverlay,guardPressureReadout} from './GuardSensorPressure';
@@ -285,7 +286,7 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
     {g8aRiskActor && enemy.enemyId === 'NORMAL' ? <g className="zb-g8a-risk-worker-wrap" data-g8a-risk-actor="WORKER_APPROACH" aria-hidden="true">
       <ellipse cx="0" cy="2" rx="11" ry="3.6" className="zb-g8a-risk-contact-shadow" />
       <image
-        href="assets/episode01/characters/player-map.webp"
+        href={resolveCharacterBrandingUri('assets/episode01/characters/player-map.webp')}
         x="-15"
         y="-44"
         width="30"
@@ -295,9 +296,9 @@ function EnemyGlyph({ content, enemy, state, isHit, counterRotate=false }: { con
       />
     </g> : g8aRiskActor && enemy.enemyId === 'SWARM' ? <g className="zb-g8a-risk-worker-group" data-g8a-risk-actor="WORKER_GROUP" aria-hidden="true">
       <ellipse cx="0" cy="3" rx="26" ry="5" className="zb-g8a-risk-contact-shadow" />
-      <image href="assets/episode01/characters/lee-jaehoon-map.webp" x="-25" y="-43" width="27" height="43" preserveAspectRatio="xMidYMax meet" />
-      <image href="assets/episode01/characters/seo-jeongmin-map.webp" x="-4" y="-49" width="29" height="45" preserveAspectRatio="xMidYMax meet" />
-      <image href="assets/episode01/characters/player-map.webp" x="-1" y="-37" width="25" height="39" preserveAspectRatio="xMidYMax meet" />
+      <image href={resolveCharacterBrandingUri('assets/episode01/characters/lee-jaehoon-map.webp')} x="-25" y="-43" width="27" height="43" preserveAspectRatio="xMidYMax meet" />
+      <image href={resolveCharacterBrandingUri('assets/episode01/characters/seo-jeongmin-map.webp')} x="-4" y="-49" width="29" height="45" preserveAspectRatio="xMidYMax meet" />
+      <image href={resolveCharacterBrandingUri('assets/episode01/characters/player-map.webp')} x="-1" y="-37" width="25" height="39" preserveAspectRatio="xMidYMax meet" />
     </g> : g8aRiskActor && enemy.enemyId === 'ARMORED' && g8aDump ? <>
       <ellipse cx="0" cy="22" rx="37" ry="9" className="zb-swift-road-contact" aria-hidden="true" />
       <image
@@ -1080,7 +1081,7 @@ export function DefenseGame({
         {/* Phase 2: Tactical Radio Chatter Walkie-Talkie HUD */}
         {isRadioVisible && radioChatter ? <div className="zb-radio-chatter" role="status" aria-live="polite">
           {radioChatter.portraitUri
-            ? <img src={radioChatter.portraitUri} alt="" className="zb-radio-portrait" />
+            ? <img src={resolveCharacterBrandingUri(radioChatter.portraitUri)} alt="" className="zb-radio-portrait" />
             : <div className="zb-radio-portrait" />}
           <div className="zb-radio-content">
             <div className="zb-radio-header">

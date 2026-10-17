@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import type {CharacterId,PatrolStageDefinition} from '../domain/patrol-survivors';
 import {useState} from 'react';
 import {CHARACTER_PROFILES} from '../engine/patrol-survivors-engine';
@@ -17,7 +18,7 @@ export function SurvivorsOperationBrief({characterId,stage}:{characterId:Charact
  const role=copy.roles[roleId];const profile=CHARACTER_PROFILES[characterId];const speaker=CHARACTER_PROFILES[stage.narrative?.speaker??'player'];const reflection=characterReflection(rows,characterId);const record=reflection?.record;
  const archivedScene=characterId==='player'&&record?.stageId!=='stage_12'?playerHandoffSceneRecord(rows):null;
  return <aside className="survivors-operation-brief" aria-label={copy.title}>
- <header><img src={profile.portraitUri} alt=""/><div><small>{copy.title}</small><strong>{profile.name} · {profile.role}</strong><span>{stage.name}</span></div></header>
+ <header><img src={resolveCharacterBrandingUri(profile.portraitUri)} alt=""/><div><small>{copy.title}</small><strong>{profile.name} · {profile.role}</strong><span>{stage.name}</span></div></header>
  {stage.narrative&&<details><summary>{copy.dispatch} · {speaker.name}</summary><p>{stage.narrative.brief}</p></details>}
  <p><strong>{copy.role}</strong>{role.action}</p>
  <p><strong>{copy.objective}</strong>{stage.starChallenges[1].description}</p>

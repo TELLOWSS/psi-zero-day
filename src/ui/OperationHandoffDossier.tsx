@@ -1,3 +1,4 @@
+import {resolveCharacterBrandingUri} from '../app/character-branding';
 import {useState} from 'react';
 import {readOperationHandoffs} from '../app/operation-handoff-store';
 import {CHARACTER_PROFILES, PATROL_STAGES} from '../engine/patrol-survivors-engine';
@@ -38,7 +39,7 @@ export function OperationHandoffDossier({mode,story,defense}: {
    <label>{copy.select}<select aria-label={copy.select} value={index} onChange={event => setIndex(Number(event.target.value))}>
     {records.map((r, i) => <option key={`${r.characterId}:${r.stageId}`} value={i}>{CHARACTER_PROFILES[r.characterId].name} · {PATROL_STAGES[r.stageId].name} · {r.outcome === 'victory' ? copy.victory : copy.defeat}</option>)}
    </select></label>
-   <header><img src={profile.portraitUri} alt=""/><div><strong>{profile.name} · {profile.role}</strong><span>{PATROL_STAGES[record.stageId].name}</span><b>{record.outcome === 'victory' ? copy.victory : copy.defeat}</b></div></header>
+   <header><img src={resolveCharacterBrandingUri(profile.portraitUri)} alt=""/><div><strong>{profile.name} · {profile.role}</strong><span>{PATROL_STAGES[record.stageId].name}</span><b>{record.outcome === 'victory' ? copy.victory : copy.defeat}</b></div></header>
    <dl>{([[copy.zones, record.zones], [copy.stops, record.cartStops], [copy.routes, record.rubbleCleared], [copy.damage, Math.round(record.damageTaken * 10) / 10], [copy.stars, `${record.stars.filter(Boolean).length}/3`]] as const).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
    <p><strong>{copy[mode]}</strong>{brief.roles[roleId][mode]}</p><small>{copy.source}</small>
   </> : <p>{copy.empty}</p>}

@@ -1,0 +1,4801 @@
+{
+  "mode": "directed",
+  "registeredEvents": 26,
+  "registeredCharacters": 8,
+  "assets": 102,
+  "audioAssets": [
+    {
+      "id": "ep01.audio.concrete_pour",
+      "uri": "assets/episode01/audio/concrete-pour.ogg"
+    },
+    {
+      "id": "ep01.audio.gate_queue",
+      "uri": "assets/episode01/audio/gate-queue.ogg"
+    },
+    {
+      "id": "ep01.audio.home_night",
+      "uri": "assets/episode01/audio/home-night.ogg"
+    },
+    {
+      "id": "ep01.audio.office_report_roomtone",
+      "uri": "assets/episode01/audio/office-report-roomtone.ogg"
+    },
+    {
+      "id": "ep01.audio.pump_engine_boom",
+      "uri": "assets/episode01/audio/pump-engine-boom.ogg"
+    },
+    {
+      "id": "ep01.audio.radio_burst",
+      "uri": "assets/episode01/audio/radio-burst.ogg"
+    },
+    {
+      "id": "ep01.audio.stopwork_silence_drop",
+      "uri": "assets/episode01/audio/stopwork-silence-drop.ogg"
+    },
+    {
+      "id": "ep01.audio.voice_junho_signal",
+      "uri": "assets/episode01/audio/voice-junho-signal.ogg"
+    },
+    {
+      "id": "ep01.audio.voice_kang_first_contact",
+      "uri": "assets/episode01/audio/voice-kang-first-contact.ogg"
+    },
+    {
+      "id": "ep01.audio.voice_lee_delay",
+      "uri": "assets/episode01/audio/voice-lee-delay.ogg"
+    },
+    {
+      "id": "ep01.audio.voice_oh_record_judgment",
+      "uri": "assets/episode01/audio/voice-oh-record-judgment.ogg"
+    },
+    {
+      "id": "ep01.audio.workface_pressure",
+      "uri": "assets/episode01/audio/workface-pressure.ogg"
+    }
+  ],
+  "paths": [
+    {
+      "policy": "first",
+      "phase": "complete",
+      "completed": 26,
+      "total": 26,
+      "steps": 80,
+      "choices": 13,
+      "readSteps": 67,
+      "events": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_05_command",
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions",
+        "e01_08a_reporting_return",
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection",
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return",
+        "e01_08m_instruction_cascade",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return",
+        "e01_09_evening",
+        "e01_10_next_day_tease"
+      ],
+      "flags": {
+        "delegated_cleanup_kang": true,
+        "junho_opened_up": true,
+        "ramp_signal_known": true,
+        "junho_signal_route": "direct_follow",
+        "ramp_verified": true,
+        "direct_ramp_check": true,
+        "entrance_controlled": true,
+        "pump_result": "BEST_CONTROL",
+        "reporting_return_state": "reinforced",
+        "growth.lim_junho": "focused",
+        "training.lim_junho.reporting": true,
+        "inventory.lim_junho.item.site_radio": true,
+        "equipment.lim_junho.communication": "item.site_radio",
+        "inspection_action": "full_stop",
+        "inspection_pushback": "schedule_blame",
+        "inspection_result": "accepted",
+        "inspection_closed": true,
+        "report_basis": "one_sided",
+        "report_result": "correction_required",
+        "tbm_gap_action": "form_first",
+        "tbm_gap_result": "paper_field_gap_remains",
+        "restart_action": "follow_verbal",
+        "restart_result": "premature_restart_second_stop",
+        "stopwork_culture_action": "ignore_social",
+        "stopwork_culture_result": "reporting_silenced",
+        "instruction_chain_action": "accept_top",
+        "instruction_chain_result": "condition_loss_unresolved",
+        "record_action": "minimize_scope",
+        "record_result": "supplement_requested",
+        "evening_rest": true,
+        "next_day.precheck": "standard",
+        "episode01_completed": true
+      },
+      "trace": [
+        {
+          "event": "e01_01_arrival",
+          "node": "arrival",
+          "type": "SHOW_RESULT",
+          "text": "06:27. 아직 해가 낮다. 게이트 안쪽에서는 자재차량과 출근 인원이 같은 길을 나눠 쓰고, 멀리서는 타워크레인 무전이 먼저 하루를 시작한다. 오늘은 첫 타설이 있는 날이다. 사고는 아직 없지만 현장은 이미 움직이고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "06:40. 강태식 반장이 TBM 보드 앞에서 작업순서를 훑는다. “오늘 타설 있습니다. 오전부터 조금 바쁠 겁니다. 책에서 본 것하고 현장은 조금 달라요. 이상한 게 있으면 사람 말부터 한번 들어보세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "player",
+          "type": "SHOW_DIALOGUE",
+          "text": "“위험요인만 읽고 끝내지 않겠습니다. 오늘 바뀐 작업, 작업자들이 걱정하는 것, 질문부터 확인하고 현장에 들어가겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "07:10. TBM이 끝나고 인력과 차량이 각 구역으로 흩어진다. 경사로에는 자재가 평소보다 조금 더 나와 있고, 철근차는 예상보다 일찍 도착했다. 펌프카 시간은 그대로다. 아직 사고는 없다. 하지만 서로 다른 작은 변화가 같은 동선에 모이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "펌프카 예약 밀리면 뒤 공정까지 같이 밀립니다. 다만 지금 순서만 잡고 끝내면 안 됩니다. 누가 어느 시각에 들어오는지 하나로 맞춰야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "통로 비우라면 비웁니다. 대신 사람 둘 빼면 하던 정리가 멈춥니다. 그 5분을 어디서 감당할지까지 정하고 말씀해 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "yoon",
+          "type": "SHOW_DIALOGUE",
+          "text": "철근차 세워두는 것도 선택입니다. 기사, 크레인, 우리 작업조가 같이 기다립니다. 하역 위치만 잡히면 우리는 바로 끝낼 수 있어요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "plan",
+          "type": "SHOW_CHOICE",
+          "text": "현장은 동시에 여러 곳에서 움직인다. 첫 순찰에서 무엇을 직접 붙잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "delegate_kang",
+            "negotiate_yoon",
+            "coordinate_schedule",
+            "follow_junho"
+          ],
+          "chosen": "delegate_kang"
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "delegate_kang_result",
+          "type": "SHOW_RESULT",
+          "text": "강태식이 작업자 둘을 빼 통로를 열기 시작한다. 진입부는 눈에 띄게 정리된다. 대신 형틀 정리 속도가 떨어지고, 당신의 시야에서 경사로가 잠시 사라진다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "signal",
+          "type": "SHOW_DIALOGUE",
+          "text": "08:05. 임준호가 무전기를 쥔 채 다가온다. “저… 아닐 수도 있는데요. 아까 차량 지나간 뒤 경사로 쪽 철판 끝이 전하고 조금 달라 보였습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "detail",
+          "type": "SHOW_DIALOGUE",
+          "text": "“자갈이 조금 밀렸고 철판 끝이 떠 보였습니다. 다시 보니까 확신은 없습니다. 괜히 제가 말해서 차 세우는 건가 싶어서요.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen",
+          "type": "SHOW_CHOICE",
+          "text": "확실하지 않은 신호 하나. 그냥 지나갈 수도 있고, 다음 위험의 시작일 수도 있다. 무엇을 먼저 사실로 만들까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "listen_more",
+            "crosscheck_minseok",
+            "dismiss"
+          ],
+          "chosen": "listen_more"
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen_more_result",
+          "type": "SHOW_RESULT",
+          "text": "경사로 끝에서 작은 자갈 이동과 철판 단차가 보인다. 위험의 크기는 아직 단정할 수 없다. 다만 '아까와 같다'는 임준호의 설명이 구체적으로 바뀐다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "09:10. 펌프카가 예정보다 빨리 현장 근처에 도착했다. 자재 정리는 끝나지 않았고 철근차도 아직 동선을 쓰고 있다. 이재훈은 타설시간을, 강태식은 작업흐름을, 임준호는 아침의 작은 변화를 보고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "ramp",
+          "type": "SHOW_CHOICE",
+          "text": "직접 확인하면 가장 정확하다. 대신 그 2분 동안 다른 곳은 누군가의 판단에 맡겨진다. 누구에게 무엇을 넘길까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "check_self",
+            "ask_minseok",
+            "keep_schedule"
+          ],
+          "chosen": "check_self"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "check_self_result",
+          "type": "SHOW_RESULT",
+          "text": "직접 보면 애매했던 단차가 눈에 들어온다. 대신 당신이 돌아오는 사이 진입부에서 '누가 먼저 들어가냐'는 무전이 세 번 쌓인다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "entrance",
+          "type": "SHOW_CHOICE",
+          "text": "09:18. 펌프카가 게이트 앞에서 속도를 줄인다. 차량을 들이기 전에 지금까지 만든 통제가 실제 현장에서도 닫혀 있는지 마지막으로 판단해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "assign_crew",
+            "request_delay",
+            "force_clear"
+          ],
+          "chosen": "assign_crew"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "assign_crew_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "오케이, 형틀 쪽 두 명 빼겠습니다. 대신 지시 바뀌면 한 사람 통해서만 주세요. 여기저기서 말 나오면 더 꼬입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "best_control",
+          "type": "SHOW_RESULT",
+          "text": "진입 직전, 경사로 확인과 통로 통제가 같은 시점에 닫힌다. 펌프카는 한 번에 방향을 잡고 들어온다. 눈에 띄는 사고 장면은 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "best_control_react",
+          "type": "SHOW_DIALOGUE",
+          "text": "아까 말씀드린 게 괜히 일을 크게 만든 건 아니었네요. 다음에 이상한 거 보이면… 바로 말씀드리겠습니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pour",
+          "type": "SHOW_RESULT",
+          "text": "09:45. 펌프카 붐이 펼쳐지고 작업면이 다시 움직인다. 큰 사고는 없었다. 하지만 안전은 체크가 끝났다는 표시가 아니라 작업조건이 달라질 때마다 다시 확인해야 하는 상태라는 것이 분명해진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "타설 들어갑니다. 자바라 움직일 때 철근 위 발 디딜 자리 먼저 봐요. 아까 동선 정리한 거 지금부터가 진짜입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pressure",
+          "type": "SHOW_RESULT",
+          "text": "첫 콘크리트가 떨어진다. 계획표에서 한 줄이 진행되는 순간, 작업면에서는 호스·철근·사람·무전이 동시에 움직인다. 안전은 체크박스가 아니라 계속 갱신되는 상태가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "시간은 조금 변했어도 타설은 시작됐습니다. 오늘 결정한 것들, 끝나고 왜 그렇게 했는지 기록으로 남겨주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "after",
+          "type": "SHOW_RESULT",
+          "text": "콘크리트가 퍼지고 표면이 채워진다. 큰 사고는 없었다. 하지만 오늘의 차이는 '아무 일도 없었다'가 아니라, 어떤 신호를 듣고 무엇을 놓쳤는지가 남았다는 데 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "kang.high",
+          "type": "SHOW_DIALOGUE",
+          "text": "오늘은 사람 붙일 데 붙이고, 물을 데 물었네요. 다음에도 그렇게 갑시다. 대신 현장 흐름은 놓치지 말고.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "yoon.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "작업은 끝났습니다. 그런데 오늘은 우리가 왜 기다렸는지 끝까지 모르는 사람이 많았어요. 다음엔 이유까지 같이 맞춥시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "junho.high",
+          "type": "SHOW_DIALOGUE",
+          "text": "저… 오늘 아침에 말씀드릴까 말까 했는데요. 들어주셔서 감사합니다. 다음엔 더 빨리 얘기하겠습니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08a_reporting_return",
+          "node": "reinforced",
+          "type": "SHOW_RESULT",
+          "text": "임준호가 먼저 다가온다. ‘아까처럼 이상한 게 보이면 다음에는 바로 말씀드리겠습니다.’ 한 번 들어준 일이 다음 보고를 만든다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "inspection",
+          "type": "SHOW_DIALOGUE",
+          "text": "10:20. 고층 작업구역을 확인하던 서정민 감리가 단부 쪽을 가리킨다. “여기 난간이 완전히 이어지지 않았습니다. 바로 옆에서는 자재 이동도 하고 있고요. 이 상태를 조치완료라고 볼 수는 없습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 시계를 본다. “작업자만 안쪽으로 빼면 바로 보완할 수 있습니다. 다만 지금 전부 세우면 양중하고 뒤 작업까지 같이 밀립니다. 어디까지 멈출지 정해야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "action",
+          "type": "SHOW_CHOICE",
+          "text": "10:24. 위험은 눈앞에 있고 작업은 이미 움직이고 있다. 지금 무엇을 먼저 확정할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "inspection_full_stop",
+            "inspection_quick_photo",
+            "inspection_sequence_agreement"
+          ],
+          "chosen": "inspection_full_stop"
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "full_stop_result",
+          "type": "SHOW_RESULT",
+          "text": "모든 이동이 멈추자 통로는 빠르게 정리된다. 대신 철근차가 8분 대기하고 뒤 차량 무전이 쌓인다. 현장은 깔끔해졌지만 일정 압박은 더 선명해진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08c_site_pushback",
+          "node": "full_stop",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 시계를 확인한다. “통로는 확실히 됐습니다. 그런데 철근차가 8분 서 있었어요. 지금부터는 이 8분을 어디서 회수할지 같이 정해야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08d_reinspection",
+          "node": "full",
+          "type": "SHOW_DIALOGUE",
+          "text": "서정민 감리가 통로 전체를 걸어본다. “조치는 확실합니다. 다만 다음에는 차량을 안쪽에 넣기 전에 이 상태를 만드는 게 낫겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "gc",
+          "type": "SHOW_DIALOGUE",
+          "text": "오승재가 보고시계를 보며 말한다. “본사에 15분 안에 1차 경위 올려야 합니다. 통로 확보는 협력사 관리사항이었죠? 지금 확인된 것부터 먼저 주세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 철근차 우선이었고 중간에 펌프카 동선 먼저 보라고 바뀌었습니다. 그 시각은 제 통화기록에 있습니다. 협력사 관리 한 줄로 쓰면 앞뒤가 안 맞아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“나는 조회 때 들은 순서대로 했어요. 바뀐 얘기는 차가 들어온 다음에 들었습니다. 내 잘못 없다는 게 아니라, 언제 무슨 말을 들었는지는 맞춰야죠.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "report",
+          "type": "SHOW_CHOICE",
+          "text": "13:30. 같은 현장을 본 세 사람의 설명이 조금씩 다르다. 첫 기록을 누구의 주장도 아닌 사실로 만들려면 무엇부터 맞출까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "report_one_sided",
+            "report_defensive",
+            "report_verify_timeline"
+          ],
+          "chosen": "report_one_sided"
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "one_sided_result",
+          "type": "SHOW_RESULT",
+          "text": "보고서는 가장 빨리 올라간다. 오승재는 시한을 지켰다고 확인한다. 하지만 이재훈과 강태식은 같은 문장을 보고 서로 다른 이유로 표정이 굳는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08f_report_return",
+          "node": "correction",
+          "type": "SHOW_RESULT",
+          "text": "추가자료가 도착하자 1차 보고의 단순한 ‘협력사 관리 미흡’ 문장으로는 설명되지 않는 시각이 나온다. 보고서는 수정 대상이 되고, 빠른 보고가 두 번째 설명을 요구한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:20. 오전 작업중지 이후 작업순서가 바뀌었다. 아침 TBM 내용은 남아 있지만 오후 작업은 다른 조건으로 움직인다. 교육이 틀린 것이 아니라 현장이 달라졌다. 이제 변경된 기준을 다시 사람에게 연결해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“교육은 했고 서명도 있습니다. 그런데 지금 다시 세우면 반출 차량 두 대가 묶입니다. 오늘 작업이 바뀐 건 맞지만, 전부 처음부터 다시 할 수는 없잖아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“잠깐 열고 자재만 빼자는 얘기였습니다. 원상복구 안 한 건 문제지만, 사람들한테는 아침 내용보다 지금 순서가 더 중요해졌어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 건드리지 말라고 들었습니다. 오후에는 빼야 된다고 해서… 언제부터 다른 기준이 된 건지 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "tbm_action",
+          "type": "SHOW_CHOICE",
+          "text": "서류는 유효하지만 작업조건이 바뀌었다. 지금 무엇을 ‘기준’으로 다시 세울까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "tbm_form_first",
+            "tbm_worker_blame",
+            "tbm_change_control"
+          ],
+          "chosen": "tbm_form_first"
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "form_first_result",
+          "type": "SHOW_RESULT",
+          "text": "서명자료와 원래 기준은 빠르게 다시 확인된다. 난간도 복구된다. 하지만 오후 작업이 왜 달라졌는지는 아직 누구의 언어로도 정리되지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08h_tbm_return",
+          "node": "paper",
+          "type": "SHOW_RESULT",
+          "text": "난간은 복구됐지만 다음 반출 때 다시 같은 질문이 나온다. “아침에는 열지 말랬는데 지금은 차가 나가야 합니다. 이번엔 누가 결정합니까?” 서류는 남았고 변경 기준은 남지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:03. 변경작업 재브리핑 뒤 11분이 지났다. 일부 작업자가 다시 자재를 움직인다. 무전에는 ‘재개하라고 했다’는 말이 돌지만, 누가 어떤 조건으로 말했는지는 사람마다 다르다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“공사팀에서 다시 진행하라고 들었습니다. 계속 세워두면 반출 끝나는 시간이 넘어갑니다. 저는 ‘복구됐으면 시작’으로 이해했어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말한 건 ‘복구 확인되면 다시 시작’입니다. 확인 없이 시작하라는 뜻은 아니었습니다. 지금은 빨리 조건만 닫으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희는 그냥 다시 시작한다고 들었습니다. 누가 확인하는지는 못 들었습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "restart_action",
+          "type": "SHOW_CHOICE",
+          "text": "재개는 필요하다. 하지만 ‘누가 말했다’와 ‘조건이 닫혔다’는 같은 말이 아니다. 무엇을 먼저 확인할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "restart_follow_verbal",
+            "restart_trace_instruction",
+            "restart_verify_controls"
+          ],
+          "chosen": "restart_follow_verbal"
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "follow_verbal_result",
+          "type": "SHOW_RESULT",
+          "text": "작업 흐름은 가장 빨리 살아난다. 반장이 복구상태를 보며 진행한다. 그러나 작업자마다 ‘누가 최종 확인자였는지’에 대한 답은 다르게 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08j_restart_return",
+          "node": "premature",
+          "type": "SHOW_RESULT",
+          "text": "작업은 재개됐지만 다른 구간에서 아직 복구가 끝나지 않은 상태가 발견된다. 두 번째 정지가 걸리고, 이번에는 ‘누가 시작하라고 했느냐’가 더 큰 문제가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "15:20 쉬는 시간. 오전 작업중지와 재개는 끝났지만 사람들 사이에는 다른 문제가 남아 있다. 임준호가 지나가자 누군가 “저 친구가 말해서 오늘 일이 커졌다”고 낮게 말한다. 위험을 말한 사람이 다음에도 말할 수 있을지는 지금의 분위기에 달려 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“징계하려는 건 아닙니다. 오늘 밀린 물량 맞추려면 익숙한 사람끼리 붙이려는 겁니다. 배치까지 전부 위험보고랑 연결하면 반장도 사람 못 씁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말해서 바뀐 건 아니라고 하셔도… 다들 그렇게 생각하는 것 같습니다. 다음부터는 진짜 확실한 것만 말해야 할 것 같아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“보고 때문에 불이익 주면 안 되는 건 맞습니다. 다만 배치에는 숙련도, 물량, 팀 호흡도 있어요. 이유를 구분하지 않으면 또 다른 갈등이 생깁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "culture_action",
+          "type": "SHOW_CHOICE",
+          "text": "공식 규정, 반장의 배치권한, 작업자의 체감이 서로 다르다. 어디까지 개입할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "stopwork_ignore_social",
+            "stopwork_public_boundary",
+            "stopwork_protect_process"
+          ],
+          "chosen": "stopwork_ignore_social"
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "ignore_social_result",
+          "type": "SHOW_RESULT",
+          "text": "현장 흐름은 흔들리지 않는다. 강태식은 배치를 그대로 가져간다. 그러나 임준호에게는 ‘공식적으로는 괜찮다’와 ‘사람들이 보는 분위기’가 다른 채 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08l_stopwork_return",
+          "node": "silenced",
+          "type": "SHOW_RESULT",
+          "text": "다음 구역에서 작은 이상을 본 임준호는 무전을 들었다가 내려놓는다. 공식 불이익은 없었지만 ‘또 일이 커질까’라는 계산이 먼저 생긴다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:05. 공사팀 메모에는 ‘안전대 설치 확인 후 작업’이라고 적혀 있다. 반장 무전에는 ‘오늘 물량부터 빨리 마감’이 남아 있다. 작업자는 안전대 확인 조건을 들은 기억이 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“원지시는 분명합니다. 확인 후 작업이라고 했어요. 다만 시간이 밀려서 빨리 끝내달라고도 했습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저도 조건은 들었습니다. 조장한테 말할 때는 ‘안전대 걸고 빨리 하자’고 했고요. 그 뒤 말이 어떻게 갔는지는 정확히 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희가 들은 건 ‘오늘 물량부터 끝내라’였습니다. 안전대 얘기가 있었으면 누가 확인하는지도 같이 들었을 텐데요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "instruction_action",
+          "type": "SHOW_CHOICE",
+          "text": "원지시, 중간전달, 최종수신이 서로 다르다. 지금 어떤 수준에서 사건을 닫을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "instruction_accept_top",
+            "instruction_blame_worker",
+            "instruction_reconstruct_chain"
+          ],
+          "chosen": "instruction_accept_top"
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "accept_top_result",
+          "type": "SHOW_RESULT",
+          "text": "원지시는 빠르게 정리된다. 이재훈은 ‘조건을 말한 기록’이 남는다. 하지만 그 조건이 마지막 사람에게 도착했는지는 확인되지 않은 채 재개 압박이 돌아온다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08n_instruction_return",
+          "node": "gap",
+          "type": "SHOW_RESULT",
+          "text": "원지시는 정상이라는 기록만 남고 실제 전달경로는 바뀌지 않는다. 다음 작업에서도 일정 문구가 안전조건보다 짧고 빠르게 내려간다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:42. 하루 동안 쌓인 작업중지, 재확인, 변경작업, TBM 재전파를 한 기록으로 묶는 시간이다. 현장은 정리되고 있지만 기록은 이제 시작이다. 빠르게 쓰는 것과 정확하게 남기는 것은 같은 일이 아니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "oh",
+          "type": "SHOW_DIALOGUE",
+          "text": "“지금 필요한 건 누가 잘못했는지 단정하는 문장이 아니라, 오늘 밤에도 설명 가능한 1차보고입니다. 너무 길면 늦고, 너무 짧으면 다시 물어옵니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침 TBM은 실제로 했습니다. 오후에 작업이 바뀐 것도 사실이고요. 두 기록이 서로 모순처럼 보이지 않게 시각과 변경내용을 붙여야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“현장 입장에서는 오후에 들은 말이 기준이었습니다. 아침 교육하고 오후 변경을 한 덩어리로 쓰면 우리가 언제 뭘 들었는지 또 헷갈립니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "record_action",
+          "type": "SHOW_CHOICE",
+          "text": "퇴근 전 25분. 속도·문서 일관성·시간순 사실 중 무엇을 보고서의 뼈대로 잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "record_minimize_scope",
+            "record_retrofit_paper",
+            "record_preserve_timeline"
+          ],
+          "chosen": "record_minimize_scope"
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "summary_result",
+          "type": "SHOW_RESULT",
+          "text": "1차보고는 가장 빨리 올라간다. 관리자는 현재상태를 즉시 파악한다. 대신 낮에 오간 지시와 변경 배경은 ‘추가확인’이라는 빈칸으로 다음 사람에게 넘어간다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08p_record_return",
+          "node": "correction",
+          "type": "SHOW_RESULT",
+          "text": "5줄 보고는 빠르게 읽혔지만, 작업중지·변경지시·재확인 시각을 묻는 추가 질문이 돌아온다. 잘못된 보고라기보다 1차보고가 두 번째 설명을 요구한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "evening",
+          "type": "SHOW_CHOICE",
+          "text": "17:18. 해가 내려가고 현장 소음이 줄어든다. 오늘은 사고 없이 끝났지만 ‘아무 일도 없었다’고만 남기기에는 많은 신호와 판단이 있었다. 내일을 위해 무엇을 남길까?",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "rest",
+            "family",
+            "study",
+            "field_note"
+          ],
+          "chosen": "rest"
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "rest",
+          "type": "SHOW_RESULT",
+          "text": "알람을 맞추고 불을 끈다. 기록은 남기지 않았지만 내일 현장을 새 눈으로 볼 체력을 선택했다.",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_action",
+          "type": "SHOW_CHOICE",
+          "text": "06:52. 어제 남은 흔적을 오늘 어디부터 확인하시겠습니까?",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "next_day_standard_check",
+            "next_day_radio_checkin"
+          ],
+          "chosen": "next_day_standard_check"
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_standard",
+          "type": "SHOW_RESULT",
+          "text": "어제의 기억에 끌려가지 않고 현재 상태부터 다시 본다. 대신 어제와 달라진 지점은 스스로 연결해야 한다.",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        }
+      ]
+    },
+    {
+      "policy": "last",
+      "phase": "complete",
+      "completed": 26,
+      "total": 26,
+      "steps": 79,
+      "choices": 12,
+      "readSteps": 67,
+      "events": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_05_command",
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions",
+        "e01_08a_reporting_return",
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection",
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return",
+        "e01_08m_instruction_cascade",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return",
+        "e01_09_evening",
+        "e01_10_next_day_tease"
+      ],
+      "flags": {
+        "followed_junho": true,
+        "junho_opened_up": false,
+        "ramp_signal_known": false,
+        "junho_signal_route": "defer_until_repeat",
+        "ramp_unverified": true,
+        "entrance_watch_held": true,
+        "entrance_controlled": true,
+        "relation_conflict": true,
+        "full_stop_called": true,
+        "pump_result": "RELATION_CONFLICT",
+        "reporting_return_state": "suppressed",
+        "inspection_action": "sequence",
+        "inspection_pushback": "coordinated",
+        "inspection_result": "accepted_after_sequence",
+        "inspection_closed": true,
+        "report_basis": "timeline",
+        "report_result": "timeline_confirmed",
+        "tbm_gap_action": "change_control",
+        "tbm_gap_result": "changed_work_rebriefed",
+        "restart_action": "verify_controls",
+        "restart_result": "controlled_restart",
+        "stopwork_culture_action": "protect_process",
+        "stopwork_culture_result": "reporting_route_preserved",
+        "instruction_chain_action": "reconstruct_chain",
+        "instruction_chain_result": "conditional_phrase_restored",
+        "record_action": "preserve_timeline",
+        "record_result": "timeline_preserved",
+        "evening_field_note": true,
+        "psi_seed_day01": true,
+        "next_day.precheck": "standard",
+        "episode01_completed": true
+      },
+      "trace": [
+        {
+          "event": "e01_01_arrival",
+          "node": "arrival",
+          "type": "SHOW_RESULT",
+          "text": "06:27. 아직 해가 낮다. 게이트 안쪽에서는 자재차량과 출근 인원이 같은 길을 나눠 쓰고, 멀리서는 타워크레인 무전이 먼저 하루를 시작한다. 오늘은 첫 타설이 있는 날이다. 사고는 아직 없지만 현장은 이미 움직이고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "06:40. 강태식 반장이 TBM 보드 앞에서 작업순서를 훑는다. “오늘 타설 있습니다. 오전부터 조금 바쁠 겁니다. 책에서 본 것하고 현장은 조금 달라요. 이상한 게 있으면 사람 말부터 한번 들어보세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "player",
+          "type": "SHOW_DIALOGUE",
+          "text": "“위험요인만 읽고 끝내지 않겠습니다. 오늘 바뀐 작업, 작업자들이 걱정하는 것, 질문부터 확인하고 현장에 들어가겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "07:10. TBM이 끝나고 인력과 차량이 각 구역으로 흩어진다. 경사로에는 자재가 평소보다 조금 더 나와 있고, 철근차는 예상보다 일찍 도착했다. 펌프카 시간은 그대로다. 아직 사고는 없다. 하지만 서로 다른 작은 변화가 같은 동선에 모이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "펌프카 예약 밀리면 뒤 공정까지 같이 밀립니다. 다만 지금 순서만 잡고 끝내면 안 됩니다. 누가 어느 시각에 들어오는지 하나로 맞춰야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "통로 비우라면 비웁니다. 대신 사람 둘 빼면 하던 정리가 멈춥니다. 그 5분을 어디서 감당할지까지 정하고 말씀해 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "yoon",
+          "type": "SHOW_DIALOGUE",
+          "text": "철근차 세워두는 것도 선택입니다. 기사, 크레인, 우리 작업조가 같이 기다립니다. 하역 위치만 잡히면 우리는 바로 끝낼 수 있어요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "plan",
+          "type": "SHOW_CHOICE",
+          "text": "현장은 동시에 여러 곳에서 움직인다. 첫 순찰에서 무엇을 직접 붙잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "delegate_kang",
+            "negotiate_yoon",
+            "coordinate_schedule",
+            "follow_junho"
+          ],
+          "chosen": "follow_junho"
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "follow_junho_result",
+          "type": "SHOW_RESULT",
+          "text": "당신이 경사로로 방향을 틀자 임준호가 따라오며 다시 주변을 확인한다. 뒤에서는 '진입부 누가 잡습니까?'라는 무전이 두 번 들어온다. 90초가 짧게 느껴지지 않는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "signal",
+          "type": "SHOW_DIALOGUE",
+          "text": "08:05. 임준호가 무전기를 쥔 채 다가온다. “저… 아닐 수도 있는데요. 아까 차량 지나간 뒤 경사로 쪽 철판 끝이 전하고 조금 달라 보였습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "detail",
+          "type": "SHOW_DIALOGUE",
+          "text": "“자갈이 조금 밀렸고 철판 끝이 떠 보였습니다. 다시 보니까 확신은 없습니다. 괜히 제가 말해서 차 세우는 건가 싶어서요.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen",
+          "type": "SHOW_CHOICE",
+          "text": "확실하지 않은 신호 하나. 그냥 지나갈 수도 있고, 다음 위험의 시작일 수도 있다. 무엇을 먼저 사실로 만들까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "listen_more",
+            "crosscheck_minseok",
+            "dismiss"
+          ],
+          "chosen": "dismiss"
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "dismiss_result",
+          "type": "SHOW_RESULT",
+          "text": "당신은 진입부를 지킨다. 흐름은 끊기지 않는다. 대신 경사로의 불확실성은 '다시 움직이면 알려준다'는 한 문장에 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "09:10. 펌프카가 예정보다 빨리 현장 근처에 도착했다. 자재 정리는 끝나지 않았고 철근차도 아직 동선을 쓰고 있다. 이재훈은 타설시간을, 강태식은 작업흐름을, 임준호는 아침의 작은 변화를 보고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "ramp",
+          "type": "SHOW_CHOICE",
+          "text": "직접 확인하면 가장 정확하다. 대신 그 2분 동안 다른 곳은 누군가의 판단에 맡겨진다. 누구에게 무엇을 넘길까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "check_self",
+            "ask_minseok",
+            "keep_schedule"
+          ],
+          "chosen": "keep_schedule"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "keep_schedule_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "진입부 동선은 빠르게 정리된다. 이재훈이 시간을 다시 확인한다. 아직 경사로 자체는 눈으로 확인되지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "entrance",
+          "type": "SHOW_CHOICE",
+          "text": "09:18. 펌프카가 게이트 앞에서 속도를 줄인다. 차량을 들이기 전에 지금까지 만든 통제가 실제 현장에서도 닫혀 있는지 마지막으로 판단해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "assign_crew",
+            "request_delay",
+            "force_clear"
+          ],
+          "chosen": "force_clear"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "force_clear_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "다 멈췄습니다. 통로는 비워졌어요. 그런데 작업자들 표정 보셨죠? 다음 지시는 짧고 정확하게 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "relation_conflict",
+          "type": "SHOW_RESULT",
+          "text": "통로는 확보됐다. 차량도 안전하게 들어온다. 하지만 급한 전면정지 뒤 현장은 조용해졌다. 누구도 먼저 말을 보태지 않는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "relation_conflict_react",
+          "type": "SHOW_DIALOGUE",
+          "text": "통제는 맞았어요. 그런데 사람을 눌러서 조용해진 건지, 정리가 돼서 조용한 건지는 다음에 구분해야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pour",
+          "type": "SHOW_RESULT",
+          "text": "09:45. 펌프카 붐이 펼쳐지고 작업면이 다시 움직인다. 큰 사고는 없었다. 하지만 안전은 체크가 끝났다는 표시가 아니라 작업조건이 달라질 때마다 다시 확인해야 하는 상태라는 것이 분명해진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "타설 들어갑니다. 자바라 움직일 때 철근 위 발 디딜 자리 먼저 봐요. 아까 동선 정리한 거 지금부터가 진짜입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pressure",
+          "type": "SHOW_RESULT",
+          "text": "첫 콘크리트가 떨어진다. 계획표에서 한 줄이 진행되는 순간, 작업면에서는 호스·철근·사람·무전이 동시에 움직인다. 안전은 체크박스가 아니라 계속 갱신되는 상태가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "시간은 조금 변했어도 타설은 시작됐습니다. 오늘 결정한 것들, 끝나고 왜 그렇게 했는지 기록으로 남겨주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "after",
+          "type": "SHOW_RESULT",
+          "text": "콘크리트가 퍼지고 표면이 채워진다. 큰 사고는 없었다. 하지만 오늘의 차이는 '아무 일도 없었다'가 아니라, 어떤 신호를 듣고 무엇을 놓쳤는지가 남았다는 데 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "kang.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "형틀 쪽은 끝났습니다. 오늘은 지시가 자주 바뀌었어요. 다음에는 누가 최종으로 말하는지 먼저 정합시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "yoon.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "작업은 끝났습니다. 그런데 오늘은 우리가 왜 기다렸는지 끝까지 모르는 사람이 많았어요. 다음엔 이유까지 같이 맞춥시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "junho.high",
+          "type": "SHOW_DIALOGUE",
+          "text": "저… 오늘 아침에 말씀드릴까 말까 했는데요. 들어주셔서 감사합니다. 다음엔 더 빨리 얘기하겠습니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08a_reporting_return",
+          "node": "suppressed",
+          "type": "SHOW_RESULT",
+          "text": "임준호가 경사로 쪽을 한 번 보고도 입을 다문 채 지나간다. 아까 말을 꺼냈다가 끊긴 뒤로 먼저 이야기하지 않는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "inspection",
+          "type": "SHOW_DIALOGUE",
+          "text": "10:20. 고층 작업구역을 확인하던 서정민 감리가 단부 쪽을 가리킨다. “여기 난간이 완전히 이어지지 않았습니다. 바로 옆에서는 자재 이동도 하고 있고요. 이 상태를 조치완료라고 볼 수는 없습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 시계를 본다. “작업자만 안쪽으로 빼면 바로 보완할 수 있습니다. 다만 지금 전부 세우면 양중하고 뒤 작업까지 같이 밀립니다. 어디까지 멈출지 정해야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "action",
+          "type": "SHOW_CHOICE",
+          "text": "10:24. 위험은 눈앞에 있고 작업은 이미 움직이고 있다. 지금 무엇을 먼저 확정할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "inspection_full_stop",
+            "inspection_quick_photo",
+            "inspection_sequence_agreement"
+          ],
+          "chosen": "inspection_sequence_agreement"
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "sequence_result",
+          "type": "SHOW_RESULT",
+          "text": "서정민 감리가 시계를 보고 고개를 끄덕인다. 차량이 빠지는 시각과 재확인 시각이 정해졌다. 대신 세 팀이 같은 순서를 지켜야만 계획이 성립한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08c_site_pushback",
+          "node": "sequence",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 무전으로 순서를 다시 읽는다. “차량 빠지고 4분 뒤 통로팀 투입, 10분 뒤 재확인. 중간에 하나 밀리면 바로 다시 말해요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08d_reinspection",
+          "node": "sequence",
+          "type": "SHOW_DIALOGUE",
+          "text": "서정민 감리가 차량 이탈 시각과 정리 상태를 확인한다. “합의한 순서대로 됐네요. 이렇게 실제 상태와 말이 맞으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "gc",
+          "type": "SHOW_DIALOGUE",
+          "text": "오승재가 보고시계를 보며 말한다. “본사에 15분 안에 1차 경위 올려야 합니다. 통로 확보는 협력사 관리사항이었죠? 지금 확인된 것부터 먼저 주세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 철근차 우선이었고 중간에 펌프카 동선 먼저 보라고 바뀌었습니다. 그 시각은 제 통화기록에 있습니다. 협력사 관리 한 줄로 쓰면 앞뒤가 안 맞아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“나는 조회 때 들은 순서대로 했어요. 바뀐 얘기는 차가 들어온 다음에 들었습니다. 내 잘못 없다는 게 아니라, 언제 무슨 말을 들었는지는 맞춰야죠.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "report",
+          "type": "SHOW_CHOICE",
+          "text": "13:30. 같은 현장을 본 세 사람의 설명이 조금씩 다르다. 첫 기록을 누구의 주장도 아닌 사실로 만들려면 무엇부터 맞출까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "report_one_sided",
+            "report_defensive",
+            "report_verify_timeline"
+          ],
+          "chosen": "report_verify_timeline"
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "timeline_result",
+          "type": "SHOW_RESULT",
+          "text": "첫 보고는 몇 분 늦어진다. 대신 07:18, 07:27, 07:36의 기록이 한 화면에 놓인다. 누구의 말도 완전히 틀리지 않았고, 서로 다른 시점의 사실이 겹쳐 있었음이 보이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08f_report_return",
+          "node": "timeline",
+          "type": "SHOW_RESULT",
+          "text": "기록을 한 줄로 맞추자 조회 내용과 변경 지시, 전달 공백, 현장 조치가 순서대로 보인다. 결론은 한 사람의 실수가 아니라 ‘변경된 정보가 늦게 도착한 상태에서 통제가 겹친 것’으로 정리된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:20. 오전 작업중지 이후 작업순서가 바뀌었다. 아침 TBM 내용은 남아 있지만 오후 작업은 다른 조건으로 움직인다. 교육이 틀린 것이 아니라 현장이 달라졌다. 이제 변경된 기준을 다시 사람에게 연결해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“교육은 했고 서명도 있습니다. 그런데 지금 다시 세우면 반출 차량 두 대가 묶입니다. 오늘 작업이 바뀐 건 맞지만, 전부 처음부터 다시 할 수는 없잖아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“잠깐 열고 자재만 빼자는 얘기였습니다. 원상복구 안 한 건 문제지만, 사람들한테는 아침 내용보다 지금 순서가 더 중요해졌어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 건드리지 말라고 들었습니다. 오후에는 빼야 된다고 해서… 언제부터 다른 기준이 된 건지 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "tbm_action",
+          "type": "SHOW_CHOICE",
+          "text": "서류는 유효하지만 작업조건이 바뀌었다. 지금 무엇을 ‘기준’으로 다시 세울까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "tbm_form_first",
+            "tbm_worker_blame",
+            "tbm_change_control"
+          ],
+          "chosen": "tbm_change_control"
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "change_control_result",
+          "type": "SHOW_RESULT",
+          "text": "작업은 몇 분 멈춘다. 대신 ‘반출 때만 개방→감시자 배치→차량 이탈 즉시 복구’라는 오후 기준이 새로 생긴다. 아침 서류와 다른 실제 작업기준이 처음으로 말로 맞춰진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08h_tbm_return",
+          "node": "controlled",
+          "type": "SHOW_RESULT",
+          "text": "다음 반출 때 작업자가 먼저 “개방 조건 다시 맞나요?”라고 확인한다. 변경된 순서가 현장 언어로 남으면서 복구와 재개가 한 묶음으로 움직이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:03. 변경작업 재브리핑 뒤 11분이 지났다. 일부 작업자가 다시 자재를 움직인다. 무전에는 ‘재개하라고 했다’는 말이 돌지만, 누가 어떤 조건으로 말했는지는 사람마다 다르다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“공사팀에서 다시 진행하라고 들었습니다. 계속 세워두면 반출 끝나는 시간이 넘어갑니다. 저는 ‘복구됐으면 시작’으로 이해했어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말한 건 ‘복구 확인되면 다시 시작’입니다. 확인 없이 시작하라는 뜻은 아니었습니다. 지금은 빨리 조건만 닫으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희는 그냥 다시 시작한다고 들었습니다. 누가 확인하는지는 못 들었습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "restart_action",
+          "type": "SHOW_CHOICE",
+          "text": "재개는 필요하다. 하지만 ‘누가 말했다’와 ‘조건이 닫혔다’는 같은 말이 아니다. 무엇을 먼저 확인할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "restart_follow_verbal",
+            "restart_trace_instruction",
+            "restart_verify_controls"
+          ],
+          "chosen": "restart_verify_controls"
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "verify_controls_result",
+          "type": "SHOW_RESULT",
+          "text": "난간, 동선, 감시자 세 조건이 닫힌 뒤 재개시각이 한 번만 선언된다. 재개는 몇 분 늦지만 이후 지시가 한 줄로 정리된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08j_restart_return",
+          "node": "controlled",
+          "type": "SHOW_RESULT",
+          "text": "재개 전 세 조건과 최종 확인자를 맞춘 기록이 남는다. 이후 다른 팀이 들어와도 같은 재개 기준을 다시 읽을 수 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "15:20 쉬는 시간. 오전 작업중지와 재개는 끝났지만 사람들 사이에는 다른 문제가 남아 있다. 임준호가 지나가자 누군가 “저 친구가 말해서 오늘 일이 커졌다”고 낮게 말한다. 위험을 말한 사람이 다음에도 말할 수 있을지는 지금의 분위기에 달려 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“징계하려는 건 아닙니다. 오늘 밀린 물량 맞추려면 익숙한 사람끼리 붙이려는 겁니다. 배치까지 전부 위험보고랑 연결하면 반장도 사람 못 씁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말해서 바뀐 건 아니라고 하셔도… 다들 그렇게 생각하는 것 같습니다. 다음부터는 진짜 확실한 것만 말해야 할 것 같아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“보고 때문에 불이익 주면 안 되는 건 맞습니다. 다만 배치에는 숙련도, 물량, 팀 호흡도 있어요. 이유를 구분하지 않으면 또 다른 갈등이 생깁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "culture_action",
+          "type": "SHOW_CHOICE",
+          "text": "공식 규정, 반장의 배치권한, 작업자의 체감이 서로 다르다. 어디까지 개입할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "stopwork_ignore_social",
+            "stopwork_public_boundary",
+            "stopwork_protect_process"
+          ],
+          "chosen": "stopwork_protect_process"
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "protect_process_result",
+          "type": "SHOW_RESULT",
+          "text": "확인하는 데 시간이 걸린다. 대신 배치 이유 중 숙련도와 물량 요소, 보고와 연결될 수 있는 요소가 분리된다. 누구도 완전히 만족하지 않지만 다음 판단에 쓸 기준이 생긴다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08l_stopwork_return",
+          "node": "route",
+          "type": "SHOW_RESULT",
+          "text": "다음 이상신호가 나오자 임준호는 먼저 보고하고, 강태식은 배치문제와 별개로 받는다. 갈등이 사라진 것은 아니지만 ‘보고하면 바로 배치가 바뀐다’는 연결은 끊기기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:05. 공사팀 메모에는 ‘안전대 설치 확인 후 작업’이라고 적혀 있다. 반장 무전에는 ‘오늘 물량부터 빨리 마감’이 남아 있다. 작업자는 안전대 확인 조건을 들은 기억이 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“원지시는 분명합니다. 확인 후 작업이라고 했어요. 다만 시간이 밀려서 빨리 끝내달라고도 했습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저도 조건은 들었습니다. 조장한테 말할 때는 ‘안전대 걸고 빨리 하자’고 했고요. 그 뒤 말이 어떻게 갔는지는 정확히 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희가 들은 건 ‘오늘 물량부터 끝내라’였습니다. 안전대 얘기가 있었으면 누가 확인하는지도 같이 들었을 텐데요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "instruction_action",
+          "type": "SHOW_CHOICE",
+          "text": "원지시, 중간전달, 최종수신이 서로 다르다. 지금 어떤 수준에서 사건을 닫을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "instruction_accept_top",
+            "instruction_blame_worker",
+            "instruction_reconstruct_chain"
+          ],
+          "chosen": "instruction_reconstruct_chain"
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "reconstruct_result",
+          "type": "SHOW_RESULT",
+          "text": "네 사람이 같은 문장을 기억하지 않는다. 비교해보니 ‘안전대 설치 확인 후’는 반장 단계까지 있었고, 작업조 전달에서는 ‘빨리 마감’이 앞으로 나오면서 조건이 뒤로 사라졌다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08n_instruction_return",
+          "node": "reconstructed",
+          "type": "SHOW_RESULT",
+          "text": "사라진 조건이 어느 단계에서 빠졌는지 특정된다. 이후 지시는 ‘조건→확인자→작업’ 세 단위로 다시 읽어주는 방식으로 바뀐다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:42. 하루 동안 쌓인 작업중지, 재확인, 변경작업, TBM 재전파를 한 기록으로 묶는 시간이다. 현장은 정리되고 있지만 기록은 이제 시작이다. 빠르게 쓰는 것과 정확하게 남기는 것은 같은 일이 아니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "oh",
+          "type": "SHOW_DIALOGUE",
+          "text": "“지금 필요한 건 누가 잘못했는지 단정하는 문장이 아니라, 오늘 밤에도 설명 가능한 1차보고입니다. 너무 길면 늦고, 너무 짧으면 다시 물어옵니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침 TBM은 실제로 했습니다. 오후에 작업이 바뀐 것도 사실이고요. 두 기록이 서로 모순처럼 보이지 않게 시각과 변경내용을 붙여야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“현장 입장에서는 오후에 들은 말이 기준이었습니다. 아침 교육하고 오후 변경을 한 덩어리로 쓰면 우리가 언제 뭘 들었는지 또 헷갈립니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "record_action",
+          "type": "SHOW_CHOICE",
+          "text": "퇴근 전 25분. 속도·문서 일관성·시간순 사실 중 무엇을 보고서의 뼈대로 잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "record_minimize_scope",
+            "record_retrofit_paper",
+            "record_preserve_timeline"
+          ],
+          "chosen": "record_preserve_timeline"
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "timeline_result",
+          "type": "SHOW_RESULT",
+          "text": "보고는 몇 분 늦어진다. 그러나 07:18부터 16:24까지 사실과 판단이 분리된 한 줄의 시간이 생긴다. 누군가 다시 물어도 같은 순서로 설명할 수 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08p_record_return",
+          "node": "preserved",
+          "type": "SHOW_RESULT",
+          "text": "시간순서와 증거가 같은 축에 놓여 있어 추가 질문이 짧게 끝난다. 대신 작성에 쓴 시간만큼 퇴근은 늦어졌다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "evening",
+          "type": "SHOW_CHOICE",
+          "text": "17:18. 해가 내려가고 현장 소음이 줄어든다. 오늘은 사고 없이 끝났지만 ‘아무 일도 없었다’고만 남기기에는 많은 신호와 판단이 있었다. 내일을 위해 무엇을 남길까?",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "rest",
+            "family",
+            "study",
+            "field_note"
+          ],
+          "chosen": "field_note"
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "field_note",
+          "type": "SHOW_RESULT",
+          "text": "다섯 줄을 남긴다. ① 처음 본 신호 ② 내가 먼저 선택한 것 ③ 그 때문에 놓친 것 ④ 나중에 돌아온 결과 ⑤ 내일 가장 먼저 확인할 것. 오늘은 정답보다 연결이 남았다.",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_standard",
+          "type": "SHOW_RESULT",
+          "text": "어제의 기억에 끌려가지 않고 현재 상태부터 다시 본다. 대신 어제와 달라진 지점은 스스로 연결해야 한다.",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        }
+      ]
+    },
+    {
+      "policy": "listen",
+      "phase": "complete",
+      "completed": 26,
+      "total": 26,
+      "steps": 80,
+      "choices": 13,
+      "readSteps": 67,
+      "events": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_05_command",
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions",
+        "e01_08a_reporting_return",
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection",
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return",
+        "e01_08m_instruction_cascade",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return",
+        "e01_09_evening",
+        "e01_10_next_day_tease"
+      ],
+      "flags": {
+        "followed_junho": true,
+        "junho_opened_up": true,
+        "ramp_signal_known": true,
+        "junho_signal_route": "direct_follow",
+        "ramp_verified": true,
+        "minseok_checked_ramp": true,
+        "entrance_controlled": true,
+        "pump_result": "BEST_CONTROL",
+        "reporting_return_state": "reinforced",
+        "growth.lim_junho": "focused",
+        "training.lim_junho.reporting": true,
+        "inventory.lim_junho.item.site_radio": true,
+        "equipment.lim_junho.communication": "item.site_radio",
+        "inspection_action": "sequence",
+        "inspection_pushback": "coordinated",
+        "inspection_result": "accepted_after_sequence",
+        "inspection_closed": true,
+        "report_basis": "timeline",
+        "report_result": "timeline_confirmed",
+        "tbm_gap_action": "change_control",
+        "tbm_gap_result": "changed_work_rebriefed",
+        "restart_action": "verify_controls",
+        "restart_result": "controlled_restart",
+        "stopwork_culture_action": "protect_process",
+        "stopwork_culture_result": "reporting_route_preserved",
+        "instruction_chain_action": "reconstruct_chain",
+        "instruction_chain_result": "conditional_phrase_restored",
+        "record_action": "preserve_timeline",
+        "record_result": "timeline_preserved",
+        "evening_field_note": true,
+        "psi_seed_day01": true,
+        "next_day.precheck": "standard",
+        "episode01_completed": true
+      },
+      "trace": [
+        {
+          "event": "e01_01_arrival",
+          "node": "arrival",
+          "type": "SHOW_RESULT",
+          "text": "06:27. 아직 해가 낮다. 게이트 안쪽에서는 자재차량과 출근 인원이 같은 길을 나눠 쓰고, 멀리서는 타워크레인 무전이 먼저 하루를 시작한다. 오늘은 첫 타설이 있는 날이다. 사고는 아직 없지만 현장은 이미 움직이고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "06:40. 강태식 반장이 TBM 보드 앞에서 작업순서를 훑는다. “오늘 타설 있습니다. 오전부터 조금 바쁠 겁니다. 책에서 본 것하고 현장은 조금 달라요. 이상한 게 있으면 사람 말부터 한번 들어보세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "player",
+          "type": "SHOW_DIALOGUE",
+          "text": "“위험요인만 읽고 끝내지 않겠습니다. 오늘 바뀐 작업, 작업자들이 걱정하는 것, 질문부터 확인하고 현장에 들어가겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "07:10. TBM이 끝나고 인력과 차량이 각 구역으로 흩어진다. 경사로에는 자재가 평소보다 조금 더 나와 있고, 철근차는 예상보다 일찍 도착했다. 펌프카 시간은 그대로다. 아직 사고는 없다. 하지만 서로 다른 작은 변화가 같은 동선에 모이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "펌프카 예약 밀리면 뒤 공정까지 같이 밀립니다. 다만 지금 순서만 잡고 끝내면 안 됩니다. 누가 어느 시각에 들어오는지 하나로 맞춰야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "통로 비우라면 비웁니다. 대신 사람 둘 빼면 하던 정리가 멈춥니다. 그 5분을 어디서 감당할지까지 정하고 말씀해 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "yoon",
+          "type": "SHOW_DIALOGUE",
+          "text": "철근차 세워두는 것도 선택입니다. 기사, 크레인, 우리 작업조가 같이 기다립니다. 하역 위치만 잡히면 우리는 바로 끝낼 수 있어요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "plan",
+          "type": "SHOW_CHOICE",
+          "text": "현장은 동시에 여러 곳에서 움직인다. 첫 순찰에서 무엇을 직접 붙잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "delegate_kang",
+            "negotiate_yoon",
+            "coordinate_schedule",
+            "follow_junho"
+          ],
+          "chosen": "follow_junho"
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "follow_junho_result",
+          "type": "SHOW_RESULT",
+          "text": "당신이 경사로로 방향을 틀자 임준호가 따라오며 다시 주변을 확인한다. 뒤에서는 '진입부 누가 잡습니까?'라는 무전이 두 번 들어온다. 90초가 짧게 느껴지지 않는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "signal",
+          "type": "SHOW_DIALOGUE",
+          "text": "08:05. 임준호가 무전기를 쥔 채 다가온다. “저… 아닐 수도 있는데요. 아까 차량 지나간 뒤 경사로 쪽 철판 끝이 전하고 조금 달라 보였습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "detail",
+          "type": "SHOW_DIALOGUE",
+          "text": "“자갈이 조금 밀렸고 철판 끝이 떠 보였습니다. 다시 보니까 확신은 없습니다. 괜히 제가 말해서 차 세우는 건가 싶어서요.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen",
+          "type": "SHOW_CHOICE",
+          "text": "확실하지 않은 신호 하나. 그냥 지나갈 수도 있고, 다음 위험의 시작일 수도 있다. 무엇을 먼저 사실로 만들까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "listen_more",
+            "crosscheck_minseok",
+            "dismiss"
+          ],
+          "chosen": "listen_more"
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen_more_result",
+          "type": "SHOW_RESULT",
+          "text": "경사로 끝에서 작은 자갈 이동과 철판 단차가 보인다. 위험의 크기는 아직 단정할 수 없다. 다만 '아까와 같다'는 임준호의 설명이 구체적으로 바뀐다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "09:10. 펌프카가 예정보다 빨리 현장 근처에 도착했다. 자재 정리는 끝나지 않았고 철근차도 아직 동선을 쓰고 있다. 이재훈은 타설시간을, 강태식은 작업흐름을, 임준호는 아침의 작은 변화를 보고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "ramp",
+          "type": "SHOW_CHOICE",
+          "text": "직접 확인하면 가장 정확하다. 대신 그 2분 동안 다른 곳은 누군가의 판단에 맡겨진다. 누구에게 무엇을 넘길까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "check_self",
+            "ask_minseok",
+            "keep_schedule"
+          ],
+          "chosen": "ask_minseok"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "ask_minseok_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "사진 보냈습니다. 철판 끝하고 노면 흔적 같이 찍었습니다. 제가 여기 서서 차량 들어오기 전까지 계속 볼게요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "entrance",
+          "type": "SHOW_CHOICE",
+          "text": "09:18. 펌프카가 게이트 앞에서 속도를 줄인다. 차량을 들이기 전에 지금까지 만든 통제가 실제 현장에서도 닫혀 있는지 마지막으로 판단해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "assign_crew",
+            "request_delay",
+            "force_clear"
+          ],
+          "chosen": "assign_crew"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "assign_crew_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "오케이, 형틀 쪽 두 명 빼겠습니다. 대신 지시 바뀌면 한 사람 통해서만 주세요. 여기저기서 말 나오면 더 꼬입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "best_control",
+          "type": "SHOW_RESULT",
+          "text": "진입 직전, 경사로 확인과 통로 통제가 같은 시점에 닫힌다. 펌프카는 한 번에 방향을 잡고 들어온다. 눈에 띄는 사고 장면은 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "best_control_react",
+          "type": "SHOW_DIALOGUE",
+          "text": "아까 말씀드린 게 괜히 일을 크게 만든 건 아니었네요. 다음에 이상한 거 보이면… 바로 말씀드리겠습니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pour",
+          "type": "SHOW_RESULT",
+          "text": "09:45. 펌프카 붐이 펼쳐지고 작업면이 다시 움직인다. 큰 사고는 없었다. 하지만 안전은 체크가 끝났다는 표시가 아니라 작업조건이 달라질 때마다 다시 확인해야 하는 상태라는 것이 분명해진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "타설 들어갑니다. 자바라 움직일 때 철근 위 발 디딜 자리 먼저 봐요. 아까 동선 정리한 거 지금부터가 진짜입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pressure",
+          "type": "SHOW_RESULT",
+          "text": "첫 콘크리트가 떨어진다. 계획표에서 한 줄이 진행되는 순간, 작업면에서는 호스·철근·사람·무전이 동시에 움직인다. 안전은 체크박스가 아니라 계속 갱신되는 상태가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "시간은 조금 변했어도 타설은 시작됐습니다. 오늘 결정한 것들, 끝나고 왜 그렇게 했는지 기록으로 남겨주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "after",
+          "type": "SHOW_RESULT",
+          "text": "콘크리트가 퍼지고 표면이 채워진다. 큰 사고는 없었다. 하지만 오늘의 차이는 '아무 일도 없었다'가 아니라, 어떤 신호를 듣고 무엇을 놓쳤는지가 남았다는 데 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "kang.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "형틀 쪽은 끝났습니다. 오늘은 지시가 자주 바뀌었어요. 다음에는 누가 최종으로 말하는지 먼저 정합시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "yoon.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "작업은 끝났습니다. 그런데 오늘은 우리가 왜 기다렸는지 끝까지 모르는 사람이 많았어요. 다음엔 이유까지 같이 맞춥시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "junho.high",
+          "type": "SHOW_DIALOGUE",
+          "text": "저… 오늘 아침에 말씀드릴까 말까 했는데요. 들어주셔서 감사합니다. 다음엔 더 빨리 얘기하겠습니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08a_reporting_return",
+          "node": "reinforced",
+          "type": "SHOW_RESULT",
+          "text": "임준호가 먼저 다가온다. ‘아까처럼 이상한 게 보이면 다음에는 바로 말씀드리겠습니다.’ 한 번 들어준 일이 다음 보고를 만든다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "inspection",
+          "type": "SHOW_DIALOGUE",
+          "text": "10:20. 고층 작업구역을 확인하던 서정민 감리가 단부 쪽을 가리킨다. “여기 난간이 완전히 이어지지 않았습니다. 바로 옆에서는 자재 이동도 하고 있고요. 이 상태를 조치완료라고 볼 수는 없습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 시계를 본다. “작업자만 안쪽으로 빼면 바로 보완할 수 있습니다. 다만 지금 전부 세우면 양중하고 뒤 작업까지 같이 밀립니다. 어디까지 멈출지 정해야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "action",
+          "type": "SHOW_CHOICE",
+          "text": "10:24. 위험은 눈앞에 있고 작업은 이미 움직이고 있다. 지금 무엇을 먼저 확정할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "inspection_full_stop",
+            "inspection_quick_photo",
+            "inspection_sequence_agreement"
+          ],
+          "chosen": "inspection_sequence_agreement"
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "sequence_result",
+          "type": "SHOW_RESULT",
+          "text": "서정민 감리가 시계를 보고 고개를 끄덕인다. 차량이 빠지는 시각과 재확인 시각이 정해졌다. 대신 세 팀이 같은 순서를 지켜야만 계획이 성립한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08c_site_pushback",
+          "node": "sequence",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 무전으로 순서를 다시 읽는다. “차량 빠지고 4분 뒤 통로팀 투입, 10분 뒤 재확인. 중간에 하나 밀리면 바로 다시 말해요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08d_reinspection",
+          "node": "sequence",
+          "type": "SHOW_DIALOGUE",
+          "text": "서정민 감리가 차량 이탈 시각과 정리 상태를 확인한다. “합의한 순서대로 됐네요. 이렇게 실제 상태와 말이 맞으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "gc",
+          "type": "SHOW_DIALOGUE",
+          "text": "오승재가 보고시계를 보며 말한다. “본사에 15분 안에 1차 경위 올려야 합니다. 통로 확보는 협력사 관리사항이었죠? 지금 확인된 것부터 먼저 주세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 철근차 우선이었고 중간에 펌프카 동선 먼저 보라고 바뀌었습니다. 그 시각은 제 통화기록에 있습니다. 협력사 관리 한 줄로 쓰면 앞뒤가 안 맞아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“나는 조회 때 들은 순서대로 했어요. 바뀐 얘기는 차가 들어온 다음에 들었습니다. 내 잘못 없다는 게 아니라, 언제 무슨 말을 들었는지는 맞춰야죠.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "report",
+          "type": "SHOW_CHOICE",
+          "text": "13:30. 같은 현장을 본 세 사람의 설명이 조금씩 다르다. 첫 기록을 누구의 주장도 아닌 사실로 만들려면 무엇부터 맞출까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "report_one_sided",
+            "report_defensive",
+            "report_verify_timeline"
+          ],
+          "chosen": "report_verify_timeline"
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "timeline_result",
+          "type": "SHOW_RESULT",
+          "text": "첫 보고는 몇 분 늦어진다. 대신 07:18, 07:27, 07:36의 기록이 한 화면에 놓인다. 누구의 말도 완전히 틀리지 않았고, 서로 다른 시점의 사실이 겹쳐 있었음이 보이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08f_report_return",
+          "node": "timeline",
+          "type": "SHOW_RESULT",
+          "text": "기록을 한 줄로 맞추자 조회 내용과 변경 지시, 전달 공백, 현장 조치가 순서대로 보인다. 결론은 한 사람의 실수가 아니라 ‘변경된 정보가 늦게 도착한 상태에서 통제가 겹친 것’으로 정리된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:20. 오전 작업중지 이후 작업순서가 바뀌었다. 아침 TBM 내용은 남아 있지만 오후 작업은 다른 조건으로 움직인다. 교육이 틀린 것이 아니라 현장이 달라졌다. 이제 변경된 기준을 다시 사람에게 연결해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“교육은 했고 서명도 있습니다. 그런데 지금 다시 세우면 반출 차량 두 대가 묶입니다. 오늘 작업이 바뀐 건 맞지만, 전부 처음부터 다시 할 수는 없잖아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“잠깐 열고 자재만 빼자는 얘기였습니다. 원상복구 안 한 건 문제지만, 사람들한테는 아침 내용보다 지금 순서가 더 중요해졌어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 건드리지 말라고 들었습니다. 오후에는 빼야 된다고 해서… 언제부터 다른 기준이 된 건지 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "tbm_action",
+          "type": "SHOW_CHOICE",
+          "text": "서류는 유효하지만 작업조건이 바뀌었다. 지금 무엇을 ‘기준’으로 다시 세울까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "tbm_form_first",
+            "tbm_worker_blame",
+            "tbm_change_control"
+          ],
+          "chosen": "tbm_change_control"
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "change_control_result",
+          "type": "SHOW_RESULT",
+          "text": "작업은 몇 분 멈춘다. 대신 ‘반출 때만 개방→감시자 배치→차량 이탈 즉시 복구’라는 오후 기준이 새로 생긴다. 아침 서류와 다른 실제 작업기준이 처음으로 말로 맞춰진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08h_tbm_return",
+          "node": "controlled",
+          "type": "SHOW_RESULT",
+          "text": "다음 반출 때 작업자가 먼저 “개방 조건 다시 맞나요?”라고 확인한다. 변경된 순서가 현장 언어로 남으면서 복구와 재개가 한 묶음으로 움직이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:03. 변경작업 재브리핑 뒤 11분이 지났다. 일부 작업자가 다시 자재를 움직인다. 무전에는 ‘재개하라고 했다’는 말이 돌지만, 누가 어떤 조건으로 말했는지는 사람마다 다르다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“공사팀에서 다시 진행하라고 들었습니다. 계속 세워두면 반출 끝나는 시간이 넘어갑니다. 저는 ‘복구됐으면 시작’으로 이해했어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말한 건 ‘복구 확인되면 다시 시작’입니다. 확인 없이 시작하라는 뜻은 아니었습니다. 지금은 빨리 조건만 닫으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희는 그냥 다시 시작한다고 들었습니다. 누가 확인하는지는 못 들었습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "restart_action",
+          "type": "SHOW_CHOICE",
+          "text": "재개는 필요하다. 하지만 ‘누가 말했다’와 ‘조건이 닫혔다’는 같은 말이 아니다. 무엇을 먼저 확인할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "restart_follow_verbal",
+            "restart_trace_instruction",
+            "restart_verify_controls"
+          ],
+          "chosen": "restart_verify_controls"
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "verify_controls_result",
+          "type": "SHOW_RESULT",
+          "text": "난간, 동선, 감시자 세 조건이 닫힌 뒤 재개시각이 한 번만 선언된다. 재개는 몇 분 늦지만 이후 지시가 한 줄로 정리된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08j_restart_return",
+          "node": "controlled",
+          "type": "SHOW_RESULT",
+          "text": "재개 전 세 조건과 최종 확인자를 맞춘 기록이 남는다. 이후 다른 팀이 들어와도 같은 재개 기준을 다시 읽을 수 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "15:20 쉬는 시간. 오전 작업중지와 재개는 끝났지만 사람들 사이에는 다른 문제가 남아 있다. 임준호가 지나가자 누군가 “저 친구가 말해서 오늘 일이 커졌다”고 낮게 말한다. 위험을 말한 사람이 다음에도 말할 수 있을지는 지금의 분위기에 달려 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“징계하려는 건 아닙니다. 오늘 밀린 물량 맞추려면 익숙한 사람끼리 붙이려는 겁니다. 배치까지 전부 위험보고랑 연결하면 반장도 사람 못 씁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말해서 바뀐 건 아니라고 하셔도… 다들 그렇게 생각하는 것 같습니다. 다음부터는 진짜 확실한 것만 말해야 할 것 같아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“보고 때문에 불이익 주면 안 되는 건 맞습니다. 다만 배치에는 숙련도, 물량, 팀 호흡도 있어요. 이유를 구분하지 않으면 또 다른 갈등이 생깁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "culture_action",
+          "type": "SHOW_CHOICE",
+          "text": "공식 규정, 반장의 배치권한, 작업자의 체감이 서로 다르다. 어디까지 개입할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "stopwork_ignore_social",
+            "stopwork_public_boundary",
+            "stopwork_protect_process"
+          ],
+          "chosen": "stopwork_protect_process"
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "protect_process_result",
+          "type": "SHOW_RESULT",
+          "text": "확인하는 데 시간이 걸린다. 대신 배치 이유 중 숙련도와 물량 요소, 보고와 연결될 수 있는 요소가 분리된다. 누구도 완전히 만족하지 않지만 다음 판단에 쓸 기준이 생긴다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08l_stopwork_return",
+          "node": "route",
+          "type": "SHOW_RESULT",
+          "text": "다음 이상신호가 나오자 임준호는 먼저 보고하고, 강태식은 배치문제와 별개로 받는다. 갈등이 사라진 것은 아니지만 ‘보고하면 바로 배치가 바뀐다’는 연결은 끊기기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:05. 공사팀 메모에는 ‘안전대 설치 확인 후 작업’이라고 적혀 있다. 반장 무전에는 ‘오늘 물량부터 빨리 마감’이 남아 있다. 작업자는 안전대 확인 조건을 들은 기억이 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“원지시는 분명합니다. 확인 후 작업이라고 했어요. 다만 시간이 밀려서 빨리 끝내달라고도 했습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저도 조건은 들었습니다. 조장한테 말할 때는 ‘안전대 걸고 빨리 하자’고 했고요. 그 뒤 말이 어떻게 갔는지는 정확히 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희가 들은 건 ‘오늘 물량부터 끝내라’였습니다. 안전대 얘기가 있었으면 누가 확인하는지도 같이 들었을 텐데요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "instruction_action",
+          "type": "SHOW_CHOICE",
+          "text": "원지시, 중간전달, 최종수신이 서로 다르다. 지금 어떤 수준에서 사건을 닫을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "instruction_accept_top",
+            "instruction_blame_worker",
+            "instruction_reconstruct_chain"
+          ],
+          "chosen": "instruction_reconstruct_chain"
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "reconstruct_result",
+          "type": "SHOW_RESULT",
+          "text": "네 사람이 같은 문장을 기억하지 않는다. 비교해보니 ‘안전대 설치 확인 후’는 반장 단계까지 있었고, 작업조 전달에서는 ‘빨리 마감’이 앞으로 나오면서 조건이 뒤로 사라졌다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08n_instruction_return",
+          "node": "reconstructed",
+          "type": "SHOW_RESULT",
+          "text": "사라진 조건이 어느 단계에서 빠졌는지 특정된다. 이후 지시는 ‘조건→확인자→작업’ 세 단위로 다시 읽어주는 방식으로 바뀐다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:42. 하루 동안 쌓인 작업중지, 재확인, 변경작업, TBM 재전파를 한 기록으로 묶는 시간이다. 현장은 정리되고 있지만 기록은 이제 시작이다. 빠르게 쓰는 것과 정확하게 남기는 것은 같은 일이 아니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "oh",
+          "type": "SHOW_DIALOGUE",
+          "text": "“지금 필요한 건 누가 잘못했는지 단정하는 문장이 아니라, 오늘 밤에도 설명 가능한 1차보고입니다. 너무 길면 늦고, 너무 짧으면 다시 물어옵니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침 TBM은 실제로 했습니다. 오후에 작업이 바뀐 것도 사실이고요. 두 기록이 서로 모순처럼 보이지 않게 시각과 변경내용을 붙여야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“현장 입장에서는 오후에 들은 말이 기준이었습니다. 아침 교육하고 오후 변경을 한 덩어리로 쓰면 우리가 언제 뭘 들었는지 또 헷갈립니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "record_action",
+          "type": "SHOW_CHOICE",
+          "text": "퇴근 전 25분. 속도·문서 일관성·시간순 사실 중 무엇을 보고서의 뼈대로 잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "record_minimize_scope",
+            "record_retrofit_paper",
+            "record_preserve_timeline"
+          ],
+          "chosen": "record_preserve_timeline"
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "timeline_result",
+          "type": "SHOW_RESULT",
+          "text": "보고는 몇 분 늦어진다. 그러나 07:18부터 16:24까지 사실과 판단이 분리된 한 줄의 시간이 생긴다. 누군가 다시 물어도 같은 순서로 설명할 수 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08p_record_return",
+          "node": "preserved",
+          "type": "SHOW_RESULT",
+          "text": "시간순서와 증거가 같은 축에 놓여 있어 추가 질문이 짧게 끝난다. 대신 작성에 쓴 시간만큼 퇴근은 늦어졌다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "evening",
+          "type": "SHOW_CHOICE",
+          "text": "17:18. 해가 내려가고 현장 소음이 줄어든다. 오늘은 사고 없이 끝났지만 ‘아무 일도 없었다’고만 남기기에는 많은 신호와 판단이 있었다. 내일을 위해 무엇을 남길까?",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "rest",
+            "family",
+            "study",
+            "field_note"
+          ],
+          "chosen": "field_note"
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "field_note",
+          "type": "SHOW_RESULT",
+          "text": "다섯 줄을 남긴다. ① 처음 본 신호 ② 내가 먼저 선택한 것 ③ 그 때문에 놓친 것 ④ 나중에 돌아온 결과 ⑤ 내일 가장 먼저 확인할 것. 오늘은 정답보다 연결이 남았다.",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_action",
+          "type": "SHOW_CHOICE",
+          "text": "06:52. 어제 남은 흔적을 오늘 어디부터 확인하시겠습니까?",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "next_day_standard_check",
+            "next_day_radio_checkin"
+          ],
+          "chosen": "next_day_standard_check"
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_standard",
+          "type": "SHOW_RESULT",
+          "text": "어제의 기억에 끌려가지 않고 현재 상태부터 다시 본다. 대신 어제와 달라진 지점은 스스로 연결해야 한다.",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        }
+      ]
+    },
+    {
+      "policy": "schedule",
+      "phase": "complete",
+      "completed": 26,
+      "total": 26,
+      "steps": 80,
+      "choices": 12,
+      "readSteps": 68,
+      "events": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_05_command",
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions",
+        "e01_08a_reporting_return",
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection",
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return",
+        "e01_08m_instruction_cascade",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return",
+        "e01_09_evening",
+        "e01_10_next_day_tease"
+      ],
+      "flags": {
+        "schedule_first": true,
+        "junho_opened_up": false,
+        "ramp_signal_known": false,
+        "junho_signal_route": "defer_until_repeat",
+        "ramp_unverified": true,
+        "entrance_watch_held": true,
+        "entrance_controlled": true,
+        "relation_conflict": true,
+        "full_stop_called": true,
+        "pump_result": "RELATION_CONFLICT",
+        "reporting_return_state": "missed",
+        "inspection_action": "quick_photo",
+        "inspection_pushback": "move_on",
+        "inspection_result": "rework_after_reinspection",
+        "inspection_closed": true,
+        "report_basis": "one_sided",
+        "report_result": "correction_required",
+        "tbm_gap_action": "form_first",
+        "tbm_gap_result": "paper_field_gap_remains",
+        "restart_action": "follow_verbal",
+        "restart_result": "premature_restart_second_stop",
+        "stopwork_culture_action": "ignore_social",
+        "stopwork_culture_result": "reporting_silenced",
+        "instruction_chain_action": "accept_top",
+        "instruction_chain_result": "condition_loss_unresolved",
+        "record_action": "minimize_scope",
+        "record_result": "supplement_requested",
+        "evening_family": true,
+        "next_day.precheck": "standard",
+        "episode01_completed": true
+      },
+      "trace": [
+        {
+          "event": "e01_01_arrival",
+          "node": "arrival",
+          "type": "SHOW_RESULT",
+          "text": "06:27. 아직 해가 낮다. 게이트 안쪽에서는 자재차량과 출근 인원이 같은 길을 나눠 쓰고, 멀리서는 타워크레인 무전이 먼저 하루를 시작한다. 오늘은 첫 타설이 있는 날이다. 사고는 아직 없지만 현장은 이미 움직이고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "06:40. 강태식 반장이 TBM 보드 앞에서 작업순서를 훑는다. “오늘 타설 있습니다. 오전부터 조금 바쁠 겁니다. 책에서 본 것하고 현장은 조금 달라요. 이상한 게 있으면 사람 말부터 한번 들어보세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_02_meet_kang",
+          "node": "player",
+          "type": "SHOW_DIALOGUE",
+          "text": "“위험요인만 읽고 끝내지 않겠습니다. 오늘 바뀐 작업, 작업자들이 걱정하는 것, 질문부터 확인하고 현장에 들어가겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "07:10. TBM이 끝나고 인력과 차량이 각 구역으로 흩어진다. 경사로에는 자재가 평소보다 조금 더 나와 있고, 철근차는 예상보다 일찍 도착했다. 펌프카 시간은 그대로다. 아직 사고는 없다. 하지만 서로 다른 작은 변화가 같은 동선에 모이기 시작한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "펌프카 예약 밀리면 뒤 공정까지 같이 밀립니다. 다만 지금 순서만 잡고 끝내면 안 됩니다. 누가 어느 시각에 들어오는지 하나로 맞춰야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "통로 비우라면 비웁니다. 대신 사람 둘 빼면 하던 정리가 멈춥니다. 그 5분을 어디서 감당할지까지 정하고 말씀해 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "yoon",
+          "type": "SHOW_DIALOGUE",
+          "text": "철근차 세워두는 것도 선택입니다. 기사, 크레인, 우리 작업조가 같이 기다립니다. 하역 위치만 잡히면 우리는 바로 끝낼 수 있어요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "plan",
+          "type": "SHOW_CHOICE",
+          "text": "현장은 동시에 여러 곳에서 움직인다. 첫 순찰에서 무엇을 직접 붙잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "delegate_kang",
+            "negotiate_yoon",
+            "coordinate_schedule",
+            "follow_junho"
+          ],
+          "chosen": "coordinate_schedule"
+        },
+        {
+          "event": "e01_03_plan_breaks",
+          "node": "coordinate_schedule_result",
+          "type": "SHOW_RESULT",
+          "text": "펌프카·철근차 진입순서가 한 줄로 정리된다. 모두가 같은 시각표를 본다. 대신 그 시각표에 적히지 않은 작은 이상은 누군가 다시 말하지 않으면 우선순위 밖으로 밀린다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "signal",
+          "type": "SHOW_DIALOGUE",
+          "text": "08:05. 임준호가 무전기를 쥔 채 다가온다. “저… 아닐 수도 있는데요. 아까 차량 지나간 뒤 경사로 쪽 철판 끝이 전하고 조금 달라 보였습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "detail",
+          "type": "SHOW_DIALOGUE",
+          "text": "“자갈이 조금 밀렸고 철판 끝이 떠 보였습니다. 다시 보니까 확신은 없습니다. 괜히 제가 말해서 차 세우는 건가 싶어서요.”",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "listen",
+          "type": "SHOW_CHOICE",
+          "text": "확실하지 않은 신호 하나. 그냥 지나갈 수도 있고, 다음 위험의 시작일 수도 있다. 무엇을 먼저 사실로 만들까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "listen_more",
+            "crosscheck_minseok",
+            "dismiss"
+          ],
+          "chosen": "dismiss"
+        },
+        {
+          "event": "e01_04_junho_signal",
+          "node": "dismiss_result",
+          "type": "SHOW_RESULT",
+          "text": "당신은 진입부를 지킨다. 흐름은 끊기지 않는다. 대신 경사로의 불확실성은 '다시 움직이면 알려준다'는 한 문장에 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "09:10. 펌프카가 예정보다 빨리 현장 근처에 도착했다. 자재 정리는 끝나지 않았고 철근차도 아직 동선을 쓰고 있다. 이재훈은 타설시간을, 강태식은 작업흐름을, 임준호는 아침의 작은 변화를 보고 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "ramp",
+          "type": "SHOW_CHOICE",
+          "text": "직접 확인하면 가장 정확하다. 대신 그 2분 동안 다른 곳은 누군가의 판단에 맡겨진다. 누구에게 무엇을 넘길까?",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "check_self",
+            "ask_minseok",
+            "keep_schedule"
+          ],
+          "chosen": "keep_schedule"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "keep_schedule_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "진입부 동선은 빠르게 정리된다. 이재훈이 시간을 다시 확인한다. 아직 경사로 자체는 눈으로 확인되지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_05_command",
+          "node": "entrance",
+          "type": "SHOW_CHOICE",
+          "text": "09:18. 펌프카가 게이트 앞에서 속도를 줄인다. 차량을 들이기 전에 지금까지 만든 통제가 실제 현장에서도 닫혀 있는지 마지막으로 판단해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "assign_crew",
+            "request_delay",
+            "force_clear"
+          ],
+          "chosen": "force_clear"
+        },
+        {
+          "event": "e01_05_command",
+          "node": "force_clear_result",
+          "type": "SHOW_DIALOGUE",
+          "text": "다 멈췄습니다. 통로는 비워졌어요. 그런데 작업자들 표정 보셨죠? 다음 지시는 짧고 정확하게 주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "relation_conflict",
+          "type": "SHOW_RESULT",
+          "text": "통로는 확보됐다. 차량도 안전하게 들어온다. 하지만 급한 전면정지 뒤 현장은 조용해졌다. 누구도 먼저 말을 보태지 않는다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_06_pump_arrival",
+          "node": "relation_conflict_react",
+          "type": "SHOW_DIALOGUE",
+          "text": "통제는 맞았어요. 그런데 사람을 눌러서 조용해진 건지, 정리가 돼서 조용한 건지는 다음에 구분해야 합니다.",
+          "clock": {
+            "day": 1,
+            "slot": "MORNING"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pour",
+          "type": "SHOW_RESULT",
+          "text": "09:45. 펌프카 붐이 펼쳐지고 작업면이 다시 움직인다. 큰 사고는 없었다. 하지만 안전은 체크가 끝났다는 표시가 아니라 작업조건이 달라질 때마다 다시 확인해야 하는 상태라는 것이 분명해진다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "타설 들어갑니다. 자바라 움직일 때 철근 위 발 디딜 자리 먼저 봐요. 아까 동선 정리한 거 지금부터가 진짜입니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "pressure",
+          "type": "SHOW_RESULT",
+          "text": "첫 콘크리트가 떨어진다. 계획표에서 한 줄이 진행되는 순간, 작업면에서는 호스·철근·사람·무전이 동시에 움직인다. 안전은 체크박스가 아니라 계속 갱신되는 상태가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "시간은 조금 변했어도 타설은 시작됐습니다. 오늘 결정한 것들, 끝나고 왜 그렇게 했는지 기록으로 남겨주세요.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_07_first_pour",
+          "node": "after",
+          "type": "SHOW_RESULT",
+          "text": "콘크리트가 퍼지고 표면이 채워진다. 큰 사고는 없었다. 하지만 오늘의 차이는 '아무 일도 없었다'가 아니라, 어떤 신호를 듣고 무엇을 놓쳤는지가 남았다는 데 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "kang.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "형틀 쪽은 끝났습니다. 오늘은 지시가 자주 바뀌었어요. 다음에는 누가 최종으로 말하는지 먼저 정합시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "yoon.low",
+          "type": "SHOW_DIALOGUE",
+          "text": "작업은 끝났습니다. 그런데 오늘은 우리가 왜 기다렸는지 끝까지 모르는 사람이 많았어요. 다음엔 이유까지 같이 맞춥시다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08_reactions",
+          "node": "junho.low",
+          "type": "SHOW_RESULT",
+          "text": "임준호가 입을 열었다가 주변을 보고 다시 닫는다. 고개만 숙이고 호스를 들고 간다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08a_reporting_return",
+          "node": "missed",
+          "type": "SHOW_RESULT",
+          "text": "임준호가 경사로 쪽을 잠깐 바라보다 그냥 지나간다. 오늘 그가 무엇을 보았는지는 끝내 아무도 묻지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "inspection",
+          "type": "SHOW_DIALOGUE",
+          "text": "10:20. 고층 작업구역을 확인하던 서정민 감리가 단부 쪽을 가리킨다. “여기 난간이 완전히 이어지지 않았습니다. 바로 옆에서는 자재 이동도 하고 있고요. 이 상태를 조치완료라고 볼 수는 없습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 시계를 본다. “작업자만 안쪽으로 빼면 바로 보완할 수 있습니다. 다만 지금 전부 세우면 양중하고 뒤 작업까지 같이 밀립니다. 어디까지 멈출지 정해야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "action",
+          "type": "SHOW_CHOICE",
+          "text": "10:24. 위험은 눈앞에 있고 작업은 이미 움직이고 있다. 지금 무엇을 먼저 확정할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "inspection_full_stop",
+            "inspection_quick_photo",
+            "inspection_sequence_agreement"
+          ],
+          "chosen": "inspection_quick_photo"
+        },
+        {
+          "event": "e01_08b_inspection_find",
+          "node": "quick_photo_result",
+          "type": "SHOW_RESULT",
+          "text": "입구 쪽 사진은 바로 확보된다. 철근차도 움직이기 시작한다. 하지만 사진에 잡힌 구간과 아직 손대지 않은 끝 구간 사이에 ‘조치완료’라는 말의 간격이 생긴다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08c_site_pushback",
+          "node": "quick_photo",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 사진을 넘겨본다. “입구는 됐는데 끝쪽은 아직이죠? 사진을 ‘완료’로 보낼 건지 ‘진행 중’으로 보낼 건지 표현부터 맞춥시다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08d_reinspection",
+          "node": "reject",
+          "type": "SHOW_DIALOGUE",
+          "text": "서정민 감리가 휴대폰 사진과 끝 구간을 번갈아 본다. “사진 자체는 틀리지 않았습니다. 문제는 사진이 현장 전체를 대표하는 것처럼 전달된 겁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08d_reinspection",
+          "node": "lee_rework",
+          "type": "SHOW_DIALOGUE",
+          "text": "이재훈이 작업팀을 다시 부른다. “다시 정리합시다. 다음부터는 사진 제목에 구간하고 시각부터 넣어요. ‘완료’ 한 단어 때문에 일을 두 번 하네요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "gc",
+          "type": "SHOW_DIALOGUE",
+          "text": "오승재가 보고시계를 보며 말한다. “본사에 15분 안에 1차 경위 올려야 합니다. 통로 확보는 협력사 관리사항이었죠? 지금 확인된 것부터 먼저 주세요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 철근차 우선이었고 중간에 펌프카 동선 먼저 보라고 바뀌었습니다. 그 시각은 제 통화기록에 있습니다. 협력사 관리 한 줄로 쓰면 앞뒤가 안 맞아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“나는 조회 때 들은 순서대로 했어요. 바뀐 얘기는 차가 들어온 다음에 들었습니다. 내 잘못 없다는 게 아니라, 언제 무슨 말을 들었는지는 맞춰야죠.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "report",
+          "type": "SHOW_CHOICE",
+          "text": "13:30. 같은 현장을 본 세 사람의 설명이 조금씩 다르다. 첫 기록을 누구의 주장도 아닌 사실로 만들려면 무엇부터 맞출까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "report_one_sided",
+            "report_defensive",
+            "report_verify_timeline"
+          ],
+          "chosen": "report_one_sided"
+        },
+        {
+          "event": "e01_08e_responsibility_clash",
+          "node": "one_sided_result",
+          "type": "SHOW_RESULT",
+          "text": "보고서는 가장 빨리 올라간다. 오승재는 시한을 지켰다고 확인한다. 하지만 이재훈과 강태식은 같은 문장을 보고 서로 다른 이유로 표정이 굳는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08f_report_return",
+          "node": "correction",
+          "type": "SHOW_RESULT",
+          "text": "추가자료가 도착하자 1차 보고의 단순한 ‘협력사 관리 미흡’ 문장으로는 설명되지 않는 시각이 나온다. 보고서는 수정 대상이 되고, 빠른 보고가 두 번째 설명을 요구한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:20. 오전 작업중지 이후 작업순서가 바뀌었다. 아침 TBM 내용은 남아 있지만 오후 작업은 다른 조건으로 움직인다. 교육이 틀린 것이 아니라 현장이 달라졌다. 이제 변경된 기준을 다시 사람에게 연결해야 한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“교육은 했고 서명도 있습니다. 그런데 지금 다시 세우면 반출 차량 두 대가 묶입니다. 오늘 작업이 바뀐 건 맞지만, 전부 처음부터 다시 할 수는 없잖아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“잠깐 열고 자재만 빼자는 얘기였습니다. 원상복구 안 한 건 문제지만, 사람들한테는 아침 내용보다 지금 순서가 더 중요해졌어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침에는 건드리지 말라고 들었습니다. 오후에는 빼야 된다고 해서… 언제부터 다른 기준이 된 건지 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "tbm_action",
+          "type": "SHOW_CHOICE",
+          "text": "서류는 유효하지만 작업조건이 바뀌었다. 지금 무엇을 ‘기준’으로 다시 세울까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "tbm_form_first",
+            "tbm_worker_blame",
+            "tbm_change_control"
+          ],
+          "chosen": "tbm_form_first"
+        },
+        {
+          "event": "e01_08g_tbm_field_gap",
+          "node": "form_first_result",
+          "type": "SHOW_RESULT",
+          "text": "서명자료와 원래 기준은 빠르게 다시 확인된다. 난간도 복구된다. 하지만 오후 작업이 왜 달라졌는지는 아직 누구의 언어로도 정리되지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08h_tbm_return",
+          "node": "paper",
+          "type": "SHOW_RESULT",
+          "text": "난간은 복구됐지만 다음 반출 때 다시 같은 질문이 나온다. “아침에는 열지 말랬는데 지금은 차가 나가야 합니다. 이번엔 누가 결정합니까?” 서류는 남았고 변경 기준은 남지 않았다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "14:03. 변경작업 재브리핑 뒤 11분이 지났다. 일부 작업자가 다시 자재를 움직인다. 무전에는 ‘재개하라고 했다’는 말이 돌지만, 누가 어떤 조건으로 말했는지는 사람마다 다르다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“공사팀에서 다시 진행하라고 들었습니다. 계속 세워두면 반출 끝나는 시간이 넘어갑니다. 저는 ‘복구됐으면 시작’으로 이해했어요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말한 건 ‘복구 확인되면 다시 시작’입니다. 확인 없이 시작하라는 뜻은 아니었습니다. 지금은 빨리 조건만 닫으면 됩니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희는 그냥 다시 시작한다고 들었습니다. 누가 확인하는지는 못 들었습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "restart_action",
+          "type": "SHOW_CHOICE",
+          "text": "재개는 필요하다. 하지만 ‘누가 말했다’와 ‘조건이 닫혔다’는 같은 말이 아니다. 무엇을 먼저 확인할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "restart_follow_verbal",
+            "restart_trace_instruction",
+            "restart_verify_controls"
+          ],
+          "chosen": "restart_follow_verbal"
+        },
+        {
+          "event": "e01_08i_restart_pressure",
+          "node": "follow_verbal_result",
+          "type": "SHOW_RESULT",
+          "text": "작업 흐름은 가장 빨리 살아난다. 반장이 복구상태를 보며 진행한다. 그러나 작업자마다 ‘누가 최종 확인자였는지’에 대한 답은 다르게 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08j_restart_return",
+          "node": "premature",
+          "type": "SHOW_RESULT",
+          "text": "작업은 재개됐지만 다른 구간에서 아직 복구가 끝나지 않은 상태가 발견된다. 두 번째 정지가 걸리고, 이번에는 ‘누가 시작하라고 했느냐’가 더 큰 문제가 된다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "15:20 쉬는 시간. 오전 작업중지와 재개는 끝났지만 사람들 사이에는 다른 문제가 남아 있다. 임준호가 지나가자 누군가 “저 친구가 말해서 오늘 일이 커졌다”고 낮게 말한다. 위험을 말한 사람이 다음에도 말할 수 있을지는 지금의 분위기에 달려 있다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“징계하려는 건 아닙니다. 오늘 밀린 물량 맞추려면 익숙한 사람끼리 붙이려는 겁니다. 배치까지 전부 위험보고랑 연결하면 반장도 사람 못 씁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“제가 말해서 바뀐 건 아니라고 하셔도… 다들 그렇게 생각하는 것 같습니다. 다음부터는 진짜 확실한 것만 말해야 할 것 같아요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“보고 때문에 불이익 주면 안 되는 건 맞습니다. 다만 배치에는 숙련도, 물량, 팀 호흡도 있어요. 이유를 구분하지 않으면 또 다른 갈등이 생깁니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "culture_action",
+          "type": "SHOW_CHOICE",
+          "text": "공식 규정, 반장의 배치권한, 작업자의 체감이 서로 다르다. 어디까지 개입할까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "stopwork_ignore_social",
+            "stopwork_public_boundary",
+            "stopwork_protect_process"
+          ],
+          "chosen": "stopwork_ignore_social"
+        },
+        {
+          "event": "e01_08k_stopwork_aftershock",
+          "node": "ignore_social_result",
+          "type": "SHOW_RESULT",
+          "text": "현장 흐름은 흔들리지 않는다. 강태식은 배치를 그대로 가져간다. 그러나 임준호에게는 ‘공식적으로는 괜찮다’와 ‘사람들이 보는 분위기’가 다른 채 남는다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08l_stopwork_return",
+          "node": "silenced",
+          "type": "SHOW_RESULT",
+          "text": "다음 구역에서 작은 이상을 본 임준호는 무전을 들었다가 내려놓는다. 공식 불이익은 없었지만 ‘또 일이 커질까’라는 계산이 먼저 생긴다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:05. 공사팀 메모에는 ‘안전대 설치 확인 후 작업’이라고 적혀 있다. 반장 무전에는 ‘오늘 물량부터 빨리 마감’이 남아 있다. 작업자는 안전대 확인 조건을 들은 기억이 없다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“원지시는 분명합니다. 확인 후 작업이라고 했어요. 다만 시간이 밀려서 빨리 끝내달라고도 했습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저도 조건은 들었습니다. 조장한테 말할 때는 ‘안전대 걸고 빨리 하자’고 했고요. 그 뒤 말이 어떻게 갔는지는 정확히 모르겠습니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "junho",
+          "type": "SHOW_DIALOGUE",
+          "text": "“저희가 들은 건 ‘오늘 물량부터 끝내라’였습니다. 안전대 얘기가 있었으면 누가 확인하는지도 같이 들었을 텐데요.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "instruction_action",
+          "type": "SHOW_CHOICE",
+          "text": "원지시, 중간전달, 최종수신이 서로 다르다. 지금 어떤 수준에서 사건을 닫을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "instruction_accept_top",
+            "instruction_blame_worker",
+            "instruction_reconstruct_chain"
+          ],
+          "chosen": "instruction_accept_top"
+        },
+        {
+          "event": "e01_08m_instruction_cascade",
+          "node": "accept_top_result",
+          "type": "SHOW_RESULT",
+          "text": "원지시는 빠르게 정리된다. 이재훈은 ‘조건을 말한 기록’이 남는다. 하지만 그 조건이 마지막 사람에게 도착했는지는 확인되지 않은 채 재개 압박이 돌아온다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08n_instruction_return",
+          "node": "gap",
+          "type": "SHOW_RESULT",
+          "text": "원지시는 정상이라는 기록만 남고 실제 전달경로는 바뀌지 않는다. 다음 작업에서도 일정 문구가 안전조건보다 짧고 빠르게 내려간다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "situation",
+          "type": "SHOW_RESULT",
+          "text": "16:42. 하루 동안 쌓인 작업중지, 재확인, 변경작업, TBM 재전파를 한 기록으로 묶는 시간이다. 현장은 정리되고 있지만 기록은 이제 시작이다. 빠르게 쓰는 것과 정확하게 남기는 것은 같은 일이 아니다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "oh",
+          "type": "SHOW_DIALOGUE",
+          "text": "“지금 필요한 건 누가 잘못했는지 단정하는 문장이 아니라, 오늘 밤에도 설명 가능한 1차보고입니다. 너무 길면 늦고, 너무 짧으면 다시 물어옵니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "lee",
+          "type": "SHOW_DIALOGUE",
+          "text": "“아침 TBM은 실제로 했습니다. 오후에 작업이 바뀐 것도 사실이고요. 두 기록이 서로 모순처럼 보이지 않게 시각과 변경내용을 붙여야 합니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "kang",
+          "type": "SHOW_DIALOGUE",
+          "text": "“현장 입장에서는 오후에 들은 말이 기준이었습니다. 아침 교육하고 오후 변경을 한 덩어리로 쓰면 우리가 언제 뭘 들었는지 또 헷갈립니다.”",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_DIALOGUE"
+          ]
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "record_action",
+          "type": "SHOW_CHOICE",
+          "text": "퇴근 전 25분. 속도·문서 일관성·시간순 사실 중 무엇을 보고서의 뼈대로 잡을까?",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "record_minimize_scope",
+            "record_retrofit_paper",
+            "record_preserve_timeline"
+          ],
+          "chosen": "record_minimize_scope"
+        },
+        {
+          "event": "e01_08o_record_pressure",
+          "node": "summary_result",
+          "type": "SHOW_RESULT",
+          "text": "1차보고는 가장 빨리 올라간다. 관리자는 현재상태를 즉시 파악한다. 대신 낮에 오간 지시와 변경 배경은 ‘추가확인’이라는 빈칸으로 다음 사람에게 넘어간다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_08p_record_return",
+          "node": "correction",
+          "type": "SHOW_RESULT",
+          "text": "5줄 보고는 빠르게 읽혔지만, 작업중지·변경지시·재확인 시각을 묻는 추가 질문이 돌아온다. 잘못된 보고라기보다 1차보고가 두 번째 설명을 요구한다.",
+          "clock": {
+            "day": 1,
+            "slot": "AFTERNOON"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "evening",
+          "type": "SHOW_CHOICE",
+          "text": "17:18. 해가 내려가고 현장 소음이 줄어든다. 오늘은 사고 없이 끝났지만 ‘아무 일도 없었다’고만 남기기에는 많은 신호와 판단이 있었다. 내일을 위해 무엇을 남길까?",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_CHOICE"
+          ],
+          "choices": [
+            "rest",
+            "family",
+            "study",
+            "field_note"
+          ],
+          "chosen": "family"
+        },
+        {
+          "event": "e01_09_evening",
+          "node": "family",
+          "type": "SHOW_RESULT",
+          "text": "현장 밖 대화를 듣는 동안 하루의 긴장이 조금 풀린다. 해결책보다 사람을 다시 상대할 여유를 남긴 밤이다.",
+          "clock": {
+            "day": 1,
+            "slot": "EVENING"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        },
+        {
+          "event": "e01_10_next_day_tease",
+          "node": "next_day_standard",
+          "type": "SHOW_RESULT",
+          "text": "어제의 기억에 끌려가지 않고 현재 상태부터 다시 본다. 대신 어제와 달라진 지점은 스스로 연결해야 한다.",
+          "clock": {
+            "day": 2,
+            "slot": "PRE_WORK"
+          },
+          "commands": [
+            "SHOW_RESULT"
+          ]
+        }
+      ]
+    }
+  ]
+}

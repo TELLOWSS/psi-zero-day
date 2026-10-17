@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "date": "2026-10-17",
+  "tool": "image_gen image edit, official shield reference",
+  "items": [
+    {
+      "assetId": "ep01.character.choi_minseok.map",
+      "originalUri": "assets/episode01/characters/choi-minseok-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/choi-minseok-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "31b9fdca82009fb8505231445a5f6e701def49508dfe201d9c885dfbe8a90d18",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-d7d46146-19a7-4743-8848-cf2156569afd.png"
+    },
+    {
+      "assetId": "ep01.character.choi_minseok.portrait",
+      "originalUri": "assets/episode01/characters/choi-minseok-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/choi-minseok-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c533a15efa492844e7ca6cd15667debc63950a4bb1a8651cdd9739793fd36e2f",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-7892b037-4610-4888-8c36-af32af9645c6.png"
+    },
+    {
+      "assetId": "ep01.character.kang_taesik.map",
+      "originalUri": "assets/episode01/characters/kang-taesik-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/kang-taesik-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "d49f938edc5e3aea06be15d41d208056817ecdecdeea7c2b736a52111947551c",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-9cd991dd-6343-4747-952a-faf6e8b96e4a.png"
+    },
+    {
+      "assetId": "ep01.character.kang_taesik.performance.conflict",
+      "originalUri": "assets/episode01/characters/performance/kang-taesik-conflict.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/kang-taesik-performance-conflict.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "4247926502c118f6bae0bb847a24c5082e3c976c15594dd87f6b8d2281a80782",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-ad236072-4513-4e4e-a9ba-286670417b5a.png"
+    },
+    {
+      "assetId": "ep01.character.kang_taesik.portrait",
+      "originalUri": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "0abdd793b1187888521c66dc8c54592f8568a14c00bda8dfcb729f1833647a47",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-cae94128-762f-4a89-a507-4ab823d93596.png"
+    },
+    {
+      "assetId": "ep01.character.kang_taesik.supportive",
+      "originalUri": "assets/episode01/characters/kang-taesik-supportive.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/kang-taesik-supportive.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "08fe10e979c6d453730283369b254c4c69d70c9417c3aabf25c2b68f7ff0101d",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-68307400-a8c4-450d-bddc-d80ba87eb3ee.png"
+    },
+    {
+      "assetId": "ep01.character.lee_jaehoon.map",
+      "originalUri": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-map.webp",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "66f8385632e2ed19fb53dab3dc27fff94e472386994807d45e52b138abf31bdd",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-6322bde5-e036-4bd5-a849-c331dfa44f93.png"
+    },
+    {
+      "assetId": "ep01.character.lee_jaehoon.performance.concern",
+      "originalUri": "assets/episode01/characters/performance/lee-jaehoon-concern.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-performance-concern.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "996a817b436c18a2227cf92515e3ee4f199e3a7416fe1ae8673f703c57c5fb08",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-2b090d9a-70a6-4fcd-81fe-3e74d9ccf138.png"
+    },
+    {
+      "assetId": "ep01.character.lee_jaehoon.portrait",
+      "originalUri": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e6c97647a13ed97c0baa043ba93c0b1ccd0b6ce76134051ff232ae30d9a5b7e2",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-bb404294-05cf-48d8-900c-8a22255a8b8c.png"
+    },
+    {
+      "assetId": "ep01.character.lim_junho.concerned",
+      "originalUri": "assets/episode01/characters/lim-junho-concerned.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lim-junho-concerned.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "846c930854ef847e0fbddcf8e537d3778d42b757aa0f902de39dc251f65939d8",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-bd3a1720-2fb0-4251-a0c3-62b1246401ea.png"
+    },
+    {
+      "assetId": "ep01.character.lim_junho.map",
+      "originalUri": "assets/episode01/characters/lim-junho-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lim-junho-map.webp",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "c4c062137a8cccf5427f667a0ddc472dafef01e811345e5145bce92a136cda57",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-d0ea7af3-2e01-4bb4-8cea-253e0958df20.png"
+    },
+    {
+      "assetId": "ep01.character.lim_junho.performance.relief",
+      "originalUri": "assets/episode01/characters/performance/lim-junho-relief.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lim-junho-performance-relief.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "8b3afe3c3af51190a8b67f04c1f9b95e0a458bd91e52bc939e13090d6cb8085a",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-5c64fc03-8d5b-47f6-af47-d3671e6ea441.png"
+    },
+    {
+      "assetId": "ep01.character.lim_junho.portrait",
+      "originalUri": "assets/episode01/characters/lim-junho-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8d378c3ec60c23092486ae35d12ac83771984fb59f7bfcff162cb4589820310d",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-68ac826a-271e-4819-9eec-052dadbd714b.png"
+    },
+    {
+      "assetId": "ep01.character.oh_seungjae.map",
+      "originalUri": "assets/episode01/characters/oh-seungjae-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/oh-seungjae-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "f36e6fe634de892f80350a3061e970f287e0f20b2b8c9453770079276e8040c5",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-713f40f7-2d86-4dad-b4a9-801a049d86a5.png"
+    },
+    {
+      "assetId": "ep01.character.oh_seungjae.portrait",
+      "originalUri": "assets/episode01/characters/oh-seungjae-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/oh-seungjae-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d8d38b3b85126105ff71406d6e672ef5610a2099269476f4437294720b51677f",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-714b31a7-9a94-4f92-b0ef-532533f0fd9b.png"
+    },
+    {
+      "assetId": "ep01.character.player.map",
+      "originalUri": "assets/episode01/characters/player-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/player-map.webp",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "28731fe892131bc7423e0823698e6e03090a2adba17d197b5094ae0a335fb270",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-b81a1575-1c97-46cd-ad52-fc423aaff341.png"
+    },
+    {
+      "assetId": "ep01.character.player.performance.resolve",
+      "originalUri": "assets/episode01/characters/performance/player-resolve.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/player-performance-resolve.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "b9072329b2913bc5ae376c17810b2e682646f8e0f089841b7bb9c1d5ed8b4dee",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-120dbd1f-1f82-4b64-9775-53db8d1b19f6.png"
+    },
+    {
+      "assetId": "ep01.character.player.portrait",
+      "originalUri": "assets/episode01/characters/player-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5781f545cc8f888eb3ea726024b70891dbe78acabcb4a7027069724b26d53484",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-34131fba-2cb0-4a8f-a824-6ba9080a8deb.png"
+    },
+    {
+      "assetId": "ep01.character.seo_jeongmin.map",
+      "originalUri": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-map.webp",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "c4d18e89491008ecda85349949060a5b343f84c88ac19616a8005c3e3fe0a747",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-64254f0c-45f6-42d4-af1d-84ec76db73d9.png"
+    },
+    {
+      "assetId": "ep01.character.seo_jeongmin.performance.neutral",
+      "originalUri": "assets/episode01/characters/performance/seo-jeongmin-neutral.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-performance-neutral.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "8722de8cbfd52331d08a563b3a0b1885881c62b41eb06edd026b94a9813853c8",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-41ca81b6-dfd4-4818-8f16-050c92b57e18.png"
+    },
+    {
+      "assetId": "ep01.character.seo_jeongmin.portrait",
+      "originalUri": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "93307008deee74c2cbdbc0ca5b35f5a37f64fdbe20d55b15ef9423256b63444e",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-10effdfc-5498-4cc7-b31a-f5f15cf3fe0f.png"
+    },
+    {
+      "assetId": "ep01.character.yoon_sungho.appreciative",
+      "originalUri": "assets/episode01/characters/yoon-sungho-appreciative.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-appreciative.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "9c59d5bffa0230cb1e25693cc290f1b0689b375bb20484489585c6a47aa3dac8",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-f089b8fc-a0fc-4037-b842-33655d3c4520.png"
+    },
+    {
+      "assetId": "ep01.character.yoon_sungho.map",
+      "originalUri": "assets/episode01/characters/yoon-sungho-map.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "e5bb06ed6dfef1411d5311ab69f1a1811fe41b15c38029e28c8ff60d043369c9",
+      "prompt": "Edit image 1 only, preserve this exact adult NEW-PSI construction game character's identity, face, age, expression, pose, hairstyle, helmet color, clothes, tools, silhouette, illustration style and full-body framing. Image 2 is the approved corporate decal reference. Replace old helmet marks with the blue asymmetric shield + white concentric eye and lettering exactly NEW-PSI. Place a modest printed decal on the helmet's visible front/temple shell, correctly foreshortened and curved with the head angle, no floating camera-facing sticker. Preserve any existing full body harness; on field full-body figures make fitted dark harness leg loops and shoulder straps readable without obscuring uniform, consistent with the established PPE requirement. Do not change the person's identity or facial features. Genuinely transparent background, clean gaps between limbs, no white matte fringe or studio floor/shadow, no added background, no watermark or other text. Preserve the original portrait versus full-body aspect ratio and complete footwear.",
+      "source": "exec-6b19cf0f-384f-495f-95bf-c7810866b817.png"
+    },
+    {
+      "assetId": "ep01.character.yoon_sungho.portrait",
+      "originalUri": "assets/episode01/characters/yoon-sungho-portrait.webp",
+      "uri": "assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8c7bdad017e9c242c5d4696b608e81736e7efc491988cef9b32cc308205e5e84",
+      "prompt": "Precise localized edit of image 1 only: update this existing adult NEW-PSI game colleague's safety helmet branding. Image 2 is the ONLY approved corporate decal reference (blue asymmetrical shield, white concentric AI eye, company lettering exactly NEW-PSI). Replace any old diagonal-bars mark or old PSI lettering with that exact shield-and-NEW-PSI decal; add it to the visible front/temple helmet surface if currently blank. Keep decal modest in size, naturally printed on helmet shell, perspective-foreshortened and aligned with the helmet's local curved surface and head tilt, never facing camera independently. Preserve existing helmet color, stripe, gloss and wear. CRITICAL keep the original person's face, age, eyes, hairstyle, identity, skin, pose, expression, hands, clothes, harness, tools, body proportions, crop and rendering style unchanged. Change ONLY the helmet decal. Preserve genuinely transparent background and clean internal gaps; add no studio floor, matte rectangle, glow, text outside helmet, frame or watermark. Output the same square portrait composition.",
+      "source": "exec-eecd6775-645d-4240-ad66-58509dc374ed.png"
+    }
+  ]
+}

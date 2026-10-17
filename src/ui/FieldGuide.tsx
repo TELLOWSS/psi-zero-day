@@ -10,6 +10,7 @@ import './field-guide-studio.css';
 import studioCopy from '../../content/localization/field-guide-studio-ko.json';
 import studioArt from '../../content/art/field-studio-v1.json';
 import realisticGuide from '../../content/art/field-guide-realistic-v3.json';
+import restoredGuide from '../../content/art/field-guide-restoration-v4.json';
 
 type GuideMeta = {
   id: string;
@@ -78,7 +79,8 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
   const guideVisual = entry.field_guide_visual;
   const itemArtOnly = guideVisual?.presentation === 'generated_item_art';
   const manifestUri = itemArtOnly ? undefined : session.assetUri(guideVisual?.asset_id ?? entry.planned_asset_id);
-  const replacement = (realisticGuide.items as Record<string, {uri:string;thumbnail:string}>)[itemKey];
+  const restored = (restoredGuide.items as Record<string, {uri:string;thumbnail:string}>)[itemKey];
+  const replacement = restored ?? (realisticGuide.items as Record<string, {uri:string;thumbnail:string}>)[itemKey];
   const uri = replacement ? (alt ? replacement.uri : replacement.thumbnail) : guideVisual?.asset_path ?? manifestUri;
   return <div
     className={`field-guide-visual ${className ?? ''}`.trim()}

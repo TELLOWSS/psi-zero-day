@@ -1,0 +1,342 @@
+{
+  "base": "http://127.0.0.1:4178",
+  "reference": "WATCH patrol-agent roster; expression and map images also visually compared against approved cast production files",
+  "rows": [
+    {
+      "name": "portrait",
+      "width": 390,
+      "height": 844,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp?v=5781f545cc8f"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp?v=0abdd793b118"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp?v=8c7bdad017e9"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp?v=e6c97647a13e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp?v=8d378c3ec60c"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/choi-minseok-portrait.webp?v=c533a15efa49"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-portrait.webp?v=93307008deee"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/oh-seungjae-portrait.webp?v=d8d38b3b8512"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4178/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp?v=5781f545cc8f"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp?v=0abdd793b118"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp?v=8c7bdad017e9"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp?v=e6c97647a13e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp?v=8d378c3ec60c"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/choi-minseok-portrait.webp?v=c533a15efa49"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-portrait.webp?v=93307008deee"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/oh-seungjae-portrait.webp?v=d8d38b3b8512"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4178/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pc",
+      "width": 1440,
+      "height": 900,
+      "people": [
+        {
+          "name": "플레이어",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp?v=5781f545cc8f"
+        },
+        {
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp?v=0abdd793b118"
+        },
+        {
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp?v=8c7bdad017e9"
+        },
+        {
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp?v=e6c97647a13e"
+        },
+        {
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp?v=8d378c3ec60c"
+        },
+        {
+          "name": "최민석",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/choi-minseok-portrait.webp?v=c533a15efa49"
+        },
+        {
+          "name": "서정민",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/seo-jeongmin-portrait.webp?v=93307008deee"
+        },
+        {
+          "name": "오승재",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/oh-seungjae-portrait.webp?v=d8d38b3b8512"
+        }
+      ],
+      "agents": [
+        {
+          "name": "현장 안전관리자",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/player-portrait.webp"
+        },
+        {
+          "name": "강태식",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-portrait.webp"
+        },
+        {
+          "name": "윤성호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-portrait.webp"
+        },
+        {
+          "name": "이재훈",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-portrait.webp"
+        },
+        {
+          "name": "임준호",
+          "portrait": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp",
+          "hero": "/assets/episode01/characters/new-psi-helmets-v1/lim-junho-portrait.webp"
+        },
+        {
+          "name": "안전감시단",
+          "portrait": "/assets/survivors/safety-monitor-v2.webp",
+          "hero": "/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "breaker": [
+        {
+          "id": "player",
+          "name": "안전관리자",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/player-map.webp"
+        },
+        {
+          "id": "kang_taesik",
+          "name": "강태식",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/kang-taesik-map.webp"
+        },
+        {
+          "id": "yoon_sungho",
+          "name": "윤성호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/yoon-sungho-map.webp"
+        },
+        {
+          "id": "lee_jaehoon",
+          "name": "이재훈",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lee-jaehoon-map.webp"
+        },
+        {
+          "id": "lim_junho",
+          "name": "임준호",
+          "uri": "http://127.0.0.1:4178/assets/episode01/characters/new-psi-helmets-v1/lim-junho-map.webp"
+        },
+        {
+          "id": "safety_monitor",
+          "name": "안전감시원",
+          "uri": "http://127.0.0.1:4178/assets/survivors/safety-monitor-v2.webp"
+        }
+      ],
+      "checks": [
+        "8 companion icons and details",
+        "6 WATCH roster and hero identities",
+        "6 BREAKER actor bindings",
+        "images decode",
+        "hero preserves full crop",
+        "no JS errors"
+      ],
+      "errors": []
+    }
+  ]
+}
