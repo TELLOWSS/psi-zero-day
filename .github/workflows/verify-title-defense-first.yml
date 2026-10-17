@@ -65,7 +65,7 @@ jobs:
           grep -q "className=\"commercial-title-action is-story-entry" src/ui/GameHub.tsx
           ! grep -q 'is-episode02-entry' src/ui/GameHub.tsx
           grep -q "사고 전 신호를 읽고, 현장을 바꿔라." src/ui/GameHub.tsx
-          grep -q "LIVE SITE" src/ui/GameHub.tsx
+          grep -q "STORY / CAMPAIGN" src/ui/GameHub.tsx
           grep -q "MODE_SELECT_V11" src/ui/shooting-entry.css
 
       - name: Install Korean QA font
