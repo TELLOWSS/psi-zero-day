@@ -54,7 +54,7 @@
 }
 @media(max-height:440px){
   #root main.game-frame[data-story-player="cinematic"],#root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:60dvh}
-  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:44px 0 auto!important;height:130px!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:0 0 auto!important;height:130px!important}
 }
 #root main.game-frame[data-story-player="cinematic"] .game-header {
   position:absolute!important;inset:0 0 auto!important;height:56px!important;
