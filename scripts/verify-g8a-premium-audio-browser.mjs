@@ -186,7 +186,11 @@ async function seedCase(cdp,name){
 async function enterPersistedRun(cdp,name){
   await seedCase(cdp,name);
   await installTelemetry(cdp);
-  await clickText(cdp,'현장 디펜스');
+  // Current hub enters GUARD first; its Practice control routes to the
+  // original training persistence contract tested by these G8-A fixtures.
+  await trustedClick(cdp,"document.querySelector('button.is-defense-entry:not(:disabled)')",'GUARD hub entry');
+  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=\"guard-home\"]'))");
+  await trustedClick(cdp,"document.querySelector('[data-defense-screen=\"guard-home\"] footer button",'training practice entry');
   await waitFor(cdp,`Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`);
   await clickText(cdp,'이어서 훈련');
   await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
