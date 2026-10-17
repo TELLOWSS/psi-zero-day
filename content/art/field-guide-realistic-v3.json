@@ -1,0 +1,557 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/FIELD-GUIDE-REALISTIC-V3-PROMPTS-20261017.json",
+  "items": {
+    "transfer_floor_high_ceiling": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/transfer_floor_high_ceiling.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/transfer_floor_high_ceiling-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 583400,
+      "sha256": "856f96f4f9711643191c4a48a82ab6ec31dcc638d5f4a4afea12819623c24b0e",
+      "source": "exec-a7947465-69b7-49aa-a225-6486e8665e43.png"
+    },
+    "mobile_work_platform": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/mobile_work_platform.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/mobile_work_platform-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 343508,
+      "sha256": "3ffa7696926053c55e8dd3a87648926ee7996e8133255fa3170c644ee6caba86",
+      "source": "exec-21c82328-94e5-4faf-b545-62e2c42c5c23.png"
+    },
+    "system_scaffold_transition": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/system_scaffold_transition.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/system_scaffold_transition-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 666316,
+      "sha256": "7f384b64f07ed16920f284183545a0fdf1235dbb3ba6ff00b9af32ea04a7f1bb",
+      "source": "exec-ce6cb3cd-9f59-4395-9f98-f2b59c664fea.png"
+    },
+    "transfer_floor_opening": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/transfer_floor_opening.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/transfer_floor_opening-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 478300,
+      "sha256": "2a2ad6301c90b5b513a292458b831ae0ab824eb46b4339bc646077811e526977",
+      "source": "exec-1f933956-3a93-4b21-8f25-45e4478e1744.png"
+    },
+    "mixed_formwork_interface": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/mixed_formwork_interface.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/mixed_formwork_interface-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 513354,
+      "sha256": "9a6908e6c67137c64acace98778663a9755625257d9c16598c3b73650e425f07",
+      "source": "exec-155537e0-6959-4b1a-a199-ec18fb1ec85c.png"
+    },
+    "temporary_support_transfer": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/temporary_support_transfer.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/temporary_support_transfer-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 499502,
+      "sha256": "8eb0622e808cb34b87d8ac65b0c37173e67616378e4be91559d5062efc4e28ec",
+      "source": "exec-14ec1156-c80a-47e3-87ea-d769696660d3.png"
+    },
+    "material_lift_opening_transfer": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/material_lift_opening_transfer.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/material_lift_opening_transfer-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 465100,
+      "sha256": "4f01cc096b2d5122eb96b86d9eb4878da1e4c07bfcd65a2f40e98d55207d68cc",
+      "source": "exec-27121fc7-1fba-4608-bebe-d0d54322e065.png"
+    },
+    "temporary_route_reroute": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/temporary_route_reroute.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/temporary_route_reroute-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 529252,
+      "sha256": "cca0ac795816f31a2eb6f9ca82307425bcf913a16c3269153e2b414dc375c148",
+      "source": "exec-4caeec93-d00a-4cb6-ae07-3d5016385053.png"
+    },
+    "alform_panel": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_panel.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_panel-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 563778,
+      "sha256": "85e3d03b27d83bcdfedc3524e3c7a24c219572840c0260a6d2e2eb13f1c1b3ca",
+      "source": "exec-17c94710-ff4d-4818-830c-148020c4a175.png"
+    },
+    "alform_pin_wedge": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_pin_wedge.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_pin_wedge-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 595180,
+      "sha256": "d1fd8b35bb5429f67d2f6d16ff723d7efe0fd0040610a250c9c05eb38a937a78",
+      "source": "exec-385a44f0-f816-41e4-816f-3e208b07a082.png"
+    },
+    "alform_pin_flying": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_pin_flying.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_pin_flying-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 586466,
+      "sha256": "f221de7da391f10badb7da2dff70424ebc383403474fe0ed76f9e3f02bec5dab",
+      "source": "exec-6f996e15-6435-459e-b770-cd0f491258bd.png"
+    },
+    "alform_support": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_support.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_support-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 416034,
+      "sha256": "fed2e31c701062aefcd6cee91c8490955d875b6800f5bd75290f4933f22805fd",
+      "source": "exec-5232ceb4-9988-42c2-8a18-15770ef71c2a.png"
+    },
+    "alform_deck_support": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_deck_support.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_deck_support-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 463770,
+      "sha256": "68a9d3f46dcfa0074e38e66a36a3d401631a95999eb456ef381131551cfa737b",
+      "source": "exec-4c499af8-113c-4789-b19f-8b8ac4eff7b2.png"
+    },
+    "lifting_box": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/lifting_box.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/lifting_box-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 503552,
+      "sha256": "26e08c7e94bbf06fc8cc7c8c2abbc9c834e34c005f64b46e03da64f1fbf319ef",
+      "source": "exec-f2f9ee3f-5ada-4654-b8e9-626abb34a54e.png"
+    },
+    "material_lift_opening": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/material_lift_opening.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/material_lift_opening-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 433588,
+      "sha256": "1b7d8d648e01137829f77aeb069a41044de075679e4575bdc81e2fcea6203ce9",
+      "source": "exec-74be8d1b-03a2-47a5-b517-b9172cc4cb0e.png"
+    },
+    "pump_pipe_opening": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/pump_pipe_opening.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/pump_pipe_opening-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 448782,
+      "sha256": "17ceee1e293ffe31892247b8099690f670edf168d525e18f29fe6e506f420e3b",
+      "source": "exec-630ffc85-9178-4fd5-83d6-9bc4c133437e.png"
+    },
+    "perimeter_open_edge": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/perimeter_open_edge.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/perimeter_open_edge-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 340152,
+      "sha256": "92225d56be93c07b8cd2f06166bd60e0fca725f97e831a72749c7df65f554760",
+      "source": "exec-28ba0b9f-42b5-41b7-9728-4957cd757f6e.png"
+    },
+    "embedded_box_trip": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/embedded_box_trip.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/embedded_box_trip-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 410590,
+      "sha256": "932095dc4396d513839d1fcb940bfd02b4ac0a37ff161b44f3654f5657ccb0a6",
+      "source": "exec-46e59f53-a29e-446f-bd4c-bd28725a7029.png"
+    },
+    "alform_panel_stack": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/alform_panel_stack.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/alform_panel_stack-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 468026,
+      "sha256": "d66a46f97a5b0e2f20b467b911027a558cf878febd84e122d65b574d3dc73733",
+      "source": "exec-4acef800-849a-474a-bd93-b7e3f3bcaaee.png"
+    },
+    "housekeeping_typical_floor": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/housekeeping_typical_floor.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/housekeeping_typical_floor-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 512886,
+      "sha256": "046c0ea892c0dcc41d2f1e16eb47ae17341bb2824a80476dfb166fd8d74646e6",
+      "source": "exec-4ba6a465-b4cc-42f5-85a7-d0a368bcf5a4.png"
+    },
+    "gangform_panel": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_panel.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_panel-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 471784,
+      "sha256": "1a6eb29c599cf52eb33729f17b96ab833d8c3a28626fb441268d280430847b10",
+      "source": "exec-7f51ec3b-9b13-4b45-bb04-2d3f07372edd.png"
+    },
+    "gangform_platform": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_platform.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_platform-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 497140,
+      "sha256": "f82d583e5aad0dd2dee3c6b82d49a198de70458d491abd176c0937c4b4734b61",
+      "source": "exec-d3efbb46-7442-4157-84e2-29fc0052e8bd.png"
+    },
+    "gangform_anchor_bolt": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_anchor_bolt.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_anchor_bolt-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 570058,
+      "sha256": "28a2d202345f44e8340ace508dec84739d313e6b3a7561efa895c48ee665ac47",
+      "source": "exec-0ea0ab6d-ca0b-4fb1-863f-8304015bc7a4.png"
+    },
+    "gangform_shackle": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_shackle.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_shackle-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 351048,
+      "sha256": "e6f2cdd4d8d01546081f3054a08ed8e929ac2887dd79f362a3b2af7ef4660b1f",
+      "source": "exec-2b9a8f9a-0cae-45aa-b077-cf6d75841148.png"
+    },
+    "gangform_turnbuckle_wire": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_turnbuckle_wire.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_turnbuckle_wire-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 249836,
+      "sha256": "8c604c2acdedb061ba312ab3b33157111c0b4787ad5b7e3b45b3aa77da0e7b66",
+      "source": "exec-f3bce44a-82ea-464d-901e-76de570478b5.png"
+    },
+    "gangform_tagline": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_tagline.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_tagline-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 498134,
+      "sha256": "a34f9a6bf8fff7f846ea5078f29e010f8be03e2940532592e2dafae95926a4b7",
+      "source": "exec-498eee79-597d-4fc1-9041-d538e3f84604.png"
+    },
+    "gangform_platform_debris": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_platform_debris.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_platform_debris-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 494510,
+      "sha256": "0df9c5603693691a5a474121a9e52b5f6a4893aa393bb212ac0c903b0d5fe622",
+      "source": "exec-73417ccf-6693-4f1c-9c61-d4bfac97c6f5.png"
+    },
+    "wind_meter": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/wind_meter.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/wind_meter-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 367506,
+      "sha256": "97c981ddb75ca4c6b251252a4b684e5c5e06406adb81944f2899770be8c698a1",
+      "source": "exec-8819358e-ef9b-4f67-b49f-037e44984ac4.png"
+    },
+    "gangform_lift_interference": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_lift_interference.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_lift_interference-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 558340,
+      "sha256": "357749fb9ecaf6f9f0242693a49543b52d287a1212ec8ce7ce5a7464370b065b",
+      "source": "exec-1a7d7699-87b8-4256-8dbe-a5ec66af8738.png"
+    },
+    "gangform_landing_fix": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_landing_fix.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_landing_fix-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 563202,
+      "sha256": "b32f26ff7f27d44d7cb7a647a1482c7c20abb9ba183da9580a9c8448d130bf35",
+      "source": "exec-94402925-9ef1-41f4-8343-63318331519b.png"
+    },
+    "gangform_signal_radio": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/gangform_signal_radio.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/gangform_signal_radio-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 336448,
+      "sha256": "93b100bd6fdd894ca06c358c1f9d16b34f2a9701d63766f325738952cf83b9e4",
+      "source": "exec-25f55f2f-6f4a-4516-8dd7-1a08fa2dc95f.png"
+    },
+    "flying_metal_eye": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/flying_metal_eye.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/flying_metal_eye-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 621940,
+      "sha256": "70b4f2dc663e9a551f8d8cc5b317ddd6a47f6d2125609fb09226a04c32f83b7b",
+      "source": "exec-4989f40c-4369-4155-a71e-20f593653767.png"
+    },
+    "floor_change_edge": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/floor_change_edge.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/floor_change_edge-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 434064,
+      "sha256": "6e177fa80ae4732bfe050037511e4865d944ea1101648e7c873de3411409bcab",
+      "source": "exec-676a1539-424e-47e0-aa60-fd3f8ff70d91.png"
+    },
+    "partial_gangform_dismantle": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/partial_gangform_dismantle.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/partial_gangform_dismantle-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 617722,
+      "sha256": "1886ffa9cb133d3b31ae2a59660065701fe0a176b45407ac24aeb2f8ac5d487f",
+      "source": "exec-42eb5f7a-af10-4e59-9a44-f15e70ae2d3f.png"
+    },
+    "changed_lifting_point": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/changed_lifting_point.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/changed_lifting_point-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 529304,
+      "sha256": "45f5b12b9dbbc1958767ef49e6670ac3ab9eb65c7d4ca6f8e245a512d63eb532",
+      "source": "exec-24ff07c3-4229-4b1a-a6f6-cc27d67825c3.png"
+    },
+    "irregular_platform_gap": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/irregular_platform_gap.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/irregular_platform_gap-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 482194,
+      "sha256": "e773c0440aa7b9b73c46222cd82660b59cb282a24933a837c87861c3fba8005c",
+      "source": "exec-6d171b55-2eb9-4970-9d72-af936fc36329.png"
+    },
+    "temporary_lifeline": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/temporary_lifeline.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/temporary_lifeline-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 237216,
+      "sha256": "b61bf61c8e2dafa90409e281d9d57c39db7dd1e6ce02a99e0bb899587dcb5c36",
+      "source": "exec-c7414285-fa25-4476-913d-5d46f1f28364.png"
+    },
+    "roof_open_edge": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/roof_open_edge.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/roof_open_edge-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 460270,
+      "sha256": "cae59bef328ebf7325cb2a5c6750cfe5d094052dbeb251332ca42b6f04a7642b",
+      "source": "exec-f9bace92-fa07-4862-96e8-93254879c7be.png"
+    },
+    "penthouse_access": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/penthouse_access.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/penthouse_access-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 366062,
+      "sha256": "8a17296785abaa5a61a1b19bded3e57868837ee7a36809bfef5f290bf776a6bd",
+      "source": "exec-f5fcb27b-e0a0-403f-9a43-9aa15ba98b4d.png"
+    },
+    "roof_wind_exposure": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/roof_wind_exposure.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/roof_wind_exposure-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 407228,
+      "sha256": "5edf7a17057a80e332dc1edfb6feebaa1124bfbde0ca9bcc1e6ccd24e39e80a0",
+      "source": "exec-23ca2539-abae-45d0-88a0-280093bb559b.png"
+    },
+    "final_gangform_dismantle": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/final_gangform_dismantle.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/final_gangform_dismantle-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 474960,
+      "sha256": "82a4a776681fb339e6aa15f8c87e526649eff83a140a646acf16bb94f98f96cf",
+      "source": "exec-93f65227-8cdb-4529-8959-32aca165db5e.png"
+    },
+    "roof_housekeeping": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/roof_housekeeping.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/roof_housekeeping-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 435584,
+      "sha256": "592df418dabcedadd6782c76c5ed0f6054d166124535cd609c14a0be65ba76e0",
+      "source": "exec-a8c0fd32-f774-458a-9f14-8facc3f97357.png"
+    },
+    "surface_finishing_tools": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/surface_finishing_tools.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/surface_finishing_tools-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 563798,
+      "sha256": "22eba0d5bce546cd4d07d3eef9e2c1080d4ff5af134b7e3bc194a22dc88c96be",
+      "source": "exec-40ac5bee-c5b6-4cb0-8472-f1d7439b8c30.png"
+    },
+    "chipping_breaker": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/chipping_breaker.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/chipping_breaker-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 548922,
+      "sha256": "d7ebd71d21fcbb691231933c3c7762be9cbd15671bfd351e20026f1983899927",
+      "source": "exec-e54e2181-c8e0-4942-91f0-d4830e4473be.png"
+    },
+    "grinder_guard_switch": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/grinder_guard_switch.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/grinder_guard_switch-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 305756,
+      "sha256": "9144ee9b15c8f83030aece85b20628a04d36f2a5f9c29720cded33a99516b09f",
+      "source": "exec-832c3ba8-ff59-4c64-aa3e-a38dd31d46bc.png"
+    },
+    "mortar_mixer": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/mortar_mixer.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/mortar_mixer-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 461524,
+      "sha256": "d30a3cb88186503e5894e327b6d95351de7b83d670906277c715ac01e32e55de",
+      "source": "exec-caca6092-25b5-47a6-8ffd-20cae711a912.png"
+    },
+    "workhorse_platform": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/workhorse_platform.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/workhorse_platform-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 305210,
+      "sha256": "8afaa0f072510d1c95dda5b6c23a241c0e9770fcc0f7cabd37fb0082494f29fc",
+      "source": "exec-f564b176-f072-4356-bb2d-d322565fe8c3.png"
+    },
+    "dust_control": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/dust_control.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/dust_control-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 563070,
+      "sha256": "57e222276d8c3a83260642a96e2c407c68c666e8ef216a89a91d85a6d60ff47f",
+      "source": "exec-d7ca36d6-4834-4ce1-ab00-0a65338e2ce8.png"
+    },
+    "eye_face_ppe": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/eye_face_ppe.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/eye_face_ppe-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 432294,
+      "sha256": "85a4ba997c768c802e9985aea4a438c3bb9e9bc4b10d2e95eee972a154014641",
+      "source": "exec-d7e416a7-2abd-4829-bc13-b98a65b4df16.png"
+    },
+    "dismantle_debris_route": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/dismantle_debris_route.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/dismantle_debris_route-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 564692,
+      "sha256": "9e0cc92376cd566551ace8af6de9a223f0da131dfe5d6b6c2b960451440a93e4",
+      "source": "exec-be1c4c6d-193c-41ea-95b0-f307712ebcd9.png"
+    },
+    "waste_sorting_zone": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/waste_sorting_zone.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/waste_sorting_zone-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 572054,
+      "sha256": "fa47c97cca4da14a27c318329f7ce7dfd79281adc18a1e9f4ad2f9a8ca462be4",
+      "source": "exec-1e330028-e4d8-4321-bce3-629525f3ffaa.png"
+    },
+    "forklift_blind_spot": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/forklift_blind_spot.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/forklift_blind_spot-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 511946,
+      "sha256": "e86cdfd0326cec0b101883de7e7f1742fc322e29701f46e5531920d9d4940eca",
+      "source": "exec-e8b4803d-a5e5-4723-bd71-e8c88c125391.png"
+    },
+    "chemical_msds_station": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/chemical_msds_station.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/chemical_msds_station-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 477480,
+      "sha256": "8313f627a5fd98144cf6f6e34bb20de94c541ef3ad0c239357bc69d9b5a44d31",
+      "source": "exec-cd5cecad-0c76-4267-800d-5e8b4a59ad07.png"
+    },
+    "extension_ladder": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/extension_ladder.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/extension_ladder-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 348864,
+      "sha256": "c093d240595d114a36fb44db62fdf67d406ecf2756217824f4175e5a687c7af4",
+      "source": "exec-b2d49700-1ffc-44cc-a88d-78cbda5a9c0e.png"
+    },
+    "temporary_facility_removal": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/temporary_facility_removal.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/temporary_facility_removal-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 516560,
+      "sha256": "24d56ee36b34ba7556571c13923522f5b65b6134af4d3698188c903d16addc02",
+      "source": "exec-2511988d-f6a0-47ed-bd44-32f949f66bc6.png"
+    },
+    "temporary_power_removal": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/temporary_power_removal.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/temporary_power_removal-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 500466,
+      "sha256": "e39b8c320c36f36da28157cfe98b7fa9422f082d082306dfc0b79f57cadb75ed",
+      "source": "exec-cf8d19a3-d210-4ebc-b899-79880a5d9aba.png"
+    },
+    "final_route_clearance": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/final_route_clearance.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/final_route_clearance-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 241200,
+      "sha256": "64b86d945207d0fee3cfbab732e0bef7d43249034e7c5b991e6fc1a4c7c2129d",
+      "source": "exec-3bd5306a-f92b-4240-9abd-e38853aecc21.png"
+    },
+    "stop_work_marker": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/stop_work_marker.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/stop_work_marker-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 272248,
+      "sha256": "13eea74e6aaa5b7d93417ca2ef11f596e4d6cfe1b9768de7b94154225a442474",
+      "source": "exec-8c688776-dc48-4f4f-9bb6-a4dcccd47d85.png"
+    },
+    "tbm_board": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/tbm_board.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/tbm_board-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 288284,
+      "sha256": "7a9d026be8185e05933c24faba1418eead9ec4ecae46868df107144c459e90ec",
+      "source": "exec-cc67e763-17ec-4e49-b587-69db3b1d14c5.png"
+    },
+    "permit_board": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/permit_board.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/permit_board-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 267482,
+      "sha256": "e6f56d17538321e251646ebcf5de24f89cf912972dbf0f08324f48329eeaedd6",
+      "source": "exec-2acdf3a1-241c-439b-8ac6-e63fe076b8e0.png"
+    },
+    "near_miss_marker": {
+      "uri": "/assets/episode01/field-guide/realistic-v3/near_miss_marker.webp",
+      "thumbnail": "/assets/episode01/field-guide/realistic-v3/near_miss_marker-thumb.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 583380,
+      "sha256": "941c30460e9fb8acd15aa2fa35e571732f3b644ecc7f4eda08df338b50127b0c",
+      "source": "exec-1b030326-bf1e-4ba0-b68c-2b0af5609e71.png"
+    }
+  }
+}

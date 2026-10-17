@@ -5,11 +5,11 @@ import type { EpisodeSession } from '../app/episode-session';
 import catalog from '../../content/episode01/scene-element-catalog.json';
 import legalBasis from '../../content/episode01/field-guide-legal-basis.json';
 import { VisualImage } from './VisualSlot';
-import { FieldGuideArt } from './FieldGuideArt';
 import './field-guide.css';
 import './field-guide-studio.css';
 import studioCopy from '../../content/localization/field-guide-studio-ko.json';
 import studioArt from '../../content/art/field-studio-v1.json';
+import realisticGuide from '../../content/art/field-guide-realistic-v3.json';
 
 type GuideMeta = {
   id: string;
@@ -78,15 +78,16 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
   const guideVisual = entry.field_guide_visual;
   const itemArtOnly = guideVisual?.presentation === 'generated_item_art';
   const manifestUri = itemArtOnly ? undefined : session.assetUri(guideVisual?.asset_id ?? entry.planned_asset_id);
-  const uri = guideVisual?.asset_path ?? manifestUri;
+  const replacement = (realisticGuide.items as Record<string, {uri:string;thumbnail:string}>)[itemKey];
+  const uri = replacement ? (alt ? replacement.uri : replacement.thumbnail) : guideVisual?.asset_path ?? manifestUri;
   return <div
     className={`field-guide-visual ${className ?? ''}`.trim()}
     data-item-key={itemKey}
-    data-guide-visual-status={guideVisual?.status}
-    data-guide-presentation={guideVisual?.presentation}
+    data-guide-visual-status={replacement ? realisticGuide.status : guideVisual?.status}
+    data-guide-presentation={replacement ? 'realistic_item_art' : guideVisual?.presentation}
     data-guide-focus={guideVisual?.focus}
   >
-    {uri ? <VisualImage uri={uri} alt={alt} className="field-guide-image" loading={alt?'eager':'lazy'} /> : <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />}
+    <VisualImage uri={uri} alt={alt} className="field-guide-image" loading={alt?'eager':'lazy'} />
   </div>;
 }
 

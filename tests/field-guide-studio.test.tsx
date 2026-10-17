@@ -15,5 +15,8 @@ it('searches across processes by FG code, handles no matches, and preserves obse
   expect(host.querySelector('.field-guide-detail')?.textContent).not.toContain('+15%');
   search('zzzz-no-match');expect(host.querySelector('.field-guide-empty')?.textContent).toContain('검색 결과가 없습니다');expect(host.querySelector('.field-guide-detail')).toBeNull();
   search('');expect(host.querySelectorAll('.field-guide-list button')).toHaveLength(118);
+  expect(host.querySelectorAll('.field-guide-list img')).toHaveLength(118);
+  expect(host.querySelectorAll('.field-guide-list img[src*="/realistic-v3/"]')).toHaveLength(61);
+  expect(host.querySelector('.field-guide-list .field-guide-generated-art')).toBeNull();
  }finally{act(()=>root.unmount());host.remove();}
 });
