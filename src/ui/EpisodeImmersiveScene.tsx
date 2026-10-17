@@ -134,10 +134,23 @@ export function EpisodeImmersiveScene({
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
   const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
+  // Two-shot film grammar: the current speaker and one listener own the frame.
+  // The authored event/cast/choice contract remains intact; extras are not transparent ghosts.
+  const lead = speakerId && scene.cast.includes(speakerId) ? speakerId
+    : scene.subject_character_id && scene.cast.includes(scene.subject_character_id) ? scene.subject_character_id
+    : scene.cast.find(id=>id!=='player') ?? scene.cast[0];
+  const partner = lead==='player'
+    ? scene.cast.find(id=>id!=='player')
+    : scene.cast.includes('player') ? 'player'
+    : scene.cast.find(id=>id!==lead);
+  const shotCast = scene.cast.length<=2 ? scene.cast
+    : scene.cast.filter(id=>id===lead||id===partner);
+  const stagedCast = shotCast.length ? shotCast : scene.cast.slice(0,2);
 
   return <figure
     className="episode-immersive-scene"
-    data-cast-count={scene.cast.length}
+    data-cast-count={stagedCast.length}
+    data-director-cast="two-shot-20261018"
     data-camera={scene.camera}
     data-focus={scene.focus}
     data-tone={scene.tone}
@@ -349,17 +362,15 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {scene.cast.map((characterId, index) => {
+      {stagedCast.map((characterId, index) => {
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
         const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
         const performance = episode01CharacterPerformance(scene.event_id, scene.node_id, characterId, speakerId, relationshipCue);
         const performanceAsset = episode01CharacterPerformanceAsset(characterId, performance?.expression, resolve);
-        const characterUri = performanceAsset?.uri
-          ?? performanceAsset?.fallback_uri
-          ?? characterMapUri(characterId, resolve);
-        const characterFallbackUri = performanceAsset?.uri
-          ? performanceAsset.fallback_uri ?? characterMapUri(characterId, resolve)
-          : undefined;
+        // Production expression assets can be bust crops; stage the canonical full-body
+        // map asset in wide/mid-shots until expression masters have full-body alpha.
+        const characterUri = characterMapUri(characterId, resolve);
+        const characterFallbackUri = undefined;
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
@@ -372,7 +383,8 @@ export function EpisodeImmersiveScene({
         data-expression={performance?.expression}
         data-pose={performance?.pose}
         data-presence-motion={performance?.motion}
-        data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
+        data-performance-asset="map-fallback"
+        data-expressive-crop-suppressed={performanceAsset?.using_expression_asset || undefined}
       >
         <VisualImage uri={characterUri} fallbackUri={characterFallbackUri} alt="" />
       </div>;

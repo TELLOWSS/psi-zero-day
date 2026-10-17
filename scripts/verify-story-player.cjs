@@ -61,6 +61,15 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    if(capture.has(event)&&!screens.has(event)){
     await page.locator('.episode-immersive-character img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>{}))));await page.waitForTimeout(700);
     const composition=await page.evaluate(()=>{const dock=document.querySelector('.play-panel').getBoundingClientRect();return [...document.querySelectorAll('.episode-immersive-character')].map(actor=>{const box=actor.getBoundingClientRect(),image=actor.querySelector('img');return {character:actor.dataset.character,top:box.top,bottom:box.bottom,height:box.height,dockTop:dock.top,decoded:!!image&&image.complete&&image.naturalWidth>0};});});
+    if(composition.some(actor=>!actor.decoded))throw new Error('Director shot has undecoded character: '+event);
+    if(composition.length>2)throw new Error('Cinematic beat has ghost-prone background crowd: '+event+' '+JSON.stringify(composition));
+    const shotStyles=await page.locator('.episode-immersive-character').evaluateAll(nodes=>nodes.map(node=>({
+      opacity:Number(getComputedStyle(node).opacity),
+      visibility:getComputedStyle(node).visibility,
+      asset:node.getAttribute('data-performance-asset')
+    })));
+    a(shotStyles.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.asset==='map-fallback'),
+      'ghost actor / bust sprite in film frame: '+event+' '+JSON.stringify(shotStyles));
     const expectedCast=castPlan[event]?.cast;
     a(Array.isArray(expectedCast),'missing scene cast contract: '+event);
     if(expectedCast.length===0){

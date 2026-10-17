@@ -698,3 +698,52 @@
   opacity:1!important;visibility:visible!important;
   filter:drop-shadow(0 14px 15px rgba(1,10,16,.84))!important;
 }
+
+
+/* Director lock v4: no ghost actors or fake photo halves in the 9:16 worksite. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character,
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-character="player"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-blocking-depth="background"]{
+ opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 13px 14px rgba(2,10,15,.7))!important;
+}
+/* Legacy production scene's giant overlays were useful during mechanical prototyping,
+   but not in first-person movie reading. Preserve hazards in semantic scene titles and choices. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .tbm-production-layer,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-props,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-scene::before,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-scene::after{
+ display:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-atmosphere{
+ opacity:.12!important;mix-blend-mode:normal!important;
+}
+/* The large danger crosshairs and caption are reserved for safety-interaction decisions.
+   At an authored narration beat, avoid a red HUD taking over the film plate. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .episode-immersive-scene::before{
+ display:none!important;
+}
+@media(orientation:portrait){
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title{
+  top:8%!important;left:5%!important;right:5%!important;width:90%!important;gap:3px!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title>strong{
+  font-size:clamp(20px,5vw,31px)!important;line-height:1.15!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title>small{
+  font-size:11px!important;line-height:1.4!important;max-width:42ch!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-markers{opacity:.85!important}
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-layer{
+  pointer-events:none!important;
+ }
+}
+/* The red inspection square still indicates a real controlled access boundary,
+   but a thin outline with no opaque bands no longer competes with the characters. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline{
+ border:1px solid rgba(237,102,88,.32)!important;box-shadow:none!important;
+ background:transparent!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::before,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::after,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline>i{opacity:.2!important}
