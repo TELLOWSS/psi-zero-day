@@ -7,6 +7,8 @@ try{for(const[width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024]
  page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(25000);
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('[data-home-art="premium-hero-v4"]').waitFor();
  const hero=page.locator('.commercial-title-backdrop');await hero.evaluate(e=>e.decode());
+ const emblem=page.locator('.psi-original-emblem');await emblem.evaluate(e=>e.decode());
+ assert.equal(await emblem.getAttribute('src'),'/assets/branding/home-psi-v5/psi-original.svg');
  await page.locator('.commercial-title-action-art').evaluateAll(es=>Promise.all(es.map(e=>e.decode())));
  const image=await hero.evaluate(e=>({src:e.currentSrc,w:e.naturalWidth,h:e.naturalHeight}));
  const portrait=height>width&&width<=1050;assert(image.src.endsWith(portrait?'/portrait.webp':'/wide.webp'));
@@ -17,17 +19,20 @@ try{for(const[width,height]of[[320,568],[390,844],[568,320],[844,390],[768,1024]
   const b=e.getBoundingClientRect(),s=getComputedStyle(e),pos=s.objectPosition.split(' ').map(p=>parseFloat(p)/100),scale=Math.max(b.width/e.naturalWidth,b.height/e.naturalHeight);
   const x=b.x+(b.width-e.naturalWidth*scale)*pos[0]+e.naturalWidth*scale*(portrait?.65:.73),y=b.y+(b.height-e.naturalHeight*scale)*pos[1]+e.naturalHeight*scale*(portrait?.38:.23);
   const overlapping=[...document.querySelectorAll('.commercial-title-utility button,.commercial-title-logo,.commercial-title-copy h1,.premium-hero-start,.commercial-title-actions')].filter(n=>{const r=n.getBoundingClientRect();return x>r.x&&x<r.right&&y>r.y&&y<r.bottom}).map(n=>n.className||n.tagName);
-  return{x,y,overlapping};
+  const helmetX=b.x+(b.width-e.naturalWidth*scale)*pos[0]+e.naturalWidth*scale*(portrait?.72:.762),helmetY=b.y+(b.height-e.naturalHeight*scale)*pos[1]+e.naturalHeight*scale*(portrait?.305:.085);
+  const helmetOverlapping=[...document.querySelectorAll('.commercial-title-utility button,.commercial-title-logo,.commercial-title-copy h1,.premium-hero-start,.commercial-title-actions')].filter(n=>{const r=n.getBoundingClientRect();return helmetX>r.x&&helmetX<r.right&&helmetY>r.y&&helmetY<r.bottom}).map(n=>n.className||n.tagName);
+  return{x,y,overlapping,helmetX,helmetY,helmetOverlapping};
  },portrait);
  assert(face.x>0&&face.x<width&&face.y>0&&face.y<height,'Face outside first viewport '+JSON.stringify(face));
  assert.deepEqual(face.overlapping,[],'Hero face obscured by controls');
+ assert.deepEqual(face.helmetOverlapping,[],'Helmet PSI mark obscured by controls');
  await page.screenshot({path:path.join(out,'home-'+width+'.png')});
  await start.focus();assert.equal(await start.evaluate(e=>e===document.activeElement),true);await start.click();
  await page.locator('[data-defense-screen="guard-home"]').waitFor();
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-survivors-entry').click();await page.locator('.survivors-ready-launch').waitFor({timeout:60000});
  await page.goto(base+'/',{waitUntil:'domcontentloaded'});await page.locator('.is-story-entry').click();await page.locator('.mode-preview-dialog').waitFor();assert((await page.locator('.mode-preview-dialog').innerText()).includes('준비중'));await page.locator('.mode-preview-close').click();
  await page.locator('.is-breaker-entry').click();await page.waitForFunction(()=>typeof SignalBreakerQA!=='undefined');assert(page.url().includes('entry=play'));
- assert.deepEqual(errors,[]);rows.push({width,height,image,face,startInFirstViewport:true,keyboardFocus:true,guardEntry:true,watchEntry:true,breakerEntry:true,storyGated:true,errors});
+ assert.deepEqual(errors,[]);rows.push({width,height,image,face,originalPSIMarkDecoded:true,startInFirstViewport:true,keyboardFocus:true,guardEntry:true,watchEntry:true,breakerEntry:true,storyGated:true,errors});
  fs.writeFileSync(path.join(out,'browser.json'),JSON.stringify(rows,null,2));console.log(width,height,'PASS');await context.close();
 }}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,3000))]);}
 })().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

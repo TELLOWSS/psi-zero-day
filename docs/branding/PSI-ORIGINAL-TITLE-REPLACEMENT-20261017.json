@@ -1,0 +1,12 @@
+{
+  "authority": "USER_REQUEST_ORIGINAL_PSI_MARK_AND_HELMET_BRANDING_20261017",
+  "userRequest": "메인화면 캐릭터 안전모에 PSI 마크와 상호명 넣어주고, 메인화면 마크를 첨부한 PSI 오리지날 마크로 해주면 좋겠어.",
+  "reference": "docs/branding/psi-original-reference-20261017.png",
+  "scope": "MAIN_TITLE_MARK_AND_MAIN_CHARACTER_HELMET_ONLY",
+  "supersedesTitleFiles": ["/assets/branding/new-psi-wordmark-stacked-chalk.svg", "/assets/branding/new-psi-wordmark-wide-chalk.svg"],
+  "assetManifest": "content/episode01/home-psi-art-v5.json",
+  "runtimeMark": "/assets/branding/home-psi-v5/psi-original.svg",
+  "companyNameFromReference": "PSI",
+  "legacyAssetBytesPreserved": true,
+  "trademarkClearance": "NOT_CONFIRMED"
+}

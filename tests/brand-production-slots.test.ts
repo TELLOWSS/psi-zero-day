@@ -48,7 +48,7 @@ describe('brand production slot audit contract', () => {
     expect(cast.sort()).toEqual([...TITLE_CAST_IDS].sort());
   });
 
-  it('connects only the exact files explicitly approved by the Director', () => {
+  it('preserves previously approved file bytes and applies the explicitly requested PSI title replacement', () => {
     expect(contract.nonBinarySlots).toEqual([]);
     const approval = JSON.parse(readFileSync(contract.approvedBrandFiles, 'utf8'));
     expect(approval.decision).toBe('DESIGN_AND_FILES_APPROVED_APPLY_AFTER_VERIFICATION');
@@ -56,12 +56,20 @@ describe('brand production slot audit contract', () => {
     expect(approval.otherArtApproval).toBe(false);
     expect(approval.trademarkClearance).toBe('NOT_CONFIRMED');
     expect(approval.approvedRuntimeFiles).toHaveLength(4);
+    const replacement = JSON.parse(readFileSync(contract.titleMarkReplacement, 'utf8'));
+    expect(replacement.authority).toBe('USER_REQUEST_ORIGINAL_PSI_MARK_AND_HELMET_BRANDING_20261017');
+    expect(existsSync(replacement.reference)).toBe(true);
     for (const file of approval.approvedRuntimeFiles) {
       const delivery = readFileSync(resolve('public', file.uri.slice(1)));
       expect(delivery).toEqual(readFileSync(file.source));
       expect(createHash('sha256').update(delivery).digest('hex')).toBe(file.sha256);
-      expect(readFileSync(file.id.startsWith('symbol') ? 'index.html' : 'src/ui/GameHub.tsx', 'utf8')).toContain(file.uri);
+      if(file.id.startsWith('symbol'))expect(readFileSync('index.html','utf8')).toContain(file.uri);
+      else expect(replacement.supersedesTitleFiles).toContain(file.uri);
     }
+    const current = JSON.parse(readFileSync(replacement.assetManifest,'utf8'));
+    expect(current.mark.uri).toBe(replacement.runtimeMark);
+    expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain('home-psi-art-v5.json');
+    expect(existsSync('public'+replacement.runtimeMark)).toBe(true);
   });
 
   it('preserves the portrait candidate bytes and dimensions outside runtime', () => {

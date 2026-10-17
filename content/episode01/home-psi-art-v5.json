@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "status": "FINAL_CANDIDATE_RUNTIME_INTEGRATED",
+  "generator": "built-in image_gen",
+  "prompt": "docs/branding/HOME-PSI-ART-PROMPTS-20261017.json",
+  "mark": {
+    "uri": "/assets/branding/home-psi-v5/psi-original.svg",
+    "companyName": "PSI",
+    "source": "docs/branding/psi-original-reference-20261017.png",
+    "method": "SVG traced from user reference; geometry, blue shield, concentric eye and PSI retained"
+  },
+  "assets": {
+    "wide": {
+      "uri": "/assets/branding/home-psi-v5/wide.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 367120,
+      "sha256": "81504ad417985280666d54ef917475e92253edb98d774e57de64ab6a0903a7e5"
+    },
+    "portrait": {
+      "uri": "/assets/branding/home-psi-v5/portrait.webp",
+      "width": 940,
+      "height": 1672,
+      "bytes": 386782,
+      "sha256": "525e309cc076c96f3325a4d47d7c79145514d563bd0ae55ce5ed3ed2d2ea3f01"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
 import './hub-premium.css';
-import homePremiumArt from '../../content/episode01/home-premium-art-v4.json';
+import homePremiumArt from '../../content/episode01/home-psi-art-v5.json';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
@@ -372,7 +372,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     <header className="commercial-title-topline">
       <div className="commercial-title-meta">
         <small>Ver. 0.1.0</small>
-        <b>{COMPANY_NAME}</b>
+        <b>{homePremiumArt.mark.companyName}</b>
         <span>{t('ui.title.topline')}</span>
       </div>
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
@@ -390,10 +390,10 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <div className="hub-cinematic-intro">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
       <div className="commercial-title-logo" data-title-rank="primary" role="img" aria-label={GAME_TITLE}>
-        <picture className="commercial-title-wordmark">
-          <source media="(max-height: 460px) and (orientation: landscape)" srcSet="/assets/branding/new-psi-wordmark-wide-chalk.svg" />
-          <img src="/assets/branding/new-psi-wordmark-stacked-chalk.svg" alt="" width="460" height="144" />
-        </picture>
+        <div className="commercial-title-wordmark psi-original-lockup">
+          <img src={homePremiumArt.mark.uri} alt="" width="180" height="270" className="psi-original-emblem"/>
+          <span className="psi-original-game-name" aria-hidden="true">ZERO DAY</span>
+        </div>
       </div>
       <p className="hub-home-name">{t('ui.hub.home_name')}</p>
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
