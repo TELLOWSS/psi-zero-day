@@ -197,3 +197,24 @@
 @media (prefers-reduced-motion: reduce) {
   .episode-cold-open * { animation: none !important; transition: none !important; }
 }
+
+
+/* Mobile director fix: the prologue CTA must not vanish under dark cast/gradient. */
+@media(orientation:portrait) and (max-width:900px){
+  #root .episode-cold-open-copy{top:max(30px,5dvh)!important;left:6vw!important;right:6vw!important;width:auto!important}
+  #root .episode-cold-open-copy strong{font-size:clamp(42px,11vw,64px)!important;line-height:1.03!important}
+  #root .episode-cold-open-copy p{margin-top:12px!important;max-width:88vw!important;font-size:clamp(13px,3.65vw,17px)!important;line-height:1.55!important}
+  #root .episode-cold-open-cast{top:25%!important;bottom:8%!important;inset-inline:0!important}
+  #root .episode-cold-open-player{left:-6%!important;height:80%!important}
+  #root .episode-cold-open-kang{left:48%!important;height:64%!important}
+  #root .episode-cold-open-junho{left:79%!important;height:47%!important}
+  #root .episode-cold-open-rewind{bottom:113px!important;left:6vw!important;font-size:11px!important;max-width:88vw!important}
+  #root .episode-cold-open-cta{
+    bottom:max(20px,env(safe-area-inset-bottom))!important;left:6vw!important;right:6vw!important;
+    min-height:56px!important;z-index:90!important;background:#f4d69a!important;
+    color:#10202b!important;border:2px solid #ffe7ad!important;
+    font-weight:850!important;font-size:16px!important;
+    box-shadow:0 8px 30px #0009!important;
+  }
+  #root .episode-cold-open-cta span{color:inherit!important}
+}

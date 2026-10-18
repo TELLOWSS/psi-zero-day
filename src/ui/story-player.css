@@ -3,6 +3,7 @@
 #root main.game-frame[data-story-player="cinematic"].phase-playing:not(.strategy-active) {
   --ink:#f5f3e9;
   --paper:#101e27;
+  --story-dock-height:clamp(220px,27dvh,260px);
   display:block!important;
   width:100%!important;
   height:100dvh!important;
@@ -10,6 +11,50 @@
   aspect-ratio:auto!important;
   color:#f5f3e9;
   background:#10202a;
+}
+/* Keep faces and the worksite above the reading dock. Older scene-specific
+   blocking was authored for a different panel geometry. */
+#root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:clamp(260px,31dvh,340px)}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+  inset:72px 0 calc(var(--story-dock-height) - 54px)!important;
+  width:100%!important;height:auto!important;transform:none!important;z-index:15!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+  top:0!important;bottom:0!important;left:auto!important;right:auto!important;
+  width:26%!important;height:100%!important;max-height:none!important;min-height:0!important;
+  transform:none!important;opacity:.86!important;filter:drop-shadow(0 12px 16px #07141d55)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:5%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:27%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:25%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:3%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-5{left:38%!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{opacity:1!important;z-index:20!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character img{
+  width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;
+  transform:none!important;opacity:1!important;filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-background{
+  object-position:50% 44%!important;transform:none!important;filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-atmosphere{opacity:.22!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-grade{opacity:.25!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-props{opacity:.35!important}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-speaker-tag,
+#root main.game-frame[data-story-player="cinematic"] .episode-scene-minimap{display:none!important}
+@media(max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"]{--story-dock-height:max(280px,34dvh)}
+  #root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:max(310px,49dvh)}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:88px 0 calc(var(--story-dock-height) - 40px)!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{width:42%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:-7%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:15%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:13%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:-9%!important}
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"],#root main.game-frame[data-story-player="cinematic"]:has(.choice-content){--story-dock-height:60dvh}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{inset:0 0 auto!important;height:130px!important}
 }
 #root main.game-frame[data-story-player="cinematic"] .game-header {
   position:absolute!important;inset:0 0 auto!important;height:56px!important;
@@ -118,4 +163,798 @@
   #root main.game-frame[data-story-player="cinematic"] .story-context-panel{top:96px!important}
   #root main.game-frame[data-story-player="cinematic"] .story-reading-position{position:absolute;bottom:18px;left:14px;right:245px;z-index:1;font-size:10px}
   #root main.game-frame[data-story-player="cinematic"] .story-reading-position button{min-height:44px}
+}
+
+
+/* CINEMA / READ: subtitles are a temporary overlay, not a permanent dialogue wall.
+   Choice moments intentionally expand, and no script auto-advances dialogue or choices. */
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]{
+  --story-dock-height:112px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]{
+  --story-dock-height:clamp(190px,24dvh,260px);
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"]{
+  --story-dock-height:clamp(190px,29dvh,290px);
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide{
+  display:flex;align-items:center;flex-wrap:nowrap;min-height:44px;gap:8px;position:relative;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide strong{
+  flex:0 1 auto;min-width:0;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reading-guide span{
+  flex:1 1 auto;min-width:0;text-align:right;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-view-toggle{
+  flex:0 0 auto;min-height:44px;padding:7px 12px;border:1px solid #c4d4d49a;
+  border-radius:999px;background:#09202bbc;color:#f9ebc6;
+  font:inherit;font-size:12px;font-weight:750;white-space:nowrap;cursor:pointer;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-view-toggle:focus-visible{
+  outline:3px solid #ffe29e;outline-offset:2px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+  left:max(0px,env(safe-area-inset-left))!important;right:max(0px,env(safe-area-inset-right))!important;
+  bottom:28px!important;top:auto!important;width:auto!important;
+  height:112px!important;max-height:calc(100dvh - 78px)!important;min-height:0!important;
+  margin:0!important;padding:7px 12px!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:linear-gradient(0deg,rgba(3,12,19,.93) 0%,rgba(6,18,27,.68) 59%,rgba(8,23,32,0) 100%)!important;
+  backdrop-filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide{
+  height:44px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide span{display:none!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide strong{
+  max-width:calc(100% - 112px);font-size:13px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-view-toggle{
+  margin-left:auto;background:#081923a9;border-color:#93b3b966;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .presentation-area{
+  gap:0!important;overflow:visible!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-content{
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  gap:10px!important;min-height:0!important;max-height:none!important;
+  overflow:visible!important;flex:1 1 auto!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+  flex:1 1 0!important;width:0!important;max-width:none!important;
+  height:auto!important;max-height:50px!important;min-height:0!important;
+  margin:0!important;padding:0 2px!important;overflow:auto!important;
+  font-size:calc(15px * var(--story-font-scale))!important;
+  line-height:1.5!important;text-align:center!important;
+  text-shadow:0 2px 5px #000,0 0 14px #000a;
+  scrollbar-width:thin;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .continue-button{
+  flex:0 0 46px!important;align-self:center!important;
+  width:46px!important;min-width:46px!important;max-width:46px!important;
+  height:46px!important;min-height:46px!important;padding:0!important;margin:0!important;
+  gap:0!important;border-radius:50%!important;
+  font-size:0!important;background:#f1dbaed9!important;
+  box-shadow:0 2px 12px #0006!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .continue-button kbd{display:none!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .continue-button span{
+  font-size:20px!important;line-height:1!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-position{
+  position:absolute!important;top:7px!important;right:120px!important;bottom:auto!important;left:auto!important;
+  width:auto!important;min-height:44px!important;gap:5px!important;z-index:2;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-position button{
+  border:0!important;background:#0c2635a8!important;font-size:11px;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+  height:clamp(190px,24dvh,260px)!important;
+  max-height:calc(100dvh - 100px)!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+  height:clamp(190px,29dvh,290px)!important;
+  max-height:calc(100dvh - 90px)!important;
+  padding:10px 16px!important;background:#0c1d27ec!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel{
+  gap:7px!important;min-height:0!important;align-content:start!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel button{
+  min-height:54px!important;padding:8px 12px!important;
+  background:#173544e8!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-content{gap:6px!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"] .dialogue-text{
+  overflow:auto!important;scrollbar-width:thin;
+}
+@media(max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:112px!important;max-height:calc(100dvh - 74px)!important;padding:7px 10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .play-panel .dialogue-text{
+    font-size:calc(14px * var(--story-font-scale))!important;line-height:1.45!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+    height:clamp(220px,31dvh,300px)!important;max-height:calc(100dvh - 110px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+    height:clamp(188px,25dvh,240px)!important;max-height:calc(100dvh - 105px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-guide span{
+    display:none!important;
+  }
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]{
+    --story-dock-height:96px;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]{
+    --story-dock-height:clamp(132px,43dvh,174px);
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"]{
+    --story-dock-height:clamp(148px,45dvh,190px);
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:96px!important;max-height:calc(100dvh - 72px)!important;
+    padding:3px 12px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="read"]:not([data-story-decision="true"]) .play-panel{
+    height:clamp(132px,43dvh,174px)!important;max-height:calc(100dvh - 92px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel{
+    height:clamp(148px,45dvh,190px)!important;max-height:calc(100dvh - 84px)!important;
+    padding:6px 12px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"] .play-panel .dialogue-text{
+    max-height:41px!important;font-size:calc(13px * var(--story-font-scale))!important;line-height:1.45!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-guide strong{font-size:12px!important}
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-panel button{
+    min-height:46px!important;padding:5px 8px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .choice-content>h2{
+    font-size:14px!important;line-height:1.3!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #root main.game-frame[data-story-player="cinematic"] .play-panel,
+  #root main.game-frame[data-story-player="cinematic"] .story-view-toggle{transition:none!important}
+}
+
+
+/* Presentation-only scene focus: show the entire world, with no save/engine mutation. */
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+  position:absolute!important;bottom:calc(var(--story-dock-height) + 40px)!important;
+  right:max(14px,env(safe-area-inset-right))!important;z-index:97!important;
+  min-height:44px!important;min-width:94px!important;padding:8px 12px!important;
+  border:1px solid #b3c8c2aa!important;border-radius:999px!important;
+  background:#081f2bba!important;color:#fff1cc!important;
+  font:inherit!important;font-size:12px!important;font-weight:750!important;
+  letter-spacing:.01em;cursor:pointer;box-shadow:0 3px 16px #0005;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:focus-visible{
+  outline:3px solid #ffe2a0!important;outline-offset:2px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+  bottom:calc(36px + env(safe-area-inset-bottom))!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .episode-immersive-scene{
+  inset:0!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .play-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-header,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-footer,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-current-scene,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-context-panel,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-reader-open,
+#root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .game-manual-open{
+  opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+@media(max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+    bottom:calc(var(--story-dock-height) + 10px)!important;
+    padding:5px 10px!important;min-width:88px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-focus="true"] .story-scene-peek{
+    bottom:calc(32px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+
+/* Camera grammar: landscape is encouraged without locking orientation; portrait is an authored frame. */
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint {
+  position:absolute!important;top:114px!important;left:50%!important;transform:translateX(-50%)!important;
+  z-index:78!important;box-sizing:border-box;width:min(460px,calc(100vw - 24px))!important;
+  display:none;align-items:center;gap:10px;padding:8px 10px;
+  border:1px solid #bfcbb867;border-radius:12px;background:#071b26d9;color:#eaf0e9;
+  box-shadow:0 5px 20px #0006;font-size:12px;line-height:1.55;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint b{color:#f0d18e}
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint button{
+  border:1px solid #e2cfaa88;border-radius:8px;background:#163342;color:#f9edda;
+  min-height:44px;min-width:92px;padding:5px 8px;font:inherit;font-weight:750;cursor:pointer;
+}
+@media(orientation:portrait){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:flex}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-background{
+    object-fit:cover!important;object-position:52% 35%!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:25;
+    background:linear-gradient(90deg,rgba(3,13,19,.22),transparent 28%,transparent 72%,rgba(3,13,19,.22));
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:65px 0 calc(var(--story-dock-height) - 45px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+    background:linear-gradient(90deg,#091c2cca,#091c2c48)!important;
+  }
+}
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{top:106px!important}
+}
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
+}
+
+
+/* Director QA pass 2026-10-18: nine Android portrait captures.
+   Goal: a readable scene, one visual protagonist, daylight chronology, fewer UI occluders.
+   These rules override the legacy equal-weight 5-actor blocking ONLY in story mode. */
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open,
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open {
+  top:62px!important;bottom:auto!important;width:46px!important;height:46px!important;
+  min-width:46px!important;max-width:46px!important;min-height:46px!important;
+  padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  border-radius:50%!important;background:#081b27d4!important;
+  border:1px solid #9db3bd88!important;box-shadow:0 3px 12px #0005!important;
+  color:#f5e8ca!important;font-size:0!important;z-index:83!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open{right:72px!important}
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open{right:16px!important}
+#root main.game-frame[data-story-player="cinematic"] .story-reader-open::after{
+  content:"Aa";font-size:16px!important;font-weight:850;line-height:1;
+}
+#root main.game-frame[data-story-player="cinematic"] .game-manual-open::after{
+  content:"?";font-size:21px!important;font-weight:850;line-height:1;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+  max-width:calc(100% - 150px)!important;
+  border-radius:0 8px 8px 0;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel{
+  top:115px!important;right:14px!important;z-index:83!important;
+  max-width:min(330px,calc(100vw - 28px))!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel:not([open]) summary{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:46px!important;height:44px!important;min-height:44px!important;padding:0!important;
+  border-radius:22px!important;font-size:0!important;line-height:1!important;
+  background:#09212bb8!important;border:1px solid #aec4c190!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel:not([open]) summary::after{
+  content:"기록";font-size:11px!important;color:#f4dfb6!important;font-weight:850;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-context-panel[open]{
+  padding:12px!important;max-height:58dvh!important;overflow:auto!important;
+  background:#0b222ef0!important;border:1px solid #b9c3b88c;border-radius:12px;
+}
+/* Show deliberate character hierarchy instead of a flat row of equally large cutouts. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+  opacity:.63!important;transition:opacity .32s ease,filter .32s ease!important;
+  filter:drop-shadow(0 13px 12px #03151e88)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{
+  opacity:1!important;z-index:24!important;
+  filter:drop-shadow(0 13px 17px #02131aa8)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-blocking-depth="background"]:not([data-speaker="true"]){
+  opacity:.42!important;filter:brightness(.78) drop-shadow(0 8px 8px #06121c66)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-character="player"]:not([data-speaker="true"]){
+  opacity:.43!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-props{
+  opacity:.16!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-props,
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-props{
+  opacity:.36!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-evidence-board{
+  opacity:.35!important;
+}
+/* 09:24, 09:45 and 10:02 must not read as 18:00.
+   Lighting-grade correction pending an approved NEW daylight pour master plate. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:is(
+ [data-event="e01_06_pump_arrival"],
+ [data-event="e01_07_first_pour"],
+ [data-event="e01_08_reactions"]
+) .episode-immersive-background{
+  filter:brightness(1.22) saturate(.72) contrast(.92) hue-rotate(13deg)!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene:is(
+ [data-event="e01_06_pump_arrival"],
+ [data-event="e01_07_first_pour"],
+ [data-event="e01_08_reactions"]
+)::before {
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(170,204,226,.29) 0%,rgba(171,205,229,.10) 45%,transparent 76%);
+  mix-blend-mode:screen;
+}
+/* 2-3 lines must remain fully readable even with speaker, page indicator and next key. */
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]){
+  --story-dock-height:128px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+  height:128px!important;max-height:calc(100dvh - 86px)!important;
+  padding:6px 11px 9px!important;overflow:visible!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-content{
+  min-height:60px!important;align-items:center!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+  max-height:74px!important;min-height:0!important;overflow-y:auto!important;
+  line-height:1.5!important;white-space:pre-line!important;text-wrap:pretty;
+  scrollbar-width:thin;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+  right:12px!important;min-width:84px!important;opacity:.78;
+}
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:hover,
+#root main.game-frame[data-story-player="cinematic"] .story-scene-peek:focus-visible{opacity:1}
+@media(orientation:portrait) and (max-width:600px) {
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{
+    max-width:calc(100% - 86px)!important;top:64px!important;left:10px!important;
+    padding:6px 9px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-reader-open{top:64px!important;right:64px!important}
+  #root main.game-frame[data-story-player="cinematic"] .game-manual-open{top:64px!important;right:10px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene strong{font-size:12px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-context-panel{
+    top:117px!important;right:10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:104px 0 calc(var(--story-dock-height) - 73px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character{
+    width:43%!important;transform:translateY(4%) scale(.91)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character[data-speaker="true"]{
+    transform:translateY(5%) scale(1.03)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-1{left:-9%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-2{left:12%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-3{right:10%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-4{right:-13%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene .episode-immersive-character.cast-5{left:37%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-1{left:3%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-2{left:auto!important;right:0!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-psi-trace,
+  #root main.game-frame[data-story-player="cinematic"] .episode-scene-minimap{display:none!important}
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:128px!important;padding:4px 10px 9px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{
+    font-size:calc(14px * var(--story-font-scale))!important;max-height:64px!important;
+    line-height:1.43!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .story-reading-guide{height:39px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-reading-position{
+    top:2px!important;right:100px!important;bottom:auto!important;
+  }
+}
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]){
+    --story-dock-height:96px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel{
+    height:96px!important;max-height:calc(100dvh - 72px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-reading-mode="cinema"]:not([data-story-decision="true"]) .play-panel .dialogue-text{max-height:43px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-reader-open,
+  #root main.game-frame[data-story-player="cinematic"] .game-manual-open{top:48px!important}
+  #root main.game-frame[data-story-player="cinematic"] .story-current-scene{max-width:calc(100% - 170px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{transition:none!important}
+}
+
+
+/* Identify the photographed protagonist even during silent RESULT narration. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-framed-subject="true"]{
+  opacity:1!important;z-index:24!important;
+  filter:drop-shadow(0 15px 17px #06141f99)!important;
+}
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="5"] .episode-immersive-character[data-character="player"]:not([data-speaker="true"]):not([data-framed-subject="true"]){
+    opacity:.23!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-framed-subject="true"]{
+    transform:translateY(5%) scale(1.03)!important;
+  }
+}
+
+
+/* Second actual screenshot review: restore physical grounding and protect the opening shot. */
+@media(orientation:portrait) and (max-width:600px){
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character.cast-1{
+    left:13%!important;right:auto!important;width:68%!important;
+    transform:translateY(3%) scale(1.18)!important;
+    opacity:1!important;
+  }
+}
+/* Landscape legacy rule pinned cast to top:0 and height:130px; feet were floating near sky. */
+@media(orientation:landscape) and (max-height:440px){
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:auto 0 80px!important;height:180px!important;max-height:58dvh!important;
+    width:100%!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character.cast-1{
+    left:26%!important;right:auto!important;width:36%!important;
+    transform:none!important;opacity:1!important;
+  }
+}
+
+
+/* QA lock 2026-10-18 — directed camera blocking from nine user real-device captures.
+   Make portrait/landscape shots independent; engine cast identity and decisions do not change.
+   This replaces the generic equal-weight five-figure lineup, not the story's data. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{
+  transition:opacity .18s ease!important;
+  filter:drop-shadow(0 13px 13px rgba(4,14,20,.66))!important;
+  opacity:.79!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-speaker="true"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-framed-subject="true"]{
+  opacity:1!important;z-index:29!important;
+  filter:drop-shadow(0 16px 20px rgba(1,12,18,.82))!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-performance-asset="expression"]:not([data-expressive-crop-suppressed="true"]) img{
+  /* Some expression sheets are bust portraits, NOT standing construction workers. */
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 63%,rgba(0,0,0,.62) 83%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 63%,rgba(0,0,0,.62) 83%,transparent 100%);
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-blocking-depth="background"]:not([data-speaker="true"]):not([data-framed-subject="true"]){
+  opacity:.58!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-4:not([data-speaker="true"]):not([data-framed-subject="true"]),
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-5:not([data-speaker="true"]):not([data-framed-subject="true"]){
+  opacity:0!important;visibility:hidden!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-4[data-speaker="true"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-5[data-speaker="true"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-4[data-framed-subject="true"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-5[data-framed-subject="true"]{
+  visibility:visible!important;
+}
+@media(orientation:portrait) and (max-width:600px){
+  /* Ground line is at the top of the story subtitle vignette, not under the UI. */
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:auto 0 calc(var(--story-dock-height) + 5px)!important;
+    height:clamp(250px,46dvh,410px)!important;
+    max-height:calc(100dvh - var(--story-dock-height) - 112px)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{
+    top:0!important;bottom:0!important;height:100%!important;width:44%!important;
+    transform:none!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-1{left:-3%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-2{left:25%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-3{left:auto!important;right:-4%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-4:is([data-speaker="true"],[data-framed-subject="true"]),
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-5:is([data-speaker="true"],[data-framed-subject="true"]){
+    left:auto!important;right:0!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character.cast-1{
+    left:19%!important;width:62%!important;transform:scale(1.08)!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-1{left:2%!important;width:45%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="2"] .episode-immersive-character.cast-2{left:auto!important;right:2%!important;width:45%!important}
+  /* Fewer full-surface actions; a 44px utility rail leaves 300px+ of scenery. */
+  #root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+    position:absolute!important;top:172px!important;right:10px!important;bottom:auto!important;
+    min-width:46px!important;max-width:56px!important;min-height:44px!important;
+    padding:5px!important;font-size:10px!important;
+    background:#09212bdc!important;border-radius:12px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-context-panel{top:118px!important;right:10px!important}
+}
+@media(orientation:landscape) and (max-height:440px){
+  /* Prior strip bottom:80px placed workers above the ramp (floating).
+     Ground the cast against the actual framed world bottom. */
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-cast{
+    inset:auto 0 2px!important;height:min(215px,60dvh)!important;
+    max-height:60dvh!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character{
+    top:0!important;bottom:0!important;height:100%!important;width:23%!important;transform:none!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-1{left:5%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-2{left:33%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-3{right:12%!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-4:is([data-speaker="true"],[data-framed-subject="true"]),
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-character.cast-5:is([data-speaker="true"],[data-framed-subject="true"]){
+    right:0!important;left:auto!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character.cast-1{
+    left:40%!important;width:20%!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-scene-peek{
+    top:105px!important;bottom:auto!important;right:10px!important;
+    min-height:44px!important;min-width:56px!important;font-size:10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"] .story-context-panel{top:103px!important;right:75px!important}
+}
+/* The earlier optional rotation helper covers half the scene on old cached bundles.
+   New builds recommend landscape in the home tile, not in-play popups. */
+#root main.game-frame[data-story-player="cinematic"] .story-orientation-hint{display:none!important}
+
+
+/* Director screenshot follow-up: a sole protagonist must never resemble a ghost. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-cast-count="1"] .episode-immersive-character{
+  opacity:1!important;visibility:visible!important;
+  filter:drop-shadow(0 14px 15px rgba(1,10,16,.84))!important;
+}
+
+
+/* Director lock v4: no ghost actors or fake photo halves in the 9:16 worksite. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character,
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-character="player"],
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-blocking-depth="background"]{
+ opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 13px 14px rgba(2,10,15,.7))!important;
+}
+/* Legacy production scene's giant overlays were useful during mechanical prototyping,
+   but not in first-person movie reading. Preserve hazards in semantic scene titles and choices. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .tbm-production-layer,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-props,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-scene::before,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-scene::after{
+ display:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="TBM"] .episode-immersive-atmosphere{
+ opacity:.12!important;mix-blend-mode:normal!important;
+}
+/* The large danger crosshairs and caption are reserved for safety-interaction decisions.
+   At an authored narration beat, avoid a red HUD taking over the film plate. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .episode-immersive-scene::before{
+ display:none!important;
+}
+@media(orientation:portrait){
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title{
+  top:8%!important;left:5%!important;right:5%!important;width:90%!important;gap:3px!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title>strong{
+  font-size:clamp(20px,5vw,31px)!important;line-height:1.15!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-title>small{
+  font-size:11px!important;line-height:1.4!important;max-width:42ch!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-markers{opacity:.85!important}
+ #root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-layer{
+  pointer-events:none!important;
+ }
+}
+/* The red inspection square still indicates a real controlled access boundary,
+   but a thin outline with no opaque bands no longer competes with the characters. */
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline{
+ border:1px solid rgba(237,102,88,.32)!important;box-shadow:none!important;
+ background:transparent!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::before,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline::after,
+#root main.game-frame[data-story-player="cinematic"][data-production-scene="STOP_WORK"] .stop-work-production-stopline>i{opacity:.2!important}
+
+
+/* Authoring contract and camera exposure are distinct. Keep the complete character
+   cast in the DOM for plot continuity, but never render ghost extras into a shot. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character:not([data-on-camera="true"]){
+ opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-director-cast="two-shot-20261018"] .episode-immersive-character[data-on-camera="true"]{
+ opacity:1!important;visibility:visible!important;
+}
+
+
+/* Director V6: 14:20 TBM / 16:42 OFFICE choices must fit their text, not overlap. */
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"].phase-playing:not(.strategy-active) .play-panel:has(.choice-content){
+  display:flex!important;flex-direction:column!important;height:min(520px,58dvh)!important;
+  min-height:0!important;max-height:calc(100dvh - 110px)!important;
+  overflow:hidden!important;padding:12px!important;
+  background:rgba(8,24,34,.96)!important;backdrop-filter:blur(8px)!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .presentation-area,
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-content{
+  display:flex!important;flex-direction:column!important;flex:1 1 auto!important;
+  min-height:0!important;max-height:100%!important;overflow:hidden!important;gap:8px!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-content>h2{
+  position:static!important;flex:0 0 auto!important;font-size:clamp(15px,3.7vw,19px)!important;
+  line-height:1.4!important;font-weight:780!important;letter-spacing:-.025em!important;
+  max-height:5.6em!important;overflow:auto!important;margin:0!important;
+  padding:0 2px 4px!important;color:#fff4dc!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-panel{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;grid-auto-rows:max-content!important;
+  flex:1 1 auto!important;align-content:start!important;gap:8px!important;
+  min-height:0!important;max-height:100%!important;padding:2px 3px 5px!important;
+  overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;
+  scroll-padding-block:8px;scrollbar-width:thin!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-panel button{
+  display:flex!important;position:relative!important;align-items:center!important;justify-content:flex-start!important;
+  flex:0 0 auto!important;width:100%!important;min-width:0!important;min-height:66px!important;
+  height:auto!important;max-height:none!important;box-sizing:border-box!important;
+  padding:12px 11px!important;overflow:visible!important;
+  white-space:normal!important;word-break:keep-all!important;border:1px solid #6c939c!important;
+  border-radius:10px!important;background:#173340ef!important;
+  box-shadow:none!important;transform:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-visual{display:none!important}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-copy{
+  display:grid!important;grid-template-columns:38px minmax(0,1fr)!important;
+  align-items:start!important;gap:7px!important;flex:1 1 auto!important;
+  min-width:0!important;width:100%!important;height:auto!important;min-height:0!important;
+  margin:0!important;padding:0!important;white-space:normal!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-number{
+  display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+  min-width:34px!important;height:30px!important;box-sizing:border-box!important;flex:none!important;
+  border:1px solid #d7b9739a!important;border-radius:7px!important;
+  background:#b98f3b22!important;color:#ffe2a0!important;
+  font-size:12px!important;font-weight:800!important;line-height:1!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-text{
+  display:block!important;position:static!important;min-width:0!important;width:auto!important;
+  height:auto!important;max-height:none!important;overflow:visible!important;
+  white-space:normal!important;word-break:keep-all!important;overflow-wrap:break-word!important;
+  padding:1px 0!important;margin:0!important;
+  color:#f6f3e9!important;-webkit-text-fill-color:#f6f3e9!important;
+  font-size:clamp(13px,3.45vw,16px)!important;font-weight:600!important;
+  line-height:1.55!important;letter-spacing:-.02em!important;
+}
+#root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-arrow{
+  position:static!important;align-self:center!important;flex:0 0 auto!important;font-size:13px!important;
+}
+@media (orientation:portrait) and (max-width:650px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"].phase-playing:not(.strategy-active) .play-panel:has(.choice-content){
+    left:8px!important;right:8px!important;bottom:max(28px,env(safe-area-inset-bottom))!important;
+    width:auto!important;height:min(520px,59dvh)!important;padding:12px 10px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-panel button{
+    padding:11px 9px!important;min-height:66px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-copy{
+    grid-template-columns:35px minmax(0,1fr)!important;gap:8px!important;
+  }
+}
+@media (orientation:landscape) and (max-height:480px){
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"].phase-playing:not(.strategy-active) .play-panel:has(.choice-content){
+    left:auto!important;right:8px!important;top:62px!important;bottom:8px!important;
+    width:min(50vw,510px)!important;height:auto!important;
+    max-height:calc(100dvh - 70px)!important;padding:8px!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-content>h2{
+    font-size:14px!important;line-height:1.3!important;max-height:3.9em!important;
+  }
+  #root main.game-frame[data-story-player="cinematic"][data-story-decision="true"] .play-panel .choice-text{
+    font-size:12px!important;line-height:1.42!important;
+  }
+}
+@media (orientation:portrait) and (max-width:650px){
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_09_evening"] .day-result-production-thread,
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_10_next_day_tease"] .day-result-production-thread{display:none!important}
+  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-event="e01_09_evening"] .episode-immersive-memory-strip{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    left:7%!important;right:7%!important;top:20%!important;width:86%!important;
+    gap:8px!important;padding:8px!important;transform:none!important;
+    opacity:.85!important;box-sizing:border-box!important;
+  }
+}
+
+
+/* Directed finale: Day 01 ends as a cinematic transition, not a 20-card scroll report.
+   The full record and day-to-day carryover remain accessible on explicit expansion. */
+#root .game-frame.phase-complete .story-complete-director{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ gap:12px!important;width:min(600px,94vw)!important;
+ max-height:calc(100dvh - 105px)!important;overflow-y:auto!important;
+ padding:18px clamp(15px,4vw,28px)!important;margin:0 auto!important;
+ border:1px solid #e0c68e54!important;border-radius:16px!important;
+ background:rgba(7,23,33,.95)!important;text-align:center!important;
+ scrollbar-width:thin!important;
+}
+#root .game-frame.phase-complete .story-complete-director .eyebrow{margin:0!important;font-size:12px!important}
+#root .game-frame.phase-complete .story-complete-director h1{
+ font-size:clamp(25px,6vw,40px)!important;line-height:1.18!important;
+ margin:0!important;letter-spacing:-.03em!important;
+}
+#root .game-frame.phase-complete .story-complete-director .end-line{
+ font-size:clamp(13px,3vw,17px)!important;line-height:1.45!important;margin:0 0 5px!important;
+}
+#root .game-frame.phase-complete .story-complete-director .story-next-episode{
+ display:flex!important;flex-direction:column!important;gap:4px!important;
+ width:100%!important;min-height:74px!important;flex:none!important;
+ padding:12px 16px!important;text-align:left!important;
+ border:2px solid #e6c57d!important;border-radius:12px!important;
+ background:linear-gradient(100deg,#244656,#102736)!important;
+ color:#fff3d5!important;box-shadow:0 8px 30px #0006!important;
+}
+#root .game-frame.phase-complete .story-complete-director .story-next-episode span{font-size:11px!important;letter-spacing:.09em!important;color:#f5d392!important}
+#root .game-frame.phase-complete .story-complete-director .story-next-episode strong{font-size:clamp(15px,3.9vw,20px)!important}
+#root .game-frame.phase-complete .story-complete-director .story-completion-details{
+ width:100%!important;border:1px solid #6b879355!important;border-radius:9px!important;
+ background:#132d3977!important;text-align:left!important;overflow:hidden!important;
+}
+#root .game-frame.phase-complete .story-complete-director .story-completion-details>summary{
+ min-height:48px!important;display:list-item!important;cursor:pointer!important;
+ padding:13px 16px!important;color:#f0e6cf!important;
+ font-size:14px!important;font-weight:750!important;
+}
+#root .game-frame.phase-complete .story-complete-director .story-completion-details .episode-completion-carryover,
+#root .game-frame.phase-complete .story-complete-director .story-completion-details .episode-review{
+ width:100%!important;box-sizing:border-box!important;padding:8px!important;margin:0!important;
+ max-height:45dvh!important;overflow:auto!important;
+}
+#root .game-frame.phase-complete .story-complete-director .replay-hint{margin:0!important;font-size:12px!important;opacity:.7!important}
+#root .game-frame.phase-complete .story-complete-director .primary-button{margin:0 auto!important;min-height:44px!important}
+@media(orientation:portrait) and (max-width:650px){
+ #root .game-frame.phase-complete .story-complete-director{
+  width:calc(100% - 18px)!important;max-height:calc(100dvh - 90px)!important;
+  padding:15px 13px!important;gap:10px!important;
+ }
+ #root .game-frame.phase-complete .story-complete-director .story-next-episode{
+  min-height:76px!important;
+ }
+}
+
+/* 2026-10-18 DAYLIGHT DIRECTOR PREVIEW: photographed time of day is not final-art approval.
+   Unique 09:24 vehicle arrival / 09:45 slab-level pouring frames live above the old
+   shared twilight master. Preserve the dialogue stage and all safety/choice overlays. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-morning-shot] .episode-immersive-background {
+  object-position:50% 42%!important;
+  filter:none!important;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-morning-shot] .episode-immersive-grade {
+  opacity:.12!important;
+}
+/* Contact shadow belongs to the projected floor under a full-body cutout; it is NOT
+   an image-source alpha or skeletal-animation fix. Independent scene reblocking remains
+   necessary after the final character masters arrive. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-ground-pass="contact-shadow-v1"]
+ .episode-immersive-character[data-on-camera="true"]::after {
+  content:"";display:block!important;position:absolute!important;
+  z-index:0;pointer-events:none;
+  left:50%;bottom:1.5%;width:66%;height:4.5%;
+  border-radius:50%;transform:translateX(-50%) scaleY(.72);
+  background:radial-gradient(ellipse,rgba(5,12,15,.57) 0%,rgba(13,22,24,.36) 40%,transparent 76%);
+  filter:blur(5px);opacity:.94;
+}
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-ground-pass="contact-shadow-v1"]
+ .episode-immersive-character[data-on-camera="true"] > img {
+  position:relative;z-index:1;
+}
+@media(orientation:portrait) {
+ #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-morning-shot] .episode-immersive-background {
+   object-position:54% 45%!important;
+ }
+ #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-ground-pass="contact-shadow-v1"]
+  .episode-immersive-character[data-on-camera="true"]::after {bottom:1%;width:74%;height:3.5%}
+}
+@media(prefers-reduced-motion:reduce) {
+ #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-ground-pass="contact-shadow-v1"]
+  .episode-immersive-character[data-on-camera="true"]::after {transition:none!important;animation:none!important}
+}
+
+/* 2026-10-18 director repair: active wide-stage figures use real full-body map images;
+   retaining an expression source in metadata must NOT fade the displayed boots. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-performance-asset="map-fallback"] img {
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  -webkit-mask-size:auto!important;
+  mask-size:auto!important;
 }

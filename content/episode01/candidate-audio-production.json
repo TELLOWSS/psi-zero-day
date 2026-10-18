@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "source_ost": "the_weight_of_the_morning.mp4",
+  "music_status": "single-master-editorial-loop-excerpts-NOT-eight-original-masters",
+  "foley_status": "new-gameplay-peaks-and-splice-reviewed-pending-real-device-signoff",
+  "release": "PREVIEW_ONLY_UNTIL_LICENSE_AND_LISTENING_LOCK",
+  "assets": [
+    {
+      "asset_id": "ep01.audio.candidate.day02_gate_reprise",
+      "uri": "assets/episode01/audio/foley-candidates/day02_gate_reprise.ogg",
+      "git_blob_sha": "91e15619e689e9cee0d248e5c904560ff7806f8a",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.home_key_door",
+      "uri": "assets/episode01/audio/foley-candidates/home_key_door.ogg",
+      "git_blob_sha": "aa37aa8e1e2ff15c7fc536779aa68904adbe16a6",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.hose_surface_touch",
+      "uri": "assets/episode01/audio/foley-candidates/hose_surface_touch.ogg",
+      "git_blob_sha": "2837b58519c76a38f86d0eeeca35957c9e3d94d0",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.metal_sheet_tap",
+      "uri": "assets/episode01/audio/foley-candidates/metal_sheet_tap.ogg",
+      "git_blob_sha": "6f34a3c08335926c85727bf08a43dfaf4ff1c4fc",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.pump_hydraulic_detail",
+      "uri": "assets/episode01/audio/foley-candidates/pump_hydraulic_detail.ogg",
+      "git_blob_sha": "7d86000b8d55268d6f31aadae7d08ed96ed21bd0",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.radio_ptt_detail",
+      "uri": "assets/episode01/audio/foley-candidates/radio_ptt_detail.ogg",
+      "git_blob_sha": "c154b528edb82775c27a3dbd7243e3b4dcbcb56c",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.record_page_key",
+      "uri": "assets/episode01/audio/foley-candidates/record_page_key.ogg",
+      "git_blob_sha": "97fb61fd482dcfe7720f6542064fa3b859d6e293",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.tbm_paper_gear",
+      "uri": "assets/episode01/audio/foley-candidates/tbm_paper_gear.ogg",
+      "git_blob_sha": "4e7fbb580e29d5f5e201784bd4080660acef571e",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.zero_moment_air_cut",
+      "uri": "assets/episode01/audio/foley-candidates/zero_moment_air_cut.ogg",
+      "git_blob_sha": "c01447e28697fe32fddf97dcbd4ea27246305539",
+      "kind": "foley_one_shot",
+      "preload_policy": "on_demand"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_01_dawn_promise",
+      "uri": "assets/episode01/audio/ost-candidates/sc_01_dawn_promise.ogg",
+      "git_blob_sha": "ec97459424c42e9a4ecb1c582824f8a0b5de6a22",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_02_work_pulse",
+      "uri": "assets/episode01/audio/ost-candidates/sc_02_work_pulse.ogg",
+      "git_blob_sha": "ac8096700951b572ae5e845d6cd563bbc6b9b0a9",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_03_unsaid_signal",
+      "uri": "assets/episode01/audio/ost-candidates/sc_03_unsaid_signal.ogg",
+      "git_blob_sha": "8d02ffaffa338a825ff803579ab07a054b9d46cc",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_04_seven_minutes",
+      "uri": "assets/episode01/audio/ost-candidates/sc_04_seven_minutes.ogg",
+      "git_blob_sha": "54058083fa3211e7d0d2075367843df78c13239d",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_05_zero_moment",
+      "uri": "assets/episode01/audio/ost-candidates/sc_05_zero_moment.ogg",
+      "git_blob_sha": "a2e3d2c7d2ec4a9242e5399a202ea92bf9bf5e22",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_06_after_the_stop",
+      "uri": "assets/episode01/audio/ost-candidates/sc_06_after_the_stop.ogg",
+      "git_blob_sha": "d8c60937332924272fc4f98f072813cb1fd1ebb8",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_07_fact_and_memory",
+      "uri": "assets/episode01/audio/ost-candidates/sc_07_fact_and_memory.ogg",
+      "git_blob_sha": "34bb785055091a93302752da0c96f5e481f61947",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_08_today_return_home",
+      "uri": "assets/episode01/audio/ost-candidates/sc_08_today_return_home.ogg",
+      "git_blob_sha": "dbd4ceb1485d721a7c4949c992185fe8110cc9b3",
+      "kind": "score_excerpt",
+      "preload_policy": "next_scene"
+    }
+  ]
+}

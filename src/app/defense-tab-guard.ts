@@ -2,6 +2,16 @@ import { DEFENSE_SAVE_KEY } from './defense-save';
 
 export const DEFENSE_TAB_LOCK_NAME = 'psi-zero-day:defense:active';
 export const DEFENSE_TAB_LEASE_KEY = 'psi-zero-day.defense.tab-lease.v1';
+// Training and GUARD campaign deliberately persist to independent save keys.
+// They must also own independent tab locks, otherwise the asynchronous Web Locks
+// release on a legitimate in-tab mode switch can block the next screen.
+// Multiple tabs editing the SAME save key still contend for the same lock.
+export function defenseTabLockName(saveKey = DEFENSE_SAVE_KEY): string {
+  return saveKey === DEFENSE_SAVE_KEY ? DEFENSE_TAB_LOCK_NAME : `${DEFENSE_TAB_LOCK_NAME}:${saveKey}`;
+}
+export function defenseTabLeaseKey(saveKey = DEFENSE_SAVE_KEY): string {
+  return saveKey === DEFENSE_SAVE_KEY ? DEFENSE_TAB_LEASE_KEY : `${DEFENSE_TAB_LEASE_KEY}:${saveKey}`;
+}
 const LEASE_TTL_MS = 15_000;
 const LEASE_HEARTBEAT_MS = 5_000;
 
@@ -25,9 +35,9 @@ function ownerId(): string {
   return random ?? `tab-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function storageLease(storage: Storage, now = Date.now()): { readonly ownerId: string; readonly expiresAt: number } | null {
+function storageLease(storage: Storage, now = Date.now(), leaseKey = DEFENSE_TAB_LEASE_KEY): { readonly ownerId: string; readonly expiresAt: number } | null {
   try {
-    const raw = storage.getItem(DEFENSE_TAB_LEASE_KEY);
+    const raw = storage.getItem(leaseKey);
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     if (typeof parsed !== 'object' || parsed === null) return null;
@@ -40,10 +50,10 @@ function storageLease(storage: Storage, now = Date.now()): { readonly ownerId: s
   }
 }
 
-function writeLease(storage: Storage, id: string, now = Date.now()): boolean {
+function writeLease(storage: Storage, id: string, now = Date.now(), leaseKey = DEFENSE_TAB_LEASE_KEY): boolean {
   try {
-    storage.setItem(DEFENSE_TAB_LEASE_KEY, JSON.stringify({ ownerId: id, expiresAt: now + LEASE_TTL_MS }));
-    return storageLease(storage, now)?.ownerId === id;
+    storage.setItem(leaseKey, JSON.stringify({ ownerId: id, expiresAt: now + LEASE_TTL_MS }));
+    return storageLease(storage, now, leaseKey)?.ownerId === id;
   } catch {
     return false;
   }
@@ -55,12 +65,14 @@ export async function acquireDefenseTabGuard(
   watchedSaveKey=DEFENSE_SAVE_KEY,
 ): Promise<DefenseTabGuard> {
   const id = ownerId();
+  const lockName = defenseTabLockName(watchedSaveKey);
+  const leaseKey = defenseTabLeaseKey(watchedSaveKey);
   const lockManager = (navigator as Navigator & { readonly locks?: LockManagerLike }).locks;
   if (lockManager) {
     let releaseHold: (() => void) | null = null;
     let resolved = false;
     const acquired = new Promise<boolean>(resolve => {
-      void lockManager.request(DEFENSE_TAB_LOCK_NAME, { mode: 'exclusive', ifAvailable: true }, async lock => {
+      void lockManager.request(lockName, { mode: 'exclusive', ifAvailable: true }, async lock => {
         resolved = true;
         if (!lock) {
           resolve(false);
@@ -98,27 +110,27 @@ export async function acquireDefenseTabGuard(
     return { status: 'blocked', source: 'storage-lease', release() {} };
   }
 
-  const existing = storageLease(storage);
+  const existing = storageLease(storage, Date.now(), leaseKey);
   if (existing && existing.ownerId !== id) {
     return { status: 'blocked', source: 'storage-lease', release() {} };
   }
-  if (!writeLease(storage, id)) {
+  if (!writeLease(storage, id, Date.now(), leaseKey)) {
     return { status: 'blocked', source: 'storage-lease', release() {} };
   }
 
   const heartbeat = window.setInterval(() => {
-    const current = storageLease(storage);
+    const current = storageLease(storage, Date.now(), leaseKey);
     if (current && current.ownerId !== id) {
       onLockLost();
       return;
     }
-    if (!writeLease(storage, id)) onLockLost();
+    if (!writeLease(storage, id, Date.now(), leaseKey)) onLockLost();
   }, LEASE_HEARTBEAT_MS);
 
   const onStorage = (event: StorageEvent) => {
     if (event.key === watchedSaveKey) onExternalSave();
-    if (event.key === DEFENSE_TAB_LEASE_KEY) {
-      const current = storageLease(storage);
+    if (event.key === leaseKey) {
+      const current = storageLease(storage, Date.now(), leaseKey);
       if (current && current.ownerId !== id) onLockLost();
     }
   };
@@ -131,7 +143,7 @@ export async function acquireDefenseTabGuard(
       window.clearInterval(heartbeat);
       window.removeEventListener('storage', onStorage);
       try {
-        if (storageLease(storage)?.ownerId === id) storage.removeItem(DEFENSE_TAB_LEASE_KEY);
+        if (storageLease(storage, Date.now(), leaseKey)?.ownerId === id) storage.removeItem(leaseKey);
       } catch { /* storage unavailable during teardown */ }
     },
   };

@@ -47,7 +47,7 @@
       "scene_id": "foundation.work-overlap",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "yard",
+      "primary_anchor": "ramp",
       "active_layers": [
         "background",
         "characters",
@@ -355,7 +355,7 @@
       "scene_id": "foundation.time-compression",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "yard",
       "active_layers": [
         "background",
         "characters",

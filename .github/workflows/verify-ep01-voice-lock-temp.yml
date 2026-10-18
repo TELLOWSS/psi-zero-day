@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           cache: npm
 
       - name: Install dependencies
@@ -77,7 +77,10 @@ jobs:
           echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
           "$CHROME_BIN" --version
 
-      - name: Verify Episode 01 desktop and 390x844 presentation
+      - name: Install cinematic responsive browser runner
+        run: npm install --no-save --package-lock=false --ignore-scripts playwright@1.56.1
+
+      - name: Verify current cinematic Episode 01 in five viewports
         shell: bash
         run: |
           mkdir -p artifacts/responsive
@@ -97,7 +100,7 @@ jobs:
             cat /tmp/psi-preview.log
             exit 1
           fi
-          node scripts/verify-episode01-responsive.mjs
+          node scripts/verify-episode01-cinematic-responsive.cjs
 
       - name: Verify Survivors mobile touch and tablet layout
         shell: bash
@@ -116,7 +119,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: survivors-mobile-qa
-          path: artifacts/survivors-mobile
+          path: |
+            artifacts/responsive-cinematic/
+            artifacts/survivors-mobile/
           if-no-files-found: warn
           retention-days: 7
 

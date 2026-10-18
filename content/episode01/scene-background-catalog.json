@@ -21,26 +21,27 @@
     },
     "ramp_entry": {
       "asset_id": "ep01.scene_bg.ramp_entry",
-      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "final_path": "assets/episode01/cg/ramp-entry-cinema.webp",
       "rc_path": "assets/episode01/cg/ramp-entry-rc.svg",
       "used_by": [
         "e01_03_plan_breaks",
         "e01_04_junho_signal",
-        "e01_08a_reporting_return"
+        "e01_08a_reporting_return",
+        "e01_05_command"
       ]
     },
     "work_yard": {
       "asset_id": "ep01.scene_bg.work_yard",
-      "final_path": "assets/episode01/cg/work-yard.webp",
+      "final_path": "assets/episode01/cg/work-yard-cinema.webp",
       "rc_path": "assets/episode01/cg/work-yard-rc.svg",
       "used_by": [
         "e01_02_meet_kang",
-        "e01_05_command",
         "e01_08g_tbm_field_gap",
         "e01_08h_tbm_return",
         "e01_08i_restart_pressure",
         "e01_08j_restart_return",
-        "e01_08m_instruction_cascade"
+        "e01_08m_instruction_cascade",
+        "e01_08_reactions"
       ]
     },
     "concrete_pour": {
@@ -49,8 +50,7 @@
       "rc_path": "assets/episode01/cg/concrete-pour-rc.svg",
       "used_by": [
         "e01_06_pump_arrival",
-        "e01_07_first_pour",
-        "e01_08_reactions"
+        "e01_07_first_pour"
       ]
     },
     "inspection_zone": {
@@ -65,7 +65,7 @@
     },
     "site_office": {
       "asset_id": "ep01.scene_bg.site_office",
-      "final_path": "assets/episode01/cg/site-office.webp",
+      "final_path": "assets/episode01/cg/site-office-cinema.webp",
       "rc_path": "assets/episode01/cg/site-office-rc.svg",
       "used_by": [
         "e01_08e_responsibility_clash",
@@ -86,7 +86,7 @@
     },
     "home_night": {
       "asset_id": "ep01.scene_bg.home_night",
-      "final_path": "assets/episode01/cg/home-night.webp",
+      "final_path": "assets/episode01/cg/home-night-cinema.webp",
       "rc_path": "assets/episode01/cg/home-night-rc.svg",
       "used_by": [
         "e01_09_evening"

@@ -5,6 +5,8 @@ import {StoryReaderControls} from './StoryReaderControls';
 import {loadStoryReader,saveStoryReader,type StoryReaderSettings} from '../app/story-reader-settings';
 import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth} from '../app/episode-save-health';
 import {storySoundscape} from '../app/story-soundscape';
+import { episodeAudioDirection } from '../app/episode01-audio-director';
+import { episode01CandidateScoreAsset, episode01CandidateFoleyAssets } from '../app/episode01-candidate-audio';
 import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
@@ -87,7 +89,7 @@ function initialPaidItemWallet() {
   catch { return emptyPaidItemWallet(); }
 }
 
-export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { session: EpisodeSession; onReturn?: () => void;onWatch?:()=>void;onGuard?:()=>void }) {
+export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onGuard }: { session: EpisodeSession; onReturn?: () => void;onNextEpisode?:()=>void;onWatch?:()=>void;onGuard?:()=>void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [showManual, setShowManual] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
@@ -104,6 +106,9 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   const [voiceLocked, setVoiceLocked] = useState(false);
   const [voiceSubtitle, setVoiceSubtitle] = useState<string | null>(null);
   const [readerSettings,setReaderSettings]=useState(loadStoryReader);
+  // Presentation-only preference. Toggling this never dispatches an engine event.
+  const [storyViewMode,setStoryViewMode]=useState<'cinema'|'read'>('cinema');
+  const [sceneFocus,setSceneFocus]=useState(false);
   const [readerPaused,setReaderPaused]=useState(false);
   const [readerSaved,setReaderSaved]=useState(true);
   const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
@@ -111,10 +116,31 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   const historyDialog=useRef<HTMLDialogElement>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const soundscape=storySoundscape(snapshot.state?.event_runtime.active_instance?.event_id);
-  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice, cancelPresentation } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape});
+  // Retain the last authored bed/score through short gaps between engine events.
+  const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id
+    ?? snapshot.state?.event_runtime.finished_instances.at(-1)?.event_id;
+  const directorAudio=episodeAudioDirection(audioEventId);
+  const score=episode01CandidateScoreAsset(directorAudio?.motif);
+  const rawSoundscape=storySoundscape(audioEventId);
+  const soundscape=rawSoundscape && directorAudio
+    ? {...rawSoundscape,gain:rawSoundscape.gain*directorAudio.roomToneScale}
+    : rawSoundscape;
+  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{
+    paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape,
+    eventId:audioEventId,sceneFadeMs:directorAudio?.sceneFadeMs,scoreFadeMs:directorAudio?.scoreFadeMs,score,
+  });
   const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
   useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
+  // Cinematic hold: screen-only inspection; reset automatically on every engine step.
+  useEffect(()=>{setSceneFocus(false);},[snapshot.revision]);
+  useEffect(()=>{
+    if(!sceneFocus)return;
+    const dismiss=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){event.preventDefault();setSceneFocus(false);}
+    };
+    window.addEventListener('keydown',dismiss);
+    return ()=>window.removeEventListener('keydown',dismiss);
+  },[sceneFocus]);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -328,13 +354,22 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
   useEffect(() => {
     if (!activeEventId || !runIdentity) return;
     const cue = episodePresentationAudioCue(activeEventId);
-    if (!cue) return;
+    const foley = episode01CandidateFoleyAssets(activeEventId);
+    if (!cue && foley.length === 0) return;
     const key = `${runIdentity}:${activeEventId}`;
     if (playedSceneCues.current.has(key)) return;
     playedSceneCues.current.add(key);
-    if(cue.asset_id!==soundscape?.asset_id)playPresentationCue(cue);
+    // Avoid triggering two short radio stings on the same reporting beat.
+    if (cue && cue.asset_id !== soundscape?.asset_id &&
+        !(cue.asset_id === 'ep01.audio.radio_burst' &&
+          foley.some(item => item.asset_id.endsWith('radio_ptt_detail')))) {
+      playPresentationCue(cue);
+    }
+    // Candidate Foley remains a separate presentation one-shot; the tails
+    // must end naturally without stopping scene ambience or authored voices.
+    for (const effect of foley) playPresentationCue(effect);
   }, [activeEventId, runIdentity, playPresentationCue]);
-  useEffect(()=>()=>cancelPresentation(),[activeEventId,cancelPresentation]);
+  // Foley tails release themselves on ended/error; scene cuts must not hard-stop them.
   useEffect(() => {
     if (!activeEventId || !runIdentity || !presentation || !('node_id' in presentation)) return;
     const cue = episodePresentationNodeCue(activeEventId, presentation.node_id, presentation.type);
@@ -538,15 +573,25 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
     data-story-player={directedCampaign && isPlaying ? 'cinematic' : undefined}
+    data-story-reading-mode={directedCampaign && isPlaying ? storyViewMode : undefined}
+    data-story-focus={directedCampaign && isPlaying && sceneFocus && (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ? 'true' : undefined}
+    data-story-decision={directedCampaign && presentation?.type === 'SHOW_CHOICE' ? 'true' : undefined}
   >
-    <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/>
+    {isPlaying ? <StoryReaderControls settings={readerSettings} onChange={changeReaderSettings} onPaused={setReaderPaused} t={t}/> : null}
+    {directedCampaign && isPlaying && !strategyActive &&
+      (presentation?.type==='SHOW_DIALOGUE'||presentation?.type==='SHOW_RESULT') ?
+      <button className="story-scene-peek" type="button" aria-pressed={sceneFocus}
+        aria-label={sceneFocus?'자막과 게임 조작 복원':'대사 위치를 유지하고 장면 전체 감상'}
+        onClick={()=>setSceneFocus(value=>!value)}>
+        {sceneFocus?'자막 복원':'장면 감상'}
+      </button>:null}
     {(!readerSaved||saveHealth!=='ok')&&<p className="story-save-warning" role="status">{t(saveHealth==='preserved'?'story.reader.preserved':'story.reader.unsaved')}</p>}
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
     </div> : null}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
-    <button type="button" className="game-manual-open" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
+    {isPlaying ? <button type="button" className="game-manual-open" aria-label="게임 설명서" title="게임 설명서" onClick={() => setShowManual(true)}>{gameManualText('open')}</button> : null}
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}
@@ -574,7 +619,7 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10" /></svg>
       </button> : null}
       <div className="hud-brand"><strong>{t('ui.brand')}</strong><small>{t('ui.tagline')}</small></div>
-      <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
+      <div className="day-marker"><span>{t('ui.day')}</span><strong>{snapshot.phase === 'complete' ? '01' : String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
       {previousHistoryEntries.length > 0 ? <button
         className="gameplay-history-button"
@@ -644,9 +689,15 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
-          {directedCampaign ? <div className="story-reading-guide" role="status">
+          {directedCampaign ? <div className="story-reading-guide">
             <strong>{person ? formatCharacterIdentity(person) : t('ui.narration')}</strong>
             <span>{t(presentation?.type === 'SHOW_CHOICE' ? 'story.player.choose' : voiceLocked ? 'story.player.listening' : 'story.player.read')}</span>
+            <button className="story-view-toggle" type="button"
+              aria-pressed={storyViewMode === 'read'}
+              aria-label={storyViewMode === 'cinema' ? '전체 읽기 모드로 전환' : '영화 자막 모드로 전환'}
+              onClick={() => setStoryViewMode(mode => mode === 'cinema' ? 'read' : 'cinema')}>
+              {storyViewMode === 'cinema' ? '읽기 확대' : '영화 자막'}
+            </button>
           </div> : null}
           {voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
           {directedCampaign&&voiceLocked&&voiceSubtitle?<p className="story-voice-caption" aria-live="off">{voiceSubtitle}</p>:null}
@@ -706,6 +757,8 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
               interactionLocked={voiceLocked && !directedCampaign}
               voicePlaying={directedCampaign && voiceLocked}
               pageDialogue={directedCampaign}
+              cinematicDialogue={directedCampaign}
+              sceneTitle={snapshot.eventTitle}
               onReadAdvance={directedCampaign?stopVoice:undefined}
               dialogueOverrideText={voiceLocked && !directedCampaign ? voiceSubtitle : null}
             />}
@@ -735,19 +788,31 @@ export function PlayableEpisode({ session, onReturn, onWatch, onGuard }: { sessi
         t={t}
         onComplete={dismissColdOpen}
       /> : null}
-    </> : snapshot.phase === 'complete' ? <section className="complete-screen">
-      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
+    </> : snapshot.phase === 'complete' ? <section className="complete-screen story-complete-director">
+      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p>
+      <h1>{t('ep01.title')}</h1>
       <p className="end-line">{t('ui.end_hint')}</p>
-      <div className="episode-completion-carryover">
-        <EpisodeDayCarryover eventId="e01_10_next_day_tease" flags={snapshot.state?.flags} t={t} />
-      </div>
-      <section className="episode-review" aria-label={t('ui.review.title')}>
-        <h2>{t('ui.review.title')}</h2>
-        <p>{t('ui.review.hint')}</p>
-        <EpisodeRecord entries={session.review()} t={t} />
-      </section>
+      {onNextEpisode ? <button className="story-next-episode" type="button" onClick={onNextEpisode}>
+        <span>DAY 02 · 이어지는 사건</span><strong>두 번째 날 · 첫 양중 오프닝으로</strong><b aria-hidden="true">→</b>
+      </button> : null}
+      <details className="story-completion-details">
+        <summary>어제 선택의 영향 확인</summary>
+        <div className="episode-completion-carryover">
+          <EpisodeDayCarryover eventId="e01_10_next_day_tease" flags={snapshot.state?.flags} t={t} />
+        </div>
+      </details>
+      <details className="story-completion-details">
+        <summary>DAY 01 전체 선택 기록</summary>
+        <section className="episode-review" aria-label={t('ui.review.title')}>
+          <h2>{t('ui.review.title')}</h2>
+          <p>{t('ui.review.hint')}</p>
+          <EpisodeRecord entries={session.review()} t={t} />
+        </section>
+      </details>
       <p className="replay-hint">{t('ui.review.replay')}</p>
-      <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
+      <button className="primary-button" type="button" onClick={e => {
+        if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); }
+      }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
     </section> : <section className="complete-screen" role="alert"><p>{t('ui.error')}</p><button className="primary-button" type="button" onClick={() => session.restart(snapshot.revision)}>{t('ui.restart')}</button></section>}
     <footer className="game-footer"><div className="progress-block"><span>{t('ui.progress')}</span>
       <progress aria-label={t('ui.progress')} value={snapshot.phase === 'complete' ? snapshot.total : snapshot.completed} max={snapshot.total} /></div>
