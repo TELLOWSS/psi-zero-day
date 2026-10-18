@@ -110,6 +110,7 @@ import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '.
 import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
 import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
+import {workfaceDepthLook,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -2001,7 +2002,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Responsive Portrait / Landscape Zoom Factor
 
       // Signature events apply a brief, controlled push-in instead of a disorienting hard cut.
-      const baseZoom = displayViewZoom(survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT),displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT,display.view);
+      const baseZoom = displayViewZoom(survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT),displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT,display.view)*(display.view==='wide'?1:1.055);
       const pressure=signaturePressureRef.current;
       signaturePressureRef.current=Math.max(0,pressure-dt*1.55);
       const renderZoom=baseZoom*(1+(reducedMotionRef.current||!display.shake?0:pressure*.018));
@@ -2049,7 +2050,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const surround=fullGround?.naturalWidth?fullGround:excavationGround?.naturalWidth?excavationGround:groundV2;
       if(surround?.naturalWidth)ctx.drawImage(surround,-camera.marginX-4,-camera.marginY-4,WORLD_WIDTH+camera.marginX*2+8,WORLD_HEIGHT+camera.marginY*2+8);
       if(fullGround?.naturalWidth) {
+        ctx.save();
+        if(display.lighting)ctx.filter=workfaceDepthLook(stage.id,budget.level).floorFilter;
         ctx.drawImage(fullGround,0,0,WORLD_WIDTH,WORLD_HEIGHT);
+        ctx.restore();
         ctx.fillStyle=stage.ambientColor;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
       } else if (['stage_02', 'stage_06'].includes(stage.id) && excavationGround?.naturalWidth) {
         ctx.drawImage(excavationGround, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
@@ -2121,15 +2125,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       }
 
+      if(display.lighting)drawWorkfaceDepth(ctx,stage.id,budget.level);
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       // Project the live authored pose onto the floor before terrain, actors and warnings.
       const sceneLight=stageActorLight(stage.id);
       canvas.dataset.stageLight=sceneLight?stage.id:'';
       canvas.dataset.stageLightColor=sceneLight?.color??'';
       canvas.dataset.heroCastShadow='none';
-      if(sceneLight&&actor&&budget.ambientLighting){
-        ctx.save();ctx.translate(player.x,player.y);
-        drawDirectionalCastShadow(ctx,actor,74,playerPose,sceneLight);ctx.restore();
+      if(sceneLight&&display.lighting){
+        if(actor&&budget.ambientLighting){
+          ctx.save();ctx.translate(player.x,player.y);
+          drawDirectionalCastShadow(ctx,actor,74,playerPose,sceneLight);ctx.restore();
+        } else {
+          // Keep one real ground-contact cue even on a hot / low-end Android phone.
+          drawEssentialFootShadow(ctx,player.x,player.y);
+        }
       }
       drawTerrain(ctx,engine.state.terrain??[],spritesRef.current.terrain,engine.state.player);
       materialResolutionRef.current.drawGround(ctx);
@@ -2137,7 +2147,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
       dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
-      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object, sceneLight);
+      if(display.lighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object, sceneLight);
 
       const tactics=engine.state.fieldTactics;
       for(const line of tactics?.lines ?? []) {
@@ -3221,7 +3231,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
             // Static scene fill remains under reduced motion; only combat pulses use flash strength.
-            if(sceneLight&&budget.ambientLighting)drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,sceneLight.color,sceneLight.fill);
+            if(sceneLight&&display.lighting)drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,sceneLight.color,sceneLight.fill);
             if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18)*feelSettingsRef.current.flash);}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current,Boolean(spritesRef.current.wearables?.communication),Boolean(spritesRef.current.wearables?.normalWorn));
