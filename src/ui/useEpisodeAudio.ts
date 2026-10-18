@@ -70,7 +70,7 @@ function syntheticNoise(context: AudioContext, duration: number) {
 }
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
-export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number};eventId?:string|null}) {
+export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number};eventId?:string|null;sceneFadeMs?:number;scoreFadeMs?:number}) {
   const [hidden,setHidden]=useState(()=>typeof document!=='undefined'&&document.hidden);
   useEffect(()=>{const changed=()=>setHidden(document.hidden);document.addEventListener('visibilitychange',changed);return()=>document.removeEventListener('visibilitychange',changed);},[]);
   const audio=authoredAudio?{...authoredAudio,volumes:{...authoredAudio.volumes,
@@ -155,8 +155,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     bus.transition(track && uri ? {
       assetId: track.asset_id, uri, loop: true,
       baseGain: (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain,
-    } : null, 1200);
-  }, [options?.scene?.asset_id, options?.scene?.gain, effectiveMuted,
+    } : null, options?.sceneFadeMs ?? 1200);
+  }, [options?.scene?.asset_id, options?.scene?.gain, options?.sceneFadeMs, effectiveMuted,
       audio?.volumes.master, audio?.volumes.ambience, resolve]);
 
   useEffect(() => {
@@ -168,8 +168,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     bus.transition(track && uri ? {
       assetId: track.asset_id, uri, loop: track.loop,
       baseGain: (audio?.volumes.master ?? 1) * (audio?.volumes.bgm ?? 1) * track.gain,
-    } : null, 2300);
-  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop,
+    } : null, options?.scoreFadeMs ?? 2300);
+  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, options?.scoreFadeMs,
       effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
