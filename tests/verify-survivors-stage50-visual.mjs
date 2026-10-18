@@ -62,10 +62,10 @@ try {
         await page.waitForTimeout(120);
         const snapshot = await page.evaluate(() => {
           const e = window.visualEngine, c = document.querySelector('.survivors-canvas');
-          return { stage: e.state.stageId, light: c.dataset.stageLight, color: c.dataset.stageLightColor, shadow: c.dataset.heroCastShadow, contact: c.dataset.contactArt, stretch: Number(c.dataset.contactLegStretch), floorDraws: [...window.floorDraws], overflow: document.documentElement.scrollWidth > innerWidth + 1,
+          return { stage: e.state.stageId, light: c.dataset.stageLight, color: c.dataset.stageLightColor, depth: c.dataset.workfaceDepth, shadow: c.dataset.heroCastShadow, contact: c.dataset.contactArt, stretch: Number(c.dataset.contactLegStretch), floorDraws: [...window.floorDraws], overflow: document.documentElement.scrollWidth > innerWidth + 1,
             saved: Object.entries(window.savedBefore).every(([key, value]) => localStorage.getItem(key) === value) };
         });
-        if (snapshot.stage !== id || snapshot.light !== id || snapshot.color !== expected.color || snapshot.shadow !== (process.env.PSI_LOW ? 'none' : 'authored-pose') || snapshot.contact !== 'true' || snapshot.stretch > 1.080001 || !snapshot.floorDraws.includes(expected.ground) || snapshot.overflow || !snapshot.saved || errors.length) throw Error(JSON.stringify({ id, width, height, reduced, expected, snapshot, errors }));
+        if (snapshot.stage !== id || snapshot.light !== id || snapshot.color !== expected.color || snapshot.depth !== `${id}:${process.env.PSI_LOW ? 'low' : 'balanced'}` || snapshot.shadow !== (process.env.PSI_LOW ? 'none' : 'authored-pose') || snapshot.contact !== 'true' || snapshot.stretch > 1.080001 || !snapshot.floorDraws.includes(expected.ground) || snapshot.overflow || !snapshot.saved || errors.length) throw Error(JSON.stringify({ id, width, height, reduced, expected, snapshot, errors }));
         if (process.env.PSI_CROWD) {
           await page.evaluate(() => {
             const e = window.visualEngine; e.setPaused(false); e.state.player.invincibleTime = 999; e.state.nextLevelExp = 1e9;
