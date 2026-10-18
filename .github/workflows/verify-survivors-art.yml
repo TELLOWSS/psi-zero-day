@@ -105,8 +105,8 @@ jobs:
           node tests/verify-store-reference-layout.mjs
           node tests/verify-lz-guidance.mjs
           node scripts/audit-current-title-delivery.mjs
-          node scripts/review-brand-vector-candidate.mjs
-          node tests/verify-brand-mobile-hierarchy.mjs
+          env -u PSI_PREVIEW_URL node scripts/review-brand-vector-candidate.mjs
+          node scripts/verify-current-home-hierarchy.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()

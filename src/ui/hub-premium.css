@@ -126,3 +126,10 @@
   }
   :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-reveal-modes{bottom:8px}
 }
+
+/* 320–375px portrait phones: keep artwork first AND its jump cue on screen. */
+@media(max-width:375px) and (orientation:portrait){
+ :root .commercial-title-home[data-title-layout="MODE_SELECT_V11"][data-home-art="premium-hero-v4"] .hub-cinematic-intro{
+  min-height:clamp(460px,84svh,620px)!important;
+ }
+}
