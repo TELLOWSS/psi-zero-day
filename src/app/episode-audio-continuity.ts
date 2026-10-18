@@ -34,9 +34,13 @@ type Deck = {
 const clamp = (value: number): number => Math.min(1, Math.max(0, Number.isFinite(value) ? value : 0));
 
 const browserClock: AudioFrameClock = {
-  now: () => performance.now(),
-  frame: callback => requestAnimationFrame(callback),
-  cancel: id => cancelAnimationFrame(id),
+  now: () => typeof performance !== 'undefined' ? performance.now() : Date.now(),
+  frame: callback => typeof requestAnimationFrame === 'function'
+    ? requestAnimationFrame(callback) : setTimeout(callback, 16) as unknown as number,
+  cancel: id => {
+    if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(id);
+    else clearTimeout(id);
+  },
 };
 
 export class ContinuousEpisodeAudioBus {
@@ -63,6 +67,8 @@ export class ContinuousEpisodeAudioBus {
     audio.dataset.assetId = track.assetId;
     audio.loop = track.loop;
     audio.preload = 'auto';
+    // Never let a pending deck produce a full-volume transient before its first fade frame.
+    audio.volume = 0;
     return { audio, assetId: track.assetId, baseGain: clamp(track.baseGain), mix: 0,
       from: 0, target: 0, since: this.clock.now(), duration: 0 };
   }
