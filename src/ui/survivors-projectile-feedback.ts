@@ -53,7 +53,7 @@ export class ProjectileFeedbackLayer {
       // hit. This stays visible when heavy crowds suppress optional particle art.
       if(e.phase==='impact'&&!e.worker&&!e.blocked){
         ctx.save();
-        ctx.globalAlpha=(1-t)*(busy||reducedMotion?.38:.68);
+        ctx.globalAlpha=(1-t)*((busy||reducedMotion)? .38 : .68);
         ctx.strokeStyle=spec.color;ctx.lineWidth=e.critical?3:2;
         ctx.beginPath();
         ctx.ellipse(0,3,(e.critical?21:14)*(1+t*.55),(e.critical?8:6)*(1+t*.4),e.angle,0,Math.PI*2);
