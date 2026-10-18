@@ -70,7 +70,7 @@ function syntheticNoise(context: AudioContext, duration: number) {
 }
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
-export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number};eventId?:string|null;sceneFadeMs?:number;scoreFadeMs?:number}) {
+export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number};eventId?:string|null;sceneFadeMs?:number;scoreFadeMs?:number;score?:{asset_id:string;gain:number;loop:boolean}}) {
   const [hidden,setHidden]=useState(()=>typeof document!=='undefined'&&document.hidden);
   useEffect(()=>{const changed=()=>setHidden(document.hidden);document.addEventListener('visibilitychange',changed);return()=>document.removeEventListener('visibilitychange',changed);},[]);
   const audio=authoredAudio?{...authoredAudio,volumes:{...authoredAudio.volumes,
@@ -163,13 +163,15 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     if (typeof Audio === 'undefined') return;
     const bus = bgmBusRef.current ?? (bgmBusRef.current = new ContinuousEpisodeAudioBus('bgm'));
     bus.setMuted(effectiveMuted);
-    const track = audio?.bgm;
+    // Director candidate music replaces the authored BGM on supported EP01 events,
+    // while leaving gameplay audio state and all engine-owned cue IDs unchanged.
+    const track = options?.score ?? audio?.bgm;
     const uri = track ? resolve(track.asset_id) : undefined;
     bus.transition(track && uri ? {
       assetId: track.asset_id, uri, loop: track.loop,
       baseGain: (audio?.volumes.master ?? 1) * (audio?.volumes.bgm ?? 1) * track.gain,
     } : null, options?.scoreFadeMs ?? 2300);
-  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, options?.scoreFadeMs,
+  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, options?.score?.asset_id, options?.score?.gain, options?.score?.loop, options?.scoreFadeMs,
       effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
