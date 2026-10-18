@@ -612,7 +612,7 @@
   opacity:1!important;z-index:29!important;
   filter:drop-shadow(0 16px 20px rgba(1,12,18,.82))!important;
 }
-#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-performance-asset="expression"] img{
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-performance-asset="expression"]:not([data-expressive-crop-suppressed="true"]) img{
   /* Some expression sheets are bust portraits, NOT standing construction workers. */
   -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 63%,rgba(0,0,0,.62) 83%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 0%,#000 63%,rgba(0,0,0,.62) 83%,transparent 100%);
@@ -948,4 +948,13 @@
 @media(prefers-reduced-motion:reduce) {
  #root main.game-frame[data-story-player="cinematic"] .episode-immersive-scene[data-ground-pass="contact-shadow-v1"]
   .episode-immersive-character[data-on-camera="true"]::after {transition:none!important;animation:none!important}
+}
+
+/* 2026-10-18 director repair: active wide-stage figures use real full-body map images;
+   retaining an expression source in metadata must NOT fade the displayed boots. */
+#root main.game-frame[data-story-player="cinematic"] .episode-immersive-character[data-performance-asset="map-fallback"] img {
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  -webkit-mask-size:auto!important;
+  mask-size:auto!important;
 }

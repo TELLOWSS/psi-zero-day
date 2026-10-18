@@ -392,7 +392,7 @@ export function EpisodeImmersiveScene({
         data-expression={performance?.expression}
         data-pose={performance?.pose}
         data-presence-motion={performance?.motion}
-        data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
+        data-performance-asset="map-fallback"
         data-expression-source={performanceAsset?.uri}
         data-expressive-crop-suppressed={performanceAsset?.using_expression_asset || undefined}
       >

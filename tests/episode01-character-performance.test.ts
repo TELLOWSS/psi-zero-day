@@ -139,7 +139,7 @@ describe('Episode 01 cinematic character performance', () => {
     expect(html).toContain('data-expression="concern"');
     // Preserve expression direction in metadata, but avoid using a bust portrait
     // as a full-body standing worker in the immersive film composition.
-    expect(html).toContain('data-performance-asset="expression"');
+    expect(html).toContain('data-performance-asset="map-fallback"');
     expect(html).toContain('data-expressive-crop-suppressed="true"');
     expect(html).toContain('data-expression-source="assets/episode01/characters/lim-junho-concerned.webp"');
     expect(html).toContain('lim-junho-map.webp');

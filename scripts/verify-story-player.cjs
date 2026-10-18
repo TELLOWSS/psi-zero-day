@@ -83,11 +83,14 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
       opacity:Number(getComputedStyle(node).opacity),
       visibility:getComputedStyle(node).visibility,
       onCamera:node.getAttribute('data-on-camera')==='true',
-      cropSuppressed:node.querySelector('img')?.getAttribute('src')!==node.getAttribute('data-expression-source')
+      cropSuppressed:node.querySelector('img')?.getAttribute('src')!==node.getAttribute('data-expression-source'),
+      visibleAsset:node.getAttribute('data-performance-asset'),
+      actualMask:node.querySelector('img') ? getComputedStyle(node.querySelector('img')).maskImage : 'none',
+      shadowContent:getComputedStyle(node,'::after').content
     })));
     const active=shotStyles.filter(actor=>actor.onCamera);
     const expectsActors=(castPlan[event]?.cast?.length??0)>0;
-    a((!expectsActors&&active.length===0)||(expectsActors&&active.length>=1&&active.length<=2&&active.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.cropSuppressed)),
+    a((!expectsActors&&active.length===0)||(expectsActors&&active.length>=1&&active.length<=2&&active.every(actor=>actor.opacity>.95&&actor.visibility==='visible'&&actor.cropSuppressed&&actor.visibleAsset==='map-fallback'&&actor.actualMask==='none'&&actor.shadowContent!=='none')),
       'ghost actor / bust sprite in film frame: '+event+' '+JSON.stringify(shotStyles));
     a(shotStyles.filter(actor=>!actor.onCamera).every(actor=>actor.visibility==='hidden'),
       'background cast leaked into shot: '+event);
