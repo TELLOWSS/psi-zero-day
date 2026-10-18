@@ -3,6 +3,7 @@ import type {StoryReaderSettings} from '../app/story-reader-settings';
 import type { AudioState } from '../domain';
 import { readAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import { attemptEpisodeAudioPlay, probeEpisodeAudioMedia, traceEpisodeAudio } from '../app/episode-audio-diagnostics';
+import { ContinuousEpisodeAudioBus } from '../app/episode-audio-continuity';
 
 export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue' | 'character_intro' | 'radio_signal' | 'pressure' | 'scene_shift';
 
@@ -80,12 +81,13 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
   }}:authoredAudio;
   const preferenceMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const effectiveMuted = Boolean(audio?.muted || audio?.suspended || preferenceMuted || options?.paused || hidden);
-  const bgmRef = useRef<HTMLAudioElement | null>(null);
-  const sceneBedRef=useRef<HTMLAudioElement|null>(null);
+  const bgmBusRef = useRef<ContinuousEpisodeAudioBus | null>(null);
+  const sceneBusRef = useRef<ContinuousEpisodeAudioBus | null>(null);
+  const duckFrameRef = useRef<number | null>(null);
+  const duckActualRef = useRef(1);
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
   const presentationRef = useRef(new Set<HTMLAudioElement>());
   const voiceRef = useRef<HTMLAudioElement | null>(null);
-  const voiceDuckRef = useRef(1);
   const voiceCleanupRef = useRef<(() => void) | null>(null);
   const seenCueIds = useRef(new Set<string>());
   const contextRef = useRef<AudioContext | null>(null);
@@ -105,8 +107,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const unlock=()=>{if(effectiveMuted)return;
       traceEpisodeAudio({ bus: 'system', signal: 'gesture' });
       void contextRef.current?.resume().catch(()=>traceEpisodeAudio({ bus: 'ui', signal: 'resume_failed' }));
-      if(bgmRef.current)attemptEpisodeAudioPlay(bgmRef.current,'bgm',bgmRef.current.dataset.assetId??'unknown');
-      if(sceneBedRef.current)attemptEpisodeAudioPlay(sceneBedRef.current,'scene',sceneBedRef.current.dataset.assetId??'unknown');
+      bgmBusRef.current?.resume();
+      sceneBusRef.current?.resume();
       for(const [assetId,element] of ambienceRef.current)attemptEpisodeAudioPlay(element,'ambience',assetId);
     };
     window.addEventListener('pointerdown',unlock);window.addEventListener('keydown',unlock);
@@ -115,51 +117,60 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
 
   const applyVoiceDucking = useCallback((gain: number) => {
     const duck = Math.max(0, Math.min(1, gain));
-    voiceDuckRef.current = duck;
     traceEpisodeAudio({ bus: 'voice', signal: 'duck_change', value: duck });
-    const update = (element: HTMLAudioElement | null | undefined) => {
-      if (!element) return;
-      const base = Number(element.dataset.baseVolume ?? element.volume);
-      if (Number.isFinite(base)) element.volume = Math.max(0, Math.min(1, base * duck));
+    const ms = duck < duckActualRef.current ? 160 : 950;
+    bgmBusRef.current?.setDuck(duck, ms);
+    sceneBusRef.current?.setDuck(duck, ms);
+    if (duckFrameRef.current !== null && typeof cancelAnimationFrame === 'function') {
+      cancelAnimationFrame(duckFrameRef.current);
+      duckFrameRef.current = null;
+    }
+    const startGain = duckActualRef.current;
+    const startTime = typeof performance !== 'undefined' ? performance.now() : 0;
+    const paint = (value: number) => {
+      duckActualRef.current = value;
+      for (const element of [...ambienceRef.current.values(), ...presentationRef.current.values()]) {
+        const base = Number(element.dataset.baseVolume ?? element.volume);
+        if (Number.isFinite(base)) element.volume = Math.max(0, Math.min(1, base * value));
+      }
     };
-    update(bgmRef.current);
-    update(sceneBedRef.current);
-    for (const element of ambienceRef.current.values()) update(element);
-    for (const element of presentationRef.current.values()) update(element);
+    if (typeof requestAnimationFrame !== 'function') { paint(duck); return; }
+    const tick = (now: number) => {
+      const ratio = Math.min(1, Math.max(0, (now - startTime) / ms));
+      paint(startGain + (duck - startGain) * ratio);
+      if (ratio < 1) duckFrameRef.current = requestAnimationFrame(tick);
+      else duckFrameRef.current = null;
+    };
+    duckFrameRef.current = requestAnimationFrame(tick);
   }, []);
 
-  useEffect(()=>{
-    const track=options?.scene,uri=track?resolve(track.asset_id):undefined;
-    if(!track||!uri||typeof Audio==='undefined'){sceneBedRef.current?.pause();return;}
-    if(sceneBedRef.current?.dataset.assetId!==track.asset_id){sceneBedRef.current?.pause();const element=probeEpisodeAudioMedia(new Audio(uri),'scene',track.asset_id);element.loop=true;element.dataset.assetId=track.asset_id;sceneBedRef.current=element;}
-    const element=sceneBedRef.current!,base=(audio?.volumes.master??1)*(audio?.volumes.ambience??1)*track.gain;
-    element.dataset.baseVolume=String(base);element.volume=Math.min(1,base*voiceDuckRef.current);
-    if(effectiveMuted)element.pause();else attemptEpisodeAudioPlay(element,'scene',track.asset_id);
-    return()=>element.pause();
-  },[options?.scene?.asset_id,options?.scene?.gain,effectiveMuted,audio?.volumes.master,audio?.volumes.ambience,resolve]);
+  // The transports outlive individual story scenes. Scene/score changes never
+  // pause the previous deck until the incoming media is actually playing.
+  useEffect(() => {
+    if (typeof Audio === 'undefined') return;
+    const bus = sceneBusRef.current ?? (sceneBusRef.current = new ContinuousEpisodeAudioBus('scene'));
+    bus.setMuted(effectiveMuted);
+    const track = options?.scene;
+    const uri = track ? resolve(track.asset_id) : undefined;
+    bus.transition(track && uri ? {
+      assetId: track.asset_id, uri, loop: true,
+      baseGain: (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain,
+    } : null, 1200);
+  }, [options?.scene?.asset_id, options?.scene?.gain, effectiveMuted,
+      audio?.volumes.master, audio?.volumes.ambience, resolve]);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
+    const bus = bgmBusRef.current ?? (bgmBusRef.current = new ContinuousEpisodeAudioBus('bgm'));
+    bus.setMuted(effectiveMuted);
     const track = audio?.bgm;
     const uri = track ? resolve(track.asset_id) : undefined;
-    if (!track || !uri || effectiveMuted) {
-      bgmRef.current?.pause();
-      return;
-    }
-    if (bgmRef.current?.dataset.assetId !== track.asset_id) {
-      bgmRef.current?.pause();
-      const element = probeEpisodeAudioMedia(new Audio(uri),'bgm',track.asset_id);
-      element.dataset.assetId = track.asset_id;
-      bgmRef.current = element;
-    }
-    const element = bgmRef.current;
-    if (!element) return;
-    element.loop = track.loop;
-    const baseVolume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
-    element.dataset.baseVolume = String(baseVolume);
-    element.volume = baseVolume * voiceDuckRef.current;
-    attemptEpisodeAudioPlay(element,'bgm',track.asset_id);
-  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
+    bus.transition(track && uri ? {
+      assetId: track.asset_id, uri, loop: track.loop,
+      baseGain: (audio?.volumes.master ?? 1) * (audio?.volumes.bgm ?? 1) * track.gain,
+    } : null, 2300);
+  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop,
+      effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
@@ -176,8 +187,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       }
       const baseVolume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
       element.dataset.baseVolume = String(baseVolume);
-      element.volume = baseVolume * voiceDuckRef.current;
-      attemptEpisodeAudioPlay(element,'ambience',track.asset_id);
+      element.volume = baseVolume * duckActualRef.current;
+      if (element.paused) attemptEpisodeAudioPlay(element,'ambience',track.asset_id);
     }
     for (const [assetId, element] of ambienceRef.current) {
       if (!desired.has(assetId) || effectiveMuted) {
@@ -199,7 +210,9 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       presentationRef.current.add(element);
       const release=()=>presentationRef.current.delete(element);
       element.addEventListener('ended',release,{once:true});element.addEventListener('error',release,{once:true});
-      element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
+      const base = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
+      element.dataset.baseVolume = String(base);
+      element.volume = base * duckActualRef.current;
       attemptEpisodeAudioPlay(element,'foley',cue.asset_id,release);
     }
   }, [audio?.sfx_bus, audio?.event_bus, effectiveMuted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
@@ -207,8 +220,11 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
   useEffect(() => () => {
     traceEpisodeAudio({ bus: 'system', signal: 'cleanup' });
     voiceCleanupRef.current?.();
-    bgmRef.current?.pause();
-    sceneBedRef.current?.pause();
+    bgmBusRef.current?.dispose();
+    sceneBusRef.current?.dispose();
+    if (duckFrameRef.current !== null && typeof cancelAnimationFrame === 'function') {
+      cancelAnimationFrame(duckFrameRef.current);
+    }
     for (const element of ambienceRef.current.values()) element.pause();
     for (const element of presentationRef.current.values()) element.pause();
     void contextRef.current?.close();
@@ -275,7 +291,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const baseVolume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
     element.dataset.baseVolume = String(baseVolume);
-    element.volume = baseVolume * voiceDuckRef.current;
+    element.volume = baseVolume * duckActualRef.current;
     presentationRef.current.add(element);
     const release = () => presentationRef.current.delete(element);
     element.addEventListener('ended', release, { once: true });
