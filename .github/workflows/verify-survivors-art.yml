@@ -4,6 +4,10 @@ on:
     branches: [main]
     paths:
       - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/survivors-directional-art.ts'
+      - 'src/ui/survivors-stage-art.ts'
+      - 'src/ui/survivors-stage-light.ts'
+      - 'tests/verify-survivors-stage01-visual.mjs'
       - 'src/ui/*typography.css'
       - 'src/ui/tactical-ui.css'
       - 'src/ui/SurvivorsEquipmentStore.tsx'
@@ -70,6 +74,22 @@ jobs:
           fc-cache -f "$FONT_DIR"
           fc-query --format '%{family}\n' "$FONT_DIR/BlackHanSans-Regular.ttf" | grep -F 'Black Han Sans'
           fc-match --format '%{file}\n' 'Black Han Sans:charset=d55c' | grep -Fx "$FONT_DIR/BlackHanSans-Regular.ttf"
+      - name: Stage 01 visual matrix and synthetic crowd
+        shell: bash
+        env:
+          CODEX_PRIMARY_RUNTIME_NODE_MODULES: /tmp/psi-browser-tools/node_modules
+          PSI_PREVIEW_URL: http://127.0.0.1:4174
+        run: |
+          export CHROME_BIN="$(command -v google-chrome || command -v chromium)"
+          npm run dev -- --host 127.0.0.1 --port 4174 > /tmp/survivors-stage01-dev.log 2>&1 &
+          STAGE01_PID=$!
+          trap 'kill "$STAGE01_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          node tests/verify-survivors-stage01-visual.mjs
+          PSI_CROWD=1 node tests/verify-survivors-stage01-visual.mjs
       - name: Browser smoke and captures
         shell: bash
         env:
@@ -113,6 +133,7 @@ jobs:
         with:
           name: survivors-art-v2-captures
           path: |
+            artifacts/signal-watch-stage01
             artifacts/survivors-browser
             artifacts/mode-preview-release
             artifacts/stage-resume
