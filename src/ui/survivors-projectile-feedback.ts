@@ -49,6 +49,21 @@ export class ProjectileFeedbackLayer {
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78)*(e.worker?1:Math.max(.2,cinematic?.flashStrength??1));
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      // Readable, brief ground-plane confirmation for every genuine non-worker
+      // hit. This stays visible when heavy crowds suppress optional particle art.
+      if(e.phase==='impact'&&!e.worker&&!e.blocked){
+        ctx.save();
+        ctx.globalAlpha=(1-t)*(busy||reducedMotion?.38:.68);
+        ctx.strokeStyle=spec.color;ctx.lineWidth=e.critical?3:2;
+        ctx.beginPath();
+        ctx.ellipse(0,3,(e.critical?21:14)*(1+t*.55),(e.critical?8:6)*(1+t*.4),e.angle,0,Math.PI*2);
+        ctx.stroke();
+        if(!busy&&!reducedMotion){
+          ctx.globalAlpha=(1-t)*.28;ctx.lineWidth=1.2;
+          ctx.beginPath();ctx.ellipse(0,3,26+t*13,10+t*5,e.angle,0,Math.PI*2);ctx.stroke();
+        }
+        ctx.restore();
+      }
       if(!e.worker&&e.kind==='shout_shockwave'&&e.phase==='launch'&&drawUltimateRelease(ctx,cinematic?.atlas,age,reducedMotion,busy)){
         ctx.restore();continue;
       }
