@@ -8,6 +8,13 @@ fs.mkdirSync('artifacts/pleasure-feedback',{recursive:true});
 try{
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  // Match the passing 50-stage browser QA's deterministic fresh-operator
+  // entry. An old persisted resume state may otherwise skip the ready brief.
+  await page.addInitScript(()=>{
+    localStorage.setItem('psi.survivors.unlocked_stages',JSON.stringify(['stage_01']));
+    localStorage.setItem('psi.survivors.last_played_stage','stage_01');
+    localStorage.setItem('psi.survivors.display.v1',JSON.stringify({quality:'balanced',lighting:true}));
+  });
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
   await page.evaluate(async()=>{
    const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
@@ -19,8 +26,13 @@ try{
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
   // Follow the real preflight return path used by the passing 50-stage smoke.
   const shopText=JSON.parse(fs.readFileSync('content/localization/survivors-store-ko.json','utf8'));
-  await page.getByRole('button',{name:shopText.briefBrowse,exact:true}).click();
-  await page.getByRole('button',{name:shopText.close,exact:true}).click();
+  // The preflight has two legitimate equipment states: browse when not
+  // owned, or equip when already owned. Never require a buy button to exist.
+  const browse=page.getByRole('button',{name:shopText.briefBrowse,exact:true});
+  if(await browse.count()&&await browse.isVisible()){
+    await browse.click();
+    await page.getByRole('button',{name:shopText.close,exact:true}).click();
+  }
   await page.getByRole('button',{name:'시그널 워치 시작',exact:true}).click();
   await page.waitForFunction(()=>window.qaEngine?.state.phase==='playing');
   await page.emulateMedia({reducedMotion:'no-preference'});
