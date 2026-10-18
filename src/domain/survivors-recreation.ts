@@ -15,7 +15,7 @@ export function stageClearReward(stage:PatrolStageId,difficulty:PatrolDifficulty
  const multiplier=PATROL_DIFFICULTIES[difficulty]?.reward??1;
  const clear=Math.round(Math.min(1200,200+(n-1)*50)*multiplier);
  const first=firstClear?Math.round(Math.min(2000,400+(n-1)*100)*multiplier):0;
- const mastery=Math.min(3,Math.max(0,Number.isFinite(stars)?Math.floor(stars):0))*50;
+ const mastery=Math.round(Math.min(3,Math.max(0,Number.isFinite(stars)?Math.floor(stars):0))*50*multiplier);
  return {clear,first,mastery,total:clear+first+mastery};
 }
 export const PINBALL_THEMES={
