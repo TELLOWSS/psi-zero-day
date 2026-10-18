@@ -10,5 +10,5 @@ for(const token of ['orientation','screenSize']) if(!changes.split('|').includes
 const script=await readFile('scripts/configure-android.mjs','utf8');
 if(!script.includes('android:screenOrientation="fullUser"'))throw Error('android:sync postprocessor would overwrite fullUser policy');
 const gradle=await readFile('android/app/build.gradle','utf8');
-if(!/debug\\s*\\{[\\s\\S]*?applicationIdSuffix\\s+"\\.qa"/.test(gradle))throw Error('Director debug APK must have separate com.tellowss.psizeroday.qa id');
+if(!/debug\s*\{[\s\S]*?applicationIdSuffix\s+"\.qa"/.test(gradle))throw Error('Director debug APK must have separate com.tellowss.psizeroday.qa id');
 console.log('PASS Android portrait/landscape manifest policy (fullUser), rotation + screenSize handling; debug APK isolated from production save; physical device QA remains pending.');
