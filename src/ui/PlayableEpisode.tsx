@@ -6,6 +6,7 @@ import {loadStoryReader,saveStoryReader,type StoryReaderSettings} from '../app/s
 import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth} from '../app/episode-save-health';
 import {storySoundscape} from '../app/story-soundscape';
 import { episodeAudioDirection } from '../app/episode01-audio-director';
+import { episode01CandidateScoreAsset, episode01CandidateFoleyAssets } from '../app/episode01-candidate-audio';
 import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
@@ -117,13 +118,14 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id;
   const directorAudio=episodeAudioDirection(audioEventId);
+  const score=episode01CandidateScoreAsset(directorAudio?.motif);
   const rawSoundscape=storySoundscape(audioEventId);
   const soundscape=rawSoundscape && directorAudio
     ? {...rawSoundscape,gain:rawSoundscape.gain*directorAudio.roomToneScale}
     : rawSoundscape;
   const { playUiCue, playPresentationCue, playVoiceCue, stopVoice } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{
     paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape,
-    eventId:audioEventId,sceneFadeMs:directorAudio?.sceneFadeMs,scoreFadeMs:directorAudio?.scoreFadeMs,
+    eventId:audioEventId,sceneFadeMs:directorAudio?.sceneFadeMs,scoreFadeMs:directorAudio?.scoreFadeMs,score,
   });
   const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
   useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
@@ -350,11 +352,20 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
   useEffect(() => {
     if (!activeEventId || !runIdentity) return;
     const cue = episodePresentationAudioCue(activeEventId);
-    if (!cue) return;
+    const foley = episode01CandidateFoleyAssets(activeEventId);
+    if (!cue && foley.length === 0) return;
     const key = `${runIdentity}:${activeEventId}`;
     if (playedSceneCues.current.has(key)) return;
     playedSceneCues.current.add(key);
-    if(cue.asset_id!==soundscape?.asset_id)playPresentationCue(cue);
+    // Avoid triggering two short radio stings on the same reporting beat.
+    if (cue && cue.asset_id !== soundscape?.asset_id &&
+        !(cue.asset_id === 'ep01.audio.radio_burst' &&
+          foley.some(item => item.asset_id.endsWith('radio_ptt_detail')))) {
+      playPresentationCue(cue);
+    }
+    // Candidate Foley remains a separate presentation one-shot; the tails
+    // must end naturally without stopping scene ambience or authored voices.
+    for (const effect of foley) playPresentationCue(effect);
   }, [activeEventId, runIdentity, playPresentationCue]);
   // Foley tails release themselves on ended/error; scene cuts must not hard-stop them.
   useEffect(() => {
