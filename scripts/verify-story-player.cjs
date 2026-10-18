@@ -18,10 +18,10 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
    await page.waitForFunction(()=>{const image=document.querySelector('.episode-immersive-background');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0&&Number(getComputedStyle(image).opacity)>.95;},{},{timeout:15000});
    if(cinemaEvents.has(event))a(await page.locator('.episode-immersive-background').evaluate(image=>image.currentSrc.includes('-cinema.webp')&&image.naturalWidth===1920&&image.naturalHeight===1080),'new cinematic plate missing or fallback used: '+event);
    if(event==='e01_06_pump_arrival'||event==='e01_07_first_pour'){
-    const expected=event==='e01_06_pump_arrival'?'pump-arrival-morning-preview.svg':'first-pour-morning-preview.svg';
-    a.equal(await scene.getAttribute('data-background-source'),'daylight-director-preview','Morning plate not staged');
+    const expected=event==='e01_06_pump_arrival'?'ramp-entry-cinema.webp':'concrete-pour.webp';
+    a.equal(await scene.getAttribute('data-background-source'),'daylight-raster-review','Morning raster art not staged');
     const art=await page.locator('.episode-immersive-background').evaluate(img=>({src:img.currentSrc,width:img.naturalWidth,height:img.naturalHeight}));
-    a(art.src.includes(expected)&&art.width===1920&&art.height===1080,'Distinct daylight SVG not decoded: '+event+' '+JSON.stringify(art));
+    a(new URL(art.src).pathname.endsWith('/'+expected)&&art.width>=1920&&art.height>=1080,'Morning WebP original artwork missing or not decoded: '+event+' '+JSON.stringify(art));
     a.equal(await scene.getAttribute('data-ground-pass'),'contact-shadow-v1','Ground-contact compositor not enabled');
    }
    const area=await scene.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});a(area.width>area.viewportWidth*.8&&area.height>area.viewportHeight*.5,'scene has no readable world area: '+event+' '+JSON.stringify(area));
