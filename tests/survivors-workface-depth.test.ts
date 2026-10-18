@@ -1,6 +1,6 @@
 import {describe,expect,it,vi} from 'vitest';
 import {PATROL_STAGE_IDS} from '../src/domain/patrol-survivors';
-import {workfaceDepthLook,drawEssentialFootShadow,drawWorkfaceDepth} from '../src/ui/survivors-workface-depth';
+import {workfaceDepthLook,drawEssentialFootShadow,drawWorkfaceDepth,drawGradedWorkfaceFloor} from '../src/ui/survivors-workface-depth';
 
 describe('Signal Watch shared stage 01–50 depth contract',()=>{
   it('applies a real authored-map grading profile to all fifty stages in every quality tier',()=>{
@@ -27,6 +27,22 @@ describe('Signal Watch shared stage 01–50 depth contract',()=>{
     expect(ctx.fill).toHaveBeenCalledTimes(2);
     expect(ctx.save).toHaveBeenCalledTimes(1);
     expect(ctx.restore).toHaveBeenCalledTimes(1);
+  });
+
+  it('grades a decoded stage raster once and reuses it without per-frame filtering',()=>{
+    const paint={drawImage:vi.fn(),filter:'none',imageSmoothingEnabled:false,imageSmoothingQuality:'low'};
+    const createElement=vi.fn(()=>({width:0,height:0,getContext:()=>paint}));
+    vi.stubGlobal('document',{createElement});
+    try {
+      const ctx={drawImage:vi.fn()};
+      const image={src:'/assets/survivors/maps/test-stage-42.webp'} as HTMLImageElement;
+      drawGradedWorkfaceFloor(ctx as unknown as CanvasRenderingContext2D,image,'stage_42','balanced');
+      drawGradedWorkfaceFloor(ctx as unknown as CanvasRenderingContext2D,image,'stage_42','balanced');
+      expect(createElement).toHaveBeenCalledTimes(1);
+      expect(paint.drawImage).toHaveBeenCalledTimes(1);
+      expect(ctx.drawImage).toHaveBeenCalledTimes(2);
+      expect(paint.filter).toBe('none');
+    } finally {vi.unstubAllGlobals();}
   });
 
   it('caches world-size foreground/middle/far exposure without new geometry',()=>{
