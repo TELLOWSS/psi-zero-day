@@ -112,7 +112,7 @@ import {signatureCounterplayProfile} from '../engine/survivors-signature-counter
 import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
-import {foregroundFixtureSpec,foregroundFixtureOpacity} from './survivors-foreground-props';
+import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from './survivors-foreground-props';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -2804,7 +2804,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const cell=front.kind==='light'?7:0;
           ctx.save();
           ctx.globalAlpha*=foregroundFixtureOpacity(fixture,player);
-          drawProp(ctx,art,cell,fixture.x,front.imageY,front.size);
+          const motion=foregroundFixtureMotion(fixture,engine.state.gameTime,reducedMotionRef.current);
+          ctx.translate(fixture.x,front.imageY+motion.y);
+          ctx.rotate(motion.angle);ctx.scale(1,motion.scaleY);
+          drawProp(ctx,art,cell,0,0,front.size);
           ctx.restore();
         } else if (item.kind === 'hazard') {
           const h = item.data;
@@ -3823,7 +3826,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {preparedCharacter!==selectedChar&&<p role="status">{graphicsText.characterLoading}</p>}
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
-              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
+              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
               <p>{terrainText[selectedDifficulty]}</p><p>{terrainText.warning}</p>
               <details><summary>{terrainText.title}</summary><p>{terrainText.brief}</p><p>{terrainText.cleanupHint}</p></details>
             </fieldset>
