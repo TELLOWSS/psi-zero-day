@@ -33,7 +33,7 @@ describe('EP01 opt-in audio QA timeline', () => {
     vi.stubGlobal('window', { location: { search: '?ep01AudioDebug=1' } });
     traceEpisodeAudio({ bus: 'system', signal: 'scene_change', eventId: 'e01_01_arrival' });
     expect(readEpisodeAudioDiagnostics()).toHaveLength(1);
-    expect(readEpisodeAudioDiagnostics()[0].eventId).toBe('e01_01_arrival');
+    expect(readEpisodeAudioDiagnostics().at(0)?.eventId).toBe('e01_01_arrival');
   });
 
   it('observes element readiness/pause and captures media play rejections', async () => {
