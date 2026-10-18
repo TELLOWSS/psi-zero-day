@@ -60,12 +60,17 @@ describe('EP01 continuous audio mixer', () => {
   });
 
   it('does not restart an unchanged asset across scene text/setting updates', async () => {
-    const { bus, items, make } = fixture();
+    const { bus, clock, items, make } = fixture();
     bus.transition(make('workface_pressure'), 1200);
     await settle();
     bus.transition({...make('workface_pressure'), baseGain: 0.25}, 1200);
     expect(items).toHaveLength(1);
     expect(items[0]?.play).toHaveBeenCalledOnce();
+    expect(items[0]?.volume).toBeCloseTo(0.6);
+    clock.advance(240);
+    expect(items[0]?.volume).toBeGreaterThan(0.25);
+    expect(items[0]?.volume).toBeLessThan(0.6);
+    clock.advance(360);
     expect(items[0]?.volume).toBeCloseTo(0.25);
     bus.dispose();
   });
