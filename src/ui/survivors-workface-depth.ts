@@ -31,6 +31,31 @@ export function workfaceDepthLook(stageId:string,quality:DepthQuality):WorkfaceD
   };
 }
 
+const gradedFloors=new Map<string,HTMLCanvasElement>();
+
+/** Apply the cinematic colour grade once per decoded raster, not each RAF.
+ * A three-floor LRU caps GPU/canvas storage on Android and tablets.
+ */
+export function drawGradedWorkfaceFloor(
+  ctx:CanvasRenderingContext2D,image:HTMLImageElement,stageId:string,quality:DepthQuality,
+):void {
+  const key=image.src+':'+quality;
+  let graded=gradedFloors.get(key);
+  if(!graded) {
+    graded=document.createElement('canvas');graded.width=1400;graded.height=900;
+    const paint=graded.getContext('2d');
+    if(!paint){ctx.drawImage(image,0,0,1400,900);return;}
+    paint.imageSmoothingEnabled=true;
+    paint.imageSmoothingQuality='high';
+    paint.filter=workfaceDepthLook(stageId,quality).floorFilter;
+    paint.drawImage(image,0,0,1400,900);
+    paint.filter='none';
+    if(gradedFloors.size>=3)gradedFloors.delete(gradedFloors.keys().next().value!);
+  } else gradedFloors.delete(key);
+  gradedFloors.set(key,graded);
+  ctx.drawImage(graded,0,0,1400,900);
+}
+
 const depthLayers=new Map<string,HTMLCanvasElement>();
 
 /**
