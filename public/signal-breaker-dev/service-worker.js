@@ -1,5 +1,5 @@
 /* SIGNAL BREAKER dedicated app shell; independent of SIGNAL WATCH and Vercel. */
-const CACHE = 'psi-signal-breaker-crew-v2-20261017';
+const CACHE = 'psi-signal-breaker-raid-guide-20261018';
 const ASSETS = [
   '/assets/episode01/characters/crew-heads-v1/player.webp',
   '/assets/episode01/characters/crew-heads-v1/kang_taesik.webp',
