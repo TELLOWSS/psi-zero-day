@@ -35,7 +35,7 @@ describe('Episode 01 voice runtime production lock', () => {
     expect(audio).toContain('applyVoiceDucking(1)');
     expect(audio).toContain("attemptEpisodeAudioPlay(element,'voice',cue.asset_id,finish)");
     const diagnostics = readFileSync('src/app/episode-audio-diagnostics.ts', 'utf8');
-    expect(diagnostics).toContain('void playback.catch((error: unknown) => {');
+    expect(diagnostics).toContain('void playback.then(() => onStarted?.()).catch((error: unknown) => {');
     expect(diagnostics).toContain('onFailure?.()');
     expect(audio).toContain('onEnded?.()');
   });
