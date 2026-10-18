@@ -5,11 +5,14 @@ on:
     paths:
       - 'src/ui/PatrolSurvivorsGame.tsx'
       - 'src/ui/survivors-stage-light.ts'
+      - 'src/ui/survivors-workface-depth.ts'
+      - 'src/ui/survivors-projectile-feedback.ts'
       - 'src/ui/survivors-scene-lighting.ts'
       - 'src/ui/survivors-directional-art.ts'
       - 'src/ui/survivors-stage-art.ts'
       - 'public/assets/survivors/**'
       - 'tests/survivors-stage-light.test.ts'
+      - 'tests/survivors-workface-depth.test.ts'
       - 'tests/verify-survivors-stage50-visual.mjs'
       - '.github/workflows/verify-signal-watch-stage50.yml'
 permissions:
