@@ -3,6 +3,7 @@ import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
 import './hub-premium.css';
+import './story-chapter-gate.css';
 import homePremiumArt from '../../content/episode01/home-new-psi-art-v7.json';
 import {prepareSitePatrol} from '../app/site-patrol-access';
 import siteOperationsText from '../../content/localization/site-operations-ko.json';
@@ -44,6 +45,8 @@ import { browserLocalStoragePort } from '../platform/browser-storage';
 type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
+const loadEpisode02Cinema = () => import('./Episode02Cinema');
+const Episode02Cinema = lazy(() => loadEpisode02Cinema().then(module=>({default:module.Episode02Cinema})));
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
 const loadDefenseGame = () => import('./DefenseGame');
@@ -160,6 +163,8 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' | 
 /** Navigation is presentation state; all run mutations remain in EpisodeSession/CoreEngine. */
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
+  const [inEpisode02,setInEpisode02]=useState(false);
+  const [chapterGateOpen,setChapterGateOpen]=useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
   const [survivorsLoading, setSurvivorsLoading] = useState(false);
@@ -226,6 +231,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   }, [inDefense, inSurvivors, snapshot.revision, snapshot.state]);
 
   const play = () => {
+    if (snapshot.phase==='complete' || snapshot.state?.flags.episode01_completed===true) {
+      setChapterGateOpen(true);
+      return;
+    }
     void loadPlayableEpisode();
     setLoading(true);
   };
@@ -260,6 +269,29 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     <DefenseGame key={defenseScenarioId??"legacy"} session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} onPractice={()=>openDefense(zeroBreachContent.scenario.id)} />
   </Suspense>;
 
+  if(chapterGateOpen) return <section className="story-chapter-gate" aria-labelledby="story-chapter-title">
+    <header><span>PSI : ZERO DAY / STORY</span><button type="button" onClick={()=>setChapterGateOpen(false)}>메인으로</button></header>
+    <div className="story-chapter-gate-world" aria-hidden="true"><img src={cinematicBackground} alt="" /></div>
+    <div className="story-chapter-gate-content">
+      <p className="story-chapter-eyebrow">THE STORY CONTINUES</p>
+      <h1 id="story-chapter-title">하나의 현장, 이어지는 이야기</h1>
+      <p>어제의 선택이 다음 날의 판단으로 이어집니다. 먼저 지난 결과를 확인하거나 다음 현장으로 이동하세요.</p>
+      <div className="story-chapter-options">
+        <button className="story-chapter-card" type="button" onClick={()=>{
+          setChapterGateOpen(false);setInGame(true);void loadPlayableEpisode();
+        }}><small>DAY 01 · COMPLETED</small><strong>첫 번째 날 · 현장 기록</strong><span>완료한 이야기와 선택의 결과 확인</span><b>결과 보기 →</b></button>
+        <button className="story-chapter-card is-next" type="button" onClick={()=>{
+          setChapterGateOpen(false);setInGame(false);setInEpisode02(true);void loadEpisode02Cinema();
+        }}><small>DAY 02 · OPENING</small><strong>두 번째 날 · 첫 양중</strong><span>어제의 판단이 이어지는 두 장면의 오프닝 플레이</span><b>다음 이야기 →</b></button>
+      </div>
+      <small>DAY 02는 오프닝 두 장면까지 제작되었습니다. DAY 01의 기록은 유지됩니다.</small>
+    </div>
+  </section>;
+
+  if(inEpisode02 && (snapshot.phase==='complete'||snapshot.state?.flags.episode01_completed===true))return <Suspense fallback={<GameplayChunkFallback />}>
+    <Episode02Cinema onExit={()=>setInEpisode02(false)} carryover={snapshot.state?.flags??{}} />
+  </Suspense>;
+
   if (loading) return <CinematicLoadingScreen
     backgroundUri={cinematicBackground}
     preloadUris={preloadUris}
@@ -269,7 +301,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   />;
 
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
-    <PlayableEpisode session={session} onReturn={() => setInGame(false)} onWatch={()=>setSurvivorsLoading(true)} onGuard={()=>openDefense('guard-campaign')} />
+    <PlayableEpisode session={session} onNextEpisode={()=>{setInGame(false);setInEpisode02(true);void loadEpisode02Cinema();}} onReturn={() => setInGame(false)} onWatch={()=>setSurvivorsLoading(true)} onGuard={()=>openDefense('guard-campaign')} />
     {e1UnlockNotice ? <aside className="game-defense-unlock" role="status" aria-live="polite">
       <small>{defenseText('defense.event.new')}</small>
       <strong>{defenseText('defense.event.e1.title')}</strong>
@@ -402,9 +434,10 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
+      <a className="hub-reveal-modes" href="#psi-game-modes" aria-label="게임 선택 영역으로 이동">게임 선택 <span aria-hidden="true">↓</span></a>
       </div>
 
-      <div className="commercial-title-actions is-defense-first">
+      <div id="psi-game-modes" className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
           className="commercial-title-action is-survivors-entry has-mode-art"
           type="button"
@@ -439,12 +472,12 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art" type="button" onClick={onPlay}>
-          <VisualImage uri={episode01BackgroundUri(resolve)} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <img src="/assets/episode01/cg/gate-dawn.webp" alt="" aria-hidden="true" className="commercial-title-action-art" loading="eager" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy">
-            <em className="breaker-brand-line">STORY / EPISODE 01</em><strong className="commercial-title-mode-title">{t('story.entry.title')} <span className="commercial-title-badge-new">EP.01</span></strong>
-            <small>{t(snapshot.phase==='start'?'story.entry.begin':'story.entry.continue')}</small>
+            <em className="breaker-brand-line">STORY / CAMPAIGN</em><strong className="commercial-title-mode-title">{t('story.entry.title')} <span className="commercial-title-badge-new">EP.01 → EP.02</span></strong>
+            <small>{snapshot.phase==='complete'?'DAY 01 완료 · DAY 02 해금':t(snapshot.phase==='start'?'story.entry.begin':'story.entry.continue')} · 가로 화면 추천, 세로 화면 지원</small>
           </span>
           <em>{snapshot.completed}/{snapshot.total}</em>
           <b>›</b>

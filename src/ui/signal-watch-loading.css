@@ -20,3 +20,65 @@
 @media(orientation:portrait){.signal-watch-loading-art{object-position:75% center}.signal-watch-loading-poster:after{background:linear-gradient(0deg,#03101df5 0%,#03101dcc 35%,#03101d22 75%)}.signal-watch-loading-panel{left:24px;right:24px;width:auto;bottom:max(7dvh,env(safe-area-inset-bottom))}.signal-watch-loading-panel h1{font-size:40px}.signal-watch-loading-panel .signal-watch-loading-tagline{margin-bottom:30px}}
 @media(max-height:480px) and (orientation:landscape){.signal-watch-loading-panel{bottom:6dvh;width:min(400px,48vw)}.signal-watch-loading-panel h1{font-size:32px;margin:8px 0}.signal-watch-loading-panel .signal-watch-loading-tagline{margin-bottom:16px}.signal-watch-loading-panel small{margin-top:12px}.signal-watch-loading-panel p{margin:8px 0}}
 @media(prefers-reduced-motion:reduce){.signal-watch-loading-progress>i{transition:none}}
+
+/* Signal Watch 2026 director lock: one authentic poster image only; all optics below
+   are CSS layers. Neither a second art image nor an artificial progress indicator. */
+.signal-watch-loading {--watch-cyan:#a3ecea;--watch-amber:#ffbb73;background:#050f17}
+.signal-watch-loading-poster::before {content:"";position:absolute;z-index:1;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 75% 65% at 71% 33%,rgba(147,210,203,.11),transparent 80%),
+  linear-gradient(95deg,rgba(3,13,20,.96) 0%,rgba(4,19,27,.80) 28%,rgba(5,16,25,.26) 62%,rgba(2,12,19,.20) 100%);}
+.signal-watch-loading-poster::after {z-index:1;background:linear-gradient(0deg,rgba(3,12,20,.65),transparent 38%)}
+.signal-watch-loading-art {filter:saturate(.88) contrast(1.05);object-position:65% center}
+.signal-watch-loading-frame {position:absolute;z-index:2;inset:22px;pointer-events:none;border:1px solid rgba(168,224,222,.17);
+  box-shadow:inset 0 0 0 1px rgba(3,12,20,.17);}
+.signal-watch-loading-frame i {position:absolute;width:32px;height:32px;border-color:rgba(166,232,224,.88);border-style:solid;border-width:0}
+.signal-watch-loading-frame i:nth-child(1){left:-1px;top:-1px;border-left-width:2px;border-top-width:2px}
+.signal-watch-loading-frame i:nth-child(2){right:-1px;top:-1px;border-right-width:2px;border-top-width:2px}
+.signal-watch-loading-frame i:nth-child(3){left:-1px;bottom:-1px;border-left-width:2px;border-bottom-width:2px}
+.signal-watch-loading-frame i:nth-child(4){right:-1px;bottom:-1px;border-right-width:2px;border-bottom-width:2px}
+.signal-watch-loading-range{position:absolute;z-index:2;top:15%;right:6%;width:clamp(70px,10vw,170px);
+  aspect-ratio:1;opacity:.65;pointer-events:none;border:1px solid rgba(174,228,222,.20);border-radius:50%;
+  background:repeating-radial-gradient(circle at center,transparent 0 25%,rgba(177,226,220,.12) 25.4% 25.8%,transparent 26.2% 50%)}
+.signal-watch-loading-range::after{content:"";position:absolute;inset:50% -18%;height:1px;background:rgba(169,226,218,.30)}
+.signal-watch-loading-range span{position:absolute;inset:50% auto auto 50%;width:4px;height:4px;border-radius:50%;background:#b6f5e6;box-shadow:0 0 12px #a2f1df}
+.signal-watch-loading-range span:nth-child(2){transform:translate(-36px,-31px)}
+.signal-watch-loading-range span:nth-child(3){transform:translate(30px,25px)}
+.signal-watch-loading-panel {bottom:max(10dvh,env(safe-area-inset-bottom));width:min(520px,44vw);
+  padding:22px 22px 18px 0;border-left:2px solid rgba(150,222,216,.55);padding-left:24px;
+  filter:drop-shadow(0 12px 22px rgba(1,8,14,.33))}
+.signal-watch-loading-brand{display:inline-flex;align-items:center;gap:8px;color:var(--watch-cyan);letter-spacing:.13em}
+.signal-watch-loading-brand i{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);
+  background:var(--watch-amber);box-shadow:0 0 14px rgba(255,183,111,.48)}
+.signal-watch-loading-overline{display:block;font-size:10px;color:#c7d9d9;letter-spacing:.16em;margin:14px 0 -4px}
+.signal-watch-loading-panel h1{font-size:clamp(38px,5.1vw,70px);font-weight:900;letter-spacing:-.055em;
+  text-shadow:0 6px 32px rgba(1,9,17,.72);margin:12px 0}
+.signal-watch-loading-panel .signal-watch-loading-tagline{color:#ecf7f4;max-width:38ch;line-height:1.5}
+.signal-watch-loading-progress{height:7px;border:1px solid rgba(165,227,221,.20);border-radius:4px;
+  background:rgba(2,16,25,.76)}
+.signal-watch-loading-progress>i{box-shadow:0 0 18px rgba(118,229,218,.46)}
+.signal-watch-loading-progress-title{color:#d9edeb}
+.signal-watch-loading-exit{top:max(35px,env(safe-area-inset-top));right:max(35px,env(safe-area-inset-right))}
+@media (orientation:portrait) {
+ .signal-watch-loading-art{object-position:70% center}
+ .signal-watch-loading-poster::before{background:linear-gradient(0deg,rgba(4,12,20,.96) 0%,rgba(4,14,23,.88) 27%,rgba(4,15,23,.04) 78%)}
+ .signal-watch-loading-poster::after{background:none}
+ .signal-watch-loading-panel{left:clamp(16px,5vw,28px);right:clamp(16px,5vw,28px);bottom:max(7dvh,env(safe-area-inset-bottom));
+   width:auto;padding:12px 8px 10px 16px}
+ .signal-watch-loading-panel h1{font-size:clamp(35px,10vw,54px)}
+ .signal-watch-loading-frame{inset:12px}
+ .signal-watch-loading-range{top:13%;right:7%;width:92px;opacity:.46}
+ .signal-watch-loading-exit{top:max(20px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right))}
+}
+@media(max-height:480px) and (orientation:landscape){
+ .signal-watch-loading-frame{inset:10px}
+ .signal-watch-loading-panel{bottom:max(12px,env(safe-area-inset-bottom));padding-top:4px;padding-bottom:4px}
+ .signal-watch-loading-panel h1{font-size:30px;margin:5px 0}
+ .signal-watch-loading-panel .signal-watch-loading-tagline{margin-bottom:10px}
+ .signal-watch-loading-overline,.signal-watch-loading-range{display:none}
+ .signal-watch-loading-panel small{margin-top:6px}
+ .signal-watch-loading-exit{top:max(15px,env(safe-area-inset-top));right:max(15px,env(safe-area-inset-right))}
+}
+@media (prefers-reduced-motion: reduce) {
+ .signal-watch-loading *{animation:none!important}
+ .signal-watch-loading-progress>i{transition:none}
+}

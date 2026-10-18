@@ -71,7 +71,7 @@
       "focus": "right"
     },
     "e01_05_command": {
-      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "bg": "assets/episode01/cg/ramp-entry-rc.svg",
       "cast": [
         "player",
         "lee_jaehoon",
@@ -118,7 +118,7 @@
       "focus": "center"
     },
     "e01_08_reactions": {
-      "bg": "assets/episode01/cg/concrete-pour-rc.svg",
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
       "cast": [
         "kang_taesik",
         "yoon_sungho",

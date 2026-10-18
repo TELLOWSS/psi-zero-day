@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "ep02-director-cinema-v1",
+  "status": "OPENING_2_SCENES_IMPLEMENTED_FULL_EPISODE_PLANNED",
+  "premise": "어제 멈춘 현장은 오늘 다시 움직인다. 사람들의 경험은 정확했지만 모두가 공유한 기준은 아니었다.",
+  "thematic_question": "안전을 지키는 기준은 서류에, 숙련자에게, 아니면 서로 확인한 행동 속에 남는가?",
+  "visual_motif": [
+    "무전의 침묵",
+    "크레인 훅 아래 빈 공간",
+    "작업구역 통제선이 옮겨지는 작은 움직임",
+    "멈춘 손과 다시 움직이는 사람"
+  ],
+  "acts": [
+    {
+      "id": "ACT_01",
+      "title": "어제의 잔상",
+      "time": "06:52",
+      "state": "OPENING_SLICED",
+      "purpose": "EP01 마지막 결과와 노동자의 침묵 또는 보고 기억이 지금의 갈등을 규정"
+    },
+    {
+      "id": "ACT_02",
+      "title": "첫 양중",
+      "time": "07:06",
+      "state": "PLAYABLE",
+      "purpose": "서류 A·숙련자 B·공동 재검토의 안전기준과 현실적 비용이 충돌",
+      "choiceCount": 3
+    },
+    {
+      "id": "ACT_03",
+      "title": "두 번의 양중",
+      "time": "07:18",
+      "state": "PLAYABLE",
+      "purpose": "첫 선택의 효과를 통제선·작업자의 동선·신호 인계에서 시각화"
+    },
+    {
+      "id": "ACT_04",
+      "title": "누구의 눈인가",
+      "time": "09:40",
+      "state": "PLANNED",
+      "purpose": "신호수 교대와 낯선 작업조에서 전달되지 않은 작업기준의 비용을 보여줌"
+    },
+    {
+      "id": "ACT_05",
+      "title": "다음 변동",
+      "time": "14:10",
+      "state": "PLANNED",
+      "purpose": "계획 갱신·공동 TBM·기록에 이르기까지 선택의 연결과 오해를 마감"
+    }
+  ],
+  "core_cast": [
+    "안전관리자",
+    "최민석(신호수)",
+    "이재훈(공사팀)",
+    "강태식(형틀반)",
+    "지원 근로자(후반 신규 인물)"
+  ],
+  "scripts": {
+    "episode01_adaptation": "문장 정보량을 낮추고 무전 침묵·시선·작업 소리로 미공개 위험을 표현. 선택의 효과와 경위는 보존.",
+    "episode02_anchors": [
+      "누구도 악인이 아니다",
+      "서류가 정답인 것도 아니고 숙련이 만능도 아니다",
+      "양중물 하부 출입 통제와 전담 신호 체계는 어떤 선택에서도 변경 불가"
+    ]
+  },
+  "cinema_rules": {
+    "landscape": "넓은 공정 동선과 등장인물 관계를 한 화면에 드러내도록 비강제 권장",
+    "portrait": "중앙 인물·후광과 9:16 크롭·세로형 자막을 독립 구성",
+    "no_autoadvance": true,
+    "choices_mutate_episode01": false
+  },
+  "art_gate": "EP02 opening playback reuses the same construction site location master while Episode02 dedicated art/voice is pending. This is not an approved final production art lock.",
+  "runtime_scope": "Hub opens two-event Episode02 pilot after EP01 completion. Local pilot save key only. No Episode01 CoreEngine mutation and no claimed complete EP02 campaign."
+}

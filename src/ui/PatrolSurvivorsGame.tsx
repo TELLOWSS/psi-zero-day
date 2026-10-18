@@ -162,6 +162,7 @@ import {
 import './patrol-survivors.css';
 import './survivors-event-visibility.css';
 import './tactical-ui.css';
+import './signal-watch-visual-lock.css';
 
 interface PatrolSurvivorsGameProps {
   onExit: () => void;
@@ -1976,6 +1977,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const checkDanger=player.hp<=player.maxHp*.4||hazards.some(h=>h.hp>0&&Math.hypot(h.x-player.x,h.y-player.y)<420)
         ||engine.state.bossAlertTimer>0||Boolean(engine.state.signatureEvent&&engine.state.signatureEvent.phase!=='resolved')
         ||engine.state.directorCutinPhase!=='none'||engine.state.interactiveHazards.some(h=>(h.state==='active'||h.state==='warning')&&Math.hypot(h.x-player.x,h.y-player.y)<420);
+      // Authored screen identity follows real runtime stage/danger signals.
+      // Set only when changed: avoid forcing DOM/style work on every animation frame.
+      if (containerRef.current) {
+        const frame = containerRef.current;
+        const theme = engine.state.stage.theme;
+        const signal = checkDanger ? 'elevated' : 'normal';
+        if (frame.dataset.watchTheme !== theme) frame.dataset.watchTheme = theme;
+        if (frame.dataset.watchSignal !== signal) frame.dataset.watchSignal = signal;
+      }
       const equipmentCheck=equipmentCheckRef.current.sample({clock:engine.state.gameTime,phase:engine.state.phase,moving:trackedPose.moving,action:trackedPose.action,reaction:trackedPose.reaction,danger:checkDanger,reduced:reducedMotionRef.current,player:engine.state.characterId==='player'});
       const playerPose = {...trackedPose,equipmentCheck,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0,reaction:0,equipmentCheck:0}: {})};
       radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));

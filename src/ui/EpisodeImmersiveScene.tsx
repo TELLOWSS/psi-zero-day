@@ -2,6 +2,7 @@ import type { AssetResolver } from '../app/episode-visual-assets';
 import type { CharacterGrowthView } from '../app/character-growth';
 import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
+import { episode01MorningPourPlate } from '../app/episode01-morning-pour';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
@@ -123,7 +124,9 @@ export function EpisodeImmersiveScene({
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const finalBackground = resolvedBackground ?? scene.background_final_uri;
-  const backgroundUri=finalBackground ?? scene.background_uri;
+  // A pair of distinctly directed DAYLIGHT preview plates; never promote to FINAL implicitly.
+  const morningPlate = episode01MorningPourPlate(scene.event_id);
+  const backgroundUri = morningPlate?.uri ?? finalBackground ?? scene.background_uri;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
@@ -134,9 +137,24 @@ export function EpisodeImmersiveScene({
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
   const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
+  // Two-shot film grammar: the current speaker and one listener own the frame.
+  // The authored event/cast/choice contract remains intact; extras are not transparent ghosts.
+  const lead = speakerId && scene.cast.includes(speakerId) ? speakerId
+    : scene.subject_character_id && scene.cast.includes(scene.subject_character_id) ? scene.subject_character_id
+    : scene.cast.find(id=>id!=='player') ?? scene.cast[0];
+  const partner = lead==='player'
+    ? scene.cast.find(id=>id!=='player')
+    : scene.cast.includes('player') ? 'player'
+    : scene.cast.find(id=>id!==lead);
+  const shotCast = scene.cast.length<=2 ? scene.cast
+    : scene.cast.filter(id=>id===lead||id===partner);
+  const stagedCast = shotCast.length ? shotCast : scene.cast.slice(0,2);
 
   return <figure
     className="episode-immersive-scene"
+    data-cast-count={stagedCast.length}
+    data-authored-cast-count={scene.cast.length}
+    data-director-cast="two-shot-20261018"
     data-camera={scene.camera}
     data-focus={scene.focus}
     data-tone={scene.tone}
@@ -148,7 +166,9 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
-    data-background-source={finalBackground ? 'final' : 'rc-fallback'}
+    data-background-source={morningPlate ? 'daylight-director-preview' : finalBackground ? 'final' : 'rc-fallback'}
+    data-morning-shot={morningPlate?.id}
+    data-ground-pass={stagedCast.length > 0 ? 'contact-shadow-v1' : undefined}
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
@@ -195,7 +215,7 @@ export function EpisodeImmersiveScene({
     data-dayresult-carryover={dayResultProduction?.carryover_key}
     key={scene.background_asset_id ?? scene.background_uri}
   >
-    <VisualImage key={`${backgroundUri}:${backgroundAttempt}`} uri={backgroundUri} fallbackUri={finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" onUnavailable={()=>setFailedBackground(backgroundUri)} />
+    <VisualImage key={`${backgroundUri}:${backgroundAttempt}`} uri={backgroundUri} fallbackUri={morningPlate ? (finalBackground ?? scene.background_uri) : finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" onUnavailable={()=>setFailedBackground(backgroundUri)} />
     {failedBackground===backgroundUri ? <div className="story-background-error" role="alert">
       <p>{t('story.player.backgroundMissing')}</p>
       <button type="button" onClick={()=>{setFailedBackground(null);setBackgroundAttempt(value=>value+1);}}>{t('story.player.retryBackground')}</button>
@@ -348,21 +368,23 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {scene.cast.map((characterId, index) => {
+      {scene.cast.map(characterId => {
+        const cameraIndex = stagedCast.indexOf(characterId);
+        const onCamera = cameraIndex >= 0;
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
         const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
         const performance = episode01CharacterPerformance(scene.event_id, scene.node_id, characterId, speakerId, relationshipCue);
         const performanceAsset = episode01CharacterPerformanceAsset(characterId, performance?.expression, resolve);
-        const characterUri = performanceAsset?.uri
-          ?? performanceAsset?.fallback_uri
-          ?? characterMapUri(characterId, resolve);
-        const characterFallbackUri = performanceAsset?.uri
-          ? performanceAsset.fallback_uri ?? characterMapUri(characterId, resolve)
-          : undefined;
+        // Production expression assets can be bust crops; stage the canonical full-body
+        // map asset in wide/mid-shots until expression masters have full-body alpha.
+        const characterUri = characterMapUri(characterId, resolve);
+        const characterFallbackUri = undefined;
         return <div
         key={characterId}
-        className={`episode-immersive-character cast-${index + 1}`}
+        className={`episode-immersive-character ${onCamera ? `cast-${cameraIndex + 1}` : 'cast-extra'}`}
+        data-on-camera={onCamera || undefined}
         data-speaker={speakerId === characterId || undefined}
+        data-framed-subject={scene.subject_character_id === characterId || undefined}
         data-character={characterId}
         data-relationship-cue={relationshipCue}
         data-blocking-side={blocking?.side}
@@ -370,7 +392,9 @@ export function EpisodeImmersiveScene({
         data-expression={performance?.expression}
         data-pose={performance?.pose}
         data-presence-motion={performance?.motion}
-        data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
+        data-performance-asset="map-fallback"
+        data-expression-source={performanceAsset?.uri}
+        data-expressive-crop-suppressed={performanceAsset?.using_expression_asset || undefined}
       >
         <VisualImage uri={characterUri} fallbackUri={characterFallbackUri} alt="" />
       </div>;

@@ -1,0 +1,32 @@
+name: Verify EP01 director media previews
+on:
+  push:
+    branches: [art/story-cinema-20261017]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate-media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: npm
+      - run: npm ci
+      - name: Audit 17 retained candidate audio files (not listening approval)
+        run: node scripts/verify-episode01-candidate-audio-review.mjs
+      - name: Check daylight visual contract
+        run: npx vitest run tests/episode01-morning-pour.test.ts
+      - name: Typecheck and build
+        run: npm run build
+      - name: Retain review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ep01-director-media-candidate
+          path: artifacts/ep01-director-media/
+          if-no-files-found: warn
+          retention-days: 14

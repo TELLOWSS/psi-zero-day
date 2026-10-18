@@ -3,7 +3,14 @@ const {createRequire}=require('node:module'),{spawn}=require('node:child_process
 const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict');
 const {chromium}=process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT?createRequire(path.join(process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT,'package.json'))('playwright'):require('playwright');
 const out=process.env.SIGNAL_BREAKER_QA_OUTPUT||'/tmp/psi-campaign-ending-qa',root=path.resolve(__dirname,'../../..');
-const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];for(const n of g.circuit)n.hit=true;const b=g.boss;if(b.identity==='conveyor')b.segment=b.maxSegments;if(b.identity==='extraction')b.filterStage=b.maxFilterStages;if(b.identity==='tension')b.loadStage=b.maxLoadStages;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});g.update(1/120);};
+const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];for(const n of g.circuit)n.hit=true;const b=g.boss;if(b.identity==='conveyor')b.segment=b.maxSegments;if(b.identity==='extraction')b.filterStage=b.maxFilterStages;if(b.identity==='tension')b.loadStage=b.maxLoadStages;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});/* QA terminal playback fixture, not an in-game shortcut.
+ Actual raid combat is verified separately by verify-raid-boss.cjs. */
+ if(g.boss?.raid){g.boss.raid.phase=3;g.boss.raid.state='FINISHER';
+  g.boss.raid.finished=g.time;g.boss.raid.required=true;
+  g.boss.hp=0;g.boss.phase='resolved';g.boss.nodes.forEach(n=>n.hit=true);}
+ if(g.source)g.source.verified=true;
+ if(g.circuit)g.circuit.forEach(n=>n.hit=true);
+ g.update(1/120);};
 (async()=>{
  fs.mkdirSync(out,{recursive:true});const server=spawn('python3',['-m','http.server','5214','--bind','127.0.0.1','--directory',path.join(root,'public')],{stdio:'ignore'});const url='http://127.0.0.1:5214/signal-breaker-dev/index.html';let browser;const results=[];
  try{
@@ -13,7 +20,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    const id='CH-0'+number,context=await browser.newContext({viewport:{width,height},serviceWorkers:'block',reducedMotion:number===3?'reduce':'no-preference'});
    await context.addInitScript(n=>{const records={};for(let i=1;i<n;i++)records['CH-0'+i]={won:true};if(!localStorage.getItem('psi.signal-breaker.offline.v1'))localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({credits:0,records,sound:false,settings:{autoFire:false,assistVersion:1}}));},number);
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
-   await page.clock.install({time:new Date('2026-10-12T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-12T00:00:01Z'));await page.goto(url);await page.clock.runFor(3000);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('[data-lobby-stage="'+id+'"]').click();await page.locator('#startOperation').click();
+   await page.clock.install({time:new Date('2026-10-12T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-12T00:00:01Z'));await page.goto(url);await page.clock.runFor(3000);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('[data-lobby-stage="'+id+'"]').click();await page.locator('#heroStartBtn').click();await page.locator('#overlayPrimary').click();
    // A browser clock runs the same animation frames without wall-clock idle time.
    await page.evaluate(terminal);await page.clock.runFor(100);
    await page.locator('#stageEnding').waitFor({state:'visible'});await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.prepared==='true');await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.image==='ready');

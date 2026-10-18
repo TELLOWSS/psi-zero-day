@@ -61,9 +61,11 @@ jobs:
         shell: bash
         run: |
           grep -q "MODE_SELECT_V11" src/ui/GameHub.tsx
-          grep -q "setModePreview('defense')" src/ui/GameHub.tsx
+          grep -q "onDefense(\"guard-campaign\")" src/ui/GameHub.tsx
+          grep -q "className=\"commercial-title-action is-story-entry" src/ui/GameHub.tsx
+          ! grep -q 'is-episode02-entry' src/ui/GameHub.tsx
           grep -q "사고 전 신호를 읽고, 현장을 바꿔라." src/ui/GameHub.tsx
-          grep -q "LIVE SITE" src/ui/GameHub.tsx
+          grep -q "STORY / CAMPAIGN" src/ui/GameHub.tsx
           grep -q "MODE_SELECT_V11" src/ui/shooting-entry.css
 
       - name: Install Korean QA font
@@ -109,7 +111,7 @@ jobs:
             cat /tmp/title-preview.log
             exit 1
           fi
-          node scripts/verify-survivors-mode-previews.mjs
+          node scripts/verify-story-hub-cinema.mjs
 
       - name: Upload title QA evidence
         if: always()

@@ -35,6 +35,12 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // Keep the on-device director QA build independent of any installed
+            // production app and its private local save database.
+            applicationIdSuffix ".qa"
+            versionNameSuffix "-director-qa"
+        }
         release {
             if (hasReleaseSigning) {
                 signingConfig signingConfigs.release

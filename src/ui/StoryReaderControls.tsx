@@ -5,7 +5,7 @@ export function StoryReaderControls({settings,onChange,onPaused,t}:{settings:Sto
   const dialog=useRef<HTMLDialogElement>(null),[open,setOpen]=useState(false);
   useEffect(()=>{const el=dialog.current;if(open){el?.showModal();onPaused(true);}return()=>{if(open){el?.close();onPaused(false);}};},[open,onPaused]);
   return <>
-    <button className="story-reader-open" type="button" onClick={()=>setOpen(true)}>{t('story.reader.open')}</button>
+    <button className="story-reader-open" type="button" aria-label="읽기 크기 및 소리 설정" title="읽기 크기 및 소리 설정" onClick={()=>setOpen(true)}>{t('story.reader.open')}</button>
     <dialog className="story-reader-dialog" ref={dialog} onClose={()=>setOpen(false)} aria-labelledby="story-reader-title">
       <header><h2 id="story-reader-title">{t('story.reader.title')}</h2><button type="button" onClick={()=>setOpen(false)} aria-label={t('story.reader.close')}>×</button></header>
       <p>{t('story.reader.pause')}</p>
