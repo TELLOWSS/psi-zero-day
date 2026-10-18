@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "version": "0.68.0-trimode-intel",
-  "cacheName": "psi-signal-breaker-crew-v2-20261017",
-  "fingerprint": "c5623294552a171dd9b53bf269c7eb43702c84d48636f92579e83411a3d842ca",
+  "cacheName": "psi-signal-breaker-raid-guide-20261018",
+  "fingerprint": "0b251eebba20eb0892daca0702c591b67d592c99b2eafc0732a076610208d09c",
   "files": [
     {
       "path": "/assets/episode01/characters/crew-heads-v1/choi_minseok.webp",
@@ -131,8 +131,8 @@
     },
     {
       "path": "/assets/shared/signal-breaker-actors.js",
-      "bytes": 150363,
-      "sha256": "4a5253c052997ac1532e95f15e4ec0c07ba1a2a0a3a6f340b5f1761a1e0e791b"
+      "bytes": 150327,
+      "sha256": "322f88a12c167661b7049f500b68a39dafde571d3fc0f5b47a98700b2fe2953f"
     },
     {
       "path": "/assets/shared/signal-encounter-intel-v1.js",
@@ -866,13 +866,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 13061,
-      "sha256": "8ffdc45a9196870e4cc96afaabd3b4b6b63477ae55961ab71e10f24718ca860e"
+      "bytes": 13064,
+      "sha256": "2f978c70b423aa9ac071e910074eacd8d364339b281658ce7323855d6a7f1234"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 167542,
-      "sha256": "3d566c336bd2da3accac5092992d63b0d0c1174aa97d5e53b99d84050a706286"
+      "bytes": 168300,
+      "sha256": "302b4cbbb65aa3f7b2b5e4b9f5035f041cb71c3ddbf1576e37d3972bd7988969"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -901,8 +901,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-advisor.js",
-      "bytes": 1520,
-      "sha256": "96846a114de518ce0622a9054c6650e695b10fe5d5aa710672e92b84941cc1e1"
+      "bytes": 2677,
+      "sha256": "dba00bce651b36eb40deda5206290138c611df09dc16096cb4c7633a73fc9c9e"
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-telegraph.js",
@@ -911,13 +911,13 @@
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid-ui.js",
-      "bytes": 11143,
-      "sha256": "1784f74a46e073433512242bfa67e742f2aa5f6aee1769e495a853256dcfce59"
+      "bytes": 12489,
+      "sha256": "90d713fcf2b33cd5e353a6c46113af1b2967039d9fbd560795dfff67821b79a4"
     },
     {
       "path": "/signal-breaker-dev/src/boss-raid.css",
-      "bytes": 3187,
-      "sha256": "659cb2c9c1849a7a4b1fa302ea2228ac36ce02478e5521382da66c95dfe9d8a8"
+      "bytes": 5307,
+      "sha256": "24090d8be58e8cdd38b215b12ba640df2cfe1223517b449d60296c691af5bb6c"
     },
     {
       "path": "/signal-breaker-dev/src/burst-rules.js",
@@ -946,8 +946,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/combat-vfx.js",
-      "bytes": 10391,
-      "sha256": "637f7775d7ee58a6e893c032d6ee54f29e71c0de0a337f4fdc8025a5a3bb0606"
+      "bytes": 12924,
+      "sha256": "03280f5cfce27d8f5fc9f725157b159d5ea7221a7a80dbf949f73c8e5172bd07"
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance-content.js",
@@ -1021,8 +1021,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/localization-ko.js",
-      "bytes": 62355,
-      "sha256": "81e544dc0f725ba67e07dc78ae31cc5dae7cf7da655ce68a030384aacadb77f9"
+      "bytes": 63864,
+      "sha256": "607281eabd91b8fec1c4f2dfdade032d9c690866a068a134151db1cc69eb8161"
     },
     {
       "path": "/signal-breaker-dev/src/movement-pad.js",
@@ -1051,8 +1051,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/portrait-immersion.css",
-      "bytes": 8789,
-      "sha256": "ceee572b2d5cdbe8f2cc25846dfd3d5ac7dbbb4e92d3c3d1bc81204556ad8923"
+      "bytes": 9056,
+      "sha256": "fe43130c78848be341f3f28494f4dd27db6c0914eeffa85091b836746b77d2e8"
     },
     {
       "path": "/signal-breaker-dev/src/premium-art.js",
@@ -1061,8 +1061,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/premium-sound.js",
-      "bytes": 17701,
-      "sha256": "82112a0eee2ef5761a6e79a80a8bcf32e2905dba8f7a9842cc9fd9bf075e6898"
+      "bytes": 17889,
+      "sha256": "20edbb051e3b051bd4cb72ad290c110b1361fe46e970b6b6b23b0ee186d7fce9"
     },
     {
       "path": "/signal-breaker-dev/src/psi-rpg-art.css",

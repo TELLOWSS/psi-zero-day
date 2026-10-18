@@ -29,27 +29,27 @@ jobs:
       - name: Reproduce all 80 simulated input runs
         run: |
           node public/signal-breaker-dev/scripts/simulate-flow.cjs /tmp/psi-flow-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-flow-simulation.json'),require('./public/signal-breaker-dev/docs/flow-simulation-after-20261011.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-flow-simulation.json'),require('./docs/qa/breaker-regression-20261018/flow.json'))"
       - name: Reproduce all 80 hazard cascade input runs
         run: |
           node public/signal-breaker-dev/scripts/simulate-burst.cjs /tmp/psi-burst-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-burst-simulation.json'),require('./public/signal-breaker-dev/docs/burst-simulation-after-20261011.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-burst-simulation.json'),require('./docs/qa/breaker-regression-20261018/burst.json'))"
       - name: Reproduce three one-hour continuous input sessions
         run: |
           node public/signal-breaker-dev/scripts/simulate-continuous.cjs /tmp/psi-continuous-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-continuous-simulation.json'),require('./public/signal-breaker-dev/docs/continuous-simulation-20261011.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-continuous-simulation.json'),require('./docs/qa/breaker-regression-20261018/continuous.json'))"
       - name: Reproduce player-led operation and boss input sessions
         run: |
           node public/signal-breaker-dev/scripts/simulate-operations.cjs /tmp/psi-operation-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-operation-simulation.json'),require('./public/signal-breaker-dev/docs/operation-simulation-20261011.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-operation-simulation.json'),require('./docs/qa/breaker-regression-20261018/operations.json'))"
       - name: Reproduce movement-guidance input sessions
         run: |
           node public/signal-breaker-dev/scripts/simulate-assist-guidance.cjs /tmp/psi-assist-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-assist-simulation.json'),require('./public/signal-breaker-dev/docs/assist-guidance-simulation-20261012.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-assist-simulation.json'),require('./docs/qa/breaker-regression-20261018/assist-guidance.json'))"
       - name: Reproduce veteran affinity and evolution inputs
         run: |
           node public/signal-breaker-dev/scripts/simulate-veteran.cjs /tmp/veteran-simulation.json
-          node -e "require('node:assert/strict').deepEqual(require('/tmp/veteran-simulation.json'),require('./docs/qa/breaker-evolution-20261012/veteran-input-simulation.json'))"
+          node -e "require('node:assert/strict').deepEqual(require('/tmp/veteran-simulation.json'),require('./docs/qa/breaker-regression-20261018/veteran.json'))"
       - name: Prepare browser verification
         run: |
           npm install --prefix "$RUNNER_TEMP/signal-breaker-browser" --no-package-lock playwright@1.58.2
@@ -59,19 +59,13 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
-          node public/signal-breaker-dev/scripts/verify-psi-rpg-art.cjs
-          node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
-          node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
-          node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
-          node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
-          node public/signal-breaker-dev/scripts/verify-ui-release.cjs
-          node public/signal-breaker-dev/scripts/verify-boss-articulation.cjs
-          node public/signal-breaker-dev/scripts/verify-causal-source.cjs
-          node public/signal-breaker-dev/scripts/verify-stage-ending.cjs
-          node public/signal-breaker-dev/scripts/verify-campaign-ending.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-sound.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-voice.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-voice-ingest.cjs
+          failures=0
+          for script in verify-psi-rpg-art verify-weapon-tree verify-ep02-workshop verify-evolution-repairs verify-veteran-offline verify-ui-release verify-boss-articulation verify-causal-source verify-stage-ending verify-campaign-ending verify-ending-sound verify-ending-voice verify-ending-voice-ingest; do
+            echo "::group::$script"
+            node "public/signal-breaker-dev/scripts/$script.cjs" || failures=$((failures + 1))
+            echo "::endgroup::"
+          done
+          if [ "$failures" -ne 0 ]; then echo "::error::$failures Signal Breaker browser checks failed"; exit 1; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:

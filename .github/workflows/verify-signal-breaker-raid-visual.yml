@@ -1,0 +1,66 @@
+name: Verify Signal Breaker raid visual guide and boss impact
+on:
+  push:
+    branches: [art/story-cinema-20261017]
+    paths:
+      - 'public/signal-breaker-dev/src/boss-raid-*'
+      - 'public/signal-breaker-dev/src/combat-vfx.js'
+      - 'public/signal-breaker-dev/src/app.js'
+      - 'public/signal-breaker-dev/src/localization-ko.js'
+      - 'scripts/verify-raid-boss.cjs'
+      - 'tests/signal-breaker-raid-visual-guide.test.ts'
+      - '.github/workflows/verify-signal-breaker-raid-visual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  raid-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: npm
+      - run: npm ci
+      - name: Syntax and pure visual-state checks
+        run: |
+          node --check public/signal-breaker-dev/src/boss-raid-advisor.js
+          node --check public/signal-breaker-dev/src/boss-raid-ui.js
+          node --check public/signal-breaker-dev/src/combat-vfx.js
+          node --check public/signal-breaker-dev/src/app.js
+          npx vitest run tests/signal-breaker-raid-visual-guide.test.ts
+      - name: Verify exact offline release metadata
+        run: node scripts/check-signal-breaker-release.mjs
+      - name: Assemble Preview
+        run: npm run build
+      - name: Prepare Chrome and Playwright
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts playwright@1.56.1
+          echo "CHROME_BIN=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          test -x "$(command -v google-chrome)"
+      - name: Four-viewport raid practice and muted visual counterplay
+        shell: bash
+        env:
+          PSI_PREVIEW_URL: http://127.0.0.1:4176
+          PSI_QA_OUTPUT: artifacts/signal-breaker-raid-visual
+        run: |
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4176 --strictPort > /tmp/sb-preview.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 60); do
+            if curl -fsS "http://127.0.0.1:4176/signal-breaker-dev/index.html" >/dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1 || { cat /tmp/sb-preview.log; exit 1; }
+          node scripts/verify-raid-boss.cjs
+      - name: Keep screenshot and browser validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: signal-breaker-raid-visual-evidence
+          path: artifacts/signal-breaker-raid-visual/
+          if-no-files-found: warn
+          retention-days: 14

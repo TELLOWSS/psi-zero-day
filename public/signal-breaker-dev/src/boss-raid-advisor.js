@@ -10,5 +10,25 @@
   const seconds=Math.max(0,s.remaining),priority=danger?3:s.state==='WARNING'&&s.trueSignal?2:1;
   return {textId:'breaker.monitor.'+key,direction,seconds,priority,progress:Math.min(1,seconds/(s.warningDuration||2)),cue:['WARNING','BURST','SUPPORT'].includes(s.state)?[s.pattern,s.attempts,s.state,s.trueSignal,priority,key,direction,Math.ceil(seconds)].join(':'):null};
  }
- return {settings,advice};
+ const actions=Object.freeze({bank:'bank',belt:'belt',mist:'mist',anchor:'anchor',scan:'scan'});
+ function visual(s,x,nodeCount=0){
+  if(!s||s.state==='FINISHER')return null;
+  const actual=s.state==='WARNING'&&s.trueSignal;
+  const danger=actual&&Math.abs(x-s.laneX)<=s.half+24;
+  const phase=['INTRO','OBSERVE','TRANSITION'].includes(s.state)?'prepare'
+   :s.state==='WARNING'&&!actual?'read'
+   :s.state==='WARNING'&&danger?'evade'
+   :s.state==='WARNING'?'counter'
+   :s.state==='SUPPORT'?'support'
+   :s.state==='STAGGER'?'success'
+   :s.state==='BURST'?'burst'
+   :s.state==='RECOVERY'?'retry':'prepare';
+  const direction=danger?(s.laneX-s.half-24<57?'right':s.laneX+s.half+24>1043?'left':x<=s.laneX?'left':'right'):null;
+  return {phase,mode:danger?'danger':phase==='read'?'pending':['success','burst'].includes(phase)?'success':phase==='retry'?'retry':'ready',
+   phaseNo:Number(s.phase)||1,headline:'breaker.raid.visual.head.'+phase,
+   first:'breaker.raid.visual.step.'+phase,
+   action:'breaker.raid.visual.action.'+(actions[s.counter]||'bank'),
+   direction,remainingNodes:Math.max(0,nodeCount|0),seconds:Math.max(0,s.remaining||0)};
+ }
+ return {settings,advice,visual};
 });
