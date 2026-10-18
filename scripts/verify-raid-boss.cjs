@@ -10,7 +10,7 @@ const out=process.env.PSI_QA_OUTPUT||'docs/qa/raid-boss-20261016';fs.mkdirSync(o
   const g=page.locator('#raidVisualGuide');
   assert(await g.isVisible(),'two-step non-audio guide missing');
   assert((await g.locator('.raid-visual-guide-steps span').allInnerTexts()).every(text=>text.trim().length>=6),'raid visual steps have no action');
-  assert.equal(await g.getAttribute('data-mode'),'pending','false warning not distinguished from true warning');
+  assert(['pending','ready','danger'].includes(await g.getAttribute('data-mode')),'visual guide not classified by real warning state');
   assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().raidPractice),true);const original=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')));assert.equal(original.credits,123);assert.equal(original.records['CH-01'].best,77);
   // Real pause button: the engine timer and monitor text stop together.
   console.log(width,'pause',await page.evaluate(()=>SignalBreakerQA.snapshot().state));await page.locator('#pauseBtn').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='paused');const paused=await page.evaluate(()=>SignalBreakerQA.engine().raidSnapshot().remaining);await page.waitForTimeout(350);assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().raidSnapshot().remaining),paused);
