@@ -16,3 +16,6 @@ The first generated cutout was rejected for floor remnants. The selected second 
 
 ## Reproduction prompt
 Use case: background-extraction. Edit the exact original 1564×1006 Stage 01 source. Extract only the bottom railing, timber/rebar crates and lamps at their original coordinates. Make the remainder, including the central green-lane opening, fully transparent. Preserve object silhouette, camera and scale; no text, logo, HUD, people or new objects. Output true RGBA coverage. This asset is read as alpha, not replacement color.
+
+## Shared release and browser boundaries
+The shared Breaker actor delivery matches the canonical CI build (150481 bytes, SHA-256 95a29abdd5299981ceb9774aee50054a7f9be86918574ed03ff853c956394c90); release.json matches its complete generated fingerprint. Existing ending QA now acknowledges the earned boss-loot dialog using the actual continue button before replay/result actions. Dedicated legacy boss phase fixtures explicitly omit raid state; the causal gate additionally runs current real-pointer raid counterplay, practice/no-reward, guide and pause tests. These fixtures do not claim that legacy boss presentation is the current raid path.

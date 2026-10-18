@@ -1,3 +1,4 @@
+const {acknowledgeBossLoot}=require('./boss-loot-qa.cjs');
 /* Explicit terminal combat fixtures verify UI/save boundaries; not a gameplay balance test. */
 const {createRequire}=require('node:module'),{spawn}=require('node:child_process');
 const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict');
@@ -38,14 +39,14 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    for(const r of bounds)a.ok(r.left>=0&&r.right<=width+1&&r.top>=0&&r.bottom<=height+1,r.id+' stays readable');
    a.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
    await page.screenshot({path:path.join(out,`ending-memory-${width}.png`)});
-   await page.locator('#endingSkip').click();await page.locator('#overlayPrimary').waitFor({state:'visible'});
+   await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);await page.locator('#overlayPrimary').waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01');
    await page.locator('#replayEnding').click();await page.locator('#stageEnding').waitFor({state:'visible'});if(width===1920){await page.locator('#overlayPrimary').waitFor({state:'visible'});}else await page.keyboard.press('Escape');
    a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits,'replay does not grant rewards');
    await page.locator('#resultOperationSelect').click();await page.reload();await page.locator('#operationLobby').waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits,'reload preserves one reward');
    await page.locator('#viewEndingArchive').click();await page.locator('#stageEnding').waitFor({state:'visible'});await page.keyboard.press('Escape');await page.locator('#operationLobby').waitFor({state:'visible'});
-   await page.locator('#heroStartBtn').click();await page.locator('#overlayPrimary').click();await page.evaluate(terminal);await page.locator('#stageEnding').waitFor({state:'visible'});await page.locator('#endingSkip').click();await page.locator('#overlayPrimary').waitFor({state:'visible'});
+   await page.locator('#heroStartBtn').click();await page.locator('#overlayPrimary').click();await page.evaluate(terminal);await page.locator('#stageEnding').waitFor({state:'visible'});await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);await page.locator('#overlayPrimary').waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits,'repeat win grants no duplicate first-clear reward');
    await page.waitForTimeout(width===390?30000:250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01','results never automatically start next stage');
    await page.locator('#overlayPrimary').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-02');a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready');
@@ -60,10 +61,10 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
   await page.evaluate(terminal);await page.locator('#retryCompletionSave').waitFor({state:'visible'});a.equal(await page.locator('#stageEnding').isVisible(),false);
   await page.evaluate(()=>window.failSave=false);await page.locator('#retryCompletionSave').click();await page.locator('#stageEnding').waitFor({state:'visible'});
   a.equal(await page.locator('#stageEnding').getAttribute('data-motion'),'still');const credits=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits);
-  await page.locator('#endingSkip').click();a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits);
+  await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits);
   // Failed image cannot strand the player or fabricate evidence.
   await page.route('**/ending-ch01-restored-v1.webp',route=>route.abort());await page.locator('#replayEnding').click();await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.image==='failed');
-  await page.locator('#endingSkip').click();await page.locator('#overlayPrimary').waitFor({state:'visible'});await context.close();
+  await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);await page.locator('#overlayPrimary').waitFor({state:'visible'});await context.close();
   fs.writeFileSync(path.join(out,'summary.json'),JSON.stringify({results,storageRetry:true,reducedMotion:true,imageFailure:true},null,2));console.log('PASS CH01 ending, frozen combat, evidence, skip/replay/archive/reload, reward idempotency, 30s manual handoff, four viewports, storage retry, reduced motion and failed image');
  }finally{await browser?.close();server.kill();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

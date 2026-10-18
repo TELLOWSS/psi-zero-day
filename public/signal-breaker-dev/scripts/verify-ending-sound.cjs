@@ -1,3 +1,4 @@
+const {acknowledgeBossLoot}=require('./boss-loot-qa.cjs');
 /* Real Web Audio boundary check: signal, pause, visibility, mute and replay cleanup.
    This measures audio output; it is not a Director listening approval. */
 const {createRequire}=require('node:module'),{spawn}=require('node:child_process');
@@ -25,7 +26,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
  await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});await page.waitForTimeout(400);a.ok(await page.evaluate(rms)<1e-5,'hidden tab is silent');await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
  results.push({enabled,activeRms:active,pausedRms:paused});
  }else{a.equal(await page.locator('.ending-copy').evaluate(el=>getComputedStyle(el).animationName),'none');a.equal(await page.evaluate(()=>endingSoundProbe.running),false);a.equal(await page.evaluate(()=>endingSoundProbe.sources.size),0);results.push({enabled,sources:0});}
- await page.locator('#endingSkip').click();a.equal(await page.evaluate(()=>endingSoundProbe.sources.size),0);a.equal(await page.evaluate(()=>endingSoundProbe.nodes.length),0);
+ await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);a.equal(await page.evaluate(()=>endingSoundProbe.sources.size),0);a.equal(await page.evaluate(()=>endingSoundProbe.nodes.length),0);
  for(let i=0;i<3;i++){await page.locator('#replayEnding').click();a.equal(await page.evaluate(()=>endingSoundProbe.sources.size),enabled?4:0);await page.keyboard.press('Escape');a.equal(await page.evaluate(()=>endingSoundProbe.sources.size),0);}
  a.deepEqual(errors,[]);await context.close();
  }

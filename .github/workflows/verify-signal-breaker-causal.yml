@@ -14,7 +14,7 @@ permissions:
 jobs:
   source-flow:
     runs-on: ubuntu-latest
-    timeout-minutes: 22
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -54,6 +54,21 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/signal-breaker-browser" --no-package-lock playwright@1.58.2
           "$RUNNER_TEMP/signal-breaker-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Current raid guide and real pointer counterplay
+        env:
+          NODE_PATH: ${{ runner.temp }}/signal-breaker-browser/node_modules
+          PSI_PREVIEW_URL: http://127.0.0.1:5220
+          PSI_QA_OUTPUT: ${{ runner.temp }}/causal-qa/current-raid
+        run: |
+          export CHROME_BIN="$(node -e "process.stdout.write(require('playwright').chromium.executablePath())")"
+          python3 -m http.server 5220 --bind 127.0.0.1 --directory public > /tmp/current-raid-qa.log 2>&1 &
+          RAID_QA_PID=$!
+          trap 'kill "$RAID_QA_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:5220/signal-breaker-dev/index.html >/dev/null; then break; fi
+            sleep 0.25
+          done
+          node scripts/verify-raid-boss.cjs
       - name: Phone portrait, phone landscape, tablet and PC
         env:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
