@@ -32,7 +32,18 @@ try{
     return canvas.top>=tabs.bottom&&[...document.querySelectorAll('.survivors-fitting-controls button, .survivors-fitting-attack-select')].every(button=>button.getBoundingClientRect().bottom<=innerHeight-16);
    });if(!fits)throw new Error('Landscape fitting canvas or controls are clipped');
   }
-  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);const reduced=await pixels();await page.waitForTimeout(240);const quiet=await pixels();
+  await page.emulateMedia({reducedMotion:'reduce'});
+  // Wait for the preview renderer to stop advancing, rather than assuming the
+  // media-query change and React effect have committed within a fixed 100ms.
+  await page.waitForFunction(()=>{
+    const c=document.querySelector('.survivors-fitting-art canvas');
+    const clock=c?.dataset.previewClock;if(clock===undefined)return false;
+    const now=performance.now();
+    const sample=window.qaFittingStoppedClock;
+    if(!sample||sample.clock!==clock){window.qaFittingStoppedClock={clock,since:now};return false;}
+    return now-sample.since>=250;
+  });
+  const reduced=await pixels();await page.waitForTimeout(240);const quiet=await pixels();
   await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(100);
   await page.getByRole('tab',{name:'장비 목록',exact:true}).click();const hidden=await pixels();await page.waitForTimeout(240);const inactive=await pixels();
   const unchanged=await page.evaluate(()=>JSON.stringify({...localStorage}))===storage;
