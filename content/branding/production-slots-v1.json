@@ -51,47 +51,47 @@
     {
       "id": "cast-player",
       "selector": ".commercial-title-worker[data-character=\"player\"] img",
-      "uri": "/assets/episode01/characters/player-map.webp",
-      "width": 768,
-      "height": 1024,
+      "uri": "/assets/episode01/characters/new-psi-crew-v2/player-map.webp",
+      "width": 1086,
+      "height": 1448,
       "fit": "contain",
-      "source": "content/episode01/visuals.json"
+      "source": "src/app/episode-visual-assets.ts"
     },
     {
       "id": "cast-junho",
       "selector": ".commercial-title-worker[data-character=\"lim_junho\"] img",
-      "uri": "/assets/episode01/characters/lim-junho-map.webp",
-      "width": 768,
-      "height": 1024,
+      "uri": "/assets/episode01/characters/new-psi-crew-v2/lim-junho-map.webp",
+      "width": 1086,
+      "height": 1448,
       "fit": "contain",
-      "source": "content/episode01/visuals.json"
+      "source": "src/app/episode-visual-assets.ts"
     },
     {
       "id": "cast-jaehoon",
       "selector": ".commercial-title-worker[data-character=\"lee_jaehoon\"] img",
-      "uri": "/assets/episode01/characters/lee-jaehoon-map.webp",
-      "width": 768,
-      "height": 1024,
+      "uri": "/assets/episode01/characters/new-psi-crew-v2/lee-jaehoon-map.webp",
+      "width": 1086,
+      "height": 1448,
       "fit": "contain",
-      "source": "content/episode01/visuals.json"
+      "source": "src/app/episode-visual-assets.ts"
     },
     {
       "id": "cast-jeongmin",
       "selector": ".commercial-title-worker[data-character=\"seo_jeongmin\"] img",
-      "uri": "/assets/episode01/characters/seo-jeongmin-map.webp",
-      "width": 768,
-      "height": 1024,
+      "uri": "/assets/episode01/characters/new-psi-crew-v2/seo-jeongmin-map.webp",
+      "width": 1086,
+      "height": 1448,
       "fit": "contain",
-      "source": "content/episode01/visuals.json"
+      "source": "src/app/episode-visual-assets.ts"
     },
     {
       "id": "mobile-player",
       "selector": ".commercial-title-mobile-player",
-      "uri": "/assets/episode01/characters/player-map.webp",
-      "width": 768,
-      "height": 1024,
+      "uri": "/assets/episode01/characters/new-psi-crew-v2/player-map.webp",
+      "width": 1086,
+      "height": 1448,
       "fit": "contain",
-      "source": "src/ui/GameHub.tsx"
+      "source": "src/app/episode-visual-assets.ts"
     }
   ],
   "nonBinarySlots": [],
