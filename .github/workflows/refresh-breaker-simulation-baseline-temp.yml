@@ -1,0 +1,102 @@
+name: One-time Signal Breaker simulation baseline certification
+on:
+  push:
+    branches: [art/story-cinema-20261017]
+    paths:
+      - '.github/workflows/refresh-breaker-simulation-baseline-temp.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: certify-breaker-regression-baseline
+  cancel-in-progress: false
+jobs:
+  certify:
+    if: github.ref == 'refs/heads/art/story-cinema-20261017'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/checkout@v4
+        with:
+          repository: TELLOWSS/psi-zero-day
+          ref: 009e85f4d9eca48bd0fefa54de5507adb560076e
+          path: preboss
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - name: Compare six deterministic gameplay simulations with pre-boss baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/before /tmp/after docs/qa/breaker-regression-20261018
+          for script in flow burst continuous operations assist-guidance veteran; do
+            echo "CERTIFY: $script"
+            node "preboss/public/signal-breaker-dev/scripts/simulate-${script}.cjs" "/tmp/before/${script}.json" >"/tmp/before/${script}.log"
+            node "public/signal-breaker-dev/scripts/simulate-${script}.cjs" "/tmp/after/${script}.json" >"/tmp/after/${script}.log"
+            node -e "const fs=require('fs'),assert=require('node:assert/strict');const name=process.argv[1];const before=JSON.parse(fs.readFileSync('/tmp/before/'+name+'.json'));const after=JSON.parse(fs.readFileSync('/tmp/after/'+name+'.json'));assert.deepStrictEqual(after,before, 'REGRESSION: '+name+' differs from pre-boss implementation');console.log('MATCH '+name)" "$script"
+            cp "/tmp/after/${script}.json" "docs/qa/breaker-regression-20261018/${script}.json"
+          done
+      - name: Version provenance and exact hash registry
+        run: |
+          node - <<'JS'
+          const fs=require('node:fs'),crypto=require('node:crypto');
+          const names=['flow','burst','continuous','operations','assist-guidance','veteran'];
+          const hashes=Object.fromEntries(names.map(name=>{
+            const file='docs/qa/breaker-regression-20261018/'+name+'.json';
+            return [name,crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')];
+          }));
+          fs.writeFileSync('docs/qa/breaker-regression-20261018/PROVENANCE.json',JSON.stringify({
+            purpose:'Deterministic baselines refreshed only after equality against pre-boss behavior',
+            compare_commit:'009e85f4d9eca48bd0fefa54de5507adb560076e',
+            candidate_commit:process.env.GITHUB_SHA,
+            scope:'game rules only, not human win rate or Android FPS',
+            files:hashes
+          },null,2)+'\n');
+          JS
+      - name: Update causal CI references to certified snapshots only
+        run: |
+          node - <<'JS'
+          const fs=require('node:fs'),p='.github/workflows/verify-signal-breaker-causal.yml';let s=fs.readFileSync(p,'utf8');
+          const names={'flow':'flow-simulation-after-20261011.json','burst':'burst-simulation-after-20261011.json','continuous':'continuous-simulation-20261011.json','operations':'operation-simulation-20261011.json','assist-guidance':'assist-guidance-simulation-20261012.json'};
+          const oldRoot='public/signal-breaker-dev/docs/';
+          const map=[
+            [oldRoot+names.flow,'docs/qa/breaker-regression-20261018/flow.json'],
+            [oldRoot+names.burst,'docs/qa/breaker-regression-20261018/burst.json'],
+            [oldRoot+names.continuous,'docs/qa/breaker-regression-20261018/continuous.json'],
+            [oldRoot+names.operations,'docs/qa/breaker-regression-20261018/operations.json'],
+            [oldRoot+names['assist-guidance'],'docs/qa/breaker-regression-20261018/assist-guidance.json'],
+            ['docs/qa/breaker-evolution-20261012/veteran-input-simulation.json','docs/qa/breaker-regression-20261018/veteran.json']
+          ];
+          for(const [a,b]of map){if(!s.includes(a))throw Error('missing old fixture '+a);s=s.replaceAll(a,b);}
+          const special=`node -e "const a=require('/tmp/psi-flow-simulation.json'),b=require('./docs/qa/breaker-regression-20261018/flow.json');for(const row of a.runs)delete row.events.weaponcontact;require('node:assert/strict').deepEqual(a,b)"`;
+          const standard=`node -e "require('node:assert/strict').deepEqual(require('/tmp/psi-flow-simulation.json'),require('./docs/qa/breaker-regression-20261018/flow.json'))"`;
+          if(!s.includes(special))throw Error('flow special comparison not found');s=s.replace(special,standard);
+          // Keep older 2026-10-11 fixtures untouched as historical measurement.
+          fs.writeFileSync(p,s);
+          JS
+      - name: Verify new fixture checks before commit
+        run: |
+          node scripts/check-signal-breaker-release.mjs
+          node - <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path='docs/qa/breaker-regression-20261018/';
+          for(const name of ['flow','burst','continuous','operations','assist-guidance','veteran']){
+            const before=JSON.parse(fs.readFileSync('/tmp/after/'+name+'.json'));
+            const published=JSON.parse(fs.readFileSync(path+name+'.json'));
+            assert.deepStrictEqual(before,published,name);
+          }
+          console.log('Six certified regression fixtures match generated simulation outputs');
+          JS
+      - name: Commit six independently verified fixtures to feature branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/qa/breaker-regression-20261018 .github/workflows/verify-signal-breaker-causal.yml
+          git diff --cached --stat
+          git commit -m "test(breaker): certify six deterministic fixtures against unchanged pre-boss engine"
+          git push origin HEAD:art/story-cinema-20261017
