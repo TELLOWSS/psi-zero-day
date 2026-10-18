@@ -8,6 +8,7 @@ const planPath = path.join(root, 'content/episode01/visuals.json');
 const elementCatalogPath = path.join(root, 'content/episode01/scene-element-catalog.json');
 const sceneBackgroundCatalogPath = path.join(root, 'content/episode01/scene-background-catalog.json');
 const audioProductionPath = path.join(root, 'content/episode01/audio-production.json');
+const candidateAudioPath = path.join(root, 'content/episode01/candidate-audio-production.json');
 const characterPerformancePath = path.join(root, 'content/episode01/character-performance-production.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
@@ -19,6 +20,8 @@ const plan = JSON.parse(await readFile(planPath, 'utf8'));
 const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
 const sceneBackgroundCatalog = JSON.parse(await readFile(sceneBackgroundCatalogPath, 'utf8'));
 const audioProduction = JSON.parse(await readFile(audioProductionPath, 'utf8'));
+const candidateAudio = JSON.parse(await readFile(candidateAudioPath, 'utf8'));
+const candidateHash = new Map();
 const characterPerformance = JSON.parse(await readFile(characterPerformancePath, 'utf8'));
 
 const planned = [];
@@ -96,6 +99,20 @@ for (const definition of audioProduction.assets ?? []) {
     allow_rc_fallback: false,
   });
 }
+// Candidates are a separate, non-final tier and never overwrite the 12 core IDs.
+for (const candidate of candidateAudio.assets ?? []) {
+  if (!candidate?.asset_id || !candidate?.uri || !candidate?.git_blob_sha) {
+    throw new Error('Candidate audio entry requires id, uri and Git blob SHA.');
+  }
+  candidateHash.set(candidate.uri, candidate.git_blob_sha);
+  planned.push({
+    asset_id: candidate.asset_id, uri: candidate.uri,
+    type: 'audio', group_id: 'ep01.audio.candidates',
+    preload_policy: candidate.preload_policy,
+    source: 'candidate_audio:' + candidate.asset_id,
+    production_scope: 'candidate_audio', allow_rc_fallback: false,
+  });
+}
 for (const asset of characterPerformance.generated_wave_01?.assets ?? []) {
   if (!asset?.asset_id || !asset?.path) continue;
   planned.push({
@@ -146,7 +163,18 @@ function requiresTransparentBackground(item) {
 async function readPlannedAsset(item) {
   // Final commercial art always wins when present.
   const exact = await tryRead(item.uri);
-  if (exact) return exact;
+  if (exact) {
+    if (item.production_scope === 'candidate_audio') {
+      const bytes = exact.bytes;
+      const expected = candidateHash.get(item.uri);
+      const actual = createHash('sha1').update(Buffer.from('blob ' + bytes.length + '\\0'.replace('\\0', '\0'))).update(bytes).digest('hex');
+      if (expected !== actual) throw new Error('Episode candidate SHA mismatch: '+item.asset_id);
+    }
+    return exact;
+  }
+  if (item.production_scope === 'candidate_audio') {
+    throw new Error('Episode audio candidate missing: public/'+item.uri);
+  }
 
   // Scene elements intentionally have no RC image layer: final WebP -> CSS placeholder.
   if (item.allow_rc_fallback === false) return undefined;
