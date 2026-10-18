@@ -1,0 +1,35 @@
+name: Refresh Signal Breaker release snapshot (feature branch only)
+on:
+  push:
+    branches: [art/story-cinema-20261017]
+    paths:
+      - '.github/workflows/refresh-signal-breaker-release-temp.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: refresh-breaker-release-art-story-cinema
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.ref == 'refs/heads/art/story-cinema-20261017'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - name: Compute exact SHA256 snapshot and write only release.json
+        run: |
+          node scripts/check-signal-breaker-release.mjs --write
+          node scripts/check-signal-breaker-release.mjs
+          git diff --stat -- public/signal-breaker-dev/release.json
+          git add public/signal-breaker-dev/release.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(breaker): refresh offline release byte hashes for raid visuals"
+          git push origin HEAD:art/story-cinema-20261017
