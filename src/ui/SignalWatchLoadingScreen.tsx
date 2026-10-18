@@ -95,9 +95,12 @@ export function SignalWatchLoadingScreen({ loadGame, onComplete, onExit }: {
 
   return <main className="signal-watch-loading" aria-label="시그널 워치 진입 준비">
     <div className="signal-watch-loading-poster">
+      <div className="signal-watch-loading-frame" aria-hidden="true"><i /><i /><i /><i /></div>
+      <div className="signal-watch-loading-range" aria-hidden="true"><span /><span /><span /></div>
       <img key={attempt} className="signal-watch-loading-art" src={hero} alt="" aria-hidden="true" fetchPriority="high" />
       <section className="signal-watch-loading-panel" aria-live="polite">
-        <span className="signal-watch-loading-brand">SIGNAL WATCH / NEW PSI</span>
+        <span className="signal-watch-loading-brand"><i aria-hidden="true" /> SIGNAL WATCH / NEW PSI</span>
+        <span className="signal-watch-loading-overline">SITE INTELLIGENCE · OPERATION ENTRY</span>
         <h1>시그널 워치</h1>
         <p className="signal-watch-loading-tagline">사고 전 신호를 읽고, 현장을 바꿔라.</p>
         <div className="signal-watch-loading-progress-title">
