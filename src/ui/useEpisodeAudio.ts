@@ -222,6 +222,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     voiceCleanupRef.current?.();
     bgmBusRef.current?.dispose();
     sceneBusRef.current?.dispose();
+    bgmBusRef.current = null;
+    sceneBusRef.current = null;
     if (duckFrameRef.current !== null && typeof cancelAnimationFrame === 'function') {
       cancelAnimationFrame(duckFrameRef.current);
     }
