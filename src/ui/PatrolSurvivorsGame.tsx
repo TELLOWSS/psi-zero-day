@@ -2126,6 +2126,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       if(display.lighting)drawWorkfaceDepth(ctx,stage.id,budget.level);
+      canvas.dataset.workfaceDepth=display.lighting?stage.id+':'+budget.level:'off';
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       // Project the live authored pose onto the floor before terrain, actors and warnings.
       const sceneLight=stageActorLight(stage.id);
