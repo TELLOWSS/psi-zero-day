@@ -8,7 +8,39 @@ fs.mkdirSync('artifacts/pleasure-feedback',{recursive:true});
 try{
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
-  await page.emulateMedia({reducedMotion:'reduce'});await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
+  // Match the passing 50-stage browser QA's deterministic fresh-operator
+  // entry. An old persisted resume state may otherwise skip the ready brief.
+  await page.addInitScript(()=>{
+    // Exactly mirror the passing 50-stage smoke's fresh progression fixture.
+    const stageIds=Array.from({length:50},(_,i)=>'stage_'+String(i+1).padStart(2,'0'));
+    localStorage.setItem('psi.survivors.unlocked_stages',JSON.stringify(stageIds));
+    localStorage.setItem('psi.survivors.last_played_stage','stage_01');
+    localStorage.setItem('psi.survivors.credits','1234');
+    localStorage.setItem('psi.survivors.rd_upgrades',JSON.stringify({vitality:2,mobility:1,intelligence:1,firstAid:0,reroll:0}));
+    localStorage.setItem('psi.survivors.stage_stars',JSON.stringify({stage_01:[false,true,false]}));
+    localStorage.setItem('psi.survivors.display.v1',JSON.stringify({quality:'balanced',lighting:true}));
+  });
+  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
+  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  // Wait for the async loading screen and real preflight before querying
+  // optional equipment controls. Locator.count() does not wait for mounting.
+  await page.locator('.survivors-ready-dialog').waitFor({state:'visible'});
+  // Follow the real preflight return path used by the passing 50-stage smoke.
+  const shopText=JSON.parse(fs.readFileSync('content/localization/survivors-store-ko.json','utf8'));
+  // The preflight has two legitimate equipment states: browse when not
+  // owned, or equip when already owned. Never require a buy button to exist.
+  const browse=page.getByRole('button',{name:shopText.briefBrowse,exact:true});
+  if(await browse.count()&&await browse.isVisible()){
+    await browse.click();
+    await page.getByRole('button',{name:shopText.close,exact:true}).click();
+  }
+  const launch=page.getByRole('button',{name:'시그널 워치 시작',exact:true});
+  try { await launch.waitFor({state:'visible',timeout:15000}); } catch(error) {
+    const snapshot=await page.evaluate(()=>({url:location.href,ready:document.querySelector('.survivors-ready-dialog')?.getAttribute('data-preflight'),buttons:[...document.querySelectorAll('button')].slice(0,80).map(b=>b.innerText.trim()).filter(Boolean),body:document.body.innerText.slice(0,1800)}));
+    console.error('SURVIVORS_PREFLIGHT_DIAGNOSTIC',JSON.stringify({width,height,snapshot}));
+    await page.screenshot({path:`artifacts/pleasure-feedback/ready-failure-${width}x${height}.png`});
+    throw error;
+  }
   await page.evaluate(async()=>{
    const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
    const {PleasureFeedback}=await import('/src/ui/survivors-pleasure-feedback.ts');
@@ -16,7 +48,7 @@ try{
    SurvivorsEngine.prototype.drainAudioEvents=function(...args){window.qaEngine=this;return drain.apply(this,args);};
    PleasureFeedback.prototype.observe=function(...args){window.qaPleasure=this;const value=observe.apply(this,args);window.qaMarks=[...(window.qaMarks??[]),...this.marks.map(m=>({...m}))].slice(-200);return value;};
   });
-  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.getByRole('button',{name:'시그널 워치 시작',exact:true}).click();
+  await launch.click();
   await page.waitForFunction(()=>window.qaEngine?.state.phase==='playing');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.evaluate(()=>{
