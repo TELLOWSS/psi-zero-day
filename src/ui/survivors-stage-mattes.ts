@@ -55,7 +55,7 @@ export function matteVisibleAlpha(
     x>=matte.x-padding&&x<=matte.x+matte.width+padding&&
     y>=matte.y-padding&&y<=matte.y+matte.height+padding;
   // Only when a depth-sorted matte can cross the player, reduce its opacity.
-  let opacity=matte.feetY>=player.y&&contains(player.x,player.y,12)?.55:1;
+  let opacity=matte.feetY>=player.y&&contains(player.x,player.y,12) ? 0.55 : 1;
   for(const signal of warningSignals){
     if(signal.warning&&contains(signal.x,signal.y,Math.max(8,signal.radius))){
       opacity=Math.min(opacity,.25);break;
