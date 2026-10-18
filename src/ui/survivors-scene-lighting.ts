@@ -14,8 +14,8 @@ export function drawSceneLighting(ctx: CanvasRenderingContext2D, stage: PatrolSt
     const light=stageActorLight(stage.id);
     const tint=light?.color??'#ffe4b8';
     const grade=paint.createLinearGradient(0,0,1400,900);
-    grade.addColorStop(0,tint+'1a');
-    grade.addColorStop(.5,'rgba(15,23,34,.04)');grade.addColorStop(1,'rgba(7,18,30,.22)');
+    grade.addColorStop(0,tint+'2b');
+    grade.addColorStop(.5,'rgba(15,23,34,.04)');grade.addColorStop(1,'rgba(7,18,30,.17)');
     paint.fillStyle=grade;paint.fillRect(0,0,1400,900);
     const edge=paint.createRadialGradient(700,450,240,700,450,850);
     edge.addColorStop(0,'rgba(5,12,20,0)');edge.addColorStop(1,'rgba(5,12,20,.30)');
@@ -53,6 +53,6 @@ export function drawEquipmentCastShadow(ctx:CanvasRenderingContext2D, object:Sta
   if(object.state==='destroyed'||object.type==='slurry_puddle'||object.type==='crane_drop_zone')return;
   const size=object.type==='floodlight_tower'?36:18;
   ctx.save();ctx.translate(object.x,object.y);ctx.rotate(Math.atan2(light?.shadowY??.28,light?.shadowX??.42));
-  ctx.fillStyle='rgba(3,10,18,.16)';ctx.beginPath();ctx.ellipse(size*.7,6,size*1.4,size*.30,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='rgba(3,10,18,.26)';ctx.beginPath();ctx.ellipse(0,3,size*.58,size*.23,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.fillStyle='rgba(3,10,18,.24)';ctx.beginPath();ctx.ellipse(size*.7,6,size*1.4,size*.30,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(3,10,18,.38)';ctx.beginPath();ctx.ellipse(0,3,size*.58,size*.23,0,0,Math.PI*2);ctx.fill();ctx.restore();
 }
