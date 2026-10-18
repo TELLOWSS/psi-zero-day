@@ -4,7 +4,14 @@ const {createRequire}=require('node:module'),{spawn}=require('node:child_process
 const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict');
 const {chromium}=process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT?createRequire(path.join(process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT,'package.json'))('playwright'):require('playwright');
 const root=path.resolve(__dirname,'../../..'),out=process.env.SIGNAL_BREAKER_QA_OUTPUT||'/tmp/psi-ending-sound-qa';
-const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];for(const n of g.circuit)n.hit=true;const b=g.boss;if(b.identity==='tension')b.loadStage=b.maxLoadStages;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});g.update(1/120);};
+const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];for(const n of g.circuit)n.hit=true;const b=g.boss;if(b.identity==='tension')b.loadStage=b.maxLoadStages;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});/* QA terminal playback fixture, not an in-game shortcut.
+ Actual raid combat is verified separately by verify-raid-boss.cjs. */
+ if(g.boss?.raid){g.boss.raid.phase=3;g.boss.raid.state='FINISHER';
+  g.boss.raid.finished=g.time;g.boss.raid.required=true;
+  g.boss.hp=0;g.boss.phase='resolved';g.boss.nodes.forEach(n=>n.hit=true);}
+ if(g.source)g.source.verified=true;
+ if(g.circuit)g.circuit.forEach(n=>n.hit=true);
+ g.update(1/120);};
 (async()=>{
  fs.mkdirSync(out,{recursive:true});const server=spawn('python3',['-m','http.server','5215','--bind','127.0.0.1','--directory',path.join(root,'public')],{stdio:'ignore'});let browser;const results=[];
  try{const url='http://127.0.0.1:5215/signal-breaker-dev/index.html';for(let i=0;i<50;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
