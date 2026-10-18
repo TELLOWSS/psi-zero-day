@@ -167,7 +167,7 @@ async function readPlannedAsset(item) {
     if (item.production_scope === 'candidate_audio') {
       const bytes = exact.bytes;
       const expected = candidateHash.get(item.uri);
-      const actual = createHash('sha1').update(Buffer.from('blob ' + bytes.length + '\\0'.replace('\\0', '\0'))).update(bytes).digest('hex');
+      const actual = createHash('sha1').update(Buffer.from('blob ' + bytes.length + String.fromCharCode(0))).update(bytes).digest('hex');
       if (expected !== actual) throw new Error('Episode candidate SHA mismatch: '+item.asset_id);
     }
     return exact;
