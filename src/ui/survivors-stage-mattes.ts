@@ -1,5 +1,5 @@
 import {PATROL_STAGE_IDS,type PatrolStageId} from '../domain/patrol-survivors';
-import {stageGroundUri} from './survivors-stage-art';
+import {stageGroundUri} from './survivors-equipment-art';
 
 /**
  * The stage ground is a single authored opaque image. A foreground layer may
