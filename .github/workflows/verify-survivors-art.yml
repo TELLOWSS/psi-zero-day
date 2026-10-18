@@ -47,6 +47,7 @@ on:
       - 'scripts/verify-survivors-projectiles.mjs'
       - 'public/assets/survivors/**'
       - 'scripts/verify-survivors-browser.mjs'
+      - 'scripts/verify-survivors-pleasure-motion.mjs'
       - '.github/workflows/verify-survivors-art.yml'
 permissions:
   contents: read
