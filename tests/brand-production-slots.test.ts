@@ -35,6 +35,12 @@ describe('brand production slot audit contract', () => {
       } else {
         expect(existsSync(delivery)).toBe(true);
       }
+      if ('variants' in slot && slot.variants) for (const variant of slot.variants) {
+        expect(variant.uri).toMatch(/^\\/assets\\/[a-zA-Z0-9/.-]+\\.webp$/);
+        expect(existsSync(resolve('public', variant.uri.slice(1)))).toBe(true);
+        expect(variant.width).toBeGreaterThan(0);
+        expect(variant.height).toBeGreaterThan(0);
+      }
       expect(existsSync(slot.source)).toBe(true);
       expect(slot.width).toBeGreaterThan(0);
       expect(slot.height).toBeGreaterThan(0);
@@ -68,6 +74,9 @@ describe('brand production slot audit contract', () => {
     }
     const current = JSON.parse(readFileSync(replacement.assetManifest,'utf8'));
     expect(current.mark.uri).toBe(replacement.runtimeMark);
+    expect(contract.runtimeTitleMark.uri).toBe(replacement.runtimeMark);
+    expect(contract.runtimeTitleMark.sourceRecord).toBe(contract.titleMarkReplacement);
+    expect(createHash('sha256').update(readFileSync('public'+replacement.runtimeMark)).digest('hex')).toBe(contract.runtimeTitleMark.sha256);
     expect(readFileSync('src/ui/GameHub.tsx','utf8')).toContain(replacement.assetManifest.split('/').at(-1));
     expect(existsSync('public'+replacement.runtimeMark)).toBe(true);
   });

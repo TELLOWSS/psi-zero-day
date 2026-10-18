@@ -13,6 +13,12 @@ const rows = [];
 const contract = JSON.parse(fs.readFileSync('content/branding/production-slots-v1.json', 'utf8'));
 const approval = JSON.parse(fs.readFileSync(contract.approvedBrandFiles, 'utf8'));
 if (approval.decision !== 'DESIGN_AND_FILES_APPROVED_APPLY_AFTER_VERIFICATION') throw new Error('Brand file approval is missing');
+const replacement = JSON.parse(fs.readFileSync(contract.titleMarkReplacement, 'utf8'));
+const homeArt = JSON.parse(fs.readFileSync(replacement.assetManifest, 'utf8'));
+const runtimeMark = contract.runtimeTitleMark;
+if (replacement.authority !== 'USER_REQUEST_NEW_PSI_MAIN_AND_HELMET_BRANDING_20261017' ||
+    runtimeMark.uri !== replacement.runtimeMark || runtimeMark.uri !== homeArt.mark.uri) throw new Error('Title replacement provenance mismatch');
+const runtimeBrandFiles = [runtimeMark, ...approval.approvedRuntimeFiles.filter(file => file.id.startsWith('symbol'))];
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_BIN });
 try {
   const views = [[1440, 900], [390, 844], [844, 390], [1024, 768]].flatMap(([width, height]) => ['light', 'dark'].map(colorScheme => ({ width, height, colorScheme })));
@@ -24,7 +30,7 @@ try {
     await page.locator('.commercial-title-home').waitFor();
     await page.evaluate(() => document.fonts.ready);
     const images = [];
-    for (const { id, selector, uri, width: expectedWidth, height: expectedHeight, fit } of contract.slots) {
+    for (const { id, selector, uri, width: expectedWidth, height: expectedHeight, fit, variants = [] } of contract.slots) {
       const locator = page.locator(selector);
       await locator.waitFor({ state: 'attached' });
       await locator.evaluate(async image => { if (!image.complete) await image.decode(); });
@@ -43,8 +49,10 @@ try {
       const publicRoot = path.resolve('public') + path.sep;
       if (!file.startsWith(publicRoot)) throw new Error(`Asset escapes public directory: ${id}`);
       if (!fs.existsSync(file)) throw new Error(`No local delivery file for ${id}: ${metadata.uri}`);
-      const matchesContract = metadata.uri === uri && metadata.naturalWidth === expectedWidth &&
-        metadata.naturalHeight === expectedHeight && metadata.objectFit === fit;
+      const deliveries = [{ uri, width: expectedWidth, height: expectedHeight }, ...variants];
+      const expected = deliveries.find(delivery => delivery.uri === metadata.uri);
+      const matchesContract = Boolean(expected && metadata.naturalWidth === expected.width &&
+        metadata.naturalHeight === expected.height && metadata.objectFit === fit);
       images.push({ id, ...metadata, matchesContract, visible: await locator.isVisible(),
         bytes: fs.statSync(file).size, sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') });
     }
@@ -60,7 +68,7 @@ try {
     const icon = await page.locator('link[rel="icon"]').evaluateAll(elements => elements.map(element => ({ uri: new URL(element.href).pathname, media: element.media, matches: matchMedia(element.media).matches })));
     const brandFiles = [];
     for (const uri of [wordmark.uri, ...icon.map(item => item.uri)]) {
-      const expected = approval.approvedRuntimeFiles.find(file => file.uri === uri);
+      const expected = runtimeBrandFiles.find(file => file.uri === uri);
       if (!expected) throw new Error(`Unapproved brand delivery: ${uri}`);
       const response = await page.request.get(new URL(uri, url).href);
       const bytes = await response.body();
@@ -69,7 +77,7 @@ try {
     }
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     await page.screenshot({ path: `${output}/${width}x${height}-${colorScheme}-title.png`, fullPage: true });
-    const expectedWordmark = approval.approvedRuntimeFiles.find(file => file.uri === wordmark.uri);
+    const expectedWordmark = runtimeBrandFiles.find(file => file.uri === wordmark.uri);
     const pass = images.every(image => image.loaded && image.matchesContract) && brandFiles.every(file => file.matchesApproval) &&
       wordmark.accessibleName === 'NEW PSI : ZERO DAY' && wordmark.naturalWidth === expectedWordmark.width && wordmark.naturalHeight === expectedWordmark.height &&
       icon.length === 2 && icon.filter(item => item.matches).length === 1 && !overflow && !errors.length;
@@ -78,9 +86,9 @@ try {
   }
   const identities = new Map();
   for (const row of rows) for (const image of row.images) {
-    const key = `${image.uri}:${image.sha256}`;
-    if (identities.has(image.id) && identities.get(image.id) !== key) throw new Error(`Viewport asset identity drift: ${image.id}`);
-    identities.set(image.id, key);
+    const key = `${image.id}:${image.uri}`;
+    if (identities.has(key) && identities.get(key) !== image.sha256) throw new Error(`Viewport asset identity drift: ${key}`);
+    identities.set(key, image.sha256);
   }
   fs.writeFileSync(`${output}/report.json`, JSON.stringify({
     url, scope: 'ACTUAL_DOM_SLOT_AND_LOCAL_BINARY_AUDIT_NOT_ART_OR_RIGHTS_APPROVAL', rows,
