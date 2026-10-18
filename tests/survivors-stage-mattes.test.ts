@@ -1,6 +1,6 @@
 import {afterEach,describe,expect,it} from 'vitest';
 import {PATROL_STAGE_IDS} from '../src/domain/patrol-survivors';
-import {stageGroundUri} from '../src/ui/survivors-stage-art';
+import {stageGroundUri} from '../src/ui/survivors-equipment-art';
 import {FOREGROUND_MATTE_ASSETS,approvedForegroundMattes,matteVisibleAlpha,type ApprovedForegroundMatte} from '../src/ui/survivors-stage-mattes';
 
 const valid=(id:'stage_01'|'stage_50'):ApprovedForegroundMatte=>({
