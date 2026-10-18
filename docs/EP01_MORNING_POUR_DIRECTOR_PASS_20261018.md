@@ -24,3 +24,9 @@
 
 ## Merge gate
 Keep PR #210 Draft and `main` untouched until **all**: latest GitHub Actions green, Preview READY, director screens reviewed, legal and sonic evidence approved, physical Android reviewed. 
+
+## Android 실제 APK 회전 계약 수리
+- 기존 Gradle 패키징 대상 MainActivity가 `landscape`로 고정되어 반응형 웹의 세로모드가 Android 앱에서 접근 불가하던 원인 수정.
+- Manifest와 `android:sync` 후처리 모두 `fullUser`로 전환해 사용자 기기 설정 기반 회전 허용.
+- `scripts/verify-android-orientation.mjs` 추가 및 디버그 APK CI 아티팩트 경로 개설.
+- 테스트 문서: `docs/EP01_ANDROID_PHYSICAL_QA_GATE_20261018.md`. 물리 휴대폰 실제 사용 승인은 여전히 미완료.

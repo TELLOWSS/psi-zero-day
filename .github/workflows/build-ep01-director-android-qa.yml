@@ -1,0 +1,71 @@
+name: Build EP01 director Android QA APK
+on:
+  push:
+    branches: [art/story-cinema-20261017]
+    paths:
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'src/ui/EpisodeImmersiveScene.tsx'
+      - 'src/ui/story-player.css'
+      - 'src/app/episode01-morning-pour.ts'
+      - 'public/assets/episode01/cg/*-morning-preview.svg'
+      - 'scripts/configure-android.mjs'
+      - 'scripts/verify-android-orientation.mjs'
+      - '.github/workflows/build-ep01-director-android-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ep01-director-android-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - name: Install Android 36 SDK
+        shell: bash
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+        run: |
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          fi
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-36" "platform-tools"
+      - run: npm ci
+      - name: Verify portrait/landscape policy before sync
+        run: node scripts/verify-android-orientation.mjs
+      - name: Generate web build and sync Capacitor
+        run: npm run android:sync
+      - name: Verify orientation survives sync
+        run: node scripts/verify-android-orientation.mjs
+      - name: Assemble installable debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+      - name: Verify APK artifact exists and is not empty
+        run: |
+          test -s android/app/build/outputs/apk/debug/app-debug.apk
+          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload on-device review APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ep01-director-android-orientation-qa-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
