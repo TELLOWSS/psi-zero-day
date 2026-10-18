@@ -89,6 +89,7 @@ export function attemptEpisodeAudioPlay(
   bus: EpisodeAudioBus,
   assetId: string,
   onFailure?: () => void,
+  onStarted?: () => void,
 ): boolean {
   traceEpisodeAudio({ bus, signal: 'play_attempt', assetId, readyState: element.readyState });
   try {
@@ -97,7 +98,7 @@ export function attemptEpisodeAudioPlay(
       traceEpisodeAudio({ bus, signal: 'play_unavailable', assetId });
       return false;
     }
-    void playback.catch((error: unknown) => {
+    void playback.then(() => onStarted?.()).catch((error: unknown) => {
       const note = error instanceof Error ? error.name : 'unknown';
       traceEpisodeAudio({ bus, signal: 'play_rejected', assetId, note });
       onFailure?.();
