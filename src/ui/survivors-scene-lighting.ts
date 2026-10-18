@@ -1,4 +1,5 @@
 import type { PatrolStageDefinition, StageHazardObject } from '../domain/patrol-survivors';
+import { stageActorLight, type StageActorLight } from './survivors-stage-light';
 
 const layers = new Map<string, HTMLCanvasElement>();
 /** Lighting is below actors/telegraphs; it cannot obscure a warning or change a rule. */
@@ -10,9 +11,10 @@ export function drawSceneLighting(ctx: CanvasRenderingContext2D, stage: PatrolSt
   if(!layer) {
     layer=document.createElement('canvas');layer.width=700;layer.height=450;
     const paint=layer.getContext('2d');if(!paint)return;paint.scale(.5,.5);
-    const cool=stage.theme==='datacenter'||stage.theme==='deep_excavation';
+    const light=stageActorLight(stage.id);
+    const tint=light?.color??'#ffe4b8';
     const grade=paint.createLinearGradient(0,0,1400,900);
-    grade.addColorStop(0,cool?'rgba(96,165,190,.10)':'rgba(255,218,156,.10)');
+    grade.addColorStop(0,tint+'1a');
     grade.addColorStop(.5,'rgba(15,23,34,.04)');grade.addColorStop(1,'rgba(7,18,30,.22)');
     paint.fillStyle=grade;paint.fillRect(0,0,1400,900);
     const edge=paint.createRadialGradient(700,450,240,700,450,850);
@@ -21,7 +23,7 @@ export function drawSceneLighting(ctx: CanvasRenderingContext2D, stage: PatrolSt
     // Broad directional bounce gives floor material depth without grading actors or alerts.
     paint.save();paint.globalCompositeOperation='screen';
     const bounce=paint.createRadialGradient(280,170,30,280,170,620);
-    bounce.addColorStop(0,cool?'rgba(102,185,207,.13)':'rgba(249,201,130,.12)');
+    bounce.addColorStop(0,tint+'1f');
     bounce.addColorStop(1,'rgba(0,0,0,0)');paint.fillStyle=bounce;paint.fillRect(0,0,1400,900);
     paint.restore();
     for(const object of restored){
@@ -46,10 +48,11 @@ export function drawSceneLighting(ctx: CanvasRenderingContext2D, stage: PatrolSt
   ctx.save();ctx.drawImage(layer,0,0,1400,900);ctx.restore();
 }
 
-export function drawEquipmentCastShadow(ctx:CanvasRenderingContext2D, object:StageHazardObject) {
-  if(object.state==='destroyed')return;
-  const size=object.type==='floodlight_tower'?36:object.type==='crane_drop_zone'?25:18;
-  ctx.save();ctx.translate(object.x,object.y);ctx.rotate(.48);
+export function drawEquipmentCastShadow(ctx:CanvasRenderingContext2D, object:StageHazardObject, light?:Readonly<StageActorLight>) {
+  // Puddles and crane warning zones are ground effects, not solid equipment.
+  if(object.state==='destroyed'||object.type==='slurry_puddle'||object.type==='crane_drop_zone')return;
+  const size=object.type==='floodlight_tower'?36:18;
+  ctx.save();ctx.translate(object.x,object.y);ctx.rotate(Math.atan2(light?.shadowY??.28,light?.shadowX??.42));
   ctx.fillStyle='rgba(3,10,18,.16)';ctx.beginPath();ctx.ellipse(size*.7,6,size*1.4,size*.30,0,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='rgba(3,10,18,.26)';ctx.beginPath();ctx.ellipse(0,3,size*.58,size*.23,0,0,Math.PI*2);ctx.fill();ctx.restore();
 }

@@ -82,7 +82,7 @@ import growthText from '../../content/localization/survivors-campaign50-ko.json'
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {SurvivorsContainerShop} from './SurvivorsContainerShop';
 import {usePreparedSurvivorsActor} from './use-prepared-survivors-actor';
-import {isDirectionalActor,drawDirectionalLight,drawDirectionalOutline} from './survivors-directional-art';
+import {isDirectionalActor,drawDirectionalLight,drawDirectionalOutline,drawDirectionalCastShadow} from './survivors-directional-art';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,repairAllStoreItems,storeRepairCost,storeRepairTotal,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
@@ -108,6 +108,7 @@ import { operationPlan, operationProgress, operationTiming } from '../engine/sur
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
 import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
+import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -364,7 +365,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const ground = new Image();
     const terrainImage=new Image();terrainImage.src='/assets/survivors/terrain-workface-v1.png';terrainImage.onload=()=>{spritesRef.current.terrain=terrainImage;};
     ground.onload = () => { spritesRef.current.groundV2 = ground; };
-    ground.src = '/assets/survivors/stage-01-ground-v2.webp';
+    ground.src = stageGroundUri('stage_01');
     const workerV2 = new Image();
     workerV2.src = '/assets/survivors/worker-korean-v2.webp';
     workerV2.onload = () => { registerSpriteBounds(workerV2); spritesRef.current.workerV2 = workerV2; };
@@ -2121,13 +2122,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
+      // Project the live authored pose onto the floor before terrain, actors and warnings.
+      const sceneLight=stageActorLight(stage.id);
+      canvas.dataset.stageLight=sceneLight?stage.id:'';
+      canvas.dataset.stageLightColor=sceneLight?.color??'';
+      canvas.dataset.heroCastShadow='none';
+      if(sceneLight&&actor&&budget.ambientLighting){
+        ctx.save();ctx.translate(player.x,player.y);
+        drawDirectionalCastShadow(ctx,actor,74,playerPose,sceneLight);ctx.restore();
+      }
       drawTerrain(ctx,engine.state.terrain??[],spritesRef.current.terrain,engine.state.player);
       materialResolutionRef.current.drawGround(ctx);
 
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
       dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
-      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
+      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object, sceneLight);
 
       const tactics=engine.state.fieldTactics;
       for(const line of tactics?.lines ?? []) {
@@ -2684,6 +2694,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // 2. DIRECTIONAL 2.5D QUARTER-VIEW FLASHLIGHT CONE (Projected onto 45-degree concrete floor)
       ctx.save();
       ctx.translate(player.x, player.y);
+      // Match inspection-beam strength to each workface's existing light/material.
+      if(sceneLight)ctx.globalAlpha*=sceneLight.beam;
       ctx.save();
       ctx.scale(1, 0.58); // 45-degree isometric floor plane compression
       ctx.rotate(groundFacingAngle(facingAngle,.58));
@@ -3208,6 +3220,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // Draw grounded with feet touching ground contact shadow (0, 0)
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
+            // Static scene fill remains under reduced motion; only combat pulses use flash strength.
+            if(sceneLight&&budget.ambientLighting)drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,sceneLight.color,sceneLight.fill);
             if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18)*feelSettingsRef.current.flash);}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current,Boolean(spritesRef.current.wearables?.communication),Boolean(spritesRef.current.wearables?.normalWorn));

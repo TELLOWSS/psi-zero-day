@@ -1,0 +1,48 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "reduced": false,
+    "stage": "stage_01",
+    "phase": "paused",
+    "x": 700,
+    "y": 450,
+    "time": 8,
+    "shadow": "authored-pose",
+    "contactArt": "true",
+    "stretch": 0.999999999999999,
+    "overflow": false,
+    "groundLoaded": true,
+    "crowd": {
+      "phase": "playing",
+      "hazards": 65,
+      "peakProjectiles": 24,
+      "playerX": 916.3333333333244,
+      "canvas": 390
+    },
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "reduced": false,
+    "stage": "stage_01",
+    "phase": "paused",
+    "x": 700,
+    "y": 450,
+    "time": 8,
+    "shadow": "authored-pose",
+    "contactArt": "true",
+    "stretch": 0.999999999999999,
+    "overflow": false,
+    "groundLoaded": true,
+    "crowd": {
+      "phase": "playing",
+      "hazards": 65,
+      "peakProjectiles": 24,
+      "playerX": 919.9999999999909,
+      "canvas": 844
+    },
+    "errors": []
+  }
+]

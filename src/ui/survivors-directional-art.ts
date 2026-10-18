@@ -65,7 +65,7 @@ export function directionalPoseWeights(pose:SpritePose):{frame:number;weight:num
 type AuthoredSocketKind='head'|'chest'|'back'|'belt'|'wrist'|'tempo';
 interface Cell {sockets?:Partial<Record<AuthoredSocketKind,FootPoint>>;canvas:HTMLCanvasElement;width:number;height:number;anchor:number;coreWidth?:number;feet:{x:number;y:number}[]}
 interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number;coreWidth:number};direction:number;facing:number;weights:{frame:number;weight:number;direction?:number}[]}
-interface Sheet {outline?:HTMLCanvasElement;outlineKey?:string;cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;characterId?:string;contact?:boolean;authored?:boolean;contactPose?:SpritePose;contactFeet?:FootPoint[];lastPose?:SpritePose;lastFrame?:Frame}
+interface Sheet {shadow?:HTMLCanvasElement;shadowKey?:string;outline?:HTMLCanvasElement;outlineKey?:string;cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;characterId?:string;contact?:boolean;authored?:boolean;contactPose?:SpritePose;contactFeet?:FootPoint[];lastPose?:SpritePose;lastFrame?:Frame}
 const sheetStride=(sheet:Sheet)=>sheet.authored?20:sheet.contact?8:FRAMES_PER_DIRECTION;
 export interface AuthoredDirectionLayout {src:string;frames:{x:number;y:number;width:number;height:number;src?:string;referenceHeight?:number;mirror?:boolean;sockets?:Partial<Record<AuthoredSocketKind,FootPoint>>}[]}
 /** Explicit reviewed crops, fixed scale per direction: crouching never enlarges a character. */
@@ -232,9 +232,7 @@ function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  const facing=direction+(sheet.contact&&!sheet.authored&&strongest.frame===1?.5:0);
  const result={sheet,cell:shape,direction,facing,weights};sheet.lastPose=pose;sheet.lastFrame=result;return result;
 }
-export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
- const frame=cell(actor,pose);if(!frame)return false;
- ctx.canvas.dataset.actorIdentity='single-authored-frame';
+function prepareComposite(frame:Frame):void {
  const sheet=frame.sheet,key=frame.direction+':'+frame.weights.map(w=>w.direction+':'+w.frame+':'+w.weight).join(',');
  if(sheet.key!==key){
   const composite=sheet.composite,paint=composite.getContext('2d')!;
@@ -242,6 +240,11 @@ export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImage
   for(const sample of frame.weights){const c=sheet.cells[(sample.direction??frame.direction)*sheetStride(sheet)+sample.frame]!;paint.globalAlpha=sample.weight;paint.drawImage(c.canvas,composite.width/2-c.anchor,composite.height-c.height,c.width,c.height);}
   paint.globalAlpha=1;paint.globalCompositeOperation='source-over';sheet.key=key;
  }
+}
+export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
+ const frame=cell(actor,pose);if(!frame)return false;
+ ctx.canvas.dataset.actorIdentity='single-authored-frame';
+ const sheet=frame.sheet;prepareComposite(frame);
  const scale=height/sheet.bodyHeight,w=sheet.composite.width*scale,h=sheet.composite.height*scale;
  ctx.save();ctx.fillStyle='rgba(3,10,18,.12)';ctx.beginPath();ctx.ellipse(height*.14,3,height*.27,height*.065,.18,0,Math.PI*2);ctx.fill();ctx.restore();
  ctx.save();if(transform)applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
@@ -279,6 +282,26 @@ export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImage
   ctx.canvas.dataset.contactLegStretch=String(Math.max(...target.map((p,i)=>Math.hypot(p.x-source[i]!.x,p.y+height*.4)/Math.max(height*.12,source[i]!.y+height*.4))));
   ctx.canvas.dataset.contactArt='true';ctx.canvas.dataset.contactError=String(error);
  }else ctx.drawImage(sheet.composite,-w/2,-h,w,h);ctx.restore();return true;
+}
+/** Live silhouette projected from the same authored pose; one cached alpha mask, no blur/readback. */
+export function drawDirectionalCastShadow(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,light:{shadowX:number;shadowY:number;opacity:number}):boolean {
+ const frame=cell(actor,pose);if(!frame||!Number.isFinite(height)||height<=0)return false;
+ if(![light.shadowX,light.shadowY,light.opacity].every(Number.isFinite)||light.opacity<=0)return false;
+ prepareComposite(frame);
+ const sheet=frame.sheet;
+ if(!sheet.shadow){sheet.shadow=document.createElement('canvas');sheet.shadow.width=sheet.composite.width;sheet.shadow.height=sheet.composite.height;}
+ if(sheet.shadowKey!==sheet.key){
+  const paint=sheet.shadow.getContext('2d')!;
+  paint.clearRect(0,0,sheet.shadow.width,sheet.shadow.height);paint.drawImage(sheet.composite,0,0);
+  paint.globalCompositeOperation='source-in';paint.fillStyle='#07121b';paint.fillRect(0,0,sheet.shadow.width,sheet.shadow.height);
+  paint.globalCompositeOperation='source-over';sheet.shadowKey=sheet.key;
+ }
+ const scale=height/sheet.bodyHeight;
+ ctx.save();ctx.globalAlpha*=Math.min(.24,light.opacity);
+ // Feet stay at the actor origin; upward body pixels project away from the upper-left key.
+ ctx.transform(1,0,-light.shadowX,-light.shadowY,0,2);
+ ctx.drawImage(sheet.shadow,-sheet.shadow.width*scale/2,-height,sheet.shadow.width*scale,height);
+ ctx.restore();ctx.canvas.dataset.heroCastShadow='authored-pose';return true;
 }
 /** Reuse the exact sprite alpha for local light, without tinting the surrounding scene. */
 export function drawDirectionalLight(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,color:string,strength:number):boolean {
