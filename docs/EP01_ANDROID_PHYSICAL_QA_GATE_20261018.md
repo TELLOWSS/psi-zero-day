@@ -25,3 +25,10 @@
 - Android 디버그 변형에서 `applicationIdSuffix ".qa"`와 `versionNameSuffix "-director-qa"` 적용.
 - 테스트 기기에서 기존 `com.tellowss.psizeroday` 정식 패키지와 공존 가능; 테스트 저장 영역은 독립됨.
 - QA 설치 아이콘·앱 이름은 `PSI : ZERO DAY QA`; 배포용 릴리스 서명·패키지 ID는 변경하지 않음.
+
+## Android QA 전용 텍스처 용량 패스
+- 원인 진단: 이전 디버그 APK 571 MiB 수준(빌드 로그 기준); `public/assets/survivors`의 큰 PNG 사용량이 높음.
+- `scripts/prepare-android-qa-textures.mjs`는 `npm run build` 후, Capacitor `sync` 전 `dist/assets/survivors/{maps,pinball/tables,graphics-v1}`에 한정해 용량 1MiB 이상·최대 변 1600px 초과 PNG를 축소.
+- 경로/파일 형식 PNG, 종횡비, alpha 보존. 결과가 원본보다 작지 않으면 교체하지 않음. `public/` 원화 및 브라우저 Vercel 빌드 변경 **없음**.
+- `artifacts/android-qa/texture-budget.json`에 변경별 SHA256/전후 해상도/절감 바이트를 기록.
+- 원본 자산의 미술품질 승인과 별개인 디버그 APK 한정 실험; 세로/가로 Android 실기에서 디테일·가독성 재검수가 필요.
