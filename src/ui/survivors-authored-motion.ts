@@ -13,8 +13,10 @@ export function authoredMotionWeights(pose:SpritePose):{direction:number;frame:n
   const t=Math.max(0,Math.min(1,(fraction-.44)/.12)),blend=t*t*(3-2*t);
   return [{direction:lower,frame:14,weight:1-blend},{direction:(lower+1)%8,frame:13,weight:blend}].filter(f=>f.weight>0);
  }
- if(!pose.moving)return [{direction,frame:0,weight:1}];
- const running=pose.mode==='run'||pose.speed>145,count=running?4:8,start=running?9:1;
+ // Let the last planted locomotion pose settle into idle instead of popping.
+ // The simulation position/cadence stays frozen; only its presentation weight decays.
+ if(!pose.moving&&!(pose.gaitBlend>0))return [{direction,frame:0,weight:1}];
+ const running=pose.mode==='run'||pose.speed>145||!pose.moving&&pose.locomotionMode==='run',count=running?4:8,start=running?9:1;
  const cursor=phase*count,index=Math.floor(cursor),t=Math.max(0,(cursor-index-.88)/.12),blend=t*t*(3-2*t);
  const gait=Math.max(0,Math.min(1,Number.isFinite(pose.gaitBlend)?pose.gaitBlend:0));
  return [{direction,frame:0,weight:1-gait},{direction,frame:start+index,weight:gait*(1-blend)},

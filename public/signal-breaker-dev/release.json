@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.68.0-trimode-intel",
   "cacheName": "psi-signal-breaker-raid-guide-20261018",
-  "fingerprint": "a8ed7b6398a3ea0b2a7e1e4cd602d6a95af6132b388065282ad8404b1ec71da5",
+  "fingerprint": "59a278aa36b2681ea66b412161f292f20d1a92f694b28a86002ce18be0dd1b7c",
   "files": [
     {
       "path": "/assets/episode01/characters/crew-heads-v1/choi_minseok.webp",
@@ -131,8 +131,8 @@
     },
     {
       "path": "/assets/shared/signal-breaker-actors.js",
-      "bytes": 150363,
-      "sha256": "4a5253c052997ac1532e95f15e4ec0c07ba1a2a0a3a6f340b5f1761a1e0e791b"
+      "bytes": 150481,
+      "sha256": "95a29abdd5299981ceb9774aee50054a7f9be86918574ed03ff853c956394c90"
     },
     {
       "path": "/assets/shared/signal-encounter-intel-v1.js",
@@ -961,8 +961,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/ending-player.js",
-      "bytes": 8497,
-      "sha256": "28fe933b7f7d17aabe51245a39c710c613d13cab0faa0a974ab5df8a0039301f"
+      "bytes": 8521,
+      "sha256": "d6f16098bdd4baaa7ba139a3f330324ff2d37ac910dc7db52ffb9e8fe9f1c49d"
     },
     {
       "path": "/signal-breaker-dev/src/ending-sound.js",

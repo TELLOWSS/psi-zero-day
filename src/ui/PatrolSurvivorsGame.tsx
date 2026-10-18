@@ -114,6 +114,7 @@ import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-li
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
 import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from './survivors-foreground-props';
 import {approvedForegroundMattes,matteVisibleAlpha} from './survivors-stage-mattes';
+import {prepareForegroundMatte} from './survivors-matte-texture';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -482,15 +483,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     } catch { return 'stage_01'; }
   });
   const [loadedGround, setLoadedGround] = useState<string | null>(null);
-  const foregroundMatteImagesRef=useRef<Record<string,HTMLImageElement>>({});
+  const foregroundMatteImagesRef=useRef<Record<string,HTMLImageElement|HTMLCanvasElement>>({});
   useEffect(()=>{
     // Only explicitly reviewed site cut-outs may load. No speculative masks.
     let active=true;
     foregroundMatteImagesRef.current={};
     for(const layer of approvedForegroundMattes(selectedStage)){
-      const image=new Image();
-      image.onload=()=>{if(active&&image.naturalWidth)foregroundMatteImagesRef.current[layer.id]=image;};
-      image.src=layer.imageUri;
+      const load=(uri:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{
+        const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=uri;
+      });
+      void Promise.all([load(layer.imageUri),load(layer.sourceGround)]).then(([coverage,source])=>{
+        if(!active)return;
+        const texture=prepareForegroundMatte(coverage,source,layer);
+        if(texture)foregroundMatteImagesRef.current[layer.id]=texture;
+      }).catch(()=>{ /* Preserve the original floor when a matte cannot prepare. */ });
     }
     return ()=>{active=false;foregroundMatteImagesRef.current={};};
   },[selectedStage]);
@@ -2788,8 +2794,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       const foregrounds=approvedForegroundMattes(stage.id);
       canvas.dataset.approvedForegroundMattes=String(foregrounds.length);
+      canvas.dataset.drawnForegroundMattes='0';
       for(const matte of foregrounds){
-        if(!foregroundMatteImagesRef.current[matte.id]?.naturalWidth)continue;
+        if(!foregroundMatteImagesRef.current[matte.id]?.width)continue;
         if(matte.x+matte.width<camX||matte.x>camX+viewW||matte.y+matte.height<camY||matte.y>camY+viewH)continue;
         entityList.push({kind:'matte',y:matte.feetY,data:matte});
       }
@@ -2820,10 +2827,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         } else if(item.kind==='matte'){
           const matte=item.data;
           const image=foregroundMatteImagesRef.current[matte.id];
-          if(!image?.naturalWidth)continue;
+          if(!image?.width)continue;
           ctx.save();
           ctx.globalAlpha*=matteVisibleAlpha(matte,player,hazards.map(h=>({x:h.x,y:h.y,radius:h.radius,warning:h.motion?.phase==='warning'})));
           ctx.drawImage(image,matte.x,matte.y,matte.width,matte.height);
+          canvas.dataset.drawnForegroundMattes=String(Number(canvas.dataset.drawnForegroundMattes)+1);
           ctx.restore();
         } else if (item.kind === 'fixture') {
           const fixture=item.data;
