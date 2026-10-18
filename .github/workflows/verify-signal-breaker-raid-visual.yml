@@ -31,6 +31,8 @@ jobs:
           node --check public/signal-breaker-dev/src/combat-vfx.js
           node --check public/signal-breaker-dev/src/app.js
           npx vitest run tests/signal-breaker-raid-visual-guide.test.ts
+      - name: Verify exact offline release metadata
+        run: node scripts/check-signal-breaker-release.mjs
       - name: Assemble Preview
         run: npm run build
       - name: Prepare Chrome and Playwright
