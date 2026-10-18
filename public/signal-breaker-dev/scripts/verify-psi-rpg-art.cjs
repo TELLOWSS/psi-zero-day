@@ -10,7 +10,7 @@ for(const [width,height] of [[1440,900],[844,390],[390,844]]){
 const ctx=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await ctx.newPage(),errors=[];
 page.on('pageerror',e=>errors.push(e.message));await page.goto(url);
 await page.locator('#operationLobby').waitFor({state:'visible',timeout:45000});
-a.ok(await page.locator('#brandLoading>img').evaluate(i=>i.src.endsWith('psi-rpg-world-v1.png')&&i.naturalWidth===1672));
+a.ok(await page.locator('#brandLoading>img').evaluate(i=>new URL(i.currentSrc||i.src).pathname.endsWith('/signal-breaker-dev/art/loading-keyart-v1.webp')&&i.complete&&i.naturalWidth>=720&&i.naturalHeight>=320),'current single-piece loading hero art failed to decode');
 a.ok(await page.locator('#operationLobby').evaluate(e=>getComputedStyle(e).backgroundImage.includes('psi-rpg-base-v1.png')));
 a.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
 await page.screenshot({path:out+'/psi-base-'+width+'.png',fullPage:true});
