@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from '
 import type {StoryReaderSettings} from '../app/story-reader-settings';
 import type { AudioState } from '../domain';
 import { readAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
+import { attemptEpisodeAudioPlay, probeEpisodeAudioMedia, traceEpisodeAudio } from '../app/episode-audio-diagnostics';
 
 export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue' | 'character_intro' | 'radio_signal' | 'pressure' | 'scene_shift';
 
@@ -68,7 +69,7 @@ function syntheticNoise(context: AudioContext, duration: number) {
 }
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
-export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number}}) {
+export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, resolve: AssetResolver, options?:{paused?:boolean;settings?:StoryReaderSettings;scene?:{asset_id:string;gain:number};eventId?:string|null}) {
   const [hidden,setHidden]=useState(()=>typeof document!=='undefined'&&document.hidden);
   useEffect(()=>{const changed=()=>setHidden(document.hidden);document.addEventListener('visibilitychange',changed);return()=>document.removeEventListener('visibilitychange',changed);},[]);
   const audio=authoredAudio?{...authoredAudio,volumes:{...authoredAudio.volumes,
@@ -88,12 +89,25 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
   const voiceCleanupRef = useRef<(() => void) | null>(null);
   const seenCueIds = useRef(new Set<string>());
   const contextRef = useRef<AudioContext | null>(null);
+  useEffect(() => {
+    traceEpisodeAudio({ bus: 'system', signal: 'scene_change', eventId: options?.eventId ?? 'none', assetId: options?.scene?.asset_id });
+  }, [options?.eventId, options?.scene?.asset_id]);
+  useEffect(() => {
+    traceEpisodeAudio({
+      bus: 'system', signal: 'mute_change', value: effectiveMuted ? 1 : 0,
+      note: hidden ? 'visibility_hidden' : options?.paused ? 'reader_paused' : 'engine_or_preference',
+    });
+  }, [effectiveMuted, hidden, options?.paused]);
   const stopVoice=useCallback(()=>voiceCleanupRef.current?.(),[]);
   const cancelPresentation=useCallback(()=>{for(const element of presentationRef.current)element.pause();presentationRef.current.clear();},[]);
   useEffect(()=>{if(effectiveMuted){stopVoice();cancelPresentation();}},[effectiveMuted,stopVoice,cancelPresentation]);
   useEffect(()=>{
-    const unlock=()=>{if(effectiveMuted)return;void contextRef.current?.resume().catch(()=>{});
-      for(const el of [bgmRef.current,sceneBedRef.current,...ambienceRef.current.values()])if(el)void el.play()?.catch(()=>{});
+    const unlock=()=>{if(effectiveMuted)return;
+      traceEpisodeAudio({ bus: 'system', signal: 'gesture' });
+      void contextRef.current?.resume().catch(()=>traceEpisodeAudio({ bus: 'ui', signal: 'resume_failed' }));
+      if(bgmRef.current)attemptEpisodeAudioPlay(bgmRef.current,'bgm',bgmRef.current.dataset.assetId??'unknown');
+      if(sceneBedRef.current)attemptEpisodeAudioPlay(sceneBedRef.current,'scene',sceneBedRef.current.dataset.assetId??'unknown');
+      for(const [assetId,element] of ambienceRef.current)attemptEpisodeAudioPlay(element,'ambience',assetId);
     };
     window.addEventListener('pointerdown',unlock);window.addEventListener('keydown',unlock);
     return()=>{window.removeEventListener('pointerdown',unlock);window.removeEventListener('keydown',unlock);};
@@ -102,6 +116,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
   const applyVoiceDucking = useCallback((gain: number) => {
     const duck = Math.max(0, Math.min(1, gain));
     voiceDuckRef.current = duck;
+    traceEpisodeAudio({ bus: 'voice', signal: 'duck_change', value: duck });
     const update = (element: HTMLAudioElement | null | undefined) => {
       if (!element) return;
       const base = Number(element.dataset.baseVolume ?? element.volume);
@@ -116,10 +131,10 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
   useEffect(()=>{
     const track=options?.scene,uri=track?resolve(track.asset_id):undefined;
     if(!track||!uri||typeof Audio==='undefined'){sceneBedRef.current?.pause();return;}
-    if(sceneBedRef.current?.dataset.assetId!==track.asset_id){sceneBedRef.current?.pause();const element=new Audio(uri);element.loop=true;element.dataset.assetId=track.asset_id;sceneBedRef.current=element;}
+    if(sceneBedRef.current?.dataset.assetId!==track.asset_id){sceneBedRef.current?.pause();const element=probeEpisodeAudioMedia(new Audio(uri),'scene',track.asset_id);element.loop=true;element.dataset.assetId=track.asset_id;sceneBedRef.current=element;}
     const element=sceneBedRef.current!,base=(audio?.volumes.master??1)*(audio?.volumes.ambience??1)*track.gain;
     element.dataset.baseVolume=String(base);element.volume=Math.min(1,base*voiceDuckRef.current);
-    if(effectiveMuted)element.pause();else void element.play()?.catch(()=>{});
+    if(effectiveMuted)element.pause();else attemptEpisodeAudioPlay(element,'scene',track.asset_id);
     return()=>element.pause();
   },[options?.scene?.asset_id,options?.scene?.gain,effectiveMuted,audio?.volumes.master,audio?.volumes.ambience,resolve]);
 
@@ -133,7 +148,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     }
     if (bgmRef.current?.dataset.assetId !== track.asset_id) {
       bgmRef.current?.pause();
-      const element = new Audio(uri);
+      const element = probeEpisodeAudioMedia(new Audio(uri),'bgm',track.asset_id);
       element.dataset.assetId = track.asset_id;
       bgmRef.current = element;
     }
@@ -143,7 +158,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const baseVolume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
     element.dataset.baseVolume = String(baseVolume);
     element.volume = baseVolume * voiceDuckRef.current;
-    void element.play().catch(() => { /* browser gesture policy; retry occurs on the next state change */ });
+    attemptEpisodeAudioPlay(element,'bgm',track.asset_id);
   }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
@@ -155,14 +170,14 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       if (!uri || effectiveMuted) continue;
       let element = ambienceRef.current.get(track.asset_id);
       if (!element) {
-        element = new Audio(uri);
+        element = probeEpisodeAudioMedia(new Audio(uri),'ambience',track.asset_id);
         element.loop = track.loop;
         ambienceRef.current.set(track.asset_id, element);
       }
       const baseVolume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
       element.dataset.baseVolume = String(baseVolume);
       element.volume = baseVolume * voiceDuckRef.current;
-      void element.play()?.catch(()=>{});
+      attemptEpisodeAudioPlay(element,'ambience',track.asset_id);
     }
     for (const [assetId, element] of ambienceRef.current) {
       if (!desired.has(assetId) || effectiveMuted) {
@@ -180,16 +195,17 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       seenCueIds.current.add(cue.cue_id);
       const uri = resolve(cue.asset_id);
       if (!uri) continue;
-      const element = new Audio(uri);
+      const element = probeEpisodeAudioMedia(new Audio(uri),'foley',cue.asset_id);
       presentationRef.current.add(element);
       const release=()=>presentationRef.current.delete(element);
       element.addEventListener('ended',release,{once:true});element.addEventListener('error',release,{once:true});
       element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
-      void element.play()?.catch(release);
+      attemptEpisodeAudioPlay(element,'foley',cue.asset_id,release);
     }
   }, [audio?.sfx_bus, audio?.event_bus, effectiveMuted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
   useEffect(() => () => {
+    traceEpisodeAudio({ bus: 'system', signal: 'cleanup' });
     voiceCleanupRef.current?.();
     bgmRef.current?.pause();
     sceneBedRef.current?.pause();
@@ -204,7 +220,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const timbre = CUE_TIMBRE[cue];
     const context = contextRef.current ?? new window.AudioContext();
     contextRef.current = context;
-    if (context.state === 'suspended') void context.resume();
+    if (context.state === 'suspended') void context.resume().catch(()=>traceEpisodeAudio({bus:'ui',signal:'resume_failed'}));
 
     const now = context.currentTime;
     const baseVolume = Math.max(0.006, Math.min(0.036,
@@ -254,7 +270,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       playUiCue(cue.fallback);
       return;
     }
-    const element = new Audio(uri);
+    const element = probeEpisodeAudioMedia(new Audio(uri),'foley',cue.asset_id ?? 'fallback');
     const gain = cue.gain ?? 1;
     const baseVolume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
@@ -264,12 +280,12 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const release = () => presentationRef.current.delete(element);
     element.addEventListener('ended', release, { once: true });
     element.addEventListener('error', release, { once: true });
-    const playback = element.play();
-    if (playback && typeof playback.catch === 'function') {
-      void playback.catch(() => {
-        release();
-        playUiCue(cue.fallback);
-      });
+    if (!attemptEpisodeAudioPlay(element,'foley',cue.asset_id ?? 'fallback',() => {
+      release();
+      playUiCue(cue.fallback);
+    })) {
+      release();
+      playUiCue(cue.fallback);
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
@@ -286,7 +302,7 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
       return () => {};
     }
 
-    const element = new Audio(uri);
+    const element = probeEpisodeAudioMedia(new Audio(uri),'voice',cue.asset_id);
     voiceRef.current = element;
     const baseVolume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (options?.settings?.voice ?? 1) * (cue.gain ?? 1)));
@@ -318,18 +334,8 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     applyVoiceDucking(cue.duck_gain ?? 0.28);
     onProgress?.(0);
 
-    try {
-      const playback = element.play();
-      // Real browsers return a Promise. Test/hardened media environments may not
-      // implement playback; never leave gameplay locked when audio cannot start.
-      if (!playback || typeof playback.catch !== 'function') {
-        finish();
-        return cleanup;
-      }
-      void playback.catch(finish);
-    } catch {
-      finish();
-    }
+    // Never lock story progression when autoplay or a media source is unavailable.
+    if (!attemptEpisodeAudioPlay(element,'voice',cue.asset_id,finish)) finish();
     return cleanup;
   }, [
     effectiveMuted,
