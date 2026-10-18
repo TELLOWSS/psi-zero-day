@@ -9,7 +9,7 @@ let browser;
 const rows=[];
 try {
  for(const [width,height] of (process.env.PSI_CROWD?[[390,844],[844,390]]:[[1440,900],[390,844],[844,390],[1024,768]]))for(const reduced of (process.env.PSI_CROWD?[false]:[false,true])) {
-  browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN,args:['--no-sandbox','--disable-dev-shm-usage','--no-zygote','--single-process']});
+  browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN,args:['--no-sandbox','--disable-dev-shm-usage']});
   const page=await browser.newPage({viewport:{width,height},reducedMotion:reduced?'reduce':'no-preference'}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
   await page.addInitScript(()=>{
