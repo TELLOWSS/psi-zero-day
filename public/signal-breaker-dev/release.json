@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.68.0-trimode-intel",
   "cacheName": "psi-signal-breaker-crew-v2-20261017",
-  "fingerprint": "1bd73a0489701582f04f4e7fc4164a48c7dd544f6800c422d712690906fe1c05",
+  "fingerprint": "c5623294552a171dd9b53bf269c7eb43702c84d48636f92579e83411a3d842ca",
   "files": [
     {
       "path": "/assets/episode01/characters/crew-heads-v1/choi_minseok.webp",
@@ -131,8 +131,8 @@
     },
     {
       "path": "/assets/shared/signal-breaker-actors.js",
-      "bytes": 150327,
-      "sha256": "322f88a12c167661b7049f500b68a39dafde571d3fc0f5b47a98700b2fe2953f"
+      "bytes": 150363,
+      "sha256": "4a5253c052997ac1532e95f15e4ec0c07ba1a2a0a3a6f340b5f1761a1e0e791b"
     },
     {
       "path": "/assets/shared/signal-encounter-intel-v1.js",

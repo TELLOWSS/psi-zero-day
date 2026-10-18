@@ -37,7 +37,7 @@ try {
   await page.screenshot({ path: `${output}/defeat.png` });
   await defeat.getByRole('button', { name: copy.retry_ready, exact: true }).click();
   const preview = await openSurvivorsStagePreview(page);
-  const expected = '/assets/survivors/stage-01-ground-v2.webp';
+  const expected = '/assets/survivors/stage-01-ground-v3.webp';
   if (await preview.getAttribute('src') !== expected) throw new Error('Retry did not prepare the failed stage');
   await page.reload();
   await enter();
