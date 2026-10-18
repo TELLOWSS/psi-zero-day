@@ -6,6 +6,8 @@ on:
       - 'src/ui/PatrolSurvivorsGame.tsx'
       - 'src/ui/survivors-stage-light.ts'
       - 'src/ui/survivors-workface-depth.ts'
+      - 'src/ui/survivors-foreground-props.ts'
+      - 'tests/survivors-foreground-props.test.ts'
       - 'src/ui/survivors-projectile-feedback.ts'
       - 'src/ui/survivors-scene-lighting.ts'
       - 'src/ui/survivors-directional-art.ts'
