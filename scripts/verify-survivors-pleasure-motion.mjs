@@ -20,15 +20,11 @@ try{
     localStorage.setItem('psi.survivors.stage_stars',JSON.stringify({stage_01:[false,true,false]}));
     localStorage.setItem('psi.survivors.display.v1',JSON.stringify({quality:'balanced',lighting:true}));
   });
-  await page.emulateMedia({reducedMotion:'reduce'});await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
-  await page.evaluate(async()=>{
-   const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
-   const {PleasureFeedback}=await import('/src/ui/survivors-pleasure-feedback.ts');
-   const drain=SurvivorsEngine.prototype.drainAudioEvents,observe=PleasureFeedback.prototype.observe;
-   SurvivorsEngine.prototype.drainAudioEvents=function(...args){window.qaEngine=this;return drain.apply(this,args);};
-   PleasureFeedback.prototype.observe=function(...args){window.qaPleasure=this;const value=observe.apply(this,args);window.qaMarks=[...(window.qaMarks??[]),...this.marks.map(m=>({...m}))].slice(-200);return value;};
-  });
+  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  // Wait for the async loading screen and real preflight before querying
+  // optional equipment controls. Locator.count() does not wait for mounting.
+  await page.locator('.survivors-ready-dialog').waitFor({state:'visible'});
   // Follow the real preflight return path used by the passing 50-stage smoke.
   const shopText=JSON.parse(fs.readFileSync('content/localization/survivors-store-ko.json','utf8'));
   // The preflight has two legitimate equipment states: browse when not
@@ -45,6 +41,13 @@ try{
     await page.screenshot({path:`artifacts/pleasure-feedback/ready-failure-${width}x${height}.png`});
     throw error;
   }
+  await page.evaluate(async()=>{
+   const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
+   const {PleasureFeedback}=await import('/src/ui/survivors-pleasure-feedback.ts');
+   const drain=SurvivorsEngine.prototype.drainAudioEvents,observe=PleasureFeedback.prototype.observe;
+   SurvivorsEngine.prototype.drainAudioEvents=function(...args){window.qaEngine=this;return drain.apply(this,args);};
+   PleasureFeedback.prototype.observe=function(...args){window.qaPleasure=this;const value=observe.apply(this,args);window.qaMarks=[...(window.qaMarks??[]),...this.marks.map(m=>({...m}))].slice(-200);return value;};
+  });
   await launch.click();
   await page.waitForFunction(()=>window.qaEngine?.state.phase==='playing');
   await page.emulateMedia({reducedMotion:'no-preference'});
