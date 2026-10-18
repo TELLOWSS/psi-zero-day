@@ -2124,6 +2124,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       // Project the live authored pose onto the floor before terrain, actors and warnings.
       const sceneLight=stageActorLight(stage.id);
+      canvas.dataset.stageLight=sceneLight?stage.id:'';
+      canvas.dataset.stageLightColor=sceneLight?.color??'';
+      canvas.dataset.heroCastShadow='none';
       if(sceneLight&&actor&&budget.ambientLighting){
         ctx.save();ctx.translate(player.x,player.y);
         drawDirectionalCastShadow(ctx,actor,74,playerPose,sceneLight);ctx.restore();
@@ -2134,7 +2137,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
       dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
-      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
+      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object, sceneLight);
 
       const tactics=engine.state.fieldTactics;
       for(const line of tactics?.lines ?? []) {
@@ -2691,8 +2694,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // 2. DIRECTIONAL 2.5D QUARTER-VIEW FLASHLIGHT CONE (Projected onto 45-degree concrete floor)
       ctx.save();
       ctx.translate(player.x, player.y);
-      // The daylight foundation scene keeps its concrete readable beneath the inspection beam.
-      if(sceneLight)ctx.globalAlpha*=.36;
+      // Match inspection-beam strength to each workface's existing light/material.
+      if(sceneLight)ctx.globalAlpha*=sceneLight.beam;
       ctx.save();
       ctx.scale(1, 0.58); // 45-degree isometric floor plane compression
       ctx.rotate(groundFacingAngle(facingAngle,.58));

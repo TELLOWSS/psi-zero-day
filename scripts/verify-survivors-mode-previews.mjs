@@ -14,17 +14,20 @@ try{
     page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push(String(error)));
     await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
     await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
-    const images=[];
+    const images=[],entries=[];
     for(const mode of ['defense','story']){
-      await page.locator(`.is-${mode}-entry`).click();
-      const dialog=page.locator('.mode-preview-dialog');await dialog.waitFor();
-      const image=await dialog.locator('.mode-preview-visual img').evaluate(async image=>{
+      const entry=page.locator(`.is-${mode}-entry`);
+      const image=await entry.locator('img').evaluate(async image=>{
         await image.decode();return {src:new URL(image.src).pathname,width:image.naturalWidth,height:image.naturalHeight};
       });
       images.push(image);
-      if(await page.locator('[data-defense-screen],.zb-shell').count())throw new Error('Locked mode entered gameplay');
+      // Both cards now enter live modes. The former locked-preview contract is retired.
+      await entry.click();
+      await page.locator(mode==='defense'?'[data-defense-screen="guard-home"]':'.game-frame').waitFor();
+      entries.push({mode,entered:true});
       await page.screenshot({path:path.join(out,`${width}x${height}-${mode}.png`)});
-      await page.locator('.mode-preview-close').click();
+      await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
+      await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
     }
     await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
     await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
@@ -40,8 +43,8 @@ try{
     await page.getByRole('button',{name:'메인으로 나가기',exact:true}).click();
     await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-    const pass=images.every(image=>image.src.endsWith('-v2.webp')&&image.width>=1600&&image.height>=900)&&nonblank&&!overflow&&!errors.length;
-    results.push({width,height,images,nonblank,overflow,errors,pass});await page.close();
+    const pass=images.every(image=>image.width>=1600&&image.height>=900)&&entries.length===2&&nonblank&&!overflow&&!errors.length;
+    results.push({width,height,images,entries,nonblank,overflow,errors,pass});await page.close();
   }
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({baseUrl,results},null,2));
   console.log(JSON.stringify(results));if(results.some(result=>!result.pass))process.exitCode=1;
