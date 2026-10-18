@@ -96,7 +96,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/qa/breaker-regression-20261018 .github/workflows/verify-signal-breaker-causal.yml
+          git add docs/qa/breaker-regression-20261018
           git diff --cached --stat
           git commit -m "test(breaker): certify six deterministic fixtures against unchanged pre-boss engine"
           git push origin HEAD:art/story-cinema-20261017
