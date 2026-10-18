@@ -8,11 +8,16 @@ const valid=(id:'stage_01'|'stage_50'):ApprovedForegroundMatte=>({
   imageUri:'/assets/survivors/foreground/approved-facade-01.webp',
   x:102,y:80,width:235,height:300,feetY:340,approval:'art-director-20261018',
 });
-afterEach(()=>{for(const id of PATROL_STAGE_IDS)delete FOREGROUND_MATTE_ASSETS[id]});
+const originalMattes={...FOREGROUND_MATTE_ASSETS};
+afterEach(()=>{for(const id of PATROL_STAGE_IDS)delete FOREGROUND_MATTE_ASSETS[id];Object.assign(FOREGROUND_MATTE_ASSETS,originalMattes)});
 describe('stage 01–50 explicit foreground matte pipeline',()=>{
-  it('never makes up cutouts for the fifty opaque original stage paintings',()=>{
+  it('loads one reviewed source-coverage matte and preserves the other 49 originals',()=>{
     expect(PATROL_STAGE_IDS).toHaveLength(50);
-    for(const id of PATROL_STAGE_IDS)expect(approvedForegroundMattes(id)).toEqual([]);
+    expect(approvedForegroundMattes('stage_01')).toHaveLength(1);
+    const matte=approvedForegroundMattes('stage_01')[0]!;
+    expect(matte.sourceCoverage).toBe(true);
+    expect(matte.y+matte.height).toBe(900);
+    for(const id of PATROL_STAGE_IDS.filter(id=>id!=='stage_01'))expect(approvedForegroundMattes(id)).toEqual([]);
   });
   it('requires exact stage, source painting, approval, bounded crop and safe URI',()=>{
     const good=valid('stage_01');
@@ -22,6 +27,7 @@ describe('stage 01–50 explicit foreground matte pipeline',()=>{
       {...good,id:'oversize',x:1360,width:200},
       {...good,id:'external-uri',imageUri:'https://attacker.invalid/mask.png'},
       {...good,id:'wrong-anchor',feetY:700},
+      {...good,id:'invalid-coverage-crop',sourceCoverage:true,sourceCrop:{x:-1,y:0,width:1,height:1}},
     ];
     expect(approvedForegroundMattes('stage_01')).toEqual([good]);
     expect(approvedForegroundMattes('stage_50')).toEqual([]);

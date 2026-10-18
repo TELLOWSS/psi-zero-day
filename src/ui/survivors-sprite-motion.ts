@@ -6,7 +6,7 @@ import {commandArtProfile} from './survivors-command-art';
 import {movementDirection,drawDirectionalBody} from './survivors-directional-art';
 import {turnToward} from './survivors-foot-lock';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; velocityX:number; gaitActivation:number; pose: SpritePose }
-export interface SpritePose { visualAngle?:number;turning?:boolean;contactCycle?:number;worldX?:number;worldY?:number;clock?:number;entity?:object; moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; equipmentCheck?:number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+export interface SpritePose { locomotionMode?:'walk'|'run'; visualAngle?:number;turning?:boolean;contactCycle?:number;worldX?:number;worldY?:number;clock?:number;entity?:object; moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; equipmentCheck?:number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
@@ -59,6 +59,7 @@ export class SpriteMotionTracker {
     const contactCycle=((previous?.pose.contactCycle??0)+(moving?distance*Math.PI*2/(64+32*smoothRun):0))%(Math.PI*2);
     const pose: SpritePose = {
       moving, cycle, authoredCycle, facing,direction,visualAngle,turning,contactCycle,worldX:x,worldY:y,clock,entity,
+      locomotionMode:moving?(running?'run':'walk'):previous?.pose.locomotionMode??'walk',
       attackAngle:attack?.angle,actionKind:attack?.gestureKind,
       lean, actionProgress: attack ? attackProgress(clock-attack.gestureStart,attack.gestureKind) : 0,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,

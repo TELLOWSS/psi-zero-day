@@ -89,6 +89,7 @@ jobs:
             if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
             sleep 0.25
           done
+          node scripts/verify-survivors-matte.mjs
           node tests/verify-survivors-stage01-visual.mjs
           PSI_CROWD=1 node tests/verify-survivors-stage01-visual.mjs
           node scripts/verify-survivors-pleasure-motion.mjs
@@ -127,6 +128,7 @@ jobs:
         with:
           name: survivors-art-v2-captures
           path: |
+            artifacts/signal-watch-matte
             artifacts/signal-watch-stage01
             artifacts/survivors-browser
             artifacts/mode-preview-release
