@@ -16,7 +16,12 @@ try{
    SurvivorsEngine.prototype.drainAudioEvents=function(...args){window.qaEngine=this;return drain.apply(this,args);};
    PleasureFeedback.prototype.observe=function(...args){window.qaPleasure=this;const value=observe.apply(this,args);window.qaMarks=[...(window.qaMarks??[]),...this.marks.map(m=>({...m}))].slice(-200);return value;};
   });
-  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.getByRole('button',{name:'시그널 워치 시작',exact:true}).click();
+  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  // Follow the real preflight return path used by the passing 50-stage smoke.
+  const shopText=JSON.parse(fs.readFileSync('content/localization/survivors-store-ko.json','utf8'));
+  await page.getByRole('button',{name:shopText.briefBrowse,exact:true}).click();
+  await page.getByRole('button',{name:shopText.close,exact:true}).click();
+  await page.getByRole('button',{name:'시그널 워치 시작',exact:true}).click();
   await page.waitForFunction(()=>window.qaEngine?.state.phase==='playing');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.evaluate(()=>{
