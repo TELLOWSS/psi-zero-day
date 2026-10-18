@@ -20,3 +20,8 @@
 - 자동 정적 매니페스트/웹 CI는 실제 단말 QA 증거가 아니다.
 - 최종 WebP 원화와 캐릭터 전신 원본 재제작 역시 별도 ART Lock 사항.
 - 운영 `main` 병합 및 Play Store 정식 배포 금지. PR #210 Draft 보존.
+
+### QA APK 분리 패키지 정책
+- Android 디버그 변형에서 `applicationIdSuffix ".qa"`와 `versionNameSuffix "-director-qa"` 적용.
+- 테스트 기기에서 기존 `com.tellowss.psizeroday` 정식 패키지와 공존 가능; 테스트 저장 영역은 독립됨.
+- QA 설치 아이콘·앱 이름은 `PSI : ZERO DAY QA`; 배포용 릴리스 서명·패키지 ID는 변경하지 않음.
