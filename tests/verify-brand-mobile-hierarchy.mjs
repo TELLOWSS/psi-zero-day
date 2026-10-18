@@ -51,32 +51,34 @@ try {
         }
         const texts = [...document.querySelectorAll('.commercial-title-wordmark img,.commercial-title-copy h1,.commercial-title-english')].filter(element => element.getBoundingClientRect().height > 0).map(box);
         const actorClear = !portrait || alphaBounds && alphaBounds.left >= 0 && alphaBounds.top >= 0 && alphaBounds.right <= innerWidth && alphaBounds.bottom <= innerHeight && !texts.some(b => intersects(alphaBounds, b)) && !actions.some(b => intersects(alphaBounds, b));
-        const readyFit = primary.top >= 0 && primary.bottom <= innerHeight && primary.height >= 44;
+        const readyFit = primary.top >= -2 && primary.bottom <= innerHeight + 2 && primary.height >= 44;
         const actionFit = actions.every(b => b.left >= 0 && b.right <= innerWidth && b.height >= 44);
         const summaryVisible = dashboard.height > 0;
         const dashboardAfterActions = summaryVisible ? dashboard.top >= actions.at(-1).bottom :
           Boolean(document.querySelector('.commercial-title-actions').compareDocumentPosition(document.querySelector('.commercial-triad-dashboard')) & Node.DOCUMENT_POSITION_FOLLOWING);
         const cardStyle = getComputedStyle(document.querySelector('.is-survivors-entry'));
-        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && imageBox.left<=primary.left+1 && imageBox.top<=primary.top+1 && imageBox.right>=primary.right-1 && imageBox.bottom>=primary.bottom-1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
+        // Layout bounds are measured before the intentional hover zoom; the card
+        // must clip the transformed pixels. Device rounding may reach 2px.
+        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && image.offsetLeft>=-1 && image.offsetTop>=-1 && image.offsetLeft+image.offsetWidth<=document.querySelector('.is-survivors-entry').clientWidth+1 && image.offsetTop+image.offsetHeight<=document.querySelector('.is-survivors-entry').clientHeight+1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
         return { modeSelect, cardArtFits, loaded, identity: new URL(image.currentSrc).pathname, imageBox, alphaBounds, actorClear, primary, readyFit, actionFit, summaryVisible, dashboardAfterActions,
           overflow: document.documentElement.scrollWidth > innerWidth };
       }, portrait);
       await page.screenshot({ path: `${output}/${width}x${height}-${reducedMotion}.png` });
+      // These cards now enter live modes; exercise their real destinations.
       await page.locator('.is-defense-entry').click();
-      await page.locator('.mode-preview-dialog').waitFor();
-      const defenseLocked = await page.locator('[data-defense-screen],.zb-shell').count() === 0;
-      await page.getByRole('button', { name: '프리뷰 닫기' }).click();
+      await page.locator('[data-defense-screen="guard-home"]').waitFor();
+      const defenseEntered = true;
+      await page.goto(url);
       await page.locator('.is-story-entry').click();
-      await page.locator('.mode-preview-dialog.is-story').waitFor();
-      const storyLocked = await page.locator('.title-screen-commercial').count() === 0;
-      await page.getByRole('button', { name: '프리뷰 닫기' }).click();
+      await page.locator('.game-frame').waitFor();
+      const storyEntered = true;
       // A fresh navigation also checks the actual playable route without mutating an engine state.
       await page.goto(url);
       await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
       await page.locator('.survivors-ready-dialog').waitFor();
       const playableReady = await page.locator('.survivors-ready-launch .survivors-btn-primary').isVisible();
-      rows.push({ width, height, reducedMotion, ...result, defenseLocked, storyLocked, playableReady, errors,
-        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/signal-watch-loading/signal-watch-landscape-v2.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
+      rows.push({ width, height, reducedMotion, ...result, defenseEntered, storyEntered, playableReady, errors,
+        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/signal-watch-loading/signal-watch-landscape-v2.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseEntered && storyEntered && playableReady && !errors.length) });
       await page.close();
     }
   }

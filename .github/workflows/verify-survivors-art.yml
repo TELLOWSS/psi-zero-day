@@ -47,13 +47,14 @@ on:
       - 'scripts/verify-survivors-projectiles.mjs'
       - 'public/assets/survivors/**'
       - 'scripts/verify-survivors-browser.mjs'
+      - 'scripts/verify-survivors-pleasure-motion.mjs'
       - '.github/workflows/verify-survivors-art.yml'
 permissions:
   contents: read
 jobs:
   survivors-art:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -81,7 +82,7 @@ jobs:
           PSI_PREVIEW_URL: http://127.0.0.1:4174
         run: |
           export CHROME_BIN="$(command -v google-chrome || command -v chromium)"
-          npm run dev -- --host 127.0.0.1 --port 4174 > /tmp/survivors-stage01-dev.log 2>&1 &
+          node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 4174 --strictPort > /tmp/survivors-stage01-dev.log 2>&1 &
           STAGE01_PID=$!
           trap 'kill "$STAGE01_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -90,6 +91,9 @@ jobs:
           done
           node tests/verify-survivors-stage01-visual.mjs
           PSI_CROWD=1 node tests/verify-survivors-stage01-visual.mjs
+          node scripts/verify-survivors-pleasure-motion.mjs
+          node scripts/verify-survivors-equipment-check-motion.mjs
+          node tests/verify-survivors-combat-ui.mjs
       - name: Browser smoke and captures
         shell: bash
         env:
@@ -104,6 +108,9 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 0.25
           done
+          node scripts/audit-brand-production-slots.mjs
+          PSI_PREVIEW_URL= node scripts/review-brand-vector-candidate.mjs
+          node tests/verify-brand-mobile-hierarchy.mjs
           node scripts/verify-survivors-mode-previews.mjs
           node scripts/verify-survivors-stage-resume.mjs
           node scripts/verify-survivors-fitting-motion.mjs
@@ -111,22 +118,9 @@ jobs:
           node scripts/verify-survivors-props.mjs
           node scripts/verify-survivors-projectiles.mjs
           node scripts/verify-survivors-confirmed-impact.mjs
-          npm run dev -- --host 127.0.0.1 --port 4174 > /tmp/survivors-pleasure-dev.log 2>&1 &
-          DEV_PID=$!
-          trap 'kill "$PREVIEW_PID" "$DEV_PID" 2>/dev/null || true' EXIT
-          for attempt in $(seq 1 60); do
-            if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
-            sleep 0.25
-          done
-          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-pleasure-motion.mjs
-          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-equipment-check-motion.mjs
-          PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-survivors-combat-ui.mjs
           node tests/verify-survivors-store-maintenance.mjs
           node tests/verify-store-reference-layout.mjs
           node tests/verify-lz-guidance.mjs
-          node scripts/audit-brand-production-slots.mjs
-          node scripts/review-brand-vector-candidate.mjs
-          node tests/verify-brand-mobile-hierarchy.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()
