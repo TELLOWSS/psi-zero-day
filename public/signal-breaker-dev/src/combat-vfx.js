@@ -44,12 +44,35 @@ class CombatVfx{
    }c.restore();continue;
   }
   if(q.kind==='bosshit'){
-   const r=12+t*57;c.globalAlpha=fade*(this.reduced?.30:.88);
-   ring(c,q.x,q.y,r,'#ffe6ba',this.quality==='low'?2.2:4);
-   if(!this.reduced&&this.quality!=='low'){ring(c,q.x,q.y,r*.64,'#ffffff',2.1);
-    for(let i=0;i<9;i++){const a=i*Math.PI*2/9+q.seed*.46,inner=4+t*10,outer=21+(1-t)*35;
-     stroke(c,[[q.x+Math.cos(a)*inner,q.y+Math.sin(a)*inner],
-       [q.x+Math.cos(a)*outer,q.y+Math.sin(a)*outer]],i%2?'#ffd38c':'#f3fbff',2.5);}
+   // One real contact produces three separately timed layers: white-hot core,
+   // compressing contact seal, and outward structural fracture. All radii are
+   // world-space; nothing is randomized or projected over HUD controls.
+   const expansion=1-Math.pow(1-t,2),r=8+64*expansion;
+   c.globalAlpha=fade*(this.reduced?.3:.90);
+   ring(c,q.x,q.y,r,'#ffe6ba',this.quality==='low'?2:4.2*(1-t*.45));
+   if(this.quality!=='low'&&!this.reduced){
+    c.globalAlpha=fade*.56;ring(c,q.x,q.y,r*.74,'#f4b969',1.8);
+    const halo=c.createRadialGradient(q.x,q.y,0,q.x,q.y,36*(1-t*.25));
+    halo.addColorStop(0,'#fff9efbb');halo.addColorStop(.24,'#ffdea277');
+    halo.addColorStop(.62,'#fa984b23');halo.addColorStop(1,'#fa984b00');
+    c.fillStyle=halo;c.fillRect(q.x-40,q.y-40,80,80);
+    c.globalAlpha=fade*.96;
+    for(let i=0;i<11;i++){
+     const angle=i*Math.PI*2/11+q.seed*.38;
+     const inner=4+expansion*(15+i%3*3),outer=14+expansion*(36+i%4*9);
+     stroke(c,[[q.x+Math.cos(angle)*inner,q.y+Math.sin(angle)*inner],
+      [q.x+Math.cos(angle+.03)*outer,q.y+Math.sin(angle+.03)*outer]],
+      i%3===0?'#e8fbff':i%2?'#ffd18c':'#fff7d9',i%3===0?1.4:2.8*(1-t*.5));
+    }
+    // Angular boss plating fragments, not identical circular particles.
+    for(let i=0;i<5;i++){
+     const angle=(i*2+1)*Math.PI/5+q.seed*.13,dist=10+expansion*(33+i%3*7);
+     const x=q.x+Math.cos(angle)*dist,y=q.y+Math.sin(angle)*dist;
+     c.beginPath();c.moveTo(x+Math.cos(angle)*6*(1-t),y+Math.sin(angle)*6*(1-t));
+     c.lineTo(x-Math.sin(angle)*3,y+Math.cos(angle)*3);
+     c.lineTo(x+Math.sin(angle)*3,y-Math.cos(angle)*3);
+     c.closePath();c.fillStyle=i%2?'#ffd7a0':'#d6e5e6';c.fill();
+    }
    }c.restore();continue;
   }
   if(q.kind==='evolutionfield'){const r=q.radius;c.globalAlpha=fade*.45;ring(c,q.x,q.y,r,q.color,2);if(q.recipe==='singularity'){ring(c,q.x,q.y,18+10*(1-t),q.color,4);if(!this.reduced&&this.quality!=='low')for(let i=0;i<5;i++){const a=i*Math.PI*2/5+t*3,reach=r*(1-t*.7);stroke(c,[[q.x+Math.cos(a)*reach,q.y+Math.sin(a)*reach],[q.x+Math.cos(a+.7)*reach*.5,q.y+Math.sin(a+.7)*reach*.5],[q.x,q.y]],q.color,1.3);}}else{ring(c,q.x,q.y,r*.65,q.color,1);if(!this.reduced&&this.quality!=='low')for(let i=-2;i<=2;i++){const d=i*r/3,span=Math.sqrt(r*r-d*d);stroke(c,[[q.x-span,q.y+d],[q.x+span,q.y+d]],q.color,1);}}c.restore();continue;}
