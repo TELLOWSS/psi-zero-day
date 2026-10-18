@@ -110,7 +110,7 @@ import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '.
 import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
 import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
-import {workfaceDepthLook,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
+import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -2050,10 +2050,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const surround=fullGround?.naturalWidth?fullGround:excavationGround?.naturalWidth?excavationGround:groundV2;
       if(surround?.naturalWidth)ctx.drawImage(surround,-camera.marginX-4,-camera.marginY-4,WORLD_WIDTH+camera.marginX*2+8,WORLD_HEIGHT+camera.marginY*2+8);
       if(fullGround?.naturalWidth) {
-        ctx.save();
-        if(display.lighting)ctx.filter=workfaceDepthLook(stage.id,budget.level).floorFilter;
-        ctx.drawImage(fullGround,0,0,WORLD_WIDTH,WORLD_HEIGHT);
-        ctx.restore();
+        if(display.lighting)drawGradedWorkfaceFloor(ctx,fullGround,stage.id,budget.level);
+        else ctx.drawImage(fullGround,0,0,WORLD_WIDTH,WORLD_HEIGHT);
         ctx.fillStyle=stage.ambientColor;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
       } else if (['stage_02', 'stage_06'].includes(stage.id) && excavationGround?.naturalWidth) {
         ctx.drawImage(excavationGround, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
