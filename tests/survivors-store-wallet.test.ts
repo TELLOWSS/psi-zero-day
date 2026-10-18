@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import {afterEach,expect,it,vi} from 'vitest';
-import {persistStoreWallet} from '../src/app/survivors-store-wallet';
+import {persistStoreWallet,readDifficultyClearRecords} from '../src/app/survivors-store-wallet';
 import {readSurvivorsCredits} from '../src/app/unified-meta-bridge';
 afterEach(()=>{vi.restoreAllMocks();localStorage.clear();});
 it('reads authoritative credits even when a compatibility mirror is unavailable',()=>{
@@ -24,4 +24,18 @@ it('retains clear claims through purchases and writes them atomically with credi
  vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw Error('quota');});
  expect(()=>persistStoreWallet({credits:1500,inventory:{owned:[],equipped:[]},clearRewardClaims:['stage_02']})).toThrow();
  expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!)).toMatchObject({credits:500,clearRewardClaims:['stage_01']});
+});
+
+it('awards each difficulty separately with best-star monotonicity and keeps purchases safe',()=>{
+ persistStoreWallet({credits:600,inventory:{owned:[],equipped:[]},difficultyClearRecords:{stage_01:{standard:2,extreme:3}}});
+ persistStoreWallet({credits:400,inventory:{owned:[],equipped:[]},difficultyClearRecords:{stage_01:{standard:1},stage_02:{hard:2}}});
+ expect(readDifficultyClearRecords()).toEqual({stage_01:{standard:2,extreme:3},stage_02:{hard:2}});
+ persistStoreWallet({credits:300,inventory:{owned:[],equipped:[]}});
+ expect(readDifficultyClearRecords().stage_01?.extreme).toBe(3);
+});
+it('never grants a difficulty medal after a failed authoritative wallet write',()=>{
+ persistStoreWallet({credits:60,inventory:{owned:[],equipped:[]},difficultyClearRecords:{stage_01:{story:1}}});
+ vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw Error('quota');});
+ expect(()=>persistStoreWallet({credits:90,inventory:{owned:[],equipped:[]},difficultyClearRecords:{stage_01:{extreme:3}}})).toThrow();
+ expect(readDifficultyClearRecords()).toEqual({stage_01:{story:1}});
 });
