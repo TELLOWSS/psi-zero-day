@@ -16,7 +16,7 @@ const out=process.env.PSI_QA_OUTPUT||'docs/qa/raid-boss-20261016';fs.mkdirSync(o
   console.log(width,'pause',await page.evaluate(()=>SignalBreakerQA.snapshot().state));await page.locator('#pauseBtn').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='paused');const paused=await page.evaluate(()=>SignalBreakerQA.engine().raidSnapshot().remaining);await page.waitForTimeout(350);assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().raidSnapshot().remaining),paused);
   await page.locator('.raid-tools-shell summary').click();await page.locator('#raidMonitorMode').selectOption('off');await page.waitForTimeout(100);assert.equal(await page.locator('#raidAdvisor').isVisible(),false);await page.locator('#raidMonitorMode').selectOption('essential');await page.locator('#raidMonitorMode').selectOption('full');await page.locator('#overlayPrimary').click();
   await page.locator('#raidSupportSelect').click();assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().weapon),'anchor');
-  await page.waitForFunction(()=>{const r=SignalBreakerQA.engine().raidSnapshot();return r.state==='WARNING'&&r.trueSignal&&r.remaining>1.3;});
+  await page.waitForFunction(()=>{const r=SignalBreakerQA.engine().raidSnapshot();return r.state==='WARNING'&&r.trueSignal&&r.remaining>1.3&&['danger','ready'].includes(document.querySelector('#raidVisualGuide')?.dataset.mode);});
   assert(await page.locator('#raidVisualGuide').isVisible(),'confirmed warning has no readable instructions');
   assert(['danger','ready'].includes(await page.locator('#raidVisualGuide').getAttribute('data-mode')),'true danger mode missing');
   assert.equal(await page.evaluate(()=>SignalBreakerQA.engine().raidSnapshot().counter),'anchor','practice counter changed');
