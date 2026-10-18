@@ -4,7 +4,14 @@ const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/str
 const {chromium}=process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT?createRequire(path.join(process.env.SIGNAL_BREAKER_PLAYWRIGHT_ROOT,'package.json'))('playwright'):require('playwright');
 const root=path.resolve(__dirname,'../../..'),out=process.env.SIGNAL_BREAKER_QA_OUTPUT||'/tmp/psi-stage-ending-qa';
 const url='http://127.0.0.1:5213/signal-breaker-dev/index.html';
-const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];g.source={...g.source,observed:true,controlled:true,verified:true};const b=g.boss;b.gatePhase=b.maxGatePhases;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});g.update(1/120);};
+const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];g.source={...g.source,observed:true,controlled:true,verified:true};const b=g.boss;b.gatePhase=b.maxGatePhases;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});/* QA terminal playback fixture, not an in-game shortcut.
+ Actual raid combat is verified separately by verify-raid-boss.cjs. */
+ if(g.boss?.raid){g.boss.raid.phase=3;g.boss.raid.state='FINISHER';
+  g.boss.raid.finished=g.time;g.boss.raid.required=true;
+  g.boss.hp=0;g.boss.phase='resolved';g.boss.nodes.forEach(n=>n.hit=true);}
+ if(g.source)g.source.verified=true;
+ if(g.circuit)g.circuit.forEach(n=>n.hit=true);
+ g.update(1/120);};
 (async()=>{
  fs.mkdirSync(out,{recursive:true});const server=spawn('python3',['-m','http.server','5213','--bind','127.0.0.1','--directory',path.join(root,'public')],{stdio:'ignore'});let browser;const results=[];
  try{
@@ -14,7 +21,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    const context=await browser.newContext({viewport:{width,height},hasTouch:true,serviceWorkers:'block'});
    await context.addInitScript(()=>{if(!localStorage.getItem('psi.signal-breaker.offline.v1'))localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({sound:false,settings:{controlMode:'twin',assistVersion:1,autoFire:false}}));});
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
-   await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#startOperation').click();
+   await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#heroStartBtn').click();
    await page.evaluate(terminal);await page.locator('#stageEnding').waitFor({state:'visible'});
    await page.waitForFunction(()=>document.getElementById('stageEnding').dataset.image==='ready');
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'won');
@@ -38,7 +45,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    await page.locator('#resultOperationSelect').click();await page.reload();await page.locator('#operationLobby').waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits,'reload preserves one reward');
    await page.locator('#viewEndingArchive').click();await page.locator('#stageEnding').waitFor({state:'visible'});await page.keyboard.press('Escape');await page.locator('#operationLobby').waitFor({state:'visible'});
-   await page.locator('#startOperation').click();await page.evaluate(terminal);await page.locator('#stageEnding').waitFor({state:'visible'});await page.locator('#endingSkip').click();await page.locator('#overlayPrimary').waitFor({state:'visible'});
+   await page.locator('#heroStartBtn').click();await page.locator('#overlayPrimary').click();await page.evaluate(terminal);await page.locator('#stageEnding').waitFor({state:'visible'});await page.locator('#endingSkip').click();await page.locator('#overlayPrimary').waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits,'repeat win grants no duplicate first-clear reward');
    await page.waitForTimeout(width===390?30000:250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01','results never automatically start next stage');
    await page.locator('#overlayPrimary').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-02');a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready');
@@ -48,7 +55,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
   // Storage failure must retain an explicit retry without replaying the reward calculation.
   const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block',reducedMotion:'reduce'});
   await context.addInitScript(()=>localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({sound:false,settings:{autoFire:false,assistVersion:1}})));
-  const page=await context.newPage();await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#startOperation').click();
+  const page=await context.newPage();await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#heroStartBtn').click();
   await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(window.failSave&&k==='psi.signal-breaker.offline.v1')throw new Error('test full storage');return original.call(this,k,v);};window.failSave=true;});
   await page.evaluate(terminal);await page.locator('#retryCompletionSave').waitFor({state:'visible'});a.equal(await page.locator('#stageEnding').isVisible(),false);
   await page.evaluate(()=>window.failSave=false);await page.locator('#retryCompletionSave').click();await page.locator('#stageEnding').waitFor({state:'visible'});

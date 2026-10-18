@@ -11,10 +11,10 @@ class CombatVfx{
  configure(quality,reduced){this.quality=quality;this.reduced=!!reduced;this.items=this.items.slice(-this.limit());}
  limit(){return this.quality==='low'?8:this.quality==='high'?28:16;}
  event(e){
-  if(!['fire','impact','armorhit','armorbreak','evolved','bosshit','capture','skillshot','electrochain','laserline','relaybreak','assaultsurge','weaponcontact','ricochet','netfield','evolutionfield'].includes(e.kind)||!Number.isFinite(e.x)||!Number.isFinite(e.y))return false;
+  if(!['fire','impact','armorhit','armorbreak','evolved','bosshit','capture','skillshot','electrochain','laserline','relaybreak','assaultsurge','weaponcontact','ricochet','netfield','evolutionfield','raidcounter','raidburst','raidfailure'].includes(e.kind)||!Number.isFinite(e.x)||!Number.isFinite(e.y))return false;
   const family=e.element||e.weapon||'pulse',materialColor={metal:'#ffd597',dust:COLORS.mist,power:COLORS.scan,load:COLORS.anchor}[e.material],color=['weaponcontact','ricochet','netfield','evolutionfield'].includes(e.kind)?COLORS[family]||COLORS.pulse:['assaultsurge','relaybreak'].includes(e.kind)?'#91ffe1':e.kind==='capture'?COLORS.net:e.kind!=='fire'&&materialColor?materialColor:COLORS[family]||COLORS.pulse;
   if(e.kind==='evolutionfield')this.items=this.items.filter(q=>q.kind!=='evolutionfield'||q.recipe!==e.recipe);
-  this.items.push({kind:e.kind,x:e.x,y:e.y,angle:Math.atan2(e.vy??e.dy??0,e.vx??e.dx??1),toX:e.toX,toY:e.toY,family,color:RECIPE_COLORS[e.recipe]||color,recipe:e.recipe,capstone:!!e.capstone,material:e.material,radius:['netfield','armorbreak','evolutionfield'].includes(e.kind)&&Number.isFinite(e.n)?e.n:0,tier:e.equipmentTier||1,age:0,duration:e.kind==='evolutionfield'?Math.min(2.4,e.duration||1.2):e.kind==='netfield'?.42:['assaultsurge','relaybreak','evolved'].includes(e.kind)?.55:e.kind==='armorbreak'?.38:e.kind==='fire'?.16:e.kind==='capture'?.38:.25,seed:++this.serial});
+  this.items.push({kind:e.kind,x:e.x,y:e.y,angle:Math.atan2(e.vy??e.dy??0,e.vx??e.dx??1),toX:e.toX,toY:e.toY,family,color:RECIPE_COLORS[e.recipe]||color,recipe:e.recipe,capstone:!!e.capstone,material:e.material,radius:['netfield','armorbreak','evolutionfield'].includes(e.kind)&&Number.isFinite(e.n)?e.n:0,tier:e.equipmentTier||1,age:0,duration:e.kind==='evolutionfield'?Math.min(2.4,e.duration||1.2):e.kind==='raidcounter'?.48:e.kind==='raidburst'?.64:e.kind==='raidfailure'?.28:e.kind==='bosshit'?.34:e.kind==='netfield'?.42:['assaultsurge','relaybreak','evolved'].includes(e.kind)?.55:e.kind==='armorbreak'?.38:e.kind==='fire'?.16:e.kind==='capture'?.38:.25,seed:++this.serial});
   this.items=this.items.slice(-this.limit());this.seen.add(e.kind+':'+family);return true;
  }
  update(dt){dt=clamp(Number(dt)||0,0,.05);for(const q of this.items)q.age+=dt;this.items=this.items.filter(q=>q.age<q.duration);}
@@ -32,6 +32,49 @@ class CombatVfx{
   c.restore();
  }
  draw(c){c.save();c.lineCap='round';for(const q of this.items){const t=q.age/q.duration,fade=(1-t)**2;c.save();c.globalAlpha=fade*(this.reduced?.4:.85);
+  if(['raidcounter','raidburst','raidfailure'].includes(q.kind)){
+   const r=(q.kind==='raidburst'?32:q.kind==='raidcounter'?22:16)+t*(q.kind==='raidburst'?94:67);
+   const tint=q.kind==='raidfailure'?'#ff9b82':q.kind==='raidcounter'?'#9effd9':'#ffe6aa';
+   c.globalAlpha=fade*(this.reduced?.42:.90);
+   ring(c,q.x,q.y,r,tint,this.quality==='low'?2:4);
+   if(!this.reduced&&this.quality!=='low'){ring(c,q.x,q.y,r*.64,'#fbffff',1.6);
+    for(let i=0;i<8;i++){const a=i*Math.PI/4+q.seed*.3;
+     stroke(c,[[q.x+Math.cos(a)*r*.7,q.y+Math.sin(a)*r*.7],
+       [q.x+Math.cos(a)*(r+18*(1-t)),q.y+Math.sin(a)*(r+18*(1-t))]],tint,2.4);}
+   }c.restore();continue;
+  }
+  if(q.kind==='bosshit'){
+   // One real contact produces three separately timed layers: white-hot core,
+   // compressing contact seal, and outward structural fracture. All radii are
+   // world-space; nothing is randomized or projected over HUD controls.
+   const expansion=1-Math.pow(1-t,2),r=8+64*expansion;
+   c.globalAlpha=fade*(this.reduced?.3:.90);
+   ring(c,q.x,q.y,r,'#ffe6ba',this.quality==='low'?2:4.2*(1-t*.45));
+   if(this.quality!=='low'&&!this.reduced){
+    c.globalAlpha=fade*.56;ring(c,q.x,q.y,r*.74,'#f4b969',1.8);
+    const halo=c.createRadialGradient(q.x,q.y,0,q.x,q.y,36*(1-t*.25));
+    halo.addColorStop(0,'#fff9efbb');halo.addColorStop(.24,'#ffdea277');
+    halo.addColorStop(.62,'#fa984b23');halo.addColorStop(1,'#fa984b00');
+    c.fillStyle=halo;c.fillRect(q.x-40,q.y-40,80,80);
+    c.globalAlpha=fade*.96;
+    for(let i=0;i<11;i++){
+     const angle=i*Math.PI*2/11+q.seed*.38;
+     const inner=4+expansion*(15+i%3*3),outer=14+expansion*(36+i%4*9);
+     stroke(c,[[q.x+Math.cos(angle)*inner,q.y+Math.sin(angle)*inner],
+      [q.x+Math.cos(angle+.03)*outer,q.y+Math.sin(angle+.03)*outer]],
+      i%3===0?'#e8fbff':i%2?'#ffd18c':'#fff7d9',i%3===0?1.4:2.8*(1-t*.5));
+    }
+    // Angular boss plating fragments, not identical circular particles.
+    for(let i=0;i<5;i++){
+     const angle=(i*2+1)*Math.PI/5+q.seed*.13,dist=10+expansion*(33+i%3*7);
+     const x=q.x+Math.cos(angle)*dist,y=q.y+Math.sin(angle)*dist;
+     c.beginPath();c.moveTo(x+Math.cos(angle)*6*(1-t),y+Math.sin(angle)*6*(1-t));
+     c.lineTo(x-Math.sin(angle)*3,y+Math.cos(angle)*3);
+     c.lineTo(x+Math.sin(angle)*3,y-Math.cos(angle)*3);
+     c.closePath();c.fillStyle=i%2?'#ffd7a0':'#d6e5e6';c.fill();
+    }
+   }c.restore();continue;
+  }
   if(q.kind==='evolutionfield'){const r=q.radius;c.globalAlpha=fade*.45;ring(c,q.x,q.y,r,q.color,2);if(q.recipe==='singularity'){ring(c,q.x,q.y,18+10*(1-t),q.color,4);if(!this.reduced&&this.quality!=='low')for(let i=0;i<5;i++){const a=i*Math.PI*2/5+t*3,reach=r*(1-t*.7);stroke(c,[[q.x+Math.cos(a)*reach,q.y+Math.sin(a)*reach],[q.x+Math.cos(a+.7)*reach*.5,q.y+Math.sin(a+.7)*reach*.5],[q.x,q.y]],q.color,1.3);}}else{ring(c,q.x,q.y,r*.65,q.color,1);if(!this.reduced&&this.quality!=='low')for(let i=-2;i<=2;i++){const d=i*r/3,span=Math.sqrt(r*r-d*d);stroke(c,[[q.x-span,q.y+d],[q.x+span,q.y+d]],q.color,1);}}c.restore();continue;}
   if(q.kind==='armorbreak'){const r=q.radius+4+t*18;ring(c,q.x,q.y,r,'#9fffe0',this.quality==='low'?2:3);if(!this.reduced&&this.quality!=='low'){for(let i=0;i<6;i++){const a=i*Math.PI/3+q.seed,dx=Math.cos(a),dy=Math.sin(a);stroke(c,[[q.x+dx*r-dy*4,q.y+dy*r+dx*4],[q.x+dx*(r+5),q.y+dy*(r+5)],[q.x+dx*r+dy*4,q.y+dy*r-dx*4]],'#d4efff',1.6);}}c.restore();continue;}
   if(q.kind==='evolved'){ring(c,q.x,q.y-24,18+t*22,'#b6f7e8',2);if(!this.reduced&&this.quality!=='low')ring(c,q.x,q.y-24,12+t*14,'#fff1be',1);c.restore();continue;}

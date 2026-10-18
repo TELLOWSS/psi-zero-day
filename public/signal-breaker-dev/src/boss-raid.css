@@ -4,3 +4,29 @@
 .raid-tools-shell{position:relative;z-index:24;background:#0b202a}.raid-tools-shell summary{min-height:44px;display:flex;align-items:center;padding:0 12px;cursor:pointer;color:#c9ded6;font-size:12px}.raid-tools-shell summary::after{content:' ▾';margin-left:8px}.raid-tools-shell[open] .raid-tools{position:absolute;top:44px;left:0;right:0;background:#0b202af5;border:1px solid #52747d;padding:10px;box-shadow:0 8px 30px #0008}.raid-advisor{position:absolute;left:12px;bottom:12px;max-width:min(520px,calc(100% - 24px));background:#0b2839ed;color:#f7f1d7;border:1px solid #a9c7bb;border-radius:8px;padding:9px 12px;pointer-events:none;z-index:13;display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:13px}.raid-advisor[hidden],.raid-prompt[hidden]{display:none}.raid-advisor[data-priority='3']{border:2px solid #ffe5a9;background:#4a2815ef}.raid-advisor strong{font-size:inherit}.raid-advisor progress{grid-column:1/-1;width:100%;height:5px;accent-color:#f2d098}.raid-tools input[type=checkbox]{width:20px;height:20px}.raid-tools label{min-height:44px}
 @media(max-width:600px){.raid-advisor{font-size:11px;left:7px;bottom:7px;max-width:calc(100% - 14px);padding:7px;gap:4px}.raid-tools-shell summary{font-size:11px}.raid-prompt button{min-height:44px;padding:4px}.raid-prompt{max-width:94%;width:max-content}}
 @media(min-width:1000px){.raid-prompt{top:150px}}
+
+/* Raid v3: engine-driven instructions, readable without TTS. */
+.raid-advisor:has(.raid-visual-guide:not([hidden])){max-width:min(550px,calc(100% - 24px));width:550px}
+.raid-visual-guide{grid-column:1/-1;display:grid;gap:5px;min-width:0;border-top:1px solid #c2d6cf60;padding-top:5px}
+.raid-visual-guide[hidden]{display:none}
+.raid-visual-guide-kicker{color:#b9f5dd;letter-spacing:.10em;font-size:10px;font-weight:850}
+.raid-visual-guide-headline{color:#f8f6eb;font-size:clamp(13px,1.4vw,17px);line-height:1.3}
+.raid-visual-guide-steps{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-width:0}
+.raid-visual-guide-steps span{min-width:0;padding:6px 8px;font-weight:760;font-size:12px;line-height:1.4;border-radius:5px;border:1px solid #b4c8c674;background:#031b25dd;overflow-wrap:anywhere}
+.raid-visual-guide[data-mode=danger] .raid-visual-guide-headline{color:#ffe3a4}
+.raid-visual-guide[data-mode=danger] .raid-visual-guide-steps span:first-child{background:#4b291aed;border-color:#ffb772}
+.raid-visual-guide[data-mode=success] .raid-visual-guide-headline{color:#a9f8d4}
+.raid-visual-guide[data-mode=pending] .raid-visual-guide-headline{color:#ecf2ff}
+.raid-visual-guide[data-mode=retry] .raid-visual-guide-headline{color:#ffdbb0}
+@media(max-width:600px){
+ .raid-advisor:has(.raid-visual-guide:not([hidden])){max-width:calc(100% - 14px);width:calc(100% - 14px)}
+ .raid-visual-guide-steps{gap:4px}.raid-visual-guide-steps span{padding:4px 5px;font-size:10px;line-height:1.3}
+ .raid-visual-guide-headline{font-size:13px}.raid-visual-guide-kicker{font-size:9px}
+}
+@media(orientation:landscape) and (max-height:420px){
+ .raid-advisor:has(.raid-visual-guide:not([hidden])){width:390px;max-width:min(390px,calc(100% - 16px))}
+ .raid-visual-guide-steps span{padding:3px 4px;font-size:10px}
+}
+.boss-encounter[data-raid=true].is-boss-impact{border-color:#f8dfa3;box-shadow:0 0 0 2px #f5d79375,0 0 16px #ffb96882}
+.boss-encounter[data-raid=true].is-boss-impact .boss-encounter-track i{filter:brightness(1.6)}
+@media(prefers-reduced-motion:reduce){.raid-visual-guide *{animation:none!important;transition:none!important}}

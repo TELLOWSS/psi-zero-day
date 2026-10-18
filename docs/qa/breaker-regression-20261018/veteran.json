@@ -1,0 +1,933 @@
+{
+  "method": "45 ordinary input runs, 120Hz movement/fire and aim each 14 ticks; frame choice and intermission evolution through engine methods; no forced wins or life refill. Not a human win-rate measurement.",
+  "runs": [
+    {
+      "id": "CH-01",
+      "frame": "wrong",
+      "seed": 17,
+      "state": "lost",
+      "waves": 5,
+      "time": 279.88,
+      "cleared": 141,
+      "maxUnits": 142,
+      "pickups": 70,
+      "recipe": null,
+      "life": 5,
+      "shots": 1774,
+      "waveTimes": [
+        52.22,
+        46.9,
+        34.32,
+        56.44
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "wrong",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 263.72,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 1820,
+      "waveTimes": [
+        52.22,
+        47.76,
+        37,
+        52.65,
+        74.09
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "wrong",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 251.13,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 1763,
+      "waveTimes": [
+        52.22,
+        47.68,
+        32.93,
+        44.79,
+        73.52
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "matching",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 126.78,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 854,
+      "waveTimes": [
+        30.19,
+        18.33,
+        15.49,
+        22.5,
+        40.26
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "matching",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 117.38,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 851,
+      "waveTimes": [
+        30.19,
+        17.47,
+        16.9,
+        18.33,
+        34.48
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "matching",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 124.1,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 920,
+      "waveTimes": [
+        30.19,
+        15.27,
+        14.23,
+        28.36,
+        36.05
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "evolved",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 106.03,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 779,
+      "waveTimes": [
+        30.19,
+        14.51,
+        10.01,
+        16.93,
+        34.4
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "evolved",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 90.17,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 605,
+      "waveTimes": [
+        30.19,
+        8.88,
+        11.97,
+        13.24,
+        25.88
+      ]
+    },
+    {
+      "id": "CH-01",
+      "frame": "evolved",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 103.08,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 685,
+      "waveTimes": [
+        30.19,
+        17.12,
+        10.98,
+        14.38,
+        30.41
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "wrong",
+      "seed": 17,
+      "state": "lost",
+      "waves": 5,
+      "time": 275.56,
+      "cleared": 138,
+      "maxUnits": 142,
+      "pickups": 69,
+      "recipe": null,
+      "life": 5,
+      "shots": 1758,
+      "waveTimes": [
+        49.98,
+        41.43,
+        39.4,
+        59.74
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "wrong",
+      "seed": 29,
+      "state": "lost",
+      "waves": 5,
+      "time": 276.17,
+      "cleared": 141,
+      "maxUnits": 142,
+      "pickups": 70,
+      "recipe": null,
+      "life": 5,
+      "shots": 1918,
+      "waveTimes": [
+        49.98,
+        47.97,
+        39.03,
+        54.18
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "wrong",
+      "seed": 43,
+      "state": "lost",
+      "waves": 5,
+      "time": 275.37,
+      "cleared": 140,
+      "maxUnits": 142,
+      "pickups": 70,
+      "recipe": null,
+      "life": 5,
+      "shots": 1950,
+      "waveTimes": [
+        49.98,
+        51.57,
+        36.82,
+        51.99
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "matching",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 136.93,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 910,
+      "waveTimes": [
+        26.7,
+        19.65,
+        17.33,
+        34.14,
+        39.11
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "matching",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 127.41,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 923,
+      "waveTimes": [
+        26.7,
+        20.85,
+        17.61,
+        22.28,
+        39.97
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "matching",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 125.66,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 945,
+      "waveTimes": [
+        26.7,
+        20.4,
+        18.28,
+        23.86,
+        36.42
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "evolved",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 91.1,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 674,
+      "waveTimes": [
+        26.7,
+        10.63,
+        12.47,
+        14.25,
+        27.04
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "evolved",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 85.7,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 579,
+      "waveTimes": [
+        26.7,
+        8.4,
+        14.65,
+        13.15,
+        22.8
+      ]
+    },
+    {
+      "id": "CH-02",
+      "frame": "evolved",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 91.86,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 607,
+      "waveTimes": [
+        26.7,
+        12.35,
+        14.15,
+        14.48,
+        24.18
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "wrong",
+      "seed": 17,
+      "state": "lost",
+      "waves": 4,
+      "time": 278.92,
+      "cleared": 103,
+      "maxUnits": 142,
+      "pickups": 51,
+      "recipe": null,
+      "life": 5,
+      "shots": 1694,
+      "waveTimes": [
+        76.98,
+        57.58,
+        54.35
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "wrong",
+      "seed": 29,
+      "state": "lost",
+      "waves": 4,
+      "time": 274.46,
+      "cleared": 103,
+      "maxUnits": 142,
+      "pickups": 51,
+      "recipe": null,
+      "life": 5,
+      "shots": 1666,
+      "waveTimes": [
+        76.98,
+        56.33,
+        51.14
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "wrong",
+      "seed": 43,
+      "state": "lost",
+      "waves": 5,
+      "time": 344.51,
+      "cleared": 135,
+      "maxUnits": 142,
+      "pickups": 67,
+      "recipe": null,
+      "life": 5,
+      "shots": 2143,
+      "waveTimes": [
+        76.98,
+        58.11,
+        43.58,
+        85.82
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "matching",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 178.18,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 1218,
+      "waveTimes": [
+        34.2,
+        25.4,
+        22.49,
+        32.24,
+        63.85
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "matching",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 179.06,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 1220,
+      "waveTimes": [
+        34.2,
+        29.04,
+        18.78,
+        36.89,
+        60.14
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "matching",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 199.23,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": null,
+      "life": 5,
+      "shots": 1284,
+      "waveTimes": [
+        34.2,
+        25.55,
+        27.75,
+        41.95,
+        69.78
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "evolved",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 114.42,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "storm",
+      "life": 5,
+      "shots": 768,
+      "waveTimes": [
+        34.2,
+        14.42,
+        12.16,
+        18.85,
+        34.78
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "evolved",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 128.33,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "storm",
+      "life": 5,
+      "shots": 873,
+      "waveTimes": [
+        34.2,
+        19.62,
+        18.34,
+        12.18,
+        43.99
+      ]
+    },
+    {
+      "id": "CH-03",
+      "frame": "evolved",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 119.53,
+      "cleared": 142,
+      "maxUnits": 142,
+      "pickups": 71,
+      "recipe": "storm",
+      "life": 5,
+      "shots": 777,
+      "waveTimes": [
+        34.2,
+        21.98,
+        18.04,
+        14.46,
+        30.85
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "wrong",
+      "seed": 17,
+      "state": "lost",
+      "waves": 5,
+      "time": 221.21,
+      "cleared": 127,
+      "maxUnits": 132,
+      "pickups": 63,
+      "recipe": null,
+      "life": 3,
+      "shots": 1399,
+      "waveTimes": [
+        36.23,
+        39.05,
+        22,
+        48.92
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "wrong",
+      "seed": 29,
+      "state": "lost",
+      "waves": 5,
+      "time": 226.03,
+      "cleared": 126,
+      "maxUnits": 132,
+      "pickups": 63,
+      "recipe": null,
+      "life": 5,
+      "shots": 1431,
+      "waveTimes": [
+        36.23,
+        36.65,
+        23.13,
+        55.01
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "wrong",
+      "seed": 43,
+      "state": "lost",
+      "waves": 5,
+      "time": 227.63,
+      "cleared": 126,
+      "maxUnits": 132,
+      "pickups": 63,
+      "recipe": null,
+      "life": 3,
+      "shots": 1378,
+      "waveTimes": [
+        36.23,
+        37.63,
+        21.56,
+        57.21
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "matching",
+      "seed": 17,
+      "state": "lost",
+      "waves": 5,
+      "time": 149.14,
+      "cleared": 131,
+      "maxUnits": 132,
+      "pickups": 65,
+      "recipe": null,
+      "life": 5,
+      "shots": 967,
+      "waveTimes": [
+        19.23,
+        17.52,
+        14.9,
+        22.49
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "matching",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 133.9,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": null,
+      "life": 4,
+      "shots": 879,
+      "waveTimes": [
+        19.23,
+        19.67,
+        15.47,
+        25.06,
+        54.47
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "matching",
+      "seed": 43,
+      "state": "lost",
+      "waves": 5,
+      "time": 156.93,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": null,
+      "life": 5,
+      "shots": 944,
+      "waveTimes": [
+        19.23,
+        17.35,
+        14.3,
+        31.04
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "evolved",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 87.04,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 567,
+      "waveTimes": [
+        19.23,
+        11.99,
+        10.77,
+        13.29,
+        31.75
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "evolved",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 117.01,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 759,
+      "waveTimes": [
+        19.23,
+        10.24,
+        9.45,
+        14.31,
+        63.78
+      ]
+    },
+    {
+      "id": "CH-04",
+      "frame": "evolved",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 99.58,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 611,
+      "waveTimes": [
+        19.23,
+        11.73,
+        12.14,
+        13.72,
+        42.76
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "wrong",
+      "seed": 17,
+      "state": "lost",
+      "waves": 5,
+      "time": 237.31,
+      "cleared": 130,
+      "maxUnits": 132,
+      "pickups": 65,
+      "recipe": null,
+      "life": 5,
+      "shots": 1560,
+      "waveTimes": [
+        42.96,
+        42.6,
+        25.08,
+        56.66
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "wrong",
+      "seed": 29,
+      "state": "lost",
+      "waves": 5,
+      "time": 232.65,
+      "cleared": 130,
+      "maxUnits": 132,
+      "pickups": 65,
+      "recipe": null,
+      "life": 5,
+      "shots": 1511,
+      "waveTimes": [
+        42.96,
+        39.23,
+        22.78,
+        57.67
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "wrong",
+      "seed": 43,
+      "state": "lost",
+      "waves": 5,
+      "time": 233.17,
+      "cleared": 128,
+      "maxUnits": 132,
+      "pickups": 64,
+      "recipe": null,
+      "life": 5,
+      "shots": 1465,
+      "waveTimes": [
+        42.96,
+        39.23,
+        23.5,
+        57.47
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "matching",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 116.76,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": null,
+      "life": 5,
+      "shots": 803,
+      "waveTimes": [
+        19.97,
+        20.68,
+        14.74,
+        23.47,
+        37.89
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "matching",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 129.1,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": null,
+      "life": 5,
+      "shots": 843,
+      "waveTimes": [
+        19.97,
+        24.62,
+        13,
+        26.22,
+        45.29
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "matching",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 130.12,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": null,
+      "life": 5,
+      "shots": 822,
+      "waveTimes": [
+        19.97,
+        22.63,
+        14.04,
+        25.25,
+        48.22
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "evolved",
+      "seed": 17,
+      "state": "won",
+      "waves": 5,
+      "time": 73.06,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 501,
+      "waveTimes": [
+        19.97,
+        13,
+        10.22,
+        12.92,
+        16.95
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "evolved",
+      "seed": 29,
+      "state": "won",
+      "waves": 5,
+      "time": 76.51,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 503,
+      "waveTimes": [
+        19.97,
+        10.66,
+        10.28,
+        15.66,
+        19.93
+      ]
+    },
+    {
+      "id": "CH-05",
+      "frame": "evolved",
+      "seed": 43,
+      "state": "won",
+      "waves": 5,
+      "time": 80.28,
+      "cleared": 132,
+      "maxUnits": 132,
+      "pickups": 66,
+      "recipe": "prism",
+      "life": 5,
+      "shots": 537,
+      "waveTimes": [
+        19.97,
+        13.5,
+        11.49,
+        14.68,
+        20.63
+      ]
+    }
+  ]
+}
