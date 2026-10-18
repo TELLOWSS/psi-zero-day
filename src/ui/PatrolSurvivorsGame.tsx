@@ -113,6 +113,7 @@ import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
 import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from './survivors-foreground-props';
+import {approvedForegroundMattes,matteVisibleAlpha} from './survivors-stage-mattes';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -481,6 +482,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     } catch { return 'stage_01'; }
   });
   const [loadedGround, setLoadedGround] = useState<string | null>(null);
+  const foregroundMatteImagesRef=useRef<Record<string,HTMLImageElement>>({});
+  useEffect(()=>{
+    // Only explicitly reviewed site cut-outs may load. No speculative masks.
+    let active=true;
+    foregroundMatteImagesRef.current={};
+    for(const layer of approvedForegroundMattes(selectedStage)){
+      const image=new Image();
+      image.onload=()=>{if(active&&image.naturalWidth)foregroundMatteImagesRef.current[layer.id]=image;};
+      image.src=layer.imageUri;
+    }
+    return ()=>{active=false;foregroundMatteImagesRef.current={};};
+  },[selectedStage]);
   useEffect(()=>{clearRequestedSitePatrolStage(selectedStage);},[selectedStage]);
   const [failedGround, setFailedGround] = useState<string | null>(null);
   const [groundRetry, setGroundRetry] = useState(0);
@@ -2753,6 +2766,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         | { kind: 'drop'; y: number; data: typeof drops[0] }
         | { kind: 'hazard'; y: number; data: typeof hazards[0] }
         | { kind: 'fixture'; y: number; data: typeof engine.state.interactiveHazards[0] }
+        | { kind: 'matte'; y: number; data: ReturnType<typeof approvedForegroundMattes>[number] }
         | { kind: 'player'; y: number };
 
       const entityList: EntityItem[] = [];
@@ -2771,6 +2785,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if(!front)continue;
         if(fixture.x<camX-120||fixture.x>camX+viewW+120||front.anchorY<camY-120||front.anchorY>camY+viewH+120)continue;
         entityList.push({kind:'fixture',y:front.anchorY,data:fixture});
+      }
+      const foregrounds=approvedForegroundMattes(stage.id);
+      canvas.dataset.approvedForegroundMattes=String(foregrounds.length);
+      for(const matte of foregrounds){
+        if(!foregroundMatteImagesRef.current[matte.id]?.naturalWidth)continue;
+        if(matte.x+matte.width<camX||matte.x>camX+viewW||matte.y+matte.height<camY||matte.y>camY+viewH)continue;
+        entityList.push({kind:'matte',y:matte.feetY,data:matte});
       }
       entityList.push({ kind: 'player', y: player.y });
 
@@ -2795,6 +2816,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.strokeStyle=meta?.color ?? (drop.isHeal?'#34d399':'#7dd3fc');ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.stroke();
           drawProp(ctx,spritesRef.current.itemsAtlas,meta?.atlasCell ?? (drop.isHeal?1:0),0,1,size);
           if(drop.itemKind){ctx.font='bold 10px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
+          ctx.restore();
+        } else if(item.kind==='matte'){
+          const matte=item.data;
+          const image=foregroundMatteImagesRef.current[matte.id];
+          if(!image?.naturalWidth)continue;
+          ctx.save();
+          ctx.globalAlpha*=matteVisibleAlpha(matte,player,hazards.map(h=>({x:h.x,y:h.y,radius:h.radius,warning:h.motion?.phase==='warning'})));
+          ctx.drawImage(image,matte.x,matte.y,matte.width,matte.height);
           ctx.restore();
         } else if (item.kind === 'fixture') {
           const fixture=item.data;
