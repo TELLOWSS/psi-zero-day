@@ -124,7 +124,7 @@ export function EpisodeImmersiveScene({
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const finalBackground = resolvedBackground ?? scene.background_final_uri;
-  // A pair of distinctly directed DAYLIGHT preview plates; never promote to FINAL implicitly.
+  // Event-specific daylight raster artwork under Director review; never promote to FINAL implicitly.
   const morningPlate = episode01MorningPourPlate(scene.event_id);
   const backgroundUri = morningPlate?.uri ?? finalBackground ?? scene.background_uri;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
@@ -166,7 +166,7 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
-    data-background-source={morningPlate ? 'daylight-director-preview' : finalBackground ? 'final' : 'rc-fallback'}
+    data-background-source={morningPlate ? 'daylight-raster-review' : finalBackground ? 'final' : 'rc-fallback'}
     data-morning-shot={morningPlate?.id}
     data-ground-pass={stagedCast.length > 0 ? 'contact-shadow-v1' : undefined}
     data-authored-node={scene.authored_node_direction || undefined}
