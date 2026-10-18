@@ -21,9 +21,9 @@ describe('Episode 01 visual production queue',()=>{
     expect(queue.production_surfaces.some(item=>item.asset_id===queue.master_map.asset_id)).toBe(false);
   });
 
-  it('records the completed atomic binary ingest after all eight final backgrounds land',()=>{
-    expect(queue.final_art_batch.status).toBe('exact_archive_verified_github_ingested');
-    expect(ingest.status).toBe('exact_archive_verified_github_ingested');
+  it('records versioned candidates while retaining all eight production slots',()=>{
+    expect(queue.final_art_batch.status).toBe('versioned_cinema_candidates_ingested');
+    expect(ingest.status).toBe('versioned_cinema_candidates_ingested');
     expect(queue.final_art_batch.repository_binaries_present).toBe(8);
   });
 });

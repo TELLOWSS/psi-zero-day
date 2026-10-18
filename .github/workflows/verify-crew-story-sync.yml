@@ -2,7 +2,20 @@ name: Verify crew and story synchronization
 
 on:
   push:
-    branches: [sync/crew-story-20261017, fix/story-player-20261017]
+    branches: [sync/crew-story-20261017, fix/story-player-20261017, art/story-cinema-20261017]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ui/*Episode*'
+      - 'src/ui/*story*'
+      - 'src/ui/PresentationView.tsx'
+      - 'src/ui/GameHub.tsx'
+      - 'src/app/episode*'
+      - 'content/episode*/**'
+      - 'art-source/story-cinema-v1/**'
+      - 'public/assets/episode01/audio/**'
+      - 'scripts/*story*'
+      - '.github/workflows/verify-crew-story-sync.yml'
   workflow_dispatch:
 
 permissions:
@@ -19,6 +32,8 @@ jobs:
           node-version: '24.x'
           cache: npm
       - run: npm ci
+      - name: Prepare reviewed cinematic art
+        run: node scripts/build-story-cinema-art.mjs && node scripts/build-episode01-assets.mjs
       - name: Typecheck
         run: npm run typecheck
       - name: Full regression
@@ -61,5 +76,8 @@ jobs:
             artifacts/story-recovery/
             artifacts/crew-motion/
             artifacts/story-player/
+            public/assets/episode01/cg/*-cinema.webp
+            content/episode01/assets.json
+            content/episode01/final-art-ingest-manifest.json
           if-no-files-found: warn
           retention-days: 14

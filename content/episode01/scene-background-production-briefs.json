@@ -37,7 +37,7 @@
       "ui_safe_zone": "lower center 38% relatively low-detail; main visual anchors upper-left and mid-right"
     },
     "ramp_entry": {
-      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "final_path": "assets/episode01/cg/ramp-entry-cinema.webp",
       "story_function": "Schedule collision and Junho signal. The player can see why material flow, vehicle access and people interfere with each other.",
       "time_light": "early morning neutral-cool daylight with warmer reflected construction lighting",
       "camera": "wide-to-medium 30–35mm equivalent looking along a temporary ramp/entry lane",
@@ -52,7 +52,7 @@
       "ui_safe_zone": "lower center-left reserved; strongest depth line should lead toward right-center"
     },
     "work_yard": {
-      "final_path": "assets/episode01/cg/work-yard.webp",
+      "final_path": "assets/episode01/cg/work-yard-cinema.webp",
       "story_function": "Field command, TBM gap, restart pressure and instruction cascade. Formal controls coexist with changing work.",
       "time_light": "morning daylight, slightly dusty/overcast, realistic temporary illumination under structure",
       "camera": "wide 28–32mm equivalent at worker eye height across active staging/workface",
@@ -97,7 +97,7 @@
       "ui_safe_zone": "center-lower clean; inspection clues left and right so choice focus can crop either way"
     },
     "site_office": {
-      "final_path": "assets/episode01/cg/site-office.webp",
+      "final_path": "assets/episode01/cg/site-office-cinema.webp",
       "story_function": "Responsibility clash, report return and record pressure. Human accounts meet incomplete records.",
       "time_light": "daytime site office, cool fluorescent/LED light with warm daylight leak from window",
       "camera": "medium-wide 35–40mm equivalent from meeting-table corner toward wall/window",
@@ -127,7 +127,7 @@
       "ui_safe_zone": "center-lower clear; seating and site glimpse toward sides"
     },
     "home_night": {
-      "final_path": "assets/episode01/cg/home-night.webp",
+      "final_path": "assets/episode01/cg/home-night-cinema.webp",
       "story_function": "Evening reflection. Work traces remain mentally present without melodramatic punishment or reward.",
       "time_light": "quiet Korean apartment-like night, warm practical lamp plus cool window city light",
       "camera": "medium-wide 35–40mm equivalent from seated eye level toward modest living/dining workspace",

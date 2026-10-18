@@ -12,11 +12,11 @@ if (!match) {
 
 let attributes = match[1];
 if (/android:screenOrientation=/.test(attributes)) {
-  attributes = attributes.replace(/android:screenOrientation="[^"]*"/, 'android:screenOrientation="landscape"');
+  attributes = attributes.replace(/android:screenOrientation="[^"]*"/, 'android:screenOrientation="fullUser"');
 } else {
-  attributes += '\n            android:screenOrientation="landscape"';
+  attributes += '\n            android:screenOrientation="fullUser"';
 }
 
 manifest = manifest.replace(activityPattern, `<activity${attributes}>`);
 await writeFile(manifestPath, manifest, 'utf8');
-console.log('Android MainActivity orientation locked to landscape.');
+console.log('Android MainActivity orientation respects the user (portrait and landscape enabled).');

@@ -840,14 +840,10 @@ try {
         continue;
       }
 
-      // The product home is now Defense-first. Episode regression must explicitly
-      // use the secondary "new story" entry instead of assuming the primary CTA is story.
-      await evaluate(cdp, "document.querySelector('.commercial-title-action.is-quiet')?.click(); true");
-      await sleep(120);
-      const confirmNewGame = await evaluate(cdp, "Boolean(document.querySelector('.commercial-title-dialog .is-danger'))");
-      if (confirmNewGame) {
-        await evaluate(cdp, "document.querySelector('.commercial-title-dialog .is-danger')?.click(); true");
-      }
+      // The released hub exposes an explicit Episode 01 entry. Exercise that
+      // production path rather than the removed secondary "quiet" CTA.
+      const storyEntryClicked = await evaluate(cdp, "(() => { const entry = document.querySelector('button.is-story-entry:not(:disabled)'); if (!entry) return false; entry.click(); return true; })()");
+      if (!storyEntryClicked) throw new Error('Episode 01 story entry is missing from the released hub');
       await waitFor(cdp, "Boolean(document.querySelector('.cinematic-loading, .game-frame'))", 5000);
       const hasLoadingSurface = await evaluate(cdp, "Boolean(document.querySelector('.cinematic-loading'))");
       if (hasLoadingSurface) {
