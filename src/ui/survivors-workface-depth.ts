@@ -18,7 +18,7 @@ export function workfaceDepthLook(stageId:string,quality:DepthQuality):WorkfaceD
   const art=stageArtProfile(stageId);
   const light=stageActorLight(stageId);
   const detail=Math.max(1,Math.min(5,art.detail));
-  const gain=quality==='high'?1:quality==='balanced'?.72:.52;
+  const gain=quality==='high'?1:quality==='balanced'? .72 : .52;
   const contrast=(1+.09*gain+detail*.008).toFixed(3);
   const saturation=(1+.13*gain+detail*.006).toFixed(3);
   const brightness=(1+.015*gain).toFixed(3);
