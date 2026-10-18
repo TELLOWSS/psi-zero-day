@@ -1,5 +1,5 @@
 import type { HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
-import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
+import {PATROL_DIFFICULTIES, difficultyComplexBias, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {operationTiming} from './survivors-operation';
 
 /** Authored map progression; independent of permanent upgrades and player performance. */
@@ -95,7 +95,7 @@ const introductoryMixes: readonly (readonly HazardType[])[] = [
   ['UNHELMETED', 'RUNAWAY_CART', 'RUNAWAY_CART', 'GAS_LEAK'],
   ['UNHELMETED', 'GAS_LEAK', 'FALLING_DEBRIS', 'RUNAWAY_CART'],
 ];
-export function selectStageHazard(stage: PatrolStageDefinition, time: number, roll: number,maxTime=180,accentRoll?:number): HazardType {
+export function selectStageHazard(stage: PatrolStageDefinition, time: number, roll: number,maxTime=180,accentRoll?:number,difficulty:PatrolDifficulty='standard'): HazardType {
   if (time < difficultyProfile(stage.stageNumber).introductionTime) return 'UNHELMETED';
   // Bosses are authored one-off events, never accidental ordinary spawns.
   const mix = (stage.hazardMix ?? introductoryMixes[Math.max(0, Math.min(4, stage.stageNumber - 1))] ?? ['UNHELMETED'])
@@ -104,19 +104,23 @@ export function selectStageHazard(stage: PatrolStageDefinition, time: number, ro
   const complex=mix.filter(type=>type!=='UNHELMETED');
   const director=waveDirector(time,maxTime);
   const accent=accentRoll===undefined?((roll*1.61803398875+.173)%1):Math.max(0,Math.min(.999999,accentRoll));
+  const extraBias=difficultyComplexBias(difficulty,director.wave);
 
   // Wave 1 teaches the map language: complex hazards appear, but never dominate the screen.
   if(director.wave===1&&selected!=='UNHELMETED'&&accent<.55)return 'UNHELMETED';
 
   // Wave 2/3 deliberately replace some generic contacts with authored stage hazards.
-  if(complex.length&&selected==='UNHELMETED'&&accent<director.complexBias){
+  if(complex.length&&selected==='UNHELMETED'&&accent<Math.max(0,Math.min(.96,director.complexBias+extraBias))){
     const index=Math.min(complex.length-1,Math.floor(((roll*7.173)+accent)%1*complex.length));
     return complex[index]??selected;
   }
-  if(complex.length&&director.wave===3&&accent<.34){
+  if(complex.length&&director.wave===3&&accent<Math.max(0,.34+extraBias*.35)){
     const index=Math.min(complex.length-1,Math.floor(((accent*5.31)+roll)%1*complex.length));
     return complex[index]??selected;
   }
+  // Entry contract keeps early threat combinations readable instead of
+  // escalating HP, speed and density at the same instant.
+  if(selected!=='UNHELMETED'&&director.wave>1&&extraBias<0&&accent<Math.abs(extraBias))return 'UNHELMETED';
   return selected;
 }
 

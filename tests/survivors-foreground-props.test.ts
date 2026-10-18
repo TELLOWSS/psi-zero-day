@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGE_IDS,type StageHazardObject} from '../src/domain/patrol-survivors';
 import {STAGE_ART} from '../src/ui/survivors-stage-art';
-import {foregroundFixtureSpec,foregroundFixtureOpacity} from '../src/ui/survivors-foreground-props';
+import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from '../src/ui/survivors-foreground-props';
 
 const fixture=(type:StageHazardObject['type'],state:StageHazardObject['state']='idle',x=600,y=300)=>
  ({type,state,x,y} as StageHazardObject);
@@ -36,4 +36,14 @@ describe('Signal Watch approved foreground sprite depth',()=>{
     expect(foregroundFixtureOpacity(object,{x:object.x,y:object.y-100})).toBe(1);
     expect(JSON.stringify(object)).toBe(previous);
   });
+});
+
+it('animates approved original fixture sprites only on a real warning and honours reduced motion',()=>{
+ const lamp=fixture('floodlight_tower','warning');
+ const cabinet=fixture('electric_transformer','warning');
+ expect(Math.abs(foregroundFixtureMotion(lamp,1.2,false).angle)).toBeLessThanOrEqual(.009);
+ expect(foregroundFixtureMotion(cabinet,1.2,false).scaleY).toBeGreaterThan(0);
+ expect(foregroundFixtureMotion(lamp,1.2,true)).toEqual({y:0,angle:0,scaleY:1});
+ expect(foregroundFixtureMotion(fixture('explosive_barrel','active'),1.2,false)).toEqual({y:0,angle:0,scaleY:1});
+ expect(foregroundFixtureMotion(lamp,Number.NaN,false)).toEqual({y:0,angle:0,scaleY:1});
 });

@@ -8,7 +8,7 @@ import {createResolvedWorker,updateResolvedWorker,workerRouteTerrain} from './su
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
-import {PATROL_DIFFICULTIES,DIFFICULTY_WARNING_SCALE, type PatrolDifficulty} from '../domain/survivors-challenge';
+import {PATROL_DIFFICULTIES,DIFFICULTY_WARNING_SCALE,counterplayBreather, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {lateThreatVariant} from './survivors-late-threats';
 import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
@@ -1775,7 +1775,8 @@ export class SurvivorsEngine {
             positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
             reward:event.reward,remaining:2.1,
           };
-          this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,.8);
+          // Skillful control buys deliberate pickup/repositioning time, not more HP.
+          this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,counterplay?counterplayBreather(this.state.difficulty??'standard'):.8);
           this.emitAudio('control',centroid.x,centroid.y);
         }
         continue;
@@ -1862,7 +1863,7 @@ export class SurvivorsEngine {
       this.cooldowns.spawnTimer = pressure.interval;
       const alive = this.state.hazards.filter(h => h.hp > 0);
       if (alive.length >= pressure.activeLimit) return;
-      let type = selectStageHazard(stage, this.state.gameTime, this.random(), this.state.maxTime, this.random());
+      let type = selectStageHazard(stage, this.state.gameTime, this.random(), this.state.maxTime, this.random(),this.state.difficulty??'standard');
       const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
       // Bound concurrent charging/falling threats without shortening their warnings.
       if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {

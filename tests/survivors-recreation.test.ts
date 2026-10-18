@@ -11,8 +11,8 @@ describe('stage rewards and pinball progression',()=>{
  });
  it('grows stage pay, caps late-stage awards, distinguishes first clears and rewards mastery',()=>{
   expect(stageClearReward('stage_01','standard',true,3)).toEqual({clear:200,first:400,mastery:150,total:750});
-  expect(stageClearReward('stage_02','hard',false,1)).toEqual({clear:375,first:0,mastery:50,total:425});
-  expect(stageClearReward('stage_50','extreme',true,99)).toEqual({clear:2400,first:4000,mastery:150,total:6550});
+  expect(stageClearReward('stage_02','hard',false,1)).toEqual({clear:375,first:0,mastery:75,total:450});
+  expect(stageClearReward('stage_50','extreme',true,99)).toEqual({clear:2400,first:4000,mastery:300,total:6700});
  });
  it('counts distinct completed stages across legacy and current records, not repeat clears or unlocked stages',()=>{
   expect(completedPatrolStages({stage_01:[true],stage_02:[false,true]},[{characterId:'player',stageId:'stage_01',stars:[true,false,false]}],['stage_01','stage_03','bad'])).toEqual(['stage_01','stage_03']);

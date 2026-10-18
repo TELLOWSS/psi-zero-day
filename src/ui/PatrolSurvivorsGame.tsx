@@ -89,7 +89,8 @@ import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equi
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
 import {completedPatrolStages,stageClearReward,type StageClearReward} from '../domain/survivors-recreation';
 import recreationText from '../../content/localization/survivors-recreation-ko.json';
-import {persistStoreWallet,readClearRewardClaims,type StoreWallet} from '../app/survivors-store-wallet';
+import {persistStoreWallet,readClearRewardClaims,readDifficultyClearRecords,type StoreWallet} from '../app/survivors-store-wallet';
+import {awardDifficultyClear,type DifficultyClearRecords} from '../domain/survivors-difficulty-records';
 import {settlePatrolCredits} from '../domain/survivors-credit-settlement';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import resultText from '../../content/localization/survivors-result-ko.json';
@@ -111,7 +112,7 @@ import {signatureCounterplayProfile} from '../engine/survivors-signature-counter
 import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
-import {foregroundFixtureSpec,foregroundFixtureOpacity} from './survivors-foreground-props';
+import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from './survivors-foreground-props';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -737,8 +738,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const extractionCompletedRef = useRef(false);
 
   // Save Meta Progress to LocalStorage
-  const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current,clearRewardClaims?:PatrolStageId[]) => {
-    try {persistStoreWallet({credits:newCredits,inventory,clearRewardClaims});}catch{setStoreMessage(storeText.failure);return false;}
+  const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current,clearRewardClaims?:PatrolStageId[],difficultyClearRecords?:DifficultyClearRecords) => {
+    try {persistStoreWallet({credits:newCredits,inventory,clearRewardClaims,difficultyClearRecords});}catch{setStoreMessage(storeText.failure);return false;}
     setPermanentUpgrades(newUpgrades);
     setPsiCredits(newCredits);
     creditsRef.current = newCredits;
@@ -757,7 +758,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const extra=victory?stageClearReward(engine.state.stageId,engine.state.difficulty??'standard',!engine.bossIntroReplay&&!claims.includes(engine.state.stageId),engine.state.starsEarned.filter(Boolean).length):null;
     const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
     const inventory=victory?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
-    const ok=saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,engine.state.psiCredits+(extra?.total??0),transferredSessionCreditsRef.current),inventory,victory?[...claims,engine.state.stageId]:claims);
+    const marks=victory?awardDifficultyClear(readDifficultyClearRecords(),engine.state.stageId,engine.state.difficulty??'standard',engine.state.starsEarned.filter(Boolean).length):readDifficultyClearRecords();
+    const ok=saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,engine.state.psiCredits+(extra?.total??0),transferredSessionCreditsRef.current),inventory,victory?[...claims,engine.state.stageId]:claims,marks);
     setSettlementFailed(!ok);if(!ok)return false;
     settledRuns.current.add(engine);setStoreMessage('');if(extra){setClearReward(engine.applyStageClearReward(extra.first>0));setClearGearWear([...new Set(used)]);}return true;
   };
@@ -2802,7 +2804,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const cell=front.kind==='light'?7:0;
           ctx.save();
           ctx.globalAlpha*=foregroundFixtureOpacity(fixture,player);
-          drawProp(ctx,art,cell,fixture.x,front.imageY,front.size);
+          const motion=foregroundFixtureMotion(fixture,engine.state.gameTime,reducedMotionRef.current);
+          ctx.translate(fixture.x,front.imageY+motion.y);
+          ctx.rotate(motion.angle);ctx.scale(1,motion.scaleY);
+          drawProp(ctx,art,cell,0,0,front.size);
           ctx.restore();
         } else if (item.kind === 'hazard') {
           const h = item.data;
@@ -3821,7 +3826,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {preparedCharacter!==selectedChar&&<p role="status">{graphicsText.characterLoading}</p>}
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
-              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small></button>)}
+              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
               <p>{terrainText[selectedDifficulty]}</p><p>{terrainText.warning}</p>
               <details><summary>{terrainText.title}</summary><p>{terrainText.brief}</p><p>{terrainText.cleanupHint}</p></details>
             </fieldset>
@@ -4312,7 +4317,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {label:resultText.environment,value:`${engineRef.current?.state.environmentalKills??0}건`,tone:'cyan'},
               {label:resultText.mastery,value:engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`},
             ]}/>
-            {clearReward&&<section className="survivors-clear-reward"><h3>{recreationText.stageReward} +{clearReward.total} PSI</h3><p>{recreationText.clearPay} +{clearReward.clear} · {recreationText.firstClear} +{clearReward.first} · {recreationText.masteryPay} +{clearReward.mastery}</p><p>{recreationText.progress.replace('{count}',String(completedStages.length))}</p>{clearReward.first>0&&PINBALL_TABLE_IDS.filter(id=>id!=='factory'&&pinballTableProgress(id,completedStages).unlocked&&!pinballTableProgress(id,completedStages.filter(stage=>stage!==selectedStage)).unlocked).map(id=><p key={id}><strong>{recreationText.newTable} · {recreationText.themes[id].name}</strong><br/>{recreationText.themes[id].detail}</p>)}<SurvivorsPinballUnlockPreview completedStages={completedStages}/></section>}
+            {clearReward&&<section className="survivors-clear-reward"><h3>{recreationText.stageReward} +{clearReward.total} PSI</h3><p>{challengeText[selectedDifficulty]} · {challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[selectedDifficulty]??engineRef.current?.state.starsEarned.filter(Boolean).length??0}/3</p><p>{recreationText.clearPay} +{clearReward.clear} · {recreationText.firstClear} +{clearReward.first} · {recreationText.masteryPay} +{clearReward.mastery}</p><p>{recreationText.progress.replace('{count}',String(completedStages.length))}</p>{clearReward.first>0&&PINBALL_TABLE_IDS.filter(id=>id!=='factory'&&pinballTableProgress(id,completedStages).unlocked&&!pinballTableProgress(id,completedStages.filter(stage=>stage!==selectedStage)).unlocked).map(id=><p key={id}><strong>{recreationText.newTable} · {recreationText.themes[id].name}</strong><br/>{recreationText.themes[id].detail}</p>)}<SurvivorsPinballUnlockPreview completedStages={completedStages}/></section>}
             {settlementFailed&&<p role="alert">{recreationText.saveFailed}<button type="button" onClick={()=>engineRef.current&&settleRun(engineRef.current)}>{recreationText.retry}</button></p>}
             <p className="survivors-story-result">{operationText.handoff}</p>
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}

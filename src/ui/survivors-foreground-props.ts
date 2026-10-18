@@ -49,3 +49,21 @@ export function foregroundFixtureOpacity(
   const occlusion=Math.max(0,Math.min(1,lateral*depth));
   return Math.max(.52,1-.48*occlusion);
 }
+
+/** Calm equipment motion is locked to the existing warning/isolated state.
+ * Never simulates unsafe unprompted barrel rolling or displacement.
+ * Production sprite remains the visual source: only a bounded pivot response.
+ */
+export function foregroundFixtureMotion(
+  object:Pick<StageHazardObject,'type'|'state'>,
+  gameTime:number,
+  reducedMotion:boolean,
+):{y:number;angle:number;scaleY:number} {
+  const none={y:0,angle:0,scaleY:1};
+  if(reducedMotion||!Number.isFinite(gameTime)||object.state!=='warning')return none;
+  const phase=gameTime*5.3;
+  if(object.type==='floodlight_tower')return {y:0,angle:Math.sin(phase)*.009,scaleY:1};
+  if(object.type==='electric_transformer')return {y:0,angle:0,scaleY:1+Math.sin(phase*1.1)*.004};
+  if(object.type==='explosive_barrel')return {y:0,angle:Math.sin(phase)*.006,scaleY:1};
+  return none;
+}
