@@ -19,8 +19,8 @@ describe('Episode01 daylight director preview, without mutating narrative', () =
   }
  });
  it('preserves pre-existing concrete environment catalog and event engine identities',()=>{
-  expect(episode01ImmersiveScene('e01_06_pump_arrival')?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
-  expect(episode01ImmersiveScene('e01_07_first_pour')?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
+  expect(episode01ImmersiveScene('e01_06_pump_arrival', undefined, undefined)?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
+  expect(episode01ImmersiveScene('e01_07_first_pour', undefined, undefined)?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
   expect(episode01MorningPourPlate('e01_08_reactions')).toBeUndefined();
  });
 });
