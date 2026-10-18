@@ -114,8 +114,9 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
   const historyDialog=useRef<HTMLDialogElement>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const soundscape=storySoundscape(snapshot.state?.event_runtime.active_instance?.event_id);
-  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice, cancelPresentation } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape});
+  const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id;
+  const soundscape=storySoundscape(audioEventId);
+  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice, cancelPresentation } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape,eventId:audioEventId});
   const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
   useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
   // Cinematic hold: screen-only inspection; reset automatically on every engine step.
