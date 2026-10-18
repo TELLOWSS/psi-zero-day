@@ -111,6 +111,7 @@ import {signatureCounterplayProfile} from '../engine/survivors-signature-counter
 import { stageActorLight } from './survivors-stage-light';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
+import {foregroundFixtureSpec,foregroundFixtureOpacity} from './survivors-foreground-props';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -2572,7 +2573,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
             ctx.stroke();
 
-            drawProp(ctx,spritesRef.current.itemsAtlas,7,h.x,h.y,48);
+            // The authored lamp sprite is depth-sorted with people below.
 
             // Zone tag
             ctx.font = 'bold 10px Pretendard, sans-serif';
@@ -2656,7 +2657,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // D. Isolate flammable storage (legacy type ID retained)
           if (h.type === 'explosive_barrel') {
             ctx.save();
-            drawProp(ctx,spritesRef.current.flammableDrum,0,h.x,h.y+8,64);
+            // Existing material artwork is rendered once in the world depth pass.
             if (h.state === 'active') {
               ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 3; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 50, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
@@ -2688,7 +2689,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // E. Electric Transformer
           if (h.type === 'electric_transformer') {
             ctx.save();
-            drawProp(ctx,spritesRef.current.distributionCabinet,0,h.x,h.y+8,68);
+            // Keep state/alerts here; sort the physical equipment sprite below.
             if (h.state === 'active') {
               ctx.strokeStyle = '#86efac'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 200, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
@@ -2749,6 +2750,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       type EntityItem =
         | { kind: 'drop'; y: number; data: typeof drops[0] }
         | { kind: 'hazard'; y: number; data: typeof hazards[0] }
+        | { kind: 'fixture'; y: number; data: typeof engine.state.interactiveHazards[0] }
         | { kind: 'player'; y: number };
 
       const entityList: EntityItem[] = [];
@@ -2761,6 +2763,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         // Keep warning trajectories even when their source is outside the view.
         if(!h.isStageBoss&&h.type!=='CRANE_BOSS'&&h.motion?.phase!=='warning'&&(h.x<camX-180||h.x>camX+viewW+180||h.y<camY-180||h.y>camY+viewH+180))continue;
         entityList.push({ kind: 'hazard', y: h.y, data: h });
+      }
+      for (const fixture of engine.state.interactiveHazards) {
+        const front=foregroundFixtureSpec(fixture);
+        if(!front)continue;
+        if(fixture.x<camX-120||fixture.x>camX+viewW+120||front.anchorY<camY-120||front.anchorY>camY+viewH+120)continue;
+        entityList.push({kind:'fixture',y:front.anchorY,data:fixture});
       }
       entityList.push({ kind: 'player', y: player.y });
 
@@ -2785,6 +2793,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.strokeStyle=meta?.color ?? (drop.isHeal?'#34d399':'#7dd3fc');ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.stroke();
           drawProp(ctx,spritesRef.current.itemsAtlas,meta?.atlasCell ?? (drop.isHeal?1:0),0,1,size);
           if(drop.itemKind){ctx.font='bold 10px Pretendard, sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
+          ctx.restore();
+        } else if (item.kind === 'fixture') {
+          const fixture=item.data;
+          const front=foregroundFixtureSpec(fixture);
+          if(!front)continue;
+          const art=front.kind==='light'?spritesRef.current.itemsAtlas:front.kind==='drum'?spritesRef.current.flammableDrum:spritesRef.current.distributionCabinet;
+          const cell=front.kind==='light'?7:0;
+          ctx.save();
+          ctx.globalAlpha*=foregroundFixtureOpacity(fixture,player);
+          drawProp(ctx,art,cell,fixture.x,front.imageY,front.size);
           ctx.restore();
         } else if (item.kind === 'hazard') {
           const h = item.data;
