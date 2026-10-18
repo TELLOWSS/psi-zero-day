@@ -59,7 +59,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
   const page=await context.newPage();await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#heroStartBtn').click();
   await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(window.failSave&&k==='psi.signal-breaker.offline.v1')throw new Error('test full storage');return original.call(this,k,v);};window.failSave=true;});
   await page.evaluate(terminal);await page.locator('#retryCompletionSave').waitFor({state:'visible'});a.equal(await page.locator('#stageEnding').isVisible(),false);
-  await page.evaluate(()=>window.failSave=false);await page.locator('#retryCompletionSave').click();await page.locator('#stageEnding').waitFor({state:'visible'});
+  await page.evaluate(()=>window.failSave=false);await acknowledgeBossLoot(page);await page.locator('#retryCompletionSave').click();await page.locator('#stageEnding').waitFor({state:'visible'});
   a.equal(await page.locator('#stageEnding').getAttribute('data-motion'),'still');const credits=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits);
   await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);a.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.signal-breaker.offline.v1')).credits),credits);
   // Failed image cannot strand the player or fabricate evidence.
