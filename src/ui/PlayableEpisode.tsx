@@ -348,7 +348,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
     playedSceneCues.current.add(key);
     if(cue.asset_id!==soundscape?.asset_id)playPresentationCue(cue);
   }, [activeEventId, runIdentity, playPresentationCue]);
-  useEffect(()=>()=>cancelPresentation(),[activeEventId,cancelPresentation]);
+  // Foley tails release themselves on ended/error; scene cuts must not hard-stop them.
   useEffect(() => {
     if (!activeEventId || !runIdentity || !presentation || !('node_id' in presentation)) return;
     const cue = episodePresentationNodeCue(activeEventId, presentation.node_id, presentation.type);
