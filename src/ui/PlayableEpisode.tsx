@@ -5,6 +5,7 @@ import {StoryReaderControls} from './StoryReaderControls';
 import {loadStoryReader,saveStoryReader,type StoryReaderSettings} from '../app/story-reader-settings';
 import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth} from '../app/episode-save-health';
 import {storySoundscape} from '../app/story-soundscape';
+import { episodeAudioDirection } from '../app/episode01-audio-director';
 import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
@@ -115,8 +116,15 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id;
-  const soundscape=storySoundscape(audioEventId);
-  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape,eventId:audioEventId});
+  const directorAudio=episodeAudioDirection(audioEventId);
+  const rawSoundscape=storySoundscape(audioEventId);
+  const soundscape=rawSoundscape && directorAudio
+    ? {...rawSoundscape,gain:rawSoundscape.gain*directorAudio.roomToneScale}
+    : rawSoundscape;
+  const { playUiCue, playPresentationCue, playVoiceCue, stopVoice } = useEpisodeAudio(snapshot.state?.audio, resolveAsset,{
+    paused:readerPaused||historyOpen,settings:readerSettings,scene:soundscape,
+    eventId:audioEventId,sceneFadeMs:directorAudio?.sceneFadeMs,scoreFadeMs:directorAudio?.scoreFadeMs,
+  });
   const changeReaderSettings=(value:StoryReaderSettings)=>{setReaderSettings(value);setReaderSaved(saveStoryReader(value));};
   useEffect(()=>{const dialog=historyDialog.current;if(historyOpen)dialog?.showModal();return()=>dialog?.close();},[historyOpen]);
   // Cinematic hold: screen-only inspection; reset automatically on every engine step.
