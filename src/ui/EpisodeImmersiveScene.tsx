@@ -2,6 +2,7 @@ import type { AssetResolver } from '../app/episode-visual-assets';
 import type { CharacterGrowthView } from '../app/character-growth';
 import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
+import { episode01MorningPourPlate } from '../app/episode01-morning-pour';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
@@ -123,7 +124,9 @@ export function EpisodeImmersiveScene({
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const finalBackground = resolvedBackground ?? scene.background_final_uri;
-  const backgroundUri=finalBackground ?? scene.background_uri;
+  // A pair of distinctly directed DAYLIGHT preview plates; never promote to FINAL implicitly.
+  const morningPlate = episode01MorningPourPlate(scene.event_id);
+  const backgroundUri = morningPlate?.uri ?? finalBackground ?? scene.background_uri;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
@@ -163,7 +166,9 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
-    data-background-source={finalBackground ? 'final' : 'rc-fallback'}
+    data-background-source={morningPlate ? 'daylight-director-preview' : finalBackground ? 'final' : 'rc-fallback'}
+    data-morning-shot={morningPlate?.id}
+    data-ground-pass={stagedCast.length > 0 ? 'contact-shadow-v1' : undefined}
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
@@ -210,7 +215,7 @@ export function EpisodeImmersiveScene({
     data-dayresult-carryover={dayResultProduction?.carryover_key}
     key={scene.background_asset_id ?? scene.background_uri}
   >
-    <VisualImage key={`${backgroundUri}:${backgroundAttempt}`} uri={backgroundUri} fallbackUri={finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" onUnavailable={()=>setFailedBackground(backgroundUri)} />
+    <VisualImage key={`${backgroundUri}:${backgroundAttempt}`} uri={backgroundUri} fallbackUri={morningPlate ? (finalBackground ?? scene.background_uri) : finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" onUnavailable={()=>setFailedBackground(backgroundUri)} />
     {failedBackground===backgroundUri ? <div className="story-background-error" role="alert">
       <p>{t('story.player.backgroundMissing')}</p>
       <button type="button" onClick={()=>{setFailedBackground(null);setBackgroundAttempt(value=>value+1);}}>{t('story.player.retryBackground')}</button>
