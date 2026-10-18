@@ -1,0 +1,14 @@
+{
+  "purpose": "Deterministic baselines refreshed only after equality against pre-boss behavior",
+  "compare_commit": "009e85f4d9eca48bd0fefa54de5507adb560076e",
+  "candidate_commit": "6c94bd186384b1d6f0dd2cdcb4ded11b490dae68",
+  "scope": "game rules only, not human win rate or Android FPS",
+  "files": {
+    "flow": "1c8a760e445b3a7edb39e0568c6af085e6e258abcf5048f666e00032ed5c8a20",
+    "burst": "d7935a5c31f67475072087d71e918c4fe9c47347fa7d5f3f52e23961e51999e8",
+    "continuous": "c4c8f7d32bf8a05bbd185b80421797eff5f74ccc70654c40350067c880a4b068",
+    "operations": "c8457639d5867fa6bfd15a00a9d50b3164812a110e751cad941731d27a5205a3",
+    "assist-guidance": "4749beafaa6e72a108144b8dd0de4281b783f96506356c738eb323118b0341b8",
+    "veteran": "ede85d0ee67263ddf15c4394c79f3ffc5859ce319947794296c5e502db8e6151"
+  }
+}

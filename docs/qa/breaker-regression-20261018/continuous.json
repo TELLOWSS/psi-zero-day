@@ -1,0 +1,1919 @@
+{
+  "method": "3 seeds × 3600 simulated seconds; 120 Hz fixed rules, ordinary movement/assist/shots/source/boost commands, automatic wave tuning and chapter succession. No forced completion or refill; built-in one-life chapter recovery is part of succession. Not a human engagement study or physical-device FPS.",
+  "runs": [
+    {
+      "seed": 1,
+      "seconds": 3600,
+      "state": "playing",
+      "pauses": 0,
+      "peaks": {
+        "cores": 19,
+        "shots": 32
+      },
+      "chapters": [
+        {
+          "stage": "CH-01",
+          "cycle": 0,
+          "seed": 1,
+          "seconds": 52.08,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 0,
+          "seed": 7920,
+          "seconds": 47.23,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 0,
+          "seed": 15839,
+          "seconds": 51.97,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 0,
+          "seed": 23758,
+          "seconds": 48.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 0,
+          "seed": 31677,
+          "seconds": 48.29,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 1,
+          "seed": 39596,
+          "seconds": 54.39,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 1,
+          "seed": 47515,
+          "seconds": 47.57,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 1,
+          "seed": 55434,
+          "seconds": 54.42,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 1,
+          "seed": 63353,
+          "seconds": 47.82,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 1,
+          "seed": 71272,
+          "seconds": 48.27,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 2,
+          "seed": 79191,
+          "seconds": 62.48,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 2,
+          "seed": 87110,
+          "seconds": 50.01,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 2,
+          "seed": 95029,
+          "seconds": 51.95,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 2,
+          "seed": 102948,
+          "seconds": 46.02,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 2,
+          "seed": 110867,
+          "seconds": 50.45,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 3,
+          "seed": 118786,
+          "seconds": 55.57,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 3,
+          "seed": 126705,
+          "seconds": 47.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 3,
+          "seed": 134624,
+          "seconds": 59.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 3,
+          "seed": 142543,
+          "seconds": 46.74,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 3,
+          "seed": 150462,
+          "seconds": 48.61,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 4,
+          "seed": 158381,
+          "seconds": 58.1,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 4,
+          "seed": 166300,
+          "seconds": 47.54,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 4,
+          "seed": 174219,
+          "seconds": 52.63,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 4,
+          "seed": 182138,
+          "seconds": 49.47,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 4,
+          "seed": 190057,
+          "seconds": 53.64,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 5,
+          "seed": 197976,
+          "seconds": 58.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 5,
+          "seed": 205895,
+          "seconds": 46.75,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 5,
+          "seed": 213814,
+          "seconds": 53.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 5,
+          "seed": 221733,
+          "seconds": 47.72,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 5,
+          "seed": 229652,
+          "seconds": 53.46,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 6,
+          "seed": 237571,
+          "seconds": 57.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 6,
+          "seed": 245490,
+          "seconds": 45.92,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 6,
+          "seed": 253409,
+          "seconds": 48.62,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 6,
+          "seed": 261328,
+          "seconds": 48.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 6,
+          "seed": 269247,
+          "seconds": 47.92,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 7,
+          "seed": 277166,
+          "seconds": 55.53,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 7,
+          "seed": 285085,
+          "seconds": 46.43,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 7,
+          "seed": 293004,
+          "seconds": 51.5,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 7,
+          "seed": 300923,
+          "seconds": 47.15,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 7,
+          "seed": 308842,
+          "seconds": 61.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 8,
+          "seed": 316761,
+          "seconds": 56.3,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 8,
+          "seed": 324680,
+          "seconds": 50.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 8,
+          "seed": 332599,
+          "seconds": 55.99,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 8,
+          "seed": 340518,
+          "seconds": 47.2,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 8,
+          "seed": 348437,
+          "seconds": 50.83,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 9,
+          "seed": 356356,
+          "seconds": 57.62,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 9,
+          "seed": 364275,
+          "seconds": 58.72,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 9,
+          "seed": 372194,
+          "seconds": 52.1,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 9,
+          "seed": 380113,
+          "seconds": 48.19,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 9,
+          "seed": 388032,
+          "seconds": 47.75,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 10,
+          "seed": 395951,
+          "seconds": 56.4,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 10,
+          "seed": 403870,
+          "seconds": 47.78,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 10,
+          "seed": 411789,
+          "seconds": 59.14,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 10,
+          "seed": 419708,
+          "seconds": 48.76,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 10,
+          "seed": 427627,
+          "seconds": 48.49,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 11,
+          "seed": 435546,
+          "seconds": 55.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 11,
+          "seed": 443465,
+          "seconds": 47.78,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 11,
+          "seed": 451384,
+          "seconds": 60.51,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 11,
+          "seed": 459303,
+          "seconds": 54.48,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 11,
+          "seed": 467222,
+          "seconds": 57.53,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 12,
+          "seed": 475141,
+          "seconds": 52.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 12,
+          "seed": 483060,
+          "seconds": 45.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 12,
+          "seed": 490979,
+          "seconds": 48.45,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 12,
+          "seed": 498898,
+          "seconds": 47.97,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 12,
+          "seed": 506817,
+          "seconds": 46.68,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 13,
+          "seed": 514736,
+          "seconds": 51.97,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 13,
+          "seed": 522655,
+          "seconds": 46.54,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 13,
+          "seed": 530574,
+          "seconds": 48.42,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 13,
+          "seed": 538493,
+          "seconds": 47.47,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        }
+      ],
+      "current": {
+        "stage": "CH-05",
+        "wave": 5,
+        "cycle": 13
+      }
+    },
+    {
+      "seed": 3,
+      "seconds": 3600,
+      "state": "playing",
+      "pauses": 0,
+      "peaks": {
+        "cores": 19,
+        "shots": 32
+      },
+      "chapters": [
+        {
+          "stage": "CH-01",
+          "cycle": 0,
+          "seed": 3,
+          "seconds": 53.59,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 0,
+          "seed": 7922,
+          "seconds": 52.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 0,
+          "seed": 15841,
+          "seconds": 60.33,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 0,
+          "seed": 23760,
+          "seconds": 47.88,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 0,
+          "seed": 31679,
+          "seconds": 49.62,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 1,
+          "seed": 39598,
+          "seconds": 54.64,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 1,
+          "seed": 47517,
+          "seconds": 45.12,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 1,
+          "seed": 55436,
+          "seconds": 47.81,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 1,
+          "seed": 63355,
+          "seconds": 48.52,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 1,
+          "seed": 71274,
+          "seconds": 55.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 2,
+          "seed": 79193,
+          "seconds": 57.57,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 2,
+          "seed": 87112,
+          "seconds": 46.21,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 2,
+          "seed": 95031,
+          "seconds": 46.82,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 2,
+          "seed": 102950,
+          "seconds": 47.14,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 2,
+          "seed": 110869,
+          "seconds": 48.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 3,
+          "seed": 118788,
+          "seconds": 62.49,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 3,
+          "seed": 126707,
+          "seconds": 50.55,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 3,
+          "seed": 134626,
+          "seconds": 57.26,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 3,
+          "seed": 142545,
+          "seconds": 46.1,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 3,
+          "seed": 150464,
+          "seconds": 50.17,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 4,
+          "seed": 158383,
+          "seconds": 50.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 4,
+          "seed": 166302,
+          "seconds": 45.15,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 4,
+          "seed": 174221,
+          "seconds": 49.78,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 4,
+          "seed": 182140,
+          "seconds": 47.85,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 4,
+          "seed": 190059,
+          "seconds": 55.37,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 5,
+          "seed": 197978,
+          "seconds": 56.12,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 5,
+          "seed": 205897,
+          "seconds": 47.72,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 5,
+          "seed": 213816,
+          "seconds": 51.78,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 5,
+          "seed": 221735,
+          "seconds": 47.81,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 5,
+          "seed": 229654,
+          "seconds": 50.73,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 6,
+          "seed": 237573,
+          "seconds": 55.09,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 6,
+          "seed": 245492,
+          "seconds": 46.76,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 6,
+          "seed": 253411,
+          "seconds": 55.78,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 6,
+          "seed": 261330,
+          "seconds": 46.29,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 6,
+          "seed": 269249,
+          "seconds": 48.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 7,
+          "seed": 277168,
+          "seconds": 55.12,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 7,
+          "seed": 285087,
+          "seconds": 47.44,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 7,
+          "seed": 293006,
+          "seconds": 56.99,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 7,
+          "seed": 300925,
+          "seconds": 46.02,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 7,
+          "seed": 308844,
+          "seconds": 52.29,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 8,
+          "seed": 316763,
+          "seconds": 56.62,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 8,
+          "seed": 324682,
+          "seconds": 55.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 8,
+          "seed": 332601,
+          "seconds": 46.98,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 8,
+          "seed": 340520,
+          "seconds": 48.3,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 8,
+          "seed": 348439,
+          "seconds": 56.68,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 9,
+          "seed": 356358,
+          "seconds": 50.01,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 9,
+          "seed": 364277,
+          "seconds": 48.6,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 9,
+          "seed": 372196,
+          "seconds": 52.99,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 9,
+          "seed": 380115,
+          "seconds": 50.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 9,
+          "seed": 388034,
+          "seconds": 47.88,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 10,
+          "seed": 395953,
+          "seconds": 59.11,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 10,
+          "seed": 403872,
+          "seconds": 51.46,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 10,
+          "seed": 411791,
+          "seconds": 49.91,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 10,
+          "seed": 419710,
+          "seconds": 46.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 10,
+          "seed": 427629,
+          "seconds": 47.65,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 11,
+          "seed": 435548,
+          "seconds": 56.66,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 11,
+          "seed": 443467,
+          "seconds": 53.16,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 11,
+          "seed": 451386,
+          "seconds": 52.97,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 11,
+          "seed": 459305,
+          "seconds": 47.56,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 11,
+          "seed": 467224,
+          "seconds": 61.91,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 12,
+          "seed": 475143,
+          "seconds": 54.65,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 12,
+          "seed": 483062,
+          "seconds": 50.71,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 12,
+          "seed": 490981,
+          "seconds": 58.39,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 12,
+          "seed": 498900,
+          "seconds": 45.88,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 12,
+          "seed": 506819,
+          "seconds": 46.41,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 13,
+          "seed": 514738,
+          "seconds": 59.88,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 13,
+          "seed": 522657,
+          "seconds": 54.2,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 13,
+          "seed": 530576,
+          "seconds": 59.12,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 13,
+          "seed": 538495,
+          "seconds": 45.46,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        }
+      ],
+      "current": {
+        "stage": "CH-05",
+        "wave": 5,
+        "cycle": 13
+      }
+    },
+    {
+      "seed": 8,
+      "seconds": 3600,
+      "state": "playing",
+      "pauses": 0,
+      "peaks": {
+        "cores": 19,
+        "shots": 32
+      },
+      "chapters": [
+        {
+          "stage": "CH-01",
+          "cycle": 0,
+          "seed": 8,
+          "seconds": 61.43,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 0,
+          "seed": 7927,
+          "seconds": 47.27,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 0,
+          "seed": 15846,
+          "seconds": 57.12,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 0,
+          "seed": 23765,
+          "seconds": 48.83,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 0,
+          "seed": 31684,
+          "seconds": 48.27,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 1,
+          "seed": 39603,
+          "seconds": 57.44,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 1,
+          "seed": 47522,
+          "seconds": 47.11,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 1,
+          "seed": 55441,
+          "seconds": 49.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 1,
+          "seed": 63360,
+          "seconds": 45.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 1,
+          "seed": 71279,
+          "seconds": 55.58,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 2,
+          "seed": 79198,
+          "seconds": 52.85,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 2,
+          "seed": 87117,
+          "seconds": 48.52,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 2,
+          "seed": 95036,
+          "seconds": 57.89,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 2,
+          "seed": 102955,
+          "seconds": 48.24,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 2,
+          "seed": 110874,
+          "seconds": 47.48,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 3,
+          "seed": 118793,
+          "seconds": 58.75,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 3,
+          "seed": 126712,
+          "seconds": 50.19,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 3,
+          "seed": 134631,
+          "seconds": 52.63,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 3,
+          "seed": 142550,
+          "seconds": 48.67,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 3,
+          "seed": 150469,
+          "seconds": 54.98,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 4,
+          "seed": 158388,
+          "seconds": 58.32,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 4,
+          "seed": 166307,
+          "seconds": 46.83,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 4,
+          "seed": 174226,
+          "seconds": 52.34,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 4,
+          "seed": 182145,
+          "seconds": 47.42,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 4,
+          "seed": 190064,
+          "seconds": 47.08,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 5,
+          "seed": 197983,
+          "seconds": 60.84,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 5,
+          "seed": 205902,
+          "seconds": 46.07,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 5,
+          "seed": 213821,
+          "seconds": 48.69,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 5,
+          "seed": 221740,
+          "seconds": 53.18,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 5,
+          "seed": 229659,
+          "seconds": 55.96,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 6,
+          "seed": 237578,
+          "seconds": 55.99,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 6,
+          "seed": 245497,
+          "seconds": 51.35,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 6,
+          "seed": 253416,
+          "seconds": 56.84,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 6,
+          "seed": 261335,
+          "seconds": 52.66,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 6,
+          "seed": 269254,
+          "seconds": 62.74,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 7,
+          "seed": 277173,
+          "seconds": 56.11,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 7,
+          "seed": 285092,
+          "seconds": 57.02,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 7,
+          "seed": 293011,
+          "seconds": 55.96,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 7,
+          "seed": 300930,
+          "seconds": 48.92,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 7,
+          "seed": 308849,
+          "seconds": 54.01,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 8,
+          "seed": 316768,
+          "seconds": 55.83,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 8,
+          "seed": 324687,
+          "seconds": 45.79,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 8,
+          "seed": 332606,
+          "seconds": 55.82,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 8,
+          "seed": 340525,
+          "seconds": 46.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 8,
+          "seed": 348444,
+          "seconds": 47.3,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 9,
+          "seed": 356363,
+          "seconds": 55.66,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 9,
+          "seed": 364282,
+          "seconds": 49.57,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 9,
+          "seed": 372201,
+          "seconds": 51.72,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 9,
+          "seed": 380120,
+          "seconds": 47.31,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 9,
+          "seed": 388039,
+          "seconds": 48.66,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 10,
+          "seed": 395958,
+          "seconds": 52.91,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 10,
+          "seed": 403877,
+          "seconds": 46.37,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 10,
+          "seed": 411796,
+          "seconds": 46.65,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 10,
+          "seed": 419715,
+          "seconds": 45.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 10,
+          "seed": 427634,
+          "seconds": 46.26,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 11,
+          "seed": 435553,
+          "seconds": 58.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 11,
+          "seed": 443472,
+          "seconds": 48.3,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 11,
+          "seed": 451391,
+          "seconds": 52.69,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 11,
+          "seed": 459310,
+          "seconds": 50.68,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 11,
+          "seed": 467229,
+          "seconds": 57.68,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 12,
+          "seed": 475148,
+          "seconds": 54.04,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 12,
+          "seed": 483067,
+          "seconds": 47.27,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 12,
+          "seed": 490986,
+          "seconds": 53.62,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 12,
+          "seed": 498905,
+          "seconds": 46.87,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-05",
+          "cycle": 12,
+          "seed": 506824,
+          "seconds": 49.5,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-01",
+          "cycle": 13,
+          "seed": 514743,
+          "seconds": 55.22,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-02",
+          "cycle": 13,
+          "seed": 522662,
+          "seconds": 49.89,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-03",
+          "cycle": 13,
+          "seed": 530581,
+          "seconds": 52.43,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        },
+        {
+          "stage": "CH-04",
+          "cycle": 13,
+          "seed": 538500,
+          "seconds": 48.31,
+          "life": 5,
+          "waves": 5,
+          "rank": 3
+        }
+      ],
+      "current": {
+        "stage": "CH-05",
+        "wave": 3,
+        "cycle": 13
+      }
+    }
+  ]
+}
