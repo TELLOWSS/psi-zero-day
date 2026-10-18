@@ -151,7 +151,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready&&SignalBreakerQA.engine().config.id==='CH-01'&&SignalBreakerQA.engine().wave===1&&!SignalBreakerQA.view().camera.bossFraming);
     await page.waitForTimeout(90); // wait for CH01 ordinary camera to replace the previous CH05 boss-frame transform
-   a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
+   a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v3.png'));
    // Presentation fixtures cover every material and state without claiming player balance.
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();if(g.state==='playing')g.pause();const c=SignalBreakerQA.view().camera;g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:c.x+innerWidth*(.17+i*.22)/c.scale,y:c.y+innerHeight*.45/c.scale,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;g.fields=[{kind:'mist',x:g.cores[1].x,y:g.cores[1].y,radius:95,until:g.time+1}];});
    await page.waitForTimeout(80);
