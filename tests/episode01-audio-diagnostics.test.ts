@@ -54,8 +54,7 @@ describe('EP01 opt-in audio QA timeline', () => {
     element.dispatchEvent(new Event('pause'));
     const failed = vi.fn();
     expect(attemptEpisodeAudioPlay(media, 'bgm', 'score_01', failed)).toBe(true);
-    await Promise.resolve();
-    expect(failed).toHaveBeenCalledOnce();
+    await vi.waitFor(() => expect(failed).toHaveBeenCalledOnce());
     const records = readEpisodeAudioDiagnostics();
     expect(records.map(item => item.signal)).toEqual([
       'created', 'loadeddata', 'pause', 'play_attempt', 'play_rejected',
