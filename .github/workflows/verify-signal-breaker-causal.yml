@@ -59,19 +59,13 @@ jobs:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
         run: |
-          node public/signal-breaker-dev/scripts/verify-psi-rpg-art.cjs
-          node public/signal-breaker-dev/scripts/verify-weapon-tree.cjs
-          node public/signal-breaker-dev/scripts/verify-ep02-workshop.cjs
-          node public/signal-breaker-dev/scripts/verify-evolution-repairs.cjs
-          node public/signal-breaker-dev/scripts/verify-veteran-offline.cjs
-          node public/signal-breaker-dev/scripts/verify-ui-release.cjs
-          node public/signal-breaker-dev/scripts/verify-boss-articulation.cjs
-          node public/signal-breaker-dev/scripts/verify-causal-source.cjs
-          node public/signal-breaker-dev/scripts/verify-stage-ending.cjs
-          node public/signal-breaker-dev/scripts/verify-campaign-ending.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-sound.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-voice.cjs
-          node public/signal-breaker-dev/scripts/verify-ending-voice-ingest.cjs
+          failures=0
+          for script in verify-psi-rpg-art verify-weapon-tree verify-ep02-workshop verify-evolution-repairs verify-veteran-offline verify-ui-release verify-boss-articulation verify-causal-source verify-stage-ending verify-campaign-ending verify-ending-sound verify-ending-voice verify-ending-voice-ingest; do
+            echo "::group::$script"
+            node "public/signal-breaker-dev/scripts/$script.cjs" || failures=$((failures + 1))
+            echo "::endgroup::"
+          done
+          if [ "$failures" -ne 0 ]; then echo "::error::$failures Signal Breaker browser checks failed"; exit 1; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
