@@ -15,7 +15,7 @@ const {spawn}=require('node:child_process');
   for(const [width,height] of [[1920,1080],[844,390],[390,844],[768,1024]]){
    const context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
-   await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#startOperation').click();
+   await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});await page.locator('#heroStartBtn').click();
    for(let i=1;i<=5;i++){
     const id='CH-0'+i;
     await page.evaluate(id=>{SignalBreakerQA.selectStage(id,true);const g=SignalBreakerQA.engine();g.boss=g.operationBoss();g.state='paused';g.time=2;},id);
