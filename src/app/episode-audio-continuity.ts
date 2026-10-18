@@ -24,6 +24,10 @@ type Deck = {
   readonly audio: HTMLAudioElement;
   readonly assetId: string;
   baseGain: number;
+  gainFrom: number;
+  gainTarget: number;
+  gainSince: number;
+  gainDuration: number;
   mix: number;
   from: number;
   target: number;
@@ -69,7 +73,9 @@ export class ContinuousEpisodeAudioBus {
     audio.preload = 'auto';
     // Never let a pending deck produce a full-volume transient before its first fade frame.
     audio.volume = 0;
-    return { audio, assetId: track.assetId, baseGain: clamp(track.baseGain), mix: 0,
+    return { audio, assetId: track.assetId, baseGain: clamp(track.baseGain),
+      gainFrom: clamp(track.baseGain), gainTarget: clamp(track.baseGain),
+      gainSince: this.clock.now(), gainDuration: 0, mix: 0,
       from: 0, target: 0, since: this.clock.now(), duration: 0 };
   }
 
@@ -100,8 +106,11 @@ export class ContinuousEpisodeAudioBus {
       if (!deck) continue;
       const progress = deck.duration ? Math.min(1, Math.max(0, (now - deck.since) / deck.duration)) : 1;
       deck.mix = clamp(deck.from + (deck.target - deck.from) * progress);
+      const gainProgress = deck.gainDuration
+        ? Math.min(1, Math.max(0, (now - deck.gainSince) / deck.gainDuration)) : 1;
+      deck.baseGain = clamp(deck.gainFrom + (deck.gainTarget - deck.gainFrom) * gainProgress);
       this.paint(deck);
-      if (progress < 1) changing = true;
+      if (progress < 1 || gainProgress < 1) changing = true;
     }
     if (this.outgoing && this.outgoing.mix === 0) {
       this.outgoing.audio.pause();
@@ -131,15 +140,23 @@ export class ContinuousEpisodeAudioBus {
       return;
     }
     if (this.active?.assetId === track.assetId) {
-      this.active.baseGain = clamp(track.baseGain);
-      this.active.audio.loop = track.loop;
-      this.paint(this.active);
+      const active = this.active;
+      active.audio.loop = track.loop;
+      const target = clamp(track.baseGain);
+      if (Math.abs(active.gainTarget - target) > 0.0005) {
+        active.gainFrom = active.baseGain;
+        active.gainTarget = target;
+        active.gainSince = this.clock.now();
+        active.gainDuration = Math.min(650, Math.max(180, fadeMs * 0.4));
+        this.schedule();
+      }
       this.resume();
       return;
     }
     if (this.pending?.assetId === track.assetId) {
-      this.pending.baseGain = clamp(track.baseGain);
-      this.pending.audio.loop = track.loop;
+      const pending = this.pending;
+      pending.baseGain = pending.gainFrom = pending.gainTarget = clamp(track.baseGain);
+      pending.audio.loop = track.loop;
       return;
     }
     this.pending?.audio.pause();
@@ -149,7 +166,7 @@ export class ContinuousEpisodeAudioBus {
 
     let settled = false;
     const onStarted = () => {
-      if (settled || this.disposed || this.pending !== incoming) return;
+      if (settled || this.disposed || this.pending !== incoming || this.muted) return;
       settled = true;
       this.pending = null;
       if (this.outgoing) this.outgoing.audio.pause();
