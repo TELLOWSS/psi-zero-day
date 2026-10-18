@@ -108,6 +108,9 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 0.25
           done
+          node scripts/audit-brand-production-slots.mjs
+          PSI_PREVIEW_URL= node scripts/review-brand-vector-candidate.mjs
+          node tests/verify-brand-mobile-hierarchy.mjs
           node scripts/verify-survivors-mode-previews.mjs
           node scripts/verify-survivors-stage-resume.mjs
           node scripts/verify-survivors-fitting-motion.mjs
@@ -118,9 +121,6 @@ jobs:
           node tests/verify-survivors-store-maintenance.mjs
           node tests/verify-store-reference-layout.mjs
           node tests/verify-lz-guidance.mjs
-          node scripts/audit-brand-production-slots.mjs
-          node scripts/review-brand-vector-candidate.mjs
-          node tests/verify-brand-mobile-hierarchy.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()

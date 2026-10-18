@@ -62,21 +62,21 @@ try {
           overflow: document.documentElement.scrollWidth > innerWidth };
       }, portrait);
       await page.screenshot({ path: `${output}/${width}x${height}-${reducedMotion}.png` });
+      // These cards now enter live modes; exercise their real destinations.
       await page.locator('.is-defense-entry').click();
-      await page.locator('.mode-preview-dialog').waitFor();
-      const defenseLocked = await page.locator('[data-defense-screen],.zb-shell').count() === 0;
-      await page.getByRole('button', { name: '프리뷰 닫기' }).click();
+      await page.locator('[data-defense-screen="guard-home"]').waitFor();
+      const defenseEntered = true;
+      await page.goto(url);
       await page.locator('.is-story-entry').click();
-      await page.locator('.mode-preview-dialog.is-story').waitFor();
-      const storyLocked = await page.locator('.title-screen-commercial').count() === 0;
-      await page.getByRole('button', { name: '프리뷰 닫기' }).click();
+      await page.locator('.game-frame').waitFor();
+      const storyEntered = true;
       // A fresh navigation also checks the actual playable route without mutating an engine state.
       await page.goto(url);
       await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
       await page.locator('.survivors-ready-dialog').waitFor();
       const playableReady = await page.locator('.survivors-ready-launch .survivors-btn-primary').isVisible();
-      rows.push({ width, height, reducedMotion, ...result, defenseLocked, storyLocked, playableReady, errors,
-        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/signal-watch-loading/signal-watch-landscape-v2.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
+      rows.push({ width, height, reducedMotion, ...result, defenseEntered, storyEntered, playableReady, errors,
+        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/signal-watch-loading/signal-watch-landscape-v2.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseEntered && storyEntered && playableReady && !errors.length) });
       await page.close();
     }
   }
