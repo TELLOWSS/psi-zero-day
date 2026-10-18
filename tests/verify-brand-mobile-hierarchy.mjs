@@ -57,7 +57,7 @@ try {
         const dashboardAfterActions = summaryVisible ? dashboard.top >= actions.at(-1).bottom :
           Boolean(document.querySelector('.commercial-title-actions').compareDocumentPosition(document.querySelector('.commercial-triad-dashboard')) & Node.DOCUMENT_POSITION_FOLLOWING);
         const cardStyle = getComputedStyle(document.querySelector('.is-survivors-entry'));
-        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && imageBox.left<=primary.left+1 && imageBox.top<=primary.top+1 && imageBox.right>=primary.right-1 && imageBox.bottom>=primary.bottom-1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
+        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && imageBox.left>=primary.left-1 && imageBox.top>=primary.top-1 && imageBox.right<=primary.right+1 && imageBox.bottom<=primary.bottom+1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
         return { modeSelect, cardArtFits, loaded, identity: new URL(image.currentSrc).pathname, imageBox, alphaBounds, actorClear, primary, readyFit, actionFit, summaryVisible, dashboardAfterActions,
           overflow: document.documentElement.scrollWidth > innerWidth };
       }, portrait);
