@@ -116,7 +116,9 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
   const historyDialog=useRef<HTMLDialogElement>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id;
+  // Retain the last authored bed/score through short gaps between engine events.
+  const audioEventId=snapshot.state?.event_runtime.active_instance?.event_id
+    ?? snapshot.state?.event_runtime.finished_instances.at(-1)?.event_id;
   const directorAudio=episodeAudioDirection(audioEventId);
   const score=episode01CandidateScoreAsset(directorAudio?.motif);
   const rawSoundscape=storySoundscape(audioEventId);
