@@ -280,13 +280,14 @@ export function useEpisodeAudio(authoredAudio: AudioState | null | undefined, re
     const release = () => presentationRef.current.delete(element);
     element.addEventListener('ended', release, { once: true });
     element.addEventListener('error', release, { once: true });
-    if (!attemptEpisodeAudioPlay(element,'foley',cue.asset_id ?? 'fallback',() => {
+    let fallbackPlayed = false;
+    const useFallback = () => {
+      if (fallbackPlayed) return;
+      fallbackPlayed = true;
       release();
       playUiCue(cue.fallback);
-    })) {
-      release();
-      playUiCue(cue.fallback);
-    }
+    };
+    if (!attemptEpisodeAudioPlay(element,'foley',cue.asset_id ?? 'fallback',useFallback)) useFallback();
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
   const playVoiceCue = useCallback((
