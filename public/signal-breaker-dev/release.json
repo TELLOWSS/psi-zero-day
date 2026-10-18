@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.68.0-trimode-intel",
   "cacheName": "psi-signal-breaker-raid-guide-20261018",
-  "fingerprint": "3ff589d65b390b7a3eadb442c5f58c0d43ea1f051c1251aa2546b9679b788c2f",
+  "fingerprint": "c2ae7f1d37daa9e19774ae8c6adc9b8b3a5d61975ec0bf7e70dacb4db0419b93",
   "files": [
     {
       "path": "/assets/episode01/characters/crew-heads-v1/choi_minseok.webp",
@@ -946,8 +946,8 @@
     },
     {
       "path": "/signal-breaker-dev/src/combat-vfx.js",
-      "bytes": 11686,
-      "sha256": "e36fa8e56485af424564be5e4b893514b98e7db9d49738074ed75c36d01bc305"
+      "bytes": 12924,
+      "sha256": "03280f5cfce27d8f5fc9f725157b159d5ea7221a7a80dbf949f73c8e5172bd07"
     },
     {
       "path": "/signal-breaker-dev/src/ending-performance-content.js",
