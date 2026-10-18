@@ -51,7 +51,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots),'manual aim retains automatic fire');
    await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),live=g.launchGeometry().direction,shot=g.route.at(-1),facing=Number(document.getElementById('arena').dataset.breakerFacing),quantize=d=>(Math.round(Math.atan2(d.y,d.x)/(Math.PI/4))+8)%8;return live.x<0&&[live,shot&&g.time-shot.time<=.15?{x:shot.dx,y:shot.dy}:null].filter(Boolean).some(d=>facing===quantize(d));},null,{timeout:5000});
    await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();if(g.boss)delete g.boss.raid;});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.raidEnabled=false;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
     await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextDischargeAt-1.34;g.step(1/120);});
     a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='delivery'&&b.warningUntil>SignalBreakerQA.engine().time;}),'CH01 dedicated boss shows warned discharge lane');
@@ -81,7 +81,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    // CH02-specific presentation contract: live belt-warning lane and interactive mitigation.
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();if(g.boss)delete g.boss.raid;g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=4;g.raidEnabled=false;g.beginNextWave();g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='conveyor'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('과부하'));
    await page.screenshot({path:path.join(out,`operation-conveyor-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH02');
@@ -99,7 +99,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.segment===2&&b.phase==='sealed'&&b.nodes.every(n=>!n.hit);}));
    await page.screenshot({path:path.join(out,`operation-conveyor-armour-two-${width}.png`)});
    // CH03 distinct cyclone boss: warning, player-applied mist on extractor intake and cleared pressure.
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-03',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();if(g.boss)delete g.boss.raid;g.time=g.boss.nextPressureAt-1.48;g.step(1/120);});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-03',true);const g=SignalBreakerQA.engine();g.wave=4;g.raidEnabled=false;g.beginNextWave();g.time=g.boss.nextPressureAt-1.48;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='extraction'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('분진 압력'));
    if(height>width){await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),v=SignalBreakerQA.view(),cam=v.camera,playerX=(g.player.x-cam.x)*cam.scale,bossX=(g.boss.x-cam.x)*cam.scale;return playerX>=12&&playerX<=innerWidth-10&&bossX>=28&&bossX<=innerWidth-25;});}
@@ -118,7 +118,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.filterStage===2&&b.phase==='sealed'&&b.nodes.every(n=>!n.hit);}));
    await page.screenshot({path:path.join(out,`operation-extraction-filter-rearmed-${width}.png`)});
    // CH04 tension relay: make warned snap visible, then deliberately lock the rail with the anchor apparatus.
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-04',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();if(g.boss)delete g.boss.raid;g.time=g.boss.nextSnapAt-1.3;g.step(1/120);});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-04',true);const g=SignalBreakerQA.engine();g.wave=4;g.raidEnabled=false;g.beginNextWave();g.time=g.boss.nextSnapAt-1.3;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='tension'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('장력 파열'));
    await page.screenshot({path:path.join(out,`operation-tension-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH04');
@@ -136,7 +136,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='sealed'&&b.loadStage===2&&b.nodes.every(n=>!n.hit);}));
    await page.screenshot({path:path.join(out,`operation-tension-load-rearmed-${width}.png`)});
    // Final boss QA: three-zone electrical warning, explicit scan response, phase 2.
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();if(g.boss)delete g.boss.raid;g.time=g.boss.nextArcAt-1.36;g.step(1/120);});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.wave=4;g.raidEnabled=false;g.beginNextWave();g.time=g.boss.nextArcAt-1.36;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='grid'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('전력 불균형'));
    await page.screenshot({path:path.join(out,`operation-grid-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH05');
@@ -158,7 +158,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.every(q=>(q.x-q.r-c.x)*c.scale>=0&&(q.x+q.r-c.x)*c.scale<=innerWidth&&(q.y-q.r-c.y)*c.scale>=0&&(q.y+q.r-c.y)*c.scale<=innerHeight);}),true,'all material fixture silhouettes inside camera');
    await page.screenshot({path:path.join(out,`materials-${width}.png`)});
    // Reproduce CH02 FLOW 2/5 released-metal clutter independently of the actual final boss.
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=1;g.beginNextWave();if(g.boss)delete g.boss.raid;g.cores=[];g.pendingCores=[];g.addCore({x:540,y:300,tier:2,kind:'metal',vx:0,vy:0});g.cores[0].released=true;g.cores[0].releaseAt=g.time-1;g.pause();});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=1;g.raidEnabled=false;g.beginNextWave();g.cores=[];g.pendingCores=[];g.addCore({x:540,y:300,tier:2,kind:'metal',vx:0,vy:0});g.cores[0].released=true;g.cores[0].releaseAt=g.time-1;g.pause();});
    await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready&&SignalBreakerQA.view().hazards.footprints.length===1);
    a.ok(await page.evaluate(()=>{const view=SignalBreakerQA.view(),p=view.hazards.footprints[0];return SignalBreakerQA.engine().wave===2&&!SignalBreakerQA.engine().boss&&p.kind==='metal'&&p.visual>=p.r*2&&p.pixels<=Math.max(110,p.r*2*view.camera.scale)+1;}),'CH02 flow-2 metal hazard stays inside physical collision and screen pixel budget');
    await page.screenshot({path:path.join(out,`operation-ch02-flow02-metal-budget-${width}.png`)});
@@ -283,7 +283,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.keyboard.up('KeyD');await page.reload();await page.locator('#resumeRun').click();
    await page.waitForFunction(()=>SignalBreakerQA.snapshot().wave===2&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#tuningDock').isVisible(),false,'continuous checkpoint resumes directly');
    await page.keyboard.down('KeyD');
-   for(let wave=2;wave<=5;wave++){await page.evaluate(clear);if(wave===5)await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;if(b){delete b.raid;for(let gate=1;gate<=(b.maxGatePhases||1);gate++){if(b.phase==='rearming'){g.time=b.resetUntil+1/120;b.nextDischargeAt=g.time+30;g.step(1/120);}for(const n of b.nodes)if(!n.hit)g.shotBoss({x:n.x,y:n.y,r:8,life:1,kind:'pulse'});for(let i=0;i<b.maxHp;i++)if(b.phase==='exposed')g.shotBoss({x:b.x,y:b.y,r:8,life:1,kind:'pulse'});}}});await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
+   await page.evaluate(()=>{SignalBreakerQA.engine().raidEnabled=false;});
+   for(let wave=2;wave<=5;wave++){await page.evaluate(clear);if(wave===5)await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;if(b){for(let gate=1;gate<=(b.maxGatePhases||1);gate++){if(b.phase==='rearming'){g.time=b.resetUntil+1/120;b.nextDischargeAt=g.time+30;g.step(1/120);}for(const n of b.nodes)if(!n.hit)g.shotBoss({x:n.x,y:n.y,r:8,life:1,kind:'pulse'});for(let i=0;i<b.maxHp;i++)if(b.phase==='exposed')g.shotBoss({x:b.x,y:b.y,r:8,life:1,kind:'pulse'});}}});await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
    await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-01'&&SignalBreakerQA.snapshot().state==='won');await page.locator('#stageEnding').waitFor({state:'visible'});await page.locator('#endingSkip').click();await acknowledgeBossLoot(page);await page.locator('#overlay').waitFor({state:'visible'});a.equal(await page.locator('#overlay').isVisible(),true,'stage result waits for explicit choice');a.equal(await page.locator('#resultOperationSelect').isVisible(),true,'operation map reachable from results');a.equal(await page.locator('#resultLoadout').isVisible(),true,'equipment preparation reachable from results');a.equal(await page.locator('.result-award').isVisible(),true,'victory screen foregrounds earned outcome');await page.screenshot({path:path.join(out,`combat-result-${width}.png`)});await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01');await page.keyboard.up('KeyD');await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='ready');a.equal(await page.locator('#slot1Select').count(),1,'next stage supports loadout preparation');await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');await page.keyboard.down('KeyD');
    const continued=await page.evaluate(()=>SignalBreakerQA.engine().player.x);await page.waitForTimeout(180);a.ok(await page.evaluate(x=>SignalBreakerQA.engine().player.x>x,continued),'held movement survives chapter handoff');await page.keyboard.up('KeyD');
    await page.screenshot({path:path.join(out,`continuous-story-${width}.png`)});

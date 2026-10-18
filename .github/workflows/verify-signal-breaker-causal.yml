@@ -77,7 +77,7 @@ jobs:
           failures=0
           for script in verify-psi-rpg-art verify-weapon-tree verify-ep02-workshop verify-evolution-repairs verify-veteran-offline verify-ui-release verify-boss-articulation verify-causal-source verify-stage-ending verify-campaign-ending verify-ending-sound verify-ending-voice verify-ending-voice-ingest; do
             echo "::group::$script"
-            node "public/signal-breaker-dev/scripts/$script.cjs" || failures=$((failures + 1))
+            timeout 600s node "public/signal-breaker-dev/scripts/$script.cjs" || failures=$((failures + 1))
             echo "::endgroup::"
           done
           if [ "$failures" -ne 0 ]; then echo "::error::$failures Signal Breaker browser checks failed"; exit 1; fi
