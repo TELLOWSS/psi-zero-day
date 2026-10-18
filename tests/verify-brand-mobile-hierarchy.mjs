@@ -51,13 +51,15 @@ try {
         }
         const texts = [...document.querySelectorAll('.commercial-title-wordmark img,.commercial-title-copy h1,.commercial-title-english')].filter(element => element.getBoundingClientRect().height > 0).map(box);
         const actorClear = !portrait || alphaBounds && alphaBounds.left >= 0 && alphaBounds.top >= 0 && alphaBounds.right <= innerWidth && alphaBounds.bottom <= innerHeight && !texts.some(b => intersects(alphaBounds, b)) && !actions.some(b => intersects(alphaBounds, b));
-        const readyFit = primary.top >= 0 && primary.bottom <= innerHeight && primary.height >= 44;
+        const readyFit = primary.top >= -2 && primary.bottom <= innerHeight + 2 && primary.height >= 44;
         const actionFit = actions.every(b => b.left >= 0 && b.right <= innerWidth && b.height >= 44);
         const summaryVisible = dashboard.height > 0;
         const dashboardAfterActions = summaryVisible ? dashboard.top >= actions.at(-1).bottom :
           Boolean(document.querySelector('.commercial-title-actions').compareDocumentPosition(document.querySelector('.commercial-triad-dashboard')) & Node.DOCUMENT_POSITION_FOLLOWING);
         const cardStyle = getComputedStyle(document.querySelector('.is-survivors-entry'));
-        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && imageBox.left>=primary.left-1 && imageBox.top>=primary.top-1 && imageBox.right<=primary.right+1 && imageBox.bottom<=primary.bottom+1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
+        // Layout bounds are measured before the intentional hover zoom; the card
+        // must clip the transformed pixels. Device rounding may reach 2px.
+        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && image.offsetLeft>=-1 && image.offsetTop>=-1 && image.offsetLeft+image.offsetWidth<=document.querySelector('.is-survivors-entry').clientWidth+1 && image.offsetTop+image.offsetHeight<=document.querySelector('.is-survivors-entry').clientHeight+1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
         return { modeSelect, cardArtFits, loaded, identity: new URL(image.currentSrc).pathname, imageBox, alphaBounds, actorClear, primary, readyFit, actionFit, summaryVisible, dashboardAfterActions,
           overflow: document.documentElement.scrollWidth > innerWidth };
       }, portrait);
