@@ -1,0 +1,6 @@
+{
+  "id": "stage_31",
+  "source": "public/assets/survivors/maps/skydeck-v2.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_31: extract ONLY the existing nearest bottom blue safety curtain and orange/yellow guardrail, stored steel and equipment hut attached to the bottom perimeter (bottom 25 percent). All flat floor, painted green walkways, outer city and upper/side cranes transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-982fee1a-8fdd-4a43-8f02-f15c6161ca34.png"
+}

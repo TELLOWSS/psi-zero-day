@@ -1,0 +1,247 @@
+{
+  "stage_01": {
+    "source": "public/assets/survivors/stage-01-ground-v3.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-ab9c5076-7622-4fed-a4ae-4f4b69e41dd1.png",
+    "prompt": "Use case: background-extraction. Edit target: the attached STAGE 01 construction yard ground raster, used at 1400 x 900 world coordinates. Produce an aligned RGBA foreground cutout ONLY of the physical bottom-edge material stacks, metal pipe/rebar bundles, pallets, narrow perimeter safety railing and lamps already painted along the very bottom edge (roughly bottom 9 percent). Keep original canvas framing, object positions, silhouette and perspective absolutely unchanged. Everything else, including the entire central concrete walking floor and its green path, side edges and upper border, must be fully transparent. Preserve actual alpha; no checkerboard, no solid background, no new objects, no people, no text, no shadows extending onto the walking floor. Do not redraw or move equipment. This is an alpha extraction for source-matched game compositing; preserve the original silhouette exactly."
+  },
+  "stage_03": {
+    "source": "public/assets/survivors/maps/highrise-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-aa95c63b-725d-4c0f-afc5-416d98955590.png",
+    "prompt": "Use case: background-extraction. Edit target: stage_03 original ground raster. Extract ONLY the existing bottom edge green safety net and guardrail, the central protruding concrete/rebar column, yellow perimeter scaffold and the bottom-edge material bundles only (roughly bottom 22 percent); do not include the city scenery, open concrete slab or tall left crane. Preserve original full canvas dimensions, camera, exact pixel positions, scale and object silhouette. All other pixels fully transparent, especially central walking floor. Actual RGBA transparent background, no black background/checkerboard, no new geometry, no workers or text, no moved/redrawn equipment, no ground shadows. This is an exact aligned alpha cutout for game source-matched compositing."
+  },
+  "stage_04": {
+    "source": "public/assets/survivors/maps/winter-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-37ce46ff-af39-4c06-94fd-7ba29dac1d4c.png",
+    "prompt": "Use case: background-extraction. Edit target: stage_04 original ground raster. Extract ONLY the existing bottom-edge white/red insulated tent barrier, red heater cylinders, attached curled ventilation duct, bundled panels and lower center equipment stands only (roughly bottom 18 percent); no upper/side walls and no icy walking floor. Preserve original full canvas dimensions, camera, exact pixel positions, scale and object silhouette. All other pixels fully transparent, especially central walking floor. Actual RGBA transparent background, no black background/checkerboard, no new geometry, no workers or text, no moved/redrawn equipment, no ground shadows. This is an exact aligned alpha cutout for game source-matched compositing."
+  },
+  "stage_05": {
+    "source": "public/assets/survivors/maps/datacenter-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-471afad4-f7a0-4e9d-bb1e-cfd12266482d.png",
+    "prompt": "Use case: background-extraction. Edit target: original ground raster for stage_05. Extract ONLY the existing bottom-edge server racks, gray electrical cabinets and raised blue/green pipe runs only, below the edge of the clear tiled walking area (bottom 17 percent); no flat tile floor or floor grates. Exact same original canvas dimensions, camera, scale, positions and object silhouette. Every other pixel fully transparent. Actual RGBA transparency, no black background or checkerboard. No new objects, workers, text or shadows painted onto the ground. Do not redraw or reposition the equipment. Game foreground alpha extraction: preserve original object-edge alignment exactly."
+  },
+  "stage_06": {
+    "source": "public/assets/survivors/maps/remodel-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e7259877-6d46-40b5-a5be-abda4d79d225.png",
+    "prompt": "Use case: background-extraction. Edit target: original ground raster for stage_06. Extract ONLY the existing bottom foreground brick window wall, green steel supports, electrical cabinet and the nearest lower-left rubble skip bin only; omit all central flat floor, upper and side walls. Exact same original canvas dimensions, camera, scale, positions and object silhouette. Every other pixel fully transparent. Actual RGBA transparency, no black background or checkerboard. No new objects, workers, text or shadows painted onto the ground. Do not redraw or reposition the equipment. Game foreground alpha extraction: preserve original object-edge alignment exactly."
+  },
+  "stage_07": {
+    "source": "public/assets/survivors/demolition-ground-v3.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-81c63e0f-adb1-4a0b-8ad1-3d35af4526d7.png",
+    "prompt": "Use case: background-extraction. Edit target: original ground raster for stage_07. Extract ONLY the existing nearest bottom broken concrete walls, protruding broken column stubs and bottom-edge bundled pipes/rebar only; omit scattered flat rubble, central green path, all side and upper edges. Exact same original canvas dimensions, camera, scale, positions and object silhouette. Every other pixel fully transparent. Actual RGBA transparency, no black background or checkerboard. No new objects, workers, text or shadows painted onto the ground. Do not redraw or reposition the equipment. Game foreground alpha extraction: preserve original object-edge alignment exactly."
+  },
+  "stage_08": {
+    "source": "public/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-497c6ba3-34ac-4ef4-aa98-0d7efe48e236.png",
+    "prompt": "Use case: background-extraction. Edit target: the original STAGE 08 ground map. Output ONLY the foreground equipment stacks and concrete stubs touching the BOTTOM border: left scaffolding/rod bundles and right scaffolding/rod bundles. Every pixel above y=735 must be transparent. IMPORTANT: the long diagonal metal expansion-joint strip across the middle is FLAT FLOOR and must be entirely REMOVED/TRANSPARENT, including its bottommost segment. The concrete walking floor, all upper/side border equipment, light spill and shadows are also transparent. Preserve the original 1536 x 1024 full canvas, equipment positions and precise silhouettes; do not move or rescale anything. Genuine RGBA transparency. No background, halo, people or text."
+  },
+  "stage_09": {
+    "source": "public/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f1bf1712-dc42-4a76-8398-ccc74217237a.png",
+    "prompt": "Use case: background-extraction. Edit target stage_09: extract ONLY the existing bottom foreground yellow-railed storage platform with silver HVAC duct sections and green elbow pipes, below the central walking floor. Preserve the full original canvas dimensions, exact camera, positions, scale, perspective and silhouette. Keep every other pixel fully transparent. Actual RGBA transparency, no opaque/black background or checkerboard. Do not add or move any objects, no people, text, glow, shadows or floor color. This is a pixel-aligned game foreground mask, not a recomposed illustration."
+  },
+  "stage_10": {
+    "source": "public/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-d9f2c48a-3825-4a6b-b1f2-e56978f61a0d.png",
+    "prompt": "Use case: background-extraction. Edit target stage_10: extract ONLY the existing bottom edge raised gray HVAC cabinets, nearest short railing and attached blue/yellow pipe runs; no tile floor or flat floor grates. Preserve the full original canvas dimensions, exact camera, positions, scale, perspective and silhouette. Keep every other pixel fully transparent. Actual RGBA transparency, no opaque/black background or checkerboard. Do not add or move any objects, no people, text, glow, shadows or floor color. This is a pixel-aligned game foreground mask, not a recomposed illustration."
+  },
+  "stage_11": {
+    "source": "public/assets/survivors/maps/formwork-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f37791cb-57b0-4b7b-a61d-6f2716c11d21.png",
+    "prompt": "Use case: background-extraction. Edit target stage_11: extract ONLY the existing bottom foreground yellow shoring props, silver formwork stacks and steel cages in their storage slots (bottom 14 percent); exclude the chalked floor. Preserve the full original canvas dimensions, exact camera, positions, scale, perspective and silhouette. Keep every other pixel fully transparent. Actual RGBA transparency, no opaque/black background or checkerboard. Do not add or move any objects, no people, text, glow, shadows or floor color. This is a pixel-aligned game foreground mask, not a recomposed illustration."
+  },
+  "stage_12": {
+    "source": "public/assets/survivors/maps/rebar-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-8967a614-6c8f-43c2-9be9-afeaf38b1aec.png",
+    "prompt": "Use case: background-extraction. Edit target stage_12: extract ONLY the existing bottom foreground steel rod bundles, coiled rebar and welded cages (bottom 17 percent); exclude all chalked concrete floor and side storage rows. Preserve the full original canvas dimensions, exact camera, positions, scale, perspective and silhouette. Keep every other pixel fully transparent. Actual RGBA transparency, no opaque/black background or checkerboard. Do not add or move any objects, no people, text, glow, shadows or floor color. This is a pixel-aligned game foreground mask, not a recomposed illustration."
+  },
+  "stage_13": {
+    "source": "public/assets/survivors/maps/pour-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-5e8bb612-ad35-4b16-b7c5-c01089c276d8.png",
+    "prompt": "Use case: background-extraction. Edit target stage_13: isolate ONLY the existing nearest bottom-edge guardrail/rebar stubs and service-platform equipment: red and gray power boxes, work lights and material bundles (bottom 15 percent). All wet concrete walking surface and city scenery are transparent; do not include the upper pump boom. Exact full original canvas dimensions, original object positions, original camera, unchanged scale and silhouettes. All unlisted pixels transparent; genuine RGBA. Do not recompose, redraw, move or add equipment. No people, text, ground shadows, glow or opaque background. This is a native-aligned alpha mask for source-matched rendering."
+  },
+  "stage_14": {
+    "source": "public/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-0d02230b-3317-434d-aaf5-c51cf7f6453c.png",
+    "prompt": "Use case: background-extraction. Edit target stage_14: isolate ONLY the existing nearest bottom-edge gray steel column bases, yellow guardrails and steel bundles (bottom 20 percent). All blue floor markings, slab surface and side towers are transparent. Exact full original canvas dimensions, original object positions, original camera, unchanged scale and silhouettes. All unlisted pixels transparent; genuine RGBA. Do not recompose, redraw, move or add equipment. No people, text, ground shadows, glow or opaque background. This is a native-aligned alpha mask for source-matched rendering."
+  },
+  "stage_15": {
+    "source": "public/assets/survivors/maps/scaffold-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-a124b304-8920-4b56-af49-1a96390d1a49.png",
+    "prompt": "Use case: background-extraction. Edit target stage_15: isolate ONLY the existing nearest bottom-edge green safety net, perimeter scaffold and small concrete/rebar stubs (bottom 23 percent), keeping city scenery and the slab floor transparent; do not include upper or side scaffolds. Exact full original canvas dimensions, original object positions, original camera, unchanged scale and silhouettes. All unlisted pixels transparent; genuine RGBA. Do not recompose, redraw, move or add equipment. No people, text, ground shadows, glow or opaque background. This is a native-aligned alpha mask for source-matched rendering."
+  },
+  "stage_16": {
+    "source": "public/assets/survivors/maps/roof-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-8cf757cb-3283-4e4f-93e8-332f820916d4.png",
+    "prompt": "Use case: background-extraction. Edit target stage_16: isolate ONLY the existing nearest bottom-edge rooftop HVAC fan cabinet, service hut, two blue glass skylights and perimeter parapet (bottom 22 percent). All flat roof flooring and city scenery fully transparent. Exact full original canvas dimensions, original object positions, original camera, unchanged scale and silhouettes. All unlisted pixels transparent; genuine RGBA. Do not recompose, redraw, move or add equipment. No people, text, ground shadows, glow or opaque background. This is a native-aligned alpha mask for source-matched rendering."
+  },
+  "stage_17": {
+    "source": "public/assets/survivors/maps/waterproof-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-00839b2a-bc77-48e3-837d-e44d796b2362.png",
+    "prompt": "Use case: background-extraction. Edit target stage_17: isolate ONLY the existing bottom parapet wall, near-left fan cabinet, black membrane roll stacks and paint drums along the nearest bottom edge (bottom 13 percent). Keep the blue waterproofed floor entirely transparent. Preserve original full-canvas dimensions, camera, scale, exact positions and silhouettes. Actual RGBA transparent surrounding area. Do not invent, redraw or move objects. No background fill, checkerboard, floor shadows, glow, people or text. Native-aligned foreground alpha cutout for source-matched game rendering."
+  },
+  "stage_18": {
+    "source": "public/assets/survivors/maps/finish-v1.png",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-287a3b5d-f753-4914-bcc2-e4e76f130008.png",
+    "prompt": "Use case: background-extraction. Edit target stage_18: isolate ONLY the existing bottom nearest material pallets, silver frame bundles, marble-clad column blocks, blue lifting frame and window mullions only (bottom 18 percent). All flat marble floor, reflections and outside garden are transparent. Preserve original full-canvas dimensions, camera, scale, exact positions and silhouettes. Actual RGBA transparent surrounding area. Do not invent, redraw or move objects. No background fill, checkerboard, floor shadows, glow, people or text. Native-aligned foreground alpha cutout for source-matched game rendering."
+  },
+  "stage_19": {
+    "source": "public/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-c1959d00-afce-4419-9b07-1fbc34e6d4c2.png",
+    "prompt": "Use case: background-extraction. Edit target stage_19: isolate ONLY the existing bottom-edge raised electrical cabinets, guardrails and attached conduit runs (bottom 14 percent). Do not include any central dark floor, white boundary markings, horizontal floor drains or left/right tall cabinets. Preserve original full-canvas dimensions, camera, scale, exact positions and silhouettes. Actual RGBA transparent surrounding area. Do not invent, redraw or move objects. No background fill, checkerboard, floor shadows, glow, people or text. Native-aligned foreground alpha cutout for source-matched game rendering."
+  },
+  "stage_20": {
+    "source": "public/assets/survivors/maps/handover-v1.png",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_20. Extract ONLY the two bottom server rack clusters behind glass, four silver cylindrical columns, plants and outer elevator door jambs. EXCLUDE the central double glass entrance door, central black floor grille, every flat marble floor and all side/top objects. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparent background with isolated physical objects only. All cast ground shadows transparent. Do not move, invent or enlarge any object. Do not compose a new scene or add backdrop/glow/text/characters.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e38743ed-d4b0-46f6-b9be-1f2d5fbac889.png"
+  },
+  "stage_21": {
+    "source": "public/assets/survivors/maps/deepworks-v2.webp",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e764abdc-ee28-4415-a79e-367543491b04.png",
+    "prompt": "Use case: background-extraction. Edit target stage_21: extract ONLY the existing nearest bottom retaining-wall edge, red ventilation blower/duct and low rebar cages, light posts and material stacks (bottom 23 percent). Do not include the wet slab, floor marks or upper and side walls. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration."
+  },
+  "stage_22": {
+    "source": "public/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_22: extract ONLY the existing bottom foreground retaining wall, nearest blue hoses/gray bent pipework and short yellow guardrail. Every pixel above y=650 and the wet central slab and its painted fan-shaped markings must be transparent. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-49e29a8e-e67e-499b-8e64-6a9b5f9b62e6.png"
+  },
+  "stage_23": {
+    "source": "public/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_23: extract ONLY the existing ONLY the narrow bottom-center red/white barricades, yellow handrail and raised metal service-box edge (within bottom 12 percent). Do not include the large left conveyor, the right dump bins, the concrete walkway or dirt/tire tracks. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-fac4409b-9130-4006-b9da-fdece6dc08d6.png"
+  },
+  "stage_24": {
+    "source": "public/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_24: extract ONLY the existing bottom-edge blue ventilation fan stack, nearest electrical boxes, material stacks and guardrail (lower left fans may extend to y=700). The entire diagonal yellow painted lane, green painted pedestrian path and concrete floor are flat and must remain fully transparent. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-6e6b82d8-399c-432d-8e48-88ee723b4a93.png"
+  },
+  "stage_25": {
+    "source": "public/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_25. Extract ONLY the existing two bottom GREEN horizontal safety guardrail panels and their yellow posts. EXCLUDE all brown earth/soil, rocks, concrete floor, drains, grates, central entrance bridge, left pipe bundle and right pallets. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparent background with isolated physical objects only. All cast ground shadows transparent. Do not move, invent or enlarge any object. Do not compose a new scene or add backdrop/glow/text/characters.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-d13daa4c-64c7-4624-a550-0bdbbea9a3fb.png"
+  },
+  "stage_26": {
+    "source": "public/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_26: isolate ONLY the existing ONLY the low nearest gray concrete parapet at the bottom border and attached lower-left/lower-right cabinet corners, within bottom 16 percent. No central floor, pipe markings, side walls or flat drains. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-df5cf34d-d4d0-4839-b9cf-d1e3d3bb78dc.png"
+  },
+  "stage_27": {
+    "source": "public/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_27: isolate ONLY the existing ONLY the nearest horizontal steel I-beam bundles on the bottom-left and the concrete retaining blocks and yellow railing bordering the bottom-right rubble storage (bottom 24 percent). No scattered loose rubble, central walkway, upper piles, entire tall side heap or flat floor. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1e94ac36-7018-4af2-963b-184986709388.png"
+  },
+  "stage_28": {
+    "source": "public/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_28: isolate ONLY the existing the four rust-brown rectangular rubble bins along the BOTTOM edge and nearest left demolition breaker/grapple head only (bottom 22 percent). All flat rubble-covered floor, tire tracks, side and upper storage rows are transparent. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-075d455f-c708-4626-b129-17d2318dbb0a.png"
+  },
+  "stage_29": {
+    "source": "public/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_29: extract ONLY the existing nearest bottom gray retaining-wall/parapet and raised service pipe housings with short yellow rails (bottom 16 percent). All floor, orange/cyan painted lines, square central grate and side valve columns transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-dbf0f331-2083-400f-8cdb-08349e342484.png"
+  },
+  "stage_30": {
+    "source": "public/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_30: extract ONLY the existing nearest bottom tunnel-mouth arch/parapet edge and raised service conduits, plus immediate lower-left/right rock retaining edges (bottom 23 percent); do not include the central flat T-shaped walkway, floor drains, black tunnel void or full side pipes. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-3f8d3fa5-60b1-4e7e-b460-dd824a437750.png"
+  },
+  "stage_31": {
+    "source": "public/assets/survivors/maps/skydeck-v2.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_31: extract ONLY the existing nearest bottom blue safety curtain and orange/yellow guardrail, stored steel and equipment hut attached to the bottom perimeter (bottom 25 percent). All flat floor, painted green walkways, outer city and upper/side cranes transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-982fee1a-8fdd-4a43-8f02-f15c6161ca34.png"
+  },
+  "stage_32": {
+    "source": "public/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_32: extract ONLY the existing nearest bottom blue safety net/guardrail and stored black/silver formwork panels and yellow shoring props along that edge (bottom 23 percent). Central slab and side/upper storage rows fully transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-306821ed-8138-4b2f-9b2e-26d9cb3c3e70.png"
+  },
+  "stage_33": {
+    "source": "public/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_33: isolate ONLY the existing nearest bottom rebar bundles, steel-mesh guards and concrete parapet/opening jambs (bottom 17 percent). Do not include central chalk/yellow floor markings, side stacks or flat floor. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-63489e49-8852-4003-8671-63f5170cd2b9.png"
+  },
+  "stage_34": {
+    "source": "public/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_34: isolate ONLY the existing nearest bottom blue perimeter curtain, low black rebar cage, short steel bundles, pallet and bottom-right horizontal yellow props (bottom 14 percent). All concrete floor, vertical seams and right-side upright long props transparent. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-ba6ac673-84df-4a8d-af1c-035e6acb6041.png"
+  },
+  "stage_35": {
+    "source": "public/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_35: isolate ONLY the existing nearest bottom green safety net, short guardrails, wood platforms and stored metal scaffold frames along the bottom edge (bottom 18 percent). All green painted walkways, yellow floor markings and open concrete transparent. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-b4dbf1b6-75d5-48f0-a3a6-fb7d68dfa800.png"
+  },
+  "stage_36": {
+    "source": "public/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Edit target stage_36: isolate ONLY the existing nearest bottom gray parapet, small silver rod bundles, two mesh service cabinets, blue storage rack and attached low conduit/rail (bottom 13 percent). Do not include the diagonal gray floor strip, square floor panels, tall side HVAC rows or central slab. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f1bf2e19-718c-4d46-aed9-e910db592871.png"
+  },
+  "stage_37": {
+    "source": "public/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_37. Extract ONLY existing nearest bottom parapet, black rolled membranes, low concrete vent housings, small right rod bundles and tarp boxes. Exclude all beige painted floor strips and central rooftop slab. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-9abddba6-e8b8-40b7-938d-2416c3cc166a.png"
+  },
+  "stage_38": {
+    "source": "public/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_38. Extract ONLY existing nearest bottom white wrapped pallets, short sheet stacks, gray window jambs and parapet. Exclude all flat beige floor, tape and central entrance walkway. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-03750fab-a8a1-422c-b63b-0f635eda5229.png"
+  },
+  "stage_39": {
+    "source": "public/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input is edit target stage_39. Remove the entire image except ONLY the LOW BOTTOM-RIGHT yellow guardrail, silver pipe bundle and adjacent short mesh cabinet at x=1200..1420,y=850..1024. Leave this small corner cutout at EXACT original pixel coordinates on the original 1536x1024 full transparent canvas. Do not include the central blue machine, top red machine, side objects, floor or painted floor arrows. DO NOT enlarge, center, move or redraw objects. All other pixels fully RGBA transparent, no glow or shadow. Native-aligned small corner cutout only.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1edd0403-3d49-47bf-8e60-b9f38c82c742.png"
+  },
+  "stage_40": {
+    "source": "public/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_40. Extract ONLY existing nearest bottom green safety curtain, short black steel bundles, small wood pallets and low scaffold frames. Exclude ALL colored circle and fan sectors painted on floor, central slab and tall side stacks. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-db81e101-65b7-4581-8a84-8a604ee0b69d.png"
+  },
+  "stage_41": {
+    "source": "public/assets/survivors/maps/plant-v2.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_41. Isolate ONLY existing bottom horizontal duct/cable tray, low silver switchgear and cable reels in bottom 24 percent only. Exclude painted green route, top and tall side machines. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e67299c9-8c6f-4efc-b5e0-c9de41c202e2.png"
+  },
+  "stage_42": {
+    "source": "public/assets/survivors/maps/plant-stage-42-graphics-v2.png",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_42. Isolate ONLY existing bottom horizontal red conduits, short white switchgear boxes and low bottom-right silver elbow duct in bottom 15 percent only. Exclude tall right vertical duct, tall left switchgear bank, red/green painted floor route. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-4e6a9850-2dbf-4d33-8d59-ca50ce6cfb2e.png"
+  },
+  "stage_43": {
+    "source": "public/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_43. Isolate ONLY existing bottom yellow dock bumpers, low raised loading lift frames, nearest gray parapet and short hand pallet trucks in bottom 15 percent only. Exclude the diagonal gray FLAT floor strip, central floor and side blue cabinets. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f8494569-70af-4415-b312-a93134f90e77.png"
+  },
+  "stage_44": {
+    "source": "public/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_44. Isolate ONLY existing bottom short gray switchgear boxes, low ventilation housings, copper pipe cluster and nearest concrete parapet in bottom 15 percent only. Exclude the COPPER-COLORED flat central floor strips, central walkway, tall left red transformers and tall right white switchgear. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-6625344f-16c2-421c-8ad5-3bb52b658f57.png"
+  },
+  "stage_45": {
+    "source": "public/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_45. Isolate ONLY existing bottom nearest low concrete retaining blocks, short gray cabinets and small green tarp bundle/steel rod rack at bottom corners in bottom 14 percent only. Exclude tall right white pipe machine, all floor/drains and diagonal yellow painted stripe. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-a1be0bc6-3271-47aa-8d4a-0b60e2b0dab0.png"
+  },
+  "stage_46": {
+    "source": "public/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_46. Extract ONLY existing bottom short cable reels, green control benches, gray cabinets, low cable tray and nearest parapet. Exclude central walkway, all green painted floor, floor grilles and tall side rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-4f39814a-5e9e-43a6-9824-2599b08edf6c.png"
+  },
+  "stage_47": {
+    "source": "public/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_47. Extract ONLY existing bottom silver elbow ducts, two low fan housings and their yellow safety rails. Exclude central access floor, hexagon floor marking, floor drains and tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-bf6d5dc2-050f-4643-8e26-3e67e4882365.png"
+  },
+  "stage_48": {
+    "source": "public/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_48. Extract ONLY existing bottom short bundled sheet stacks, low rolling tool cabinets, gray switchgear and nearest parapet. Exclude flat central gray floor, copper painted lines, floor drains and all tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1f859a1b-4759-4f7b-a251-5d2b71d6c7e8.png"
+  },
+  "stage_49": {
+    "source": "public/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_49. Extract ONLY existing bottom short steel rod bundles, covered green storage pallets, gray cabinets and nearest yellow guardrail. Exclude ALL orange painted pedestrian FLOOR stripe, green painted floor, central slab and tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-741710e9-3233-4339-b427-1e1377bde515.png"
+  },
+  "stage_50": {
+    "source": "public/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+    "prompt": "Use case: background-extraction. Input image is edit target stage_50. Extract ONLY existing bottom low horizontal gray door lintel/rolling shutter frame, small corner ventilation boxes, short pipe bundle and nearest guardrails. Exclude central door access floor, central green painted route and octagonal floor motif, ALL tall side/top machines. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+    "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-2cbe1708-ae3c-4346-a42c-e57a891b8c62.png"
+  }
+}

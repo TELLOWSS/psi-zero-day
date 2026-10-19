@@ -1,0 +1,6 @@
+{
+  "id": "stage_41",
+  "source": "public/assets/survivors/maps/plant-v2.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_41. Isolate ONLY existing bottom horizontal duct/cable tray, low silver switchgear and cable reels in bottom 24 percent only. Exclude painted green route, top and tall side machines. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e67299c9-8c6f-4efc-b5e0-c9de41c202e2.png"
+}

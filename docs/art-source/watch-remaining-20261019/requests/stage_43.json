@@ -1,0 +1,6 @@
+{
+  "id": "stage_43",
+  "source": "public/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_43. Isolate ONLY existing bottom yellow dock bumpers, low raised loading lift frames, nearest gray parapet and short hand pallet trucks in bottom 15 percent only. Exclude the diagonal gray FLAT floor strip, central floor and side blue cabinets. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f8494569-70af-4415-b312-a93134f90e77.png"
+}

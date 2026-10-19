@@ -50,6 +50,7 @@ try {
       });
       await page.getByRole('button', { name: '시그널 워치 시작', exact: true }).click();
       await page.waitForFunction(({ id, low }) => window.visualEngine?.state.stageId === id && document.querySelector('.survivors-canvas')?.dataset.heroCastShadow === (low ? 'none' : 'authored-pose'), { id, low: Boolean(process.env.PSI_LOW) });
+      await page.waitForFunction(() => document.querySelector('.survivors-canvas')?.dataset.loadedForegroundMattes === '1');
       await page.evaluate(() => {
         const e = window.visualEngine;
         e.state.player.invincibleTime = 0; e.state.player.x = 700; e.state.player.y = 450;
@@ -63,9 +64,10 @@ try {
         const snapshot = await page.evaluate(() => {
           const e = window.visualEngine, c = document.querySelector('.survivors-canvas');
           return { stage: e.state.stageId, light: c.dataset.stageLight, color: c.dataset.stageLightColor, depth: c.dataset.workfaceDepth, shadow: c.dataset.heroCastShadow, contact: c.dataset.contactArt, stretch: Number(c.dataset.contactLegStretch), floorDraws: [...window.floorDraws], overflow: document.documentElement.scrollWidth > innerWidth + 1,
+            registeredForegrounds: Number(c.dataset.approvedForegroundMattes), loadedForegrounds: Number(c.dataset.loadedForegroundMattes),
             saved: Object.entries(window.savedBefore).every(([key, value]) => localStorage.getItem(key) === value) };
         });
-        if (snapshot.stage !== id || snapshot.light !== id || snapshot.color !== expected.color || snapshot.depth !== `${id}:${process.env.PSI_LOW ? 'low' : 'balanced'}` || snapshot.shadow !== (process.env.PSI_LOW ? 'none' : 'authored-pose') || snapshot.contact !== 'true' || snapshot.stretch > 1.080001 || !snapshot.floorDraws.includes(expected.ground) || snapshot.overflow || !snapshot.saved || errors.length) throw Error(JSON.stringify({ id, width, height, reduced, expected, snapshot, errors }));
+        if (snapshot.registeredForegrounds !== 1 || snapshot.loadedForegrounds !== 1 || snapshot.stage !== id || snapshot.light !== id || snapshot.color !== expected.color || snapshot.depth !== `${id}:${process.env.PSI_LOW ? 'low' : 'balanced'}` || snapshot.shadow !== (process.env.PSI_LOW ? 'none' : 'authored-pose') || snapshot.contact !== 'true' || snapshot.stretch > 1.080001 || !snapshot.floorDraws.includes(expected.ground) || snapshot.overflow || !snapshot.saved || errors.length) throw Error(JSON.stringify({ id, width, height, reduced, expected, snapshot, errors }));
         if (process.env.PSI_CROWD) {
           await page.evaluate(() => {
             const e = window.visualEngine; e.setPaused(false); e.state.player.invincibleTime = 999; e.state.nextLevelExp = 1e9;

@@ -1,0 +1,6 @@
+{
+  "id": "stage_42",
+  "source": "public/assets/survivors/maps/plant-stage-42-graphics-v2.png",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_42. Isolate ONLY existing bottom horizontal red conduits, short white switchgear boxes and low bottom-right silver elbow duct in bottom 15 percent only. Exclude tall right vertical duct, tall left switchgear bank, red/green painted floor route. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-4e6a9850-2dbf-4d33-8d59-ca50ce6cfb2e.png"
+}

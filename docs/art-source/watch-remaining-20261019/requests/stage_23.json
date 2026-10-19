@@ -1,0 +1,6 @@
+{
+  "id": "stage_23",
+  "source": "public/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_23: extract ONLY the existing ONLY the narrow bottom-center red/white barricades, yellow handrail and raised metal service-box edge (within bottom 12 percent). Do not include the large left conveyor, the right dump bins, the concrete walkway or dirt/tire tracks. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-fac4409b-9130-4006-b9da-fdece6dc08d6.png"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "stage_40",
+  "source": "public/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_40. Extract ONLY existing nearest bottom green safety curtain, short black steel bundles, small wood pallets and low scaffold frames. Exclude ALL colored circle and fan sectors painted on floor, central slab and tall side stacks. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-db81e101-65b7-4581-8a84-8a604ee0b69d.png"
+}

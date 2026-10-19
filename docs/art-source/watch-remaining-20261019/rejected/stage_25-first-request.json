@@ -1,0 +1,7 @@
+{
+  "id": "stage_25",
+  "source": "public/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_25: isolate ONLY the existing nearest bottom green-mesh safety railing and bottom-left/bottom-right pipe bundles only (bottom 20 percent); keep dirt banks, the central entrance bridge/slab and floor drains transparent. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f28b9e7e-ebf9-45e5-836f-2730f7fbf0ce.png",
+  "rejectionReason": "flat passage or earth included beyond selected foreground objects"
+}

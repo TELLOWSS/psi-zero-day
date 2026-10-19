@@ -1,0 +1,6 @@
+{
+  "id": "stage_44",
+  "source": "public/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_44. Isolate ONLY existing bottom short gray switchgear boxes, low ventilation housings, copper pipe cluster and nearest concrete parapet in bottom 15 percent only. Exclude the COPPER-COLORED flat central floor strips, central walkway, tall left red transformers and tall right white switchgear. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-6625344f-16c2-421c-8ad5-3bb52b658f57.png"
+}

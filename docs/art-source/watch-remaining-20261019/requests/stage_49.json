@@ -1,0 +1,6 @@
+{
+  "id": "stage_49",
+  "source": "public/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_49. Extract ONLY existing bottom short steel rod bundles, covered green storage pallets, gray cabinets and nearest yellow guardrail. Exclude ALL orange painted pedestrian FLOOR stripe, green painted floor, central slab and tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-741710e9-3233-4339-b427-1e1377bde515.png"
+}

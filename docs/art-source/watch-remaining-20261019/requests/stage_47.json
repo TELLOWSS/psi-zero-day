@@ -1,0 +1,6 @@
+{
+  "id": "stage_47",
+  "source": "public/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_47. Extract ONLY existing bottom silver elbow ducts, two low fan housings and their yellow safety rails. Exclude central access floor, hexagon floor marking, floor drains and tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-bf6d5dc2-050f-4643-8e26-3e67e4882365.png"
+}

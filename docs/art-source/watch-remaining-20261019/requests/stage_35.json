@@ -1,0 +1,6 @@
+{
+  "id": "stage_35",
+  "source": "public/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_35: isolate ONLY the existing nearest bottom green safety net, short guardrails, wood platforms and stored metal scaffold frames along the bottom edge (bottom 18 percent). All green painted walkways, yellow floor markings and open concrete transparent. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-b4dbf1b6-75d5-48f0-a3a6-fb7d68dfa800.png"
+}

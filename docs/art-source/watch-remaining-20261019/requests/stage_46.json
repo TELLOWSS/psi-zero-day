@@ -1,0 +1,6 @@
+{
+  "id": "stage_46",
+  "source": "public/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_46. Extract ONLY existing bottom short cable reels, green control benches, gray cabinets, low cable tray and nearest parapet. Exclude central walkway, all green painted floor, floor grilles and tall side rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-4f39814a-5e9e-43a6-9824-2599b08edf6c.png"
+}

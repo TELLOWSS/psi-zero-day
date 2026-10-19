@@ -1,0 +1,6 @@
+{
+  "id": "stage_20",
+  "source": "public/assets/survivors/maps/handover-v1.png",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_20. Extract ONLY the two bottom server rack clusters behind glass, four silver cylindrical columns, plants and outer elevator door jambs. EXCLUDE the central double glass entrance door, central black floor grille, every flat marble floor and all side/top objects. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparent background with isolated physical objects only. All cast ground shadows transparent. Do not move, invent or enlarge any object. Do not compose a new scene or add backdrop/glow/text/characters.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-e38743ed-d4b0-46f6-b9be-1f2d5fbac889.png"
+}
