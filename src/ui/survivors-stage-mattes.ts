@@ -1,11 +1,13 @@
 import {PATROL_STAGE_IDS,type PatrolStageId} from '../domain/patrol-survivors';
 import {stageGroundUri} from './survivors-equipment-art';
+import reviewedMattes from '../../content/design/survivors-stage-foreground-v1.json';
 
 /**
  * The stage ground is a single authored opaque image. A foreground layer may
  * only be added after its alpha cut-out is hand reviewed against THAT image.
  *
- * Empty by design until actual approved RGBA image files are submitted.
+ * STAGE 02's source-matched alpha cutout was explicitly approved on 2026-10-19.
+ * Other workfaces remain empty until their own asset review.
  * The renderer never invents masks from flat colour, alpha thresholds, or
  * hard-coded silhouettes of an unknown site.
  */
@@ -21,7 +23,9 @@ export interface ApprovedForegroundMatte {
   readonly feetY:number;
   readonly approval:string;
 }
-export const FOREGROUND_MATTE_ASSETS:Partial<Record<PatrolStageId,readonly ApprovedForegroundMatte[]>>={};
+export const FOREGROUND_MATTE_ASSETS:Partial<Record<PatrolStageId,readonly ApprovedForegroundMatte[]>>={
+  stage_02:[{...reviewedMattes.stage02,stageId:'stage_02'}],
+};
 export const WORKFACE_WIDTH=1400;
 export const WORKFACE_HEIGHT=900;
 const isAssetPath=(uri:string)=>/^\/assets\/survivors\/foreground\/[-a-z0-9/]+\.(webp|png)$/.test(uri);
@@ -54,8 +58,13 @@ export function matteVisibleAlpha(
   const contains=(x:number,y:number,padding=0)=>
     x>=matte.x-padding&&x<=matte.x+matte.width+padding&&
     y>=matte.y-padding&&y<=matte.y+matte.height+padding;
-  // Only when a depth-sorted matte can cross the player, reduce its opacity.
-  let opacity=matte.feetY>=player.y&&contains(player.x,player.y,12) ? 0.55 : 1;
+  // Feet alone miss the shoulder/helmet at a lateral edge. Use the existing
+  // 74-world-unit body, with a soft spatial approach instead of an opacity pop.
+  const body={left:player.x-22,right:player.x+22,top:player.y-74,bottom:player.y+4};
+  const dx=Math.max(matte.x-body.right,body.left-(matte.x+matte.width),0);
+  const dy=Math.max(matte.y-body.bottom,body.top-(matte.y+matte.height),0);
+  const t=Math.max(0,1-Math.hypot(dx,dy)/16),ease=t*t*(3-2*t);
+  let opacity=matte.feetY>=player.y ? 1-.45*ease : 1;
   for(const signal of warningSignals){
     if(signal.warning&&contains(signal.x,signal.y,Math.max(8,signal.radius))){
       opacity=Math.min(opacity,.25);break;

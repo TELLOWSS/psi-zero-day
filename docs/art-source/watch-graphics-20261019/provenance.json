@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-19",
+  "baseCommit": "fb7daca5",
+  "tool": "Built-in image_gen",
+  "runtimeStage": "stage_02",
+  "nativeWidth": 1536,
+  "nativeHeight": 1024,
+  "encoding": "WebP quality 90, no resampling",
+  "status": "production-candidate",
+  "files": [
+    {
+      "path": "public/assets/survivors/excavation-ground-v3.webp",
+      "bytes": 373600,
+      "sha256": "deb87fd2f24cbeccd8a6adca7ae5bb98a5adb30a4a546d70a02d732aaddc50ae"
+    },
+    {
+      "path": "docs/art-source/watch-graphics-20261019/excavation-ground-v4-source.png",
+      "bytes": 3385238,
+      "sha256": "c2f2a550f139d57d8c846daedd23cae397cdecc6962c2ffa193ebdc0e2c90e98"
+    },
+    {
+      "path": "public/assets/survivors/excavation-ground-v4.webp",
+      "bytes": 540792,
+      "sha256": "70e43a8bb8d2c05efb4452558b15b18e0b88dc0de49f47f37311fc9c2de7006a"
+    }
+  ]
+}

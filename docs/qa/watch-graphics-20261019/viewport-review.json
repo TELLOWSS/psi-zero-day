@@ -1,0 +1,182 @@
+[
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 900,
+    "overflow": false,
+    "quality": "high",
+    "width": 1440
+  },
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 900,
+    "overflow": false,
+    "quality": "low",
+    "width": 1440
+  },
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 844,
+    "overflow": false,
+    "quality": "high",
+    "width": 390
+  },
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 844,
+    "overflow": false,
+    "quality": "low",
+    "width": 390
+  },
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "authored-pose",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 390,
+    "overflow": false,
+    "quality": "high",
+    "width": 844
+  },
+  {
+    "canvases": [
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v3.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0",
+        "stage": "stage_02"
+      },
+      {
+        "actorIdentity": "single-authored-frame",
+        "contactArt": "true",
+        "contactError": "0",
+        "contactLegStretch": "1.0447778897798534",
+        "contactSlip": "0",
+        "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+        "heroCastShadow": "contact-only",
+        "localInfluence": "0.6495713066587807",
+        "stage": "stage_02"
+      }
+    ],
+    "height": 390,
+    "overflow": false,
+    "quality": "low",
+    "width": 844
+  }
+]

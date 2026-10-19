@@ -1,0 +1,340 @@
+
+> psi-zero-day@0.1.0 prebuild
+> npm run assets:story-cinema && npm run assets:breaker-runtime && node scripts/check-signal-breaker-release.mjs && npm run audio:ending-ep02-check && npm run assets:mode-previews && npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:survivors-wave-supply && npm run test:survivors-wave-director && npm run test:survivors-signature-events && npm run test:survivors-signature-mastery && npm run test:hub-mode-lock && npm run test:survivors-flow && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest
+
+
+> psi-zero-day@0.1.0 assets:story-cinema
+> node scripts/build-story-cinema-art.mjs
+
+ramp-entry: 1672x941 source → 1920x1080 delivery WebP (upscaled)
+work-yard: 1672x941 source → 1920x1080 delivery WebP (upscaled)
+site-office: 1672x941 source → 1920x1080 delivery WebP (upscaled)
+home-night: 1672x941 source → 1920x1080 delivery WebP (upscaled)
+
+> psi-zero-day@0.1.0 assets:breaker-runtime
+> node scripts/build-breaker-shared-actor.mjs
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 28 modules transformed.
+rendering chunks...
+computing gzip size...
+public/assets/shared/signal-breaker-actors.js  150.36 kB │ gzip: 31.72 kB
+
+✓ built in 94ms
+PASS local release 0.68.0-trimode-intel; 230 asset hashes; a8ed7b6398a3
+
+> psi-zero-day@0.1.0 audio:ending-ep02-check
+> node scripts/check-ending-ep02-candidates.mjs
+
+PASS EP02 candidate integrity: 10 exact WAVs, PCM 24 kHz mono 16-bit, no sample clipping; timing 1/10. Runtime mapping and listening remain pending.
+PASS EP02 recommendations: 5/5 fit, source provenance intact, loudness within 0.3 LUFS of -24, true peak <= -3 dBTP, no clipping.
+
+> psi-zero-day@0.1.0 assets:mode-previews
+> node scripts/materialize-mode-preview-art.mjs
+
+Mode preview materialized: defense-coming-soon.webp (18646 bytes)
+Mode preview materialized: signal-watch.webp (12422 bytes)
+
+> psi-zero-day@0.1.0 assets:scene-runtime
+> node scripts/build-scene-element-runtime.mjs
+
+Wrote scene runtime projection: 1 placed element(s), 1370 bytes.
+
+> psi-zero-day@0.1.0 assets:choice-visual-check
+> node scripts/check-choice-visual-coverage.mjs
+
+Episode 01 choice visual coverage ready: 75/75 authored across 22 choice events.
+
+> psi-zero-day@0.1.0 assets:node-visual-check
+> node scripts/check-node-visual-coverage.mjs
+
+Episode 01 node visual coverage ready: 146/146 non-END nodes authored across 26 events.
+
+> psi-zero-day@0.1.0 assets:scene-background-status
+> node scripts/check-scene-background-production.mjs
+
+FINAL gate_dawn          1920x1080
+FINAL ramp_entry         1920x1080
+FINAL work_yard          1920x1080
+FINAL concrete_pour      1920x1080
+FINAL inspection_zone    1920x1080
+FINAL site_office        1920x1080
+FINAL break_area         1920x1080
+FINAL home_night         1920x1080
+Episode 01 immersive backgrounds: 8/8 final WebP; 0 RC fallback.
+
+> psi-zero-day@0.1.0 assets:visual-production-queue-check
+> node scripts/check-visual-production-queue.mjs
+
+Visual production queue: 8/8 runtime surfaces synchronized; final WebPs in repo: 8/8.
+
+> psi-zero-day@0.1.0 assets:scene-background-brief-check
+> node scripts/check-scene-background-briefs.mjs
+
+Episode 01 final background briefs: 8/8 authored.
+
+> psi-zero-day@0.1.0 assets:scene-background-imagegen-check
+> node scripts/check-scene-background-imagegen-prompts.mjs
+
+Episode 01 image-generation prompts: 8/8 production slots authored.
+
+> psi-zero-day@0.1.0 assets:final-art-ingest-status
+> node scripts/check-final-art-ingest.mjs
+
+Episode 01 generated final-art ingest: 8/8 exact binaries present.
+READY   break-area.webp 186994 bytes
+READY   concrete-pour.webp 219648 bytes
+READY   gate-dawn.webp 164000 bytes
+READY   home-night-cinema.webp 293522 bytes
+READY   inspection-zone.webp 216202 bytes
+READY   ramp-entry-cinema.webp 582126 bytes
+READY   site-office-cinema.webp 296880 bytes
+READY   work-yard-cinema.webp 607254 bytes
+
+> psi-zero-day@0.1.0 audio:contract-check
+> npm run audio:voice-materialize && node scripts/check-audio-production.mjs
+
+
+> psi-zero-day@0.1.0 audio:voice-materialize
+> node scripts/materialize-episode01-voice.mjs
+
+Episode 01 voice materialized: 4; pending embedded sources: 0.
+Episode 01 audio production: 12/12 final binaries present.
+
+> psi-zero-day@0.1.0 test:survivors-wave-supply
+> vitest run tests/survivors-container-shop-and-juice.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  15:06:01
+   Duration  3.53s (transform 84%, import 13%, worker 2%, tests 1%)
+
+  Transform  transforming modules took 2.21s · 84% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+
+> psi-zero-day@0.1.0 test:survivors-wave-director
+> vitest run tests/survivors-difficulty.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  53 passed (53)
+   Start at  15:06:06
+   Duration  1.15s (transform 57%, tests 35%, import 8%, worker 1%)
+
+
+> psi-zero-day@0.1.0 test:survivors-signature-events
+> vitest run tests/survivors-signature-events.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  15:06:08
+   Duration  843ms (transform 80%, import 11%, tests 8%, worker 1%)
+
+
+> psi-zero-day@0.1.0 test:survivors-signature-mastery
+> vitest run tests/survivors-signature-mastery.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  15:06:10
+   Duration  865ms (transform 86%, import 12%, tests 1%, worker 1%)
+
+
+> psi-zero-day@0.1.0 test:hub-mode-lock
+> vitest run tests/gamehub-mode-lock.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  15:06:12
+   Duration  246ms (transform 48%, import 36%, worker 8%, tests 7%)
+
+
+> psi-zero-day@0.1.0 test:survivors-flow
+> vitest run tests/survivors-operation.test.ts tests/survivors-extraction-and-tactical-arsenal.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  2 passed (2)
+      Tests  17 passed (17)
+   Start at  15:06:13
+   Duration  1.26s (transform 76%, import 17%, tests 5%, worker 1%)
+
+
+> psi-zero-day@0.1.0 test:field-guide-recovery
+> vitest run tests/field-guide-recovery.test.tsx
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  15:06:15
+   Duration  34.21s (environment 94%, transform 4%, import 2%)
+
+
+> psi-zero-day@0.1.0 test:strategy-stage2
+> vitest run tests/strategy-stage2-flow.test.tsx
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  15:06:50
+   Duration  2.70s (environment 42%, transform 30%, tests 16%, import 12%)
+
+
+> psi-zero-day@0.1.0 test:episode01-visual
+> vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts tests/episode01-immersive-preload.test.ts tests/episode01-cinematic-trace.test.ts tests/episode01-character-blocking.test.ts tests/episode01-character-performance.test.ts tests/episode01-character-performance-assets.test.ts tests/episode01-memory-visuals.test.ts tests/episode01-location-coherence.test.ts tests/episode01-scene-background-production.test.ts tests/episode01-final-polish.test.ts tests/episode01-office-production.test.ts tests/episode01-day-result-production.test.ts tests/episode01-phase-c-integration.test.ts tests/episode01-final-playthrough-regression.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  15 passed (15)
+      Tests  117 passed (117)
+   Start at  15:06:54
+   Duration  8.23s (import 57%, transform 32%, tests 9%, worker 1%)
+
+    Isolate  15 workers spawned · ~153ms startup each (spawn + environment, per file)
+             at least ~2.14s faster with isolate: false — reuses workers across files instead of one per file
+
+
+> psi-zero-day@0.1.0 test:episode01-audio
+> vitest run tests/episode01-audio-production.test.ts
+
+
+ RUN  v5.0.0 C:/Users/user/OneDrive/Desktop/개발실/psi-watch-graphics-20261019
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  15:07:03
+   Duration  404ms (transform 66%, import 16%, tests 15%, worker 3%)
+
+
+> psi-zero-day@0.1.0 assets:embedded
+> node scripts/materialize-embedded-media.mjs && node scripts/materialize-vehicle-overlap.mjs && node scripts/materialize-character-media.mjs
+
+Verified Foundation Production Master (3072x1728, 1,253,340 bytes).
+Verified material stack final WebP (768x581, 51,984 bytes).
+Verified access barrier final WebP (820x514, 55,802 bytes).
+Verified foundation blinding final WebP (768x576, 25,546 bytes).
+Verified foundation rebar final WebP (768x576, 35,778 bytes).
+Materialized vehicle overlap final WebP (768x512, 3,972 bytes).
+Verified choi-minseok-map (1024x1536, 202,410 bytes).
+Verified choi-minseok-portrait (1024x1024, 218,992 bytes).
+Verified kang-taesik-map (1024x1536, 216,506 bytes).
+Verified kang-taesik-portrait (1024x1024, 181,498 bytes).
+Verified lee-jaehoon-map (768x1024, 71,042 bytes).
+Verified lee-jaehoon-portrait (1024x1024, 145,550 bytes).
+Verified lim-junho-map (768x1024, 84,476 bytes).
+Verified lim-junho-portrait (1024x1024, 165,450 bytes).
+Verified oh-seungjae-map (1024x1536, 160,120 bytes).
+Verified oh-seungjae-portrait (1024x1024, 143,820 bytes).
+Verified player-map (768x1024, 77,050 bytes).
+Verified player-portrait (1024x1024, 162,794 bytes).
+Verified seo-jeongmin-map (768x1024, 65,344 bytes).
+Verified seo-jeongmin-portrait (1024x1024, 157,994 bytes).
+Verified yoon-sungho-map (1024x1536, 207,572 bytes).
+Verified yoon-sungho-portrait (1024x1024, 208,644 bytes).
+
+> psi-zero-day@0.1.0 assets:vector
+> node scripts/generate-episode01-vector-art.mjs
+
+Wrote 17 Episode 01 vector art files.
+
+> psi-zero-day@0.1.0 assets:manifest
+> npm run audio:voice-materialize && node scripts/build-episode01-assets.mjs
+
+
+> psi-zero-day@0.1.0 audio:voice-materialize
+> node scripts/materialize-episode01-voice.mjs
+
+Episode 01 voice materialized: 4; pending embedded sources: 0.
+Wrote 119 Episode 01 assets to content/episode01/assets.json.
+
+> psi-zero-day@0.1.0 build
+> npm run typecheck && vite build
+
+
+> psi-zero-day@0.1.0 typecheck
+> tsc --noEmit && tsc --project tsconfig.engine.json
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 2659 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                1.15 kB │ gzip:   0.61 kB
+dist/assets/OperationHandoffDossier-BAnyF8lF.css               1.92 kB │ gzip:   0.67 kB
+dist/assets/Episode02Cinema-BNpMZyTP.css                       3.83 kB │ gzip:   1.33 kB
+dist/assets/PlayableEpisode-BlZa-XET.css                       7.75 kB │ gzip:   2.00 kB
+dist/assets/FieldGuide-BXAXP7Lw.css                           13.34 kB │ gzip:   3.26 kB
+dist/assets/GameHub-Cdm7YvlK.css                              81.96 kB │ gzip:  11.26 kB
+dist/assets/DefenseGame-BIazZ4S2.css                         104.05 kB │ gzip:  16.27 kB
+dist/assets/PatrolSurvivorsGame-B6wZWg8f.css                 140.12 kB │ gzip:  25.71 kB
+dist/assets/index-BzXZglnk.css                               899.74 kB │ gzip: 132.45 kB
+dist/assets/signal-encounter-intel-B574b_eI.js                 0.21 kB │ gzip:   0.17 kB
+dist/assets/jsx-runtime-BENtQNpy.js                            0.42 kB │ gzip:   0.29 kB
+dist/assets/guard-storage-D-0WPNXb.js                          1.14 kB │ gzip:   0.63 kB
+dist/assets/episode-save-24vcWgaj.js                           1.97 kB │ gzip:   0.83 kB
+dist/assets/survivors-art-frame-layouts-8LUIr3H4.js            3.99 kB │ gzip:   0.90 kB
+dist/assets/OperationHandoffDossier-Ds7uxZpu.js                4.23 kB │ gzip:   2.07 kB
+dist/assets/index-DbabLvUk.js                                  5.04 kB │ gzip:   2.49 kB
+dist/assets/react-DInHeDI3.js                                  7.86 kB │ gzip:   2.99 kB
+dist/assets/package-CP5k0iZA.js                               10.98 kB │ gzip:   2.10 kB
+dist/assets/survivors-campaign50-ko-DcjWqlO7.js               15.30 kB │ gzip:   4.80 kB
+dist/assets/Episode02Cinema-4HC18vwu.js                       16.33 kB │ gzip:   5.19 kB
+dist/assets/strategy-psi-CRtoTSIg.js                          20.48 kB │ gzip:   3.89 kB
+dist/assets/story-novel-ko-B_s_d1u-.js                        62.32 kB │ gzip:  13.44 kB
+dist/assets/survivors-authored-actor-layouts-v1-mgKJ3_ee.js   64.60 kB │ gzip:   9.33 kB
+dist/assets/FieldGuide-yrvD_V_L.js                           198.85 kB │ gzip:  30.06 kB
+dist/assets/client-BW11xZMI.js                               211.20 kB │ gzip:  65.86 kB
+dist/assets/operation-handoff-bridge-ko-LYdJPhwZ.js          251.48 kB │ gzip:  73.58 kB
+dist/assets/PlayableEpisode-CaizF9ti.js                      274.93 kB │ gzip:  61.71 kB
+dist/assets/DefenseGame-nm2jbHkW.js                          281.74 kB │ gzip:  84.44 kB
+dist/assets/GameHub-CT5UcvvC.js                              310.45 kB │ gzip:  81.62 kB
+dist/assets/episode-session-B2GKkCe2.js                      452.15 kB │ gzip: 113.07 kB
+dist/assets/PatrolSurvivorsGame-DLp6eZFF.js                  611.12 kB │ gzip: 196.79 kB
+
+✓ built in 9.48s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mPlugin hooks ran for 8.8s of this 9.5s build (93%).
+The slowest hooks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - vite:prepare-out-dir renderStart (67%, 6.3s, 1 call)
+  - vite:css-post renderChunk (12%, 1.2s, 22 calls)
+Additional hook time came from the hooks below and from hooks under 1s.
+1 hook is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
+  - vite:css transform (69 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.

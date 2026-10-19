@@ -1,0 +1,174 @@
+[
+  {
+    "actorIdentity": "single-authored-frame",
+    "actorX": "670",
+    "actorY": "865",
+    "contactArt": "true",
+    "contactError": "0",
+    "contactLegStretch": "0.9999999999999986",
+    "contactSlip": "0",
+    "heroCastShadow": "authored-pose",
+    "matteAlpha": "1",
+    "quality": "high",
+    "scenario": "opaque-reference",
+    "sourceColorError": "1"
+  },
+  {
+    "actorIdentity": "single-authored-frame",
+    "actorX": "670",
+    "actorY": "865",
+    "contactArt": "true",
+    "contactError": "0",
+    "contactLegStretch": "0.9999999999999986",
+    "contactSlip": "0",
+    "heroCastShadow": "authored-pose",
+    "matteAlpha": "0.25",
+    "quality": "high",
+    "scenario": "warning-protection",
+    "sourceColorError": "1"
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "706.0626135801804",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "1.0073613390106786",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "high",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "670",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "0.9999999999999986",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "low",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "670",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "0.9999999999999986",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "high",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "670",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "0.9999999999999986",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "low",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "670",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "0.9999999999999986",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "high",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  },
+  {
+    "after": {
+      "actorIdentity": "single-authored-frame",
+      "actorX": "670",
+      "actorY": "865",
+      "contactArt": "true",
+      "contactError": "0",
+      "contactLegStretch": "0.9999999999999986",
+      "contactSlip": "0",
+      "heroCastShadow": "authored-pose",
+      "matteAlpha": "0.25",
+      "quality": "low",
+      "sourceColorError": "1"
+    },
+    "height": 720,
+    "overflow": false,
+    "proof": {
+      "colorSamples": "12205",
+      "ready": "true",
+      "sourceColorError": "1"
+    },
+    "scenario": "viewport-quality",
+    "width": 1280
+  }
+]

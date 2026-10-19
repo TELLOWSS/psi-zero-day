@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "approvalRecord": "docs/art-source/watch-foreground-20261019/approval.json",
+  "stage02": {
+    "id": "stage-02-shoring-v1",
+    "sourceGround": "/assets/survivors/excavation-ground-v4.webp",
+    "imageUri": "/assets/survivors/foreground/stage-02-shoring-alpha-v1.png",
+    "x": 0,
+    "y": 760.25390625,
+    "width": 1400,
+    "height": 139.74609375,
+    "feetY": 900,
+    "approval": "USER_CONFIRMED_FOREGROUND_20261019"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "tool": "built-in image_gen",
+  "sourceWidth": 1536,
+  "sourceHeight": 1024,
+  "deliveryWidth": 1536,
+  "deliveryHeight": 159,
+  "processing": "Crop to visible alpha support bounds; preserve alpha; discard generated RGB at render time",
+  "review": {
+    "source": "User confirmed previous floor",
+    "foreground": "Explicit user confirmation: 현재 후보를 게임에 적용 (2026-10-19)"
+  },
+  "files": [
+    {
+      "path": "public/assets/survivors/excavation-ground-v4.webp",
+      "bytes": 540792,
+      "sha256": "70e43a8bb8d2c05efb4452558b15b18e0b88dc0de49f47f37311fc9c2de7006a"
+    },
+    {
+      "path": "docs/art-source/watch-foreground-20261019/stage-02-shoring-source.png",
+      "bytes": 793038,
+      "sha256": "9f58ef3375cec2337bace380a0036547aa6d12461d3b57ffafe178e52e0058d3"
+    },
+    {
+      "path": "public/assets/survivors/foreground/stage-02-shoring-alpha-v1.png",
+      "bytes": 480467,
+      "sha256": "47df90a030b65ebde0ad57a0e20b80dbc5479794c3960f965c97515ef76c47f3"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Signal Watch – approved Stage 01–50 foreground-matte ingest gate (2026-10-18)
 
+2026-10-19 update: STAGE 02's bottom shoring alpha was explicitly reviewed and approved by the user, then registered in the real game path. See [activation record](SIGNAL-WATCH-FOREGROUND-ACTIVATION-20261019.md). The empty-registry descriptions below record the original pipeline delivery; the other 49 stages still have no approved masks.
+
 ## Ground truth
 The repo currently contains 50 mapped, opaque stage ground backgrounds but no art-director-approved, pixel-aligned RGBA cut-outs for all 50. Prior work (#215) gives real 3-type equipment sprite Y-occlusion; it is **not** the same as painted-map foreground separation.
 

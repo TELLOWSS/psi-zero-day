@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-19",
+  "authority": "explicit_user_reply_in_current_chat",
+  "question": "보여드린 STAGE 02 하단 흙막이 전경 후보를 실제 게임 렌더러에 연결할까요? 인물이 가려질 때 투명해지는 처리를 포함하며, 충돌·이동·보상은 바꾸지 않습니다.",
+  "answer": "현재 후보를 게임에 적용",
+  "reviewedCandidateId": "stage-02-shoring-candidate-v1",
+  "runtimeId": "stage-02-shoring-v1",
+  "reviewedImage": "artifacts/watch-foreground-20261019/foreground-final.jpg",
+  "scope": "STAGE 02 하단 흙막이 전경 1종과 인물·경고 가림 보호를 실제 게임 렌더러에 연결",
+  "notClaimed": ["50개 전경 제작 완료", "Android 성능 승인", "최종 전체 아트 Lock", "main 병합", "운영 배포"]
+}

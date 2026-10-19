@@ -83,6 +83,7 @@ import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {SurvivorsContainerShop} from './SurvivorsContainerShop';
 import {usePreparedSurvivorsActor} from './use-prepared-survivors-actor';
 import {isDirectionalActor,drawDirectionalLight,drawDirectionalOutline,drawDirectionalCastShadow} from './survivors-directional-art';
+import {actorLocalLight} from './survivors-local-light';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,repairAllStoreItems,storeRepairCost,storeRepairTotal,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
@@ -114,6 +115,7 @@ import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-li
 import {drawGradedWorkfaceFloor,drawWorkfaceDepth,drawEssentialFootShadow} from './survivors-workface-depth';
 import {foregroundFixtureSpec,foregroundFixtureOpacity,foregroundFixtureMotion} from './survivors-foreground-props';
 import {approvedForegroundMattes,matteVisibleAlpha} from './survivors-stage-mattes';
+import {sourceMatchedMatte,type ForegroundTextureEntry} from './survivors-matte-texture';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -482,15 +484,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     } catch { return 'stage_01'; }
   });
   const [loadedGround, setLoadedGround] = useState<string | null>(null);
-  const foregroundMatteImagesRef=useRef<Record<string,HTMLImageElement>>({});
+  const foregroundMatteImagesRef=useRef<Record<string,ForegroundTextureEntry>>({});
   useEffect(()=>{
     // Only explicitly reviewed site cut-outs may load. No speculative masks.
     let active=true;
     foregroundMatteImagesRef.current={};
     for(const layer of approvedForegroundMattes(selectedStage)){
-      const image=new Image();
-      image.onload=()=>{if(active&&image.naturalWidth)foregroundMatteImagesRef.current[layer.id]=image;};
-      image.src=layer.imageUri;
+      const image=new Image(),source=new Image();
+      const ready=()=>{if(active&&image.naturalWidth&&source.naturalWidth)foregroundMatteImagesRef.current[layer.id]={mask:image,source};};
+      image.onload=ready;source.onload=ready;image.src=layer.imageUri;source.src=layer.sourceGround;
     }
     return ()=>{active=false;foregroundMatteImagesRef.current={};};
   },[selectedStage]);
@@ -2144,13 +2146,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       // Project the live authored pose onto the floor before terrain, actors and warnings.
       const sceneLight=stageActorLight(stage.id);
+      const heroSceneLight=sceneLight?actorLocalLight(sceneLight,player,engine.state.interactiveHazards):undefined;
+      canvas.dataset.localLightInfluence=String(display.lighting?heroSceneLight?.localInfluence??0:0);
       canvas.dataset.stageLight=sceneLight?stage.id:'';
       canvas.dataset.stageLightColor=sceneLight?.color??'';
       canvas.dataset.heroCastShadow='none';
       if(sceneLight&&display.lighting){
         if(actor&&budget.ambientLighting){
           ctx.save();ctx.translate(player.x,player.y);
-          drawDirectionalCastShadow(ctx,actor,74,playerPose,sceneLight);ctx.restore();
+          drawDirectionalCastShadow(ctx,actor,74,playerPose,heroSceneLight!);ctx.restore();
         } else {
           // Keep one real ground-contact cue even on a hot / low-end Android phone.
           drawEssentialFootShadow(ctx,player.x,player.y);
@@ -2788,8 +2792,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       const foregrounds=approvedForegroundMattes(stage.id);
       canvas.dataset.approvedForegroundMattes=String(foregrounds.length);
+      canvas.dataset.loadedForegroundMattes=String(foregrounds.filter(matte=>foregroundMatteImagesRef.current[matte.id]?.mask.naturalWidth).length);
+      canvas.dataset.drawnForegroundMattes='0';
       for(const matte of foregrounds){
-        if(!foregroundMatteImagesRef.current[matte.id]?.naturalWidth)continue;
+        if(!foregroundMatteImagesRef.current[matte.id]?.mask.naturalWidth)continue;
         if(matte.x+matte.width<camX||matte.x>camX+viewW||matte.y+matte.height<camY||matte.y>camY+viewH)continue;
         entityList.push({kind:'matte',y:matte.feetY,data:matte});
       }
@@ -2819,11 +2825,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.restore();
         } else if(item.kind==='matte'){
           const matte=item.data;
-          const image=foregroundMatteImagesRef.current[matte.id];
-          if(!image?.naturalWidth)continue;
+          const entry=foregroundMatteImagesRef.current[matte.id];
+          if(!entry?.mask.naturalWidth)continue;
+          const key=[stage.id,budget.level,display.lighting,budget.ambientLighting,
+            engine.state.interactiveHazards.filter(h=>h.type==='floodlight_tower').map(h=>`${h.id}:${h.state}:${h.x}:${h.y}`).join(','),
+            (engine.state.operationControlledZones??[]).join(',')].join('|');
+          if(entry.key!==key||!entry.texture){
+            entry.texture=sourceMatchedMatte(entry.source,entry.mask,matte,paint=>{
+              drawGradedWorkfaceFloor(paint,entry.source,stage.id,budget.level);
+              if(display.lighting)drawWorkfaceDepth(paint,stage.id,budget.level);
+              if(budget.ambientLighting)drawSceneLighting(paint,stage,engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
+            });entry.key=key;
+          }
+          if(!entry.texture)continue;
           ctx.save();
           ctx.globalAlpha*=matteVisibleAlpha(matte,player,hazards.map(h=>({x:h.x,y:h.y,radius:h.radius,warning:h.motion?.phase==='warning'})));
-          ctx.drawImage(image,matte.x,matte.y,matte.width,matte.height);
+          ctx.drawImage(entry.texture,matte.x,matte.y,matte.width,matte.height);
+          canvas.dataset.drawnForegroundMattes=String(Number(canvas.dataset.drawnForegroundMattes)+1);
           ctx.restore();
         } else if (item.kind === 'fixture') {
           const fixture=item.data;
@@ -3282,7 +3300,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
             // Static scene fill remains under reduced motion; only combat pulses use flash strength.
-            if(sceneLight&&display.lighting)drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,sceneLight.color,sceneLight.fill);
+            if(heroSceneLight&&display.lighting)drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,heroSceneLight.color,heroSceneLight.fill);
             if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18)*feelSettingsRef.current.flash);}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current,Boolean(spritesRef.current.wearables?.communication),Boolean(spritesRef.current.wearables?.normalWorn));
