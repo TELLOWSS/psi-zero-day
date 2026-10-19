@@ -1,0 +1,906 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "stage": "stage_01",
+      "quality": "high",
+      "error": 1,
+      "samples": 8462
+    },
+    {
+      "stage": "stage_01",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 8462
+    },
+    {
+      "stage": "stage_01",
+      "quality": "low",
+      "error": 1,
+      "samples": 8462
+    },
+    {
+      "stage": "stage_02",
+      "quality": "high",
+      "error": 1,
+      "samples": 12205
+    },
+    {
+      "stage": "stage_02",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 12205
+    },
+    {
+      "stage": "stage_02",
+      "quality": "low",
+      "error": 1,
+      "samples": 12205
+    },
+    {
+      "stage": "stage_03",
+      "quality": "high",
+      "error": 1,
+      "samples": 15160
+    },
+    {
+      "stage": "stage_03",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 15160
+    },
+    {
+      "stage": "stage_03",
+      "quality": "low",
+      "error": 1,
+      "samples": 15160
+    },
+    {
+      "stage": "stage_04",
+      "quality": "high",
+      "error": 1,
+      "samples": 14842
+    },
+    {
+      "stage": "stage_04",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 14842
+    },
+    {
+      "stage": "stage_04",
+      "quality": "low",
+      "error": 1,
+      "samples": 14842
+    },
+    {
+      "stage": "stage_05",
+      "quality": "high",
+      "error": 1,
+      "samples": 25088
+    },
+    {
+      "stage": "stage_05",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 25088
+    },
+    {
+      "stage": "stage_05",
+      "quality": "low",
+      "error": 1,
+      "samples": 25088
+    },
+    {
+      "stage": "stage_06",
+      "quality": "high",
+      "error": 1,
+      "samples": 21163
+    },
+    {
+      "stage": "stage_06",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 21163
+    },
+    {
+      "stage": "stage_06",
+      "quality": "low",
+      "error": 1,
+      "samples": 21163
+    },
+    {
+      "stage": "stage_07",
+      "quality": "high",
+      "error": 1,
+      "samples": 17954
+    },
+    {
+      "stage": "stage_07",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 17954
+    },
+    {
+      "stage": "stage_07",
+      "quality": "low",
+      "error": 1,
+      "samples": 17954
+    },
+    {
+      "stage": "stage_08",
+      "quality": "high",
+      "error": 1,
+      "samples": 19261
+    },
+    {
+      "stage": "stage_08",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 19261
+    },
+    {
+      "stage": "stage_08",
+      "quality": "low",
+      "error": 1,
+      "samples": 19261
+    },
+    {
+      "stage": "stage_09",
+      "quality": "high",
+      "error": 1,
+      "samples": 32943
+    },
+    {
+      "stage": "stage_09",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 32943
+    },
+    {
+      "stage": "stage_09",
+      "quality": "low",
+      "error": 1,
+      "samples": 32943
+    },
+    {
+      "stage": "stage_10",
+      "quality": "high",
+      "error": 1,
+      "samples": 13319
+    },
+    {
+      "stage": "stage_10",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 13319
+    },
+    {
+      "stage": "stage_10",
+      "quality": "low",
+      "error": 1,
+      "samples": 13319
+    },
+    {
+      "stage": "stage_11",
+      "quality": "high",
+      "error": 1,
+      "samples": 18924
+    },
+    {
+      "stage": "stage_11",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 18924
+    },
+    {
+      "stage": "stage_11",
+      "quality": "low",
+      "error": 1,
+      "samples": 18924
+    },
+    {
+      "stage": "stage_12",
+      "quality": "high",
+      "error": 1,
+      "samples": 16008
+    },
+    {
+      "stage": "stage_12",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 16008
+    },
+    {
+      "stage": "stage_12",
+      "quality": "low",
+      "error": 1,
+      "samples": 16008
+    },
+    {
+      "stage": "stage_13",
+      "quality": "high",
+      "error": 1,
+      "samples": 8809
+    },
+    {
+      "stage": "stage_13",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 8809
+    },
+    {
+      "stage": "stage_13",
+      "quality": "low",
+      "error": 1,
+      "samples": 8809
+    },
+    {
+      "stage": "stage_14",
+      "quality": "high",
+      "error": 1,
+      "samples": 17361
+    },
+    {
+      "stage": "stage_14",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 17361
+    },
+    {
+      "stage": "stage_14",
+      "quality": "low",
+      "error": 1,
+      "samples": 17361
+    },
+    {
+      "stage": "stage_15",
+      "quality": "high",
+      "error": 1,
+      "samples": 19211
+    },
+    {
+      "stage": "stage_15",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 19211
+    },
+    {
+      "stage": "stage_15",
+      "quality": "low",
+      "error": 1,
+      "samples": 19211
+    },
+    {
+      "stage": "stage_16",
+      "quality": "high",
+      "error": 1,
+      "samples": 34120
+    },
+    {
+      "stage": "stage_16",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 34120
+    },
+    {
+      "stage": "stage_16",
+      "quality": "low",
+      "error": 1,
+      "samples": 34120
+    },
+    {
+      "stage": "stage_17",
+      "quality": "high",
+      "error": 1,
+      "samples": 14522
+    },
+    {
+      "stage": "stage_17",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 14522
+    },
+    {
+      "stage": "stage_17",
+      "quality": "low",
+      "error": 1,
+      "samples": 14522
+    },
+    {
+      "stage": "stage_18",
+      "quality": "high",
+      "error": 1,
+      "samples": 17496
+    },
+    {
+      "stage": "stage_18",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 17496
+    },
+    {
+      "stage": "stage_18",
+      "quality": "low",
+      "error": 1,
+      "samples": 17496
+    },
+    {
+      "stage": "stage_19",
+      "quality": "high",
+      "error": 1,
+      "samples": 15531
+    },
+    {
+      "stage": "stage_19",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 15531
+    },
+    {
+      "stage": "stage_19",
+      "quality": "low",
+      "error": 1,
+      "samples": 15531
+    },
+    {
+      "stage": "stage_20",
+      "quality": "high",
+      "error": 1,
+      "samples": 18613
+    },
+    {
+      "stage": "stage_20",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 18613
+    },
+    {
+      "stage": "stage_20",
+      "quality": "low",
+      "error": 1,
+      "samples": 18613
+    },
+    {
+      "stage": "stage_21",
+      "quality": "high",
+      "error": 1,
+      "samples": 28356
+    },
+    {
+      "stage": "stage_21",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 28356
+    },
+    {
+      "stage": "stage_21",
+      "quality": "low",
+      "error": 1,
+      "samples": 28356
+    },
+    {
+      "stage": "stage_22",
+      "quality": "high",
+      "error": 1,
+      "samples": 34721
+    },
+    {
+      "stage": "stage_22",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 34721
+    },
+    {
+      "stage": "stage_22",
+      "quality": "low",
+      "error": 1,
+      "samples": 34721
+    },
+    {
+      "stage": "stage_23",
+      "quality": "high",
+      "error": 1,
+      "samples": 1170
+    },
+    {
+      "stage": "stage_23",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 1170
+    },
+    {
+      "stage": "stage_23",
+      "quality": "low",
+      "error": 1,
+      "samples": 1170
+    },
+    {
+      "stage": "stage_24",
+      "quality": "high",
+      "error": 1,
+      "samples": 20833
+    },
+    {
+      "stage": "stage_24",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 20833
+    },
+    {
+      "stage": "stage_24",
+      "quality": "low",
+      "error": 1,
+      "samples": 20833
+    },
+    {
+      "stage": "stage_25",
+      "quality": "high",
+      "error": 1,
+      "samples": 2970
+    },
+    {
+      "stage": "stage_25",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 2970
+    },
+    {
+      "stage": "stage_25",
+      "quality": "low",
+      "error": 1,
+      "samples": 2970
+    },
+    {
+      "stage": "stage_26",
+      "quality": "high",
+      "error": 1,
+      "samples": 21415
+    },
+    {
+      "stage": "stage_26",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 21415
+    },
+    {
+      "stage": "stage_26",
+      "quality": "low",
+      "error": 1,
+      "samples": 21415
+    },
+    {
+      "stage": "stage_27",
+      "quality": "high",
+      "error": 1,
+      "samples": 36865
+    },
+    {
+      "stage": "stage_27",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 36865
+    },
+    {
+      "stage": "stage_27",
+      "quality": "low",
+      "error": 1,
+      "samples": 36865
+    },
+    {
+      "stage": "stage_28",
+      "quality": "high",
+      "error": 1,
+      "samples": 16846
+    },
+    {
+      "stage": "stage_28",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 16846
+    },
+    {
+      "stage": "stage_28",
+      "quality": "low",
+      "error": 1,
+      "samples": 16846
+    },
+    {
+      "stage": "stage_29",
+      "quality": "high",
+      "error": 1,
+      "samples": 23307
+    },
+    {
+      "stage": "stage_29",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 23307
+    },
+    {
+      "stage": "stage_29",
+      "quality": "low",
+      "error": 1,
+      "samples": 23307
+    },
+    {
+      "stage": "stage_30",
+      "quality": "high",
+      "error": 1,
+      "samples": 33048
+    },
+    {
+      "stage": "stage_30",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 33048
+    },
+    {
+      "stage": "stage_30",
+      "quality": "low",
+      "error": 1,
+      "samples": 33048
+    },
+    {
+      "stage": "stage_31",
+      "quality": "high",
+      "error": 1,
+      "samples": 28698
+    },
+    {
+      "stage": "stage_31",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 28698
+    },
+    {
+      "stage": "stage_31",
+      "quality": "low",
+      "error": 1,
+      "samples": 28698
+    },
+    {
+      "stage": "stage_32",
+      "quality": "high",
+      "error": 1,
+      "samples": 19647
+    },
+    {
+      "stage": "stage_32",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 19647
+    },
+    {
+      "stage": "stage_32",
+      "quality": "low",
+      "error": 1,
+      "samples": 19647
+    },
+    {
+      "stage": "stage_33",
+      "quality": "high",
+      "error": 1,
+      "samples": 30129
+    },
+    {
+      "stage": "stage_33",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 30129
+    },
+    {
+      "stage": "stage_33",
+      "quality": "low",
+      "error": 1,
+      "samples": 30129
+    },
+    {
+      "stage": "stage_34",
+      "quality": "high",
+      "error": 1,
+      "samples": 15156
+    },
+    {
+      "stage": "stage_34",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 15156
+    },
+    {
+      "stage": "stage_34",
+      "quality": "low",
+      "error": 1,
+      "samples": 15156
+    },
+    {
+      "stage": "stage_35",
+      "quality": "high",
+      "error": 1,
+      "samples": 24538
+    },
+    {
+      "stage": "stage_35",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 24538
+    },
+    {
+      "stage": "stage_35",
+      "quality": "low",
+      "error": 1,
+      "samples": 24538
+    },
+    {
+      "stage": "stage_36",
+      "quality": "high",
+      "error": 1,
+      "samples": 14166
+    },
+    {
+      "stage": "stage_36",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 14166
+    },
+    {
+      "stage": "stage_36",
+      "quality": "low",
+      "error": 1,
+      "samples": 14166
+    },
+    {
+      "stage": "stage_37",
+      "quality": "high",
+      "error": 1,
+      "samples": 35328
+    },
+    {
+      "stage": "stage_37",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 35328
+    },
+    {
+      "stage": "stage_37",
+      "quality": "low",
+      "error": 1,
+      "samples": 35328
+    },
+    {
+      "stage": "stage_38",
+      "quality": "high",
+      "error": 1,
+      "samples": 33798
+    },
+    {
+      "stage": "stage_38",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 33798
+    },
+    {
+      "stage": "stage_38",
+      "quality": "low",
+      "error": 1,
+      "samples": 33798
+    },
+    {
+      "stage": "stage_39",
+      "quality": "high",
+      "error": 1,
+      "samples": 5878
+    },
+    {
+      "stage": "stage_39",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 5878
+    },
+    {
+      "stage": "stage_39",
+      "quality": "low",
+      "error": 1,
+      "samples": 5878
+    },
+    {
+      "stage": "stage_40",
+      "quality": "high",
+      "error": 1,
+      "samples": 12145
+    },
+    {
+      "stage": "stage_40",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 12145
+    },
+    {
+      "stage": "stage_40",
+      "quality": "low",
+      "error": 1,
+      "samples": 12145
+    },
+    {
+      "stage": "stage_41",
+      "quality": "high",
+      "error": 1,
+      "samples": 28957
+    },
+    {
+      "stage": "stage_41",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 28957
+    },
+    {
+      "stage": "stage_41",
+      "quality": "low",
+      "error": 1,
+      "samples": 28957
+    },
+    {
+      "stage": "stage_42",
+      "quality": "high",
+      "error": 1,
+      "samples": 12193
+    },
+    {
+      "stage": "stage_42",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 12193
+    },
+    {
+      "stage": "stage_42",
+      "quality": "low",
+      "error": 1,
+      "samples": 12193
+    },
+    {
+      "stage": "stage_43",
+      "quality": "high",
+      "error": 1,
+      "samples": 21011
+    },
+    {
+      "stage": "stage_43",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 21011
+    },
+    {
+      "stage": "stage_43",
+      "quality": "low",
+      "error": 1,
+      "samples": 21011
+    },
+    {
+      "stage": "stage_44",
+      "quality": "high",
+      "error": 1,
+      "samples": 18619
+    },
+    {
+      "stage": "stage_44",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 18619
+    },
+    {
+      "stage": "stage_44",
+      "quality": "low",
+      "error": 1,
+      "samples": 18619
+    },
+    {
+      "stage": "stage_45",
+      "quality": "high",
+      "error": 1,
+      "samples": 9344
+    },
+    {
+      "stage": "stage_45",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 9344
+    },
+    {
+      "stage": "stage_45",
+      "quality": "low",
+      "error": 1,
+      "samples": 9344
+    },
+    {
+      "stage": "stage_46",
+      "quality": "high",
+      "error": 1,
+      "samples": 16669
+    },
+    {
+      "stage": "stage_46",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 16669
+    },
+    {
+      "stage": "stage_46",
+      "quality": "low",
+      "error": 1,
+      "samples": 16669
+    },
+    {
+      "stage": "stage_47",
+      "quality": "high",
+      "error": 1,
+      "samples": 28595
+    },
+    {
+      "stage": "stage_47",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 28595
+    },
+    {
+      "stage": "stage_47",
+      "quality": "low",
+      "error": 1,
+      "samples": 28595
+    },
+    {
+      "stage": "stage_48",
+      "quality": "high",
+      "error": 1,
+      "samples": 16184
+    },
+    {
+      "stage": "stage_48",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 16184
+    },
+    {
+      "stage": "stage_48",
+      "quality": "low",
+      "error": 1,
+      "samples": 16184
+    },
+    {
+      "stage": "stage_49",
+      "quality": "high",
+      "error": 1,
+      "samples": 18837
+    },
+    {
+      "stage": "stage_49",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 18837
+    },
+    {
+      "stage": "stage_49",
+      "quality": "low",
+      "error": 1,
+      "samples": 18837
+    },
+    {
+      "stage": "stage_50",
+      "quality": "high",
+      "error": 1,
+      "samples": 16270
+    },
+    {
+      "stage": "stage_50",
+      "quality": "balanced",
+      "error": 1,
+      "samples": 16270
+    },
+    {
+      "stage": "stage_50",
+      "quality": "low",
+      "error": 1,
+      "samples": 16270
+    }
+  ],
+  "errors": []
+}

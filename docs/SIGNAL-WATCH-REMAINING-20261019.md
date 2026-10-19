@@ -14,7 +14,24 @@
 
 ## 검증 기록
 
-진행 중. 최종 전체 테스트·타입 검사·빌드·브라우저·배포 결과를 종료 시 기록한다. 로컬 네이티브 컴파일러가 Windows 메모리 부족으로 중단된 실행은 통과로 계산하지 않는다. 개발 서버와 이전 검수 탭을 닫고 `GOMAXPROCS=1`, `GOGC=50`로 재실행한 타입 검사는 통과했다. 제품 설정을 낮추거나 검사를 생략하지 않았다.
+검증 대상 소스 커밋은 `6e514ce89a64f894015ceb0759753bfa77fc8084`다. 로컬 Windows의 가상 메모리 부족으로 중단된 전체 실행은 통과로 계산하지 않고, 기존 GitHub Actions의 격리된 Linux 환경에서 전체 검증을 완료한다. 제품의 렌더링 품질이나 검사 항목은 낮추지 않았다.
+
+- 전체 회귀: **409개 파일, 2,406개 테스트 통과**, 기존 1개 스킵. 타입 검사와 정상 `npm run build`도 통과. [검증 실행](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39223646469/job/117964587843)
+- 로컬 집중 검사: **55/55 통과**. 49개 원화·추출본·납품본 해시, 원본 크기, 변형 없는 알파 크롭, 50개 원화 연결, 6명 요원 로딩 계획을 확인했다.
+- 로컬 전경 검수 브라우저: **50단계 × high/balanced/low = 150개 조합 통과**, 페이지 오류 0. 원화의 불투명 픽셀 RGB 오차는 최대 1/255, 모든 단계에서 경고 보호 알파 0.25 확인. 390×844·844×390에서도 문서 가로 넘침 없음. 이 검수 페이지는 실제 렌더러를 사용하며 게임 플레이·자연 해금 검증과 구분한다.
+- 실제 게임 브라우저: [50단계 반응형 실행](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39223646469). 네 화면 크기에서 모든 단계의 `registeredForegrounds=1`, `loadedForegrounds=1`, 기존 원화·조명·인물·저장 상태·화면 넘침·reduced motion·low 품질을 검사한다. 해금·인물 위치·승리 등은 명시적 QA fixture이며 자연 진행 완료로 계산하지 않는다.
+- 기존 Episode 01 음성·시네마틱·모바일 터치 검증: [성공](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39223646416).
+- 공용 Signal Breaker 자산: Git의 릴리스 자산 **230개 해시 일치**. 방향별 원화 로더를 공유하므로 재빌드한 공용 번들과 `release.json`을 함께 동기화했다.
+
+원화 디코딩 동시 보유량의 계산상 최대값은 player **72→18 MiB(75% 감소)**, 나머지 5명 **66→24 MiB(약 64% 감소)**다. 이는 전체 프로세스 메모리나 Android 실측치가 아니다.
+
+## 기존 별도 모드 QA 실패
+
+별도 모드인 Signal Breaker의 브라우저 QA 7건은 [이번 실행](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39223646463)에서도 실패했다. [2026-10-18 main 실행](https://github.com/TELLOWSS/psi-zero-day/actions/runs/39118397201)에서 같은 7개 스크립트가 이미 실패했음을 로그로 대조했다. 5건은 기존 전리품 모달이 엔딩 컨트롤의 클릭을 가로막고, 나머지는 기존 UI·보스 상태 대기 조건에서 시간 초과한다. 해당 `app.js`·엔진·7개 검증 스크립트는 당시 main부터 이번 커밋까지 변경되지 않았다. 이를 시그널워치의 신규 회귀나 통과한 검사로 표시하지 않는다.
+
+## GitHub · Vercel
+
+[PR #221](https://github.com/TELLOWSS/psi-zero-day/pull/221)에서 `TELLOWSS/psi-zero-day`의 main으로 반영한다. 연결된 기존 운영 프로젝트는 `psi-zero-day` / `prj_W0pIPvmZkiP5mSi92LRxH7aw3PNa`이며 운영 주소는 [psi-zero-day.vercel.app](https://psi-zero-day.vercel.app)이다. 배포 완료 판정에는 Vercel READY와 main 커밋 일치, 업그레이드된 게임 번들, 49개 신규 전경 파일의 실제 HTTP SHA-256 확인이 필요하다. 최종 배포 영수증은 로컬 `artifacts/resume-production-assets.json`과 대화 완료 보고에 남긴다.
 
 ## Android
 
