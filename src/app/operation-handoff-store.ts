@@ -14,8 +14,11 @@ export function readOperationHandoffs(storage = defaultStorage()): OperationHand
 export function saveOperationHandoff(record: OperationHandoff, storage = defaultStorage()): boolean {
   if (!storage || !isOperationHandoff(record)) return false;
   try {
+    const observedAt=record.observedAt??new Date().toISOString();
+    const runId=record.runId??globalThis.crypto?.randomUUID?.();
+    const saved={...record,...(runId?{runId}:{}),observedAt};
     const rows = readOperationHandoffs(storage).filter(r => r.characterId !== record.characterId || r.stageId !== record.stageId);
-    storage.setItem(OPERATION_HANDOFF_KEY, JSON.stringify([...rows, record].slice(-50)));
+    storage.setItem(OPERATION_HANDOFF_KEY, JSON.stringify([...rows, saved].slice(-50)));
     return true;
   } catch { return false; }
 }

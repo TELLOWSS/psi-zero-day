@@ -10,6 +10,11 @@
 .story-reader-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px}.story-reader-dialog h2{font-size:1.2rem}.story-reader-dialog button{min-height:44px;min-width:44px}
 .story-reader-dialog label{display:grid;grid-template-columns:1fr auto;gap:8px;margin:18px 0}.story-reader-dialog input{grid-column:1/-1;width:100%;min-height:44px;accent-color:#b9ddbd}.story-reader-dialog p{line-height:1.7;color:#c3d6d4}
 .story-evidence{margin:0 0 14px;padding:12px 14px;border-left:2px solid #b3d6b4;border-radius:8px;background:#102b31b3}.story-evidence summary{min-height:32px;cursor:pointer;font-size:.82rem;color:#d6e8c9}.story-evidence article{margin:12px 0}.story-evidence article span{font-size:.7rem;letter-spacing:.06em;color:#d1bb88}.story-evidence p{line-height:1.75;font-size:.88rem;white-space:pre-line}.story-evidence-boundary{color:#9fb9b8;font-size:.75rem!important}
+.story-evidence-source{display:block;margin-top:6px;font-size:.72rem;line-height:1.6;color:#c5d9d7;overflow-wrap:anywhere}
+.story-evidence ul{padding-left:18px;color:#c5d9d7;font-size:.75rem;line-height:1.7}
+.story-context-panel .episode-day-carryover{width:100%;min-width:0;box-sizing:border-box;position:static}
+.story-context-panel .day-carryover-cards{display:grid;grid-template-columns:minmax(0,1fr)}
+.story-context-panel .day-carryover-cards article{min-width:0;overflow-wrap:anywhere}
 .story-save-warning{position:fixed;z-index:45;bottom:65px;right:12px;max-width:300px;padding:12px;background:#322b1b;color:#ffe4a0;border-radius:10px;font-size:.8rem}.story-skip-voice{font-size:.8rem;margin:0 0 12px}
 .presentation-history-drawer[open]{position:fixed;inset:4dvh 3vw;margin:auto;max-height:88dvh;width:min(700px,90vw);box-sizing:border-box;overflow:auto;background:#11262ef5;color:#eef4ed;border:1px solid #bad1be77;border-radius:16px;padding:20px;z-index:60}.presentation-history-drawer p{line-height:1.8;white-space:pre-line}
 .story-restart-entry{margin:18px auto;display:block;font-size:.8rem}

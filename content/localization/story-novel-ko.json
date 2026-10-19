@@ -119,6 +119,22 @@
     "ui.day_carryover.stage.evening": "17:18 회복",
     "ui.day_carryover.evening.eyebrow": "17:18 · DAY RESIDUE",
     "ui.day_result.production.eyebrow": "17:18 · DAY 01 MEMORY",
-    "ep01.restart.situation": "14:48. 변경작업 재브리핑 뒤 십여 분이 지났다. 자재가 다시 움직이기 시작했다. 무전에는 ‘재개하라고 했다’는 말이 돌았지만, 누가 어떤 조건으로 말했는지는 사람마다 달랐다.\n무전기를 쥔 손에 힘이 들어갔다. 누군가의 짧은 한마디가 여러 사람의 다음 걸음이 되고 있었다."
+    "ep01.restart.situation": "14:48. 변경작업 재브리핑 뒤 십여 분이 지났다. 자재가 다시 움직이기 시작했다. 무전에는 ‘재개하라고 했다’는 말이 돌았지만, 누가 어떤 조건으로 말했는지는 사람마다 달랐다.\n무전기를 쥔 손에 힘이 들어갔다. 누군가의 짧은 한마디가 여러 사람의 다음 걸음이 되고 있었다.",
+    "story.evidence.general": "다른 구역에서 남긴 훈련 기록입니다. 지금 이 사건의 조치 완료나 원인을 확인한 기록은 아닙니다. 해당 위치와 작업 조건을 직접 다시 확인합니다.",
+    "story.evidence.unknown": "이 기록에는 마지막 시도의 완료 여부가 남아 있지 않습니다. 과거 완료 이력으로 최신 결과를 추정하지 않습니다.",
+    "story.evidence.outcome.unknown": "완료 여부 미상",
+    "story.evidence.source": "기록 출처",
+    "story.evidence.legacy": "출처를 보존하지 않은 이전 기록",
+    "story.evidence.undated": "관찰 시각 미상",
+    "story.evidence.observation.controlled-zone": "통제 구역 확인",
+    "story.evidence.observation.cart-stop": "운반대차 통제",
+    "story.evidence.observation.route-cleared": "통로 잔재 정리",
+    "story.evidence.observation.defense-route-review": "방어 경로 검토",
+    "story.evidence.observation.watch-load-pattern": "순찰의 위험 흐름 관찰",
+    "story.evidence.observation.guard-load-pattern": "방어의 위험 흐름 관찰",
+    "story.evidence.observation.breaker-load-pattern": "반사 훈련의 압박 흐름 관찰",
+    "story.evidence.observation.other": "작전 관찰 기록",
+    "ui.day_carryover.first.route.title": "DAY 02 첫 확인 · 어제 열린 보고통로를 오늘도 확인한다",
+    "ui.day_carryover.first.route.body": "어제 위험보고와 배치 문제를 나누어 들었던 방식을 떠올린다. 오늘도 작업자가 위치와 달라진 조건을 직접 말할 수 있는지 먼저 듣고, 현재 작업면을 함께 확인한다."
   }
 }

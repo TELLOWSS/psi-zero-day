@@ -248,7 +248,7 @@ export interface DefenseTacticalStats extends DefenseFamilyStats {
  readonly tickMs?:number;
  readonly detailTrackedFromTick?:number;
  readonly byLevel?:Readonly<Record<string,DefenseFamilyStats>>;
- readonly routeLeaks?:readonly {readonly enemyId:DefenseEnemyId;readonly routeId:string;readonly waveId:number;readonly tick:number;readonly point:DefensePoint;readonly firstContact?:DefenseEnemyState['firstContact']}[];
+ readonly routeLeaks?:readonly {readonly enemyId:DefenseEnemyId;readonly routeId:string;readonly waveId:number;readonly tick:number;readonly point:DefensePoint;readonly firstContact?:DefenseEnemyState['firstContact'];readonly targetsAtLeak?:readonly Pick<DefenseTowerState,'padId'|'targetMode'>[]}[];
  readonly supportEvents?:readonly {readonly kind:'SUPPORT'|'E_STOP';readonly supportId:DefenseSupportId;readonly waveId:number;readonly tick:number}[];
  readonly initialLeaks:number;
  readonly initialShield:number;

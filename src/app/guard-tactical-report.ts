@@ -15,3 +15,14 @@ export function guardDebriefAdvice(run:DefenseRunState):string{
  if(Object.values(leaks).some(n=>(n??0)>0))return 'guard.review.advice.NORMAL';
  return 'guard.review.advice.CLEAR';
 }
+
+/** Describe recorded observations, never infer a single cause or a win probability. */
+export function guardFailureReview(report:DefenseTacticalReport){
+ const leaks=report.stats.routeLeaks??[];
+ const counts=new Map<string,number>();for(const leak of leaks)counts.set(leak.enemyId,(counts.get(leak.enemyId)??0)+1);
+ const recentLeaks=[...leaks].reverse();
+ const targetRisk=recentLeaks.find(e=>e.enemyId==='SWIFT'&&e.targetsAtLeak?.some(t=>t.targetMode==='STRONG'));
+ return {leaks:[...counts].sort((a,b)=>b[1]-a[1]),sampleCount:leaks.length,
+  adviceId:targetRisk?'guard.review.advice.targetSwift':'guard.review.advice.changeOne',
+  targetEvidence:targetRisk??recentLeaks.find(e=>e.targetsAtLeak!==undefined)};
+}

@@ -282,7 +282,7 @@ function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRu
     if (distance + EPSILON >= defensePathLength(defenseEnemyPath(content,enemy,state))) {
       shield = Math.max(0, shield - definition.leak);
       leakedByEnemy[enemy.enemyId] = (leakedByEnemy[enemy.enemyId] ?? 0) + 1;
-      routeLeaks.push({enemyId:enemy.enemyId,routeId:enemy.routeId??'main',waveId:state.waveId,tick:state.tick,point:defenseEnemyPosition(content,{...enemy,distance},state),...(enemy.firstContact?{firstContact:enemy.firstContact}:{})});
+      routeLeaks.push({enemyId:enemy.enemyId,routeId:enemy.routeId??'main',waveId:state.waveId,tick:state.tick,point:defenseEnemyPosition(content,{...enemy,distance},state),...(enemy.firstContact?{firstContact:enemy.firstContact}:{}),targetsAtLeak:state.towers.map(({padId,targetMode})=>({padId,targetMode}))});
       continue;
     }
     moved.push({ ...enemy, distance });

@@ -18,7 +18,11 @@ export function StoryEvidence({eventId,state,t}:{eventId:string|null;state:GameS
     <p className="story-evidence-boundary">{t('story.evidence.boundary')}</p>
     {rows.map(row=><article key={`${row.sourceMode}:${row.sourceRecordId}`} data-evidence-mode={row.sourceMode} data-evidence-outcome={row.outcome}>
       <span>{t(`story.evidence.mode.${row.sourceMode}`)} · {t(`story.evidence.outcome.${row.outcome}`)}</span>
+      <small className="story-evidence-source">{t('story.evidence.source')} · {row.sourceAreaId==='unknown'?t('story.evidence.legacy'):row.sourceAreaId}
+        {' · '}{row.observedAt?<time dateTime={row.observedAt}>{new Date(row.observedAt).toLocaleString('ko-KR')}</time>:t('story.evidence.undated')}
+      </small>
       <p>{t(storyEvidenceReaction(row,state))}</p>
+      {row.observationIds.length?<ul>{row.observationIds.map(id=><li key={id}>{t(`story.evidence.observation.${id}`)===`story.evidence.observation.${id}`?t('story.evidence.observation.other'):t(`story.evidence.observation.${id}`)}</li>)}</ul>:null}
     </article>)}
     {!result.saved&&<small role="status">{t('story.reader.unsaved')}</small>}
   </details>;

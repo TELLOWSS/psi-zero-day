@@ -194,3 +194,5 @@
 .guard-spatial-controls select{min-height:44px;max-width:100%;padding:6px;border:1px solid #70949e;border-radius:8px;background:#112f3b;color:#effaff}
 .guard-spatial-controls button{min-height:44px;padding:8px;margin-left:6px}
 .guard-spatial-controls button:focus-visible,.guard-spatial-controls select:focus-visible{outline:3px solid #ffd38c;outline-offset:2px}
+
+.guard-failure-review{padding:12px;border:1px solid #d8b97088;border-radius:10px;background:#112c35;color:#f2eee2}.guard-failure-review p,.guard-failure-review li{line-height:1.7;font-size:13px}.guard-failure-review small{display:block;line-height:1.6;color:#cad9dc}.guard-wave-brief{margin:10px 0;padding:10px;border:1px solid #8fb5b644;border-radius:10px;color:#e4efea;background:#102a34}.guard-wave-brief>strong{font-size:13px}.guard-wave-brief>ul{padding-left:18px;font-size:12px;line-height:1.7}.guard-wave-brief>p{font-size:12px;line-height:1.7;color:#ffe3a4}

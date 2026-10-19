@@ -28,6 +28,12 @@ it.each(['first','last'])('offers explicit controls throughout the 26-event %s-c
     expect(host.querySelector('.strategy-shell')).toBeNull();
     expect(host.querySelector('.episode-immersive-background')?.getAttribute('src')).toBeTruthy();
     expect(host.querySelector('.story-reading-guide')?.textContent).toBeTruthy();
+    const skip=host.querySelector<HTMLButtonElement>('.story-skip-voice');
+    if(skip)expect(skip.closest('.story-reading-guide')).not.toBeNull();
+    if(event==='e01_10_next_day_tease'){
+      expect(host.querySelector('.story-next-check')?.textContent).toContain('DAY 02');
+      expect(host.querySelector('.story-context-panel .episode-day-carryover')).not.toBeNull();
+    }
     const choices=[...host.querySelectorAll<HTMLButtonElement>('.choice-panel button:not(:disabled)')];
     const choice=policy==='last'?choices.at(-1):choices[0];
     if(choice){expect(host.querySelector('.map-choice-fallback')).toBeNull();decisions++;click(choice);}

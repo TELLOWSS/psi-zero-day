@@ -335,7 +335,8 @@ export function useDefensePersistence(
     setStateInternal(next);
     if (command.type === 'Build' || command.type === 'UndoBuild' || command.type === 'Upgrade' || command.type === 'Sell'
       || command.type === 'SetPaused' || command.type === 'StartWave' || command.type === 'TriggerEStop'
-      || command.type === 'ConfirmTransition' || command.type === 'RelocateTower' || command.type === 'UseSupport') {
+      || command.type === 'ConfirmTransition' || command.type === 'RelocateTower' || command.type === 'UseSupport'
+      || command.type === 'SetTargetMode') {
       void persistRun(next);
     }
     return next;

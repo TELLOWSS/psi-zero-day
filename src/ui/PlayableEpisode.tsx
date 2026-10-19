@@ -55,6 +55,7 @@ import { EpisodeStopworkCultureChain } from './EpisodeStopworkCultureChain';
 import { EpisodeInstructionRealityChain } from './EpisodeInstructionRealityChain';
 import { EpisodeRecordRealityChain } from './EpisodeRecordRealityChain';
 import { EpisodeDayCarryover } from './EpisodeDayCarryover';
+import {episode01DayCarryover} from '../app/episode01-day-carryover';
 import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
 import { EpisodeColdOpen } from './EpisodeColdOpen';
@@ -669,6 +670,7 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
         <span>{cinematicBeat.time} · {cinematicBeat.zone}</span><strong>{snapshot.eventTitle}</strong>
       </aside> : null}
       {['e01_04_junho_signal','e01_05_command','e01_06_pump_arrival','e01_08e_responsibility_clash','e01_08n_instruction_return','e01_09_evening','e01_10_next_day_tease'].includes(activeEventId??'')?<details className="story-context-panel"><summary>{t('story.context.open')}</summary>
+          <EpisodeDayCarryover eventId={activeEventId} flags={snapshot.state?.flags} t={t}/>
           <StoryEvidence eventId={activeEventId} state={snapshot.state} t={t}/>
           {activeEventId==='e01_04_junho_signal'&&onWatch?<div className="story-mode-link"><p>{t('story.bridge.watch')}</p><button type="button" onClick={onWatch}>{t('story.bridge.watchAction')}</button><small>{t('story.bridge.optional')}</small></div>:null}
           {activeEventId==='e01_05_command'&&onGuard?<div className="story-mode-link"><p>{t('story.bridge.guard')}</p><button type="button" onClick={onGuard}>{t('story.bridge.guardAction')}</button><small>{t('story.bridge.optional')}</small></div>:null}
@@ -698,8 +700,10 @@ export function PlayableEpisode({ session, onReturn, onNextEpisode, onWatch, onG
               onClick={() => setStoryViewMode(mode => mode === 'cinema' ? 'read' : 'cinema')}>
               {storyViewMode === 'cinema' ? '읽기 확대' : '영화 자막'}
             </button>
+            {voiceLocked?<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>:null}
+            {activeEventId==='e01_10_next_day_tease'?<small className="story-next-check">{t(episode01DayCarryover(activeEventId,snapshot.state?.flags)!.cards.at(-1)!.title_text_id)}</small>:null}
           </div> : null}
-          {voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
+          {!directedCampaign&&voiceLocked&&<button className="story-skip-voice" type="button" onClick={stopVoice}>{t('story.reader.skipVoice')}</button>}
           {directedCampaign&&voiceLocked&&voiceSubtitle?<p className="story-voice-caption" aria-live="off">{voiceSubtitle}</p>:null}
           {activeVoiceCue?.countdown_label ? <div className="episode-voice-countdown" aria-label={activeVoiceCue.countdown_label}>
             <span aria-hidden="true">T−</span><strong>{activeVoiceCue.countdown_label}</strong>

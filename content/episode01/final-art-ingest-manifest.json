@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "batch_id": "episode01-final-backgrounds-generated-2026-09-19",
-  "status": "exact_archive_verified_github_ingested",
-  "source": "ChatGPT image generation batch, converted to 1920x1080 WebP for runtime ingestion",
+  "batch_id": "episode01-versioned-cinema-candidates-2026-10-17",
+  "status": "versioned_cinema_candidates_ingested",
+  "source": "Four retained baseline plates plus four built-in image_gen successors; archived ZIP metadata below describes the historical baseline only, not the active successor binaries.",
   "assets": [
     {
       "filename": "break-area.webp",
@@ -32,13 +32,13 @@
       "sha256": "bf0d7f51abd1be209ea7d28d548cbf27f57c0cd85476dc36117ff120a8495021"
     },
     {
-      "filename": "home-night.webp",
-      "target_path": "public/assets/episode01/cg/home-night.webp",
-      "source_generated_file": "서울_야경이_보이는_아늑한_원룸.png",
+      "filename": "home-night-cinema.webp",
+      "target_path": "public/assets/episode01/cg/home-night-cinema.webp",
+      "source_generated_file": "art-source/story-cinema-v1/home-night.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 76944,
-      "sha256": "75c44aa554bfcdacbd10e4ca22bb2a5949cf8b08cedc5b8c07350a39badccf7c"
+      "bytes": 293522,
+      "sha256": "e1b901058addcc93a7f7870abaae59098c687c39056afb9c7ff0f4a98910b902"
     },
     {
       "filename": "inspection-zone.webp",
@@ -50,31 +50,31 @@
       "sha256": "29327423d047693f4015f0d5341d2ac906055fa29559489d7dc08dd31a120e95"
     },
     {
-      "filename": "ramp-entry.webp",
-      "target_path": "public/assets/episode01/cg/ramp-entry.webp",
-      "source_generated_file": "새벽_건설_현장_램프.png",
+      "filename": "ramp-entry-cinema.webp",
+      "target_path": "public/assets/episode01/cg/ramp-entry-cinema.webp",
+      "source_generated_file": "art-source/story-cinema-v1/ramp-entry.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 229240,
-      "sha256": "382859fff69e1efadf21089031788f4fafc465601c7b9b006d2d333ecfa35906"
+      "bytes": 582126,
+      "sha256": "0bf889ea006406d1de7ae180cdf54318bc473c1465464a6becfc9ee3c6ab9828"
     },
     {
-      "filename": "site-office.webp",
-      "target_path": "public/assets/episode01/cg/site-office.webp",
-      "source_generated_file": "건설_현장_사무실_회의실_풍경.png",
+      "filename": "site-office-cinema.webp",
+      "target_path": "public/assets/episode01/cg/site-office-cinema.webp",
+      "source_generated_file": "art-source/story-cinema-v1/site-office.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 89936,
-      "sha256": "57fc86a99c4a28deb7d42b330a193ad67acbc7032c4534151dec9c91ae8f9434"
+      "bytes": 296880,
+      "sha256": "819442f429cc0207925a5bdcda7f55e477f9c3bf948c3036e435c060a113d5c5"
     },
     {
-      "filename": "work-yard.webp",
-      "target_path": "public/assets/episode01/cg/work-yard.webp",
-      "source_generated_file": "안개_낀_도시_건설_현장.png",
+      "filename": "work-yard-cinema.webp",
+      "target_path": "public/assets/episode01/cg/work-yard-cinema.webp",
+      "source_generated_file": "art-source/story-cinema-v1/work-yard.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 216874,
-      "sha256": "b994d768a856227aa62924824032951b9ac5cd95714b2ba75b77934c0880d22f"
+      "bytes": 607254,
+      "sha256": "46409904833be2be153ba8bb4411a99a3ec8b5b6b9ef8f972160e59f9ba013c9"
     }
   ],
   "archive": {
@@ -84,10 +84,8 @@
   },
   "ingest_workflow": ".github/workflows/ingest-episode01-final-art.yml",
   "verification": {
-    "verified_at": "2026-09-19",
-    "archive_sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb",
+    "verified_at": "2026-10-17",
     "exact_asset_count": 8,
-    "rule": "Do not mark final art ingested until all eight contracted WebPs are committed under public/assets/episode01/cg and the production checks pass.",
-    "ingested_at": "2026-09-20T06:29:23.426Z"
+    "rule": "All eight active files must match their recorded dimensions and SHA-256; visual lock requires separate composited-screen review."
   }
 }

@@ -1246,7 +1246,7 @@ export function DefenseGame({
           <button type="button" onClick={() => { if(guard)void operations();else void persistence.exitToMain(); }}>{t(guard?'guard.home':activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
         </div>
         {guard?<button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button>:null}
-        {guard&&state.tacticalStats?<details className="guard-result-review"><summary>{t('guard.review')} · {t('guard.review.resolved')} {state.tacticalStats.resolved}</summary><GuardTacticalDebrief report={guardTacticalReport(content,state)!} adviceId={guardDebriefAdvice(state)}/></details>:null}
+        {guard&&state.tacticalStats?<details className="guard-result-review" open={!result.won}><summary>{t('guard.review')} · {t('guard.review.resolved')} {state.tacticalStats.resolved}</summary><GuardTacticalDebrief report={guardTacticalReport(content,state)!} adviceId={guardDebriefAdvice(state)}/></details>:null}
         {guard?<p className="guard-result-boundary">{t('defense.tactics.boundary')}</p>:<section className="zb-tactics-debrief"><h3>{t('defense.tactics.review')}</h3><p>{t('defense.tactics.boundary')}</p>
           <strong>{t('defense.tactics.loadout')}</strong><p>{state.towers.map(tower=>`${tower.padId} ${towerName(content.map.id,tower.towerId)} ${tower.levelId}`).join(' · ')||'—'}</p>
           <strong>{t('defense.tactics.leaks')}</strong><p>{leakedEntries.length?leakedEntries.map(([id,count])=>`${enemyName(content.map.id,id)} ×${count}`).join(' · '):t('defense.tactics.no_leaks')}</p>

@@ -47,7 +47,7 @@ describe('Episode 01 day carryover',()=>{
       instruction_chain_result:'conditional_phrase_restored',
       evening_field_note:true
     });
-    expect(model?.cards.some(c=>c.title_text_id==='ui.day_carryover.first.stable.title')).toBe(true);
+    expect(model?.cards.some(c=>c.title_text_id==='ui.day_carryover.first.route.title')).toBe(true);
   });
 
   it('keeps evening and day-two cinematic/audio continuity',()=>{

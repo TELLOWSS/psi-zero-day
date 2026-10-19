@@ -647,10 +647,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/home-night.webp",
+          "uri": "assets/episode01/cg/home-night-cinema.webp",
           "format": "webp",
-          "bytes": 76944,
-          "hash": "75c44aa554bfcdacbd10e4ca22bb2a5949cf8b08cedc5b8c07350a39badccf7c"
+          "bytes": 293522,
+          "hash": "e1b901058addcc93a7f7870abaae59098c687c39056afb9c7ff0f4a98910b902"
         }
       ],
       "dependencies": [],
@@ -679,10 +679,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/ramp-entry.webp",
+          "uri": "assets/episode01/cg/ramp-entry-cinema.webp",
           "format": "webp",
-          "bytes": 229240,
-          "hash": "382859fff69e1efadf21089031788f4fafc465601c7b9b006d2d333ecfa35906"
+          "bytes": 582126,
+          "hash": "0bf889ea006406d1de7ae180cdf54318bc473c1465464a6becfc9ee3c6ab9828"
         }
       ],
       "dependencies": [],
@@ -695,10 +695,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/site-office.webp",
+          "uri": "assets/episode01/cg/site-office-cinema.webp",
           "format": "webp",
-          "bytes": 89936,
-          "hash": "57fc86a99c4a28deb7d42b330a193ad67acbc7032c4534151dec9c91ae8f9434"
+          "bytes": 296880,
+          "hash": "819442f429cc0207925a5bdcda7f55e477f9c3bf948c3036e435c060a113d5c5"
         }
       ],
       "dependencies": [],
@@ -711,10 +711,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/work-yard.webp",
+          "uri": "assets/episode01/cg/work-yard-cinema.webp",
           "format": "webp",
-          "bytes": 216874,
-          "hash": "b994d768a856227aa62924824032951b9ac5cd95714b2ba75b77934c0880d22f"
+          "bytes": 607254,
+          "hash": "46409904833be2be153ba8bb4411a99a3ec8b5b6b9ef8f972160e59f9ba013c9"
         }
       ],
       "dependencies": [],

@@ -6,6 +6,8 @@ export function isOperationHandoff(value: unknown): value is OperationHandoff {
   const r = value as Record<string, unknown>;
   const stageIndex = PATROL_STAGE_IDS.findIndex(id => id === r.stageId);
   return r.version === 1 && characters.includes(String(r.characterId))
+    && (r.runId===undefined||(typeof r.runId==='string'&&r.runId.length>0&&r.runId.length<=240))
+    && (r.observedAt===undefined||(typeof r.observedAt==='string'&&/^\d{4}-\d\d-\d\dT/.test(r.observedAt)&&Number.isFinite(Date.parse(r.observedAt))))
     && stageIndex >= 0 && r.stageNumber === stageIndex + 1
     && (r.outcome === 'victory' || r.outcome === 'defeat')
     && [r.zones, r.cartStops, r.rubbleCleared].every(v => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0)

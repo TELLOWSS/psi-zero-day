@@ -10,6 +10,7 @@ export function validDefenseTacticalStats(v:unknown):v is DefenseTacticalStats{
  if(!record(v)||!family(v)||!['trackedFromTick','initialLeaks','initialShield','supportUses','eStopUses','peakSignals'].every(k=>count(v[k])))return false;
  if(!record(v.byFamily)||Object.entries(v.byFamily).some(([key,value])=>!tower(key)||!family(value)))return false;
  if(v.routeLeaks!==undefined&&(!Array.isArray(v.routeLeaks)||v.routeLeaks.length>24||!v.routeLeaks.every(e=>record(e)&&['NORMAL','SWIFT','ARMORED','SWARM','VEILED','BOSS'].includes(String(e.enemyId))&&typeof e.routeId==='string'&&e.routeId.length<=80&&count(e.waveId)&&count(e.tick)&&point(e.point)&&(e.firstContact===undefined||validDefenseFirstContact(e.firstContact)))))return false;
+ if(Array.isArray(v.routeLeaks)&&v.routeLeaks.some(e=>record(e)&&e.targetsAtLeak!==undefined&&(!Array.isArray(e.targetsAtLeak)||e.targetsAtLeak.length>8||!e.targetsAtLeak.every(t=>record(t)&&typeof t.padId==='string'&&t.padId.length<=80&&['FIRST','STRONG','THREAT'].includes(String(t.targetMode))))))return false;
  if(v.supportEvents!==undefined&&(!Array.isArray(v.supportEvents)||v.supportEvents.length>24||!v.supportEvents.every(e=>record(e)&&['SUPPORT','E_STOP'].includes(String(e.kind))&&['COORDINATOR','OBSERVER','REBAR_LEAD','ENGINEER','COMMANDER','SIGNALER'].includes(String(e.supportId))&&count(e.waveId)&&count(e.tick))))return false;
  if(v.tickMs!==undefined&&(!count(v.tickMs)||v.tickMs<1||v.tickMs>1000))return false;
  if(v.detailTrackedFromTick!==undefined&&!count(v.detailTrackedFromTick))return false;

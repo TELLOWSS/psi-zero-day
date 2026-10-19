@@ -88,6 +88,9 @@ function firstCheckCard(flags:FlagMap):DayCarryoverCard{
   if(flags.record_result==='supplement_requested'||flags.record_result==='document_sync_required'){
     return {title_text_id:'ui.day_carryover.first.record.title',body_text_id:'ui.day_carryover.first.record.body',tone:'first'};
   }
+  if(flags.stopwork_culture_result==='reporting_route_preserved'){
+    return {title_text_id:'ui.day_carryover.first.route.title',body_text_id:'ui.day_carryover.first.route.body',tone:'first'};
+  }
   return {title_text_id:'ui.day_carryover.first.stable.title',body_text_id:'ui.day_carryover.first.stable.body',tone:'first'};
 }
 

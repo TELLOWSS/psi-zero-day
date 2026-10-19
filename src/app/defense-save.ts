@@ -116,6 +116,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
 
 function validRecord(value: unknown): value is DefenseScenarioRecord {
   return record(value)
+    && (value.lastResultWon===undefined||typeof value.lastResultWon==='boolean')
     && (value.lastTacticalReport===undefined||validDefenseTacticalReport(value.lastTacticalReport))
     && nonEmptyString(value.scenarioId)
     && nonNegativeInteger(value.finishedRuns)
@@ -300,6 +301,7 @@ export function applyDefenseOutcome(
     bestShield: Math.max(previous?.bestShield ?? 0, result.shield),
     bestCompletedWaves: Math.max(previous?.bestCompletedWaves ?? 0, result.completedWaves),
     lastResultRunId: run.runId,
+    lastResultWon: result.won,
     updatedAt,
   };
 

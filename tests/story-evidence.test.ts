@@ -1,16 +1,16 @@
 import {describe,it,expect} from 'vitest';
-import {isStoryEvidenceReceipt,mergeStoryEvidence,storyEvidenceForScene,storyEvidenceReaction,type StoryEvidenceReceipt} from '../src/domain/story-evidence';
+import {isStoryEvidenceReceipt,normalizeStoryEvidence,mergeStoryEvidence,storyEvidenceForScene,storyEvidenceReaction,type StoryEvidenceReceipt} from '../src/domain/story-evidence';
 import {persistStoryEvidence,readStoryEvidence,STORY_EVIDENCE_KEY} from '../src/app/story-evidence';
 import {normalizeStoryReader,DEFAULT_STORY_READER} from '../src/app/story-reader-settings';
 import {identityFrameWeights} from '../src/ui/survivors-identity-frame';
 const receipt:StoryEvidenceReceipt={schemaVersion:1,sourceMode:'watch',sourceRecordId:'actual-handoff',incidentId:'ep01.ramp',observationIds:['route-cleared'],outcome:'verified-clear',contentVersion:'ep01.story-evidence.v1'};
 describe('story evidence boundaries',()=>{
  it('deduplicates receipts without converting a combat win into a field fact',()=>{
-  expect(mergeStoryEvidence([receipt],[receipt])).toEqual([receipt]);
-  expect(storyEvidenceReaction(receipt,null)).toBe('story.evidence.watch.question');
-  expect(storyEvidenceForScene('e01_04_junho_signal',[receipt])).toEqual([receipt]);
+  expect(mergeStoryEvidence([receipt],[receipt])).toEqual([normalizeStoryEvidence(receipt)]);
+  expect(storyEvidenceReaction(receipt,null)).toBe('story.evidence.general');
+  expect(storyEvidenceForScene('e01_04_junho_signal',[receipt])).toEqual([normalizeStoryEvidence(receipt)]);
   expect(storyEvidenceForScene('e01_01_arrival',[receipt])).toEqual([]);
-  expect(storyEvidenceReaction({...receipt,outcome:'incomplete'},null)).toBe('story.evidence.watch.incomplete');
+  expect(storyEvidenceReaction({...receipt,outcome:'incomplete'},null)).toBe('story.evidence.general');
  });
  it('rejects future, malformed and oversized records and retains a bounded ledger',()=>{
   for(const r of [null,{}, {...receipt,schemaVersion:2},{...receipt,contentVersion:'future'},{...receipt,sourceRecordId:''},{...receipt,sourceMode:'story'},{...receipt,observationIds:[null]}])expect(isStoryEvidenceReceipt(r)).toBe(false);
@@ -19,9 +19,9 @@ describe('story evidence boundaries',()=>{
  it('survives corrupt/quota storage, retaining current receipts without pretending they were saved',()=>{
   const storage={getItem:()=>'{broken',setItem:()=>{throw Error('quota');}};
   expect(readStoryEvidence(storage)).toEqual([]);
-  expect(persistStoryEvidence([receipt],storage)).toEqual({receipts:[receipt],saved:false});
+  expect(persistStoryEvidence([receipt],storage)).toEqual({receipts:[normalizeStoryEvidence(receipt)],saved:false});
   let raw='';const usable={getItem:()=>raw,setItem:(key:string,value:string)=>{expect(key).toBe(STORY_EVIDENCE_KEY);raw=value;}};
-  expect(persistStoryEvidence([receipt,receipt],usable).saved).toBe(true);expect(readStoryEvidence(usable)).toEqual([receipt]);
+  expect(persistStoryEvidence([receipt,receipt],usable).saved).toBe(true);expect(readStoryEvidence(usable)).toEqual([normalizeStoryEvidence(receipt)]);
  });
  it('clamps reader preferences and ignores invalid values',()=>{
   expect(normalizeStoryReader(null)).toEqual(DEFAULT_STORY_READER);
