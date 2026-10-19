@@ -22,8 +22,10 @@ it.skipIf(false)('samples six representative maps with normal inputs and confirm
    if(s.ultimateCharge>=100&&near.length>=3)e.triggerDirectorShout();
    const progress=operationProgress(s);
    if(progress.complete){if(readyAt===null)readyAt=s.gameTime;if(!s.fieldTactics?.handoff&&e.requestHandoff())requests++;}
-   // Follow earned pickups/actual control objects; evade live contact/telegraph footprints.
-   const target=s.drops.slice().sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]
+   // Read the live boss objective before chasing pickups; keep normal contact avoidance.
+   // Current stage geometry can leave an unattended cart outside the pickup loop.
+   const target=s.hazards.find(h=>h.isStageBoss&&h.hp>0)
+    ?? s.drops.slice().sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]
     ?? s.interactiveHazards.find(h=>!s.operationControlledZones?.includes(h.id)&&['explosive_barrel','electric_transformer','crane_drop_zone'].includes(h.type))
     ?? {x:700+Math.cos(s.gameTime*.13)*230,y:450+Math.sin(s.gameTime*.13)*200};
    let dx=target.x-p.x,dy=target.y-p.y,len=Math.hypot(dx,dy)||1;dx/=len;dy/=len;

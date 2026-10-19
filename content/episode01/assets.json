@@ -2,6 +2,278 @@
   "schema_version": 1,
   "assets": [
     {
+      "asset_id": "ep01.audio.candidate.day02_gate_reprise",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/day02_gate_reprise.ogg",
+          "format": "ogg",
+          "bytes": 12606,
+          "hash": "e03c9dc138ceea0443428d9164ac196bc5cf8bf1c901c9d244fb4da8ac34b5e4"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.home_key_door",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/home_key_door.ogg",
+          "format": "ogg",
+          "bytes": 18368,
+          "hash": "15a85873cedff0d8916743448f30e88001e3da598f9879c3c167f1428fd09d52"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.hose_surface_touch",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/hose_surface_touch.ogg",
+          "format": "ogg",
+          "bytes": 18935,
+          "hash": "479587b18710c9248861be6aed17b83b02b16060b5472ec2f0f21ca07364e250"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.metal_sheet_tap",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/metal_sheet_tap.ogg",
+          "format": "ogg",
+          "bytes": 10850,
+          "hash": "5edcdad71b2f57bc105b82410252d792465eb1d82682b5514047794180c063a3"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.pump_hydraulic_detail",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/pump_hydraulic_detail.ogg",
+          "format": "ogg",
+          "bytes": 15452,
+          "hash": "5ee38b0c66b0d3c4959cede516f1b98d027e6c27b64cf479ad56cdf0ddae67bb"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.radio_ptt_detail",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/radio_ptt_detail.ogg",
+          "format": "ogg",
+          "bytes": 11160,
+          "hash": "eb06c02854ae871b52aac5a65acd1e054aa30936a7a364ae4986cdfa90170722"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.record_page_key",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/record_page_key.ogg",
+          "format": "ogg",
+          "bytes": 15074,
+          "hash": "9ef8e2f36c9e4a3ddcdab68e5ecbe3713530b935bf1a3b1ed1d6c1afe783cc65"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_01_dawn_promise",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_01_dawn_promise.ogg",
+          "format": "ogg",
+          "bytes": 159615,
+          "hash": "1df68f0c669de575de8afd26d33f8427f142ef80b3983b48f7e188103f86e427"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_02_work_pulse",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_02_work_pulse.ogg",
+          "format": "ogg",
+          "bytes": 187162,
+          "hash": "935179b18e68b2a4b601dedd7ae93cf5f83383b84e7a744c6296e3628b51643c"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_03_unsaid_signal",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_03_unsaid_signal.ogg",
+          "format": "ogg",
+          "bytes": 126095,
+          "hash": "8ec7f9ed0b12d0c199424dca637c7597acf84a3b1952605e4242fd259833e23b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_04_seven_minutes",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_04_seven_minutes.ogg",
+          "format": "ogg",
+          "bytes": 136730,
+          "hash": "c08ad56248e912ec8f2d0190de3555d4878bc2be6a8a3ae3c08a13adf05a5342"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_05_zero_moment",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_05_zero_moment.ogg",
+          "format": "ogg",
+          "bytes": 88558,
+          "hash": "0dfdbb7ac08efdc6da7f8d129ac4b6e9efc9de91e14faa142156200949840363"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_06_after_the_stop",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_06_after_the_stop.ogg",
+          "format": "ogg",
+          "bytes": 124177,
+          "hash": "6aa965e831b98aac258e67b13b81712f112dba6cf37181b4d357456c7b92cef1"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_07_fact_and_memory",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_07_fact_and_memory.ogg",
+          "format": "ogg",
+          "bytes": 114845,
+          "hash": "00f62e4464cf8308d0bd1d24a563bda0614cd974235b6ec1e53bf77403541d64"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.sc_08_today_return_home",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/ost-candidates/sc_08_today_return_home.ogg",
+          "format": "ogg",
+          "bytes": 132435,
+          "hash": "580779c53dd23a72257f4c3bc005b849f972c9360ed016f56bf8d62705c63fa4"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.tbm_paper_gear",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/tbm_paper_gear.ogg",
+          "format": "ogg",
+          "bytes": 15468,
+          "hash": "57d72323a329959f4923735d269554e44450a421d5ced5cd664e5880a16a0fd0"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.candidate.zero_moment_air_cut",
+      "type": "audio",
+      "group_id": "ep01.audio.candidates",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foley-candidates/zero_moment_air_cut.ogg",
+          "format": "ogg",
+          "bytes": 11042,
+          "hash": "7d5b5aa6eb429b3d36d9cf4708987c2682a9b2775c72c80b08a26353d750d1ff"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.audio.concrete_pour",
       "type": "audio",
       "group_id": "ep01.audio",
