@@ -1,0 +1,13 @@
+{
+  "actorIdentity": "single-authored-frame",
+  "approvedForegroundMattes": "0",
+  "contactArt": "true",
+  "contactError": "0",
+  "contactLegStretch": "0.999999999999999",
+  "contactSlip": "0",
+  "heroCastShadow": "authored-pose",
+  "localLightInfluence": "0.3258792603506315",
+  "stageLight": "stage_01",
+  "stageLightColor": "#ffe4b8",
+  "workfaceDepth": "stage_01:high"
+}

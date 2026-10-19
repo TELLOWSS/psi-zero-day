@@ -1,0 +1,23 @@
+{
+  "id": "stage-02-shoring-candidate-v1",
+  "stageId": "stage_02",
+  "sourceGround": "/assets/survivors/excavation-ground-v4.webp",
+  "imageUri": "/assets/survivors/foreground/stage-02-shoring-alpha-v1.png",
+  "x": 0,
+  "y": 760.25390625,
+  "width": 1400,
+  "height": 139.74609375,
+  "feetY": 900,
+  "status": "approved-for-runtime",
+  "humanMatteApproval": "USER_CONFIRMED_FOREGROUND_20261019",
+  "sourceReview": "User confirmed excavation-ground-v4 on 2026-10-19",
+  "alphaSourceCrop": {
+    "left": 0,
+    "top": 865,
+    "width": 1536,
+    "height": 159
+  },
+  "cropNote": "Alpha support threshold 4/255 bounds: only sub-1.6 percent isolated alpha specks outside the extracted object are cropped away; retained alpha is unchanged.",
+  "colorPolicy": "Generated RGB ignored. Runtime composites canonical ground pixels with extracted alpha.",
+  "approvalRecord": "docs/art-source/watch-foreground-20261019/approval.json"
+}

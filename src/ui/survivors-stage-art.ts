@@ -8,7 +8,7 @@ const stage = (ground: string, accent: string, detail: number, layout: number): 
 /** Every workface owns its background; retained originals are assigned only once. */
 export const STAGE_ART: Record<string, StageArtProfile> = {
   stage_01: stage('/assets/survivors/stage-01-ground-v3.webp', '#d4d8ca', 1, 0),
-  stage_02: stage('/assets/survivors/excavation-ground-v3.webp', '#b6c6b2', 1, 1),
+  stage_02: stage('/assets/survivors/excavation-ground-v4.webp', '#b6c6b2', 1, 1),
   stage_03: stage(floor('highrise'), '#d8e5e0', 1, 2),
   stage_04: stage(floor('winter'), '#c8e4e8', 1, 3),
   stage_05: stage(floor('datacenter'), '#91d9d5', 2, 4),

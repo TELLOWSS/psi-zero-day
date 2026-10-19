@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "Use case: background-extraction. Production asset: exact alpha cutout of the BOTTOM foreground shoring edge in the attached SIGNAL WATCH excavation floor. Preserve source pixels, materials, perspective and original positions. Keep the full original 1536x1024 canvas with every retained pixel at exactly the same coordinates. Retain ONLY the bottom timber lagging wall and rusty soldier-pile faces and diagonal corner braces along the lower edge, approximately native y=930..1024, with their true jagged object boundary against the earth. Remove all of the earth floor, central green walkway, top border, side walls above the lower corner braces, loose gravel and any painted ground shadow: these become truly transparent alpha zero. Do not repaint, improve, move, rescale, center, widen or add anything. No background, no checkerboard pixels, no text, no new objects, no drop shadow. The result must overlay the original at (0,0) without a visible doubled edge. Empty upper 90 percent of canvas must be transparent. RGBA transparent output.",
+  "alphaOnly": true,
+  "sourceColors": "canonical excavation-ground-v4.webp; generated RGB discarded",
+  "sourceReview": "User confirmed previous floor on 2026-10-19",
+  "matteReview": "Explicit user confirmation: 현재 후보를 게임에 적용 (2026-10-19)"
+}

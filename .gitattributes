@@ -14,3 +14,5 @@ public/signal-breaker-dev/*.webmanifest text eol=lf
 
 public/assets/shared/signal-encounter-intel*.js text eol=lf
 public/assets/shared/signal-encounter-intel*.css text eol=lf
+public/assets/shared/presentation-cache-v1.js text eol=lf
+public/assets/branding/home-new-psi-v6/shield.svg text eol=lf

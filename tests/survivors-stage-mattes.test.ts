@@ -8,11 +8,14 @@ const valid=(id:'stage_01'|'stage_50'):ApprovedForegroundMatte=>({
   imageUri:'/assets/survivors/foreground/approved-facade-01.webp',
   x:102,y:80,width:235,height:300,feetY:340,approval:'art-director-20261018',
 });
-afterEach(()=>{for(const id of PATROL_STAGE_IDS)delete FOREGROUND_MATTE_ASSETS[id]});
+const reviewedBaseline={...FOREGROUND_MATTE_ASSETS};
+afterEach(()=>{for(const id of PATROL_STAGE_IDS)delete FOREGROUND_MATTE_ASSETS[id];Object.assign(FOREGROUND_MATTE_ASSETS,reviewedBaseline);});
 describe('stage 01–50 explicit foreground matte pipeline',()=>{
-  it('never makes up cutouts for the fifty opaque original stage paintings',()=>{
+  it('loads the explicitly approved workface while keeping the other forty-nine empty',()=>{
     expect(PATROL_STAGE_IDS).toHaveLength(50);
-    for(const id of PATROL_STAGE_IDS)expect(approvedForegroundMattes(id)).toEqual([]);
+    for(const id of PATROL_STAGE_IDS)if(id!=='stage_02')expect(approvedForegroundMattes(id)).toEqual([]);
+    expect(approvedForegroundMattes('stage_02')).toHaveLength(1);
+    expect(approvedForegroundMattes('stage_02')[0]?.approval).toBe('USER_CONFIRMED_FOREGROUND_20261019');
   });
   it('requires exact stage, source painting, approval, bounded crop and safe URI',()=>{
     const good=valid('stage_01');
@@ -33,5 +36,14 @@ describe('stage 01–50 explicit foreground matte pipeline',()=>{
     expect(matteVisibleAlpha(m,{x:850,y:720},[{x:320,y:220,radius:24,warning:true}])).toBe(.25);
     expect(matteVisibleAlpha(m,{x:250,y:250},[{x:320,y:220,radius:24,warning:true}])).toBe(.25);
     expect(matteVisibleAlpha(m,{x:850,y:720},[{x:320,y:220,radius:24,warning:false}])).toBe(1);
+  });
+  it('protects the body at a lateral edge and approaches transparency continuously',()=>{
+    const m=valid('stage_50'),edge=m.x+m.width;
+    expect(matteVisibleAlpha(m,{x:edge+20,y:250},[])).toBeCloseTo(.55);
+    const samples=[edge+22,edge+26,edge+30,edge+34,edge+38].map(x=>matteVisibleAlpha(m,{x,y:250},[]));
+    expect(samples[0]).toBeCloseTo(.55);expect(samples.at(-1)).toBe(1);
+    for(let i=1;i<samples.length;i++){expect(samples[i]).toBeGreaterThan(samples[i-1]!);expect(samples[i]!-samples[i-1]!).toBeLessThan(.18);}
+    // A matte behind the player's feet must not fade unrelated scenery.
+    expect(matteVisibleAlpha(m,{x:250,y:m.feetY+1},[])).toBe(1);
   });
 });

@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-19",
+  "scope": "Approved STAGE 02 foreground registration, source-matched texture and Watch local lighting",
+  "tests": {
+    "passed": 2355,
+    "failed": 0,
+    "skipped": 1,
+    "processExitCode": 0
+  },
+  "typecheck": {
+    "processExitCode": 0
+  },
+  "build": {
+    "processExitCode": 0
+  },
+  "runtimeApproval": "USER_CONFIRMED_FOREGROUND_20261019",
+  "browser": {
+    "previousSourceAndProtectionReview": "render-cases.json",
+    "previousStageCount": 50,
+    "activationRecheck": "Blocked by local browser webview attachment timeout after system memory pressure; no Stage 02 full gameplay claim"
+  },
+  "limits": [
+    "Other 49 stages have no approved foreground mask",
+    "Android physical device review pending",
+    "Not an overall visual production lock"
+  ]
+}

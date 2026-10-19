@@ -1,0 +1,352 @@
+[
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/stage-01-ground-v3.webp",
+    "height": 900,
+    "local": 0.6987553337364005,
+    "stage": "stage_01",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/excavation-ground-v4.webp",
+    "height": 900,
+    "local": 0.6495713066587807,
+    "stage": "stage_02",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/highrise-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_03",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/winter-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_04",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_05",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/remodel-v1.png",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_06",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/demolition-ground-v3.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_07",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_08",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_09",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_10",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/formwork-v1.png",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_11",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/rebar-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_12",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/pour-v1.png",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_13",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_14",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/scaffold-v1.png",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_15",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/roof-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_16",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/waterproof-v1.png",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_17",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/finish-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_18",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+    "height": 900,
+    "local": 0.6876571595500114,
+    "stage": "stage_19",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/handover-v1.png",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_20",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-v2.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_21",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_22",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_23",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_24",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_25",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_26",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_27",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_28",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_29",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_30",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/skydeck-v2.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_31",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_32",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_33",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_34",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_35",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_36",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_37",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_38",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_39",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_40",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-v2.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_41",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-stage-42-graphics-v2.png",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_42",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_43",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_44",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_45",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+    "height": 900,
+    "local": 0.5520703144845807,
+    "stage": "stage_46",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+    "height": 900,
+    "local": 0.13600926375312675,
+    "stage": "stage_47",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_48",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_49",
+    "width": 1400
+  },
+  {
+    "ground": "http://127.0.0.1:5191/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+    "height": 900,
+    "local": 0,
+    "stage": "stage_50",
+    "width": 1400
+  }
+]
