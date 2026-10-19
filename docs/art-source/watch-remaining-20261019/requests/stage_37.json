@@ -1,0 +1,6 @@
+{
+  "id": "stage_37",
+  "source": "public/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_37. Extract ONLY existing nearest bottom parapet, black rolled membranes, low concrete vent housings, small right rod bundles and tarp boxes. Exclude all beige painted floor strips and central rooftop slab. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-9abddba6-e8b8-40b7-938d-2416c3cc166a.png"
+}

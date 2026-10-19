@@ -1,0 +1,6 @@
+{
+  "id": "stage_24",
+  "source": "public/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_24: extract ONLY the existing bottom-edge blue ventilation fan stack, nearest electrical boxes, material stacks and guardrail (lower left fans may extend to y=700). The entire diagonal yellow painted lane, green painted pedestrian path and concrete floor are flat and must remain fully transparent. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-6e6b82d8-399c-432d-8e48-88ee723b4a93.png"
+}

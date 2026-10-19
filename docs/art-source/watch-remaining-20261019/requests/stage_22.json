@@ -1,0 +1,6 @@
+{
+  "id": "stage_22",
+  "source": "public/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_22: extract ONLY the existing bottom foreground retaining wall, nearest blue hoses/gray bent pipework and short yellow guardrail. Every pixel above y=650 and the wet central slab and its painted fan-shaped markings must be transparent. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-49e29a8e-e67e-499b-8e64-6a9b5f9b62e6.png"
+}

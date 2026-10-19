@@ -1,0 +1,7 @@
+{
+  "id": "stage_39",
+  "source": "public/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_39. Extract ONLY existing nearest bottom BLUE machinery frame, its mesh housings and small bottom corner stacks. Exclude ALL red machinery at top, side objects, red/blue painted floor arrows and concrete apron. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-5632d52e-35af-4724-b59c-3c322ce424c2.png",
+  "rejectionReason": "blue machinery enlarged upward relative to source; native registration failed"
+}

@@ -11,9 +11,12 @@ const valid=(id:'stage_01'|'stage_50'):ApprovedForegroundMatte=>({
 const reviewedBaseline={...FOREGROUND_MATTE_ASSETS};
 afterEach(()=>{for(const id of PATROL_STAGE_IDS)delete FOREGROUND_MATTE_ASSETS[id];Object.assign(FOREGROUND_MATTE_ASSETS,reviewedBaseline);});
 describe('stage 01–50 explicit foreground matte pipeline',()=>{
-  it('loads the explicitly approved workface while keeping the other forty-nine empty',()=>{
+  it('loads one source-matched foreground for each of the fifty workfaces',()=>{
     expect(PATROL_STAGE_IDS).toHaveLength(50);
-    for(const id of PATROL_STAGE_IDS)if(id!=='stage_02')expect(approvedForegroundMattes(id)).toEqual([]);
+    for(const id of PATROL_STAGE_IDS){
+      expect(approvedForegroundMattes(id)).toHaveLength(1);
+      expect(approvedForegroundMattes(id)[0]?.sourceGround).toBe(stageGroundUri(id));
+    }
     expect(approvedForegroundMattes('stage_02')).toHaveLength(1);
     expect(approvedForegroundMattes('stage_02')[0]?.approval).toBe('USER_CONFIRMED_FOREGROUND_20261019');
   });
@@ -27,7 +30,7 @@ describe('stage 01–50 explicit foreground matte pipeline',()=>{
       {...good,id:'wrong-anchor',feetY:700},
     ];
     expect(approvedForegroundMattes('stage_01')).toEqual([good]);
-    expect(approvedForegroundMattes('stage_50')).toEqual([]);
+    expect(approvedForegroundMattes('stage_50')).toEqual(reviewedBaseline.stage_50??[]);
   });
   it('protects players and nearby warning symbols without affecting gameplay',()=>{
     const m=valid('stage_50');

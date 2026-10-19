@@ -68,15 +68,31 @@ interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number;core
 interface Sheet {shadow?:HTMLCanvasElement;shadowKey?:string;outline?:HTMLCanvasElement;outlineKey?:string;cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;characterId?:string;contact?:boolean;authored?:boolean;contactPose?:SpritePose;contactFeet?:FootPoint[];lastPose?:SpritePose;lastFrame?:Frame}
 const sheetStride=(sheet:Sheet)=>sheet.authored?20:sheet.contact?8:FRAMES_PER_DIRECTION;
 export interface AuthoredDirectionLayout {src:string;frames:{x:number;y:number;width:number;height:number;src?:string;referenceHeight?:number;mirror?:boolean;sockets?:Partial<Record<AuthoredSocketKind,FootPoint>>}[]}
+/** Keep a shared source until its last direction, then release the decoded image. */
+export function authoredDirectionSourcePlan(layouts:readonly AuthoredDirectionLayout[]):{load:string[];release:string[]}[]{
+ const sources=layouts.map(l=>[...new Set(l.frames.map(f=>f.src??l.src))]);
+ const resident=new Set<string>();
+ return sources.map((needed,direction)=>{
+  const load=needed.filter(src=>!resident.has(src));for(const src of load)resident.add(src);
+  const release=[...resident].filter(src=>!sources.slice(direction+1).some(later=>later.includes(src)));
+  for(const src of release)resident.delete(src);
+  return {load,release};
+ });
+}
 /** Explicit reviewed crops, fixed scale per direction: crouching never enlarges a character. */
 export async function loadAuthoredDirectionalActor(actor:HTMLImageElement,id:string,layouts:readonly AuthoredDirectionLayout[]):Promise<void>{
  if(layouts.length!==8||layouts.some(l=>l.frames.length!==20))throw new Error('Eight directions with twenty reviewed frames required');
- const urls=[...new Set(layouts.flatMap(l=>[l.src,...l.frames.flatMap(f=>f.src?[f.src]:[])]))];
- const images=new Map(await Promise.all(urls.map(src=>new Promise<[string,HTMLImageElement]>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve([src,image]);image.onerror=reject;image.src=src;}))));
+ // Decode one direction at a time instead of retaining every 6 MB source sheet
+ // while building 160 frame canvases. Shared turns/braces live until their last use.
+ const sourcePlan=authoredDirectionSourcePlan(layouts);
+ const images=new Map<string,HTMLImageElement>();
  const referenceHeight=Math.max(...layouts.map(l=>l.frames[0]!.height)),cells:Cell[]=[];
  const crewHead=await loadCrewHeadAtlas(id);
  for(let direction=0;direction<8;direction++){
   const layout=layouts[direction]!;
+  await Promise.all(sourcePlan[direction]!.load.map(src=>new Promise<void>((resolve,reject)=>{
+   const image=new Image();image.onload=()=>{images.set(src,image);resolve();};image.onerror=reject;image.src=src;
+  })));
   for(let frame=0;frame<20;frame++){
    const rect=layout.frames[frame]!,image=images.get(rect.src??layout.src)!,scale=referenceHeight/(rect.referenceHeight??layout.frames[0]!.height);if(rect.width<8||rect.height<24||rect.x<0||rect.y<0||rect.x+rect.width>image.naturalWidth||rect.y+rect.height>image.naturalHeight)throw new Error('Invalid authored crop');
    const canvas=document.createElement('canvas');canvas.width=rect.width;canvas.height=rect.height;
@@ -96,6 +112,7 @@ export async function loadAuthoredDirectionalActor(actor:HTMLImageElement,id:str
    const sockets=rect.sockets?Object.fromEntries(Object.entries(rect.sockets).map(([kind,p])=>[kind,{x:(rect.mirror?rect.width-p.x*rect.width:p.x*rect.width)*scale,y:p.y*rect.height*scale}])):undefined;
    cells.push({sockets,canvas,width:rect.width*scale,height:rect.height*scale,anchor:anchor*scale,coreWidth:(rows?coreWidth/rows:rect.width*.5)*scale,feet:[feet[left]!,feet[1-left]!]});
   }
+  for(const src of sourcePlan[direction]!.release){images.get(src)!.src='';images.delete(src);}
  }
  const bodyHeight=Math.ceil(Math.max(...cells.map(c=>c.height))),composite=document.createElement('canvas');
  composite.width=Math.ceil(Math.max(...cells.map(c=>Math.max(c.anchor,c.width-c.anchor)))*2+4);composite.height=bodyHeight;composite.dataset.contactSheet='authored-20:'+id;

@@ -1,0 +1,6 @@
+{
+  "id": "stage_32",
+  "source": "public/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_32: extract ONLY the existing nearest bottom blue safety net/guardrail and stored black/silver formwork panels and yellow shoring props along that edge (bottom 23 percent). Central slab and side/upper storage rows fully transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-306821ed-8138-4b2f-9b2e-26d9cb3c3e70.png"
+}

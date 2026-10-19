@@ -1,0 +1,6 @@
+{
+  "id": "stage_38",
+  "source": "public/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_38. Extract ONLY existing nearest bottom white wrapped pallets, short sheet stacks, gray window jambs and parapet. Exclude all flat beige floor, tape and central entrance walkway. Only bottom 20 percent physical foreground. Preserve exact original full canvas dimensions and native pixel positions, camera, scale, silhouettes. Genuine RGBA transparent background; every floor pixel and cast ground shadow transparent. No added/moved objects, characters, text, backdrop or halos. This is an aligned cutout for the existing scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-03750fab-a8a1-422c-b63b-0f635eda5229.png"
+}

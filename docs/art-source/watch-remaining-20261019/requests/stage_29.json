@@ -1,0 +1,6 @@
+{
+  "id": "stage_29",
+  "source": "public/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_29: extract ONLY the existing nearest bottom gray retaining-wall/parapet and raised service pipe housings with short yellow rails (bottom 16 percent). All floor, orange/cyan painted lines, square central grate and side valve columns transparent. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-dbf0f331-2083-400f-8cdb-08349e342484.png"
+}

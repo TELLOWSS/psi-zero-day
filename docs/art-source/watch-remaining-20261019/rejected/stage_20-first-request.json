@@ -1,0 +1,7 @@
+{
+  "id": "stage_20",
+  "source": "public/assets/survivors/maps/handover-v1.png",
+  "prompt": "Use case: background-extraction. Edit target stage_20: extract ONLY the existing nearest bottom foreground glass/server partition panels, silver cylindrical columns, small potted plants and bottom doorway wall jambs (bottom 23 percent); the flat marble walkway and central entrance floor must remain transparent. Keep original full canvas dimensions, exact camera, positions, scale and silhouettes. Actual RGBA transparency. No new objects, moved equipment, characters, text, light halos or cast ground shadows. Everything not specified is fully transparent. This is a source-aligned physical foreground mask, not a new illustration.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-d9b98200-fd83-4443-9596-df61408077aa.png",
+  "rejectionReason": "flat passage or earth included beyond selected foreground objects"
+}

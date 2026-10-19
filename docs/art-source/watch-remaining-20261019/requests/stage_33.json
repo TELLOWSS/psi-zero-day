@@ -1,0 +1,6 @@
+{
+  "id": "stage_33",
+  "source": "public/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_33: isolate ONLY the existing nearest bottom rebar bundles, steel-mesh guards and concrete parapet/opening jambs (bottom 17 percent). Do not include central chalk/yellow floor markings, side stacks or flat floor. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-63489e49-8852-4003-8671-63f5170cd2b9.png"
+}

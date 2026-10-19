@@ -1,0 +1,6 @@
+{
+  "id": "stage_26",
+  "source": "public/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_26: isolate ONLY the existing ONLY the low nearest gray concrete parapet at the bottom border and attached lower-left/lower-right cabinet corners, within bottom 16 percent. No central floor, pipe markings, side walls or flat drains. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-df5cf34d-d4d0-4839-b9cf-d1e3d3bb78dc.png"
+}

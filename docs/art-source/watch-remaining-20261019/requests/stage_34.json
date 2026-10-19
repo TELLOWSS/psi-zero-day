@@ -1,0 +1,6 @@
+{
+  "id": "stage_34",
+  "source": "public/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_34: isolate ONLY the existing nearest bottom blue perimeter curtain, low black rebar cage, short steel bundles, pallet and bottom-right horizontal yellow props (bottom 14 percent). All concrete floor, vertical seams and right-side upright long props transparent. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-ba6ac673-84df-4a8d-af1c-035e6acb6041.png"
+}

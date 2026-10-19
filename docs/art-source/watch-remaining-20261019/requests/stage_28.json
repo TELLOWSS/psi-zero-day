@@ -1,0 +1,6 @@
+{
+  "id": "stage_28",
+  "source": "public/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_28: isolate ONLY the existing the four rust-brown rectangular rubble bins along the BOTTOM edge and nearest left demolition breaker/grapple head only (bottom 22 percent). All flat rubble-covered floor, tire tracks, side and upper storage rows are transparent. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-075d455f-c708-4626-b129-17d2318dbb0a.png"
+}

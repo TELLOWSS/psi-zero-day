@@ -1,0 +1,6 @@
+{
+  "id": "stage_48",
+  "source": "public/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_48. Extract ONLY existing bottom short bundled sheet stacks, low rolling tool cabinets, gray switchgear and nearest parapet. Exclude flat central gray floor, copper painted lines, floor drains and all tall side/top rows. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1f859a1b-4759-4f7b-a251-5d2b71d6c7e8.png"
+}

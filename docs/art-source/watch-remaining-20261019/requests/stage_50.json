@@ -1,0 +1,6 @@
+{
+  "id": "stage_50",
+  "source": "public/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_50. Extract ONLY existing bottom low horizontal gray door lintel/rolling shutter frame, small corner ventilation boxes, short pipe bundle and nearest guardrails. Exclude central door access floor, central green painted route and octagonal floor motif, ALL tall side/top machines. Select physical objects within bottom 20 percent only. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparency, every flat floor pixel and cast ground shadow transparent. No new/moved/enlarged objects, characters, text, opaque backdrop or halos. Aligned foreground for this scene, not a new composition.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-2cbe1708-ae3c-4346-a42c-e57a891b8c62.png"
+}

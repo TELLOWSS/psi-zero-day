@@ -1,0 +1,6 @@
+{
+  "id": "stage_25",
+  "source": "public/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_25. Extract ONLY the existing two bottom GREEN horizontal safety guardrail panels and their yellow posts. EXCLUDE all brown earth/soil, rocks, concrete floor, drains, grates, central entrance bridge, left pipe bundle and right pallets. Preserve exact original full canvas dimensions, native pixel positions, scale, silhouettes and camera. Genuine RGBA transparent background with isolated physical objects only. All cast ground shadows transparent. Do not move, invent or enlarge any object. Do not compose a new scene or add backdrop/glow/text/characters.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-d13daa4c-64c7-4624-a550-0bdbbea9a3fb.png"
+}

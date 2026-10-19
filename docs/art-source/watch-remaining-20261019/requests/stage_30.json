@@ -1,0 +1,6 @@
+{
+  "id": "stage_30",
+  "source": "public/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_30: extract ONLY the existing nearest bottom tunnel-mouth arch/parapet edge and raised service conduits, plus immediate lower-left/right rock retaining edges (bottom 23 percent); do not include the central flat T-shaped walkway, floor drains, black tunnel void or full side pipes. Exact full original canvas dimensions, camera, object placement, scale and silhouette; do not recompose, add or move anything. Genuine RGBA transparency; no background, checkerboard, characters, text, glow or ground shadows. Native-aligned physical foreground alpha for the existing game painting.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-3f8d3fa5-60b1-4e7e-b460-dd824a437750.png"
+}

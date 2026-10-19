@@ -1,0 +1,6 @@
+{
+  "id": "stage_27",
+  "source": "public/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_27: isolate ONLY the existing ONLY the nearest horizontal steel I-beam bundles on the bottom-left and the concrete retaining blocks and yellow railing bordering the bottom-right rubble storage (bottom 24 percent). No scattered loose rubble, central walkway, upper piles, entire tall side heap or flat floor. Preserve original full canvas dimensions and exact camera, object positions, scale and silhouettes. Genuine RGBA transparent surroundings. No new geometry, moving objects, people, text, shadows on the floor, glow or solid background. Native source-aligned game foreground alpha extraction.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1e94ac36-7018-4af2-963b-184986709388.png"
+}

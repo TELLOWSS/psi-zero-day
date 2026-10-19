@@ -1,0 +1,6 @@
+{
+  "id": "stage_36",
+  "source": "public/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Edit target stage_36: isolate ONLY the existing nearest bottom gray parapet, small silver rod bundles, two mesh service cabinets, blue storage rack and attached low conduit/rail (bottom 13 percent). Do not include the diagonal gray floor strip, square floor panels, tall side HVAC rows or central slab. Keep exact original full canvas dimensions, camera, positions, scale and silhouettes. Genuine RGBA transparency. No invented/moved objects, characters, text, opaque background, glow or ground shadows. This must be a native-aligned physical foreground mask, not a newly composed scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-f1bf2e19-718c-4d46-aed9-e910db592871.png"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "stage_39",
+  "source": "public/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input is edit target stage_39. Remove the entire image except ONLY the LOW BOTTOM-RIGHT yellow guardrail, silver pipe bundle and adjacent short mesh cabinet at x=1200..1420,y=850..1024. Leave this small corner cutout at EXACT original pixel coordinates on the original 1536x1024 full transparent canvas. Do not include the central blue machine, top red machine, side objects, floor or painted floor arrows. DO NOT enlarge, center, move or redraw objects. All other pixels fully RGBA transparent, no glow or shadow. Native-aligned small corner cutout only.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-1edd0403-3d49-47bf-8e60-b9f38c82c742.png"
+}

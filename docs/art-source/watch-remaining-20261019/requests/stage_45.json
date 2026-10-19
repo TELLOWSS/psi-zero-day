@@ -1,0 +1,6 @@
+{
+  "id": "stage_45",
+  "source": "public/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+  "prompt": "Use case: background-extraction. Input image is edit target stage_45. Isolate ONLY existing bottom nearest low concrete retaining blocks, short gray cabinets and small green tarp bundle/steel rod rack at bottom corners in bottom 14 percent only. Exclude tall right white pipe machine, all floor/drains and diagonal yellow painted stripe. Keep exact original full canvas dimensions, native object positions, camera, scale and silhouettes. Genuine RGBA transparency: all flat floor and cast ground shadows fully transparent. No invented/moved objects, characters, text, opaque backdrop, glow or halos. Native-aligned physical foreground cutout, not new scene.",
+  "generated": "C:/Users/user/.codex/generated_images/01a150fc-b58b-7782-a107-4acfa15e28f5/exec-a1be0bc6-3271-47aa-8d4a-0b60e2b0dab0.png"
+}

@@ -7,7 +7,8 @@ import reviewedMattes from '../../content/design/survivors-stage-foreground-v1.j
  * only be added after its alpha cut-out is hand reviewed against THAT image.
  *
  * STAGE 02's source-matched alpha cutout was explicitly approved on 2026-10-19.
- * Other workfaces remain empty until their own asset review.
+ * Later per-stage extractions are reviewed against their own native source and
+ * registered under the user's explicit request to apply the remaining work.
  * The renderer never invents masks from flat colour, alpha thresholds, or
  * hard-coded silhouettes of an unknown site.
  */
@@ -25,6 +26,8 @@ export interface ApprovedForegroundMatte {
 }
 export const FOREGROUND_MATTE_ASSETS:Partial<Record<PatrolStageId,readonly ApprovedForegroundMatte[]>>={
   stage_02:[{...reviewedMattes.stage02,stageId:'stage_02'}],
+  ...Object.fromEntries(Object.entries(reviewedMattes.stages).map(([stageId,layer])=>
+    [stageId,[{...layer,stageId:stageId as PatrolStageId}]])),
 };
 export const WORKFACE_WIDTH=1400;
 export const WORKFACE_HEIGHT=900;

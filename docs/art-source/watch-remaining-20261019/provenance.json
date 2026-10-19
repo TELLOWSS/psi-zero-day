@@ -1,0 +1,1771 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "background-extraction",
+  "approvalRecord": "docs/art-source/watch-remaining-20261019/authorization.json",
+  "assets": [
+    {
+      "stageId": "stage_01",
+      "sourceGround": "/assets/survivors/stage-01-ground-v3.webp",
+      "sourceSha256": "2716f6b7d9772abdfa29c427f4ebf785dce79d1a9bbc8782832c8d18a62d7ab6",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_01-source.png",
+      "generatedSha256": "9e29d0c3e8f37b06a92a995fc701889d57dcc2a718ae430c2ff278a49357f23c",
+      "alphaUri": "/assets/survivors/foreground/stage-01-edge-alpha-v1.png",
+      "alphaSha256": "82119385a37bedc8551256a4c73f524497c5e9846f678c555d84af564650bdc1",
+      "nativeSize": {
+        "width": 1564,
+        "height": 1006
+      },
+      "crop": {
+        "left": 1,
+        "top": 924,
+        "width": 1562,
+        "height": 82
+      },
+      "visiblePixels": 85704,
+      "opaquePixels": 75267,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-01-edge-v1",
+        "sourceGround": "/assets/survivors/stage-01-ground-v3.webp",
+        "imageUri": "/assets/survivors/foreground/stage-01-edge-alpha-v1.png",
+        "x": 0.8951406649616369,
+        "y": 826.6401590457256,
+        "width": 1398.2097186700769,
+        "height": 73.35984095427435,
+        "feetY": 899.9999999999999,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_03",
+      "sourceGround": "/assets/survivors/maps/highrise-v1.png",
+      "sourceSha256": "3ca09c31a23aecd0be560b0b57753685af85cc2b65cd2caa3a277e8f7a97f21c",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_03-source.png",
+      "generatedSha256": "33a15e44344ca7299bb69ed27b91de235ba6faa423ec543500fe562b18134f24",
+      "alphaUri": "/assets/survivors/foreground/stage-03-edge-alpha-v1.png",
+      "alphaSha256": "92ebb5ded3ba24dc809f49c2a86d04893432ad51f2bd280858597fddfb0cc7e2",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 5,
+        "top": 701,
+        "width": 1519,
+        "height": 257
+      },
+      "visiblePixels": 162206,
+      "opaquePixels": 136631,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-03-edge-v1",
+        "sourceGround": "/assets/survivors/maps/highrise-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-03-edge-alpha-v1.png",
+        "x": 4.557291666666667,
+        "y": 616.11328125,
+        "width": 1384.5052083333333,
+        "height": 225.87890625,
+        "feetY": 841.9921875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_04",
+      "sourceGround": "/assets/survivors/maps/winter-v1.png",
+      "sourceSha256": "99f54a1580d68441a39973a3d5dc65e01b1955cf895e7e5fec233bb25dd564dd",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_04-source.png",
+      "generatedSha256": "454854f2674b97034a159263443640ad1c1de764e13552b684902791f3a3ed90",
+      "alphaUri": "/assets/survivors/foreground/stage-04-edge-alpha-v1.png",
+      "alphaSha256": "5a1ed9c226bbcc996c854664f560419ad31a92bc5e3c11473c3f192a16a788a7",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 818,
+        "width": 1536,
+        "height": 166
+      },
+      "visiblePixels": 158222,
+      "opaquePixels": 133579,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-04-edge-v1",
+        "sourceGround": "/assets/survivors/maps/winter-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-04-edge-alpha-v1.png",
+        "x": 0,
+        "y": 718.9453125,
+        "width": 1400,
+        "height": 145.8984375,
+        "feetY": 864.84375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_05",
+      "sourceGround": "/assets/survivors/maps/datacenter-v1.png",
+      "sourceSha256": "120aedb167d37402f179b75a189019747203533065a8437d932a6f0ec6a1bac9",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_05-source.png",
+      "generatedSha256": "6d5ad36ee0ec9267c0f432738dcd676507a5f9d3e93aa79d1ab024b0431ffc20",
+      "alphaUri": "/assets/survivors/foreground/stage-05-edge-alpha-v1.png",
+      "alphaSha256": "ec3ce9500abf7799262c4fc91e08acba0d3d4583910266dc8dc3b024e65d31b1",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 1,
+        "top": 828,
+        "width": 1535,
+        "height": 171
+      },
+      "visiblePixels": 233507,
+      "opaquePixels": 225528,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-05-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-05-edge-alpha-v1.png",
+        "x": 0.9114583333333333,
+        "y": 727.734375,
+        "width": 1399.0885416666667,
+        "height": 150.29296875,
+        "feetY": 878.02734375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_06",
+      "sourceGround": "/assets/survivors/maps/remodel-v1.png",
+      "sourceSha256": "c8ac0f4a8967ad9267c809a6ffb943e9821b9d269de90953d9ed13649059b47d",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_06-source.png",
+      "generatedSha256": "2db1a4d4c198f6c198e86a27ab4e482fa983ddd44caf3c81b0b9642c61c58e43",
+      "alphaUri": "/assets/survivors/foreground/stage-06-edge-alpha-v1.png",
+      "alphaSha256": "ace9a0765633bbf979d916d90bbebd14fb43b7f1d5073e7e72fae7fcc66a54f7",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 1,
+        "top": 790,
+        "width": 1531,
+        "height": 228
+      },
+      "visiblePixels": 198527,
+      "opaquePixels": 189747,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-06-edge-v1",
+        "sourceGround": "/assets/survivors/maps/remodel-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-06-edge-alpha-v1.png",
+        "x": 0.9114583333333333,
+        "y": 694.3359375,
+        "width": 1395.4427083333333,
+        "height": 200.390625,
+        "feetY": 894.7265625,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_07",
+      "sourceGround": "/assets/survivors/demolition-ground-v3.webp",
+      "sourceSha256": "69d7949fa1734b394e1901cb11fb31dba67b23b8ee2406ecc548189d8dc41cae",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_07-source.png",
+      "generatedSha256": "0a648fbd90c748a3a1e2ff6e4365cee76a0febba05b02f831a6c0257a81b9e48",
+      "alphaUri": "/assets/survivors/foreground/stage-07-edge-alpha-v1.png",
+      "alphaSha256": "07eca338849acc50bb4c12247f7b5a86980eddaf159c744dc4f7a9c813e4ab8c",
+      "nativeSize": {
+        "width": 1548,
+        "height": 1016
+      },
+      "crop": {
+        "left": 0,
+        "top": 748,
+        "width": 1548,
+        "height": 268
+      },
+      "visiblePixels": 167392,
+      "opaquePixels": 159591,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-07-edge-v1",
+        "sourceGround": "/assets/survivors/demolition-ground-v3.webp",
+        "imageUri": "/assets/survivors/foreground/stage-07-edge-alpha-v1.png",
+        "x": 0,
+        "y": 662.5984251968504,
+        "width": 1400,
+        "height": 237.40157480314957,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_08",
+      "sourceGround": "/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+      "sourceSha256": "220893005a1c0caf2d2162360e36c5ca078a8b30bebd6efac7bc2b63082e4c73",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_08-source.png",
+      "generatedSha256": "2fbca3ce8d6b66c5f7fd3ffe876d9a57204ae52dbdab028e529e87bb314431b6",
+      "alphaUri": "/assets/survivors/foreground/stage-08-edge-alpha-v1.png",
+      "alphaSha256": "3f0d12efd703b218aa025182be77fbcf9f022117eb986d5b69744a55a7bcd854",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 768,
+        "width": 1536,
+        "height": 256
+      },
+      "visiblePixels": 181000,
+      "opaquePixels": 171766,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-08-edge-v1",
+        "sourceGround": "/assets/survivors/maps/remodel-stage-08-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-08-edge-alpha-v1.png",
+        "x": 0,
+        "y": 675,
+        "width": 1400,
+        "height": 225,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_09",
+      "sourceGround": "/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+      "sourceSha256": "788650d15367ec5b9d11e0d4c8f08368f70ae9f74efbc3aaa81afb89aefe346e",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_09-source.png",
+      "generatedSha256": "206ffc7580d3360c9c6453958d3bf98787dabd52bbd7be815bf28fe1b0ca2fcc",
+      "alphaUri": "/assets/survivors/foreground/stage-09-edge-alpha-v1.png",
+      "alphaSha256": "2fb4a297b6f2960e48dc1caa4dffabc9efec0ff1540bfeebd9a189653eb02bdf",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 93,
+        "top": 723,
+        "width": 1321,
+        "height": 268
+      },
+      "visiblePixels": 309446,
+      "opaquePixels": 295663,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-09-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-stage-09-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-09-edge-alpha-v1.png",
+        "x": 84.765625,
+        "y": 635.44921875,
+        "width": 1204.0364583333333,
+        "height": 235.546875,
+        "feetY": 870.99609375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_10",
+      "sourceGround": "/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+      "sourceSha256": "6a6d5757c44efb188ba10e04bad5b044d0473f2369854780c4ef7acc0751c806",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_10-source.png",
+      "generatedSha256": "3d8d2c18fd2fc70da5c66f4123d204dccd9f9a46f6ac5ac8f398e85fbbc26323",
+      "alphaUri": "/assets/survivors/foreground/stage-10-edge-alpha-v1.png",
+      "alphaSha256": "a983254f02706f26d6d4c4a51cfa427f37b61b44aa13fdff674575a0553e63c7",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 1,
+        "top": 857,
+        "width": 1535,
+        "height": 145
+      },
+      "visiblePixels": 132193,
+      "opaquePixels": 120815,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-10-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-stage-10-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-10-edge-alpha-v1.png",
+        "x": 0.9114583333333333,
+        "y": 753.22265625,
+        "width": 1399.0885416666667,
+        "height": 127.44140625,
+        "feetY": 880.6640625,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_11",
+      "sourceGround": "/assets/survivors/maps/formwork-v1.png",
+      "sourceSha256": "00251eb2dcb4f67795c011a986c3c01f741e72edaa2c082c58d067f1c6dc319a",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_11-source.png",
+      "generatedSha256": "74b3167e4fdfae802e19cf11dd073fac700f0fa00a90ba05aefcaf2ddcd09bfb",
+      "alphaUri": "/assets/survivors/foreground/stage-11-edge-alpha-v1.png",
+      "alphaSha256": "ae18c296bf13550b10c5f45ff58fc0e35aab423c1b6eb5576eb8a2cea3dde380",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 818,
+        "width": 1536,
+        "height": 196
+      },
+      "visiblePixels": 197746,
+      "opaquePixels": 170189,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-11-edge-v1",
+        "sourceGround": "/assets/survivors/maps/formwork-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-11-edge-alpha-v1.png",
+        "x": 0,
+        "y": 718.9453125,
+        "width": 1400,
+        "height": 172.265625,
+        "feetY": 891.2109375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_12",
+      "sourceGround": "/assets/survivors/maps/rebar-v1.png",
+      "sourceSha256": "2d858d0793de1302ac0955b7f1509d59e814d874d08bd4fb5366199477c87430",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_12-source.png",
+      "generatedSha256": "9271924d412ecaac19b1a9196c97377a54ccd0f5909ac7c9dd5199535bb56d8d",
+      "alphaUri": "/assets/survivors/foreground/stage-12-edge-alpha-v1.png",
+      "alphaSha256": "aa7044d735bb13575768f6662acbe1273a51e902dbc9b7dc627d2245d743c14c",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 30,
+        "top": 835,
+        "width": 1472,
+        "height": 149
+      },
+      "visiblePixels": 165995,
+      "opaquePixels": 143616,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-12-edge-v1",
+        "sourceGround": "/assets/survivors/maps/rebar-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-12-edge-alpha-v1.png",
+        "x": 27.34375,
+        "y": 733.88671875,
+        "width": 1341.6666666666667,
+        "height": 130.95703125,
+        "feetY": 864.84375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_13",
+      "sourceGround": "/assets/survivors/maps/pour-v1.png",
+      "sourceSha256": "02d17fd7eab56d145ee8845374bd538453418b2f2b649daf7f8e1987f5636195",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_13-source.png",
+      "generatedSha256": "aa7dcb17ed84bf2c357ad184e11bfba68ba0c396c80f4eef1edc5ee8b5efc532",
+      "alphaUri": "/assets/survivors/foreground/stage-13-edge-alpha-v1.png",
+      "alphaSha256": "29604315c94fe034b5beb230c67b5cd82278aae77c77afc96c09e1bd5a9a49b9",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 846,
+        "width": 1536,
+        "height": 141
+      },
+      "visiblePixels": 148907,
+      "opaquePixels": 78678,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-13-edge-v1",
+        "sourceGround": "/assets/survivors/maps/pour-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-13-edge-alpha-v1.png",
+        "x": 0,
+        "y": 743.5546875,
+        "width": 1400,
+        "height": 123.92578125,
+        "feetY": 867.48046875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_14",
+      "sourceGround": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+      "sourceSha256": "1a3e985cd8d8f2215eec886a2fdc4e8a0a64a8bc98f2c1bf8266b94b718bac1f",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_14-source.png",
+      "generatedSha256": "85de05f98133f83aa656ef66707c9fa9f71c6c09305f73ab60ce81b179529dbe",
+      "alphaUri": "/assets/survivors/foreground/stage-14-edge-alpha-v1.png",
+      "alphaSha256": "bd2a2405ab2370674076d1446655b2af954dbbf271b8439ee1c3e8464ec87de5",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 799,
+        "width": 1536,
+        "height": 200
+      },
+      "visiblePixels": 192448,
+      "opaquePixels": 156113,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-14-edge-v1",
+        "sourceGround": "/assets/survivors/maps/highrise-stage-14-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-14-edge-alpha-v1.png",
+        "x": 0,
+        "y": 702.24609375,
+        "width": 1400,
+        "height": 175.78125,
+        "feetY": 878.02734375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_15",
+      "sourceGround": "/assets/survivors/maps/scaffold-v1.png",
+      "sourceSha256": "87cdf131de0ac92ef9e192c2e14613162a973f2231331608f740ccc3675d26d7",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_15-source.png",
+      "generatedSha256": "cda78a201c7fb35848a4e3e8f48e056dc39e63f20078babf01654479aca5e0c2",
+      "alphaUri": "/assets/survivors/foreground/stage-15-edge-alpha-v1.png",
+      "alphaSha256": "29afd50cfa569f9a2bc383a1effc3683ae4aebd66190eb3c2d5d2c2315e61e47",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 767,
+        "width": 1536,
+        "height": 191
+      },
+      "visiblePixels": 207960,
+      "opaquePixels": 172861,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-15-edge-v1",
+        "sourceGround": "/assets/survivors/maps/scaffold-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-15-edge-alpha-v1.png",
+        "x": 0,
+        "y": 674.12109375,
+        "width": 1400,
+        "height": 167.87109375,
+        "feetY": 841.9921875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_16",
+      "sourceGround": "/assets/survivors/maps/roof-v1.png",
+      "sourceSha256": "f44e5db86b8bef879532781ba711a686d8f3ab57071f2ef52dcbdf754438a24d",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_16-source.png",
+      "generatedSha256": "5504f315014630f9be8199e66a2559206ed6fc7102838e40c8603c7085067611",
+      "alphaUri": "/assets/survivors/foreground/stage-16-edge-alpha-v1.png",
+      "alphaSha256": "78b9ba1ae237162e2178cac579d50639aafcd5d9237548dbd23e24b8f9dc89d7",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 772,
+        "width": 1535,
+        "height": 252
+      },
+      "visiblePixels": 320799,
+      "opaquePixels": 308610,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-16-edge-v1",
+        "sourceGround": "/assets/survivors/maps/roof-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-16-edge-alpha-v1.png",
+        "x": 0,
+        "y": 678.515625,
+        "width": 1399.0885416666667,
+        "height": 221.484375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_17",
+      "sourceGround": "/assets/survivors/maps/waterproof-v1.png",
+      "sourceSha256": "89ab4ec60178bfcffaee78066f66d5a6d103dfc9ac6de9a03c8f7d7099060536",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_17-source.png",
+      "generatedSha256": "bde6b24056c810797410e678627cee3e65a9c886c1e5a25451faf2552cce4483",
+      "alphaUri": "/assets/survivors/foreground/stage-17-edge-alpha-v1.png",
+      "alphaSha256": "7666cecb4b638f06963fceed404cb70958a592f45187f5e67892e5492099c85a",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 878,
+        "width": 1536,
+        "height": 146
+      },
+      "visiblePixels": 139655,
+      "opaquePixels": 130115,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-17-edge-v1",
+        "sourceGround": "/assets/survivors/maps/waterproof-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-17-edge-alpha-v1.png",
+        "x": 0,
+        "y": 771.6796875,
+        "width": 1400,
+        "height": 128.3203125,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_18",
+      "sourceGround": "/assets/survivors/maps/finish-v1.png",
+      "sourceSha256": "49f537e01e08d2ee3f1ea18acafbb2b12996b869255f3e01a48899cbae7722ba",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_18-source.png",
+      "generatedSha256": "2c4f7336d6401b2b986cb15792e952140e6d750558487a0b8fb289fe87dc8d0b",
+      "alphaUri": "/assets/survivors/foreground/stage-18-edge-alpha-v1.png",
+      "alphaSha256": "d670112db541d5db4b771554ebbe9198653850ec9623eda26e7c664a692442a8",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 25,
+        "top": 808,
+        "width": 1492,
+        "height": 216
+      },
+      "visiblePixels": 177821,
+      "opaquePixels": 157809,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-18-edge-v1",
+        "sourceGround": "/assets/survivors/maps/finish-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-18-edge-alpha-v1.png",
+        "x": 22.786458333333336,
+        "y": 710.15625,
+        "width": 1359.8958333333333,
+        "height": 189.84375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_19",
+      "sourceGround": "/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+      "sourceSha256": "155efb6d251051ee3a2acab326ac7d6c2ac441c74cff4a377f0494330aaa0983",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_19-source.png",
+      "generatedSha256": "890cbf37c297b1c0e897abcb8a6933c1e23e13ffeebac39e4bb3ae31537d4c85",
+      "alphaUri": "/assets/survivors/foreground/stage-19-edge-alpha-v1.png",
+      "alphaSha256": "583ed40de8f18b602cec0019e94e96f7e3535f65a8e5b91cd3531869ea3c72e1",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 851,
+        "width": 1536,
+        "height": 156
+      },
+      "visiblePixels": 159828,
+      "opaquePixels": 139279,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-19-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-stage-19-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-19-edge-alpha-v1.png",
+        "x": 0,
+        "y": 747.94921875,
+        "width": 1400,
+        "height": 137.109375,
+        "feetY": 885.05859375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_20",
+      "sourceGround": "/assets/survivors/maps/handover-v1.png",
+      "sourceSha256": "57ee67f89b06e4727c786b5ee55c71d19ec369d4656df391df0ba0c4b811dae1",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_20-source.png",
+      "generatedSha256": "af12027c1119effc26fef88e03aac9aea4a310ac6cd79cfc3162713a9fa35441",
+      "alphaUri": "/assets/survivors/foreground/stage-20-edge-alpha-v1.png",
+      "alphaSha256": "c7c603a9193227dfa01bd0c98bcb7344a294a742ae87693019ade5d7c89edc6f",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 768,
+        "width": 1536,
+        "height": 206
+      },
+      "visiblePixels": 180657,
+      "opaquePixels": 167279,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-20-edge-v1",
+        "sourceGround": "/assets/survivors/maps/handover-v1.png",
+        "imageUri": "/assets/survivors/foreground/stage-20-edge-alpha-v1.png",
+        "x": 0,
+        "y": 675,
+        "width": 1400,
+        "height": 181.0546875,
+        "feetY": 856.0546875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_21",
+      "sourceGround": "/assets/survivors/maps/deepworks-v2.webp",
+      "sourceSha256": "c30935a85b23369358e849717139343005e20b67a9292e297ebffa69103d9db6",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_21-source.png",
+      "generatedSha256": "fe094763b4e7b50db591fb8fa4a5ff66a871f17ba151f95d7954640556cc82a6",
+      "alphaUri": "/assets/survivors/foreground/stage-21-edge-alpha-v1.png",
+      "alphaSha256": "ac45013a103e73c2f9544daf04ad0c86e92a07d22d20f4b644e6fce553be97fb",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 777,
+        "width": 1536,
+        "height": 247
+      },
+      "visiblePixels": 279275,
+      "opaquePixels": 254799,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-21-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-v2.webp",
+        "imageUri": "/assets/survivors/foreground/stage-21-edge-alpha-v1.png",
+        "x": 0,
+        "y": 682.91015625,
+        "width": 1400,
+        "height": 217.08984375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_22",
+      "sourceGround": "/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+      "sourceSha256": "a48d20f476bc510665d8988e6bdf2ee0df7f92b0c78caaf6db3984a356d1ccbb",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_22-source.png",
+      "generatedSha256": "21b1929ef0823ec7a3f24c72cc46490750ab6465712036bf86fc118ebdb56f96",
+      "alphaUri": "/assets/survivors/foreground/stage-22-edge-alpha-v1.png",
+      "alphaSha256": "e293d5513a130c885940b704f611d738abd9dde5216623c2cb8fe7543aff9277",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 627,
+        "width": 1536,
+        "height": 397
+      },
+      "visiblePixels": 323362,
+      "opaquePixels": 311268,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-22-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-stage-22-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-22-edge-alpha-v1.png",
+        "x": 0,
+        "y": 551.07421875,
+        "width": 1400,
+        "height": 348.92578125,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_23",
+      "sourceGround": "/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+      "sourceSha256": "0ee934b5c7b5998d5a66603700a3a6b0558470a7351d822dbc1a1870e89501b7",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_23-source.png",
+      "generatedSha256": "4c9590e1db63b7cc41389e53e3f485e199ffb7bd335d803cfda9b1e352bc65b4",
+      "alphaUri": "/assets/survivors/foreground/stage-23-edge-alpha-v1.png",
+      "alphaSha256": "7b04837522d7b01ba39862c0790b3abca4595208831775d767db07e3d1fe148b",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 182,
+        "top": 946,
+        "width": 852,
+        "height": 78
+      },
+      "visiblePixels": 25920,
+      "opaquePixels": 10650,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-23-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-stage-23-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-23-edge-alpha-v1.png",
+        "x": 165.88541666666666,
+        "y": 831.4453125,
+        "width": 776.5625,
+        "height": 68.5546875,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_24",
+      "sourceGround": "/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+      "sourceSha256": "8851e37b50ec078ba9f88703c2ac018f770387111a6b3528e0e16f4b7c67cbf6",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_24-source.png",
+      "generatedSha256": "16d7074811120914981a6ba74387ab1507efb2a0e1e9bfb58211112f9cdb4fdd",
+      "alphaUri": "/assets/survivors/foreground/stage-24-edge-alpha-v1.png",
+      "alphaSha256": "de830edb5b27dbb85f8c34a1501cc5a8535efebefd888a29973336698a41786d",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 660,
+        "width": 1536,
+        "height": 318
+      },
+      "visiblePixels": 201655,
+      "opaquePixels": 187100,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-24-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-stage-24-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-24-edge-alpha-v1.png",
+        "x": 0,
+        "y": 580.078125,
+        "width": 1400,
+        "height": 279.4921875,
+        "feetY": 859.5703125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_25",
+      "sourceGround": "/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+      "sourceSha256": "58fe5bc868b24cf20ab7a3c503914fc42c2191ce99beecb54df3f003ee628abb",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_25-source.png",
+      "generatedSha256": "75750c64aa65b5f3dfa23d7e6c37e35b3459f0eb0d8bf9e986dadf3128f2e198",
+      "alphaUri": "/assets/survivors/foreground/stage-25-edge-alpha-v1.png",
+      "alphaSha256": "20787a84dc1eb02f499c74b341f26745500091a67cbbb7eff75eba74667c2ec1",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 131,
+        "top": 841,
+        "width": 1249,
+        "height": 85
+      },
+      "visiblePixels": 37807,
+      "opaquePixels": 26323,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-25-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-stage-25-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-25-edge-alpha-v1.png",
+        "x": 119.40104166666666,
+        "y": 739.16015625,
+        "width": 1138.4114583333333,
+        "height": 74.70703125,
+        "feetY": 813.8671875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_26",
+      "sourceGround": "/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+      "sourceSha256": "3db9eed6a5877356990fe94d024a8f8efca1a36cf5a35739d183f186154fe0cc",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_26-source.png",
+      "generatedSha256": "1df6d5f2802cacb80bcbf2d9bd7a6f8edadc3e0901b5bcafebafdbb521002af2",
+      "alphaUri": "/assets/survivors/foreground/stage-26-edge-alpha-v1.png",
+      "alphaSha256": "9bf4cb60ba05ae15341cce7fd71b0fb72b89ba50bb76998bc1dc5d38c6f8643f",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 532,
+        "width": 1536,
+        "height": 492
+      },
+      "visiblePixels": 199351,
+      "opaquePixels": 194688,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-26-edge-v1",
+        "sourceGround": "/assets/survivors/maps/remodel-stage-26-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-26-edge-alpha-v1.png",
+        "x": 0,
+        "y": 467.578125,
+        "width": 1400,
+        "height": 432.421875,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_27",
+      "sourceGround": "/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+      "sourceSha256": "df225de9d9826581f3d8de6712ddac102ab96deae80d601d70aa8099939dee50",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_27-source.png",
+      "generatedSha256": "23f90e2bd75c07a1d42542869e62e69c57b13c60d8d771cafd7055eb2238ee3f",
+      "alphaUri": "/assets/survivors/foreground/stage-27-edge-alpha-v1.png",
+      "alphaSha256": "44262ffb70b96ec82642f86bec62c4c4947ce85a9250d47d832406c6fc574942",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 560,
+        "width": 1536,
+        "height": 450
+      },
+      "visiblePixels": 343295,
+      "opaquePixels": 332362,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-27-edge-v1",
+        "sourceGround": "/assets/survivors/maps/demolition-stage-27-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-27-edge-alpha-v1.png",
+        "x": 0,
+        "y": 492.1875,
+        "width": 1400,
+        "height": 395.5078125,
+        "feetY": 887.6953125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_28",
+      "sourceGround": "/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+      "sourceSha256": "c17372ac67780af25027475d6d15675232dab5b8e90fc9d4399e9f82c859882b",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_28-source.png",
+      "generatedSha256": "9b53f09cd489df2685f1d57778f98c8dca50dd4a6f6f6b632e3a57e1c562c053",
+      "alphaUri": "/assets/survivors/foreground/stage-28-edge-alpha-v1.png",
+      "alphaSha256": "31c26ce4c201e16f8310d37f38afb1d26ec471c673cf35c1e626c136cf7f1641",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 752,
+        "width": 1493,
+        "height": 245
+      },
+      "visiblePixels": 163881,
+      "opaquePixels": 150856,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-28-edge-v1",
+        "sourceGround": "/assets/survivors/maps/demolition-stage-28-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-28-edge-alpha-v1.png",
+        "x": 0,
+        "y": 660.9375,
+        "width": 1360.8072916666667,
+        "height": 215.33203125,
+        "feetY": 876.26953125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_29",
+      "sourceGround": "/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+      "sourceSha256": "8a2e026997ee08378588e29be06c5109bb736ed9d0f5956aca4d196c43f05d97",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_29-source.png",
+      "generatedSha256": "430431454f511b06e2eed197bb2c5c09bea672156186f3f72d1dd3d44014f111",
+      "alphaUri": "/assets/survivors/foreground/stage-29-edge-alpha-v1.png",
+      "alphaSha256": "de5bb8d833ca50b3279cd368b17abebde218535d57f8f8dca7b5485fed714ccd",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 810,
+        "width": 1536,
+        "height": 197
+      },
+      "visiblePixels": 219927,
+      "opaquePixels": 209226,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-29-edge-v1",
+        "sourceGround": "/assets/survivors/maps/remodel-stage-29-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-29-edge-alpha-v1.png",
+        "x": 0,
+        "y": 711.9140625,
+        "width": 1400,
+        "height": 173.14453125,
+        "feetY": 885.05859375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_30",
+      "sourceGround": "/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+      "sourceSha256": "0ebe786bcbc0de403113cef33d7256cb85c580f06195db698afe4bc5b1925f0f",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_30-source.png",
+      "generatedSha256": "c763b9be8c4e6acc357d8c5eebaaa98ac749ee8857703c3436a58bf3cb3a90d1",
+      "alphaUri": "/assets/survivors/foreground/stage-30-edge-alpha-v1.png",
+      "alphaSha256": "4a5358bfd1873c6b3753f0f88a12f09e5fc035099b2f994bd7bebc737ceb9a65",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 801,
+        "width": 1536,
+        "height": 223
+      },
+      "visiblePixels": 300290,
+      "opaquePixels": 295340,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-30-edge-v1",
+        "sourceGround": "/assets/survivors/maps/deepworks-stage-30-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-30-edge-alpha-v1.png",
+        "x": 0,
+        "y": 704.00390625,
+        "width": 1400,
+        "height": 195.99609375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_31",
+      "sourceGround": "/assets/survivors/maps/skydeck-v2.webp",
+      "sourceSha256": "160b3f2c3fb2511b9799195636a93b8d443f87f117d144a68d1089d6b24a87ab",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_31-source.png",
+      "generatedSha256": "63b9c60e2ce4d403e7de384e33ab7942238cea03219a411450fd12bbb74a7a4d",
+      "alphaUri": "/assets/survivors/foreground/stage-31-edge-alpha-v1.png",
+      "alphaSha256": "5b0ce271ea422189b0dc3367f015d1e26e7b75abd199fb3e3df8a766e130d7ef",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 666,
+        "width": 1536,
+        "height": 327
+      },
+      "visiblePixels": 279137,
+      "opaquePixels": 258597,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-31-edge-v1",
+        "sourceGround": "/assets/survivors/maps/skydeck-v2.webp",
+        "imageUri": "/assets/survivors/foreground/stage-31-edge-alpha-v1.png",
+        "x": 0,
+        "y": 585.3515625,
+        "width": 1400,
+        "height": 287.40234375,
+        "feetY": 872.75390625,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_32",
+      "sourceGround": "/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+      "sourceSha256": "fe932ed1564ff62044067f3d7d594738b07e945355242e9e1646d373ca4f9446",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_32-source.png",
+      "generatedSha256": "717e81167c6e28c3b2ac95d42d7d3ed85288d147d2a80ba95407c07ab02f2183",
+      "alphaUri": "/assets/survivors/foreground/stage-32-edge-alpha-v1.png",
+      "alphaSha256": "8941f280e8da16a8926197125155ef41097bf8da9d014899a3ed5e321301e7e1",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 737,
+        "width": 1536,
+        "height": 253
+      },
+      "visiblePixels": 206997,
+      "opaquePixels": 176944,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-32-edge-v1",
+        "sourceGround": "/assets/survivors/maps/formwork-stage-32-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-32-edge-alpha-v1.png",
+        "x": 0,
+        "y": 647.75390625,
+        "width": 1400,
+        "height": 222.36328125,
+        "feetY": 870.1171875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_33",
+      "sourceGround": "/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+      "sourceSha256": "becd53780f2ed3d72a6422a5bd1f457b2f4f8f4b72901289312ad78502d233a3",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_33-source.png",
+      "generatedSha256": "1d0f490b248f58652eb2e9cd725f1ad39d59b41e672ab6a1fd792a2ed3b19829",
+      "alphaUri": "/assets/survivors/foreground/stage-33-edge-alpha-v1.png",
+      "alphaSha256": "9082755da0827a72db4734614c148820386ba77d2dc84d251a1115066216608f",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 722,
+        "width": 1536,
+        "height": 302
+      },
+      "visiblePixels": 278651,
+      "opaquePixels": 270886,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-33-edge-v1",
+        "sourceGround": "/assets/survivors/maps/rebar-stage-33-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-33-edge-alpha-v1.png",
+        "x": 0,
+        "y": 634.5703125,
+        "width": 1400,
+        "height": 265.4296875,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_34",
+      "sourceGround": "/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+      "sourceSha256": "e6f0003588df0bddb1c06a938806a932a664d94cf2d6aeb2907fc2c7b31890ab",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_34-source.png",
+      "generatedSha256": "4651d5b83a52f13470f7292e49090b1dcdb532e4f1d0f6526c50d54df6d13230",
+      "alphaUri": "/assets/survivors/foreground/stage-34-edge-alpha-v1.png",
+      "alphaSha256": "8437e4d9bd0eb9edd20ebed3f80e260e4eeb6362097fb82c107287182c963c1c",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 883,
+        "width": 1536,
+        "height": 141
+      },
+      "visiblePixels": 151691,
+      "opaquePixels": 136757,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-34-edge-v1",
+        "sourceGround": "/assets/survivors/maps/pour-stage-34-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-34-edge-alpha-v1.png",
+        "x": 0,
+        "y": 776.07421875,
+        "width": 1400,
+        "height": 123.92578125,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_35",
+      "sourceGround": "/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+      "sourceSha256": "07ee3a7928669927d57b6ce43b4d49024a7bebfecd6ba25ba819fd41bd27821d",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_35-source.png",
+      "generatedSha256": "52f2bcaac461f58612c1a476b710fa82ca059b51adb2869c14c4fb9ef9667df5",
+      "alphaUri": "/assets/survivors/foreground/stage-35-edge-alpha-v1.png",
+      "alphaSha256": "6e56d414a292b370ba298e4d0d4905a65d3410b89ebf9dd0f8056973e07e37be",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 11,
+        "top": 761,
+        "width": 1513,
+        "height": 239
+      },
+      "visiblePixels": 240596,
+      "opaquePixels": 220521,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-35-edge-v1",
+        "sourceGround": "/assets/survivors/maps/scaffold-stage-35-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-35-edge-alpha-v1.png",
+        "x": 10.026041666666666,
+        "y": 668.84765625,
+        "width": 1379.0364583333333,
+        "height": 210.05859375,
+        "feetY": 878.90625,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_36",
+      "sourceGround": "/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+      "sourceSha256": "350465f2881869f4520195d1b96a723dca52f1b5aa47244fec9ec45756910a06",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_36-source.png",
+      "generatedSha256": "dc85b255f5e77567f995d5cf7f7732f71c994fc9460133fa505734ba941462ed",
+      "alphaUri": "/assets/survivors/foreground/stage-36-edge-alpha-v1.png",
+      "alphaSha256": "1efc6875ae6b03b6761c310a3f590e1c110dcf1377e1088f52b0af3c266c87ee",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 865,
+        "width": 1536,
+        "height": 133
+      },
+      "visiblePixels": 161337,
+      "opaquePixels": 128904,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-36-edge-v1",
+        "sourceGround": "/assets/survivors/maps/skydeck-stage-36-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-36-edge-alpha-v1.png",
+        "x": 0,
+        "y": 760.25390625,
+        "width": 1400,
+        "height": 116.89453125,
+        "feetY": 877.1484375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_37",
+      "sourceGround": "/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+      "sourceSha256": "c5755aae67d9f6b1cd00a358e535ff0723cad461228e43433a4aa60b49d9b43b",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_37-source.png",
+      "generatedSha256": "02ffbf539a31544ab608c37bb3ba67659bfc4be6410e53e821c676584f6d56fc",
+      "alphaUri": "/assets/survivors/foreground/stage-37-edge-alpha-v1.png",
+      "alphaSha256": "a4a918152b90d9e6559486af697d0d087ade1123104ab17f43a6b7fb2b8aea2a",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 737,
+        "width": 1536,
+        "height": 287
+      },
+      "visiblePixels": 327043,
+      "opaquePixels": 317302,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-37-edge-v1",
+        "sourceGround": "/assets/survivors/maps/waterproof-stage-37-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-37-edge-alpha-v1.png",
+        "x": 0,
+        "y": 647.75390625,
+        "width": 1400,
+        "height": 252.24609375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_38",
+      "sourceGround": "/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+      "sourceSha256": "fe2ca926de8639db0e3c2ec90b24f29ee6dbe208a94b4e59476925ee2c5956df",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_38-source.png",
+      "generatedSha256": "ceef3c25641fbae74fbdfdefb49267aae4fa4f520789db0e814a51df46bc8a01",
+      "alphaUri": "/assets/survivors/foreground/stage-38-edge-alpha-v1.png",
+      "alphaSha256": "dbdca0cef40a0ad42f7db6890a7eaf68edcdd2e80e294599ad38ee10a92b8298",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 793,
+        "width": 1536,
+        "height": 231
+      },
+      "visiblePixels": 315228,
+      "opaquePixels": 303980,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-38-edge-v1",
+        "sourceGround": "/assets/survivors/maps/finish-stage-38-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-38-edge-alpha-v1.png",
+        "x": 0,
+        "y": 696.97265625,
+        "width": 1400,
+        "height": 203.02734375,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_39",
+      "sourceGround": "/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+      "sourceSha256": "f697e22e41b0d20c8c4d5c54953417ead6c3d3cea9731d0773aa6291e29bf6e5",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_39-source.png",
+      "generatedSha256": "8d023d4278b745f4b219af41a1fa441e768316b65d277fa7558d8f86be684b16",
+      "alphaUri": "/assets/survivors/foreground/stage-39-edge-alpha-v1.png",
+      "alphaSha256": "6adc7aaf8fd07effc3433c0db52fc43b2a1e80e53ba0f8abb79857d3601e13c2",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 1119,
+        "top": 753,
+        "width": 368,
+        "height": 222
+      },
+      "visiblePixels": 55985,
+      "opaquePixels": 52906,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-39-edge-v1",
+        "sourceGround": "/assets/survivors/maps/skydeck-stage-39-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-39-edge-alpha-v1.png",
+        "x": 1019.921875,
+        "y": 661.81640625,
+        "width": 335.4166666666667,
+        "height": 195.1171875,
+        "feetY": 856.93359375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_40",
+      "sourceGround": "/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+      "sourceSha256": "2ce129fc0513c3f71723ce12a703fb61a84d8c97d57720ae762f55a0699e497c",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_40-source.png",
+      "generatedSha256": "05fd34b0a906471aa30f6f3e2d31a129a90081ea76cacc8fb1c26d648261fc61",
+      "alphaUri": "/assets/survivors/foreground/stage-40-edge-alpha-v1.png",
+      "alphaSha256": "ca8ae11d0913847fb89c42ca3bead21c272209e71c5974b4b356b2bbd71d2026",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 9,
+        "top": 834,
+        "width": 1526,
+        "height": 139
+      },
+      "visiblePixels": 126750,
+      "opaquePixels": 109824,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-40-edge-v1",
+        "sourceGround": "/assets/survivors/maps/skydeck-stage-40-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-40-edge-alpha-v1.png",
+        "x": 8.203125,
+        "y": 733.0078125,
+        "width": 1390.8854166666667,
+        "height": 122.16796875,
+        "feetY": 855.17578125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_41",
+      "sourceGround": "/assets/survivors/maps/plant-v2.webp",
+      "sourceSha256": "e9cf14658ecd1d12c731e199bbe441abb8ec247612f984e0ad72cfd3526967cf",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_41-source.png",
+      "generatedSha256": "fb4a3d2d2d37700bf4be5670bfb23ea73512a56178409272e1e0001449d0bdc4",
+      "alphaUri": "/assets/survivors/foreground/stage-41-edge-alpha-v1.png",
+      "alphaSha256": "99dcbd1f7686437bbe44a75f62185fa29bd4e6db80f1a4b6faa21a3e3cb62b2f",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 751,
+        "width": 1536,
+        "height": 273
+      },
+      "visiblePixels": 299524,
+      "opaquePixels": 260595,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-41-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-v2.webp",
+        "imageUri": "/assets/survivors/foreground/stage-41-edge-alpha-v1.png",
+        "x": 0,
+        "y": 660.05859375,
+        "width": 1400,
+        "height": 239.94140625,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_42",
+      "sourceGround": "/assets/survivors/maps/plant-stage-42-graphics-v2.png",
+      "sourceSha256": "3ad5bf038d9cfe1b8dd591ea68be8c7ae1491cc4ddaa1677f88cab3184220610",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_42-source.png",
+      "generatedSha256": "44b82628b83d611ffb177bad3ca0291b9f9092730c262ff45915eded4af8cf35",
+      "alphaUri": "/assets/survivors/foreground/stage-42-edge-alpha-v1.png",
+      "alphaSha256": "e839eb1a35344475e24898aa3bc88d70bbc6acdc65328a1fd656b3a604f4fdc5",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 33,
+        "top": 815,
+        "width": 1490,
+        "height": 166
+      },
+      "visiblePixels": 122845,
+      "opaquePixels": 108574,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-42-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-stage-42-graphics-v2.png",
+        "imageUri": "/assets/survivors/foreground/stage-42-edge-alpha-v1.png",
+        "x": 30.078125,
+        "y": 716.30859375,
+        "width": 1358.0729166666667,
+        "height": 145.8984375,
+        "feetY": 862.20703125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_43",
+      "sourceGround": "/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+      "sourceSha256": "328b7070978d98c7d943e64549495692bd4d4938d4b07115312dda4d4471273f",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_43-source.png",
+      "generatedSha256": "bcb9201653d37506172c7bca79b7509ea5614e3bfc5e46763d40c5849fa2918a",
+      "alphaUri": "/assets/survivors/foreground/stage-43-edge-alpha-v1.png",
+      "alphaSha256": "89b0878d94dec18c95c686659a6bc4c75d3488ec3a49832123e80826282c52c5",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 824,
+        "width": 1536,
+        "height": 174
+      },
+      "visiblePixels": 199105,
+      "opaquePixels": 189647,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-43-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-stage-43-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-43-edge-alpha-v1.png",
+        "x": 0,
+        "y": 724.21875,
+        "width": 1400,
+        "height": 152.9296875,
+        "feetY": 877.1484375,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_44",
+      "sourceGround": "/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+      "sourceSha256": "2439e8d69d0e7acfb4317abfb25c014d5f3cee13306d7b4a352bfac2e4331d96",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_44-source.png",
+      "generatedSha256": "3bef1d06068345d8e85a4122fd76dd75223da5c6f6cb249b1eeedce4057b0c17",
+      "alphaUri": "/assets/survivors/foreground/stage-44-edge-alpha-v1.png",
+      "alphaSha256": "51409b51f8b978270d3a136c632bd6b351824d051433bd7d6504f0a222b973be",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 834,
+        "width": 1536,
+        "height": 170
+      },
+      "visiblePixels": 178624,
+      "opaquePixels": 166800,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-44-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-stage-44-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-44-edge-alpha-v1.png",
+        "x": 0,
+        "y": 733.0078125,
+        "width": 1400,
+        "height": 149.4140625,
+        "feetY": 882.421875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_45",
+      "sourceGround": "/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+      "sourceSha256": "c48c17e2b5dcf57934ded28bf62512c7d582af410dba0f1763dd7226149b1c6b",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_45-source.png",
+      "generatedSha256": "ab4aed337f56a32a3ac8448ff73af93a1de0c57dd96300a097231f400456d52f",
+      "alphaUri": "/assets/survivors/foreground/stage-45-edge-alpha-v1.png",
+      "alphaSha256": "4a87981a3dd6baa12c7aed96c5961cd95daf2f75c3832cd8efdc618b3b948c20",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 862,
+        "width": 1536,
+        "height": 162
+      },
+      "visiblePixels": 91821,
+      "opaquePixels": 85277,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-45-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-stage-45-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-45-edge-alpha-v1.png",
+        "x": 0,
+        "y": 757.6171875,
+        "width": 1400,
+        "height": 142.3828125,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_46",
+      "sourceGround": "/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+      "sourceSha256": "6586c5b385db63df65806900241347c63fff10128e26de9e81f16af88da21b0b",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_46-source.png",
+      "generatedSha256": "9c40ccfb951de43cfdfe58842d47652bbbdae9ef3d1909cc4eb4e54dd9482f67",
+      "alphaUri": "/assets/survivors/foreground/stage-46-edge-alpha-v1.png",
+      "alphaSha256": "d76c8cc4e24d490a713b85dd4ebb04a30c847202a6036e7d63cab7e994321f8f",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 771,
+        "width": 1536,
+        "height": 235
+      },
+      "visiblePixels": 163985,
+      "opaquePixels": 150335,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-46-edge-v1",
+        "sourceGround": "/assets/survivors/maps/datacenter-stage-46-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-46-edge-alpha-v1.png",
+        "x": 0,
+        "y": 677.63671875,
+        "width": 1400,
+        "height": 206.54296875,
+        "feetY": 884.1796875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_47",
+      "sourceGround": "/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+      "sourceSha256": "c467074c63f93b5b0d7353ccbb74554b0f32acf5402ca1f260d044f0aaa67cda",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_47-source.png",
+      "generatedSha256": "2273b5cb1bdb07eef5eb4956be2edfc8f88e6763f538611d7467c4236f3fe182",
+      "alphaUri": "/assets/survivors/foreground/stage-47-edge-alpha-v1.png",
+      "alphaSha256": "9de3e63193e48613185c3e444c1357a4fea25557e81ffd0e238977d6b48c62b4",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 690,
+        "width": 1517,
+        "height": 302
+      },
+      "visiblePixels": 288675,
+      "opaquePixels": 256849,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-47-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-stage-47-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-47-edge-alpha-v1.png",
+        "x": 0,
+        "y": 606.4453125,
+        "width": 1382.6822916666667,
+        "height": 265.4296875,
+        "feetY": 871.875,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_48",
+      "sourceGround": "/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+      "sourceSha256": "d5d7ba377bd7c003add3255e3c9a08e8a5e5c9a1bee1303a142f5967130e55e3",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_48-source.png",
+      "generatedSha256": "87406c7abda7209b252ec0b97803eec61a17a1eb5b6fb36816e61a8def70f006",
+      "alphaUri": "/assets/survivors/foreground/stage-48-edge-alpha-v1.png",
+      "alphaSha256": "6f10a46c6804eed6dc81fc9e8b1d494a428125e4fe58dc03cf44ebd490b51ca8",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 806,
+        "width": 1536,
+        "height": 204
+      },
+      "visiblePixels": 156573,
+      "opaquePixels": 145212,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-48-edge-v1",
+        "sourceGround": "/assets/survivors/maps/finish-stage-48-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-48-edge-alpha-v1.png",
+        "x": 0,
+        "y": 708.3984375,
+        "width": 1400,
+        "height": 179.296875,
+        "feetY": 887.6953125,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_49",
+      "sourceGround": "/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+      "sourceSha256": "dde66bc55bb7d8addd8d069efec20a6c99c170a7c509dc71c6983d82ff9ed8db",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_49-source.png",
+      "generatedSha256": "099f8db7fe00b8ac61118a11fae3db7be611a3bd5202ae1988ea00e67d14338a",
+      "alphaUri": "/assets/survivors/foreground/stage-49-edge-alpha-v1.png",
+      "alphaSha256": "790fedf4ad28d0fab24e5cf69ea4d8dd09fadaf7c5f3ee8ca55f55154b8a6866",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 843,
+        "width": 1536,
+        "height": 181
+      },
+      "visiblePixels": 203197,
+      "opaquePixels": 169272,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-49-edge-v1",
+        "sourceGround": "/assets/survivors/maps/handover-stage-49-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-49-edge-alpha-v1.png",
+        "x": 0,
+        "y": 740.91796875,
+        "width": 1400,
+        "height": 159.08203125,
+        "feetY": 900,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    },
+    {
+      "stageId": "stage_50",
+      "sourceGround": "/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+      "sourceSha256": "cfb801e4e75ae66c792cd011ef86d28ecb16392fe1a7db904596c6547747ae72",
+      "generatedSource": "docs/art-source/watch-remaining-20261019/stage_50-source.png",
+      "generatedSha256": "5b8c2baed0b4b3e46ae64c93f0ef3cc9324724bcdec4c1fa2703ca70810f3638",
+      "alphaUri": "/assets/survivors/foreground/stage-50-edge-alpha-v1.png",
+      "alphaSha256": "a29ce6fc5578a6245cb12243a9bf52a551d27b7f31f9fd01f2952a9448e1f637",
+      "nativeSize": {
+        "width": 1536,
+        "height": 1024
+      },
+      "crop": {
+        "left": 0,
+        "top": 849,
+        "width": 1536,
+        "height": 160
+      },
+      "visiblePixels": 157775,
+      "opaquePixels": 146283,
+      "alphaUnmodifiedWithinCrop": true,
+      "generatedRgbUsed": false,
+      "review": "agent-reviewed-source-and-extraction",
+      "humanVisualLock": false,
+      "layer": {
+        "id": "stage-50-edge-v1",
+        "sourceGround": "/assets/survivors/maps/plant-stage-50-unique-v1.webp",
+        "imageUri": "/assets/survivors/foreground/stage-50-edge-alpha-v1.png",
+        "x": 0,
+        "y": 746.19140625,
+        "width": 1400,
+        "height": 140.625,
+        "feetY": 886.81640625,
+        "approval": "USER_REQUESTED_REMAINING_FOREGROUNDS_20261019"
+      }
+    }
+  ]
+}
