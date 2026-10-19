@@ -17,7 +17,7 @@
   "browser": {
     "previousSourceAndProtectionReview": "render-cases.json",
     "previousStageCount": 50,
-    "activationRecheck": "Blocked by local browser webview attachment timeout after system memory pressure; no Stage 02 full gameplay claim"
+    "activationRecheck": "Passed after excluding OneDrive-locked documentation from the local-only dev watcher: actual approved registry count 1, player alpha 0.55, low-quality warning alpha 0.25, max source color error 1/255, zero browser errors. See activation-browser.json. No Stage 02 full gameplay claim."
   },
   "limits": [
     "Other 49 stages have no approved foreground mask",

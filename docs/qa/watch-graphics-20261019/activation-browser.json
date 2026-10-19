@@ -1,0 +1,17 @@
+{
+  "status": "실게임 등록 전경 1개 · low · 가림 불투명도 25% · 원화 색 오차 1/255 (12205 표본) · 사용자 승인 적용",
+  "canvas": {
+    "actorIdentity": "single-authored-frame",
+    "actorX": "670",
+    "actorY": "865",
+    "contactArt": "true",
+    "contactError": "0",
+    "contactLegStretch": "0.999999999999999",
+    "contactSlip": "0",
+    "heroCastShadow": "authored-pose",
+    "matteAlpha": "0.25",
+    "quality": "low",
+    "sourceColorError": "1"
+  },
+  "errors": []
+}
