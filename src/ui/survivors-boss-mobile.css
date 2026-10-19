@@ -1,0 +1,266 @@
+/* Signal Breaker: preserve the live boss arena on touch portrait/landscape.
+   Applied only while a boss is present/arriving/being secured. Do not alter
+   combat simulation, touch hit areas, or desktop cinematic presentation. */
+@media (max-width: 900px), (pointer: coarse) {
+  .survivors-container.is-combat.is-boss-fight {
+    --boss-hud-gutter: max(8px, env(safe-area-inset-left));
+    --boss-hud-top: max(8px, env(safe-area-inset-top));
+  }
+
+  /* Keep player health, the pause target and the boss's HP/readout visible. */
+  .survivors-container.is-combat.is-boss-fight .survivors-hud-top {
+    top: var(--boss-hud-top);
+    height: 44px;
+    padding: 0 6px;
+    max-width: calc(100% - 16px);
+    box-sizing: border-box;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status {
+    display: flex;
+    top: calc(var(--boss-hud-top) + 47px);
+    left: var(--boss-hud-gutter);
+    right: max(8px, env(safe-area-inset-right));
+    width: auto;
+    height: 25px;
+    z-index: 41;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status strong {
+    flex: 0 1 auto;
+    max-width: 38%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status progress {
+    flex: 1 1 30px;
+    min-width: 30px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 40%;
+  }
+
+  /* Announce the boss in one small edge rail, not across the arena. */
+  .survivors-container.is-combat.is-boss-fight :is(
+    .survivors-encounter-notice,
+    .survivors-wave-director-notice,
+    .survivors-signature-event,
+    .survivors-counterplay-banner,
+    .survivors-mastery-notice,
+    .survivors-wave-supply-notice,
+    .survivors-evo-banner
+  ) {
+    position: absolute;
+    top: calc(var(--boss-hud-top) + 78px);
+    left: var(--boss-hud-gutter);
+    right: auto;
+    bottom: auto;
+    width: min(300px, 46vw);
+    max-width: calc(100% - 16px);
+    max-height: 64px;
+    margin: 0;
+    padding: 5px 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+    transform: none;
+    animation: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice {
+    z-index: 46;
+    pointer-events: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice .survivors-boss-alert-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 3px 6px;
+    padding: 0;
+    text-align: left;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice .survivors-boss-alert-text strong {
+    grid-column: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice .survivors-boss-alert-text small {
+    display: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice .survivors-boss-alert-text progress {
+    grid-column: 1 / -1;
+    margin: 1px 0 0;
+    height: 5px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-encounter-notice .survivors-boss-skip {
+    grid-column: 2;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+    pointer-events: auto;
+  }
+
+  /* No large captions or multilined panels during damage-heavy boss combat. */
+  .survivors-container.is-combat.is-boss-fight :is(
+    .survivors-wave-director-notice,
+    .survivors-signature-event,
+    .survivors-counterplay-banner,
+    .survivors-mastery-notice,
+    .survivors-wave-supply-notice
+  ) > :is(small, span, em, i, b) {
+    display: none;
+  }
+  .survivors-container.is-combat.is-boss-fight :is(
+    .survivors-wave-director-notice,
+    .survivors-signature-event,
+    .survivors-counterplay-banner,
+    .survivors-mastery-notice,
+    .survivors-wave-supply-notice
+  ) > strong {
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-evo-banner-icon {
+    font-size: 22px;
+    flex-basis: 26px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-evo-banner-content p {
+    display: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-evo-banner-content h4 {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  /* Director callout is informational and must not be a fullscreen mask. */
+  .survivors-container.is-combat.is-boss-fight .survivors-director-cutin-layer {
+    inset: auto;
+    top: calc(var(--boss-hud-top) + 78px);
+    left: var(--boss-hud-gutter);
+    right: auto;
+    bottom: auto;
+    width: min(300px, 46vw);
+    height: 62px;
+    max-height: 62px;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+    border-radius: 6px;
+    transform: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-cutin-diagonal-banner {
+    padding: 5px;
+    gap: 6px;
+    min-height: 0;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-cutin-portrait {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-cutin-shout {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-cutin-sub {
+    display: none;
+  }
+
+  /* The general ultimate tutorial stylesheet expanded this button to 148px.
+     Override it specifically during bosses; retain a 56px touch target. */
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-control .survivors-ultimate-btn {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    padding: 4px 3px 9px;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 10px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-control .survivors-ultimate-info {
+    align-items: center;
+    line-height: 1.1;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-control .survivors-ultimate-info :is(strong, em) {
+    display: none;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-control .survivors-ultimate-info small {
+    font-size: 9px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-control .survivors-ultimate-icon {
+    font-size: 19px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-ultimate-meter {
+    left: 5px;
+    right: 5px;
+    bottom: 4px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-tactical-actions {
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 67px);
+  }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+  .survivors-container.is-combat.is-boss-fight :is(
+    .survivors-encounter-notice,
+    .survivors-wave-director-notice,
+    .survivors-signature-event,
+    .survivors-counterplay-banner,
+    .survivors-mastery-notice,
+    .survivors-wave-supply-notice,
+    .survivors-evo-banner,
+    .survivors-director-cutin-layer
+  ) {
+    width: min(320px, calc(100% - 16px));
+    max-height: 58px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-director-cutin-layer {
+    height: 58px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status strong {
+    max-width: 28%;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-focus-status span {
+    max-width: 38%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 480px) {
+  .survivors-container.is-combat.is-boss-fight :is(
+    .survivors-encounter-notice,
+    .survivors-wave-director-notice,
+    .survivors-signature-event,
+    .survivors-counterplay-banner,
+    .survivors-mastery-notice,
+    .survivors-wave-supply-notice,
+    .survivors-evo-banner,
+    .survivors-director-cutin-layer
+  ) {
+    width: min(240px, 32vw);
+    max-height: 52px;
+    padding: 4px 6px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-director-cutin-layer {
+    height: 52px;
+  }
+  .survivors-container.is-combat.is-boss-fight .survivors-cutin-portrait {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+}
