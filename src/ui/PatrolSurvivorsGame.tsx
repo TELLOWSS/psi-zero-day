@@ -169,6 +169,7 @@ import {
 import './patrol-survivors.css';
 import './survivors-event-visibility.css';
 import './tactical-ui.css';
+import './survivors-boss-mobile.css';
 
 interface PatrolSurvivorsGameProps {
   onExit: () => void;
@@ -3528,10 +3529,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
 
   const encounterLocked=!!engineRef.current?.state.bossEncounter&&engineRef.current.state.bossEncounter.phase!=='combat';
+  const bossFightVisible=phase==='playing' && Boolean(bossAlert || bossSecured || engineRef.current?.state.bossEncounter || engineRef.current?.state.hazards.some(h=>h.isStageBoss&&h.hp>0));
   return (
     <div
       ref={containerRef}
-      className={`survivors-container${phase === 'playing' ? ' is-combat' : ''}`}
+      className={`survivors-container${phase === 'playing' ? ' is-combat' : ''}${bossFightVisible ? ' is-boss-fight' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEndOrCancel}
