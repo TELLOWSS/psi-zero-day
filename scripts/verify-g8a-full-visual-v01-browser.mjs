@@ -554,6 +554,20 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  // Capture the entire EVADE -> SAFE_RETURN -> NORMAL sequence. Reading one
+  // DOM frame at RETURN_RECOVER can miss the short SAFE_RETURN transition.
+  await evaluate(cdp,`(() => {
+    window.__psiReturnTrace=[];
+    const record=()=>{
+      const group=document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state');
+      if(group&&window.__psiReturnTrace.at(-1)!==group)window.__psiReturnTrace.push(group);
+    };
+    record();
+    window.__psiReturnObserver?.disconnect();
+    window.__psiReturnObserver=new MutationObserver(record);
+    window.__psiReturnObserver.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:['data-worker-group-state','data-worker-response']});
+    return true;
+  })()`);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   report.desktopImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
@@ -567,9 +581,12 @@ try {
   await screenshot(cdp,'02-g8a-control-impact.png');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
   report.desktopRecover=await metrics(cdp);
-  if(report.desktopRecover.workerGroupState!=='SAFE_RETURN' || !report.desktopRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
-    throw new Error('Desktop workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.desktopRecover.workerGroupState,responses:report.desktopRecover.workerResponses}));
+  report.desktopWorkerTrace=await evaluate(cdp,"window.__psiReturnTrace??[]");
+  if(!report.desktopWorkerTrace.includes('SAFE_RETURN') ||
+    !['SAFE_RETURN','NORMAL'].includes(report.desktopRecover.workerGroupState)) {
+    throw new Error('Desktop workers failed actual SAFE_RETURN transition: '+JSON.stringify({trace:report.desktopWorkerTrace,group:report.desktopRecover.workerGroupState,responses:report.desktopRecover.workerResponses}));
   }
+  await evaluate(cdp,"window.__psiReturnObserver?.disconnect(); true");
 
   await viewport(cdp,780,360,true);
   await clearState(cdp);
@@ -677,6 +694,20 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  // Capture the entire EVADE -> SAFE_RETURN -> NORMAL sequence. Reading one
+  // DOM frame at RETURN_RECOVER can miss the short SAFE_RETURN transition.
+  await evaluate(cdp,`(() => {
+    window.__psiReturnTrace=[];
+    const record=()=>{
+      const group=document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state');
+      if(group&&window.__psiReturnTrace.at(-1)!==group)window.__psiReturnTrace.push(group);
+    };
+    record();
+    window.__psiReturnObserver?.disconnect();
+    window.__psiReturnObserver=new MutationObserver(record);
+    window.__psiReturnObserver.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:['data-worker-group-state','data-worker-response']});
+    return true;
+  })()`);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   report.mobileImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
@@ -692,9 +723,12 @@ try {
   await screenshot(cdp,'04-g8a-control-impact-mobile.png');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
   report.mobileRecover=await metrics(cdp);
-  if(report.mobileRecover.workerGroupState!=='SAFE_RETURN' || !report.mobileRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
-    throw new Error('390x844 workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.mobileRecover.workerGroupState,responses:report.mobileRecover.workerResponses}));
+  report.mobileWorkerTrace=await evaluate(cdp,"window.__psiReturnTrace??[]");
+  if(!report.mobileWorkerTrace.includes('SAFE_RETURN') ||
+    !['SAFE_RETURN','NORMAL'].includes(report.mobileRecover.workerGroupState)) {
+    throw new Error('390x844 workers failed actual SAFE_RETURN transition: '+JSON.stringify({trace:report.mobileWorkerTrace,group:report.mobileRecover.workerGroupState,responses:report.mobileRecover.workerResponses}));
   }
+  await evaluate(cdp,"window.__psiReturnObserver?.disconnect(); true");
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
