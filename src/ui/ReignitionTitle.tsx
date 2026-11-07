@@ -25,6 +25,8 @@ export interface ReignitionTitleProps {
  readonly emblem:string;
  readonly heroWide:string;
  readonly heroPortrait:string;
+ readonly crew?:readonly {id:string;uri:string;name:string;role:string}[];
+ readonly onMap?:()=>void;
  readonly onGuard?:()=>void;
  readonly onWatch?:()=>void;
  readonly onStory:()=>void;
@@ -83,6 +85,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     <button type="button" className="rg-rail-primary" onClick={heroGo} disabled={!heroGo}><span aria-hidden="true">◈</span> 작전 개시</button>
     <button type="button" onClick={scrollToMissions}><span aria-hidden="true">◫</span> 작전 선택</button>
     <button type="button" onClick={props.onJournal}><span aria-hidden="true">▥</span> 작전 기록</button>
+    <button type="button" onClick={props.onMap}><span aria-hidden="true">◉</span> 스토리 진행 경로</button>
     <button type="button" onClick={props.onPeople}><span aria-hidden="true">♧</span> 대원 정보</button>
     <button type="button" onClick={props.onGuide}><span aria-hidden="true">◇</span> 현장 안내</button>
     <button type="button" onClick={props.onSong}><span aria-hidden="true">♫</span> OST</button>
@@ -96,6 +99,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      </picture>
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
      <div className="rg-hero-shade" aria-hidden="true"/>
+     <div className="rg-cinematic-rings" aria-hidden="true"><span/><span/></div>
      <div className="rg-hero-content">
       <span className="rg-hero-eyebrow">{active.eyebrow}</span>
       <div className="rg-hero-update"><span aria-hidden="true" className="rg-led"/> MAJOR UPDATE · NOVEMBER 2026</div>
@@ -112,7 +116,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
 
     <section className="rg-missions" id="reignition-missions" aria-labelledby="rg-missions-title">
      <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">새로운 전선, 두 개의 선택.</h2></div><span>ENDGAME · 2026.11</span></div>
-     <div className="rg-mission-grid">
+     <div className="rg-mission-grid" data-compact-entry="full-card">
       <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard}>
        <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="eager" decoding="async"/>
        <span className="rg-card-screen"/>
@@ -143,6 +147,12 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      <button type="button" onClick={props.onJournal}><span>▤</span><strong>기록·성취</strong><small>PROGRESS / ARCHIVE</small></button>
      <button type="button" onClick={props.onGuide}><span>▧</span><strong>현장 안내</strong><small>GUIDE / FIELD</small></button>
     </section>
+    {props.crew?.length?<details className="rg-crew-reveal">
+      <summary>함께한 현장 동료 <span>CREW ARCHIVE / {props.crew.length} MEMBERS</span></summary>
+      <div className="rg-crew-grid">{props.crew.map(member=><figure key={member.id} data-character={member.id} data-art-surface="main">
+        <img src={member.uri} alt="" loading="lazy" decoding="async"/><figcaption><strong>{member.name}</strong><small>{member.role}</small></figcaption>
+      </figure>)}</div>
+     </details>:null}
    </div>
   </div>
   <section className="rg-release">
@@ -151,7 +161,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    </button>
    {releaseOpen?<div id="rg-release-detail" className="rg-release-items"><p><strong>시그널 가드</strong> 6개 작전 완료 이후 더 강한 적 특성과 새로운 대응 과제. 마스터 별도 기록.</p><p><strong>시그널 워치</strong> 50스테이지 완주 이후 마스터 난이도. 보스 경고·회피·약점 파악이 중요합니다.</p><p><strong>복귀 유저</strong> 기존 저장기록 유지, 완료 수치 표시, 다음 마스터 목표 자동 안내.</p></div>:<div id="rg-release-detail" hidden/>}
   </section>
-  <footer className="rg-footer"><span>PSI : ZERO DAY</span><span>RE:IGNITION · BUILD PEOPLE A SAFER TOMORROW</span><span>MAIN MENU DESIGN STUDY · A / B / C / D</span></footer>
+  <footer className="rg-footer"><span>PSI : ZERO DAY</span><span>RE:IGNITION · BUILD PEOPLE A SAFER TOMORROW</span><span>VETERAN EDITION · 2026.11</span></footer>
   {settings?<div className="rg-settings-backdrop" role="presentation" onClick={()=>setSettings(false)}>
    <section role="dialog" aria-modal="true" aria-labelledby="rg-settings-title" className="rg-settings-panel" onClick={e=>e.stopPropagation()}>
     <header><h2 id="rg-settings-title">게임·화면 설정</h2><button type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>

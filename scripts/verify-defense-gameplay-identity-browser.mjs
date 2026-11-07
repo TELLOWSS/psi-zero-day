@@ -347,7 +347,7 @@ async function navigateHome() {
   const loaded = cdp.once('Page.loadEventFired');
   await cdp.send('Page.navigate', { url: baseUrl });
   await loaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
 }
 
 async function rectOf(selector) {
@@ -376,7 +376,7 @@ function assertInsideViewport(rect, label) {
  */
 async function enterLegacyTrainingViaGuard() {
   const launched = await evaluate(cdp, `(() => {
-    const primary=document.querySelector('button[data-title-primary-cta="defense"]');
+    const primary=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');
     if(!(primary instanceof HTMLButtonElement))return false;
     primary.click();
     return true;

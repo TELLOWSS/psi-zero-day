@@ -203,3 +203,5 @@
 .guard-mastery-choice button { padding: .65rem 1rem; border: 1px solid #6c93aa; border-radius: 8px; background: #163344; color: #eaf7ff; cursor: pointer; }
 .guard-mastery-choice button[aria-pressed="true"] { border-color: #9ce8ec; background: #1a586b; font-weight: 700; }
 .guard-mastery-choice small { color: #c4d7e5; line-height: 1.5; }
+
+.guard-veteran-objective{margin:14px 0 5px;padding:13px 15px;border-left:3px solid #f0c980;background:linear-gradient(90deg,#334a52,#0e293a5a);border-radius:0 9px 9px 0;display:grid;gap:4px}.guard-veteran-objective span{font-size:10px;color:#f5ce8a;font-weight:850;letter-spacing:.12em}.guard-veteran-objective strong{font-size:17px;color:#f6f2e9}.guard-veteran-objective small{font-size:11px;color:#c0d6dc;line-height:1.6}

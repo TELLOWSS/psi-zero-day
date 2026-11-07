@@ -74,7 +74,7 @@ async function viewport(cdp,width,height,mobile){
 async function navigate(cdp){
   const loaded=cdp.once('Page.loadEventFired',15000);
   await cdp.send('Page.navigate',{url:baseUrl});await loaded;
-  await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp,"Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
 }
 function fnv1a32(value){let hash=0x811c9dc5;for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,0x01000193);}return 'fnv1a32:'+(hash>>>0).toString(16).padStart(8,'0');}
 
@@ -188,7 +188,7 @@ async function enterPersistedRun(cdp,name){
   await installTelemetry(cdp);
   // Current hub enters GUARD first; its Practice control routes to the
   // original training persistence contract tested by these G8-A fixtures.
-  await trustedClick(cdp,"document.querySelector('button.is-defense-entry:not(:disabled)')",'GUARD hub entry');
+  await trustedClick(cdp,"document.querySelector('button.rg-card.is-guard:not(:disabled),button.is-defense-entry:not(:disabled)')",'GUARD hub entry');
   await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen=\"guard-home\"]'))");
   await trustedClick(cdp,"document.querySelector('[data-defense-screen=\"guard-home\"] footer button')",'training practice entry');
   // A valid saved legacy scenario may differ from the now-default training-ramp-v1.

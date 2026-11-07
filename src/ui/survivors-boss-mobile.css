@@ -264,3 +264,5 @@
     flex-basis: 40px;
   }
 }
+
+.survivors-veteran-medal{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin:11px 0 8px;color:#f0d29a}.survivors-veteran-medal>b{font-size:11px;letter-spacing:.13em}.survivors-veteran-medal>strong{font-size:23px;font-variant-numeric:tabular-nums}.survivors-veteran-medal>strong small{font-size:12px}.survivors-veteran-medal progress{flex:1;min-width:100px;height:7px;accent-color:#efcb89}.survivors-mastery-lock-warning{display:grid;gap:4px;margin-top:7px;padding:9px 11px;border:1px solid #f8939b;background:#4a1b2dbd;border-radius:8px;color:#fff1e2}.survivors-mastery-lock-warning strong{color:#ffe0b0;font-size:12px}.survivors-mastery-lock-warning small{color:#ffe0e6;font-size:11px;line-height:1.4}.survivors-mastery-lock-warning progress{height:5px;width:100%;accent-color:#ff8f9b}@media(max-width:600px){.survivors-mastery-lock-warning{padding:6px 8px}.survivors-mastery-lock-warning strong{font-size:11px}.survivors-mastery-lock-warning small{font-size:10px}}

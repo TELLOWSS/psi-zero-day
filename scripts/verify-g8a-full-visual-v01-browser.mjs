@@ -136,7 +136,7 @@ async function navigate(cdp) {
   const loaded = cdp.once('Page.loadEventFired', 15000);
   await cdp.send('Page.navigate', { url: baseUrl });
   await loaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
   await sleep(220);
 }
 async function clearState(cdp) {
@@ -250,7 +250,7 @@ function representativeDefenseSave(impact = false) {
 /** Navigate the current Signal Guard CTA, then select its real training practice button. */
 async function enterLegacyTrainingViaGuard(cdp) {
   const opened=await evaluate(cdp,`(() => {
-    const button=document.querySelector('button[data-title-primary-cta="defense"]');
+    const button=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');
     if(!(button instanceof HTMLButtonElement))return false;
     button.click();return true;
   })()`);

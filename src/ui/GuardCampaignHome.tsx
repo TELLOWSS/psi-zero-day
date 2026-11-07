@@ -31,6 +31,7 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
     <div className="guard-veteran-copy"><small>RE:IGNITION · SIGNAL GUARD / VETERAN</small>
       <h2>6개 작전을 마쳤다면, 이제 공략을 증명할 차례.</h2>
       <p>일반 클리어와 마스터 최고기록은 별도로 유지됩니다. 작전마다 중점 위협과 실드 손실 조건이 달라집니다.</p>
+      <div className="guard-veteran-objective" data-guard-replay-objective="true"><span>다음 전술 목표</span><strong>GD-0{guardContents.indexOf(priority)+1} · {t('guard.gd0'+(guardContents.indexOf(priority)+1)+'.title')}</strong><small>마스터 최고 ★{document.records.find(r=>r.scenarioId===priority.scenario.id)?.bestMasteryStars??0}/3 · {priority.waves.length}개 웨이브 · 적 특성에 따른 타워 재배치</small></div>
     </div>
     <div className="guard-veteran-record" aria-label={`마스터 별 세 개 달성 ${mastered}개 중 6개`}>
       <strong>{mastered}<span>/ 6</span></strong><small>MASTER ★★★</small>

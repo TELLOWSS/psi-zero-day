@@ -400,6 +400,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     emblem={homePremiumArt.mark.uri}
     heroWide={homePremiumArt.assets.wide.uri}
     heroPortrait={homePremiumArt.assets.portrait.uri}
+    crew={featured.map(id=>({id,uri:characterMapUri(id,resolve),name:session.character(id)?.name??id,role:session.character(id)?.role??''}))}
+    onMap={()=>setPage('map')}
     onGuard={onDefense?()=>onDefense('guard-campaign'):undefined}
     onWatch={onSurvivors}
     onStory={onPlay}

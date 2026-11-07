@@ -81,7 +81,7 @@ async function verifyStage(page, width, height, expectedEvent) {
       page.on('pageerror',err=>errors.push(err.message));
       try{
         await page.goto(base,{waitUntil:'domcontentloaded'});
-        const start=page.locator('button.is-story-entry:not(:disabled)');
+        const start=page.locator('button.rg-story-button:not(:disabled),button.is-story-entry:not(:disabled)');
         await start.scrollIntoViewIfNeeded();
         await start.click({timeout:10000});
         await page.locator('.episode-cold-open-cta').click({timeout:30000});
