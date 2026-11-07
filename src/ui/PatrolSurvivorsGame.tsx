@@ -172,6 +172,8 @@ import './survivors-event-visibility.css';
 import './tactical-ui.css';
 import './survivors-boss-mobile.css';
 import './psi-experience-ui.css';
+import './combat-hud-clarity.css';
+import {watchBossTacticalCue} from './combat-ux-cues';
 import {MissionStatusRail} from './MissionStatusRail';
 
 interface PatrolSurvivorsGameProps {
@@ -3554,7 +3556,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {/* TOP COMPACT HUD */}
       <header className="survivors-hud-top" role="toolbar" aria-label="순찰 상황판">
-        <div className="survivors-player-hud">
+        <div className="survivors-player-hud" data-health={maxHp>0&&hp/maxHp<=.3?"critical":"normal"}>
           <div className="survivors-hp-container">
             <span className="survivors-level-tag">LV {level}</span>
             {liveGear && liveGear.equipped.length>0 && <span className="survivors-premium-hp-badge" aria-label={storeText.status} title={liveGear.equipped.map(id=>storeText.items[id as keyof typeof storeText.items].name).join(' · ')}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===liveGear.equipped[0])!}/>{liveGear.equipped.length>1&&<small>+{liveGear.equipped.length-1}</small>}</span>}
@@ -3691,12 +3693,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
         const deadline = Math.max(0, operationPlan(state.stage,state.maxTime).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
-        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss,state.difficulty):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
+        const bossCue=boss?watchBossTacticalCue(bossCoreStatus(boss,state.difficulty),boss.bossGameplay?.combatPhase??boss.motion?.phase):null;
+        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss,state.difficulty):undefined} data-tactical={bossCue?.tone} aria-label={bossSecured ? bossText.secured : boss ? `${state.stage.bossName} · ${bossCue?.label}` : focusText.bossIncoming}>
           {bossSecured ? <span>{bossText.secured}</span> : boss ? <>
             <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
             <strong>{state.stage.bossName}</strong>
             <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
-            <span>{bossCombatReadout(boss)} · {bossRisk}% · 궁극기 면역</span>
+            <span className="survivors-focus-action" title={`궁극기 면역 · ${bossCombatHint(boss)}`}>{bossCue?.label} · {bossRisk??Math.ceil(boss.hp/boss.maxHp*100)}%</span>
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}

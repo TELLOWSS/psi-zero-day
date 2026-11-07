@@ -1,0 +1,92 @@
+/* RE:IGNITION combat HUD clarity, presentation only. Field and canvas untouched. */
+.zb-shell[data-map^="guard-gd-"] .zb-hud .zb-meter {
+ border:1px solid #9ac2bb34;
+ background:linear-gradient(165deg,#1b3b46be,#0b232fa8);
+ border-radius:10px;
+ box-shadow:inset 0 1px #ffffff12;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-hud .zb-meter[data-guard-metric="shield"] {
+ border-color:#b9dbce66;
+}
+.zb-shell[data-map^="guard-gd-"][data-guard-mastery=true] .zb-hud .zb-meter[data-guard-metric="wave"] {
+ border-color:#f2d39778;
+}
+.zb-shell[data-map^="guard-gd-"].is-critical-shield .zb-hud .zb-meter[data-guard-metric="shield"]{
+ border-color:#f1a6a0;
+ background:linear-gradient(135deg,#71333be8,#321d30eb);
+}
+.zb-shell[data-map^="guard-gd-"] .zb-tactics-strip {
+ transition:border-color .16s ease,background .16s ease;
+ border-bottom:1px solid #71918d58;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-tactics-strip[data-guard-tactical="critical"] {
+ background:linear-gradient(90deg,#512a36e0,#172b34c6);
+ border-bottom-color:#f0ada8b4;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-tactics-strip[data-guard-tactical="critical"] .guard-next-intel strong {
+ color:#ffd1c7;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-tactics-strip[data-guard-tactical="hold"] .guard-next-intel strong {
+ color:#f4dba1;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-tactics-strip[data-guard-tactical="engaged"] .guard-next-intel strong {
+ color:#d5f2e9;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-estop-btn:not(:disabled) {
+ border:1px solid #ffd6b7;color:#fff9ed;
+ background:linear-gradient(130deg,#b8444b,#7e293b);
+ box-shadow:inset 0 1px #ffffff47,0 3px 12px #0005;
+}
+.zb-shell[data-map^="guard-gd-"] .zb-start-wave:not(:disabled) {
+ border:1px solid #ffeed0;background:linear-gradient(130deg,#f5dba9,#dfb96f);
+ color:#172b2d;
+}
+.survivors-container .survivors-hud-top{
+ background:linear-gradient(120deg,#142b34ed,#0b1b28ed);
+ border-color:#91b8ab62;border-radius:12px;
+ box-shadow:inset 0 1px #ffffff1a,0 8px 22px #0006;
+}
+.survivors-container .survivors-player-hud[data-health="critical"] .survivors-hp-bar-bg{
+ box-shadow:0 0 0 2px #ffaaa75c,0 0 11px #ee766b75;
+}
+.survivors-container .survivors-player-hud[data-health="critical"] .survivors-hp-text {
+ color:#ffd1c6;font-weight:900;
+}
+.survivors-container.is-combat .survivors-tactical-actions button:not(:disabled){
+ border-color:#9ac4bb8c;
+ background:linear-gradient(145deg,#245160,#102d39);
+ box-shadow:inset 0 1px #ffffff19,0 4px 12px #0004;
+}
+.survivors-container.is-combat .survivors-tactical-actions button:focus-visible{
+ outline:3px solid #f4d39c;outline-offset:3px;
+}
+.survivors-container.is-combat .survivors-tactical-actions button:disabled{
+ opacity:.64;filter:saturate(.7);
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status{
+ border-color:#91b0b28a;background:linear-gradient(120deg,#102733f2,#172d37ed);
+ box-shadow:inset 0 1px #ffffff19,0 4px 16px #0004;
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status[data-tactical="dodge"] {
+ border-color:#f1b69c9c;
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status[data-tactical="attack"] {
+ border-color:#9be6b8c2;background:linear-gradient(110deg,#123b39f2,#0e3039ed);
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status .survivors-focus-action{
+ font-weight:850;letter-spacing:-.015em;font-size:11px;
+ color:#e3ebec;
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status[data-tactical="attack"] .survivors-focus-action{
+ color:#aaf3ca;
+}
+.survivors-container.is-combat.is-boss-fight .survivors-focus-status[data-tactical="dodge"] .survivors-focus-action{
+ color:#ffd5bc;
+}
+@media(orientation:landscape) and (max-height:480px){
+ .survivors-container.is-combat.is-boss-fight .survivors-focus-status .survivors-focus-action{font-size:10px}
+ .zb-shell[data-map^="guard-gd-"] .zb-tactics-strip{transition:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .zb-shell[data-map^="guard-gd-"] .zb-tactics-strip{transition:none!important}
+}
