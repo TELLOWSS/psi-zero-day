@@ -142,7 +142,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       </div>
       <div className="rg-hero-buttons">
        <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?mission.label:active.primary}</button>
-       <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>가드 / 워치 선택 <span aria-hidden="true">↓</span></button>
+       <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>두 게임 보기 <span aria-hidden="true">↓</span></button>
       </div>
       <div className="rg-hero-caption"><span aria-hidden="true">✦</span><span>WATCH THE SIGNAL. MAKE THE CALL.</span></div>
      </div>
