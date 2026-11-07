@@ -38,7 +38,7 @@ export interface DefensePersistenceController {
   readonly lastSavedAt: string | null;
   readonly conflict: boolean;
   readonly awardedCosmeticIds: readonly string[];
-  startWithSupport(supportId: DefenseSupportId, portrait: boolean, launchContent?: DefenseContent): void;
+  startWithSupport(supportId: DefenseSupportId, portrait: boolean, launchContent?: DefenseContent, masteryRun?: boolean): void;
   resumeSavedRun(): void;
   discardSavedRun(): Promise<boolean>;
   dispatch(command: DefenseCommand): DefenseRunState | null;
