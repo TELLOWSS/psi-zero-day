@@ -45,6 +45,28 @@ function validate(entry){
  }catch(error){return {label:entry.label,path:entry.path,status:'invalid',message:String(error)};}
 }
 const report=resources.map(validate);
-const ready=report.every(r=>r.status==='present');
-console.log(JSON.stringify({name:'OMEGA_OPERATOR_ART',playableArtReady:ready,resources:report},null,2));
-if(process.argv.includes('--release')&&!ready)process.exitCode=1;
+const isRelease=process.argv.includes('--release');
+let ready=report.every(r=>r.status==='present');
+let pixelApproval=null;
+const approvalManifest='content/art/omega-production-art-approval.json';
+if(isRelease){
+ // Even complete PNG headers cannot certify non-mirrored, artist-authored art.
+ if(!existsSync(join(root,approvalManifest))){
+  ready=false;
+  pixelApproval={status:'missing',reason:'Artist provenance and signed-off SHA256 are required'};
+ }else if(ready){
+  try{
+   const {auditOmegaMotionStudy}=await import('./audit-omega-motion-study.mjs');
+   const pixels=await auditOmegaMotionStudy(join(root,'public/assets/omega/aira-contact-8x6.png'),join(root,approvalManifest));
+   pixelApproval={status:pixels.interpretation.playableArtReady?'pass':'fail',checks:pixels.interpretation.releaseBlockers,
+    mirror:pixels.evidence.mirroredNWNE,sha256Matches:pixels.input.sha256Matches};
+   ready=ready&&pixels.interpretation.playableArtReady;
+  }catch(error){ready=false;pixelApproval={status:'error',reason:String(error)};}
+ }else{
+  ready=false;
+  pixelApproval={status:'blocked',reason:'Required runtime resources are missing'};
+ }
+}
+console.log(JSON.stringify({name:'OMEGA_OPERATOR_ART',playableArtReady:ready,resources:report,
+ ...(isRelease?{pixelApproval}:{} )},null,2));
+if(isRelease&&!ready)process.exitCode=1;
