@@ -31,9 +31,9 @@ it('uses the authored gas signature warning without speaking for unrelated vapor
 });
 it('opens the actual designated boss core once per phase, not on mere spawn or ordinary targets',()=>{
  const {direction,state}=session();const boss:Hazard={id:'boss',type:'CRANE_BOSS',x:state.player.x,y:state.player.y,hp:8,maxHp:100,speed:0,radius:20,damage:0,expValue:0,isStageBoss:true,bossEncounterManaged:true,bossPhase:2,bossAttackCycles:0,motion:{phase:'cooldown',timer:1,directionX:0,directionY:0}};
- state.hazards=[boss];expect(direction.observe(state)).toBeUndefined();boss.bossAttackCycles=1;
+ state.hazards=[boss];expect(direction.observe(state)).toBeUndefined();boss.bossAttackCycles=2;
  expect(direction.observe(state)?.cue).toBe('CORE_OPEN');expect(direction.observe(state)).toBeUndefined();
- boss.bossAttackCycles=0;direction.observe(state);boss.bossAttackCycles=1;expect(direction.observe(state)).toBeUndefined();
+ boss.bossAttackCycles=0;direction.observe(state);boss.bossAttackCycles=2;expect(direction.observe(state)).toBeUndefined();
 });
 it('consumes lower priority facts behind urgent warnings instead of queuing stale chatter',()=>{
  const {direction,state}=session();state.activePerks.satellite_broadcast=1;state.resolvedWorkers=[{id:'worker',x:0,y:0,remaining:3}];state.player.hp=state.player.maxHp*.2;

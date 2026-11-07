@@ -11,6 +11,8 @@ function setup(difficulty:'standard'|'mastery'='standard'){
  state.stageBossSpawned=true;
  state.player.x=700;state.player.y=450;state.player.invincibleTime=999;
  state.nextLevelExp=1e9;
+ // Remove automatic starting weapon so this spec isolates the ultimate itself.
+ for(const id of Object.keys(state.activePerks) as Array<keyof typeof state.activePerks>)state.activePerks[id]=0;
  const boss:Hazard={id:'test-boss',type:'CRANE_BOSS',x:700,y:450,hp:1000,maxHp:1000,speed:0,radius:34,damage:0,expValue:1,
   isStageBoss:true,bossEncounterManaged:true,motion:{phase:'warning',timer:1.4,directionX:0,directionY:0},
   bossGameplay:createBossCombat(bossGameplayForStage('stage_14'))};

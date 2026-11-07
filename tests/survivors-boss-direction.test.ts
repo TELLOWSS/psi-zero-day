@@ -21,7 +21,7 @@ it('suppresses decoration during danger trajectories and marks only locked or ex
  const {s,h}=fixture();s.bossEncounter!.phase='combat';h.hp=50;
  expect(bossPresentationPose(s,h,false,false)!.phase).toBe('interlocked');
  for(const phase of ['warning','charge','fall'] as const){h.motion!.phase=phase;expect(bossPresentationPose(s,h,false,false)).toBeNull();}
- h.bossPhase=2;h.bossAttackCycles=1;h.motion!.phase='cooldown';expect(bossPresentationPose(s,h,false,false)!.phase).toBe('exposed');
+ h.bossPhase=2;h.bossAttackCycles=2;h.motion!.phase='cooldown';expect(bossPresentationPose(s,h,false,false)!.phase).toBe('exposed');
  h.motion!.phase='approach';expect(bossPresentationPose(s,h,false,false)).toBeNull();
 });
 it('retains one immutable control remnant, fades it, and clears it on session change',()=>{

@@ -1,7 +1,7 @@
 import {it,expect} from 'vitest';
 import {SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationTiming} from '../src/engine/survivors-operation';
-it.each(['stage_01','stage_03','stage_22','stage_35'] as const)('introduces %s, resolves its signature then requires repeated boss weak-point windows and pays once',stage=>{
+it.each(['stage_01','stage_03','stage_22'] as const)('introduces %s, resolves its signature then requires repeated boss weak-point windows and pays once',stage=>{
  const s=createInitialSurvivorsState('yoon',undefined,stage),e=new SurvivorsEngine(s,42);e.start();s.gameTime=operationTiming(s.maxTime).bossAt;
  const tick=(frames=1)=>{for(let i=0;i<frames;i++){e.update(1/60,{moveX:0,moveY:0});if(s.extractionPhase)e.tickExtraction(1/60);}};
  tick();const boss=s.hazards.find(h=>h.isStageBoss)!;

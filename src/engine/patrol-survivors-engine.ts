@@ -2158,7 +2158,7 @@ export class SurvivorsEngine {
         }
       }
       for(const h of hazards){
-        const zone=hitGangformZone(h,p,previous,this.state.player);
+        const zone=hitGangformZone(h,p,previous,this.state.player,this.state.difficulty??'standard');
         if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
       }
       if(p.duration<=0||p.pierce<=0)continue;
