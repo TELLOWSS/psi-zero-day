@@ -7,6 +7,8 @@
   --rg-accent:#f2d3a3;
   background:#070e14;
   color:var(--rg-text);
+  /* Decorative hero layers must never enlarge the mobile document width. */
+  overflow-x:clip;
 }
 .rg-home[data-reignition-concept=cinematic] .rg-header {
   min-height:76px;
@@ -427,6 +429,7 @@
  .rg-home .rg-header-tools button:nth-child(2):before {content:"?";font-size:18px}
  .rg-home .rg-header-tools button:last-child span {font-size:17px}
  .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary{width:40px;min-height:42px;padding:7px 3px}
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance .rg-theme-picker{position:fixed;top:62px;left:auto;right:10px;width:min(330px,calc(100vw - 20px))}
  .rg-home[data-reignition-concept=cinematic] .rg-hero{
   min-height:620px!important;padding:46px 17px 67px!important;
  }
