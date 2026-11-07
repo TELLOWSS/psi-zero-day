@@ -8,6 +8,9 @@ on:
       - 'src/ui/GameHub.tsx'
       - 'src/ui/ReignitionTitle.tsx'
       - 'src/ui/reignition-title.css'
+      - 'src/ui/GuardCampaignHome.tsx'
+      - 'src/ui/reignition-modes.css'
+      - 'tests/reignition-modes.test.tsx'
       - 'tests/reignition-title.test.ts'
       - 'src/ui/psi-experience-ui.css'
       - 'src/ui/useDialogFocus.ts'
@@ -27,6 +30,9 @@ on:
       - 'src/ui/GameHub.tsx'
       - 'src/ui/ReignitionTitle.tsx'
       - 'src/ui/reignition-title.css'
+      - 'src/ui/GuardCampaignHome.tsx'
+      - 'src/ui/reignition-modes.css'
+      - 'tests/reignition-modes.test.tsx'
       - 'tests/reignition-title.test.ts'
       - 'src/ui/psi-experience-ui.css'
       - 'src/ui/useDialogFocus.ts'
@@ -65,7 +71,7 @@ jobs:
         run: npm ci
 
       - name: Commercial presentation contracts
-        run: npx vitest run tests/main-title-layout.test.ts tests/commercial-presentation-upgrade.test.ts tests/reignition-title.test.ts tests/psi-experience-ui.test.tsx tests/endgame-home.test.ts tests/endgame-hub-ui.test.ts
+        run: npx vitest run tests/main-title-layout.test.ts tests/commercial-presentation-upgrade.test.ts tests/reignition-title.test.ts tests/psi-experience-ui.test.tsx tests/reignition-modes.test.tsx tests/endgame-home.test.ts tests/endgame-hub-ui.test.ts
 
       - name: Typecheck
         run: npm run typecheck

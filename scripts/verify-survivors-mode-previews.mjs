@@ -14,7 +14,7 @@ try{
     page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push(String(error)));
     await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
     await page.locator('.rg-home,.commercial-title-home').waitFor();
-    const images=[],entries=[];
+    const images=[],entries=[],seasonScreens=[];
     for(const mode of ['defense','story']){
       const entry=page.locator(mode==='defense'?'button.rg-card.is-guard,button.is-defense-entry':'button.rg-story-button,button.is-story-entry').first();
       const image=await (mode==='story'&&await page.locator('.rg-home').count()?page.locator('.rg-hero-art'):entry.locator('img')).evaluate(async image=>{
@@ -24,12 +24,31 @@ try{
       // Both cards now enter live modes. The former locked-preview contract is retired.
       await entry.click();
       await page.locator(mode==='defense'?'[data-defense-screen="guard-home"]':'.game-frame').waitFor();
+      if(mode==='defense'){
+        const guard=page.locator('.guard-home[data-reignition-season="2026"]');
+        await guard.waitFor();
+        const stageCount=await guard.locator('[data-reignition-card="command"]').count();
+        const intro=await guard.locator('.guard-season-hero-copy').boundingBox();
+        if(stageCount!==6||!intro||intro.height<140)throw new Error('Guard command center missing genuine stages or hero: '+JSON.stringify({stageCount,intro}));
+        const svg=await page.request.get(new URL('/assets/reignition/guard-sector-command.svg',baseUrl).href);
+        if(!svg.ok())throw new Error('Guard RE:IGNITION overlay asset not served');
+        seasonScreens.push({mode:'guard',stageCount,heroHeight:intro.height});
+      }
       entries.push({mode,entered:true});
       await page.screenshot({path:path.join(out,`${width}x${height}-${mode}.png`)});
       await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
       await page.locator('.rg-home,.commercial-title-home').waitFor();
     }
     await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();
+    const watch=page.locator('.survivors-ready-dialog[data-reignition-ui="watch-v2"]');
+    await watch.waitFor();
+    const showcase=await watch.locator('.sw-season-showcase').boundingBox();
+    const watchOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+    if(!showcase||showcase.height<94||watchOverflow)throw new Error('Watch survival season frame invalid: '+JSON.stringify({showcase,watchOverflow}));
+    const svg=await page.request.get(new URL('/assets/reignition/watch-omega-reactor.svg',baseUrl).href);
+    if(!svg.ok())throw new Error('Watch RE:IGNITION omega art not served');
+    await page.screenshot({path:path.join(out,`${width}x${height}-watch-season-ready.png`),animations:'disabled'});
+    seasonScreens.push({mode:'watch',showcaseHeight:showcase.height,showcaseWidth:showcase.width});
     await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
     const canvas=page.locator('.survivors-container canvas').first();
     await page.waitForTimeout(1500);
@@ -54,7 +73,7 @@ try{
       return image.width>=900&&image.height>=650; // Other home variants
     });
     const pass=artValid&&entries.length===2&&nonblank&&!overflow&&!errors.length;
-    results.push({width,height,images,entries,nonblank,overflow,errors,pass});await page.close();
+    results.push({width,height,images,entries,seasonScreens,nonblank,overflow,errors,pass});await page.close();
   }
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({baseUrl,results},null,2));
   console.log(JSON.stringify(results));if(results.some(result=>!result.pass))process.exitCode=1;
