@@ -28,6 +28,14 @@ export function EndgameHomeDeck({status,onGuard,onWatch}:{status:EndgameHomeStat
     </div>
    </article>
   </div>
+  <details className="hub-endgame-release" aria-label="2026년 11월 게임 업데이트의 핵심 변경사항">
+   <summary>이번 업데이트, 무엇이 달라졌나요? <span aria-hidden="true">+</span></summary>
+   <div className="hub-endgame-release-grid">
+    <section><small>GUARD / TACTICS</small><strong>상대에 맞춰 다시 짜는 방어</strong><p>마스터 작전은 웨이브마다 주요 위험과 실드 손실 기준을 알리고, 일반 기록과 별도로 평가합니다.</p></section>
+    <section><small>WATCH / SURVIVAL</small><strong>최고 성장 이후의 새 공략</strong><p>50개 스테이지 완주 시 새 마스터 난이도가 열립니다. 장비 화력 외에 패턴 회피와 위치 판단을 요구합니다.</p></section>
+    <section><small>RECORD / PROGRESS</small><strong>진행 기록을 이어서</strong><p>기존 클리어와 성장 기록을 유지합니다. 홈 작전판에는 각 모드의 실제 달성 현황만 표시합니다.</p></section>
+   </div>
+  </details>
   <p className="hub-endgame-disclaimer">실제 클리어 기록으로 진행도를 표시합니다. 마스터 도전은 각 모드의 기존 클리어 조건을 달성한 경우에만 선택할 수 있습니다.</p>
  </section>;
 }
