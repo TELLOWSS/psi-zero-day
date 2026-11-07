@@ -34,3 +34,14 @@ export function bossPattern(h: Hazard) {
     pulseDuration:intensified?.9:.65,
   };
 }
+
+/** Stage 50 uses a bespoke encounter, not the normal signature-burst state machine.
+ * In mastery, the boss's hit-point gates open only after completed visible attacks.
+ * Phase 1: 2 reads to 50% HP. Phase 2: 4 additional reads to 0%.
+ */
+export function masteryBossCycleFloor(h:Readonly<Hazard>):number {
+ if(!h.isStageBoss||!h.bossEncounterManaged)return 0;
+ const cycles=Math.max(0,Math.floor(h.bossAttackCycles??0));
+ if(h.bossPhase===2)return Math.max(0,h.maxHp*(.5-.125*Math.min(4,cycles)));
+ return Math.max(h.maxHp*.5,h.maxHp*(1-.25*Math.min(2,cycles)));
+}

@@ -23,7 +23,7 @@ export function tickBossCombat(h: Hazard, dt: number): boolean {
   const elapsed=Math.max(0,dt);
   if(p.combatPhase==='burst'){
     p.burstRemaining=Math.max(0,p.burstRemaining-elapsed);
-    if(p.burstRemaining===0){p.combatPhase='recovery';p.remaining=1.2;}
+    if(p.burstRemaining===0){p.combatPhase='recovery';p.remaining=1.2;p.burstFloorHp=undefined;}
   }else{
     p.remaining=Math.max(0,p.remaining-elapsed);
     if(p.remaining===0){
@@ -38,13 +38,16 @@ export function tickBossCombat(h: Hazard, dt: number): boolean {
 }
 
 /** Passive equipment cannot resolve the signature or activate its weak point. */
-export function bossCombatDamage(h: Hazard, amount: number, definition: BossGameplayDefinition, projectile=false): void {
+export function bossCombatDamage(h: Hazard, amount: number, definition: BossGameplayDefinition, projectile=false, mastery=false): void {
   const p=h.bossGameplay;if(!p||!Number.isFinite(amount)||amount<=0)return;
   if(p.combatPhase==='weak_point'&&p.signatureResolvedThisCycle&&projectile){
     p.combatPhase='burst';p.remaining=0;p.burstRemaining=definition.burstWindowSeconds;
+    // The strongest equipment can fill one opening, but not bypass multiple reads.
+    // Four clean weak-point windows are needed if each window hits the full cap.
+    p.burstFloorHp=mastery?Math.max(0,h.hp-h.maxHp*.25):undefined;
     return;
   }
   if(p.combatPhase!=='burst')return;
-  h.hp=Math.max(0,h.hp-amount*2);
+  h.hp=Math.max(p.burstFloorHp??0,h.hp-amount*2);
   if(h.hp===0){p.combatPhase='secured';p.burstRemaining=0;}
 }

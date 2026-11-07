@@ -34,3 +34,23 @@ it('latches phase two only at recovery and does not alter ordinary hazards',()=>
  p.combatPhase='recovery';expect(advanceBossPhase(h)).toBe(true);expect(advanceBossPhase(h)).toBe(false);
  const ordinary={...h,bossGameplay:undefined,isStageBoss:false};expect(tickBossCombat(ordinary,1)).toBe(false);
 });
+
+it('mastery requires four separate clean boss weak-point bursts, preserving extreme instant damage',()=>{
+ const {h,definition,p}=fixture();
+ const originalMax=h.maxHp;
+ for(let cycle=1;cycle<=4;cycle++){
+  p.combatPhase='pattern';p.patternContact=false;
+  resolveBossSignature(h);
+  expect(p.combatPhase).toBe('weak_point');
+  bossCombatDamage(h,1,definition,true,true);
+  expect(p.combatPhase).toBe('burst');
+  bossCombatDamage(h,1e8,definition,true,true);
+  expect(h.hp).toBeCloseTo(originalMax*(1-cycle/4),5);
+  if(cycle<4){
+   expect(p.combatPhase).toBe('burst');
+   tickBossCombat(h,definition.burstWindowSeconds);
+   expect(p.combatPhase).toBe('recovery');
+  }
+ }
+ expect(h.hp).toBe(0);expect(p.combatPhase).toBe('secured');
+});

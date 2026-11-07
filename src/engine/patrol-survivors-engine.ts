@@ -14,7 +14,7 @@ import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
-import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus } from './survivors-boss-pattern';
+import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus,masteryBossCycleFloor } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
@@ -1885,12 +1885,12 @@ export class SurvivorsEngine {
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       if(h.bossGameplay){
-        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);
+        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile,this.state.difficulty==='mastery');
         if(h.hp<beforeHp)h.hitFlashTimer=0.08;
         return;
       }
       // Structural interlocks expose the next core only after its risk cycle settles.
-      const floor=bossCoreFloor(h);
+      const floor=Math.max(bossCoreFloor(h),this.state.difficulty==='mastery'&&this.state.stage.stageNumber===50?masteryBossCycleFloor(h):0);
       h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
     } else h.hp=Math.max(0,h.hp-amount);
     if(h.hp<beforeHp)h.hitFlashTimer=0.08;

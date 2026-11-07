@@ -10,6 +10,8 @@ export interface BossGameplayProgress {
   signatureResolvedThisCycle: boolean;
   patternContact: boolean;
   burstRemaining: number;
+  /** Mastery only: minimum boss HP allowed during the current weak-point burst. */
+  burstFloorHp?: number;
   remaining: number;
   cycleCount: number;
   gangform?: {
