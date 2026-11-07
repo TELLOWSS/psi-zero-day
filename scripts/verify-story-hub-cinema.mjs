@@ -42,7 +42,10 @@ try{
        dock.buttons.some(button=>button.disabled||button.width<130||button.height<44))
        throw new Error('Premium mobile Guard/Watch quick launcher fails touch contract: '+JSON.stringify(dock));
      const headerOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
-     if(headerOverflow)throw new Error('Premium phone title overflow');
+     if(headerOverflow){
+      const offenders=await page.evaluate(()=>[...document.querySelectorAll('main.rg-home *')].map(el=>({selector:el.tagName.toLowerCase()+'.'+String(el.className||'').replace(/\\s+/g,'.'),left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),scroll:el.scrollWidth,client:el.clientWidth})).filter(x=>x.right>innerWidth+2||x.left< -2).slice(0,18));
+      throw new Error('Premium phone title overflow: '+JSON.stringify({scrollWidth:await page.evaluate(()=>document.documentElement.scrollWidth),offenders}));
+     }
    }
    const tested=[];
    for(const [index,design] of designs.entries()){
