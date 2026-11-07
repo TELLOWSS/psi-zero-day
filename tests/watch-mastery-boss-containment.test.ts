@@ -49,5 +49,6 @@ describe('Watch final boss mastery positional containment',()=>{
    tickPressure(engine,2.25);
    expect(state.masteryBossPressure?.avoided).toBe(1);
    expect(state.masteryBossPressure?.exposures).toBe(1);
+   expect(state.masteryBossPressure?.streak).toBe(0);
  });
 });

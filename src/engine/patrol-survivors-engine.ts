@@ -7,6 +7,7 @@ import {createTerrain,terrainMove,terrainHit,terrainWaypoint,terrainFreePoint} f
 import {createResolvedWorker,updateResolvedWorker,workerRouteTerrain} from './survivors-worker-egress';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
+import {masteryBossPressureProfile} from './survivors-mastery-pressure';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
 import {PATROL_DIFFICULTIES,DIFFICULTY_WARNING_SCALE,counterplayBreather, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {lateThreatVariant} from './survivors-late-threats';
@@ -922,10 +923,10 @@ export class SurvivorsEngine {
         id:'mastery-boss-50-lock',type:'crane_drop_zone',
         x:Math.max(120,Math.min(WORLD_WIDTH-120,player.x)),
         y:Math.max(120,Math.min(WORLD_HEIGHT-120,player.y)),
-        radius:118,hp:9999,maxHp:9999,state:'warning',timer:2.2,
+        radius:masteryBossPressureProfile(0).radius,hp:9999,maxHp:9999,state:'warning',timer:2.2,
         label:'마스터 양중 집중 경고 · 이동 및 회피',
       });
-      this.state.masteryBossPressure={warnings:1,avoided:0,exposures:0};
+      this.state.masteryBossPressure={warnings:1,avoided:0,exposures:0,streak:0,bestStreak:0};
     }
     const progress=boss?.bossGameplay;
     if(progress){
@@ -2486,9 +2487,10 @@ export class SurvivorsEngine {
         hazard.timer -= dt;
         if(masteryLock&&hazard.state==='idle'&&hazard.timer<=0){
           // Acquire the current position once. Never home in after the visible warning.
+          hazard.radius=masteryBossPressureProfile(this.state.masteryBossPressure?.streak??0).radius;
           hazard.x=Math.max(hazard.radius,Math.min(WORLD_WIDTH-hazard.radius,player.x));
           hazard.y=Math.max(hazard.radius,Math.min(WORLD_HEIGHT-hazard.radius,player.y));
-          hazard.state='warning';hazard.timer=2.2;
+          hazard.state='warning';hazard.timer=2.2; // Never shorten a touch player's response window.
           if(this.state.masteryBossPressure)this.state.masteryBossPressure.warnings++;
           this.emitAudio('boss_alarm',hazard.x,hazard.y);
           continue;
@@ -2508,10 +2510,16 @@ export class SurvivorsEngine {
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
             if(masteryLock&&this.state.masteryBossPressure){
               if(pDist>hazard.radius||player.isDashing){
-                this.state.masteryBossPressure.avoided++;
-                this.state.score+=100;
+                const pressure=this.state.masteryBossPressure;
+                pressure.avoided++;
+                pressure.streak=(pressure.streak??0)+1;
+                pressure.bestStreak=Math.max(pressure.bestStreak??0,pressure.streak);
+                this.state.score+=masteryBossPressureProfile(pressure.streak).dodgeScore;
                 this.emitAudio('control',hazard.x,hazard.y);
-              }else this.state.masteryBossPressure.exposures++;
+              }else{
+                this.state.masteryBossPressure.exposures++;
+                this.state.masteryBossPressure.streak=0;
+              }
             }
             if (pDist <= hazard.radius && player.invincibleTime <= 0 && !player.isDashing) {
               const damage = absorbPremiumDamage(this.state,30);
@@ -2525,7 +2533,7 @@ export class SurvivorsEngine {
         } else if (hazard.state === 'active' || hazard.state === 'cooldown') {
           if (hazard.timer <= 0) {
             hazard.state = 'idle';
-            hazard.timer = masteryLock?4.8:14; // Targeted mastery pressure renews; legacy stage zones unchanged
+            hazard.timer = masteryLock?masteryBossPressureProfile(this.state.masteryBossPressure?.streak??0).cooldownSeconds:14; // Dynamic mastery only; legacy zones unchanged
           }
         }
       }

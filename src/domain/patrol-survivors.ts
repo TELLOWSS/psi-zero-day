@@ -209,7 +209,7 @@ export interface SurvivorsGameState {
   player: PlayerStats;
   lastDamage?: { source: HazardType | 'CRANE_DROP'; amount: number; remaining: number };
   /** Signal Watch stage-50 mastery only: disclosed targeted overhead pressure. */
-  masteryBossPressure?: { warnings: number; avoided: number; exposures: number };
+  masteryBossPressure?: { warnings: number; avoided: number; exposures: number; streak?: number; bestStreak?: number };
   // Legacy hp/damage/entity IDs denote remaining risk and intervention strength.
   // People are guided to safety; they are not attack targets.
   resolvedWorkers?: import('./survivors-safety-walkway').ResolvedWorker[];
