@@ -6,6 +6,10 @@ on:
       - sol/commercial-presentation-upgrade-20260927
     paths:
       - 'src/ui/GameHub.tsx'
+      - 'src/ui/ReignitionTitle.tsx'
+      - 'src/ui/reignition-title.css'
+      - 'tests/reignition-title.test.ts'
+      - 'scripts/verify-story-hub-cinema.mjs'
       - 'src/ui/game-hub.css'
       - 'content/episode01/main-title-layout.json'
       - 'scripts/verify-title-defense-first.mjs'
@@ -17,6 +21,10 @@ on:
       - main
     paths:
       - 'src/ui/GameHub.tsx'
+      - 'src/ui/ReignitionTitle.tsx'
+      - 'src/ui/reignition-title.css'
+      - 'tests/reignition-title.test.ts'
+      - 'scripts/verify-story-hub-cinema.mjs'
       - 'src/ui/game-hub.css'
       - 'content/episode01/main-title-layout.json'
       - 'tests/main-title-layout.test.ts'
@@ -49,7 +57,7 @@ jobs:
         run: npm ci
 
       - name: Commercial presentation contracts
-        run: npx vitest run tests/main-title-layout.test.ts tests/commercial-presentation-upgrade.test.ts
+        run: npx vitest run tests/main-title-layout.test.ts tests/commercial-presentation-upgrade.test.ts tests/reignition-title.test.ts tests/endgame-home.test.ts tests/endgame-hub-ui.test.ts
 
       - name: Typecheck
         run: npm run typecheck
