@@ -247,6 +247,23 @@ function representativeDefenseSave(impact = false) {
   };
 }
 
+/** Navigate the current Signal Guard CTA, then select its real training practice button. */
+async function enterLegacyTrainingViaGuard(cdp) {
+  const opened=await evaluate(cdp,`(() => {
+    const button=document.querySelector('button[data-title-primary-cta="defense"]');
+    if(!(button instanceof HTMLButtonElement))return false;
+    button.click();return true;
+  })()`);
+  if(!opened)throw new Error('Current Signal Guard home CTA is missing');
+  await waitFor(cdp,`Boolean(document.querySelector('[data-defense-screen="guard-home"]'))`);
+  const practice=await evaluate(cdp,`(() => {
+    const button=document.querySelector('[data-defense-screen="guard-home"] footer button');
+    if(!(button instanceof HTMLButtonElement))return false;
+    button.click();return true;
+  })()`);
+  if(!practice)throw new Error('Current Guard practice entry is missing');
+}
+
 async function enterRepresentativeBottomUp(cdp, impact = false) {
   const save = representativeDefenseSave(impact);
   await evaluate(cdp, `(() => {
@@ -254,7 +271,7 @@ async function enterRepresentativeBottomUp(cdp, impact = false) {
     localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
     return true;
   })()`);
-  await clickButton(cdp, '현장 디펜스');
+  await enterLegacyTrainingViaGuard(cdp);
   await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`, 12000);
   await clickButton(cdp, '이어서 훈련');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'`, 12000);

@@ -371,77 +371,63 @@ function assertInsideViewport(rect, label) {
   }
 }
 
+/** Follow the shipping Guard menu to the legacy training practice lane.
+ * Do not target retired home-page labels, and do not bypass the UI with direct component calls.
+ */
+async function enterLegacyTrainingViaGuard() {
+  const launched = await evaluate(cdp, `(() => {
+    const primary=document.querySelector('button[data-title-primary-cta="defense"]');
+    if(!(primary instanceof HTMLButtonElement))return false;
+    primary.click();
+    return true;
+  })()`);
+  if(!launched)throw new Error('Shipping Signal Guard launcher missing');
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="guard-home"]'))`);
+  const practice = await evaluate(cdp, `(() => {
+    const button=document.querySelector('[data-defense-screen="guard-home"] footer button');
+    if(!(button instanceof HTMLButtonElement))return false;
+    button.click();return true;
+  })()`);
+  if(!practice)throw new Error('Guard campaign practice entry missing');
+}
+
 async function runLiveSiteEntryPath() {
   await setViewport({ width: 390, height: 844, mobile: true });
   await navigateHome();
-
-  const stale = qaStaleTrainingSave();
+  const stale=qaStaleTrainingSave();
   await evaluate(cdp, `(() => {
     localStorage.setItem('psi-zero-day.defense.save.v1', ${JSON.stringify(JSON.stringify(stale))});
-    localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
+    localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');
     return true;
   })()`);
-
-  await clickText(cdp, '대표 시나리오 바로 시작');
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"requested-scenario-conflict\"]'))");
-
-  const conflictCopy = await evaluate(cdp, "document.querySelector('[data-defense-screen=\"requested-scenario-conflict\"]')?.textContent || ''");
-  if (!conflictCopy.includes('대표 시나리오로 전환할까요?') || !conflictCopy.includes('기존 훈련 이어하기')) {
-    throw new Error('LIVE SITE stale-run conflict gate copy missing');
-  }
-  await screenshot(cdp, 'entry-01-stale-run-conflict.png');
-
-  await clickText(cdp, '대표 시나리오 시작');
-  await waitFor(cdp, "document.querySelector('[data-defense-screen=\"support-select\"]')?.getAttribute('data-scenario') === 'event-ramp-reconstruction-v1'");
-
-  const preserved = await evaluate(cdp, `(() => {
-    const raw = localStorage.getItem('psi-zero-day.defense.save.v1');
-    const parsed = raw ? JSON.parse(raw) : null;
-    const payload = parsed?.payload ?? null;
+  await enterLegacyTrainingViaGuard();
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]'))`);
+  const gateCopy=await evaluate(cdp,`document.querySelector('[data-defense-screen="persistence-gate"]')?.textContent||''`);
+  if(!gateCopy.includes('이어서 훈련'))throw new Error('Practice entry failed to offer continuing the saved training');
+  await screenshot(cdp,'entry-01-practice-resume-gate.png');
+  await clickText(cdp,'이어서 훈련');
+  await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-scenario')==='training-ramp-v1'`);
+  const persisted=await evaluate(cdp,`(() => {
+    const raw=localStorage.getItem('psi-zero-day.defense.save.v1');
+    const payload=raw?JSON.parse(raw)?.payload:null;
+    const combat=document.querySelector('[data-defense-screen="combat"]');
     return {
-      hasActiveRun: Boolean(payload && Object.prototype.hasOwnProperty.call(payload, 'activeRun')),
-      activeRun: payload?.activeRun,
-      trainingClears: payload?.records?.find(item => item.scenarioId === 'training-ramp-v1')?.clears ?? -1,
+      trainingClears:payload?.records?.find(row=>row.scenarioId==='training-ramp-v1')?.clears??-1,
+      scenario:combat?.getAttribute('data-scenario')??null,
+      wave:combat?.getAttribute('data-wave')??null,
+      mobile:window.innerWidth===390 && window.innerHeight===844,
     };
   })()`);
-  if (!preserved.hasActiveRun || preserved.activeRun !== null || preserved.trainingClears !== 1) {
-    throw new Error('LIVE SITE switch did not preserve records while clearing only activeRun: ' + JSON.stringify(preserved));
-  }
-  await screenshot(cdp, 'entry-02-event-support-select.png');
-
-  const supportClicked = await evaluate(cdp, `(() => {
-    const button = document.querySelector('[data-support="COORDINATOR"]');
-    if (!(button instanceof HTMLButtonElement)) return false;
-    button.click();
-    return true;
-  })()`);
-  if (!supportClicked) throw new Error('LIVE SITE event support button missing');
-
-  await waitFor(cdp, `(() => {
-    const combat = document.querySelector('[data-defense-screen="combat"]');
-    return combat?.getAttribute('data-scenario') === 'event-ramp-reconstruction-v1'
-      && combat?.getAttribute('data-event') === 'event-ramp-reconstruction-v1';
-  })()`);
-
-  const eventLaunch = await evaluate(cdp, `(() => {
-    const combat = document.querySelector('[data-defense-screen="combat"]');
-    return {
-      scenario: combat?.getAttribute('data-scenario') || null,
-      event: combat?.getAttribute('data-event') || null,
-      wave: combat?.getAttribute('data-wave') || null,
-      portrait: window.innerWidth === 390 && window.innerHeight === 844,
-    };
-  })()`);
-  await screenshot(cdp, 'entry-03-event-combat.png');
-
+  await screenshot(cdp,'entry-02-training-resumed.png');
+  if(persisted.trainingClears!==1||persisted.scenario!=='training-ramp-v1'||persisted.wave!=='3'||!persisted.mobile)
+    throw new Error('Shipping practice path lost saved training context: '+JSON.stringify(persisted));
   return {
-    stale_run_conflict_seen: true,
-    records_preserved: preserved.trainingClears === 1,
-    stale_active_run_cleared: preserved.activeRun === null,
-    support_select_scenario: 'event-ramp-reconstruction-v1',
-    event_launch: eventLaunch,
-    passed: eventLaunch.scenario === 'event-ramp-reconstruction-v1'
-      && eventLaunch.event === 'event-ramp-reconstruction-v1',
+    shipping_entry:'Guard → practice → training save resume',
+    training_records_preserved:true,
+    legacy_training_resumed:true,
+    event_scenario_entry_not_tested:true,
+    actual:persisted,
+    passed:true,
   };
 }
 
@@ -460,7 +446,7 @@ async function runChoice(choice, viewport) {
     return true;
   })()`);
 
-  await clickText(cdp, '현장 디펜스');
+  await enterLegacyTrainingViaGuard();
   await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"persistence-gate\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
   await clickText(cdp, '이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-wave') === '8'");
@@ -580,7 +566,7 @@ try {
   report.runs.push(await runChoice('C', { width: 390, height: 844, mobile: true }));
 
   report.final = {
-    live_site_entry_verified: report.entry_path?.passed === true,
+    shipping_guard_practice_entry_verified: report.entry_path?.passed === true,
     abc_replayed: report.runs.map(run => run.choice).join('') === 'ABC',
     all_verified: report.runs.every(run => run.verified.verified === 'true'),
     mobile_c_verified: report.runs.some(run => run.choice === 'C' && run.viewport === '390x844'),
