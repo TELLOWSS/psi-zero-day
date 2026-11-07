@@ -16,7 +16,7 @@ export interface OmegaMotionSpec {
 }
 export const OMEGA_MOTIONS:Readonly<Record<OmegaMotionName,OmegaMotionSpec>>=Object.freeze({
  idle:{frames:6,fps:8,loop:true,bodyMotion:'low',hairFollowThrough:true,equipmentAnchors:true},
- walk:{frames:8,fps:12,loop:true,bodyMotion:'mid',hairFollowThrough:true,equipmentAnchors:true},
+ walk:{frames:6,fps:12,loop:true,bodyMotion:'mid',hairFollowThrough:true,equipmentAnchors:true},
  run:{frames:8,fps:16,loop:true,bodyMotion:'high',hairFollowThrough:true,equipmentAnchors:true},
  fire:{frames:6,fps:18,loop:false,bodyMotion:'mid',hairFollowThrough:true,equipmentAnchors:true},
  combo:{frames:8,fps:18,loop:false,bodyMotion:'high',hairFollowThrough:true,equipmentAnchors:true},
