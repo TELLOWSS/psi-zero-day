@@ -80,6 +80,7 @@ export async function auditOmegaMotionStudy(atlasPath,manifestPath){
  const blockers=[];
  if(manifest.status!=='ARTIST_AUTHORED_APPROVED')blockers.push('UNAPPROVED_ART_PROVENANCE');
  if(manifest.releaseApproved!==true||manifest.doNotInstallAsPlayableCharacter!==false)blockers.push('NO_SIGNED_ART_APPROVAL');
+ if(!expected)blockers.push('MISSING_ATLAS_SHA256');
  if(!checksumOk)blockers.push('ATLAS_SHA256_MISMATCH');
  if(mirror.suspectedMirror)blockers.push('NE_IS_MIRRORED_NW');
  if(directions.some(r=>!r.allSixFramesNonIdentical))blockers.push('DUPLICATE_GAIT_PHASE');
