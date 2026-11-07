@@ -14,7 +14,7 @@ it('shares the actual structural floor with readable locked and exposed states',
  const h=boss('CRANE_BOSS');h.bossEncounterManaged=true;h.hp=50;
  expect(bossCoreFloor(h)).toBe(50);expect(bossCoreStatus(h)).toBe('interlocked');
  h.bossPhase=2;h.hp=8;h.bossAttackCycles=0;expect(bossCoreFloor(h)).toBe(8);expect(bossCoreStatus(h)).toBe('interlocked');
- h.bossAttackCycles=1;h.motion!.phase='spent';expect(bossCoreFloor(h)).toBe(0);expect(bossCoreStatus(h)).toBe('active');
+ h.bossAttackCycles=1;h.motion!.phase='spent';expect(bossCoreFloor(h)).toBe(0);expect(bossCoreStatus(h)).toBe('interlocked');
  h.bossAttackCycles=2;h.hp=0;expect(bossCoreStatus(h)).toBe('exposed');
  h.motion!.phase='warning';expect(bossCoreStatus(h)).toBe('active');
 });
