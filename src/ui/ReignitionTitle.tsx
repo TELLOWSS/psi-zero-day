@@ -1,0 +1,166 @@
+import {useState,type ReactNode} from 'react';
+import type {EndgameHomeStatus} from '../app/endgame-home';
+import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
+import {SIGNAL_WATCH_KEY_ART} from './signal-watch-art';
+import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
+import './reignition-title.css';
+
+export const HOME_THEMES=[
+ {id:'cinematic',label:'A · 시네마틱',subtitle:'리바이벌'},
+ {id:'operations',label:'B · 작전 허브',subtitle:'상황실'},
+ {id:'terminal',label:'C · 터미널',subtitle:'컨트롤'},
+ {id:'elite',label:'D · 미니멀',subtitle:'엘리트'},
+] as const;
+export type HomeTheme=typeof HOME_THEMES[number]['id'];
+const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design';
+export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
+  const requested=new URLSearchParams(query).get('home');
+  const value=requested??stored;
+  return HOME_THEMES.find(theme=>theme.id===value)?.id??'cinematic';
+}
+
+export interface ReignitionTitleProps {
+ readonly status:EndgameHomeStatus;
+ readonly brand:string;
+ readonly emblem:string;
+ readonly heroWide:string;
+ readonly heroPortrait:string;
+ readonly onGuard?:()=>void;
+ readonly onWatch?:()=>void;
+ readonly onStory:()=>void;
+ readonly onGuide:()=>void;
+ readonly onPeople:()=>void;
+ readonly onJournal:()=>void;
+ readonly onManual:()=>void;
+ readonly onSong:()=>void;
+ readonly audioMuted:boolean;
+ readonly onToggleAudio:()=>void;
+ readonly motionEnabled:boolean;
+ readonly onToggleMotion:()=>void;
+ readonly children?:ReactNode;
+}
+
+const descriptions:Record<HomeTheme,{eyebrow:string,title:string,lead:string,primary:string}>={
+ cinematic:{eyebrow:'THE RETURN / A NEW FRONTIER',title:'끝난 싸움 너머, 진짜 작전이 시작된다.',lead:'기록은 그대로. 위험은 더 영리하게. 다시 현장으로 돌아온 당신을 위한 새로운 전선.',primary:'마스터 작전 개시'},
+ operations:{eyebrow:'OPERATION CONTROL / VETERAN HQ',title:'다음 현장을 지휘할 시간.',lead:'시그널 가드와 워치의 달성도, 위험 작전, 새로운 도전을 한눈에 확인하세요.',primary:'작전 현황 보기'},
+ terminal:{eyebrow:'SYSTEM READY / RISK CONTAINMENT',title:'위험 신호를 분석하라.',lead:'여섯 번의 방어, 쉰 번의 순찰 다음에도 끝나지 않는 현장 판단.',primary:'작전 신호 연결'},
+ elite:{eyebrow:'RE:IGNITION / THE VETERAN ERA',title:'다시, 현장으로.',lead:'전과 다른 압박. 같은 판단력. 오늘의 무사귀환을 완성하세요.',primary:'도전 시작'},
+};
+
+export function ReignitionTitle(props:ReignitionTitleProps){
+ const [theme,setTheme]=useState<HomeTheme>(()=>{
+  try{return resolveHomeTheme(typeof window==='undefined'?'':window.location.search,typeof window==='undefined'?null:window.localStorage.getItem(HOME_THEME_STORAGE_KEY));}
+  catch{return 'cinematic';}
+ });
+ const [settings,setSettings]=useState(false);
+ const [releaseOpen,setReleaseOpen]=useState(false);
+ const {status}=props;
+ const active=descriptions[theme];
+ const guardUnlocked=status.guardUnlocked;
+ const watchUnlocked=status.watchUnlocked;
+ const heroGo=props.onGuard??props.onWatch;
+ const selectTheme=(next:HomeTheme)=>{
+  setTheme(next);
+  try{window.localStorage.setItem(HOME_THEME_STORAGE_KEY,next);
+    const url=new URL(window.location.href);url.searchParams.set('home',next);window.history.replaceState(null,'',url.toString());
+  }catch{/* browser preferences are optional; selection still works */}
+ };
+ const scrollToMissions=()=>document.getElementById('reignition-missions')?.scrollIntoView({behavior:props.motionEnabled?'smooth':'auto',block:'start'});
+ return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
+  <header className="rg-header">
+   <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
+   <div className="rg-theme-picker" role="group" aria-label="메인 화면 시안 선택">
+    {HOME_THEMES.map(option=><button key={option.id} type="button" aria-pressed={theme===option.id} onClick={()=>selectTheme(option.id)} title={option.subtitle}>{option.label}</button>)}
+   </div>
+   <div className="rg-header-tools">
+    <button type="button" onClick={props.onManual}>도움말</button>
+    <button type="button" onClick={()=>setSettings(true)} aria-label="게임 설정 열기">설정 <span aria-hidden="true">⚙</span></button>
+   </div>
+  </header>
+  <div className="rg-workspace">
+   <nav className="rg-sidebar" aria-label="메인 메뉴">
+    <span className="rg-rail-code">PSI / COMMAND</span>
+    <button type="button" className="rg-rail-primary" onClick={heroGo} disabled={!heroGo}><span aria-hidden="true">◈</span> 작전 개시</button>
+    <button type="button" onClick={scrollToMissions}><span aria-hidden="true">◫</span> 작전 선택</button>
+    <button type="button" onClick={props.onJournal}><span aria-hidden="true">▥</span> 작전 기록</button>
+    <button type="button" onClick={props.onPeople}><span aria-hidden="true">♧</span> 대원 정보</button>
+    <button type="button" onClick={props.onGuide}><span aria-hidden="true">◇</span> 현장 안내</button>
+    <button type="button" onClick={props.onSong}><span aria-hidden="true">♫</span> OST</button>
+    <small>RE:IGNITION / 2026.11</small>
+   </nav>
+   <div className="rg-main">
+    <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
+     <picture className="rg-hero-picture">
+      <source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>
+      <img src={theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+     </picture>
+     <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
+     <div className="rg-hero-shade" aria-hidden="true"/>
+     <div className="rg-hero-content">
+      <span className="rg-hero-eyebrow">{active.eyebrow}</span>
+      <div className="rg-hero-update"><span aria-hidden="true" className="rg-led"/> MAJOR UPDATE · NOVEMBER 2026</div>
+      <p className="rg-hero-name">RE:IGNITION</p>
+      <h1>{status.veteran?active.title:'위험을 읽고, 오늘을 지켜라.'}</h1>
+      <p className="rg-hero-lead">{active.lead}</p>
+      <div className="rg-hero-buttons">
+       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {active.primary}</button>
+       <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>가드 / 워치 선택 <span aria-hidden="true">↓</span></button>
+      </div>
+     </div>
+     <div className="rg-hero-index" aria-hidden="true"><span>001 / VETERAN OPERATIONS</span><b>ZERO DAY</b><span>SURVIVE · SECURE · RETURN</span></div>
+    </section>
+
+    <section className="rg-missions" id="reignition-missions" aria-labelledby="rg-missions-title">
+     <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">새로운 전선, 두 개의 선택.</h2></div><span>ENDGAME · 2026.11</span></div>
+     <div className="rg-mission-grid">
+      <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard}>
+       <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="lazy" decoding="async"/>
+       <span className="rg-card-screen"/>
+       <span className="rg-card-info"><small>01 / TACTICAL DEFENSE</small><strong>시그널 가드</strong><em>SIGNAL GUARD</em>
+        <span>6개 현장 완료 후, 더욱 날카로운 마스터 전술전</span>
+        <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
+      </button>
+      <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch}>
+       <img src={SIGNAL_WATCH_KEY_ART} alt="" loading="lazy" decoding="async"/>
+       <span className="rg-card-screen"/>
+       <span className="rg-card-info"><small>02 / SURVIVAL ACTION</small><strong>시그널 워치</strong><em>SIGNAL WATCH</em>
+        <span>50개 스테이지 이후, 변칙 위험과 패턴 대응 보스</span>
+        <b>{watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
+      </button>
+     </div>
+     <aside className="rg-command-status" aria-label="실제 클리어 기록 기반 도전 현황">
+      <div className="rg-command-heading"><span className="rg-led" aria-hidden="true"/><strong>VETERAN RECORD</strong><small>저장기록 연동</small></div>
+      <div className="rg-stats">
+       <div><span>GUARD CLEAR</span><strong>{status.guardClears}<small>/6</small></strong><progress max={6} value={status.guardClears} aria-label="가드 작전 클리어 수"/><small>{guardUnlocked?'마스터 ★★★ '+status.guardMastered+'/6':'6개 작전 완료 시 마스터 해금'}</small></div>
+       <div><span>WATCH CLEAR</span><strong>{status.watchClears}<small>/50</small></strong><progress max={50} value={status.watchClears} aria-label="워치 스테이지 클리어 수"/><small>{watchUnlocked?'마스터 ★★★ '+status.watchMastered+'/50':'50개 스테이지 완료 시 마스터 해금'}</small></div>
+      </div>
+      <p>{status.veteran?'기존 완료 기록은 유지됩니다. 다음 도전은 마스터 별 3개를 완성하는 것입니다.':'기존 작전을 완료하면 각 모드의 마스터 난이도가 열립니다.'}</p>
+     </aside>
+    </section>
+    <section className="rg-shortcuts" aria-label="다른 게임과 기록">
+     <button type="button" className="rg-story-button" onClick={props.onStory}><span>◉</span><strong>스토리 모드</strong><small>EPISODE / STORY</small></button>
+     <a href="/signal-breaker-dev/index.html?entry=play" className="rg-breaker-link"><span>◇</span><strong>시그널 브레이커</strong><small>ARCADE / BREAKER</small></a>
+     <button type="button" onClick={props.onJournal}><span>▤</span><strong>기록·성취</strong><small>PROGRESS / ARCHIVE</small></button>
+     <button type="button" onClick={props.onGuide}><span>▧</span><strong>현장 안내</strong><small>GUIDE / FIELD</small></button>
+    </section>
+   </div>
+  </div>
+  <section className="rg-release">
+   <button type="button" className="rg-release-toggle" aria-expanded={releaseOpen} aria-controls="rg-release-detail" onClick={()=>setReleaseOpen(v=>!v)}>
+    <span>2026.11 업데이트 · 무엇이 달라졌나요?</span><span aria-hidden="true">{releaseOpen?'−':'+'}</span>
+   </button>
+   {releaseOpen?<div id="rg-release-detail" className="rg-release-items"><p><strong>시그널 가드</strong> 6개 작전 완료 이후 더 강한 적 특성과 새로운 대응 과제. 마스터 별도 기록.</p><p><strong>시그널 워치</strong> 50스테이지 완주 이후 마스터 난이도. 보스 경고·회피·약점 파악이 중요합니다.</p><p><strong>복귀 유저</strong> 기존 저장기록 유지, 완료 수치 표시, 다음 마스터 목표 자동 안내.</p></div>:<div id="rg-release-detail" hidden/>}
+  </section>
+  <footer className="rg-footer"><span>PSI : ZERO DAY</span><span>RE:IGNITION · BUILD PEOPLE A SAFER TOMORROW</span><span>MAIN MENU DESIGN STUDY · A / B / C / D</span></footer>
+  {settings?<div className="rg-settings-backdrop" role="presentation" onClick={()=>setSettings(false)}>
+   <section role="dialog" aria-modal="true" aria-labelledby="rg-settings-title" className="rg-settings-panel" onClick={e=>e.stopPropagation()}>
+    <header><h2 id="rg-settings-title">게임·화면 설정</h2><button type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>
+    <SurvivorsGraphicsSettings/>
+    <label>화면 애니메이션 <input type="checkbox" checked={props.motionEnabled} onChange={props.onToggleMotion}/></label>
+    <label>배경음·효과음 <input type="checkbox" checked={!props.audioMuted} onChange={props.onToggleAudio}/></label>
+    <p>시안 선택은 해당 브라우저에 저장되며, 미리보기에서만 변경됩니다.</p>
+   </section>
+  </div>:null}
+  {props.children}
+ </main>;
+}

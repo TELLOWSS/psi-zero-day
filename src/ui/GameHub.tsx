@@ -6,6 +6,7 @@ import './hub-premium.css';
 import './hub-endgame.css';
 import {readEndgameHomeStatus} from '../app/endgame-home';
 import {EndgameHomeDeck} from './EndgameHomeDeck';
+import {ReignitionTitle} from './ReignitionTitle';
 import './story-chapter-gate.css';
 import homePremiumArt from '../../content/episode01/home-new-psi-art-v7.json';
 import {prepareSitePatrol} from '../app/site-patrol-access';
@@ -392,6 +393,28 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     document.documentElement.classList.toggle('psi-title-quotes-off', !castQuotesEnabled);
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
+
+  if(page==='home'&&!playFirst)return <ReignitionTitle
+    status={endgameStatus}
+    brand={homePremiumArt.mark.companyName}
+    emblem={homePremiumArt.mark.uri}
+    heroWide={homePremiumArt.assets.wide.uri}
+    heroPortrait={homePremiumArt.assets.portrait.uri}
+    onGuard={onDefense?()=>onDefense('guard-campaign'):undefined}
+    onWatch={onSurvivors}
+    onStory={onPlay}
+    onGuide={openGuide}
+    onPeople={()=>setPage('people')}
+    onJournal={()=>setPage('journal')}
+    onManual={()=>setShowManual(true)}
+    onSong={()=>setShowSongPlayer(true)}
+    audioMuted={audioMuted}
+    onToggleAudio={()=>setAudioMuted(!audioMuted)}
+    motionEnabled={motionEnabled}
+    onToggleMotion={()=>setMotionEnabled(value=>!value)}
+  >{showSongPlayer&&<WorkStopSongPlayer onClose={()=>setShowSongPlayer(false)}/>}
+   {showManual&&<GameManual onClose={()=>setShowManual(false)}/>}
+  </ReignitionTitle>;
 
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art={playFirst?'play-first-v3':'premium-hero-v4'} data-endgame-home="2026-11">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
