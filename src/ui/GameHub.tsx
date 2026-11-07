@@ -3,6 +3,9 @@ import './shooting-entry.css';
 import './hub-unified.css';
 import './hub-cinematic.css';
 import './hub-premium.css';
+import './hub-endgame.css';
+import {readEndgameHomeStatus} from '../app/endgame-home';
+import {EndgameHomeDeck} from './EndgameHomeDeck';
 import './story-chapter-gate.css';
 import homePremiumArt from '../../content/episode01/home-new-psi-art-v7.json';
 import {prepareSitePatrol} from '../app/site-patrol-access';
@@ -348,6 +351,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const [showSongPlayer, setShowSongPlayer] = useState(false);
   const [showManual, setShowManual] = useState(false);
   const [page, setPage] = useState<HubPage>('home');
+  const [endgameStatus] = useState(()=>readEndgameHomeStatus(typeof window==='undefined'?undefined:window.localStorage));
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
   const [showTitleSettings, setShowTitleSettings] = useState(false);
@@ -389,7 +393,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
-  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art={playFirst?'play-first-v3':'premium-hero-v4'}>
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11" data-home-art={playFirst?'play-first-v3':'premium-hero-v4'} data-endgame-home="2026-11">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
     {!playFirst?<picture className="premium-title-picture">
@@ -404,7 +408,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
 
     <header className="commercial-title-topline">
       <div className="commercial-title-meta">
-        <small>Ver. 0.1.0</small>
+        <small>ENDGAME UPDATE · 2026.11</small>
         <b>{homePremiumArt.mark.companyName}</b>
         <span>{t('ui.title.topline')}</span>
       </div>
@@ -430,13 +434,15 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         </div>
       </div>
       <p className="hub-home-name">{t('ui.hub.home_name')}</p>
-      <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
+      <div className="hub-endgame-chapter-mark"><span className="hub-endgame-live-mark" aria-hidden="true" /> RE:IGNITION / ENDGAME PROTOCOL <b>2026.11</b></div>
+      <h1 data-title-rank="slogan">{endgameStatus.veteran?'끝낸 현장에, 더 어려운 선택이 돌아왔다.':'사고 전 신호를 읽고, 현장을 바꿔라.'}</h1>
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
-      <a className="hub-reveal-modes" href="#psi-game-modes" aria-label="게임 선택 영역으로 이동">게임 선택 <span aria-hidden="true">↓</span></a>
+      <a className="hub-reveal-modes" href="#psi-endgame-deck" aria-label="새로운 엔드게임 작전판으로 이동">새로운 도전 보기 <span aria-hidden="true">↓</span></a>
       </div>
 
+      <EndgameHomeDeck status={endgameStatus} onGuard={onDefense?()=>onDefense('guard-campaign'):undefined} onWatch={onSurvivors}/>
       <div id="psi-game-modes" className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
           className="commercial-title-action is-survivors-entry has-mode-art"
@@ -453,7 +459,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
             <strong className="commercial-title-survivors-title commercial-title-mode-title" aria-label="시그널 워치 (SURVIVORS)">
               시그널 워치 <span className="commercial-mode-genre">(SURVIVORS)</span>
             </strong>
-            <small>사고 전 신호 포착 · 현장 위험 실시간 요격 · 3-Wave 시네마틱 서바이벌</small>
+            <small>50개 현장 완주 후 마스터 도전 · 변칙 위험과 다중 대응 보스</small>
           </span>
           <b>›</b>
         </button> : null}
@@ -468,7 +474,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD</em><strong className="commercial-title-mode-title">{defenseText('guard.title')}</strong><small>{defenseText('guard.hub.description')}</small></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / GUARD · VETERAN OPERATIONS</em><strong className="commercial-title-mode-title">{defenseText('guard.title')}</strong><small>전 작전 클리어 이후 마스터 전술전 · 6개 현장별 상이한 대응</small></span>
           <b>›</b>
         </button> : null}
         <button className="commercial-title-action is-story-entry has-mode-art" type="button" onClick={onPlay}>

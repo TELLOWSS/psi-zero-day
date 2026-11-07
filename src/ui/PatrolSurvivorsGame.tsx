@@ -1091,10 +1091,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
-  const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
+  const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage, difficulty:PatrolDifficulty=selectedDifficulty) => {
     setClearReward(null);setSettlementFailed(false);
     const replay=Boolean(stageReplayRef.current[stageId]?.[0])||growthRef.current.some(record=>record.stageId===stageId);
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory, readOperationHandoffs()), crypto.getRandomValues(new Uint32Array(1))[0],replay);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, difficulty, storeInventory, readOperationHandoffs()), crypto.getRandomValues(new Uint32Array(1))[0],replay);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -3861,6 +3861,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
               <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
             </header>
+            {completedStages.length===50&&<section className="survivors-veteran-return" data-endgame-preflight="watch" aria-label="시그널 워치 엔드게임 복귀 작전">
+              <div><small>SIGNAL WATCH · RE:IGNITION / VETERAN</small><h3>50개 스테이지 완주. 새로운 공략은 지금부터.</h3><p>마스터 단계는 단순 화력 경쟁이 아닙니다. 중점 위험을 예측하고, 보스의 경고 패턴을 회피하며 약점을 여러 차례 공략하세요.</p></div>
+              <button type="button" onClick={()=>{
+                const records=readDifficultyClearRecords();
+                const priority=STAGE_IDS.find(id=>!records[id]?.mastery)??'stage_50';
+                setSelectedDifficulty('mastery');setSelectedStage(priority);setStageChapter(Math.floor(STAGE_IDS.indexOf(priority)/10));
+                initGame(selectedChar,priority,'mastery');setPreflightTab('brief');
+              }}>다음 마스터 작전 준비 →</button>
+            </section>}
             <label className="survivors-voice-version">{voiceVersionText.label}
               <select value={playerVoiceVersion} onChange={event=>changePlayerVoiceVersion(event.target.value)}>
                 {(['original','covert','engineer'] as const).map(version=><option key={version} value={version}>{voiceVersionText[version]}</option>)}
