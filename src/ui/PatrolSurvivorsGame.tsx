@@ -3865,7 +3865,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><small>SIGNAL WATCH · RE:IGNITION / VETERAN</small><h3>50개 스테이지 완주. 새로운 공략은 지금부터.</h3><p>마스터 단계는 단순 화력 경쟁이 아닙니다. 중점 위험을 예측하고, 보스의 경고 패턴을 회피하며 약점을 여러 차례 공략하세요.</p></div>
               <button type="button" onClick={()=>{
                 const records=readDifficultyClearRecords();
-                const priority=STAGE_IDS.find(id=>!records[id]?.mastery)??'stage_50';
+                const priority=STAGE_IDS.find(id=>(records[id]?.mastery??0)<3)??'stage_50';
                 setSelectedDifficulty('mastery');setSelectedStage(priority);setStageChapter(Math.floor(STAGE_IDS.indexOf(priority)/10));
                 initGame(selectedChar,priority,'mastery');setPreflightTab('brief');
               }}>다음 마스터 작전 준비 →</button>
