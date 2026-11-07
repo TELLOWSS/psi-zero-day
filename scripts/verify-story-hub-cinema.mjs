@@ -32,6 +32,17 @@ try{
      if(!hero||hero.height<height*.55||!headline||headline.height===0)
        throw new Error('Portrait hero / welcome message missing: '+JSON.stringify({hero,headline}));
      if(!nav||nav.height>90)throw new Error('Phone header wrapped into multiple rows: '+JSON.stringify(nav));
+     const dock=await page.locator('.rg-mobile-dock').evaluate(el=>({
+       position:getComputedStyle(el).position,
+       visible:getComputedStyle(el).display!=='none',
+       bottom:el.getBoundingClientRect().bottom,
+       buttons:[...el.querySelectorAll('button')].map(button=>({width:button.getBoundingClientRect().width,height:button.getBoundingClientRect().height,disabled:button.disabled}))
+     }));
+     if(dock.position!=='fixed'||!dock.visible||Math.abs(dock.bottom-height)>3||dock.buttons.length!==2||
+       dock.buttons.some(button=>button.disabled||button.width<130||button.height<44))
+       throw new Error('Premium mobile Guard/Watch quick launcher fails touch contract: '+JSON.stringify(dock));
+     const headerOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+     if(headerOverflow)throw new Error('Premium phone title overflow');
    }
    const tested=[];
    for(const [index,design] of designs.entries()){
@@ -82,6 +93,11 @@ try{
    await page.locator('.rg-appearance summary').click();
    await page.locator('.rg-theme-picker button').first().click();
    await page.locator('.rg-appearance summary').click();
+   if(width===1440){
+     const topCard=await page.locator('.rg-card').first().boundingBox();
+     if(!topCard||topCard.y>=height*.96)
+       throw new Error('Premium desktop launcher is hidden below the first viewport: '+JSON.stringify(topCard));
+   }
    const panels=await page.locator('.rg-card').count();
    await page.locator('#reignition-missions').scrollIntoViewIfNeeded();
    const cardInfo=await launchers.evaluateAll(buttons=>buttons.map(b=>({
