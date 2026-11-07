@@ -590,3 +590,42 @@
 @media(prefers-reduced-motion:reduce){
  .rg-home .rg-card-mastery-track i{transition:none}
 }
+
+/* OMEGA earn-only identity ribbon. Not a playable CTA until authored 8-way art exists. */
+.rg-home .rg-omega-unlock{
+ display:flex;align-items:center;gap:11px;min-width:0;
+ margin-top:12px;padding:10px 13px;
+ border:1px solid #d1a5bd53;border-radius:8px;
+ background:linear-gradient(105deg,#261725d9,#1a2230cb);
+}
+.rg-home .rg-omega-symbol{
+ display:grid;place-items:center;flex:0 0 32px;height:32px;
+ color:#ffdfeb;font-size:26px;font-weight:700;text-shadow:0 0 15px #e57aaf;
+}
+.rg-home .rg-omega-unlock-copy{
+ display:flex;flex:1;flex-direction:column;gap:2px;min-width:0
+}
+.rg-home .rg-omega-unlock-copy small{
+ color:#ecaec9;letter-spacing:.12em;font-size:9px;font-weight:850
+}
+.rg-home .rg-omega-unlock-copy strong{
+ color:#ffeaf6;font-size:13px;letter-spacing:-.01em
+}
+.rg-home .rg-omega-unlock-copy>span{
+ color:#c5b6ca;font-size:10px;line-height:1.5
+}
+.rg-home .rg-omega-tag{
+ color:#e6becf;font-weight:900;font-size:9px;letter-spacing:.1em;
+ border:1px solid #a9789361;border-radius:3px;padding:4px 7px
+}
+.rg-home .rg-omega-unlock[data-omega-earned=true]{
+ border-color:#d1bc85a6;background:linear-gradient(100deg,#322420d9,#1d242ddd)
+}
+.rg-home .rg-omega-unlock[data-omega-earned=true] .rg-omega-tag{
+ color:#ffe2a0;border-color:#e4be7b91
+}
+@media(max-width:600px){
+ .rg-home .rg-omega-unlock{flex-wrap:wrap;gap:7px;padding:9px 10px}
+ .rg-home .rg-omega-symbol{flex-basis:26px;font-size:24px}
+ .rg-home .rg-omega-tag{margin-left:auto}
+}
