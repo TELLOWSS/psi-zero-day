@@ -131,7 +131,7 @@ describe('Endgame comparative balance audit (deterministic bots, not human win-r
        const t=frame/60;
        engine.update(1/60,{moveX:Math.cos(t*.19),moveY:Math.sin(t*.19)});
      }
-     rows.push({difficulty,seconds:Math.round(state.gameTime*10)/10,phase:state.phase,hp:Math.round(state.player.hp),neutralized:state.hazardsNeutralized,bossAlive:state.hazards.some(h=>h.isStageBoss&&h.hp>0),bossResolved:state.bossSecured});
+     rows.push({difficulty,seconds:Math.round(state.gameTime*10)/10,phase:state.phase,hp:Math.round(state.player.hp),neutralized:state.hazardsNeutralized,bossAlive:state.hazards.some(h=>h.isStageBoss&&h.hp>0),bossResolved:state.bossEncounter?.phase==='secured'||state.phase==='victory'});
      expect(Number.isFinite(state.gameTime)).toBe(true);
      expect(state.gameTime).toBeGreaterThan(20);
    }
