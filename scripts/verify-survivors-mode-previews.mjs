@@ -47,6 +47,8 @@ try{
     if(!showcase||showcase.height<94||watchOverflow)throw new Error('Watch survival season frame invalid: '+JSON.stringify({showcase,watchOverflow}));
     const svg=await page.request.get(new URL('/assets/reignition/watch-omega-reactor.svg',baseUrl).href);
     if(!svg.ok())throw new Error('Watch RE:IGNITION omega art not served');
+    const characterArt=await page.request.get(new URL('/assets/reignition/watch-action-art.webp',baseUrl).href);
+    if(!characterArt.ok()||!characterArt.headers()['content-type']?.includes('image/'))throw new Error('New Watch action artwork is not served as an image');
     await page.screenshot({path:path.join(out,`${width}x${height}-watch-season-ready.png`),animations:'disabled'});
     seasonScreens.push({mode:'watch',showcaseHeight:showcase.height,showcaseWidth:showcase.width});
     await page.locator('.survivors-ready-launch .survivors-btn-primary').click();

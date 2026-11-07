@@ -30,6 +30,7 @@ on:
       - 'src/ui/reignition-modes.css'
       - 'public/assets/reignition/guard-sector-command.svg'
       - 'public/assets/reignition/watch-omega-reactor.svg'
+      - 'public/assets/reignition/watch-action-art.webp'
       - 'tests/reignition-modes.test.tsx'
       - 'src/ui/GuardBattleAtmosphere.tsx'
       - 'src/ui/combat-action-feel.css'

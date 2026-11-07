@@ -35,6 +35,7 @@ describe('RE:IGNITION season mode UI contracts',()=>{
   expect(css).toContain('max-height:440px');
   expect(css).toContain('data-reignition-mode=guard-v2');
   expect(css).toContain('.sw-season-v2.is-combat');
+  expect(css).toContain('/assets/reignition/watch-action-art.webp');
   for(const source of [svg1,svg2]){
     expect(source).toContain('<svg');
     expect(source).not.toContain('<foreignObject');
