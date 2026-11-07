@@ -35,9 +35,28 @@ try{
      if(backdrop.width<900||backdrop.height<1500||backdrop.opacity<.98)throw new Error('Premium portrait background missing: '+JSON.stringify(backdrop));
      await page.screenshot({path:path.join(out,'390x844-art-first-before-menu.png'),animations:'disabled'});
      await reveal.click();
-     const modeBox=await page.locator('#psi-game-modes').boundingBox();
-     if(!modeBox||modeBox.y>height*.60||modeBox.y+modeBox.height<0)throw new Error('Game choice scroll link did not bring actions into view '+JSON.stringify(modeBox));
+     await page.waitForFunction(() => {
+       const box=document.querySelector('#psi-endgame-deck')?.getBoundingClientRect();
+       return Boolean(box && box.y < innerHeight * .60 && box.bottom > 0);
+     },null,{timeout:5000});
    }
+   // This release changes the destination from the legacy tile row to the
+   // visible veteran command board. Validate the real destination and launchers.
+   const deck=page.locator('#psi-endgame-deck');
+   await deck.scrollIntoViewIfNeeded();
+   const endgame=await page.evaluate(()=>{
+     const root=document.querySelector('#psi-endgame-deck');
+     const box=root?.getBoundingClientRect();
+     const buttons=Array.from(root?.querySelectorAll('button')??[]);
+     return {box:box?{top:box.top,bottom:box.bottom,width:box.width}:null,
+       cards:root?.querySelectorAll('.hub-endgame-card').length??0,
+       launches:buttons.map(button=>({label:button.textContent?.trim(),height:button.getBoundingClientRect().height,disabled:button.disabled})),
+       overflow:document.documentElement.scrollWidth>innerWidth+2};
+   });
+   if(!endgame.box||endgame.box.top>height*.60||endgame.box.bottom<0||
+      endgame.cards!==2||endgame.launches.length!==2||endgame.launches.some(b=>b.height<44||b.disabled)||endgame.overflow)
+     throw new Error('RE:IGNITION actual command deck failed responsive game entry: '+JSON.stringify(endgame));
+   await page.screenshot({path:path.join(out,width+'x'+height+'-endgame-deck.png'),animations:'disabled'});
    const splitCount=await page.locator('button.is-episode02-entry').count();
    const art=await page.locator('button.is-story-entry img.commercial-title-action-art').evaluate(async img=>{
      await img.decode();
