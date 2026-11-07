@@ -13,18 +13,22 @@ const c=await context(),p=await c.newPage();await p.addInitScript(key=>{const ol
 {
 const c=await context(),p=await c.newPage();let fail=true;await p.route('**/new-psi-crew-v2/player-map.webp*',r=>fail?r.abort():r.continue());await p.goto(base);await p.locator('.rg-story-button,.is-story-entry').click();await p.locator('.story-loading-recovery').waitFor({timeout:20000});a.equal(await p.locator('.episode-cold-open-cta').count(),0);a.equal(await p.evaluate(key=>localStorage.getItem(key),key),null);fail=false;await p.getByRole('button',{name:'다시 불러오기',exact:true}).click();await p.locator('.episode-cold-open-cta').waitFor({timeout:25000});rows.push('missing required art blocks entry; retry recovers without advancing save');await c.close();}
 {
-const c=await context(),p=await c.newPage();await p.addInitScript(receipts=>localStorage.setItem('psi.story.evidence.v1',JSON.stringify(receipts)),receipts);await p.goto(base);await enter(p);const seen=new Set();let watch=false,guard=false;
+const c=await context(),p=await c.newPage();await p.addInitScript(receipts=>localStorage.setItem('psi.story.evidence.v1',JSON.stringify(receipts)),receipts);await p.goto(base);await enter(p);const seen=new Set();let watch=false,guard=false,missingFrames=0;
 for(let step=0;step<350;step++){
-// The terminal frame unmounts the immersive scene; check completion FIRST.
-// Previous ordering retried a missing locator for 30 seconds per iteration
-// after a successful full playthrough, exhausting the workflow timeout.
+// The finished frame unmounts the scene. During authored tactical interludes,
+// the same narrative session can legitimately show strategy actions instead.
 if(await p.locator('.phase-complete').count())break;
 const scene=p.locator('.episode-immersive-scene');
-if(!await scene.count()){
- const current=await p.evaluate(()=>({phaseComplete:!!document.querySelector('.phase-complete'),screen:document.querySelector('main')?.getAttribute('class'),title:document.title}));
- throw new Error('Story recovery lost its scene before completion at step '+step+': '+JSON.stringify(current));
-}
-const event=await scene.getAttribute('data-event',{timeout:2500});
+const visibleScene=(await scene.count())>0;
+const event=visibleScene?await scene.getAttribute('data-event',{timeout:2500}):null;
+if(!visibleScene){
+ const validInterlude=(await p.locator('.strategy-shell,.strategy-observe-card,.strategy-outcome-card,.strategy-action-confirm,.strategy-action-list,.strategy-map-worker,.strategy-risk-signal,.strategy-zone-target,.strategy-rail,.choice-panel,.continue-button,.story-skip-voice').count())>0;
+ missingFrames=validInterlude?0:missingFrames+1;
+ if(missingFrames>8){
+  const current=await p.evaluate(()=>({phaseComplete:!!document.querySelector('.phase-complete'),storyFrame:document.querySelector('.game-frame')?.className,hub:!!document.querySelector('.rg-home'),guard:!!document.querySelector('.guard-home'),watch:!!document.querySelector('.survivors-preflight-top'),actions:[...document.querySelectorAll('button')].slice(0,8).map(e=>e.textContent?.trim()),title:document.title}));
+  throw new Error('Story recovery left all valid narrative and tactical surfaces at step '+step+': '+JSON.stringify(current));
+ }
+}else missingFrames=0;
 for(const el of await p.locator('[data-evidence-mode]').all())seen.add((await el.getAttribute('data-evidence-mode'))+':'+await el.getAttribute('data-evidence-outcome'));
 if((event==='e01_04_junho_signal'&&!watch)||(event==='e01_05_command'&&!guard)){
 const isWatch=!watch&&event==='e01_04_junho_signal',before=JSON.parse(await p.evaluate(key=>localStorage.getItem(key),key)).payload;
