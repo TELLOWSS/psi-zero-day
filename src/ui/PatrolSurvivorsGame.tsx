@@ -173,6 +173,7 @@ import './tactical-ui.css';
 import './survivors-boss-mobile.css';
 import './psi-experience-ui.css';
 import './combat-hud-clarity.css';
+import './combat-action-feel.css';
 import {watchBossTacticalCue} from './combat-ux-cues';
 import {MissionStatusRail} from './MissionStatusRail';
 
@@ -878,7 +879,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => { audioRef.current.setMuted(audioMuted); if ((phase === 'paused'&&!accountabilityCase)||phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase, accountabilityCase]);
 
   // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
-  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution' | 'mastery' | 'ultimate_ready', position?: { x: number; y: number }) => {
+  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution' | 'mastery' | 'ultimate_ready' | 'dash' | 'support' | 'control_line', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
       const ctx = audioRef.current.getContext();
@@ -922,7 +923,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         return;
       }
       const now = ctx.currentTime;
-      const interval = type === 'impact' ? .06 : type === 'control_heavy' ? .5 : type === 'pickup' || type === 'control' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
+      const interval = type === 'impact' ? .06 : type === 'control_heavy' ? .5 : type === 'pickup' || type === 'control' || type === 'dash' || type === 'support' || type === 'control_line' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
       const previous = sfxTimesRef.current.get(type);
       if (interval && previous !== undefined && now >= previous && now - previous < interval) return;
       sfxTimesRef.current.set(type, now);
@@ -971,6 +972,26 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         noise.connect(gain);
         audioRef.current.connectSfx(noise, gain, position, listener);
         noise.start(now);
+      } else if(type==='dash'||type==='support'||type==='control_line'){
+        // Acknowledgements are emitted only after a field tactic succeeds.
+        // Short, distinct signatures share the existing SFX mixer, mute state,
+        // listener position and polyphony budget; no extra music/voice layer.
+        const signature=type==='dash'
+          ? {start:640,end:240,length:.105,gain:.14,wave:'sine' as const}
+          : type==='support'
+          ? {start:510,end:820,length:.155,gain:.15,wave:'sine' as const}
+          : {start:430,end:175,length:.135,gain:.17,wave:'triangle' as const};
+        const osc=ctx.createOscillator(),gain=ctx.createGain();
+        osc.type=signature.wave;
+        osc.frequency.setValueAtTime(signature.start,now);
+        osc.frequency.exponentialRampToValueAtTime(signature.end,now+signature.length);
+        gain.gain.setValueAtTime(.001,now);
+        gain.gain.linearRampToValueAtTime(signature.gain,now+.012);
+        gain.gain.exponentialRampToValueAtTime(.001,now+signature.length);
+        if(!audioRef.current.track(osc,gain,2))return;
+        osc.connect(gain);
+        audioRef.current.connectSfx(osc,gain,position,listener);
+        osc.start(now);osc.stop(now+signature.length+.01);
       } else if (type === 'pickup' || type === 'control') {
         [659.25, 1046.5].forEach((freq, i) => {
           const osc = ctx.createOscillator();
@@ -3804,9 +3825,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const p=engine.state.player;
         const dashCd=p.dashCooldown ?? 0;
         return <div className="survivors-tactical-actions" aria-label={tacticsText.support}>
-          <button type="button" aria-label={tacticsText.dash ?? '긴급 회피'} title={tacticsText.dash_description ?? '0.25초 무적 회피'} disabled={encounterLocked||dashCd>0} onClick={()=>engine.triggerPlayerDash()}><ArrowUp size={20}/><span>{tacticsText.dash ?? '긴급 회피'}</span><b>{dashCd>0?Math.ceil(dashCd)+'s':'READY'}</b><small>Space/Shift</small></button>
-          {t && <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>}
-          {t && <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>}
+          <button type="button" data-action-feedback="dash" data-action-active={p.isDashing?"true":"false"} aria-label={tacticsText.dash ?? '긴급 회피'} title={tacticsText.dash_description ?? '0.25초 무적 회피'} disabled={encounterLocked||dashCd>0} onClick={()=>engine.triggerPlayerDash()}><ArrowUp size={20}/><span>{tacticsText.dash ?? '긴급 회피'}</span><b>{dashCd>0?Math.ceil(dashCd)+'s':'READY'}</b><small>Space/Shift</small></button>
+          {t && <button type="button" data-action-feedback="support" data-action-active={t.pendingSupport?"true":"false"} aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>}
+          {t && <button type="button" data-action-feedback="control-line" data-action-active={t.lines.length>0?"true":"false"} aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>}
         </div>;
       })()}
       {phase==='playing'&&(engineRef.current?.state.terrainGift?.remaining??0)>0&&<aside className="survivors-terrain-gift" role="status">{terrainText.cleanupGift} +{engineRef.current?.state.terrainGift?.credits} PSI<small>{terrainText.cleanupGiftNote}</small></aside>}

@@ -21,3 +21,15 @@ export function guardDamageLabels(shots:readonly DefenseCombatShot[]){
   .sort((a,b)=>Number(b.hit.enemyId==='BOSS')-Number(a.hit.enemyId==='BOSS')||Number(b.hit.resolved)-Number(a.hit.resolved)||b.hit.damage-a.hit.damage)
   .slice(0,8).map(({shotId,hit})=>`${shotId}|${hit.id}`);
 }
+
+/** A short, bounded visual receipt for an actual neutralization.
+ * Single controls are visible at a slower cadence; boss resolution always wins.
+ * No damage, score or audio mutation is performed here.
+ */
+export function guardFeedbackPulse(shots:readonly DefenseCombatShot[],sinceLastMs:number){
+ const summary=guardContactSummary(shots);
+ if(summary.resolved<=0)return null;
+ const interval=summary.resolved<3?1050:750;
+ if(!summary.bossResolved&&sinceLastMs<interval)return null;
+ return {tier:summary.bossResolved?'BOSS':summary.tier,resolved:summary.resolved,bossResolved:summary.bossResolved};
+}

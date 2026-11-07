@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import type {DefenseCombatShot,DefenseContent,DefenseRunState} from '../domain/defense';
 import {defenseBoundary,defenseEnemyPosition,defenseObservationPoints,defenseTowerPoint} from '../engine/defense-geometry';
-import {guardContactSummary,guardExitPressure} from '../app/guard-battle-feedback';
+import {guardExitPressure,guardFeedbackPulse} from '../app/guard-battle-feedback';
 import {defenseText as t} from '../app/defense-text';
 
 export function GuardWaveMeter({content,state}:{content:DefenseContent;state:DefenseRunState}){
@@ -39,15 +39,17 @@ export function GuardEvolutionFX({content,state,rotated=false}:{content:DefenseC
 
 export function GuardBattleFeedback({state,shots}:{state:DefenseRunState;shots:readonly DefenseCombatShot[]}){
  const [message,setMessage]=useState<{id:string;text:string;tier:string}|null>(null),seen=useRef(''),previous=useRef<DefenseRunState|null>(null),last=useRef(-Infinity);
- useEffect(()=>{const before=previous.current;previous.current=state;if(before?.runId!==state.runId){setMessage(null);last.current=-Infinity;}
+ useEffect(()=>{const before=previous.current;previous.current=state;if(before?.runId!==state.runId){setMessage(null);last.current=-Infinity;seen.current='';}
   if(state.paused||document.hidden){setMessage(null);return;}
   if(before&&state.completedWaves>before.completedWaves&&state.status==='INTERMISSION'){
    const wave=state.tacticalStats?.waves.at(-1);setMessage({id:`wave:${state.completedWaves}`,text:t(wave?.leaks===0?'guard.feedback.clean_wave':'guard.feedback.wave_clear'),tier:'WAVE'});return;
   }
   const key=shots.map(s=>s.id).join('|');if(!key||key===seen.current)return;seen.current=key;
-  const summary=guardContactSummary(shots);if(!summary.bossResolved&&summary.resolved<3)return;
-  const now=performance.now();if(now-last.current<800&&!summary.bossResolved)return;last.current=now;
-  setMessage({id:key,text:summary.bossResolved?t('guard.feedback.core_break'):`${t(summary.tier==='SURGE'?'guard.feedback.surge':'guard.feedback.break')} ×${summary.resolved}`,tier:summary.tier});
+  const now=performance.now();
+  const pulse=guardFeedbackPulse(shots,now-last.current);
+  if(!pulse)return;
+  last.current=now;
+  setMessage({id:key,text:pulse.bossResolved?t('guard.feedback.core_break'):`${t(pulse.tier==='SURGE'?'guard.feedback.surge':'guard.feedback.break')} ×${pulse.resolved}`,tier:pulse.tier});
  },[state,shots]);
  useEffect(()=>{if(!message)return;const timer=window.setTimeout(()=>setMessage(null),1400);return()=>window.clearTimeout(timer);},[message]);
  useEffect(()=>{const hide=()=>{if(document.hidden)setMessage(null);};document.addEventListener('visibilitychange',hide);return()=>document.removeEventListener('visibilitychange',hide);},[]);
