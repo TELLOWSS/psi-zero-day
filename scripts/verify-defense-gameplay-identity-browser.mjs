@@ -401,8 +401,8 @@ async function runLiveSiteEntryPath() {
     return true;
   })()`);
   await enterLegacyTrainingViaGuard();
-  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]'))`);
-  const gateCopy=await evaluate(cdp,`document.querySelector('[data-defense-screen="persistence-gate"]')?.textContent||''`);
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="save-resume"]'))`);
+  const gateCopy=await evaluate(cdp,`document.querySelector('[data-defense-screen="save-resume"]')?.textContent||''`);
   if(!gateCopy.includes('이어서 훈련'))throw new Error('Practice entry failed to offer continuing the saved training');
   await screenshot(cdp,'entry-01-practice-resume-gate.png');
   await clickText(cdp,'이어서 훈련');
@@ -447,7 +447,7 @@ async function runChoice(choice, viewport) {
   })()`);
 
   await enterLegacyTrainingViaGuard();
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"persistence-gate\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
+  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"save-resume\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
   await clickText(cdp, '이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-wave') === '8'");
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-def-core-phase') === 'DECISION'");
