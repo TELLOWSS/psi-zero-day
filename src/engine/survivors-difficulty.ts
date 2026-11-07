@@ -104,7 +104,7 @@ export function selectStageHazard(stage: PatrolStageDefinition, time: number, ro
   // Wave 2/3 can focus an already authored, explicitly briefed hazard without new spawns.
   if(difficulty==='mastery'&&director.wave>1){
     const focus=masteryStageFocus(stage);
-    if(focus&&complex.includes(focus.type)&&accent>=.7&&accent<.9)return focus.type;
+    if(focus&&complex.some(type=>type===focus.type)&&accent>=.7&&accent<.9)return focus.type;
   }
 
   // Wave 2/3 deliberately replace some generic contacts with authored stage hazards.
