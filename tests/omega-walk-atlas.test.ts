@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {OMEGA_WALK_STUDY,omegaWalkStudyAtlasFrame} from '../src/ui/omega-walk-atlas';
+import {OMEGA_WALK_STUDY,OMEGA_WALK_STUDY_MOBILE,omegaWalkStudyAtlasFrame} from '../src/ui/omega-walk-atlas';
 import {OMEGA_ART_CONTRACT,OMEGA_MOTIONS} from '../src/ui/omega-operator-motion';
 import {omegaOperatorEligibility} from '../src/domain/omega-operator-unlock';
 import {PATROL_STAGE_IDS} from '../src/domain/patrol-survivors';
@@ -22,6 +22,17 @@ describe('OMEGA 8 direction × 6 phase reference atlas is NOT a playable release
    }
   }
   expect(all.size).toBe(48);
+ });
+ it('keeps 8x6 mobile atlas addresses in bounds with quarter texture memory',()=>{
+  expect(OMEGA_WALK_STUDY_MOBILE).toMatchObject({width:1536,height:1536,frameWidth:192,frameHeight:256,prototypeOnly:true,artistApproved:false});
+  for(let direction=0;direction<8;direction++)for(let frame=0;frame<6;frame++){
+   const p=omegaWalkStudyAtlasFrame(frame/12,direction*Math.PI/4,false,'mobile');
+   expect(p).toMatchObject({x:direction*192,y:frame*256,width:192,height:256,playable:false});
+   expect(p.x+p.width).toBeLessThanOrEqual(OMEGA_WALK_STUDY_MOBILE.width);
+   expect(p.y+p.height).toBeLessThanOrEqual(OMEGA_WALK_STUDY_MOBILE.height);
+  }
+  expect(OMEGA_WALK_STUDY_MOBILE.width*OMEGA_WALK_STUDY_MOBILE.height*4)
+   .toBe((OMEGA_WALK_STUDY.width*OMEGA_WALK_STUDY.height*4)/4);
  });
  it('supports wraparound, negative time and reduced-motion static frame',()=>{
   expect(omegaWalkStudyAtlasFrame(.5,2*Math.PI)).toMatchObject({direction:'E',frame:0,x:0,y:0});
