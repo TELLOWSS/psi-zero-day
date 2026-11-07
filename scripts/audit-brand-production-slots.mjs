@@ -27,6 +27,30 @@ try {
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
     await page.goto(url);
+    if(await page.locator('.rg-home').count()){
+      await page.locator('.rg-hero-art').evaluate(async image=>image.decode());
+      const rg=await page.evaluate(()=>{
+        const home=document.querySelector('.rg-home');
+        const wordmark=document.querySelector('.rg-brand img');
+        const art=document.querySelector('.rg-hero-art');
+        const actions=[...home.querySelectorAll('.rg-card')];
+        const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
+        return {layout:home?.dataset.titleLayout,wordmark:{uri:new URL(wordmark.currentSrc).pathname,loaded:wordmark.complete&&wordmark.naturalWidth>0,box:rect(wordmark)},
+          hero:{uri:new URL(art.currentSrc).pathname,loaded:art.complete&&art.naturalWidth>0,box:rect(art)},
+          actions:actions.map(e=>({visible:e.getBoundingClientRect().height>150,disabled:e.disabled})),
+          overflow:document.documentElement.scrollWidth>innerWidth};
+      });
+      const expectedMark=runtimeBrandFiles.find(item=>item.uri===rg.wordmark.uri);
+      const response=await page.request.get(new URL(rg.wordmark.uri,url).href);
+      const markSha=createHash('sha256').update(await response.body()).digest('hex');
+      const verified=Boolean(expectedMark&&response.ok()&&markSha===expectedMark.sha256);
+      const pass=verified&&rg.layout==='REIGNITION_V1'&&rg.wordmark.loaded&&rg.hero.loaded&&
+         rg.actions.length===2&&rg.actions.every(item=>item.visible&&!item.disabled)&&!rg.overflow&&!errors.length;
+      const images=[{id:'REIGNITION_HERO',uri:rg.hero.uri,sha256:'runtime-screen',loaded:rg.hero.loaded,matchesContract:rg.hero.loaded}];
+      rows.push({width,height,colorScheme,images,wordmark:rg.wordmark,brandFiles:[{uri:rg.wordmark.uri,sha256:markSha,matchesApproval:verified}],overflow:rg.overflow,errors,pass,scope:'REIGNITION_NEW_TITLE_APPROVED_MARK_REAL_DOM'});
+      await page.screenshot({path:`${output}/${width}x${height}-${colorScheme}-title.png`,fullPage:true});
+      await page.close();continue;
+    }
     await page.locator('.commercial-title-home').waitFor();
     await page.evaluate(() => document.fonts.ready);
     const images = [];
