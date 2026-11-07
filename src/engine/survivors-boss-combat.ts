@@ -1,4 +1,5 @@
 import type { Hazard } from '../domain/patrol-survivors';
+import type {PatrolDifficulty} from '../domain/survivors-challenge';
 import type { BossGameplayDefinition, BossGameplayProgress } from '../domain/survivors-boss-gameplay';
 
 export function createBossCombat(definition: BossGameplayDefinition): BossGameplayProgress {
@@ -37,14 +38,21 @@ export function tickBossCombat(h: Hazard, dt: number): boolean {
   return true;
 }
 
+/** How many clean, warned openings a maximum-strength build must face. */
+export function bossBurstFraction(difficulty:PatrolDifficulty):number {
+  if(difficulty==='story')return .5;
+  if(difficulty==='standard')return .4;
+  if(difficulty==='hard')return .34;
+  return .25;
+}
 /** Passive equipment cannot resolve the signature or activate its weak point. */
-export function bossCombatDamage(h: Hazard, amount: number, definition: BossGameplayDefinition, projectile=false, mastery=false): void {
+export function bossCombatDamage(h: Hazard, amount: number, definition: BossGameplayDefinition, projectile=false, difficulty:PatrolDifficulty='standard'): void {
   const p=h.bossGameplay;if(!p||!Number.isFinite(amount)||amount<=0)return;
   if(p.combatPhase==='weak_point'&&p.signatureResolvedThisCycle&&projectile){
     p.combatPhase='burst';p.remaining=0;p.burstRemaining=definition.burstWindowSeconds;
     // The strongest equipment can fill one opening, but not bypass multiple reads.
     // Four clean weak-point windows are needed if each window hits the full cap.
-    p.burstFloorHp=mastery?Math.max(0,h.hp-h.maxHp*.25):undefined;
+    p.burstFloorHp=Math.max(0,h.hp-h.maxHp*bossBurstFraction(difficulty));
     return;
   }
   if(p.combatPhase!=='burst')return;

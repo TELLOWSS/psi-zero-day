@@ -14,7 +14,7 @@ import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
-import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus,masteryBossCycleFloor } from './survivors-boss-pattern';
+import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus,bossCycleFloor } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
@@ -1147,8 +1147,10 @@ export class SurvivorsEngine {
     this.state.directorShoutTimer = 2.0;
     this.state.directorCutinPhase = 'cutin';
 
-    // 1. Time freeze & stun all existing hazards, deal massive damage
+    // The shout neutralizes ordinary hazards, never a scripted boss.
+    // Boss patterns, weak-point windows and movement must remain playable.
     for (const h of this.state.hazards) {
+      if(h.isStageBoss&&h.bossEncounterManaged)continue;
       h.isStunned = 3.5;
       this.damageHazard(h,9999);
     }
@@ -1901,12 +1903,12 @@ export class SurvivorsEngine {
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       if(h.bossGameplay){
-        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile,this.state.difficulty==='mastery');
+        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile,this.state.difficulty??'standard');
         if(h.hp<beforeHp)h.hitFlashTimer=0.08;
         return;
       }
       // Structural interlocks expose the next core only after its risk cycle settles.
-      const floor=Math.max(bossCoreFloor(h),this.state.difficulty==='mastery'&&this.state.stage.stageNumber===50?masteryBossCycleFloor(h):0);
+      const floor=Math.max(bossCoreFloor(h),this.state.stage.stageNumber===50?bossCycleFloor(h,this.state.difficulty??'standard'):0);
       h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
     } else h.hp=Math.max(0,h.hp-amount);
     if(h.hp<beforeHp)h.hitFlashTimer=0.08;
@@ -2027,7 +2029,7 @@ export class SurvivorsEngine {
   private updateHazards(dt: number) {
     const { player } = this.state;
     for (const h of this.state.hazards) {
-      if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
+      if(advanceBossPhase(h,this.state.difficulty))this.emitAudio('boss_alarm',h.x,h.y);
       if(h.bossGameplay){
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
@@ -2167,6 +2169,15 @@ export class SurvivorsEngine {
         if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss || hits?.has(h.id)) continue;
         if (p.duration <= 0 || p.pierce <= 0) break;
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
+          // Shout (including revival shockwave) cannot stun, damage or
+          // prematurely resolve a scripted boss during its warning cycle.
+          if(h.isStageBoss&&h.bossEncounterManaged&&p.kind==='shout_shockwave'){
+            if(!hits){hits=new Set();this.projectileHits.set(p,hits);}
+            hits.add(h.id);
+            this.emitProjectileFeedback(p,'impact',h.x,h.y,false,false,h.type,true,0,h);
+            p.pierce-=1;
+            continue;
+          }
           // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
           if(!repeatContact){
             if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
@@ -2176,7 +2187,7 @@ export class SurvivorsEngine {
           const isWeakPoint = Boolean(
             h.weakPointExposed ||
             (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
-            (h.bossEncounterManaged && bossCoreStatus(h) === 'exposed')
+            (h.bossEncounterManaged && bossCoreStatus(h,this.state.difficulty) === 'exposed')
           );
           const isCrit = isWeakPoint || this.random() < player.critRate;
           const damageDealt = isWeakPoint ? p.damage * 2.5 : isCrit ? p.damage * 2.0 : p.damage;
