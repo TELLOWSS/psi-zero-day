@@ -43,8 +43,17 @@ try{
     await page.getByRole('button',{name:'메인으로 나가기',exact:true}).click();
     await page.locator('.rg-home,.commercial-title-home').waitFor();
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-    const pass=images.every(image=>image.width>=900&&image.height>=650)&&entries.length===2&&nonblank&&!overflow&&!errors.length;
-    results.push({width,height,images,entries,nonblank,overflow,errors,pass});await page.close();
+    // The Guard card retains its 900px+ premium art contract. The
+    // user-approved RE:IGNITION character is deliberately portrait artwork
+    // (700×788), so reject unknown images rather than applying the old
+    // landscape-only threshold to a correctly loaded portrait.
+    const artContract={
+      defense:images[0]?.width>=900&&images[0]?.height>=650,
+      approvedReignition:images[1]?.src==='/assets/reignition/veteran-return.webp'
+        &&images[1]?.width>=650&&images[1]?.height>=750,
+    };
+    const pass=artContract.defense&&artContract.approvedReignition&&entries.length===2&&nonblank&&!overflow&&!errors.length;
+    results.push({width,height,images,artContract,entries,nonblank,overflow,errors,pass});await page.close();
   }
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({baseUrl,results},null,2));
   console.log(JSON.stringify(results));if(results.some(result=>!result.pass))process.exitCode=1;
