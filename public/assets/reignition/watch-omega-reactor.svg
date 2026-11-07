@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="740" viewBox="0 0 1600 740" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="dark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#130e26" stop-opacity=".1"/><stop offset=".62" stop-color="#480c43" stop-opacity=".27"/><stop offset="1" stop-color="#df1c75" stop-opacity=".19"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#ff8ed0" stop-opacity=".62"/><stop offset=".22" stop-color="#f5309c" stop-opacity=".22"/><stop offset=".9" stop-color="#8f0c59" stop-opacity=".03"/><stop offset="1" stop-color="#ff0099" stop-opacity="0"/></radialGradient>
+<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="#f36cbd" stroke-width=".7" fill="none" opacity=".11"/></pattern>
+</defs><rect width="1600" height="740" fill="url(#dark)"/><rect width="1600" height="740" fill="url(#grid)"/>
+<g transform="translate(1220 337)">
+ <circle r="366" fill="url(#light)"/>
+ <circle r="272" stroke="#ef3ea6" stroke-opacity=".65" stroke-width="12" fill="none" stroke-dasharray="11 22"/>
+ <circle r="235" stroke="#ffabe5" stroke-opacity=".4" stroke-width="1.5" fill="none"/>
+ <circle r="201" stroke="#ff48ac" stroke-opacity=".55" stroke-width="20" stroke-dasharray="290 83 420 110" fill="none"/>
+ <circle r="168" stroke="#f2a2e6" stroke-opacity=".64" stroke-width="2.5" fill="none" stroke-dasharray="3 8"/>
+ <circle r="123" stroke="#ff5aac" stroke-opacity=".42" stroke-width="4" fill="none"/>
+ <path d="M0-110 76-44 95 69 0 112-95 69-76-44Z" fill="#890a50" fill-opacity=".38" stroke="#ff86cf" stroke-width="4"/>
+ <path d="M-76-22 0-76 76-22 0 83Z" fill="#f128a3" fill-opacity=".18" stroke="#ffbcea" stroke-opacity=".8" stroke-width="3"/>
+ <path d="M-24-40 25-40 55 8 0 64-55 8Z" fill="#f64da9" fill-opacity=".75"/>
+ <g stroke="#ffa6e2" stroke-width="3" fill="none"><path d="M0-330V-255M0 255V330M-320 0H-252M252 0H320"/><path d="M-260-260L-210-210M260-260L210-210M260 260L210 210"/></g>
+</g>
+<g fill="none" stroke="#f939a4" opacity=".44"><path d="M400 710 630 500 870 500 1020 340" stroke-width="7"/><path d="M740 710 890 562 1040 562 1110 480" stroke-width="5"/><path d="M650 30 870 180 1080 180" stroke-width="3" stroke-dasharray="12 14"/></g>
+<g stroke="#fb89cb" stroke-width="2" opacity=".27"><path d="M880 30H1600M925 50V650"/><path d="M1080 1V110M1200 40V120M1320 5V150M1440 60V200"/></g>
+<g fill="#ffb7e2" opacity=".72"><path d="M920 400 941 381 941 420Z"/><path d="M780 535 798 520 802 541Z"/><path d="M895 83 909 91 903 102Z"/></g>
+<g stroke="#ed2a80" stroke-width="3" opacity=".38"><path d="M900 585h80l-40 26ZM850 628h70l-35 25ZM980 617h82l-41 24Z"/></g>
+<rect x="8" y="8" width="1584" height="724" rx="14" fill="none" stroke="#f77bca" stroke-opacity=".35"/>
+</svg>

@@ -1,0 +1,418 @@
+/* RE:IGNITION / Mode-specific Season Interface 2026.11.
+ * No background screenshot with duplicated fake buttons, no gameplay data changes.
+ * Guard command = electro-cyan. Watch action = fuchsia alarm.
+ */
+
+/* SIGNAL GUARD — command room and sector operations */
+.guard-home[data-reignition-season="2026"]{
+ --guard-neon:#5eeafd;--guard-neon-soft:#a4f5ed;--guard-frost:#d9fcff;
+ --guard-panel:#0b2233;--guard-border:#72dff28c;
+ min-height:100dvh;
+ background:
+  radial-gradient(ellipse at 72% 0%,#094c70 0%,transparent 52%),
+  linear-gradient(145deg,#030b19,#061a28 44%,#081a26);
+ color:#ecf9ff;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero{
+ min-height:clamp(420px,50vw,570px);
+ position:relative;isolation:isolate;overflow:hidden;
+ display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+ background-position:center,center,center!important;
+ background-size:cover,cover,cover!important;
+ border-bottom:1px solid #89f3ff78;
+ padding:clamp(16px,3vw,34px) clamp(18px,5vw,86px);
+ box-shadow:inset 0 -42px 64px #030d1cb5,0 18px 50px #01111e86;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero::before{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(circle at 75% 55%,#12e5ff18 0%,transparent 34%);
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero::after{
+ content:"";position:absolute;top:65px;bottom:17px;right:clamp(15px,5vw,70px);width:23px;
+ border-right:2px solid #65e6ed7c;border-top:1px solid #65e6ed6a;border-bottom:1px solid #65e6ed6a;
+ pointer-events:none;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero nav{
+ display:flex;gap:10px;justify-content:flex-start;align-items:center;
+ margin-bottom:clamp(16px,2.6vw,36px);
+ padding-bottom:14px;border-bottom:1px solid #87dbea4f;
+ letter-spacing:.07em;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-nav-logo{
+ display:inline-flex;align-items:center;gap:8px;flex:1;min-width:160px;
+ font-size:clamp(14px,2vw,22px);font-weight:1000;letter-spacing:.11em;
+ color:#e4ffff;text-shadow:0 0 24px #0bcaff7d;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-nav-logo i{
+ font-style:normal;color:#79edff;font-size:29px;text-shadow:0 0 18px #4ad9ff;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-nav-logo em{
+ font-style:normal;font-size:10px;letter-spacing:.14em;color:#8dd7e9;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero nav button{
+ border-radius:5px;border-color:#8adcf386;
+ background:#091a2bbb;backdrop-filter:blur(9px);
+ font-size:12px;text-transform:uppercase;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-ident{
+ display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+ max-width:660px;font-size:11px;font-weight:850;letter-spacing:.18em;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-ident span{color:#e1fbff}
+.guard-home[data-reignition-season="2026"] .guard-season-ident b{
+ border-left:2px solid #63e9ff;padding-left:13px;color:#79f4ff;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-ident small{color:#9dc5d8;font-size:10px}
+.guard-home[data-reignition-season="2026"] .guard-season-hero-copy{
+ position:relative;display:grid;justify-items:start;align-content:center;
+ min-height:200px;max-width:720px;z-index:1;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-hero-copy>small{
+ margin-top:16px;color:#7fe6fc;letter-spacing:.15em;font-size:13px;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero h1{
+ margin:5px 0 3px;font-size:clamp(40px,6.8vw,84px);
+ font-weight:1000;letter-spacing:-.065em;
+ color:#f0fdff;text-shadow:0 1px 0 #267c9e,0 7px 35px #001822;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-hero-copy>p{
+ max-width:520px;margin:6px 0 15px;color:#c0e9f5;
+ font-size:clamp(13px,1.35vw,17px);line-height:1.55;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-intel{
+ display:flex;flex-wrap:wrap;gap:8px;max-width:650px;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-intel>span{
+ display:flex;flex-direction:column;gap:2px;
+ min-width:128px;padding:11px 16px;
+ background:#071b2ad8;border:1px solid #6ddcee74;
+ clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+}
+.guard-home[data-reignition-season="2026"] .guard-season-intel small{
+ color:#7de0e9;font-size:9px;font-weight:850;letter-spacing:.12em;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-intel strong{
+ color:#f4ffff;font-size:clamp(15px,2.2vw,23px);font-weight:900;line-height:1.1;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-intel strong em{
+ font-size:13px;font-style:normal;color:#8bc5d1;
+}
+.guard-home[data-reignition-season="2026"] .guard-home-hero .guard-primary{
+ margin-top:15px;width:fit-content;min-height:51px;
+ padding:12px 28px;border:1px solid #d4fdff;
+ border-radius:3px 13px 3px 13px;color:#041c26;
+ background:linear-gradient(115deg,#e5fdff,#6ce9ff 55%,#10b1d6);
+ font-size:clamp(13px,1.4vw,16px);font-weight:950;
+ box-shadow:0 0 25px #1ccefa55,inset 0 1px #fff9;
+}
+.guard-home[data-reignition-season="2026"] .guard-progress{
+ margin-top:15px;display:inline-flex;align-self:flex-start;
+ color:#b8f4fa;letter-spacing:.07em;font-size:11px;
+}
+.guard-home[data-reignition-season="2026"] .psi-mission-rail{
+ border-color:#4cccf776;background:linear-gradient(115deg,#0b2944,#071928);
+ --psi-rail-accent:#78eaff;
+}
+.guard-home[data-reignition-season="2026"] .guard-veteran-command{
+ background:linear-gradient(120deg,#0a344aeb,#0a152ce8);
+ border-color:#79cfe98a;
+ box-shadow:0 20px 60px #01101caa,inset 0 1px #cdf9ff22;
+}
+.guard-home[data-reignition-season="2026"] .guard-veteran-command small{color:#85e7f7}
+.guard-home[data-reignition-season="2026"] .guard-veteran-go{
+ background:linear-gradient(115deg,#b5eeff,#3fcce7)!important;
+ color:#062631!important;border:1px solid #e1ffff!important;
+ box-shadow:0 0 28px #1dd7f559;
+}
+.guard-home[data-reignition-season="2026"] .guard-mastery-choice{
+ border:1px solid #83dce488;border-radius:9px;
+ background:linear-gradient(125deg,#073b52,#091e2d);
+}
+.guard-home[data-reignition-season="2026"] .guard-season-operation-head{
+ display:flex;gap:16px;align-items:center;justify-content:space-between;
+ padding:18px 0 18px;border-bottom:1px solid #7ce9fc5b;margin-bottom:20px;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-operation-head small{
+ color:#81dbea;font-size:10px;letter-spacing:.2em;font-weight:900;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-operation-head h2{
+ font-size:clamp(23px,3.6vw,36px);margin:8px 0;color:#ecfbfd;
+ letter-spacing:-.04em;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-operation-head p{
+ color:#a6cfdb;font-size:13px;margin:4px 0;
+}
+.guard-home[data-reignition-season="2026"] .guard-season-crosshair{
+ color:#8be8f5;font-size:55px;line-height:1;opacity:.7;
+ text-shadow:0 0 35px #2be1fd88;
+}
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article[data-reignition-card="command"]{
+ border-radius:5px 18px 5px 18px;
+ border:1px solid #69d0df89;
+ background:linear-gradient(145deg,#143245,#071a2c 92%);
+ box-shadow:0 14px 40px #0006,inset 0 1px #b9faff29;
+}
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article[data-reignition-card="command"]:focus-within,
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article[data-reignition-card="command"]:hover{
+ border-color:#b0f8ff;box-shadow:0 17px 48px #0008,0 0 0 1px #72dcf644;
+}
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article[data-reignition-card="command"]>div{
+ padding:clamp(14px,2vw,22px);
+}
+.guard-home[data-reignition-season="2026"] .guard-sector-entry{
+ display:flex;gap:10px;align-items:center;margin:0 0 12px;
+ padding:0 0 9px;border-bottom:1px solid #7bdcea52;
+ color:#9fe8f4;
+}
+.guard-home[data-reignition-season="2026"] .guard-sector-entry b{
+ font-size:28px;font-weight:950;color:#e5feff;line-height:1;
+}
+.guard-home[data-reignition-season="2026"] .guard-sector-entry span{
+ font-size:9px;letter-spacing:.16em;font-weight:850;line-height:1.4;
+}
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article h3{
+ font-size:clamp(17px,2vw,22px);color:#f0ffff;margin:10px 0;
+}
+.guard-home[data-reignition-season="2026"] .guard-stage-grid article button:not(:disabled){
+ background:linear-gradient(110deg,#dbfcff,#52d9f1 72%,#16a8ce);
+ border-color:#e1fdff;border-radius:4px 12px 4px 12px;
+ font-weight:900;box-shadow:0 6px 20px #00618068;
+}
+.guard-home[data-reignition-season="2026"][data-selected-mode=mastery] .guard-stage-grid article button:not(:disabled){
+ background:linear-gradient(105deg,#f2e4c7,#e5bb85 70%,#cf9859);
+}
+.guard-home[data-reignition-season="2026"] footer{border-top:1px solid #6bd3e65e;padding-top:22px}
+
+/* SIGNAL WATCH — Omega alert protocol / magenta survival action */
+.survivors-container.sw-season-v2{
+ --sw-hot:#ff59bd;--sw-light:#ffe3f5;--sw-warn:#ff90c8;--sw-deep:#170c29;
+}
+.sw-season-v2 .survivors-modal-backdrop{
+ background:
+  radial-gradient(ellipse at 75% 30%,#9e185c6b,transparent 53%),
+  linear-gradient(144deg,#080e20ed,#200b2fe9 68%,#160820ed);
+}
+.sw-season-v2 .survivors-ready-dialog[data-reignition-ui="watch-v2"]{
+ border:1px solid #ee73c48c;border-radius:10px 21px 10px 21px;
+ background:linear-gradient(146deg,#250d38,#140f29 62%,#1d0b31);
+ box-shadow:0 28px 100px #000c,0 0 0 1px #fe8dce16,inset 0 1px #fff3;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-top{
+ border-bottom:1px solid #d965b16e;
+ background:linear-gradient(90deg,#341341f2,#180c2ced);
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-top h2{
+ letter-spacing:.06em;color:#ffecf7;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-top button{
+ border-color:#dd83ca71;color:#f8d9ef;
+}
+.sw-season-v2 .sw-season-showcase{
+ min-height:164px;position:relative;isolation:isolate;
+ overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;
+ gap:22px;padding:clamp(14px,2.1vw,27px);
+ background:
+  linear-gradient(90deg,#180f2af5 3%,#2a0c39df 48%,#290c416a),
+  url('/assets/reignition/watch-omega-reactor.svg') right center / cover no-repeat,
+  url('/assets/survivors/collapse-core-boss-v1.webp') right center / cover no-repeat;
+ border:1px solid #e65eb085;border-radius:8px 17px 8px 17px;
+ box-shadow:0 0 38px #c3249a24,inset 0 1px #fff3;
+}
+.sw-season-v2 .sw-season-showcase::after{
+ content:"";position:absolute;inset:auto 0 0;height:3px;
+ background:linear-gradient(90deg,#fc7bda,#f3148f 50%,#ffbce9);
+ box-shadow:0 0 20px #f83ca8c9;
+}
+.sw-season-v2 .sw-season-showcase-copy{
+ z-index:1;display:grid;gap:6px;min-width:0;
+ text-shadow:0 4px 18px #110918db;
+}
+.sw-season-v2 .sw-season-eyebrow{
+ color:#ffa9dd;font-size:9px;font-weight:950;letter-spacing:.15em;
+}
+.sw-season-v2 .sw-season-showcase-copy h3{
+ color:#fff0fb;font-size:clamp(28px,4.8vw,58px);
+ font-weight:1000;letter-spacing:-.065em;line-height:1;
+ margin:3px 0 2px;text-shadow:0 0 24px #ff47ac44;
+}
+.sw-season-v2 .sw-season-showcase-copy h3 em{
+ color:#ff66bd;font-style:normal;
+}
+.sw-season-v2 .sw-season-showcase-copy p{
+ color:#ffe2f4;font-size:clamp(12px,1.5vw,16px);
+ font-weight:750;letter-spacing:-.015em;line-height:1.35;margin:0;
+}
+.sw-season-v2 .sw-season-label{
+ color:#ed93d4;font-size:10px;letter-spacing:.13em;font-weight:750;
+}
+.sw-season-v2 .sw-season-showcase-counter{
+ z-index:1;min-width:104px;max-width:180px;
+ display:grid;gap:3px;justify-items:end;text-align:right;
+ padding:12px 14px;border:1px solid #f38bd5a5;
+ background:linear-gradient(160deg,#33103de8,#190e30db);
+ clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);
+}
+.sw-season-v2 .sw-season-showcase-counter small{
+ font-size:9px;line-height:1.35;color:#fca8df;letter-spacing:.08em;
+}
+.sw-season-v2 .sw-season-showcase-counter strong{
+ font-size:clamp(25px,3.4vw,42px);font-weight:950;line-height:1.1;
+ color:#fff1fd;text-shadow:0 0 15px #f53caa66;
+}
+.sw-season-v2 .sw-season-showcase-counter strong span{
+ color:#c98bba;font-size:14px;font-weight:750;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-ready-launch{
+ background:linear-gradient(110deg,#38133af5,#22122eea);
+ border-bottom:1px solid #e776c07b;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-ready-launch strong{
+ color:#fff0fc;font-size:clamp(13px,1.8vw,18px);
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-ready-launch .survivors-btn-primary{
+ border:1px solid #ffd0ee;border-radius:4px 14px 4px 14px;
+ color:#fff4fc;background:linear-gradient(125deg,#fe4db1,#c5228b 75%,#8f1d83);
+ font-weight:950;letter-spacing:.045em;
+ box-shadow:0 0 22px #fb3da36b,inset 0 1px #fff6;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-ready-launch .survivors-btn-primary:hover:not(:disabled){
+ box-shadow:0 0 30px #ff40b6aa,inset 0 1px #fff8;
+}
+.sw-season-v2 .survivors-ready-dialog>.psi-mission-rail[data-psi-mode=watch]{
+ --psi-rail-accent:#ff76c7;
+ border-color:#dd69b585;
+ background:linear-gradient(112deg,#32173b,#1a142d);
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-veteran-return{
+ border-color:#ff90d289;background:linear-gradient(128deg,#431342e8,#17122ccf);
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-tabs{
+ border:1px solid #da75b27b;background:#30133b;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-tabs button{
+ color:#f0c6e9;letter-spacing:.02em;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-tabs button[aria-pressed="true"]{
+ color:#2c0c2a;background:linear-gradient(135deg,#ffb5df,#ff63b8);
+ border-color:#ffe1f4;box-shadow:0 5px 20px #ff4e9b49;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-challenge-select{
+ border-color:#d676b08c;
+ background:linear-gradient(145deg,#25112f,#1b122c);
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-challenge-select button[aria-pressed="true"]{
+ border-color:#ffa4dd;box-shadow:0 0 0 2px #fc5bba61;
+}
+.sw-season-v2 .survivors-ready-dialog .survivors-preflight-gear{
+ background:linear-gradient(130deg,#351a3d,#1d1937);
+ border-color:#bd79bd81;
+}
+.sw-season-v2 .survivors-ready-dialog :is(button,select):focus-visible{
+ outline:3px solid #ffe2a6!important;outline-offset:3px;
+}
+/* Watch combat uses existing HUD/canvas: no fake boss bars or blocking overlays. */
+.sw-season-v2.is-combat .survivors-hud-top{
+ background:linear-gradient(120deg,#2b123cf2,#180e2aef 72%);
+ border-color:#d371b785;border-radius:7px 14px 7px 14px;
+ box-shadow:inset 0 1px #fff3,0 7px 24px #0008;
+}
+.sw-season-v2.is-combat .survivors-hud-top::before{
+ content:"";position:absolute;left:12px;right:12px;top:0;height:2px;
+ background:linear-gradient(90deg,#ff8fd1,#ba35a8,transparent);
+ pointer-events:none;
+}
+.sw-season-v2.is-combat .survivors-wave-badge{
+ color:#ffd7f1;border-color:#fb79c281;
+}
+.sw-season-v2.is-combat .survivors-tactical-actions button:not(:disabled){
+ border-color:#fa8ac0c0;background:linear-gradient(125deg,#4e1c4f,#221438);
+ box-shadow:inset 0 1px #fff2,0 0 10px #e72d9550;
+}
+.sw-season-v2.is-combat .survivors-tactical-actions button[data-action-active="true"]{
+ border-color:#fca4e0;background:linear-gradient(130deg,#832467,#3f1853);
+ box-shadow:0 0 18px #fa49b965,inset 0 1px #fff3;
+}
+.sw-season-v2.is-combat .survivors-focus-status{
+ background:linear-gradient(110deg,#3c143eec,#21112fea);
+ border-color:#df6fba9e;border-radius:5px 12px 5px 12px;
+}
+.sw-season-v2.is-combat .survivors-focus-status[data-tactical=attack]{
+ background:linear-gradient(110deg,#361d56eb,#502057e8);
+ border-color:#fca1d6;
+}
+.sw-season-v2.is-combat .survivors-ultimate-btn{
+ border-color:#ff9ce6;
+ box-shadow:0 0 18px #e338b069,inset 0 0 20px #e63faa3e;
+}
+.sw-season-v2.is-combat .survivors-ultimate-btn:focus-visible{
+ outline:3px solid #ffd2a0;outline-offset:3px;
+}
+/* Guard combat — forged cyan telemetry, no map interaction overlay */
+.zb-shell[data-reignition-mode=guard-v2]{
+ --guard-signal:#7befff;--guard-fail:#f5a8b9;
+ background:linear-gradient(145deg,#061627,#0a2837);
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-hud{
+ background:linear-gradient(105deg,#0b2e42ed,#081a2beb);
+ border-bottom:1px solid #73e0f3a3;
+ box-shadow:inset 0 -1px #76ecfb37;
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-tactics-strip{
+ background:linear-gradient(90deg,#08263b,#102e41);
+ border-bottom:1px solid #56def9a6;
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-hud .zb-meter{
+ border-radius:4px 10px 4px 10px;
+ border-color:#81e6f39b;
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-selection{
+ border-top:1px solid #55dceb80;
+ background:linear-gradient(160deg,#0b3040,#081c2d);
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-run-controls{
+ border-color:#79e1f25d;
+ background:linear-gradient(120deg,#071d2de8,#123a46e8);
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-tower-shop button:not(:disabled){
+ border-color:#5dc8dc84;
+}
+.zb-shell[data-reignition-mode=guard-v2] .zb-tower-shop button:is(:focus-visible,:hover):not(:disabled){
+ border-color:#a8ffff;box-shadow:0 0 0 1px #60dbed55;
+}
+/* Touch size, short landscape view, power efficiency. */
+@media(max-width:740px){
+ .guard-home[data-reignition-season="2026"] .guard-home-hero{
+   min-height:365px;padding:14px 15px 24px;background-position:center,65% center,center!important;
+ }
+ .guard-home[data-reignition-season="2026"] .guard-home-hero nav{gap:6px;flex-wrap:wrap;margin-bottom:14px}
+ .guard-home[data-reignition-season="2026"] .guard-season-nav-logo{font-size:14px}
+ .guard-home[data-reignition-season="2026"] .guard-season-nav-logo em{display:none}
+ .guard-home[data-reignition-season="2026"] .guard-season-ident small{display:none}
+ .guard-home[data-reignition-season="2026"] .guard-home-hero h1{font-size:clamp(35px,9vw,55px)}
+ .guard-home[data-reignition-season="2026"] .guard-season-intel>span{min-width:0;flex:1 1 85px;padding:9px}
+ .guard-home[data-reignition-season="2026"] .guard-season-intel small{font-size:8px;letter-spacing:.02em}
+ .guard-home[data-reignition-season="2026"] .guard-season-intel strong{font-size:15px}
+ .guard-home[data-reignition-season="2026"] .guard-season-operation-head{padding:12px 0}
+ .guard-home[data-reignition-season="2026"] .guard-season-crosshair{font-size:38px}
+ .sw-season-v2 .sw-season-showcase{min-height:116px;padding:14px;gap:6px}
+ .sw-season-v2 .sw-season-showcase-copy h3{font-size:clamp(25px,7vw,37px)}
+ .sw-season-v2 .sw-season-showcase-copy p{font-size:11px}
+ .sw-season-v2 .sw-season-label{font-size:8px;letter-spacing:.04em}
+ .sw-season-v2 .sw-season-showcase-counter{min-width:73px;padding:9px;max-width:90px}
+ .sw-season-v2 .sw-season-showcase-counter strong{font-size:26px}
+ .sw-season-v2 .sw-season-showcase-counter small{font-size:8px}
+ .sw-season-v2 .survivors-ready-dialog .survivors-ready-launch .survivors-btn-primary{min-height:48px}
+}
+@media(orientation:landscape) and (max-height:440px){
+ .guard-home[data-reignition-season="2026"] .guard-home-hero{min-height:290px}
+ .sw-season-v2 .sw-season-showcase{min-height:96px}
+ .sw-season-v2 .sw-season-showcase-copy h3{font-size:24px}
+ .sw-season-v2 .sw-season-showcase-copy p{display:none}
+ .sw-season-v2.is-combat .survivors-hud-top::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .guard-home[data-reignition-season="2026"] .guard-stage-grid article,
+ .sw-season-v2 .survivors-ready-dialog button{transition:none!important}
+}
+.sw-season-v2[data-quality=low] .survivors-ready-dialog,
+.sw-season-v2[data-quality=low] .survivors-ready-launch{backdrop-filter:none!important}
