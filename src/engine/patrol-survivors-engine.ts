@@ -2213,7 +2213,9 @@ export class SurvivorsEngine {
           }
 
           // A received instruction pauses the worker/equipment; no bodily knockback.
-          if (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS') {
+          // A normal weapon hit must not repeatedly reset a scripted boss's
+          // physical warning. High-fire-rate builds once perma-stunned bosses.
+          if (!h.bossEncounterManaged && (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS')) {
             h.vx = 0; h.vy = 0; h.isStunned = Math.max(h.isStunned ?? 0, 0.15);
           }
 
