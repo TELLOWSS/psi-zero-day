@@ -914,6 +914,19 @@ export class SurvivorsEngine {
     const e=this.state.bossEncounter;if(!e||e.phase!=='arrival')return;
     e.phase='combat';e.remaining=0;this.state.bossName=null;this.state.bossAlertTimer=0;
     const boss=this.state.hazards.find(h=>h.id===e.bossId);
+    // Optional post-clear only. Reuse existing crane-drop telegraph and 2.2s response window,
+    // never spawn the lock during an intro, in earlier modes, or in other workfaces.
+    if(this.state.difficulty==='mastery'&&this.state.stage.stageNumber===50&&!this.state.interactiveHazards.some(h=>h.id==='mastery-boss-50-lock')){
+      const player=this.state.player;
+      this.state.interactiveHazards.push({
+        id:'mastery-boss-50-lock',type:'crane_drop_zone',
+        x:Math.max(120,Math.min(WORLD_WIDTH-120,player.x)),
+        y:Math.max(120,Math.min(WORLD_HEIGHT-120,player.y)),
+        radius:118,hp:9999,maxHp:9999,state:'warning',timer:2.2,
+        label:'마스터 양중 집중 경고 · 이동 및 회피',
+      });
+      this.state.masteryBossPressure={warnings:1,avoided:0,exposures:0};
+    }
     const progress=boss?.bossGameplay;
     if(progress){
       if(boss?.weakPointExposed&&(boss.weakPointTimer??0)>0){
@@ -2444,7 +2457,21 @@ export class SurvivorsEngine {
 
       // 2. Crane Drop Zone (Periodic overhead crush hazard)
       if (hazard.type === 'crane_drop_zone') {
+        const masteryLock=hazard.id==='mastery-boss-50-lock';
+        if(masteryLock&&this.state.bossEncounter?.phase!=='combat'){
+          hazard.state='destroyed';
+          continue;
+        }
         hazard.timer -= dt;
+        if(masteryLock&&hazard.state==='idle'&&hazard.timer<=0){
+          // Acquire the current position once. Never home in after the visible warning.
+          hazard.x=Math.max(hazard.radius,Math.min(WORLD_WIDTH-hazard.radius,player.x));
+          hazard.y=Math.max(hazard.radius,Math.min(WORLD_HEIGHT-hazard.radius,player.y));
+          hazard.state='warning';hazard.timer=2.2;
+          if(this.state.masteryBossPressure)this.state.masteryBossPressure.warnings++;
+          this.emitAudio('boss_alarm',hazard.x,hazard.y);
+          continue;
+        }
         if (hazard.state === 'idle') {
           if (hazard.timer <= 0) {
             hazard.state = 'warning';
@@ -2455,9 +2482,17 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.6; // Impact duration
 
-            // Player crushed if inside
+            // The lock is a readable movement test: moving outside the ring or
+            // correctly timed dash earns clean avoidance, shields still protect mistakes.
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
-            if (pDist <= hazard.radius && player.invincibleTime <= 0) {
+            if(masteryLock&&this.state.masteryBossPressure){
+              if(pDist>hazard.radius||player.isDashing){
+                this.state.masteryBossPressure.avoided++;
+                this.state.score+=100;
+                this.emitAudio('control',hazard.x,hazard.y);
+              }else this.state.masteryBossPressure.exposures++;
+            }
+            if (pDist <= hazard.radius && player.invincibleTime <= 0 && !player.isDashing) {
               const damage = absorbPremiumDamage(this.state,30);
               player.hp = Math.max(1, player.hp - damage);
               if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
@@ -2469,7 +2504,7 @@ export class SurvivorsEngine {
         } else if (hazard.state === 'active' || hazard.state === 'cooldown') {
           if (hazard.timer <= 0) {
             hazard.state = 'idle';
-            hazard.timer = 14; // Next drop in 14 seconds
+            hazard.timer = masteryLock?4.8:14; // Targeted mastery pressure renews; legacy stage zones unchanged
           }
         }
       }

@@ -23,3 +23,9 @@ The 60Hz veteran simulation showed a full-health 50th-stage clear in about 141s 
 - Watch stage 50 uses a distinct authored boss engine. Its mastery phases release 25% of max HP after each of two warned phase-1 attacks, then another 12.5% after each of four phase-2 attacks. The existing warning clock, geometry and attack path remain unchanged.
 - A preflight briefing discloses the multi-read boss contract before any penalty. No permanent equipment is removed, and no paid-equipment stats are silently reduced.
 - A deterministic bot does not prove human difficulty. Replay the 50-stage benchmark and check that both stage boss victory and timeout remain possible; assess interaction quality on desktop and mobile before production.
+
+## Stage 50 mastery positional containment
+- The upgraded boss now additionally puts an authored crane-drop warning ring at the hero's current location at the start of combat. It stays fixed during the **2.2-second** visible telegraph; a different locked location is selected only at the next cadence. A player who moves or dashes outside the ring avoids it.
+- The existing red warning/impact canvas rendering and premium shield absorption are reused; never reduce paid-equipment stats.
+- A successful avoidance yields +100 score and increments a visible counter; caught players accumulate exposure count. The zone appears only in Watch Stage 50 mastery combat, not in intro/earlier difficulties/campaigns; it is removed when boss combat is no longer active.
+- Deterministic 180-second stage 50 simulation asserts that mastery warnings exist while Extreme does not. A focused engine test checks that warnings are pinned and mobility avoids exposure, versus stillness.
