@@ -10,7 +10,7 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
   const context=await browser.newContext({viewport:{width,height},serviceWorkers:'block'}),page=await context.newPage(),errors=[],trace=[],seen=new Set(),screens=new Set();
   currentPage=page;
   page.on('pageerror',error=>errors.push(error.message));
-  await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.is-story-entry').click();await page.locator('.episode-cold-open-cta').click({timeout:30000});
+  await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.rg-story-button,.is-story-entry').click();await page.locator('.episode-cold-open-cta').click({timeout:30000});
   for(let step=0;step<650;step++){
    if(await page.locator('.phase-complete').count())break;
    await page.locator('[data-story-player="cinematic"]').waitFor();
@@ -126,9 +126,9 @@ const cinemaEvents=new Set(['e01_03_plan_breaks','e01_04_junho_signal','e01_08e_
   a.equal(await page.locator('.phase-complete').count(),1,'story did not finish');a.equal(seen.size,26);a.deepEqual(errors,[]);
   // End-of-Day must lead to a SINGLE campaign chapter gate, not a second home tile.
   await page.locator('.gameplay-home-button').click();
-  a.equal(await page.locator('button.is-story-entry').count(),1,'story home must have one entry');
+  a.equal(await page.locator('button.rg-story-button,.is-story-entry').count(),1,'story home must have one entry');
   a.equal(await page.locator('button.is-episode02-entry').count(),0,'Episode 02 must not split from story mode');
-  await page.locator('button.is-story-entry').click();
+  await page.locator('button.rg-story-button,.is-story-entry').click();
   await page.locator('.story-chapter-gate').waitFor();
   const ep2=page.locator('.story-chapter-card.is-next');
   a(await ep2.isVisible(),'completed Episode 01 did not unlock next chapter');

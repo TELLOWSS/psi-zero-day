@@ -6,7 +6,7 @@ const captured=new Set(['e01_02_meet_kang','e01_04_junho_signal','e01_08b_inspec
   const c=await b.newContext({viewport:{width,height},serviceWorkers:'block',reducedMotion:width===568?'reduce':'no-preference'}),p=await c.newPage(),errors=[],failed=[];
   p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)failed.push({status:r.status(),url:r.url()});});
   await p.addInitScript(()=>{window.__storyMedia=new Set();const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(...args){window.__storyMedia.add(this);return play.apply(this,args);};});
-  await p.goto(base,{waitUntil:'domcontentloaded'});await p.locator('.is-story-entry').click();await p.locator('.episode-cold-open-cta').waitFor({timeout:20000});
+  await p.goto(base,{waitUntil:'domcontentloaded'});await p.locator('.rg-story-button,.is-story-entry').click();await p.locator('.episode-cold-open-cta').waitFor({timeout:20000});
   if(width===390){await p.waitForTimeout(6500);a.equal(await p.locator('.episode-cold-open-cta').count(),1,'cold open must wait for its reader');}
   await p.locator('.episode-cold-open-cta').click({noWaitAfter:true});await p.locator('.story-reader-open').click();const dialog=p.locator('.story-reader-dialog');await dialog.waitFor();a(await dialog.evaluate(e=>e.open));
   await p.waitForTimeout(180);a(await p.evaluate(()=>[...window.__storyMedia].every(el=>el.paused)),'settings pause all native scene/voice audio');
@@ -20,7 +20,7 @@ const captured=new Set(['e01_02_meet_kang','e01_04_junho_signal','e01_08b_inspec
    if(captured.has(state.event)&&!screens.has(state.event)&&(width===390||width===1440)){await p.screenshot({path:path.join(out,`${width}-${state.event}.png`)});screens.add(state.event);}
    if(!resumed&&state.event==='e01_02_meet_kang'&&width===390){
     const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('psi-zero-day.episode01.save.v1')).payload.event_runtime.active_instance.current_node_id);
-    await p.locator('.gameplay-home-button').click();await p.locator('.is-story-entry').waitFor();await p.reload({waitUntil:'domcontentloaded'});await p.locator('.is-story-entry').click();await p.locator('.game-frame').waitFor({timeout:20000});
+    await p.locator('.gameplay-home-button').click();await p.locator('.rg-story-button,.is-story-entry').waitFor();await p.reload({waitUntil:'domcontentloaded'});await p.locator('.rg-story-button,.is-story-entry').click();await p.locator('.game-frame').waitFor({timeout:20000});
     a.equal(await p.locator('.episode-immersive-scene').getAttribute('data-node'),saved);resumed=true;
    }
    const key=state.event+':'+state.node;stagnant=key===last?stagnant+1:0;last=key;a(stagnant<30,'stalled '+key);

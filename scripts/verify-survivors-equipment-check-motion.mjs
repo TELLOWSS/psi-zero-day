@@ -30,7 +30,7 @@ try{
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const view=await browser.newPage({viewport:{width,height}}),viewErrors=[];view.on('pageerror',e=>viewErrors.push(String(e)));
   await view.emulateMedia({reducedMotion:'reduce'});await view.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
-  await view.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await view.getByRole('button',{name:copy.briefBrowse,exact:true}).click();await view.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
+  await view.locator('button.rg-card.is-watch,button.is-survivors-entry').click();await view.getByRole('button',{name:copy.briefBrowse,exact:true}).click();await view.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
   await view.waitForFunction(()=>!document.querySelector('.survivors-fitting-art figcaption'));await view.emulateMedia({reducedMotion:'no-preference'});
   const storage=await view.evaluate(()=>JSON.stringify({...localStorage}));await view.getByRole('combobox',{name:copy.attackMotion,exact:true}).selectOption('check');
   const pixels=()=>view.evaluate(()=>{const c=document.querySelector('.survivors-fitting-art canvas'),data=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=2166136261;for(const byte of data)hash=Math.imul(hash^byte,16777619);return hash>>>0;});

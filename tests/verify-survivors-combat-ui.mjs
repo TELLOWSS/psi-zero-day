@@ -9,7 +9,7 @@ try{
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto(url,{waitUntil:'domcontentloaded'});
-  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click({noWaitAfter:true});
+  await page.locator('button.rg-card.is-watch,button.is-survivors-entry').click({noWaitAfter:true});
   await page.locator('.survivors-ready-launch .survivors-btn-primary').click({noWaitAfter:true});
   await page.locator('.survivors-container.is-combat').waitFor();
   await page.screenshot({path:`artifacts/combat-debrief-ui/${width}x${height}-hud.png`});

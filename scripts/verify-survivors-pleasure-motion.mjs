@@ -21,7 +21,7 @@ try{
     localStorage.setItem('psi.survivors.display.v1',JSON.stringify({quality:'balanced',lighting:true}));
   });
   await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5200',{waitUntil:'networkidle'});
-  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  await page.locator('button.rg-card.is-watch,button.is-survivors-entry').click();
   // Wait for the async loading screen and real preflight before querying
   // optional equipment controls. Locator.count() does not wait for mounting.
   await page.locator('.survivors-ready-dialog').waitFor({state:'visible'});
