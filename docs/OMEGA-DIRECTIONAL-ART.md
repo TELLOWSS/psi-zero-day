@@ -21,3 +21,28 @@ Prototype includes E, SE, S, SW, W, NW, N and NE reference images. **NE is a tem
 
 ## Traceability
 See `content/art/omega-prototype-8dir-v0.json` for exact source-cell-to-engine-heading mapping. The generated chat ZIP contains `qa-report.json` and a local `omega-review-check.mjs` that validates dimensions and alpha and intentionally fails `--release`.
+
+## 2026-11-08 / Eight-direction 6-phase motion study
+
+A separate conversation download `PSI_ZERO_DAY_OMEGA_WALK_8x6_STUDY_20261108.zip` now contains:
+
+- 48 transparent 384×512 phase images, each direction with six unique pixel-deformed poses
+- A 3072×3072 8-column / 6-row reference PNG atlas and lossless WebP
+- A 1536×1536 mobile reference atlas (lossless WebP, approximately 1.41 MB in file size and 9.44 MB RGBA texture memory rather than 37.75 MB)
+- A looping eight-direction motion preview GIF, an offline HTML inspector and detailed QC JSON
+- Reproducible local source script `build_omega_walk_prototype.py` in the ZIP
+
+**This is motion research, not authored animation.** Six unique pixel states do not equal six artist-drawn gait frames; the stance-foot root, left/right knees, forearm/weapon occlusion and ground contact physics remain unverified. The NE view still mirrors another direction. Both full-resolution and optimized atlases remain outside the GitHub runtime assets.
+
+`src/ui/omega-walk-atlas.ts` maps time + angle to one of the 48 reference cells and has a separate quarter-memory mobile mapping. Its frame coordinates can be tested without loading any imagery into the running game. It never grants an OMEGA CharacterId, new combat power or premium equipment, and marks the reference as unapproved.
+
+### Gate conditions still blocking playable release
+
+1. Re-render the unique NE rear-right illustration and approve the canonical face, suit and gear asymmetry.
+2. Replace pixel deformation with truly authored upper/lower-body walking phases and reliable plant/swing anchors for all eight directions.
+3. Supply attack/recoil, dodge, hit/knockdown, stand-up, ultimate and win/lose clips along with exact weapon, wrist and boot sockets.
+4. Run actual game playthroughs with equipment, large crowds and camera; report measured mobile FPS/memory and reduced-motion cases.
+5. Import signed-off art binaries into the proper production resources; validate with `node scripts/check-omega-operator-art.mjs --release` and full CI.
+6. Keep PR #234 as a draft until all gates pass; do not deploy cosmetic prototypes as though they were a finished playable exclusive.
+
+The published local SHA256 values are recorded in `content/art/omega-motion-study-v0.1.json` to distinguish the zip's art from any eventual reviewed release assets.
