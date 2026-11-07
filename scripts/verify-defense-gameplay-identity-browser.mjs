@@ -447,8 +447,11 @@ async function runChoice(choice, viewport) {
   })()`);
 
   await enterLegacyTrainingViaGuard();
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"save-resume\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
-  await clickText(cdp, '이어서 훈련');
+  // Practice requests standard training while QA's saved run may be an Event;
+  // the current UI correctly offers to keep that existing run.
+  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"save-resume\"],[data-defense-screen=\"requested-scenario-conflict\"]'))");
+  const hasConflict=await evaluate(cdp,"Boolean(document.querySelector('[data-defense-screen=\"requested-scenario-conflict\"]'))");
+  await clickText(cdp, hasConflict?'기존 훈련 이어하기':'이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-wave') === '8'");
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-def-core-phase') === 'DECISION'");
 
