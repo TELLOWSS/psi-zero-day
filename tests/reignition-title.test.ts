@@ -51,6 +51,16 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(resolveHomeNextChallenge({...status,guardClears:0,guardUnlocked:false,watchClears:0,watchUnlocked:false,veteran:false},true,true).title).toBe('시그널 가드 · 일반 작전 6개 남음');
   expect(resolveHomeNextChallenge(status,false,false).mode).toBe('none');
  });
+ it('rewards the OMEGA achievement only on 50 normal and 50 Master three-star clears; does not claim playable art',()=>{
+  const fullMaster={...status,watchMastered:50};
+  const html=renderToStaticMarkup(React.createElement(ReignitionTitle,{status:fullMaster,brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:false,...actions}));
+  expect(html).toContain('data-omega-earned="true"');
+  expect(html).toContain('마스터 요원 업적 달성');
+  expect(html).toContain('8방향 전투 아트 제작·검수 후 장착 가능');
+  expect(html).not.toContain('캐릭터 장착 완료');
+  const incomplete=renderToStaticMarkup(React.createElement(ReignitionTitle,{status:{...fullMaster,watchClears:49},brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:false,...actions}));
+  expect(incomplete).toContain('data-omega-earned="false"');
+ });
  it('exposes truthful in-card progress, editorial brief and independent mobile game launchers',()=>{
   const html=renderToStaticMarkup(React.createElement(ReignitionTitle,{status,brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions}));
   expect(html).toContain('class="rg-hero-micro"');
@@ -61,6 +71,9 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('style="width:100%"');
   expect(html).toContain('aria-label="게임 빠른 실행"');
   expect(html).toContain('data-next-mode="watch"');
+  expect(html).toContain('data-omega-earned="false"');
+  expect(html).toContain('마스터 전용 요원 · 잠금');
+  expect(html).toContain('마스터 3★ 7/50');
   expect(html).toContain('시그널 워치 · 마스터 3성 43개 남음');
   expect(html).toContain('style="width:50%"');
   expect(html).toContain('style="width:14%"');
