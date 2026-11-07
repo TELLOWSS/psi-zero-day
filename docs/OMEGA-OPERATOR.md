@@ -1,9 +1,9 @@
 # OMEGA OPERATOR — Master-exclusive playable character
-Status: **art and gameplay integration NOT yet shipped**. An unlock-intelligence preview in the Watch operator selector is phase 1 only.
+Status: **art and gameplay integration NOT yet shipped**. Main-title unlock identity, Watch locked preview, and record-based entitlement contracts are implemented on a draft PR; runtime player selection remains disabled.
 
 ## Identity / art direction
 - Original adult woman, premium sci-fi safety-response operative; elegant, confident, visually appealing without violating PPE expectations.
-- Keep a fixed master model sheet: silver-violet hair, signature bangs/ponytail silhouette, charcoal tactical suit with controlled magenta accents, boots, gloves, protective smart visor. This sheet is a source of truth for **both** the RE:IGNITION main art and in-engine model.
+- **Canonical appearance is the CURRENT deployed main illustration**: `/assets/reignition/veteran-return.webp`. Preserve its silver-white hair, signature layered bangs, white/graphite tactical field jacket, magenta identification accents, radio/PPE details, fitted dark undersuit, boots and gloves. The new in-engine model must remain recognizably the same character from every angle. Do not replace her outfit or hair based only on separately generated promotional mockups.
 - Original design; no borrowed game-character trade dress, armor emblems, or copyrighted iconic accessories. Match the final approved artwork before sprite production.
 
 ## Unlock (current implementation, visual-only)
@@ -27,3 +27,10 @@ Status: **art and gameplay integration NOT yet shipped**. An unlock-intelligence
 2. TODO Phase 2: final signed-off character sheet + transparent directional and action animation assets.
 3. TODO Phase 3: add CharacterId/profile/portrait + art mapping, directional loader and runtime selection gated by the same reward logic.
 4. TODO Phase 4: rig anchors, carried equipment and hit effects, gameplay/audio sync and QA. Only then turn on the playable CTA.
+
+## Live UI status as of this development branch
+- The RE:IGNITION main title shows a compact OMEGA badge using the same saved 50-clear / 50-master-3-star criteria as the Watch roster.
+- GameHub refreshes entitlement on the wallet's `psi:meta-updated` event and on focus/storage changes.
+- Pure frame sampler `src/ui/omega-operator-motion.ts` defines 8 facings and 12 action types, including idle/walk/run/fire/combo/dash/hit/knockdown/recover/ultimate/victory/defeat. **This is a contract, not final authored animated graphics.**
+- Run `node scripts/check-omega-operator-art.mjs --release` before any PR enables actual play. Missing art fails deliberately. The normal script without `--release` reports the outstanding files and exits normally.
+- Generated interface illustrations are **art direction only**, not production gameplay assets. Do not crop a menu screenshot to impersonate a directional character animation.
