@@ -10,3 +10,8 @@ Each Watch stage has a deterministic specialist focus chosen from its *existing*
 
 ## Remaining release gates
 Full regression + typecheck + build, 50 stage rendering across desktop/mobile, six Guard scenarios on different support/tower configurations, and actual max-equipment playthroughs. Legacy DEF-CORE browser smoke scripts still expect entry buttons removed by an unrelated home UI refresh: fix those harness entry paths separately before production merge. Never interpret a successful build alone as game-balance validation.
+
+## Saved record isolation fix (phase 3 audit)
+- Mastery attempts no longer overwrite the normal best stars, score, shield, completed waves or normal clear count.
+- Only bestMasteryStars changes from a mastery result. Mastery can't issue old first-clear or three-star cosmetics.
+- All attempts still register in finishedRuns and settledRunIds to enforce idempotency.

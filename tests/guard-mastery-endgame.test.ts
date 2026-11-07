@@ -44,6 +44,22 @@ describe('Signal Guard mastery replay',()=>{
     expect(after.document.claimIds).toEqual(first.document.claimIds);
     expect(applyDefenseOutcome(after.document,content,mastery,defenseResult(mastery)).applied).toBe(false);
   });
+  it('does not upgrade normal records or cosmetics using mastery scores and stars',()=>{
+    const firstRun={...createDefenseRun(content,'COORDINATOR','ordinary-clear'),status:'WON' as const};
+    const veteran={...createDefenseRun(content,'COORDINATOR','master-three-stars',{masteryRun:true}),status:'WON' as const};
+    const first=applyDefenseOutcome(emptyDefenseSaveDocument(),content,firstRun,{won:true,stars:1,score:900,completedWaves:3,shield:3},'2026-11-07');
+    const after=applyDefenseOutcome(first.document,content,veteran,{won:true,stars:3,score:900000,completedWaves:6,shield:20},'2026-11-07');
+    const record=after.document.records[0]!;
+    expect(record.clears).toBe(1);
+    expect(record.bestStars).toBe(1);
+    expect(record.bestScore).toBe(900);
+    expect(record.bestShield).toBe(3);
+    expect(record.bestCompletedWaves).toBe(3);
+    expect(record.bestMasteryStars).toBe(3);
+    expect(after.document.claimIds).toEqual(first.document.claimIds);
+    expect(after.document.cosmeticIds).toEqual(first.document.cosmeticIds);
+    expect(after.document.settledRunIds).toEqual(['ordinary-clear','master-three-stars']);
+  });
   it('briefs wave priority and costs extra shield only if that type leaks',()=>{
     const wave=content.waves[1]!,directive=guardMasteryWaveDirective(content,wave.id);
     expect(directive?.enemy).toBeDefined();
