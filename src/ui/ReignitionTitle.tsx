@@ -14,7 +14,7 @@ export const HOME_THEMES=[
 ] as const;
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
 // Fresh production default; prior preview experiments must not override the approved theme.
-const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v2';
+const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v3';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
   const requested=new URLSearchParams(query).get('home');
   const value=requested??stored;
