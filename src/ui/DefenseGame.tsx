@@ -65,6 +65,8 @@ import {defensePremiumArt,DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art
 import './defense-premium.css';
 import './guard-usability.css';
 import './guard-mobile.css';
+import './combat-hud-clarity.css';
+import {guardTacticalCue} from './combat-ux-cues';
 import {useGuardBoardFit} from './use-guard-board-fit';
 import {GuardMobileInfo} from './GuardMobileInfo';
 
@@ -872,6 +874,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
   const needsTransition=!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id);
+  const guardCue=guard?guardTacticalCue({status:state.status,paused:state.paused,shield:state.shield,enemyCount:state.enemies.length,mastery:state.masteryRun===true}):null;
 
   return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-guard-mastery={state.masteryRun?"true":"false"} data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
@@ -880,11 +883,11 @@ export function DefenseGame({
       data-battle-paused={state.paused?'true':'false'}
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
-    <header className="zb-hud">
+    <header className="zb-hud" data-guard-tactical={guardCue?.tone}>
       <div className="zb-brand"><small>{guard?(state.masteryRun?"SIGNAL GUARD · MASTER":"SIGNAL GUARD"):"ZERO BREACH"}</small><strong>{t(guard?"guard.title":"defense.ui.hub.title")}</strong></div>
-      <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`}><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
-      <div className="zb-meter"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
-      <div className="zb-meter"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
+      <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`} data-guard-metric="shield"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
+      <div className="zb-meter" data-guard-metric="resources"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
+      <div className="zb-meter" data-guard-metric="wave"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
       <div className="zb-status"><span>{guard&&state.status==='INTERMISSION'?t('guard.preparation'):statusLabel(state)}</span>{state.paused ? <b>{t('defense.tactics.hold')}</b> : null}</div>
       <button
         type="button"
@@ -917,11 +920,11 @@ export function DefenseGame({
       {guard?<button type="button" className="guard-menu-operations" onClick={()=>{void operations();}}>{t('guard.home')}</button>:null}
     </section> : null}
     <DefenseSaveStatus controller={persistence} />
-    <section className={`zb-tactics-strip${guardPressureReadout(state,content)?' has-sensor-pressure':''}`} aria-label={t('defense.tactics.simulation')}>
+    <section className={`zb-tactics-strip${guardPressureReadout(state,content)?' has-sensor-pressure':''}`} data-guard-tactical={guardCue?.tone} aria-label={guardCue?`${t('defense.tactics.simulation')} · ${guardCue.headline} · ${guardCue.detail}`:t('defense.tactics.simulation')}>
       {guardPressureReadout(state,content)?<strong className="guard-pressure-banner" role="status" aria-live="polite" aria-atomic="true">{guardPressureReadout(state,content)}</strong>:null}
       {guard?<GuardBattleFeedback state={state} shots={combatFrameRef.current}/>:null}
       {guard?<GuardWaveMeter content={content} state={state}/>:null}
-      <div className="guard-next-intel"><small>{guard?`GD-0${guardIndex+1} · ${t(guardKey+'.title')}`:t('defense.tactics.simulation')}</small><strong>{guardPressureReadout(state,content)??(preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave'))}</strong>
+      <div className="guard-next-intel"><small>{guard?`GD-0${guardIndex+1} · ${t(guardKey+'.title')}`:t('defense.tactics.simulation')}</small><strong title={guardCue?.detail}>{guardCue&&(guardCue.tone==='critical'||guardCue.tone==='hold'||guardCue.tone==='engaged')?guardCue.headline:guardPressureReadout(state,content)??(preview?`${t('defense.ui.next_wave')} ${preview.id} · ${t('defense.tactics.count')} ${preview.groups.reduce((sum,group)=>sum+group.count,0)}`:t('defense.tactics.last_wave'))}</strong>
       <span>{(preview?defensePressureWaveGroups(content,preview,state.sensorPressureEnabled===true):[]).map(group=>`${group.pressureCore?t('guard.pressure.core'):enemyName(content.map.id,group.enemy)} ×${group.count}`).join(' · ')}</span>
       {isRadioVisible&&radioChatter?<span className="zb-radio-line" role="status">{radioChatter.speaker} · {radioChatter.text}</span>:null}</div>
       {!result?<button type="button" disabled={!advice} onClick={()=>{if(advice)choosePad(advice.padId);}}>{t('defense.tactics.recommend')}{advice?` · ${advice.padId} · R ${advice.cost}`:''}</button>:null}

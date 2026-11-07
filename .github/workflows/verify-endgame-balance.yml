@@ -26,6 +26,10 @@ on:
       - 'src/engine/survivors-mastery-pressure.ts'
       - 'tests/watch-mastery-pressure-progression.test.ts'
       - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/DefenseGame.tsx'
+      - 'src/ui/combat-ux-cues.ts'
+      - 'src/ui/combat-hud-clarity.css'
+      - 'tests/combat-ux-cues.test.ts'
       - 'src/ui/MissionStatusRail.tsx'
       - 'src/ui/psi-experience-ui.css'
       - 'tests/psi-experience-ui.test.tsx'
@@ -48,7 +52,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Guard six scenarios, Watch fifty stage risk focus, gear stress simulations
-        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts tests/survivors-boss-pattern.test.ts tests/survivors-boss-encounter.test.ts tests/survivors-boss-gangform.test.ts tests/watch-mastery-boss-containment.test.ts tests/watch-boss-ultimate-resistance.test.ts tests/watch-mastery-pressure-progression.test.ts
+        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts tests/survivors-boss-pattern.test.ts tests/survivors-boss-encounter.test.ts tests/survivors-boss-gangform.test.ts tests/watch-mastery-boss-containment.test.ts tests/watch-boss-ultimate-resistance.test.ts tests/watch-mastery-pressure-progression.test.ts tests/combat-ux-cues.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Build
