@@ -71,3 +71,15 @@ node scripts/audit-omega-motion-study.mjs \
 `node scripts/check-omega-operator-art.mjs --release` now requires not only complete runtime image files, but also `content/art/omega-production-art-approval.json` containing artist-authored status, explicit approval and matching atlas SHA256, plus passing image mirror/phase/sockets checks. It remains blocked before a separately reviewed playable launch.
 
 **No guarantee of anti-cheat:** This is a code and asset quality gate, not cryptographic attestation or a secure user account entitlement system.
+
+## 2026-11-08 / Offline review lab v2 and numerical leg IK
+
+The user-download `PSI_ZERO_DAY_OMEGA_MOTION_REVIEW_LAB_V2.zip` contains the actual 48-frame atlas, a lower-memory mobile atlas, self-contained HTML, metadata, a comparative review board, and Korean instructions. Its HTML source is versioned in `tools/omega-motion-review-v2.html`; the atlas binaries remain outside GitHub production assets. Release readiness remains **false**.
+
+Available offline visual review actions: 8-direction selection, play/pause/step/FPS, onion-skin frame comparison, alpha-derived foot-position proxy markers, side-by-side NE versus flipped-NW inspection and local JSON review export. This is not a new player character. Real browser automation was blocked with `ERR_BLOCKED_BY_ADMINISTRATOR` both for file and loopback HTTP in this tooling environment; HTML/JavaScript syntax and artifact-structure checks did pass.
+
+The image-derived foot-position marks are **not** a skeleton, actual foot joints or ground IK. To prepare real authored animation, `src/ui/omega-leg-ik.ts` now implements a mathematically constrained two-bone knee solution and alternating stance/swing foot targets. `tests/omega-leg-ik.test.ts` verifies limb-length conservation, unreachable-target clamping, contact/swing alternation, cyclic continuity and finite outputs. This is not connected to a runtime actor and must not be used as proof of natural knee deformation.
+
+Independent rear-right (NE) source art was attempted again. The image generator returned a promotional collage, not the requested isolated full-body NE image. It was **rejected** from the asset pack. The mirror defect remains. No result from marketing key art or IK math has been substituted for a final 8-way character atlas.
+
+**Next genuine art gate:** artist-approved NE view, six uniquely authored gait poses for each direction, pelvis/ankle/weapon sockets, pre/post-occlusion layers, live character selection with actual equipment/ranged-fire integration and 4-device gameplay acceptance testing.
