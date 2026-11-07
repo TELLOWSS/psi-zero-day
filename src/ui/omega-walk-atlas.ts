@@ -20,6 +20,12 @@ export const OMEGA_WALK_STUDY = Object.freeze({
  authenticFootIk:false,
  actualGameplayIntegration:false,
 });
+/** Same non-playable study at quarter RGBA memory for mobile preview; not FPS-tested. */
+export const OMEGA_WALK_STUDY_MOBILE = Object.freeze({
+ frameWidth:192,frameHeight:256,columns:8,rows:6,width:1536,height:1536,
+ prototypeOnly:true,artistApproved:false,
+});
+
 export interface OmegaStudyAtlasFrame {
  readonly x:number; readonly y:number; readonly width:number;readonly height:number;
  readonly direction:typeof OMEGA_DIRECTIONS[number];
@@ -30,20 +36,22 @@ export interface OmegaStudyAtlasFrame {
 }
 export function omegaWalkStudyAtlasFrame(
  elapsedSeconds:number,facingAngleRadians:number,reducedMotion=false,
+ profile:'desktop'|'mobile'='desktop',
 ):OmegaStudyAtlasFrame {
  const pose=omegaMotionFrame('walk',elapsedSeconds,facingAngleRadians,reducedMotion);
- if(OMEGA_ART_CONTRACT.contactFramesPerDirection!==OMEGA_WALK_STUDY.rows){
+ const grid=profile==='mobile'?OMEGA_WALK_STUDY_MOBILE:OMEGA_WALK_STUDY;
+ if(OMEGA_ART_CONTRACT.contactFramesPerDirection!==grid.rows){
   throw new Error('OMEGA frame contract does not match the reference atlas grid');
  }
  return Object.freeze({
-  x:pose.directionIndex*OMEGA_WALK_STUDY.frameWidth,
-  y:pose.frame*OMEGA_WALK_STUDY.frameHeight,
-  width:OMEGA_WALK_STUDY.frameWidth,
-  height:OMEGA_WALK_STUDY.frameHeight,
+  x:pose.directionIndex*grid.frameWidth,
+  y:pose.frame*grid.frameHeight,
+  width:grid.frameWidth,
+  height:grid.frameHeight,
   direction:pose.direction,
   directionIndex:pose.directionIndex,
   frame:pose.frame,
-  loopDurationSeconds:OMEGA_WALK_STUDY.rows/12,
+  loopDurationSeconds:grid.rows/12,
   playable:false,
  });
 }
