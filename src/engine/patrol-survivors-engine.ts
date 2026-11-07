@@ -1102,6 +1102,9 @@ export class SurvivorsEngine {
     // Boss resolution normally ends the stage after a short confirmation.
     // Once extraction has begun, however, the extraction hold owns the terminal outcome.
     if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+      // End targeting immediately at boss resolution; the post-boss hold is never a trap.
+      const lock=this.state.interactiveHazards.find(h=>h.id==='mastery-boss-50-lock');
+      if(lock)lock.state='destroyed';
       const extractionActive=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
       if(extractionActive){
         if(this.state.bossEncounter){
