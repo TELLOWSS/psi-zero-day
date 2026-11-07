@@ -218,3 +218,8 @@
 @media(orientation:landscape) and (max-height:540px){
  .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{height:103%;left:-14px;bottom:-6%;max-width:49%;opacity:.88}
 }
+
+.rg-story-resume{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px clamp(16px,4vw,75px);background:#0c1a2b;border-top:1px solid #f2cd924d}
+.rg-story-resume .story-restart-entry{position:relative;top:auto;left:auto;right:auto;bottom:auto;transform:none;min-height:44px;border:1px solid #efcf9a;background:#31415b;color:#fff0c4;border-radius:8px;padding:8px 15px}
+.rg-story-resume .story-save-warning,.rg-save-warning{position:relative;inset:auto;max-width:100%;margin:0;color:#ffdaae;font-size:12px;line-height:1.55;white-space:normal}
+.rg-save-warning{padding:12px 20px}

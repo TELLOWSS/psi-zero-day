@@ -35,6 +35,10 @@ export interface ReignitionTitleProps {
  readonly onJournal:()=>void;
  readonly onManual:()=>void;
  readonly onSong:()=>void;
+ readonly restartVisible?:boolean;
+ readonly onRestart?:()=>void;
+ readonly restartLabel?:string;
+ readonly saveWarning?:string;
  readonly audioMuted:boolean;
  readonly onToggleAudio:()=>void;
  readonly motionEnabled:boolean;
@@ -156,6 +160,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      </details>:null}
    </div>
   </div>
+  {props.restartVisible&&props.onRestart?<div className="rg-story-resume"><button type="button" className="story-restart-entry" onClick={props.onRestart}>{props.restartLabel??'스토리 기록 관리'}</button>{props.saveWarning?<p role="status" className="story-save-warning">{props.saveWarning}</p>:null}</div>:props.saveWarning?<p role="status" className="rg-save-warning story-save-warning">{props.saveWarning}</p>:null}
   <section className="rg-release">
    <button type="button" className="rg-release-toggle" aria-expanded={releaseOpen} aria-controls="rg-release-detail" onClick={()=>setReleaseOpen(v=>!v)}>
     <span>2026.11 업데이트 · 무엇이 달라졌나요?</span><span aria-hidden="true">{releaseOpen?'−':'+'}</span>

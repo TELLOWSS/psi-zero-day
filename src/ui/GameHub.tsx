@@ -405,6 +405,10 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     onGuard={onDefense?()=>onDefense('guard-campaign'):undefined}
     onWatch={onSurvivors}
     onStory={onPlay}
+    restartVisible={snapshot.phase!=='start'||saveHealth==='preserved'}
+    onRestart={()=>setModePreview('story')}
+    restartLabel={t('story.entry.restartMenu')}
+    saveWarning={saveHealth==='preserved'?t('story.reader.preserved'):undefined}
     onGuide={openGuide}
     onPeople={()=>setPage('people')}
     onJournal={()=>setPage('journal')}
@@ -414,7 +418,18 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     onToggleAudio={()=>setAudioMuted(!audioMuted)}
     motionEnabled={motionEnabled}
     onToggleMotion={()=>setMotionEnabled(value=>!value)}
-  >{showSongPlayer&&<WorkStopSongPlayer onClose={()=>setShowSongPlayer(false)}/>}
+  >{modePreview==='story'&&<div className="mode-preview-backdrop" role="presentation" onMouseDown={()=>setModePreview(null)}>
+      <section className="mode-preview-dialog is-story" role="dialog" aria-modal="true" aria-labelledby="reignition-story-resume-title" onMouseDown={event=>event.stopPropagation()}>
+       <button type="button" className="mode-preview-close" aria-label="기록 관리 닫기" onClick={()=>setModePreview(null)}>×</button>
+       <div className="mode-preview-copy">
+        <h2 id="reignition-story-resume-title">스토리 기록 관리 · EP.01</h2>
+        <p>{t('story.entry.restartWarning')}</p>
+        <button type="button" className="hub-primary" onClick={onPlay}>{t('story.entry.continue')}</button>
+        <button type="button" onClick={onNewGame}>{t('story.entry.restart')}</button>
+       </div>
+      </section>
+     </div>}
+   {showSongPlayer&&<WorkStopSongPlayer onClose={()=>setShowSongPlayer(false)}/>}
    {showManual&&<GameManual onClose={()=>setShowManual(false)}/>}
   </ReignitionTitle>;
 
