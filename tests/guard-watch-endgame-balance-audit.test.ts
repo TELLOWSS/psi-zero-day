@@ -22,6 +22,9 @@ describe('Endgame comparative balance audit (deterministic bots, not human win-r
              if(!advice)break;
              run=applyDefenseCommand(run,content,advice.command);
            }
+           if(run.status==='INTERMISSION'&&content.map.transition?.beforeWave===run.waveId&&!run.appliedTransitionIds?.includes(content.map.transition.id)){
+             run=applyDefenseCommand(run,content,{type:'ConfirmTransition'});
+           }
            run=applyDefenseCommand(run,content,{type:'StartWave'});
          }
          if(run.supportCooldownRemaining===0){
@@ -40,7 +43,7 @@ describe('Endgame comparative balance audit (deterministic bots, not human win-r
    }
    console.info('GUARD_ENDGAME_HEURISTIC_BOT='+JSON.stringify(rows));
    expect(rows).toHaveLength(12);
- });
+ },90000);
 
  it('checks all 50 Watch stage focus sets, 3-act pacing and post-clear challenge contracts',()=>{
    expect(PATROL_STAGE_IDS).toHaveLength(50);
@@ -107,5 +110,31 @@ describe('Endgame comparative balance audit (deterministic bots, not human win-r
    }
    console.info('WATCH_REAL_ENGINE_60HZ='+JSON.stringify(rows));
    expect(rows).toHaveLength(24);
- });
+ },90000);
+
+ it('checks late-game boss survivability under veteran automated equipment, not a human clear prediction',()=>{
+   const rows=[];
+   for(const difficulty of ['extreme','mastery'] as const){
+     const state=createInitialSurvivorsState('yoon',undefined,'stage_50',difficulty,{owned:['shock_mantle','rescue_wing'],equipped:['shock_mantle','rescue_wing']});
+     state.activePerks.radio_boost=5;state.activePerks.safety_drone=5;state.activePerks.floodlight=5;
+     state.activePerks.satellite_broadcast=1;state.activePerks.hunter_swarm=1;
+     state.player.damageMultiplier=1.8;state.player.cooldownReduction=.5;
+     const engine=new SurvivorsEngine(state,0x50262026);engine.start();
+     const frameLimit=60*180;
+     for(let frame=0;frame<frameLimit;frame++){
+       if(state.phase==='levelup'){
+         const perk=state.perkOptions.find(p=>p.category==='support')??state.perkOptions[0];
+         if(!perk)break;
+         engine.applyPerk(perk.id);
+       }
+       if(state.phase!=='playing')break;
+       const t=frame/60;
+       engine.update(1/60,{moveX:Math.cos(t*.19),moveY:Math.sin(t*.19)});
+     }
+     rows.push({difficulty,seconds:Math.round(state.gameTime*10)/10,phase:state.phase,hp:Math.round(state.player.hp),neutralized:state.hazardsNeutralized,bossAlive:state.hazards.some(h=>h.isStageBoss&&h.hp>0),bossResolved:state.bossSecured});
+     expect(Number.isFinite(state.gameTime)).toBe(true);
+     expect(state.gameTime).toBeGreaterThan(20);
+   }
+   console.info('WATCH_STAGE50_FULL_3ACT_BOT='+JSON.stringify(rows));
+ },90000);
 });
