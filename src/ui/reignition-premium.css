@@ -326,6 +326,11 @@
 .rg-home[data-reignition-concept=cinematic] .rg-release-toggle{color:#d6c8ae}
 .rg-home[data-reignition-concept=cinematic] .rg-release-items p{background:#14252b}
 .rg-home[data-reignition-concept=cinematic] .rg-footer{border-color:#b2c5b41e;color:#748a8c}
+.rg-home .rg-settings-panel .rg-help-from-settings{
+  min-height:44px;padding:10px 14px;border:1px solid #9eada77b;
+  background:#1a3139;color:#f1ead7;border-radius:7px;
+  font-weight:750;font-size:13px;text-align:left;
+}
 .rg-mobile-dock {display:none}
 
 /* Medium displays: preserve an approachable reading column and full image. */
@@ -417,6 +422,8 @@
  .rg-home[data-reignition-concept=cinematic] .rg-brand small{font-size:7px;letter-spacing:.02em}
  .rg-home .rg-header-tools button {width:39px;min-width:39px;height:42px;padding:7px 2px;font-size:0}
  .rg-home .rg-header-tools .rg-header-missions:before {content:"▦";font-size:18px}
+ /* The help entry lives in Settings on phones, freeing a full 44px touch target. */
+ .rg-home .rg-header-tools button:nth-child(2){display:none}
  .rg-home .rg-header-tools button:nth-child(2):before {content:"?";font-size:18px}
  .rg-home .rg-header-tools button:last-child span {font-size:17px}
  .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary{width:40px;min-height:42px;padding:7px 3px}
@@ -499,3 +506,8 @@
 :root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-card,
 :root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-card>img,
 :root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button {transition:none!important;transform:none!important}
+
+@media(max-width:380px){
+ /* Compact phones use the persistent two-game launcher instead of a header duplicate. */
+ .rg-home .rg-header-tools .rg-header-missions{display:none}
+}
