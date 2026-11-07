@@ -23,7 +23,7 @@ try {
           const rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
           const title=document.querySelector('.rg-brand img'),art=document.querySelector('.rg-hero-art');
           const actions=[...document.querySelectorAll('.rg-card,.rg-hero-action,.rg-hero-alt')];
-          const cards=actions.slice(0,2).map(rect);
+          const cards=[...document.querySelectorAll('.rg-card')].map(rect);
           return {loaded:art.complete&&art.naturalWidth>0,markLoaded:title.complete&&title.naturalWidth>0,mark:rect(title),
             actions:actions.map(x=>({box:rect(x),disabled:x.disabled})),cards,hero:rect(document.querySelector('.rg-hero')),
             overflow:document.documentElement.scrollWidth>innerWidth};
