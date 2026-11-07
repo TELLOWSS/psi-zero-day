@@ -1,4 +1,6 @@
 import type {Hazard,PlayerStats,Projectile} from '../domain/patrol-survivors';
+import type {PatrolDifficulty} from '../domain/survivors-challenge';
+import {bossBurstFraction} from './survivors-boss-combat';
 import {sweptCircle} from './survivors-simulation';
 import type {TerrainObject} from '../domain/survivors-terrain';
 import {terrainContains} from './survivors-terrain';
@@ -45,7 +47,7 @@ export function gangformContact(h: Readonly<Hazard>, player: {x:number;y:number}
 }
 
 /** Both spatial targets must be hit; body DPS and passive gear do not solve this pattern. */
-export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:number;y:number}, player?: {x:number;y:number}): {x:number;y:number}|undefined {
+export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:number;y:number}, player?: {x:number;y:number}, difficulty:PatrolDifficulty='standard'): {x:number;y:number}|undefined {
  const p=h.bossGameplay,g=p?.gangform;
  if(p?.combatPhase!=='weak_point'||!g||g.step!=='drop_zone'||!Number.isFinite(projectile.damage)||projectile.damage<=0)return;
  const z=g.zones.find(z=>z.hp>0);
@@ -53,6 +55,9 @@ export function hitGangformZone(h: Hazard, projectile: Projectile, previous: {x:
  z.hp=Math.max(0,z.hp-projectile.damage);projectile.pierce--;projectile.duration=0;
  if(g.zones.length===2&&g.zones.every(z=>z.hp===0)){
   p.signatureResolvedThisCycle=true;p.combatPhase='burst';p.remaining=0;p.burstRemaining=4.5;
+  // Puzzle-earned access still obeys the same boss HP gate as other bosses.
+  // Otherwise the last zone could be followed by an instant 9,999-DPS kill.
+  p.burstFloorHp=Math.max(0,h.hp-h.maxHp*bossBurstFraction(difficulty));
  }
  return z;
 }

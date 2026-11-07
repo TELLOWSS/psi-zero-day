@@ -1,6 +1,7 @@
 import type { DefenseRunState,DefenseTacticalReport } from './defense';
 
 export interface DefenseScenarioRecord {
+  readonly bestMasteryStars?:0|1|2|3;
   readonly lastResultWon?: boolean;
   readonly lastTacticalReport?:DefenseTacticalReport;
   readonly scenarioId: string;

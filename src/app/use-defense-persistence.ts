@@ -38,7 +38,7 @@ export interface DefensePersistenceController {
   readonly lastSavedAt: string | null;
   readonly conflict: boolean;
   readonly awardedCosmeticIds: readonly string[];
-  startWithSupport(supportId: DefenseSupportId, portrait: boolean, launchContent?: DefenseContent): void;
+  startWithSupport(supportId: DefenseSupportId, portrait: boolean, launchContent?: DefenseContent, masteryRun?: boolean): void;
   resumeSavedRun(): void;
   discardSavedRun(): Promise<boolean>;
   dispatch(command: DefenseCommand): DefenseRunState | null;
@@ -291,8 +291,8 @@ export function useDefensePersistence(
     }
   }, [persistRun, settleFinishedRun, state]);
 
-  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content) => {
-    let run = createDefenseRun(launchContent, supportId, newRunId(),{ultimateUnlocked:launchContent.ultimateEnabled&&documentRef.current.records.some(r=>r.scenarioId==='guard-gd-03-v1'&&r.clears>0)});
+  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content, masteryRun = false) => {
+    let run = createDefenseRun(launchContent, supportId, newRunId(),{ultimateUnlocked:launchContent.ultimateEnabled&&documentRef.current.records.some(r=>r.scenarioId==='guard-gd-03-v1'&&r.clears>0),masteryRun});
     if (portrait) run = applyDefenseCommand(run, launchContent, { type: 'SetPaused', paused: true });
     stateRef.current = run;
     previousRunRef.current = run;

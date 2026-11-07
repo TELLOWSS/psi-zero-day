@@ -136,7 +136,7 @@ async function navigate(cdp) {
   const loaded = cdp.once('Page.loadEventFired', 15000);
   await cdp.send('Page.navigate', { url: baseUrl });
   await loaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
   await sleep(220);
 }
 async function clearState(cdp) {
@@ -247,6 +247,23 @@ function representativeDefenseSave(impact = false) {
   };
 }
 
+/** Navigate the current Signal Guard CTA, then select its real training practice button. */
+async function enterLegacyTrainingViaGuard(cdp) {
+  const opened=await evaluate(cdp,`(() => {
+    const button=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');
+    if(!(button instanceof HTMLButtonElement))return false;
+    button.click();return true;
+  })()`);
+  if(!opened)throw new Error('Current Signal Guard home CTA is missing');
+  await waitFor(cdp,`Boolean(document.querySelector('[data-defense-screen="guard-home"]'))`);
+  const practice=await evaluate(cdp,`(() => {
+    const button=document.querySelector('[data-defense-screen="guard-home"] footer button');
+    if(!(button instanceof HTMLButtonElement))return false;
+    button.click();return true;
+  })()`);
+  if(!practice)throw new Error('Current Guard practice entry is missing');
+}
+
 async function enterRepresentativeBottomUp(cdp, impact = false) {
   const save = representativeDefenseSave(impact);
   await evaluate(cdp, `(() => {
@@ -254,9 +271,10 @@ async function enterRepresentativeBottomUp(cdp, impact = false) {
     localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
     return true;
   })()`);
-  await clickButton(cdp, '현장 디펜스');
-  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`, 12000);
-  await clickButton(cdp, '이어서 훈련');
+  await enterLegacyTrainingViaGuard(cdp);
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="save-resume"],[data-defense-screen="requested-scenario-conflict"]'))`, 12000);
+  const hasConflict=await evaluate(cdp, `Boolean(document.querySelector('[data-defense-screen="requested-scenario-conflict"]'))`);
+  await clickButton(cdp,hasConflict?'기존 훈련 이어하기':'이어서 훈련');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'`, 12000);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-wave') === '8'`, 12000);
   await sleep(impact ? 10 : 220);
@@ -536,6 +554,20 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  // Capture the entire EVADE -> SAFE_RETURN -> NORMAL sequence. Reading one
+  // DOM frame at RETURN_RECOVER can miss the short SAFE_RETURN transition.
+  await evaluate(cdp,`(() => {
+    window.__psiReturnTrace=[];
+    const record=()=>{
+      const group=document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state');
+      if(group&&window.__psiReturnTrace.at(-1)!==group)window.__psiReturnTrace.push(group);
+    };
+    record();
+    window.__psiReturnObserver?.disconnect();
+    window.__psiReturnObserver=new MutationObserver(record);
+    window.__psiReturnObserver.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:['data-worker-group-state','data-worker-response']});
+    return true;
+  })()`);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   report.desktopImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
@@ -549,9 +581,12 @@ try {
   await screenshot(cdp,'02-g8a-control-impact.png');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
   report.desktopRecover=await metrics(cdp);
-  if(report.desktopRecover.workerGroupState!=='SAFE_RETURN' || !report.desktopRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
-    throw new Error('Desktop workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.desktopRecover.workerGroupState,responses:report.desktopRecover.workerResponses}));
+  report.desktopWorkerTrace=await evaluate(cdp,"window.__psiReturnTrace??[]");
+  if(!report.desktopWorkerTrace.includes('SAFE_RETURN') ||
+    !['SAFE_RETURN','NORMAL'].includes(report.desktopRecover.workerGroupState)) {
+    throw new Error('Desktop workers failed actual SAFE_RETURN transition: '+JSON.stringify({trace:report.desktopWorkerTrace,group:report.desktopRecover.workerGroupState,responses:report.desktopRecover.workerResponses}));
   }
+  await evaluate(cdp,"window.__psiReturnObserver?.disconnect(); true");
 
   await viewport(cdp,780,360,true);
   await clearState(cdp);
@@ -579,7 +614,7 @@ try {
   if(report.physicalLandscape.idleInstruction.includes('LOGICAL BOARD') || report.physicalLandscape.idleInstruction.includes('1000×600')) {
     throw new Error('Developer board jargon leaked into physical gameplay: '+report.physicalLandscape.idleInstruction);
   }
-  if(!report.physicalLandscape.idleInstruction.includes('개입 지점')) throw new Error('Production-facing idle guidance missing: '+report.physicalLandscape.idleInstruction);
+  if(!/(개입 지점|설치 패드)/.test(report.physicalLandscape.idleInstruction)) throw new Error('Production-facing actionable pad guidance missing: '+report.physicalLandscape.idleInstruction);
   if(!report.physicalLandscape.command || report.physicalLandscape.command.height > 68) {
     throw new Error('780x360 idle command overlay is too tall: '+JSON.stringify(report.physicalLandscape.command));
   }
@@ -659,6 +694,20 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  // Capture the entire EVADE -> SAFE_RETURN -> NORMAL sequence. Reading one
+  // DOM frame at RETURN_RECOVER can miss the short SAFE_RETURN transition.
+  await evaluate(cdp,`(() => {
+    window.__psiReturnTrace=[];
+    const record=()=>{
+      const group=document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state');
+      if(group&&window.__psiReturnTrace.at(-1)!==group)window.__psiReturnTrace.push(group);
+    };
+    record();
+    window.__psiReturnObserver?.disconnect();
+    window.__psiReturnObserver=new MutationObserver(record);
+    window.__psiReturnObserver.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:['data-worker-group-state','data-worker-response']});
+    return true;
+  })()`);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   report.mobileImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
@@ -674,9 +723,12 @@ try {
   await screenshot(cdp,'04-g8a-control-impact-mobile.png');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
   report.mobileRecover=await metrics(cdp);
-  if(report.mobileRecover.workerGroupState!=='SAFE_RETURN' || !report.mobileRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
-    throw new Error('390x844 workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.mobileRecover.workerGroupState,responses:report.mobileRecover.workerResponses}));
+  report.mobileWorkerTrace=await evaluate(cdp,"window.__psiReturnTrace??[]");
+  if(!report.mobileWorkerTrace.includes('SAFE_RETURN') ||
+    !['SAFE_RETURN','NORMAL'].includes(report.mobileRecover.workerGroupState)) {
+    throw new Error('390x844 workers failed actual SAFE_RETURN transition: '+JSON.stringify({trace:report.mobileWorkerTrace,group:report.mobileRecover.workerGroupState,responses:report.mobileRecover.workerResponses}));
   }
+  await evaluate(cdp,"window.__psiReturnObserver?.disconnect(); true");
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;

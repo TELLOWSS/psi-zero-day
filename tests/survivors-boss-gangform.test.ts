@@ -27,6 +27,7 @@ it('requires two distinct spatial points, redirects drone aim and opens exactly 
  hitGangformZone(f.h,shot(a!.x,a!.y),a!,a!);expect(f.h.bossGameplay!.combatPhase).toBe('weak_point');
  expect(gangformTarget(f.h,a!.x,a!.y)).toMatchObject({x:b!.x,y:b!.y});
  hitGangformZone(f.h,shot(b!.x,b!.y),b!,b!);expect(f.h.bossGameplay!.combatPhase).toBe('burst');expect(f.h.bossGameplay!.burstRemaining).toBe(4.5);
+ expect(f.h.bossGameplay!.burstFloorHp).toBe(600);
  expect(gangformContact(f.h,a!)).toBe(false);expect(f.h.hp).toBe(1000);
  tickBossCombat(f.h,4.5);tickBossCombat(f.h,1.2);expect(f.h.bossGameplay!.gangform).toBeUndefined();
 });
@@ -59,4 +60,23 @@ it('keeps edge targets separate and out of actual terrain footprints',()=>{
  const zones=f.h.bossGameplay!.gangform!.zones;expect(zones).toHaveLength(2);
  for(const z of zones){expect(z.x>=80&&z.x<=1320&&z.y>=80&&z.y<=820).toBe(true);expect(z.x>108&&z.x<312&&z.y<192).toBe(false);}
  expect(Math.hypot(zones[0]!.x-zones[1]!.x,zones[0]!.y-zones[1]!.y)).toBeGreaterThanOrEqual(200);
+});
+
+it('prevents a single puzzle-earned burst from one-shotting the boss on every difficulty',()=>{
+ for(const [difficulty,maxFraction] of [['story',.5],['standard',.4],['hard',.34],['extreme',.25],['mastery',.25]] as const){
+  const f=fixture();
+  expose(f);
+  const [a,b]=f.h.bossGameplay!.gangform!.zones;
+  hitGangformZone(f.h,shot(a!.x,a!.y),a!,a!,difficulty);
+  hitGangformZone(f.h,shot(b!.x,b!.y),b!,b!,difficulty);
+  expect(f.h.bossGameplay!.combatPhase).toBe('burst');
+  expect(f.h.bossGameplay!.burstFloorHp).toBeCloseTo(1000*(1-maxFraction),4);
+  bossCombatDamage(f.h,1e8,f.definition,true,difficulty);
+  expect(f.h.hp).toBeCloseTo(1000*(1-maxFraction),4);
+  expect(f.h.hp).toBeGreaterThan(0);
+  tickBossCombat(f.h,4.5);tickBossCombat(f.h,1.2);
+  expect(f.h.bossGameplay!.combatPhase).toBe('pattern');
+  expose(f);
+  expect(f.h.bossGameplay!.combatPhase).toBe('weak_point');
+ }
 });

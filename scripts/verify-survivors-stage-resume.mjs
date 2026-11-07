@@ -24,7 +24,7 @@ try {
       if (completed) localStorage.setItem('psi.survivors.stage_stars', JSON.stringify({ stage_14: [true, false, false] }));
     }, completed);
     await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196', { waitUntil: 'domcontentloaded' });
-    await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
+    await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();
     await openSurvivorsStagePreview(page);
     const preview = await page.locator('.survivors-stage-preview').getAttribute('src');
     const uniqueMaps = JSON.parse(fs.readFileSync('content/design/survivors-stage-backgrounds-v1.json', 'utf8'));
@@ -36,7 +36,7 @@ try {
     await launchButton.click();
     await page.keyboard.press('KeyP');
     await page.getByRole('button', { name: '메인으로 나가기', exact: true }).click();
-    await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
+    await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();
     await openSurvivorsStagePreview(page);
     if (await page.locator('.survivors-stage-preview').getAttribute('src') !== preview) throw new Error('Exit lost played map');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);

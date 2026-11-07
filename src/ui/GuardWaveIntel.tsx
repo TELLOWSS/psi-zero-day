@@ -1,15 +1,18 @@
 import type {DefenseContent,DefenseRunState,DefenseWaveDefinition} from '../domain/defense';
 import {GuardPreparationCheck} from './GuardPreparationCheck';
 import {guardWaveIntel} from '../app/guard-wave-intel';
+import {guardMasteryWaveDirective} from '../engine/guard-mastery';
 import {defenseText as t} from '../app/defense-text';
 import {GUARD_PLANNING_STYLES,type GuardPlanningStyle} from '../app/guard-planning-style';
 export function GuardWaveIntel({content,state,wave,style,onStyle,initiallyOpen=false,pressureEnabled=true}:{content:DefenseContent;state?:DefenseRunState;wave:DefenseWaveDefinition;style:GuardPlanningStyle;onStyle:(style:GuardPlanningStyle)=>void;initiallyOpen?:boolean;pressureEnabled?:boolean}){
  const intel=guardWaveIntel(content,wave,pressureEnabled);
+ const directive=state?.masteryRun?guardMasteryWaveDirective(content,wave.id):null;
  const priority=['VEILED','BOSS','ARMORED','SWIFT','SWARM','NORMAL'];
  const risks=[...new Set(intel.groups.map(g=>g.enemy))].sort((a,b)=>priority.indexOf(a)-priority.indexOf(b)).slice(0,3);
  return <section className="guard-wave-brief" aria-label={t('guard.intel.brief')}>
   <strong>{t('guard.intel.brief')} · {wave.id}{t('guard.wave')}</strong>
   {pressureEnabled&&content.sensorPressure?.waves.includes(wave.id)?<p>{t('guard.pressure.prepare')}</p>:null}
+  {state?.masteryRun?<p className="guard-mastery-directive" data-guard-mastery-wave={wave.id}><b>마스터 작전</b>{directive?` · 우선 차단: ${t(`defense.enemy.${directive.enemy}.name`)} · 유출 시 방호 피해 +${directive.extraLeak}. ${directive.advice}`:' · 기본 방호선을 유지하고 보스 전환에 대비하세요.'}</p>:null}
   <ul>{risks.map(id=><li key={id}><b>{t(`defense.enemy.${id}.name`)}</b> · {t(`guard.intel.${id}`)}</li>)}</ul>
   <details className="guard-wave-intel" open={initiallyOpen||undefined}><summary>{t('guard.intel')} · {t(`guard.style.${style}`)}</summary>
   {state?<GuardPreparationCheck content={content} state={state} wave={wave}/>:null}

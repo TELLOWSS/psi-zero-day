@@ -14,13 +14,13 @@ try {
     page.on('pageerror',error=>errors.push(String(error)));
     await page.emulateMedia({reducedMotion:'reduce'});
     await page.goto(url,{waitUntil:'domcontentloaded'});
-    await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).waitFor();
+    await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().waitFor();
     const fonts=await page.evaluate(async()=>{
       const faces=await Promise.all([document.fonts.load('500 14px Pretendard','현장'),document.fonts.load('400 20px "Black Han Sans"','작전'),document.fonts.load('700 22px "Chakra Petch"','2,000')]);
       return faces.every(face=>face.length>0&&face.every(font=>font.status==='loaded'));
     });
     await page.screenshot({path:`artifacts/tactical-ui/${width}x${height}-entry.png`});
-    await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click({noWaitAfter:true});
+    await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click({noWaitAfter:true});
     try { await page.getByRole('button',{name:copy.shopEntry,exact:true}).waitFor({timeout:60000}); }
     catch(error) { console.log(JSON.stringify({errors,body:await page.locator('body').innerText()}));await page.screenshot({path:`artifacts/tactical-ui/${width}x${height}-failure.png`});throw error; }
     const ready=await page.locator('.survivors-ready-dialog').evaluate(element=>{

@@ -6,6 +6,7 @@ import type {
   DefenseTowerDefinition, DefenseTowerLevelDefinition, DefenseTowerState,
 } from '../domain/defense';
 import {withDefenseTacticalStats,recordDefenseCombat,closeDefenseTacticalWave} from './defense-tactical-stats';
+import {guardMasteryHp,guardMasterySpeed,guardMasteryWaveDirective} from './guard-mastery';
 import {defensePathLength,defenseEnemyPath,defenseEnemyPosition,defenseTowerPoint,defenseObservationPoints,defenseGuidanceContains} from './defense-geometry';
 import {fireDefenseUltimate,resolveDefensePending,updateDefenseUltimateFields,updateDefenseAnalysis} from './defense-ultimate';
 export {defensePathLength,defensePositionAtDistance} from './defense-geometry';
@@ -94,7 +95,7 @@ function startWaveState(state: DefenseRunState, content: DefenseContent): Defens
   };
 }
 
-export function createDefenseRun(content: DefenseContent, supportId: DefenseRunState['supportId'], runId = 'run-unassigned',options?:{ultimateUnlocked?:boolean}): DefenseRunState {
+export function createDefenseRun(content: DefenseContent, supportId: DefenseRunState['supportId'], runId = 'run-unassigned',options?:{ultimateUnlocked?:boolean;masteryRun?:boolean}): DefenseRunState {
   if (!content.scenario.availableSupports.includes(supportId)) throw new Error(`Support unavailable: ${supportId}`);
   const support = content.supports.find(item => item.id === supportId);
   if (!support) throw new Error(`Unknown support: ${supportId}`);
@@ -102,6 +103,7 @@ export function createDefenseRun(content: DefenseContent, supportId: DefenseRunS
   return withDefenseTacticalStats({
     ...(content.ultimateEnabled?{ultimateUnlocked:options?.ultimateUnlocked===true,pendingAttacks:[],mapPhase:'INITIAL' as const,appliedTransitionIds:[],redeploymentCredits:0}:{}),
     ...(content.sensorPressure?{sensorPressureEnabled:true}:{}),
+    ...(options?.masteryRun===true&&content.scenario.id.startsWith('guard-gd-')?{masteryRun:true as const}:{}),
     runId,
     mode: eventMode ? 'EVENT' : 'TRAINING',
     variant: eventMode ? 'EVENT_MODIFIED' : 'STANDARD',
@@ -257,7 +259,7 @@ function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunSt
       const definition = enemyDefinition(content, core?'ARMORED':group.enemy);
       enemies.push({
         ...(content.map.routes?{routeId:group.routeId??content.map.routes[0]!.id}:{}),
-        id: `enemy-${nextSequence}`, enemyId: definition.id, hp: definition.hp, distance: 0,
+        id: `enemy-${nextSequence}`, enemyId: definition.id, hp: state.masteryRun?guardMasteryHp(definition.hp,definition.id,state.waveId):definition.hp, distance: 0,
         ...(core?{sensorPressure:{phase:'SEEK' as const,remainingTicks:0,targetTowerId:null,targetPadId:null}}:{}),
         spawnSequence: nextSequence, revealUntilTick: state.tick < state.revealAllUntilTick ? state.revealAllUntilTick : 0,
         slowEffects: [], bossPhaseTriggered: false, bossArmorFromTick: 0, bossArmorUntilTick: 0,
@@ -271,6 +273,7 @@ function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunSt
 
 function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRunState {
   let shield = state.shield;
+  const masteryDirective=state.masteryRun?guardMasteryWaveDirective(content,state.waveId):null;
   const routeLeaks=[...(state.tacticalStats?.routeLeaks??[])];
   const leakedByEnemy: Partial<Record<DefenseEnemyState['enemyId'], number>> = { ...(state.leakedByEnemy ?? {}) };
   const moved: DefenseEnemyState[] = [];
@@ -278,9 +281,9 @@ function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRu
     const definition = enemyDefinition(content, enemy.enemyId);
     const frozen = state.tick < state.freezeMovementUntilTick||state.tick<(enemy.lockedUntilTick??0);
     const slow = effectiveSlow(enemy, definition, state.tick);
-    const distance = frozen ? enemy.distance : enemy.distance + definition.speed * (content.tickMs / 1000) * (1 - slow);
+    const distance = frozen ? enemy.distance : enemy.distance + definition.speed * (state.masteryRun?guardMasterySpeed(definition.id):1) * (content.tickMs / 1000) * (1 - slow);
     if (distance + EPSILON >= defensePathLength(defenseEnemyPath(content,enemy,state))) {
-      shield = Math.max(0, shield - definition.leak);
+      shield = Math.max(0, shield - definition.leak - (masteryDirective?.enemy===enemy.enemyId?masteryDirective.extraLeak:0));
       leakedByEnemy[enemy.enemyId] = (leakedByEnemy[enemy.enemyId] ?? 0) + 1;
       routeLeaks.push({enemyId:enemy.enemyId,routeId:enemy.routeId??'main',waveId:state.waveId,tick:state.tick,point:defenseEnemyPosition(content,{...enemy,distance},state),...(enemy.firstContact?{firstContact:enemy.firstContact}:{}),targetsAtLeak:state.towers.map(({padId,targetMode})=>({padId,targetMode}))});
       continue;
@@ -387,7 +390,9 @@ function triggerBossPhase(state: DefenseRunState, content: DefenseContent): Defe
   const enemies = state.enemies.map(enemy => {
     const definition = enemyDefinition(content, enemy.enemyId);
     if (!definition.boss || !definition.phase || enemy.bossPhaseTriggered || enemy.hp <= 0) return enemy;
-    if (enemy.hp / definition.hp > definition.phase.triggerHpRatio) return enemy;
+    // A mastery boss's second phase starts at its true spawned HP fraction.
+    const spawnMaxHp=state.masteryRun?guardMasteryHp(definition.hp,definition.id,state.waveId):definition.hp;
+    if (enemy.hp / spawnMaxHp > definition.phase.triggerHpRatio) return enemy;
     const from = state.tick + 1;
     return { ...enemy, bossPhaseTriggered: true, bossArmorFromTick: from, bossArmorUntilTick: from + definition.phase.durationTicks };
   });

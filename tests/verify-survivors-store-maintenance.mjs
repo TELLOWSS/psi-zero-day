@@ -11,7 +11,7 @@ try{
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',error=>errors.push(String(error)));
   await page.addInitScript(()=>{if(!localStorage.getItem('qa.store.fixture')){localStorage.setItem('qa.store.fixture','1');localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:2000,inventory:{owned:['voice_lens','shock_mantle'],equipped:['shock_mantle'],durability:{voice_lens:0,shock_mantle:15}}}));}});
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto(url,{waitUntil:'networkidle'});
-  const open=async()=>{await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.getByRole('button',{name:copy.shopEntry,exact:true}).click();};
+  const open=async()=>{await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();await page.getByRole('button',{name:copy.shopEntry,exact:true}).click();};
   await open();
   const wallet=page.locator('.survivors-toolbar-wallet');if(!(await wallet.textContent()).includes('2,000 PSI'))throw Error('Balance missing');
   await page.screenshot({path:`artifacts/store-maintenance/${width}x${height}-browse.png`});

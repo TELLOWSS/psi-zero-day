@@ -3,6 +3,7 @@ import {isStoryEvidenceReceipt,normalizeStoryEvidence,mergeStoryEvidence,storyEv
 import {persistStoryEvidence,readStoryEvidence,STORY_EVIDENCE_KEY} from '../src/app/story-evidence';
 import {normalizeStoryReader,DEFAULT_STORY_READER} from '../src/app/story-reader-settings';
 import {identityFrameWeights} from '../src/ui/survivors-identity-frame';
+import {storyObservationLabel} from '../src/ui/StoryEvidence';
 const receipt:StoryEvidenceReceipt={schemaVersion:1,sourceMode:'watch',sourceRecordId:'actual-handoff',incidentId:'ep01.ramp',observationIds:['route-cleared'],outcome:'verified-clear',contentVersion:'ep01.story-evidence.v1'};
 describe('story evidence boundaries',()=>{
  it('deduplicates receipts without converting a combat win into a field fact',()=>{
@@ -31,5 +32,12 @@ describe('story evidence boundaries',()=>{
   const input=[{direction:1,frame:3,weight:.49},{direction:2,frame:6,weight:.51}];
   expect(identityFrameWeights(input)).toEqual([{direction:2,frame:6,weight:1}]);
   expect(input[1]!.weight).toBe(.51);expect(identityFrameWeights([])).toEqual([]);
+ }); 
+ it('renders unknown legacy observation IDs safely without hiding known translated records',()=>{
+  const strict=(key:string)=>{if(!['story.evidence.observation.route-cleared','story.evidence.observation.other'].includes(key))throw Error('Missing text_id: '+key);return key==='story.evidence.observation.route-cleared'?'통로 잔재 정리':'작전 관찰 기록';};
+  expect(storyObservationLabel('route-cleared',strict)).toBe('통로 잔재 정리');
+  expect(storyObservationLabel('qa-observation',strict)).toBe('작전 관찰 기록');
+  expect(storyObservationLabel('unexpected.observation\nkey',strict)).toBe('작전 관찰 기록');
  });
+
 });

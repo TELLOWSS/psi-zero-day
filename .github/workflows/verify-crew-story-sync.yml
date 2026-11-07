@@ -62,10 +62,12 @@ jobs:
             done
             if [ "$ready" -ne 1 ]; then cat /tmp/psi-preview.log /tmp/psi-dev.log; exit 1; fi
           done
-          node scripts/verify-story-integration.cjs
-          node scripts/verify-story-player.cjs
-          node tests/browser/story-recovery.cjs
-          node scripts/verify-crew-motion.cjs
+          # Fail quickly on navigation/regression errors rather than spending a
+          # 35-minute runner on repeated missing-locator waits.
+          timeout --foreground 6m node tests/browser/story-recovery.cjs
+          timeout --foreground 8m node scripts/verify-story-integration.cjs
+          timeout --foreground 8m node scripts/verify-story-player.cjs
+          timeout --foreground 4m node scripts/verify-crew-motion.cjs
       - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v4

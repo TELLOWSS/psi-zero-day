@@ -3,6 +3,18 @@ import type {GameState} from '../domain';
 import {collectStoryEvidence,readStoryEvidence} from '../app/story-evidence';
 import {storyEvidenceForScene,storyEvidenceReaction} from '../domain/story-evidence';
 
+/** Receipt observation IDs are externally supplied, including legacy saves.
+ * Never interpolate an unknown ID into strict localization (which throws).
+ */
+const TRANSLATED_OBSERVATIONS=new Set([
+  'controlled-zone','cart-stop','route-cleared','defense-route-review',
+  'watch-load-pattern','guard-load-pattern','breaker-load-pattern',
+]);
+export function storyObservationLabel(id:string,t:(id:string)=>string):string {
+  return t(TRANSLATED_OBSERVATIONS.has(id)
+    ? `story.evidence.observation.${id}`:'story.evidence.observation.other');
+}
+
 export function StoryEvidence({eventId,state,t}:{eventId:string|null;state:GameState|null;t:(id:string)=>string}) {
   const [result,setResult]=useState(()=>({receipts:readStoryEvidence(),saved:true}));
   useEffect(()=>{
@@ -22,7 +34,7 @@ export function StoryEvidence({eventId,state,t}:{eventId:string|null;state:GameS
         {' · '}{row.observedAt?<time dateTime={row.observedAt}>{new Date(row.observedAt).toLocaleString('ko-KR')}</time>:t('story.evidence.undated')}
       </small>
       <p>{t(storyEvidenceReaction(row,state))}</p>
-      {row.observationIds.length?<ul>{row.observationIds.map(id=><li key={id}>{t(`story.evidence.observation.${id}`)===`story.evidence.observation.${id}`?t('story.evidence.observation.other'):t(`story.evidence.observation.${id}`)}</li>)}</ul>:null}
+      {row.observationIds.length?<ul>{row.observationIds.map(id=><li key={id}>{storyObservationLabel(id,t)}</li>)}</ul>:null}
     </article>)}
     {!result.saved&&<small role="status">{t('story.reader.unsaved')}</small>}
   </details>;

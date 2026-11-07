@@ -162,3 +162,64 @@
 @media(prefers-reduced-motion:reduce){
  .zb-shell[data-defense-screen="combat"][data-orientation][data-selection-mode] *,.zb-shell[data-defense-screen="combat"][data-orientation][data-selection-mode] *:before,.zb-shell[data-defense-screen="combat"][data-orientation][data-selection-mode] *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* G8-A world-first physical landscape: override the generic tactics side dock.
+   The field fills the display, and HUD/action controls float over the scene.
+   Do not apply this special production layout to other Defense/Guard maps. */
+@media(orientation:landscape) and (max-height:560px){
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active){
+  position:relative;display:grid;grid-template-areas:"field";grid-template-columns:minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);height:100dvh;min-height:100dvh;overflow:hidden;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-stage{
+  grid-area:field;container-type:size;position:relative;min-height:0;width:100%;height:100%;padding:0;overflow:hidden;align-items:stretch;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-board-wrap{
+  width:100%;height:100%;max-width:100%;max-height:100%;aspect-ratio:auto;flex:1 1 auto;
+  border:0;border-radius:0;margin:0;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-tactics-strip{display:none}
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-hud{
+  grid-area:auto;position:absolute;z-index:30;top:4px;left:4px;right:4px;
+  width:auto;height:40px;padding:3px 4px;
+  grid-template-columns:minmax(90px,1.4fr) repeat(3,minmax(54px,.72fr)) minmax(70px,.8fr) 58px 84px 84px;
+  gap:3px;overflow:visible;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-hud button{min-height:32px;font-size:9px}
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-command{
+  grid-area:auto;position:absolute;z-index:29;left:6px;right:6px;top:auto;bottom:6px;
+  width:auto;height:60px;min-height:0;max-height:60px;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,32%);
+  align-items:stretch;gap:5px;padding:5px;overflow:hidden;
+  border:1px solid rgba(185,200,211,.16);border-radius:9px;background:rgba(8,18,26,.84);
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode][data-selection-mode="PAD"]:not(.zb-prep):not(.is-def-core-active) .zb-command,
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode][data-selection-mode="TOWER"]:not(.zb-prep):not(.is-def-core-active) .zb-command{height:104px;max-height:104px}
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode][data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection{
+  display:flex;flex-direction:row;align-items:center;justify-content:space-between;min-height:0;height:100%;padding:3px 8px;margin:0;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-run-controls{
+  display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:4px;align-items:stretch;min-height:0;margin:0;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-run-controls>div{
+  min-height:0;margin:0;overflow:hidden;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-start-wave,
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-support-action button{height:44px;min-height:44px}
+}
+
+/* G8-A portrait: preserve the real actionable brief but cap its header to
+   release the final 12–16px of world viewport (390×844 baseline).
+   Target is >=72% world height with 44px focusable actions intact. */
+@media(orientation:portrait) and (max-width:560px){
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-tactics-strip{
+  height:48px;min-height:48px;max-height:48px;
+  padding:2px 7px;gap:6px;overflow:hidden;align-items:center;box-sizing:border-box;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-tactics-strip button{
+  min-height:44px;height:44px;padding:4px 6px;flex-shrink:0;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-stage{
+  min-height:0;align-items:stretch;
+ }
+}

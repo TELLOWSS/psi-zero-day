@@ -1,0 +1,70 @@
+/* RE:IGNITION / first-look refresh: preserve the original hero illustration. */
+.commercial-title-home[data-endgame-home="2026-11"] .commercial-title-meta>small{color:#f5d8a5;font-weight:800;letter-spacing:.11em}
+.commercial-title-home[data-endgame-home="2026-11"] .hub-endgame-chapter-mark{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;max-width:100%;border:1px solid #b9ddd36b;border-radius:99px;padding:7px 11px;background:#0b2532bc;color:#d2ffea;font-size:10px;line-height:1.3;font-weight:750;letter-spacing:.11em;margin-top:14px;backdrop-filter:blur(8px)}
+.hub-endgame-chapter-mark b{color:#ffcf86;font-weight:850}
+.hub-endgame-live-mark{width:7px;height:7px;border-radius:50%;background:#6febc6;box-shadow:0 0 10px #6febc699}
+.commercial-title-home[data-endgame-home="2026-11"] .hub-endgame-deck{position:relative;z-index:4;width:100%;max-width:1440px;margin:0 auto 24px;scroll-margin-top:16px;border:1px solid #c1d7df42;border-radius:23px;background:linear-gradient(130deg,#102f3eec,#0b1824f7 65%);box-shadow:0 20px 65px #0007;overflow:hidden;isolation:isolate}
+.hub-endgame-deck:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#fbd59a,#52c5c7 48%,#5b91be)}
+.hub-endgame-deck-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:21px clamp(16px,2vw,30px) 16px}
+.hub-endgame-deck-head small{font-size:10px;letter-spacing:.17em;color:#f2cd97;font-weight:850}
+.hub-endgame-deck-head h2{font-size:clamp(20px,2.1vw,30px);line-height:1.25;color:#fff4df;margin:9px 0 6px;letter-spacing:-.035em}
+.hub-endgame-deck-head p{font-size:13px;color:#b9d1d6;line-height:1.65;margin:0}
+.hub-endgame-edition{font-size:clamp(15px,2vw,29px);font-weight:950;letter-spacing:.13em;color:#f1d39e;text-align:right;line-height:1.2;white-space:nowrap}
+.hub-endgame-edition small{display:block;letter-spacing:.2em;font-size:9px;margin-top:6px}
+.hub-endgame-duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 clamp(12px,2vw,26px) 15px}
+.hub-endgame-card{position:relative;isolation:isolate;min-width:0;min-height:295px;display:flex;align-items:flex-end;overflow:hidden;border:1px solid #b7d8de50;border-radius:15px;background:#132b3a;box-shadow:inset 0 0 0 1px #ffffff08}
+.hub-endgame-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% center;z-index:-2;opacity:.93}
+.hub-endgame-card:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#071a26f7 0%,#0b2638e0 50%,#0c253853 100%),linear-gradient(0deg,#091a25ed,transparent 80%);z-index:-1}
+.hub-endgame-card.is-watch>img{object-position:72% center}
+.hub-endgame-card-content{width:min(100%,540px);padding:24px clamp(16px,2vw,28px);display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.hub-endgame-card-content>small{color:#d3dcda;letter-spacing:.16em;font-size:10px;font-weight:750}
+.hub-endgame-card-content h3{font-size:clamp(24px,2.5vw,35px);letter-spacing:-.015em;color:#fdf4e5;line-height:1.15;margin:2px 0}
+.hub-endgame-card-content>p{font-size:12px;line-height:1.7;color:#cbdfe0;max-width:410px;min-height:42px;margin:0}
+.hub-endgame-progress{display:flex;justify-content:space-between;align-items:end;gap:10px;width:100%;font-size:11px;color:#e3ddc8}
+.hub-endgame-progress strong{color:#f8c67e;font-size:23px;line-height:1.1;font-variant-numeric:tabular-nums}
+.hub-endgame-progress strong span{font-size:11px;margin-left:4px;color:#d8e4e0}
+.hub-endgame-card progress{width:100%;height:6px;accent-color:#eac17c;border:0;border-radius:99px;overflow:hidden}
+.hub-endgame-card.is-watch progress{accent-color:#6bdfd8}
+.hub-endgame-card button{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:48px;min-width:min(100%,240px);border-radius:10px;padding:11px 18px;margin-top:4px;border:1px solid #f4d69b;background:linear-gradient(130deg,#ffdf9b,#dbab5d);color:#10242a;font-size:13px;font-weight:900;cursor:pointer}
+.hub-endgame-card.is-watch button{background:linear-gradient(130deg,#a4f5ea,#58c4c6);border-color:#9ce3db}
+.hub-endgame-card button:focus-visible{outline:3px solid white;outline-offset:3px}
+.hub-endgame-card button:disabled{opacity:.6;cursor:not-allowed}
+.hub-endgame-disclaimer{padding:0 clamp(16px,2vw,30px) 16px;margin:0;color:#9db9c1;font-size:11px;line-height:1.6}
+.commercial-title-home[data-endgame-home="2026-11"] #psi-game-modes .is-defense-entry{order:0!important}
+.commercial-title-home[data-endgame-home="2026-11"] #psi-game-modes .is-survivors-entry{order:1!important}
+.commercial-title-home[data-endgame-home="2026-11"] #psi-game-modes .is-breaker-entry{order:2!important}
+.commercial-title-home[data-endgame-home="2026-11"] #psi-game-modes .is-story-entry{order:3!important}
+@media(max-width:670px){.hub-endgame-deck-head{align-items:flex-start}.hub-endgame-edition{font-size:12px}.hub-endgame-duo{grid-template-columns:1fr}.hub-endgame-card{min-height:230px}.hub-endgame-card>img{object-position:65% 40%}}
+@media(max-width:420px){.hub-endgame-deck-head{flex-direction:column}.hub-endgame-edition{align-self:flex-start}.hub-endgame-card-content{padding:20px 16px}.hub-endgame-card-content>p{font-size:12px}.hub-endgame-progress{flex-wrap:wrap}.commercial-title-home[data-endgame-home="2026-11"] .hub-endgame-chapter-mark{font-size:9px;letter-spacing:.05em}}
+@media(orientation:landscape) and (max-height:600px){.hub-endgame-card{min-height:240px}.hub-endgame-deck-head{padding-top:15px}}
+@media(prefers-reduced-motion:reduce){.hub-endgame-deck,.hub-endgame-card{scroll-behavior:auto;animation:none!important}}
+.guard-veteran-command{max-width:1240px;margin:22px auto;padding:22px clamp(16px,3vw,32px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 20px;align-items:center;border-radius:18px;border:1px solid #e6c88f77;background:linear-gradient(115deg,#203d48,#0d2333 72%);box-shadow:0 14px 40px #0004}
+.guard-veteran-copy>small,.survivors-veteran-return small{color:#f0c783;font-size:10px;letter-spacing:.15em;font-weight:900}
+.guard-veteran-copy h2{color:#fff1d5;font-size:clamp(23px,2.4vw,32px);margin:9px 0;line-height:1.3}
+.guard-veteran-copy p{color:#c1d9db;font-size:13px;line-height:1.65;max-width:680px}
+.guard-veteran-record{text-align:right;min-width:160px}
+.guard-veteran-record>strong{font-size:44px;line-height:1;font-variant-numeric:tabular-nums;color:#f6d293}
+.guard-veteran-record>strong span{font-size:20px;color:#b4c9d0}
+.guard-veteran-record>small{display:block;font-size:10px;letter-spacing:.12em;color:#dae9dd}
+.guard-veteran-cells{display:flex;gap:4px;margin:12px 0}
+.guard-veteran-cells span{display:grid;place-items:center;border:1px solid #63838c;border-radius:5px;min-width:21px;min-height:26px;background:#123340;color:#c5d5dc;font-size:11px;font-weight:800}
+.guard-veteran-cells span[data-cleared="true"]{background:#e7bb71;color:#182936;border-color:#f7d99c}
+.guard-veteran-command>button{grid-column:1/-1;justify-self:start;background:#ecc689;color:#142733;border-color:#f6dfab;min-height:48px}
+.guard-veteran-command button:hover{filter:brightness(1.08)}
+.survivors-veteran-return{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;padding:14px 17px;border:1px solid #e8c78988;border-radius:14px;background:linear-gradient(110deg,#183d48,#172537 85%);color:#f4f4e8}
+.survivors-veteran-return h3{font-size:clamp(17px,1.8vw,23px);line-height:1.3;margin:6px 0;color:#ffdfa0}
+.survivors-veteran-return p{font-size:12px;line-height:1.55;color:#c7d9d7;margin:4px 0}
+.survivors-veteran-return button{min-height:48px;flex:none;padding:11px 14px;border-radius:9px;background:#e6bd79!important;color:#122b30!important;font-weight:900}
+@media(max-width:720px){.guard-veteran-command{margin:14px 12px;grid-template-columns:1fr}.guard-veteran-record{min-width:0;text-align:left}.survivors-veteran-return{flex-direction:column;align-items:stretch}.survivors-veteran-return button{width:100%}}
+
+.hub-endgame-release{margin:0 clamp(12px,2vw,26px) 14px;border:1px solid #7da1a55c;border-radius:12px;background:#0c2331ac}
+.hub-endgame-release summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:14px 16px;font-size:13px;font-weight:800;color:#ecdfbf;min-height:44px;box-sizing:border-box}
+.hub-endgame-release summary:focus-visible{outline:3px solid #f6d69a;outline-offset:3px}
+.hub-endgame-release summary>span{font-size:20px;color:#bde3db}
+.hub-endgame-release[open] summary>span{transform:rotate(45deg)}
+.hub-endgame-release-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 12px 14px}
+.hub-endgame-release-grid section{padding:13px;border-radius:9px;background:#203c47b8;min-width:0}
+.hub-endgame-release-grid small{font-size:10px;letter-spacing:.1em;color:#f2c992}
+.hub-endgame-release-grid strong{display:block;font-size:14px;color:#f8f1e6;margin:6px 0}
+.hub-endgame-release-grid p{font-size:12px;line-height:1.7;color:#c4d9da;margin:0}
+@media(max-width:730px){.hub-endgame-release-grid{grid-template-columns:1fr}}

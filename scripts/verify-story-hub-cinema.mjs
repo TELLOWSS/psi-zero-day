@@ -15,38 +15,77 @@ try{
   const page=await browser.newPage({viewport:{width,height},serviceWorkers:'block'}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));page.setDefaultTimeout(30000);
   try{
-   await page.goto(root,{waitUntil:'domcontentloaded'});
-   await page.locator('button.is-story-entry').waitFor();
-   const entryCount=await page.locator('button.is-story-entry').count();
-   const entryBox=await page.locator('button.is-story-entry').boundingBox();
-   // Director-led home: its portrait key art must own the first viewport.
-   // Navigation lives on a real 44px scroll CTA; never squash key art for the tile.
+   await page.goto(root+(root.includes('?')?'&':'?')+'home=cinematic',{waitUntil:'domcontentloaded'});
+   const home=page.locator('main.rg-home');
+   await home.waitFor();
+   const designs=['cinematic','operations','terminal','elite'];
+   const choices=await page.locator('.rg-theme-picker button').count();
+   if(choices!==4)throw new Error('Four selectable title designs were not rendered: '+choices);
+   const launchers=page.locator('button.rg-card');
+   if(await launchers.count()!==2)throw new Error('Guard and Watch entry cards missing');
+   if(await page.locator('.rg-story-button').count()!==1||await page.locator('.rg-breaker-link').count()!==1)
+    throw new Error('Story or Breaker entry is missing');
    if(width===390){
-     const hero=await page.locator('.hub-cinematic-intro').boundingBox();
-     const reveal=page.locator('.hub-reveal-modes');
-     const revealBox=await reveal.boundingBox();
-     if(!hero||hero.height<height*.75)throw new Error('Main heroine key art was covered by premature mode cards: '+JSON.stringify(hero));
-     if(!entryBox||entryBox.y<height*.985)throw new Error('Mode cards enter first screen and cover the portrait key art: '+JSON.stringify(entryBox));
-     if(!revealBox||revealBox.height<44||revealBox.y+revealBox.height>height+2)throw new Error('Accessible game selection scroll cue missing: '+JSON.stringify(revealBox));
-     const backdrop=await page.locator('.commercial-title-backdrop').evaluate(async img=>{
-       await img.decode();
-       return {width:img.naturalWidth,height:img.naturalHeight,opacity:Number(getComputedStyle(img).opacity)};
-     });
-     if(backdrop.width<900||backdrop.height<1500||backdrop.opacity<.98)throw new Error('Premium portrait background missing: '+JSON.stringify(backdrop));
-     await page.screenshot({path:path.join(out,'390x844-art-first-before-menu.png'),animations:'disabled'});
-     await reveal.click();
-     const modeBox=await page.locator('#psi-game-modes').boundingBox();
-     if(!modeBox||modeBox.y>height*.60||modeBox.y+modeBox.height<0)throw new Error('Game choice scroll link did not bring actions into view '+JSON.stringify(modeBox));
+     const hero=await page.locator('.rg-hero').boundingBox();
+     const headline=await page.locator('.rg-hero h1').boundingBox();
+     if(!hero||hero.height<height*.55||!headline||headline.height===0)
+       throw new Error('Portrait hero / welcome message missing: '+JSON.stringify({hero,headline}));
    }
-   const splitCount=await page.locator('button.is-episode02-entry').count();
-   const art=await page.locator('button.is-story-entry img.commercial-title-action-art').evaluate(async img=>{
-     await img.decode();
-     return {src:new URL(img.src).pathname,width:img.naturalWidth,height:img.naturalHeight};
+   const tested=[];
+   for(const [index,design] of designs.entries()){
+     if(width!==1440&&design!=='cinematic')continue;
+     await page.locator('.rg-theme-picker button').nth(index).click();
+     if(await home.getAttribute('data-reignition-concept')!==design)
+       throw new Error('Title switch did not apply: '+design);
+     const visuals=await page.evaluate(()=>{
+       const hero=document.querySelector('.rg-hero');
+       const image=document.querySelector('.rg-hero-art');
+       const selected=document.querySelector('.rg-theme-picker button[aria-pressed="true"]');
+       return {heroHeight:hero?.getBoundingClientRect().height??0,
+         imageLoaded:image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0,
+         selected:selected?.textContent?.trim(),
+         overflow:document.documentElement.scrollWidth>innerWidth+2};
+     });
+     await page.waitForFunction(()=>{const image=document.querySelector('.rg-hero-art');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0;},null,{timeout:20000});
+     if(visuals.heroHeight<260||visuals.overflow)
+       throw new Error('Main title viewport invalid '+design+': '+JSON.stringify(visuals));
+     if(design==='cinematic'){
+       await page.waitForFunction(()=>{
+         const art=document.querySelector('.rg-veteran-character');
+         return art instanceof HTMLImageElement&&art.complete&&art.naturalWidth>=500;
+       },null,{timeout:20000});
+       const heroArt=await page.locator('.rg-veteran-character').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
+       if(heroArt.width<500||heroArt.height<600)throw new Error('Approved RE:IGNITION artwork failed to load: '+JSON.stringify(heroArt));
+     }
+     await page.screenshot({path:path.join(out,width+'x'+height+'-title-'+design+'.png'),animations:'disabled',fullPage:true});
+     tested.push({design,...visuals});
+   }
+   await page.locator('.rg-theme-picker button').first().click();
+   const panels=await page.locator('.rg-card').count();
+   await page.locator('#reignition-missions').scrollIntoViewIfNeeded();
+   const cardInfo=await launchers.evaluateAll(buttons=>buttons.map(b=>({
+     height:b.getBoundingClientRect().height,
+     disabled:b.disabled,
+     label:b.textContent?.trim(),
+     cardWidth:b.getBoundingClientRect().width
+   })));
+   if(panels!==2||cardInfo.some(card=>card.disabled||card.height<150||card.cardWidth<180))
+      throw new Error('Visible Guard and Watch cards must be playable: '+JSON.stringify(cardInfo));
+   // Mission artwork must be decoded before a launch screenshot is accepted.
+   const artReadiness=await page.locator('.rg-card>img').evaluateAll(async(images)=>{
+     return Promise.all(images.map(async image=>{
+       try{await image.decode();}catch{return false;}
+       return image.naturalWidth>0&&image.naturalHeight>0;
+     }));
    });
-   if(!art.src.endsWith('/gate-dawn.webp')||art.width<1200||art.height<700)throw new Error('Story campaign card art missing '+JSON.stringify(art));
-   if(entryCount!==1||splitCount!==0)throw new Error('Story must have one campaign tile: '+entryCount+'/'+splitCount);
-   await page.screenshot({path:path.join(out,width+'x'+height+'-single-story-hub.png'),animations:'disabled'});
-   await page.locator('button.is-story-entry').click();
+   if(artReadiness.length!==2||artReadiness.some(ok=>!ok))
+     throw new Error('Playable Guard/Watch cards missing finished key artwork: '+JSON.stringify(artReadiness));
+   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+   if(overflow)throw new Error('RE:IGNITION layout horizontally overflows '+width+'x'+height);
+   await page.screenshot({path:path.join(out,width+'x'+height+'-game-choices.png'),animations:'disabled'});
+   const entryCount=await page.locator('button.rg-story-button').count(),splitCount=await page.locator('button.is-episode02-entry').count();
+   if(entryCount!==1||splitCount!==0)throw new Error('Story episode entry contract '+entryCount+'/'+splitCount);
+   await page.locator('button.rg-story-button').click();
    await page.locator('.episode-cold-open-cta').click();
    const story=page.locator('[data-story-player="cinematic"]');await story.waitFor();
    // A "screen rendered" without its decoded scene plate is NOT a valid screenshot.
@@ -71,7 +110,7 @@ try{
    if(height<=440 && (look.actorY??0)<(look.sceneY??0)+35)throw new Error('Landscape cast is floating near the header '+JSON.stringify(look));
    if((look.textScroll??0)>(look.textHeight??0)+2)throw new Error('Subtitle page was clipped '+JSON.stringify(look));
    await page.screenshot({path:path.join(out,width+'x'+height+'-story-cinema.png'),animations:'disabled'});
-   rows.push({width,height,entryCount,splitCount,look,errors});
+   rows.push({width,height,entryCount,splitCount,tested,look,errors});
    if(errors.length)throw new Error('Browser errors: '+errors.join('; '));
    console.log('PASS unified story '+width+'x'+height);
   }finally{await page.close()}

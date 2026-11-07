@@ -79,6 +79,7 @@ function validTower(value: unknown): value is DefenseTowerState {
 export function isDefenseRunState(value: unknown): value is DefenseRunState {
   if (!record(value)) return false;
   return nonEmptyString(value.runId)
+    && (value.masteryRun===undefined||(value.masteryRun===true&&String(value.scenarioId).startsWith('guard-gd-')))
     && (value.lastTowerPurchase===undefined || (record(value.lastTowerPurchase)
       && nonEmptyString(value.lastTowerPurchase.towerInstanceId) && nonEmptyString(value.lastTowerPurchase.padId)
       && nonNegativeInteger(value.lastTowerPurchase.tick) && integer(value.lastTowerPurchase.waveId)
@@ -116,6 +117,7 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
 
 function validRecord(value: unknown): value is DefenseScenarioRecord {
   return record(value)
+    && (value.bestMasteryStars===undefined||(integer(value.bestMasteryStars)&&value.bestMasteryStars>=0&&value.bestMasteryStars<=3))
     && (value.lastResultWon===undefined||typeof value.lastResultWon==='boolean')
     && (value.lastTacticalReport===undefined||validDefenseTacticalReport(value.lastTacticalReport))
     && nonEmptyString(value.scenarioId)
@@ -294,12 +296,14 @@ export function applyDefenseOutcome(
   const record: DefenseScenarioRecord = {
     ...(tacticalReport?{lastTacticalReport:tacticalReport}:{}),
     scenarioId: content.scenario.id,
+    ...(run.masteryRun?{bestMasteryStars:Math.max(previous?.bestMasteryStars??0,result.won?result.stars:0) as 0|1|2|3}:previous?.bestMasteryStars!==undefined?{bestMasteryStars:previous.bestMasteryStars}:{}),
     finishedRuns: (previous?.finishedRuns ?? 0) + 1,
-    clears: (previous?.clears ?? 0) + (result.won ? 1 : 0),
-    bestStars: Math.max(previous?.bestStars ?? 0, result.stars) as 0 | 1 | 2 | 3,
-    bestScore: Math.max(previous?.bestScore ?? 0, result.score),
-    bestShield: Math.max(previous?.bestShield ?? 0, result.shield),
-    bestCompletedWaves: Math.max(previous?.bestCompletedWaves ?? 0, result.completedWaves),
+    // Mastery is a separate post-clear leaderboard, not an additional normal clear.
+    clears: (previous?.clears ?? 0) + (result.won && !run.masteryRun ? 1 : 0),
+    bestStars: (run.masteryRun ? (previous?.bestStars ?? 0) : Math.max(previous?.bestStars ?? 0, result.stars)) as 0 | 1 | 2 | 3,
+    bestScore: run.masteryRun ? (previous?.bestScore ?? 0) : Math.max(previous?.bestScore ?? 0, result.score),
+    bestShield: run.masteryRun ? (previous?.bestShield ?? 0) : Math.max(previous?.bestShield ?? 0, result.shield),
+    bestCompletedWaves: run.masteryRun ? (previous?.bestCompletedWaves ?? 0) : Math.max(previous?.bestCompletedWaves ?? 0, result.completedWaves),
     lastResultRunId: run.runId,
     lastResultWon: result.won,
     updatedAt,
@@ -309,7 +313,7 @@ export function applyDefenseOutcome(
   const cosmeticIds = new Set(document.cosmeticIds);
   const awarded: string[] = [];
 
-  if (result.won) {
+  if (result.won && !run.masteryRun) {
     const claim = firstClearClaimId(content);
     if (!claimIds.has(claim)) {
       claimIds.add(claim);
@@ -317,7 +321,7 @@ export function applyDefenseOutcome(
       awarded.push(content.scenario.firstClearCosmetic);
     }
   }
-  if (result.won && result.stars === 3 && content.scenario.threeStarCosmetic) {
+  if (result.won && !run.masteryRun && result.stars === 3 && content.scenario.threeStarCosmetic) {
     const claim = threeStarClaimId(content);
     if (!claimIds.has(claim)) {
       claimIds.add(claim);

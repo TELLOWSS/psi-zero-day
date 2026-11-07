@@ -332,7 +332,7 @@ try {
   const loaded = cdp.once('Page.loadEventFired');
   await cdp.send('Page.navigate', { url: baseUrl });
   await loaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
 
   const save = qaDefenseSave();
   await evaluate(cdp, `(() => {
@@ -342,9 +342,14 @@ try {
     return true;
   })()`);
 
-  await clickText(cdp, '현장 디펜스');
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\\\"persistence-gate\\\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
-  await clickText(cdp, '이어서 훈련');
+  const opened=await evaluate(cdp,`(() => {const el=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!opened)throw new Error('Current Signal Guard game entry is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="guard-home"]\'))');
+  const practice=await evaluate(cdp,`(() => {const el=document.querySelector('[data-defense-screen="guard-home"] footer button');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!practice)throw new Error('Signal Guard practice link is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="save-resume"],[data-defense-screen="requested-scenario-conflict"]\'))');
+  const conflict=await evaluate(cdp,'Boolean(document.querySelector(\'[data-defense-screen="requested-scenario-conflict"]\'))');
+  await clickText(cdp,conflict?'기존 훈련 이어하기':'이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-wave') === '8'");
   await clickText(cdp, '재개');
 
@@ -567,7 +572,7 @@ try {
   const mobileLoaded = cdp.once('Page.loadEventFired');
   await cdp.send('Page.navigate', { url: baseUrl });
   await mobileLoaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
 
   const mobileSave = qaDefenseSave();
   await evaluate(cdp, `(() => {
@@ -596,9 +601,14 @@ try {
     }
   };
 
-  await clickText(cdp, '현장 디펜스');
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\\\"persistence-gate\\\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
-  await clickText(cdp, '이어서 훈련');
+  const mobileOpened=await evaluate(cdp,`(() => {const el=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!mobileOpened)throw new Error('Current Signal Guard game entry is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="guard-home"]\'))');
+  const mobilePractice=await evaluate(cdp,`(() => {const el=document.querySelector('[data-defense-screen="guard-home"] footer button');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!mobilePractice)throw new Error('Signal Guard practice link is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="save-resume"],[data-defense-screen="requested-scenario-conflict"]\'))');
+  const mobileConflict=await evaluate(cdp,'Boolean(document.querySelector(\'[data-defense-screen="requested-scenario-conflict"]\'))');
+  await clickText(cdp,mobileConflict?'기존 훈련 이어하기':'이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-wave') === '8'");
   await clickText(cdp, '재개');
 

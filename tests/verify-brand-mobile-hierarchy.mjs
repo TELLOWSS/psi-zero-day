@@ -17,6 +17,35 @@ try {
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
       await page.goto(url);
+      if(await page.locator('.rg-home').count()){
+        await page.locator('.rg-hero-art').evaluate(async image=>image.decode());
+        const result=await page.evaluate(()=>{
+          const rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
+          const title=document.querySelector('.rg-brand img'),art=document.querySelector('.rg-hero-art');
+          const actions=[...document.querySelectorAll('.rg-card,.rg-hero-action,.rg-hero-alt')];
+          const cards=[...document.querySelectorAll('.rg-card')].map(rect);
+          return {loaded:art.complete&&art.naturalWidth>0,markLoaded:title.complete&&title.naturalWidth>0,mark:rect(title),
+            actions:actions.map(x=>({box:rect(x),disabled:x.disabled})),cards,hero:rect(document.querySelector('.rg-hero')),
+            overflow:document.documentElement.scrollWidth>innerWidth};
+        });
+        const cardFit=result.cards.length===2&&result.cards.every(x=>x.width>150&&x.height>=150&&x.left>=-2&&x.right<=width+2);
+        const actionFit=result.actions.length===4&&result.actions.every(x=>!x.disabled&&x.box.height>=44&&x.box.width>0);
+        await page.screenshot({path:`${output}/${width}x${height}-${reducedMotion}.png`});
+        await page.locator('.rg-card.is-guard').click();
+        await page.locator('[data-defense-screen="guard-home"]').waitFor();
+        const defenseEntered=true;
+        await page.goto(url);
+        await page.locator('button.rg-story-button').click();
+        await page.locator('.game-frame').waitFor();
+        const storyEntered=true;
+        await page.goto(url);
+        await page.locator('button.rg-card.is-watch').click();
+        await page.locator('.survivors-ready-dialog').waitFor();
+        const playableReady=await page.locator('.survivors-ready-launch .survivors-btn-primary').isVisible();
+        rows.push({width,height,reducedMotion,...result,cardFit,actionFit,defenseEntered,storyEntered,playableReady,errors,
+          pass:!!(result.loaded&&result.markLoaded&&cardFit&&actionFit&&!result.overflow&&defenseEntered&&storyEntered&&playableReady&&!errors.length)});
+        await page.close();continue;
+      }
       await page.locator('.commercial-title-home').waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.locator('.commercial-title-worker[data-character="player"] img').evaluate(async image => { if (!image.complete) await image.decode(); });

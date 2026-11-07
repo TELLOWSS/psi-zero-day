@@ -171,8 +171,8 @@ try {
       await cdp.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:3,mobile:true});
       await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
       await cdp.send('Page.navigate',{url:baseUrl});
-      await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
-      await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
+      await waitFor(cdp,"Boolean(document.querySelector('button.rg-card.is-watch,button.is-survivors-entry'))");
+      await evaluate(cdp,"document.querySelector('button.rg-card.is-watch,button.is-survivors-entry')?.click()");
       await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary:not(:disabled)'))",30000);
       await evaluate(cdp,`(async()=>{
         const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
@@ -269,8 +269,8 @@ try {
       const savedDisplay=await evaluate(cdp,"JSON.parse(localStorage.getItem('psi.survivors.display.v1'))");
       await screenshot(cdp,`${width}x${height}-display-settings.png`);
       await cdp.send('Page.navigate',{url:baseUrl});
-      await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
-      await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
+      await waitFor(cdp,"Boolean(document.querySelector('button.rg-card.is-watch,button.is-survivors-entry'))");
+      await evaluate(cdp,"document.querySelector('button.rg-card.is-watch,button.is-survivors-entry')?.click()");
       await waitFor(cdp,"Boolean(document.querySelector('.survivors-display-settings'))");
       const restored=await evaluate(cdp,"document.querySelector('.survivors-display-settings select').value==='auto'&&[...document.querySelectorAll('.survivors-display-settings input[type=checkbox]')].every(box=>!box.checked)");
       const customization={qualities,savedDisplay,restored};

@@ -17,7 +17,7 @@ try {
    localStorage.setItem('psi.survivors.last_played_stage','stage_01');
   });
   await page.goto(process.env.PSI_PREVIEW_URL??'http://127.0.0.1:5173/',{waitUntil:'networkidle'});
-  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  await page.locator('button.rg-card.is-watch,button.is-survivors-entry').click();
   await page.getByRole('button',{name:copy.briefBrowse,exact:true}).click();
   await page.getByRole('button',{name:copy.close,exact:true}).click();
   await page.evaluate(async()=>{

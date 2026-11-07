@@ -272,7 +272,7 @@ export function storeEffects(inventory: StoreInventory): Required<StoreEffects> 
 /** A useful owned item in an empty slot comes first; no purchase or automatic replacement. */
 export function recommendedStoreItem(inventory:StoreInventory,difficulty:PatrolDifficulty):StoreItem {
   const safe=sanitizeInventory(inventory);
-  const priorities=difficulty==='hard'||difficulty==='extreme'
+  const priorities=difficulty==='hard'||difficulty==='extreme'||difficulty==='mastery'
     ? ['shock_mantle','inspection_wing','predictive_watch','relay_core','recovery_mesh']
     : ['relay_core','rescue_shell','recovery_mesh','inspection_wing','barrier_forge'];
   const slots=new Set(safe.equipped.map(id=>STORE_ITEMS.find(i=>i.id===id)!.category));

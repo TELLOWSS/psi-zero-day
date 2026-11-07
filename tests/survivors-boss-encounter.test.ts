@@ -1,7 +1,7 @@
 import {it,expect} from 'vitest';
 import {SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationTiming} from '../src/engine/survivors-operation';
-it.each(['stage_01','stage_03','stage_22','stage_35'] as const)('introduces %s, resolves its signature then permits a one-burst finish and pays once',stage=>{
+it.each(['stage_01','stage_03','stage_22','stage_35'] as const)('introduces %s, resolves its signature then requires repeated boss weak-point windows and pays once',stage=>{
  const s=createInitialSurvivorsState('yoon',undefined,stage),e=new SurvivorsEngine(s,42);e.start();s.gameTime=operationTiming(s.maxTime).bossAt;
  const tick=(frames=1)=>{for(let i=0;i<frames;i++){e.update(1/60,{moveX:0,moveY:0});if(s.extractionPhase)e.tickExtraction(1/60);}};
  tick();const boss=s.hazards.find(h=>h.isStageBoss)!;
@@ -11,6 +11,9 @@ it.each(['stage_01','stage_03','stage_22','stage_35'] as const)('introduces %s, 
  tick(120);expect(boss.hp).toBe(hp);expect(s.gameTime).toBe(time);
  tick(100);expect(s.bossEncounter?.phase).toBe('combat');
  s.hazards=[boss];s.interactiveHazards=[];
+ // Isolate authored boss physics from the character's auto-firing starter weapon.
+ for(const id of Object.keys(s.activePerks) as Array<keyof typeof s.activePerks>)s.activePerks[id]=0;
+ s.projectiles=[];
  const hit=()=>{s.projectiles=[{id:crypto.randomUUID(),kind:'radio',x:boss.x,y:boss.y,vx:0,vy:0,radius:10,damage:1e8,duration:1,pierce:1}];tick(8);};
  hit();expect(boss.hp).toBe(boss.maxHp);expect(s.stageBossNeutralized).not.toBe(true);
  // Finish the actual motion transition rather than faking control accounting.
@@ -18,7 +21,20 @@ it.each(['stage_01','stage_03','stage_22','stage_35'] as const)('introduces %s, 
  boss.motion!.phase=boss.type==='RUNAWAY_CART'||boss.type==='GAS_LEAK'?'charge':'fall';boss.motion!.timer=.001;tick(20);
  expect(boss.bossGameplay?.combatPhase).toBe('weak_point');
  hit();expect(boss.hp).toBe(boss.maxHp);expect(boss.bossGameplay?.combatPhase).toBe('burst');
- hit();tick(20);
+ hit();
+ expect(boss.hp).toBeGreaterThan(0);
+ // A strong build fills an opening, but cannot skip the next two actual reads.
+ for(let repeat=0;repeat<2;repeat++){
+  boss.bossGameplay!.combatPhase='pattern';
+  boss.bossGameplay!.patternContact=false;
+  boss.motion!.phase=boss.type==='RUNAWAY_CART'||boss.type==='GAS_LEAK'?'charge':'fall';
+  boss.motion!.timer=.001;
+  tick(20);
+  expect(boss.bossGameplay!.combatPhase).toBe('weak_point');
+  hit();expect(boss.bossGameplay!.combatPhase).toBe('burst');
+  hit();
+ }
+ tick(20);
  expect(s.stageBossNeutralized).toBe(true);expect(s.bossEncounter?.phase).toBe('secured');expect(s.phase).toBe('playing');
  const credits=s.psiCredits;
  // The runtime director starts the hold after the boss-control event.

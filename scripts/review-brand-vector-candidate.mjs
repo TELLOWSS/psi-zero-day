@@ -62,6 +62,24 @@ try {
       const slotErrors = [];
       slotPage.on('pageerror', error => slotErrors.push(String(error)));
       await slotPage.goto(process.env.PSI_PREVIEW_URL);
+      if(await slotPage.locator('.rg-home').count()){
+        const host=slotPage.locator('.rg-brand img');
+        const baseline=await host.boundingBox();
+        await slotPage.screenshot({path:`${output}/${width}x${height}-existing.png`,fullPage:true});
+        await host.evaluate(async(image,uri)=>{image.src=uri;await image.decode();},imageUri);
+        const metrics=await slotPage.evaluate(()=>{
+          const rect=s=>{const b=document.querySelector(s)?.getBoundingClientRect();return b?{left:b.left,top:b.top,right:b.right,bottom:b.bottom,width:b.width,height:b.height}:null;};
+          const candidate=rect('.rg-brand img'),title=rect('.rg-brand strong'),primary=rect('.rg-hero-action');
+          const overlaps=(a,b)=>Boolean(a&&b&&a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom);
+          return {candidate,title,primary,candidateWithinViewport:!!candidate&&candidate.left>=0&&candidate.right<=innerWidth&&candidate.top>=0&&candidate.bottom<=innerHeight,
+           candidateActionOverlap:overlaps(candidate,primary),candidateTitleOverlap:overlaps(candidate,title),
+           overflow:document.documentElement.scrollWidth>innerWidth};
+        });
+        await slotPage.screenshot({path:`${output}/${width}x${height}-candidate-browser-only.png`,fullPage:true});
+        const layoutPass=metrics.candidateWithinViewport&&!metrics.candidateActionOverlap&&!metrics.candidateTitleOverlap&&!metrics.overflow&&!slotErrors.length;
+        slotRows.push({width,height,candidateFile:file.svg,baseline,...metrics,layoutPass,errors:slotErrors,scope:'REIGNITION_BROWSER_ONLY_MARK_CANDIDATE_NOT_PRODUCTION'});
+        await slotPage.close();continue;
+      }
       await slotPage.locator('.commercial-title-logo').waitFor();
       await slotPage.evaluate(() => document.fonts.ready);
       await slotPage.waitForTimeout(1300);

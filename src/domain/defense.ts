@@ -184,6 +184,8 @@ export type DefenseRunMode = 'TRAINING' | 'EVENT';
 export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
+  /** Opt-in veteran rules for fully completed Guard campaigns; never set on legacy runs. */
+  readonly masteryRun?:true;
   readonly sensorPressureEnabled?:boolean;
   readonly lastTowerPurchase?: {readonly towerInstanceId:string;readonly padId:string;readonly tick:number;readonly waveId:number;readonly status:DefenseStatus};
   readonly ultimateUnlocked?:boolean;

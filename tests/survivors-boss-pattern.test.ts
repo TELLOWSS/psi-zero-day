@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import type { Hazard } from '../src/domain/patrol-survivors';
-import { advanceBossPhase, bossPattern,bossCoreFloor,bossCoreStatus } from '../src/engine/survivors-boss-pattern';
+import { advanceBossPhase, bossPattern,bossCoreFloor,bossCoreStatus,bossCycleFloor } from '../src/engine/survivors-boss-pattern';
 import { updateHazardMotion, isHazardContactActive } from '../src/engine/patrol-hazard-motion';
 import { SurvivorsEngine, createInitialSurvivorsState } from '../src/engine/patrol-survivors-engine';
 import { craneAttackElevation } from '../src/ui/survivors-industrial-art';
@@ -14,7 +14,8 @@ it('shares the actual structural floor with readable locked and exposed states',
  const h=boss('CRANE_BOSS');h.bossEncounterManaged=true;h.hp=50;
  expect(bossCoreFloor(h)).toBe(50);expect(bossCoreStatus(h)).toBe('interlocked');
  h.bossPhase=2;h.hp=8;h.bossAttackCycles=0;expect(bossCoreFloor(h)).toBe(8);expect(bossCoreStatus(h)).toBe('interlocked');
- h.bossAttackCycles=1;h.motion!.phase='spent';expect(bossCoreFloor(h)).toBe(0);expect(bossCoreStatus(h)).toBe('exposed');
+ h.bossAttackCycles=1;h.motion!.phase='spent';expect(bossCoreFloor(h)).toBe(0);expect(bossCoreStatus(h)).toBe('interlocked');
+ h.bossAttackCycles=2;h.hp=0;expect(bossCoreStatus(h)).toBe('exposed');
  h.motion!.phase='warning';expect(bossCoreStatus(h)).toBe('active');
 });
 it('reports a locked projectile contact without damage, critical stop or destructive impact audio',()=>{
@@ -76,4 +77,27 @@ it('emits exactly one phase cue and prevents knockback from moving an anchored w
  e.drainAudioEvents();h.motion!.phase='spent';h.motion!.timer=2;
  for(let i=0;i<30;i++)e.update(1/60,{moveX:0,moveY:0});
  expect(h.bossPhase).toBe(2);expect(e.drainAudioEvents().filter(ev=>ev.type==='boss_alarm')).toHaveLength(1);
+});
+
+it('locks stage-50 HP gates until each warned phase is completed',()=>{
+ for(const [difficulty,phase1,phase2] of [['story',1,1],['standard',2,2],['hard',2,3],['extreme',2,3],['mastery',2,4]] as const){
+  const h=boss('CRANE_BOSS');
+  h.bossEncounterManaged=true;h.maxHp=1000;h.hp=1000;h.bossAttackCycles=0;
+  expect(bossCycleFloor(h,difficulty)).toBe(1000);
+  for(let cycle=1;cycle<=phase1;cycle++){
+   h.bossAttackCycles=cycle;
+   h.hp=bossCycleFloor(h,difficulty);
+   if(cycle<phase1)expect(advanceBossPhase(h,difficulty)).toBe(false);
+  }
+  h.motion!.phase='cooldown';
+  expect(h.hp).toBe(500);
+  expect(advanceBossPhase(h,difficulty)).toBe(true);
+  expect(h.bossAttackCycles).toBe(0);
+  for(let cycle=1;cycle<=phase2;cycle++){
+   h.bossAttackCycles=cycle;
+   const floor=bossCycleFloor(h,difficulty);
+   if(cycle<phase2)expect(floor).toBeGreaterThan(0);
+   else expect(floor).toBe(0);
+  }
+ }
 });

@@ -14,7 +14,7 @@ import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
-import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus } from './survivors-boss-pattern';
+import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus,bossCycleFloor } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
@@ -914,6 +914,19 @@ export class SurvivorsEngine {
     const e=this.state.bossEncounter;if(!e||e.phase!=='arrival')return;
     e.phase='combat';e.remaining=0;this.state.bossName=null;this.state.bossAlertTimer=0;
     const boss=this.state.hazards.find(h=>h.id===e.bossId);
+    // Optional post-clear only. Reuse existing crane-drop telegraph and 2.2s response window,
+    // never spawn the lock during an intro, in earlier modes, or in other workfaces.
+    if(this.state.difficulty==='mastery'&&this.state.stage.stageNumber===50&&!this.state.interactiveHazards.some(h=>h.id==='mastery-boss-50-lock')){
+      const player=this.state.player;
+      this.state.interactiveHazards.push({
+        id:'mastery-boss-50-lock',type:'crane_drop_zone',
+        x:Math.max(120,Math.min(WORLD_WIDTH-120,player.x)),
+        y:Math.max(120,Math.min(WORLD_HEIGHT-120,player.y)),
+        radius:118,hp:9999,maxHp:9999,state:'warning',timer:2.2,
+        label:'마스터 양중 집중 경고 · 이동 및 회피',
+      });
+      this.state.masteryBossPressure={warnings:1,avoided:0,exposures:0};
+    }
     const progress=boss?.bossGameplay;
     if(progress){
       if(boss?.weakPointExposed&&(boss.weakPointTimer??0)>0){
@@ -1089,6 +1102,9 @@ export class SurvivorsEngine {
     // Boss resolution normally ends the stage after a short confirmation.
     // Once extraction has begun, however, the extraction hold owns the terminal outcome.
     if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+      // End targeting immediately at boss resolution; the post-boss hold is never a trap.
+      const lock=this.state.interactiveHazards.find(h=>h.id==='mastery-boss-50-lock');
+      if(lock)lock.state='destroyed';
       const extractionActive=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
       if(extractionActive){
         if(this.state.bossEncounter){
@@ -1131,8 +1147,10 @@ export class SurvivorsEngine {
     this.state.directorShoutTimer = 2.0;
     this.state.directorCutinPhase = 'cutin';
 
-    // 1. Time freeze & stun all existing hazards, deal massive damage
+    // The shout neutralizes ordinary hazards, never a scripted boss.
+    // Boss patterns, weak-point windows and movement must remain playable.
     for (const h of this.state.hazards) {
+      if(h.isStageBoss&&h.bossEncounterManaged)continue;
       h.isStunned = 3.5;
       this.damageHazard(h,9999);
     }
@@ -1885,12 +1903,12 @@ export class SurvivorsEngine {
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       if(h.bossGameplay){
-        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);
+        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile,this.state.difficulty??'standard');
         if(h.hp<beforeHp)h.hitFlashTimer=0.08;
         return;
       }
       // Structural interlocks expose the next core only after its risk cycle settles.
-      const floor=bossCoreFloor(h);
+      const floor=Math.max(bossCoreFloor(h),this.state.stage.stageNumber===50?bossCycleFloor(h,this.state.difficulty??'standard'):0);
       h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
     } else h.hp=Math.max(0,h.hp-amount);
     if(h.hp<beforeHp)h.hitFlashTimer=0.08;
@@ -1968,7 +1986,7 @@ export class SurvivorsEngine {
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
     const traitRoll=isStageBoss||authored?.variant ? 0 : this.random();
-    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll);
+    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll,this.state.difficulty??'standard');
     const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):traits.variant??(traits.behavior?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',traitRoll)));
     if(traits.behavior==='wide_debris')radius=52;
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
@@ -2011,7 +2029,7 @@ export class SurvivorsEngine {
   private updateHazards(dt: number) {
     const { player } = this.state;
     for (const h of this.state.hazards) {
-      if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
+      if(advanceBossPhase(h,this.state.difficulty))this.emitAudio('boss_alarm',h.x,h.y);
       if(h.bossGameplay){
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
@@ -2140,7 +2158,7 @@ export class SurvivorsEngine {
         }
       }
       for(const h of hazards){
-        const zone=hitGangformZone(h,p,previous,this.state.player);
+        const zone=hitGangformZone(h,p,previous,this.state.player,this.state.difficulty??'standard');
         if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
       }
       if(p.duration<=0||p.pierce<=0)continue;
@@ -2151,6 +2169,20 @@ export class SurvivorsEngine {
         if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss || hits?.has(h.id)) continue;
         if (p.duration <= 0 || p.pierce <= 0) break;
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
+          // Shout (including revival shockwave) cannot stun, damage or
+          // prematurely resolve a scripted boss during its warning cycle.
+          if(h.isStageBoss&&h.bossEncounterManaged&&p.kind==='shout_shockwave'&&!p.id.startsWith('proj_signature_counter')){
+            // Shockwaves repeat contact on ordinary hazards, but the immune
+            // boss gets one clear blocked cue, not 90 repeated impacts.
+            let blockedBosses=this.projectileHits.get(p);
+            if(!blockedBosses){blockedBosses=new Set();this.projectileHits.set(p,blockedBosses);}
+            if(!blockedBosses.has(h.id)){
+              blockedBosses.add(h.id);
+              this.emitProjectileFeedback(p,'impact',h.x,h.y,false,false,h.type,true,0,h);
+              p.pierce-=1;
+            }
+            continue;
+          }
           // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
           if(!repeatContact){
             if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
@@ -2160,7 +2192,7 @@ export class SurvivorsEngine {
           const isWeakPoint = Boolean(
             h.weakPointExposed ||
             (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
-            (h.bossEncounterManaged && bossCoreStatus(h) === 'exposed')
+            (h.bossEncounterManaged && bossCoreStatus(h,this.state.difficulty) === 'exposed')
           );
           const isCrit = isWeakPoint || this.random() < player.critRate;
           const damageDealt = isWeakPoint ? p.damage * 2.5 : isCrit ? p.damage * 2.0 : p.damage;
@@ -2168,7 +2200,7 @@ export class SurvivorsEngine {
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
           if(isWeakPoint&&!blocked&&this.state.terrainRecord)this.state.terrainRecord.weakPointHits++;
-          if(!blocked&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
+          if(!blocked&&!h.bossEncounterManaged&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
           if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
           if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
@@ -2181,7 +2213,9 @@ export class SurvivorsEngine {
           }
 
           // A received instruction pauses the worker/equipment; no bodily knockback.
-          if (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS') {
+          // A normal weapon hit must not repeatedly reset a scripted boss's
+          // physical warning. High-fire-rate builds once perma-stunned bosses.
+          if (!h.bossEncounterManaged && (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS')) {
             h.vx = 0; h.vy = 0; h.isStunned = Math.max(h.isStunned ?? 0, 0.15);
           }
 
@@ -2444,7 +2478,21 @@ export class SurvivorsEngine {
 
       // 2. Crane Drop Zone (Periodic overhead crush hazard)
       if (hazard.type === 'crane_drop_zone') {
+        const masteryLock=hazard.id==='mastery-boss-50-lock';
+        if(masteryLock&&this.state.bossEncounter?.phase!=='combat'){
+          hazard.state='destroyed';
+          continue;
+        }
         hazard.timer -= dt;
+        if(masteryLock&&hazard.state==='idle'&&hazard.timer<=0){
+          // Acquire the current position once. Never home in after the visible warning.
+          hazard.x=Math.max(hazard.radius,Math.min(WORLD_WIDTH-hazard.radius,player.x));
+          hazard.y=Math.max(hazard.radius,Math.min(WORLD_HEIGHT-hazard.radius,player.y));
+          hazard.state='warning';hazard.timer=2.2;
+          if(this.state.masteryBossPressure)this.state.masteryBossPressure.warnings++;
+          this.emitAudio('boss_alarm',hazard.x,hazard.y);
+          continue;
+        }
         if (hazard.state === 'idle') {
           if (hazard.timer <= 0) {
             hazard.state = 'warning';
@@ -2455,9 +2503,17 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.6; // Impact duration
 
-            // Player crushed if inside
+            // The lock is a readable movement test: moving outside the ring or
+            // correctly timed dash earns clean avoidance, shields still protect mistakes.
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
-            if (pDist <= hazard.radius && player.invincibleTime <= 0) {
+            if(masteryLock&&this.state.masteryBossPressure){
+              if(pDist>hazard.radius||player.isDashing){
+                this.state.masteryBossPressure.avoided++;
+                this.state.score+=100;
+                this.emitAudio('control',hazard.x,hazard.y);
+              }else this.state.masteryBossPressure.exposures++;
+            }
+            if (pDist <= hazard.radius && player.invincibleTime <= 0 && !player.isDashing) {
               const damage = absorbPremiumDamage(this.state,30);
               player.hp = Math.max(1, player.hp - damage);
               if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
@@ -2469,7 +2525,7 @@ export class SurvivorsEngine {
         } else if (hazard.state === 'active' || hazard.state === 'cooldown') {
           if (hazard.timer <= 0) {
             hazard.state = 'idle';
-            hazard.timer = 14; // Next drop in 14 seconds
+            hazard.timer = masteryLock?4.8:14; // Targeted mastery pressure renews; legacy stage zones unchanged
           }
         }
       }

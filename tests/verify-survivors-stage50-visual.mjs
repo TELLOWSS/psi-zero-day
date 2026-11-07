@@ -35,7 +35,7 @@ try {
     }, { id, ids: allIds, low: Boolean(process.env.PSI_LOW) });
     try {
       await page.goto(process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4174', { waitUntil: 'networkidle' });
-      await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
+      await page.locator('button.rg-card.is-watch').click();
       await page.getByRole('button', { name: copy.briefBrowse, exact: true }).click();
       await page.getByRole('button', { name: copy.close, exact: true }).click();
       const expected = await page.evaluate(async () => {

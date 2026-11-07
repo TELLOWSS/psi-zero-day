@@ -121,7 +121,7 @@ async function navigate(cdp) {
   const loaded = cdp.once('Page.loadEventFired', 15000);
   await cdp.send('Page.navigate', { url: baseUrl });
   await loaded;
-  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+  await waitFor(cdp, "Boolean(document.querySelector('.rg-home,.commercial-title-home'))");
   await sleep(180);
 }
 
@@ -239,9 +239,14 @@ async function clickButton(cdp, label) {
 
 async function enterRepresentative(cdp, firing = false) {
   await setSave(cdp, firing);
-  await clickButton(cdp, '현장 디펜스');
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"persistence-gate\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
-  await clickButton(cdp, '이어서 훈련');
+  const opened=await evaluate(cdp,`(() => {const el=document.querySelector('button.rg-card.is-guard,button[data-title-primary-cta="defense"]');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!opened)throw new Error('Current Signal Guard game entry is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="guard-home"]\'))');
+  const practice=await evaluate(cdp,`(() => {const el=document.querySelector('[data-defense-screen="guard-home"] footer button');if(!(el instanceof HTMLButtonElement))return false;el.click();return true;})()`);
+  if(!practice)throw new Error('Signal Guard practice link is missing');
+  await waitFor(cdp,'Boolean(document.querySelector(\'[data-defense-screen="save-resume"],[data-defense-screen="requested-scenario-conflict"]\'))');
+  const conflict=await evaluate(cdp,'Boolean(document.querySelector(\'[data-defense-screen="requested-scenario-conflict"]\'))');
+  await clickButton(cdp,conflict?'기존 훈련 이어하기':'이어서 훈련');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'");
   await waitFor(cdp, "Boolean(document.querySelector('[data-g8a-pulse-dedicated=\"true\"]'))");
   await sleep(180);

@@ -108,6 +108,7 @@ import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
+import {masteryStageFocus} from '../engine/survivors-mastery-focus';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
 import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
 import { stageActorLight } from './survivors-stage-light';
@@ -1090,10 +1091,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
-  const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
+  const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage, difficulty:PatrolDifficulty=selectedDifficulty) => {
     setClearReward(null);setSettlementFailed(false);
     const replay=Boolean(stageReplayRef.current[stageId]?.[0])||growthRef.current.some(record=>record.stageId===stageId);
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory, readOperationHandoffs()), crypto.getRandomValues(new Uint32Array(1))[0],replay);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, difficulty, storeInventory, readOperationHandoffs()), crypto.getRandomValues(new Uint32Array(1))[0],replay);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -1900,7 +1901,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
-        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}:${bossCoreStatus(designatedBoss)}:${bossCombatReadout(designatedBoss)}`:'');
+        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}:${bossCoreStatus(designatedBoss,engine.state.difficulty)}:${bossCombatReadout(designatedBoss)}`:'');
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
@@ -3198,7 +3199,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const isWeakPoint = Boolean(
             h.weakPointExposed ||
             (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
-            (h.isStageBoss && bossCoreStatus(h) === 'exposed')
+            (h.isStageBoss && bossCoreStatus(h,engineRef.current?.state.difficulty) === 'exposed')
           );
           if (isWeakPoint) {
             ctx.save();
@@ -3524,6 +3525,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const incidentPending=fieldIncident&&accountability.access==='active'&&!accountability.decisions.some(d=>d.caseId===fieldIncident.id);
   const fieldRadio=incidentPending?fieldIncident.line:accountability.decisions.at(-1)?accountabilityText.radioAfter[accountability.decisions.at(-1)!.outcome]:'';
   const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
+  const masteryFocus=selectedDifficulty==='mastery'?masteryStageFocus(PATROL_STAGES[selectedStage]):null;
+  const masteryGoldCount=completedStages.length===50?STAGE_IDS.filter(id=>readDifficultyClearRecords()[id]?.mastery===3).length:0;
   const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
@@ -3574,7 +3577,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
           <div className="survivors-wave-badge" title="현재 방호 웨이브 진행도">
             <span>WAVE {currentWave}/3</span>
-            <small>{currentWave === 1 ? '탐색 · 빌드업' : currentWave === 2 ? '압박 · 변칙' : 'RED ZONE'}</small>
+            <small>{currentWave === 1 ? '탐색 · 빌드업' : currentWave === 2 ? '압박 · 변칙' : 'RED ZONE'}{currentWave>1&&masteryFocus?` · ${masteryFocus.label}`:''}</small>
           </div>
           <div className="survivors-score-badge">
             <span>SAFE SCORE</span>
@@ -3686,12 +3689,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
         const deadline = Math.max(0, operationPlan(state.stage,state.maxTime).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
-        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
+        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss,state.difficulty):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
           {bossSecured ? <span>{bossText.secured}</span> : boss ? <>
             <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
             <strong>{state.stage.bossName}</strong>
             <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
-            <span>{bossCombatReadout(boss)} · {bossRisk}%</span>
+            <span>{bossCombatReadout(boss)} · {bossRisk}% · 궁극기 면역</span>
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}
@@ -3743,7 +3746,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               const gate=engineRef.current.state.supplyGate;
               const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
               const wait=Math.max(0,Math.ceil((gate?.availableAt??0)-engineRef.current.state.gameTime));
-              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}{boss&&<div className="survivors-boss-readout" data-state={bossBeat} data-core={bossCoreStatus(boss)}><strong>{engineRef.current.state.stage.bossName}</strong><progress aria-label={bossText.health} value={Math.max(0,boss.hp)} max={boss.maxHp}/><span>{bossCombatReadout(boss)} · {Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)}%</span><small>{bossCombatHint(boss)}</small></div>}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
+              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}{boss&&<div className="survivors-boss-readout" data-state={bossBeat} data-core={bossCoreStatus(boss,selectedDifficulty==='mastery')}><strong>{engineRef.current.state.stage.bossName}</strong><progress aria-label={bossText.health} value={Math.max(0,boss.hp)} max={boss.maxHp}/><span>{bossCombatReadout(boss)} · {Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)}%</span><small>{bossCombatHint(boss)}{selectedDifficulty==='mastery'&&bossCoreStatus(boss,true)==='interlocked'?' · 다음 보스 패턴의 경고를 확인하고 회피해야 약점이 다시 열립니다.':''}</small>{selectedDifficulty==='mastery'&&selectedStage==='stage_50'&&engineRef.current.state.masteryBossPressure?<small data-mastery-containment-score="true">집중 위험 회피 {engineRef.current.state.masteryBossPressure!.avoided}회 · 위험 노출 {engineRef.current.state.masteryBossPressure!.exposures}회</small>:null}
+{selectedDifficulty==='mastery'&&selectedStage==='stage_50'&&(()=>{const warning=engineRef.current?.state.interactiveHazards.find(h=>h.id==='mastery-boss-50-lock'&&h.state==='warning');return warning?<div className="survivors-mastery-lock-warning" data-mastery-warning="active"><strong>양중 위험 · 지정 구역</strong><small>약 {Math.max(0,warning.timer).toFixed(1)}초 후 낙하 · 붉은 원 밖으로 이동하거나 대시</small><progress max={2.2} value={Math.min(2.2,Math.max(0,warning.timer))} aria-label="낙하 경고까지 남은 시간"/></div>:null;})()}</div>}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'||selectedDifficulty==='mastery'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
@@ -3859,6 +3863,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
               <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
             </header>
+            {completedStages.length===50&&<section className="survivors-veteran-return" data-endgame-preflight="watch" aria-label="시그널 워치 엔드게임 복귀 작전">
+              <div><small>SIGNAL WATCH · RE:IGNITION / VETERAN</small><h3>50개 스테이지 완주. 새로운 공략은 지금부터.</h3><div className="survivors-veteran-medal" aria-label={`마스터 별 3개 달성 ${masteryGoldCount}개 중 50개`}><b>MASTER ★★★</b><strong>{masteryGoldCount}<small>/ 50</small></strong><progress value={masteryGoldCount} max={50} aria-label="마스터 별 3개 달성 진행도"/></div><p>마스터 단계는 단순 화력 경쟁이 아닙니다. 중점 위험을 예측하고, 보스의 경고 패턴을 회피하며 약점을 여러 차례 공략하세요.</p></div>
+              <button type="button" onClick={()=>{
+                const records=readDifficultyClearRecords();
+                const priority=STAGE_IDS.find(id=>(records[id]?.mastery??0)<3)??'stage_50';
+                setSelectedDifficulty('mastery');setSelectedStage(priority);setStageChapter(Math.floor(STAGE_IDS.indexOf(priority)/10));
+                initGame(selectedChar,priority,'mastery');setPreflightTab('brief');
+              }}>다음 마스터 작전 준비 →</button>
+            </section>}
             <label className="survivors-voice-version">{voiceVersionText.label}
               <select value={playerVoiceVersion} onChange={event=>changePlayerVoiceVersion(event.target.value)}>
                 {(['original','covert','engineer'] as const).map(version=><option key={version} value={version}>{voiceVersionText[version]}</option>)}
@@ -3875,13 +3888,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {preparedCharacter!==selectedChar&&<p role="status">{graphicsText.characterLoading}</p>}
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
-              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
-              <p>{terrainText[selectedDifficulty]}</p><p>{terrainText.warning}</p>
+              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" disabled={id==='mastery'&&completedStages.length<50} aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
+              <p>{terrainText[selectedDifficulty]}</p>{masteryFocus?<p className="survivors-mastery-focus" data-mastery-focus={masteryFocus.type}><b>이번 작전 · {masteryFocus.label}</b> — {masteryFocus.hint}. 2·3웨이브에 집중 출현하므로 진입 전 장비와 대피 경로를 준비하세요.</p>:null}{selectedDifficulty==='mastery'?<p className="survivors-mastery-boss-contract" data-mastery-boss-contract="multi-read"><b>마스터 보스 계약</b> · 최고 장비로도 보스 약점을 한 번에 제압할 수 없습니다. 경고 동작 회피 → 약점 노출 → 공격을 여러 차례 성공해야 최종 제압됩니다.{selectedStage==='stage_50'?' 최종 스테이지에서는 적색 원형 양중 경고가 현재 위치에 고정됩니다. 경고 시간 2.2초 동안 원 밖으로 이동하거나 정확히 회피하세요. 고급 보호막은 실수 시 피해를 흡수하지만 위치 대응을 대신하지는 않습니다.':''}</p>:null}<p className="survivors-boss-resistance-brief"><b>보스 공략</b> · 궁극기는 일반 위험만 제압합니다. 보스는 경고 패턴을 회피한 뒤 약점이 열렸을 때 공격하세요. 이 난이도 최소 약점 공략: {selectedDifficulty==='story'?'2회':selectedDifficulty==='standard'||selectedDifficulty==='hard'?'3회':'4회'} (50스테이지는 별도 2단계 패턴).</p>{completedStages.length<50&&<p>마스터 도전은 50개 스테이지를 모두 클리어하면 해금됩니다. 현재 {completedStages.length}/50</p>}<p>{terrainText.warning}</p>
               <details><summary>{terrainText.title}</summary><p>{terrainText.brief}</p><p>{terrainText.cleanupHint}</p></details>
             </fieldset>
             <aside className="survivors-preflight-gear" aria-label={storeText.briefTitle}>
               <SurvivorsPremiumArt item={recommendedGear}/>
-              <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
+              <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'||selectedDifficulty==='mastery'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
                 <small>{storeInventory.equipped.includes(recommendedGear.id)?storeText.briefEquipped:storeInventory.owned.includes(recommendedGear.id)?storeText.briefOwned:`${recommendedGear.price.toLocaleString()} PSI · ${storeText.briefCredits}`}</small>
                 {storeInventory.owned.includes(recommendedGear.id)&&<small>{storeText.durability} {itemDurability(storeInventory,recommendedGear.id)}/100 {itemDurability(storeInventory,recommendedGear.id)===0?storeText.broken:''}</small>}
               </div>

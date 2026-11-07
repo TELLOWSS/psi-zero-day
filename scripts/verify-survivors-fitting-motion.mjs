@@ -10,7 +10,7 @@ try{
  for(const [width,height] of [[1440,900],[390,844],[844,390],[667,375],[568,320]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.emulateMedia({reducedMotion:'reduce'});
-  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196',{waitUntil:'networkidle'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196',{waitUntil:'networkidle'});await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.getByRole('button',{name:storeText.briefBrowse,exact:true}).click();
   await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();

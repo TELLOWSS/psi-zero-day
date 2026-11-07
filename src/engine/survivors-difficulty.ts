@@ -1,6 +1,7 @@
 import type { HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
 import {PATROL_DIFFICULTIES, difficultyComplexBias, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {operationTiming} from './survivors-operation';
+import {masteryStageFocus,authoredStageHazardMix} from './survivors-mastery-focus';
 
 /** Authored map progression; independent of permanent upgrades and player performance. */
 export function difficultyProfile(stageNumber: number) {
@@ -88,18 +89,10 @@ export function spawnPressure(stageNumber: number, time: number, difficulty:Patr
   };
 }
 
-const introductoryMixes: readonly (readonly HazardType[])[] = [
-  ['UNHELMETED', 'UNHELMETED', 'RUNAWAY_CART'],
-  ['UNHELMETED', 'GAS_LEAK', 'GAS_LEAK', 'RUNAWAY_CART'],
-  ['UNHELMETED', 'FALLING_DEBRIS', 'RUNAWAY_CART'],
-  ['UNHELMETED', 'RUNAWAY_CART', 'RUNAWAY_CART', 'GAS_LEAK'],
-  ['UNHELMETED', 'GAS_LEAK', 'FALLING_DEBRIS', 'RUNAWAY_CART'],
-];
 export function selectStageHazard(stage: PatrolStageDefinition, time: number, roll: number,maxTime=180,accentRoll?:number,difficulty:PatrolDifficulty='standard'): HazardType {
   if (time < difficultyProfile(stage.stageNumber).introductionTime) return 'UNHELMETED';
   // Bosses are authored one-off events, never accidental ordinary spawns.
-  const mix = (stage.hazardMix ?? introductoryMixes[Math.max(0, Math.min(4, stage.stageNumber - 1))] ?? ['UNHELMETED'])
-    .filter(type => type !== 'CRANE_BOSS');
+  const mix = authoredStageHazardMix(stage).filter(type => type !== 'CRANE_BOSS');
   const selected=mix[Math.min(mix.length - 1, Math.max(0, Math.floor(roll * mix.length)))] ?? 'UNHELMETED';
   const complex=mix.filter(type=>type!=='UNHELMETED');
   const director=waveDirector(time,maxTime);
@@ -108,6 +101,11 @@ export function selectStageHazard(stage: PatrolStageDefinition, time: number, ro
 
   // Wave 1 teaches the map language: complex hazards appear, but never dominate the screen.
   if(director.wave===1&&selected!=='UNHELMETED'&&accent<.55)return 'UNHELMETED';
+  // Wave 2/3 can focus an already authored, explicitly briefed hazard without new spawns.
+  if(difficulty==='mastery'&&director.wave>1){
+    const focus=masteryStageFocus(stage);
+    if(focus&&complex.some(type=>type===focus.type)&&accent>=.7&&accent<.9)return focus.type;
+  }
 
   // Wave 2/3 deliberately replace some generic contacts with authored stage hazards.
   if(complex.length&&selected==='UNHELMETED'&&accent<Math.max(0,Math.min(.96,director.complexBias+extraBias))){

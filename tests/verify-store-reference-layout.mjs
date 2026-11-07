@@ -10,7 +10,7 @@ try{
  for(const [width,height] of [[1440,900],[390,844],[844,390],[1024,768]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.addInitScript(()=>localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:1260,inventory:{owned:['broadcast_crown','sync_gauntlet'],equipped:['broadcast_crown','sync_gauntlet'],durability:{broadcast_crown:10,sync_gauntlet:40}}})));
-  await page.goto(url,{waitUntil:'networkidle'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.getByRole('button',{name:copy.shopEntry,exact:true}).click();
+  await page.goto(url,{waitUntil:'networkidle'});await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();await page.getByRole('button',{name:copy.shopEntry,exact:true}).click();
   const descriptions=await page.locator('.survivors-store-card').evaluateAll((cards,expected)=>cards.map(card=>{
    const label=card.querySelector('.survivors-store-effect'),use=card.querySelector('.survivors-premium-use'),a=label.getBoundingClientRect(),b=use.getBoundingClientRect(),c=card.getBoundingClientRect();
    return {text:label.textContent,pass:Object.values(expected).some(item=>item.description===label.textContent)&&label.scrollWidth<=label.clientWidth+1&&a.left>=c.left&&a.right<=c.right+1&&a.bottom<=b.top+1};
