@@ -207,3 +207,19 @@
  .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-start-wave,
  .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-support-action button{height:44px;min-height:44px}
 }
+
+/* G8-A portrait: preserve the real actionable brief but cap its header to
+   release the final 12–16px of world viewport (390×844 baseline).
+   Target is >=72% world height with 44px focusable actions intact. */
+@media(orientation:portrait) and (max-width:560px){
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-tactics-strip{
+  height:48px;min-height:48px;max-height:48px;
+  padding:2px 7px;gap:6px;overflow:hidden;align-items:center;box-sizing:border-box;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-tactics-strip button{
+  min-height:44px;height:44px;padding:4px 6px;flex-shrink:0;
+ }
+ .zb-shell[data-defense-screen="combat"][data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="PORTRAIT_IMMERSION"][data-orientation][data-selection-mode]:not(.zb-prep):not(.is-def-core-active) .zb-stage{
+  min-height:0;align-items:stretch;
+ }
+}
