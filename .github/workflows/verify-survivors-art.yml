@@ -4,6 +4,12 @@ on:
     branches: [main]
     paths:
       - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/GuardCampaignHome.tsx'
+      - 'src/ui/reignition-modes.css'
+      - 'public/assets/reignition/guard-sector-command.svg'
+      - 'public/assets/reignition/watch-omega-reactor.svg'
+      - 'tests/reignition-modes.test.tsx'
+      - 'scripts/verify-survivors-mode-previews.mjs'
       - 'src/ui/survivors-directional-art.ts'
       - 'src/ui/survivors-stage-art.ts'
       - 'src/ui/survivors-stage-light.ts'
