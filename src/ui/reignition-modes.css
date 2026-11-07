@@ -212,9 +212,9 @@
  overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;
  gap:22px;padding:clamp(14px,2.1vw,27px);
  background:
-  linear-gradient(90deg,#180f2af5 3%,#2a0c39df 48%,#290c416a),
-  url('/assets/reignition/watch-omega-reactor.svg') right center / cover no-repeat,
-  url('/assets/survivors/collapse-core-boss-v1.webp') right center / cover no-repeat;
+  linear-gradient(90deg,#180f2af8 3%,#2a0c39d9 53%,#290c4161),
+  url('/assets/reignition/watch-action-art.webp') right 33% / auto 235% no-repeat,
+  url('/assets/reignition/watch-omega-reactor.svg') right center / cover no-repeat;
  border:1px solid #e65eb085;border-radius:8px 17px 8px 17px;
  box-shadow:0 0 38px #c3249a24,inset 0 1px #fff3;
 }
