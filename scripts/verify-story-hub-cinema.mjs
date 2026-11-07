@@ -34,21 +34,34 @@ try{
    const tested=[];
    for(const [index,design] of designs.entries()){
      if(width!==1440&&design!=='cinematic')continue;
+     await page.locator('.rg-appearance summary').click();
      await page.locator('.rg-theme-picker button').nth(index).click();
+     await page.locator('.rg-appearance summary').click();
      if(await home.getAttribute('data-reignition-concept')!==design)
        throw new Error('Title switch did not apply: '+design);
      const visuals=await page.evaluate(()=>{
        const hero=document.querySelector('.rg-hero');
        const image=document.querySelector('.rg-hero-art');
        const selected=document.querySelector('.rg-theme-picker button[aria-pressed="true"]');
-       return {heroHeight:hero?.getBoundingClientRect().height??0,
+       const root=document.querySelector('#root')?.getBoundingClientRect();
+       const home=document.querySelector('main.rg-home')?.getBoundingClientRect();
+       const heroRect=hero?.getBoundingClientRect();
+       const name=document.querySelector('.rg-hero-name');
+       const titleStyle=name?getComputedStyle(name):null;
+       const nameRect=name?.getBoundingClientRect();
+       const lineHeight=titleStyle?parseFloat(titleStyle.lineHeight):0;
+       return {heroHeight:heroRect?.height??0,heroWidth:heroRect?.width??0,
+         homeWidth:home?.width??0,rootWidth:root?.width??0,viewport:innerWidth,
+         wordmarkHeight:nameRect?.height??0,wordmarkLineHeight:lineHeight,
          imageLoaded:image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0,
          selected:selected?.textContent?.trim(),
          overflow:document.documentElement.scrollWidth>innerWidth+2};
      });
      await page.waitForFunction(()=>{const image=document.querySelector('.rg-hero-art');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0;},null,{timeout:20000});
-     if(visuals.heroHeight<260||visuals.overflow)
-       throw new Error('Main title viewport invalid '+design+': '+JSON.stringify(visuals));
+     if(visuals.heroHeight<260||visuals.overflow||visuals.homeWidth<width*.97||visuals.heroWidth<width*.97)
+       throw new Error('Main title must fill the actual viewport '+design+': '+JSON.stringify(visuals));
+     if(design==='cinematic'&&(visuals.wordmarkHeight>visuals.wordmarkLineHeight*1.18))
+       throw new Error('RE:IGNITION title wrapped into broken lines: '+JSON.stringify(visuals));
      if(design==='cinematic'){
        await page.waitForFunction(()=>{
          const art=document.querySelector('.rg-veteran-character');
@@ -60,7 +73,9 @@ try{
      await page.screenshot({path:path.join(out,width+'x'+height+'-title-'+design+'.png'),animations:'disabled',fullPage:true});
      tested.push({design,...visuals});
    }
+   await page.locator('.rg-appearance summary').click();
    await page.locator('.rg-theme-picker button').first().click();
+   await page.locator('.rg-appearance summary').click();
    const panels=await page.locator('.rg-card').count();
    await page.locator('#reignition-missions').scrollIntoViewIfNeeded();
    const cardInfo=await launchers.evaluateAll(buttons=>buttons.map(b=>({

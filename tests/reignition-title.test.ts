@@ -12,6 +12,9 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('data-reignition-concept="cinematic"');
   expect((html.match(/aria-pressed=/g)||[]).length).toBe(4);
   expect(html).toContain('RE:IGNITION');
+  expect(html).toContain('class="rg-appearance"');
+  expect(html).toContain('화면 스타일');
+  expect(html).toContain('src="/assets/reignition/veteran-return.webp"');
   expect(html).toContain('/assets/reignition/veteran-return.webp');
   expect(html).toContain('시그널 가드');expect(html).toContain('시그널 워치');
   expect(html).toContain('max="6" value="6"');expect(html).toContain('max="50" value="50"');

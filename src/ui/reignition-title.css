@@ -223,3 +223,104 @@
 .rg-story-resume .story-restart-entry{position:relative;top:auto;left:auto;right:auto;bottom:auto;transform:none;min-height:44px;border:1px solid #efcf9a;background:#31415b;color:#fff0c4;border-radius:8px;padding:8px 15px}
 .rg-story-resume .story-save-warning,.rg-save-warning{position:relative;inset:auto;max-width:100%;margin:0;color:#ffdaae;font-size:12px;line-height:1.55;white-space:normal}
 .rg-save-warning{padding:12px 20px}
+
+/* NOV 07 visual repair: the previous game shell's centred-grid contract
+ * constrained the title to ~750px on a 1440px display. Home is a true page,
+ * while the gameplay-only 16:9 frame remains unchanged. */
+#root:has(> .rg-home){display:block;place-items:normal;width:100%;min-width:0;max-width:none;padding:0}
+#root > .rg-home{width:100%;min-width:0;max-width:none;margin:0}
+.rg-home .rg-workspace{width:100%;max-width:1920px}
+.rg-home[data-reignition-concept=cinematic] .rg-workspace{width:100%;max-width:none}
+.rg-home .rg-header{width:100%}
+
+/* Keep design alternatives accessible, but don't display four prototype tabs
+ * as the primary product navigation on every entry. */
+.rg-home .rg-appearance{position:relative;flex:none;margin-left:auto;z-index:60}
+.rg-home .rg-appearance>summary{display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 13px;border:1px solid #9fb1c54d;border-radius:10px;background:#172338;color:#e7e9f2;cursor:pointer;list-style:none;font-size:12px;font-weight:800;white-space:nowrap}
+.rg-home .rg-appearance>summary::-webkit-details-marker{display:none}
+.rg-home .rg-appearance>summary span{font-size:15px;color:#e9c9a4;transition:transform .18s}
+.rg-home .rg-appearance[open]>summary span{transform:rotate(180deg)}
+.rg-home .rg-appearance .rg-theme-picker{position:absolute;z-index:100;right:0;top:calc(100% + 8px);width:min(330px,88vw);padding:8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;box-shadow:0 18px 44px #000b;background:#0d1a30;border:1px solid #c7bed368;border-radius:14px}
+.rg-home .rg-appearance .rg-theme-picker button{display:block;width:100%;height:44px;white-space:nowrap}
+.rg-home .rg-appearance:not([open]) .rg-theme-picker{visibility:hidden;pointer-events:none}
+.rg-home .rg-header-tools{flex:none}
+@media(max-width:670px){.rg-home .rg-appearance{order:2;margin-left:auto}.rg-home .rg-header-tools{order:3}.rg-home .rg-brand{flex:1 1 auto}.rg-home .rg-header{min-height:68px}.rg-home .rg-appearance>summary{padding:9px 10px;font-size:11px}}
+
+/* One coherent visual: atmosphere and character come from the SAME approved
+ * artwork. Never lay the legacy hero/portrait behind the extracted character. */
+.rg-home[data-reignition-concept=cinematic] .rg-hero{
+ background:#0a1021;
+ min-height:clamp(640px,78vh,850px);
+ padding:48px clamp(20px,5vw,95px) 172px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-picture{overflow:hidden}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-art{
+ object-position:50% 27%;object-fit:cover;
+ transform:scale(1.22);
+ filter:blur(34px) brightness(.34) saturate(1.0);
+ opacity:1;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-shade{
+ background:linear-gradient(90deg,#06102322 0%,#08152954 40%,#070c20dc 68%,#080d1df8 100%),
+ radial-gradient(ellipse at 75% 32%,#9f306e58,transparent 52%),
+ linear-gradient(0deg,#070d1ee8,transparent 46%);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+ position:absolute;z-index:0;top:0;bottom:auto;left:-1.5%;
+ width:49%;max-width:none;height:100%;
+ object-fit:cover;object-position:32% top;
+ opacity:1;transform:none;
+ filter:drop-shadow(12px 12px 24px #0b0e25ae) brightness(.94) saturate(1.08);
+ -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 65%,transparent 99%),linear-gradient(180deg,transparent 0%,#000 10%,#000 84%,transparent 100%);
+ mask-image:linear-gradient(90deg,#000 0%,#000 65%,transparent 99%),linear-gradient(180deg,transparent 0%,#000 10%,#000 84%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:min(51%,710px);max-width:710px;margin:0 0 0 auto;z-index:2}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-name{
+ white-space:nowrap;overflow:visible;max-width:none;
+ font-size:clamp(28px,4.2vw,65px);letter-spacing:.10em;line-height:1.15;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero h1{max-width:680px;line-height:1.29}
+.rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings{right:10%;top:-24%;opacity:.7}
+.rg-home[data-reignition-concept=cinematic] .rg-missions{max-width:1430px;margin:-150px auto 0!important}
+@media(max-width:800px){
+ .rg-home[data-reignition-concept=cinematic] .rg-hero{
+  min-height:720px;align-items:flex-end;justify-content:flex-start;
+  padding:22px 22px 110px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  top:-1%;left:-11%;bottom:auto;
+  width:108%;max-width:none;height:74%;opacity:1;
+  object-position:30% 10%;
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 68%,transparent 100%),linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 68%,transparent 100%),linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-shade{
+  background:linear-gradient(0deg,#070c1ef9 0%,#091326ed 31%,#0913263b 79%,#080e1a3d 100%);
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:100%;max-width:640px;margin:0}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(27px,7.3vw,49px);letter-spacing:.08em}
+ .rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings{top:-22%;right:-31%;opacity:.6}
+ .rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-65px 12px 0!important}
+}
+@media(max-width:600px){
+ .rg-home[data-reignition-concept=cinematic] .rg-hero{min-height:690px;padding:18px 17px 92px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:100%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(27px,7.5vw,39px)}
+ .rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-48px 0 0!important}
+}
+@media(orientation:landscape) and (max-height:540px){
+ .rg-home[data-reignition-concept=cinematic] .rg-hero{
+  min-height:370px!important;padding:22px 28px 60px!important;
+  justify-content:flex-end;align-items:center;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  top:0;left:-2%;height:100%;width:47%;max-width:none;opacity:.94;
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 66%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 95%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 66%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 95%);
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:53%;margin-left:auto}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(24px,4.4vw,38px);letter-spacing:.07em}
+ .rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-38px 0 0!important}
+}

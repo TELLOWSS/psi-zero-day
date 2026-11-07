@@ -12,7 +12,8 @@ export const HOME_THEMES=[
  {id:'elite',label:'D · 미니멀',subtitle:'엘리트'},
 ] as const;
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
-const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design';
+// Fresh production default; prior preview experiments must not override the approved theme.
+const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v2';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
   const requested=new URLSearchParams(query).get('home');
   const value=requested??stored;
@@ -75,9 +76,12 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
   <header className="rg-header">
    <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
-   <div className="rg-theme-picker" role="group" aria-label="메인 화면 시안 선택">
-    {HOME_THEMES.map(option=><button key={option.id} type="button" aria-pressed={theme===option.id} onClick={()=>selectTheme(option.id)} title={option.subtitle}>{option.label}</button>)}
-   </div>
+   <details className="rg-appearance" aria-label="화면 디자인 선택">
+    <summary>화면 스타일 <span aria-hidden="true">⌄</span></summary>
+    <div className="rg-theme-picker" role="group" aria-label="메인 화면 시안 선택">
+     {HOME_THEMES.map(option=><button key={option.id} type="button" aria-pressed={theme===option.id} onClick={()=>selectTheme(option.id)} title={option.subtitle}>{option.label}</button>)}
+    </div>
+   </details>
    <div className="rg-header-tools">
     <button type="button" onClick={props.onManual}>도움말</button>
     <button type="button" onClick={()=>setSettings(true)} aria-label="게임 설정 열기">설정 <span aria-hidden="true">⚙</span></button>
@@ -98,8 +102,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    <div className="rg-main">
     <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
      <picture className="rg-hero-picture">
-      <source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>
-      <img src={theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
+      <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
      {theme==='cinematic'&&<img className="rg-veteran-character" src="/assets/reignition/veteran-return.webp" alt="" loading="eager" decoding="async"/>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
