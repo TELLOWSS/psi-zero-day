@@ -1968,7 +1968,7 @@ export class SurvivorsEngine {
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
     const traitRoll=isStageBoss||authored?.variant ? 0 : this.random();
-    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll);
+    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll,this.state.difficulty??'standard');
     const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):traits.variant??(traits.behavior?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',traitRoll)));
     if(traits.behavior==='wide_debris')radius=52;
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
