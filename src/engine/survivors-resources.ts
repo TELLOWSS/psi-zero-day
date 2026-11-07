@@ -6,6 +6,7 @@ export const RESOURCE_PROFILES = {
   standard:{controlCharge:1,logCharge:.15,batteryCharge:16,healChance:.035},
   hard:{controlCharge:.8,logCharge:.1,batteryCharge:14,healChance:.025},
   extreme:{controlCharge:.65,logCharge:.08,batteryCharge:12,healChance:.02},
+  mastery:{controlCharge:.55,logCharge:.06,batteryCharge:10,healChance:.015},
 } as const;
 export function resourceProfile(difficulty:PatrolDifficulty='standard') {return RESOURCE_PROFILES[difficulty];}
 export function earnedTacticalSupply(state:SurvivorsGameState,boss:boolean):TacticalItemId|null {
