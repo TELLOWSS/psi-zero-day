@@ -32,6 +32,20 @@ try{
      if(!hero||hero.height<height*.55||!headline||headline.height===0)
        throw new Error('Portrait hero / welcome message missing: '+JSON.stringify({hero,headline}));
      if(!nav||nav.height>90)throw new Error('Phone header wrapped into multiple rows: '+JSON.stringify(nav));
+     const compactHeader=await page.evaluate(()=>{
+      const summary=document.querySelector('.rg-appearance summary'),settings=document.querySelector('.rg-header-tools button:last-child'),brand=document.querySelector('.rg-brand');
+      const rect=el=>el?.getBoundingClientRect();
+      return {themeFont:summary?getComputedStyle(summary).fontSize:null,
+       settingsFont:settings?getComputedStyle(settings).fontSize:null,
+       brandRight:rect(brand)?.right??0,themeLeft:rect(summary)?.left??0,
+       themeRight:rect(summary)?.right??0,settingsLeft:rect(settings)?.left??0,
+       settingsRight:rect(settings)?.right??0};
+     });
+     if(compactHeader.themeFont!=='0px'||compactHeader.settingsFont!=='0px'||
+       compactHeader.brandRight>compactHeader.themeLeft+2||
+       compactHeader.themeRight>compactHeader.settingsLeft+2||
+       compactHeader.settingsRight>width+1)
+       throw new Error('Premium phone header controls overlap: '+JSON.stringify(compactHeader));
      const dock=await page.locator('.rg-mobile-dock').evaluate(el=>({
        position:getComputedStyle(el).position,
        visible:getComputedStyle(el).display!=='none',
