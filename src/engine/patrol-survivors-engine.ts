@@ -2195,7 +2195,7 @@ export class SurvivorsEngine {
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
           if(isWeakPoint&&!blocked&&this.state.terrainRecord)this.state.terrainRecord.weakPointHits++;
-          if(!blocked&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
+          if(!blocked&&!h.bossEncounterManaged&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
           if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
           if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
