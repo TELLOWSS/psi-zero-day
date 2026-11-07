@@ -196,3 +196,10 @@
 .guard-spatial-controls button:focus-visible,.guard-spatial-controls select:focus-visible{outline:3px solid #ffd38c;outline-offset:2px}
 
 .guard-failure-review{padding:12px;border:1px solid #d8b97088;border-radius:10px;background:#112c35;color:#f2eee2}.guard-failure-review p,.guard-failure-review li{line-height:1.7;font-size:13px}.guard-failure-review small{display:block;line-height:1.6;color:#cad9dc}.guard-wave-brief{margin:10px 0;padding:10px;border:1px solid #8fb5b644;border-radius:10px;color:#e4efea;background:#102a34}.guard-wave-brief>strong{font-size:13px}.guard-wave-brief>ul{padding-left:18px;font-size:12px;line-height:1.7}.guard-wave-brief>p{font-size:12px;line-height:1.7;color:#ffe3a4}
+
+/* Post-clear mastery choice: compact, accessible, no combat overlays. */
+.guard-mastery-choice { display: grid; gap: .65rem; margin: 1rem 0; padding: 1rem; border: 1px solid #55728a; border-radius: 12px; background: #0d2232; color: #e5f2fd; }
+.guard-mastery-choice > div { display: flex; gap: .5rem; flex-wrap: wrap; }
+.guard-mastery-choice button { padding: .65rem 1rem; border: 1px solid #6c93aa; border-radius: 8px; background: #163344; color: #eaf7ff; cursor: pointer; }
+.guard-mastery-choice button[aria-pressed="true"] { border-color: #9ce8ec; background: #1a586b; font-weight: 700; }
+.guard-mastery-choice small { color: #c4d7e5; line-height: 1.5; }
