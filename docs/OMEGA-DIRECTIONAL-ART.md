@@ -46,3 +46,28 @@ A separate conversation download `PSI_ZERO_DAY_OMEGA_WALK_8x6_STUDY_20261108.zip
 6. Keep PR #234 as a draft until all gates pass; do not deploy cosmetic prototypes as though they were a finished playable exclusive.
 
 The published local SHA256 values are recorded in `content/art/omega-motion-study-v0.1.json` to distinguish the zip's art from any eventual reviewed release assets.
+
+## 2026-11-08 / Measured image QA (48-frame v0.1)
+
+A pixel-level QA utility is now present at `scripts/audit-omega-motion-study.mjs` and regression scenarios at `tests/omega-motion-audit.test.ts`. It decodes all 48 pixels cells with Sharp, verifies the grid, checks source SHA256, measures actual alpha-silhouette variation, flags mirrored NE-versus-NW, and enforces explicit provenance + production equipment-socket blockers.
+
+Measurements on the original untouched 3072×3072 concept atlas (SHA256: `9fbac6535fe41ed572d942a3c6612289dc7cbb0544e8b640cb759cf237188b41`):
+- 48 cells readable, alpha masks present, no exact adjacent duplicate frames;
+- mean adjacent silhouette changes span **6.9%–9.62%** across eight compass headings; this metric is pixel variation, not biomechanical quality;
+- the lower region's alpha-centroid horizontal span is **1.41–6.20 pixels**, not sufficient to verify believable heel-to-toe stance transfer;
+- alpha-mask bottom boundaries drift by **0–1 pixel**, but that proves only image alignment, not contact-foot IK;
+- NE compared to horizontally reversed NW: **99.52% maximum silhouette overlap**, **96.1% six-phase average**. This flags the documented mirror-source defect, even though phase-by-phase pixel warps reduce the aggregate similarity.
+
+**Release result: FAIL by design.** The human-authored directional source, independent NE, genuine gait and motion/equipment rig still do not exist. A promotional collage generated while attempting an independent NE view was rejected as unsuitable source art; no new NE asset is claimed.
+
+Example diagnostic command (only after downloading the separately supplied asset ZIP locally):
+```bash
+node scripts/audit-omega-motion-study.mjs \
+  --atlas /path/to/omega-walk-MOTION-STUDY-8x6.png \
+  --manifest content/art/omega-motion-study-v0.1.json \
+  --report /path/to/omega-48frame-pixel-audit.json
+```
+
+`node scripts/check-omega-operator-art.mjs --release` now requires not only complete runtime image files, but also `content/art/omega-production-art-approval.json` containing artist-authored status, explicit approval and matching atlas SHA256, plus passing image mirror/phase/sockets checks. It remains blocked before a separately reviewed playable launch.
+
+**No guarantee of anti-cheat:** This is a code and asset quality gate, not cryptographic attestation or a secure user account entitlement system.
