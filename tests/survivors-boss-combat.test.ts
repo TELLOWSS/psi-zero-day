@@ -56,10 +56,10 @@ it('mastery requires four separate clean boss weak-point bursts, preserving extr
 });
 
 it('reports interlocked mastery cores when maximum damage per exposure has been reached',()=>{
- const {h,definition,p}=fixture();resolveBossSignature(h);bossCombatDamage(h,1,definition,true,true);bossCombatDamage(h,1e8,definition,true,true);
+ const {h,definition}=fixture();resolveBossSignature(h);bossCombatDamage(h,1,definition,true,true);bossCombatDamage(h,1e8,definition,true,true);
  expect(h.hp).toBe(750);expect(bossCoreStatus(h,true)).toBe('interlocked');
  expect(bossCoreStatus(h,false)).toBe('exposed');
- const finalBoss={...h,bossGameplay:undefined,bossPhase:1,bossAttackCycles:0,hp:1000};
+ const finalBoss:Hazard={...h,bossGameplay:undefined,bossPhase:1,bossAttackCycles:0,hp:1000};
  expect(masteryBossCycleFloor(finalBoss)).toBe(1000);
  expect(bossCoreStatus(finalBoss,true)).toBe('interlocked');
  finalBoss.bossAttackCycles=1;finalBoss.hp=750;
