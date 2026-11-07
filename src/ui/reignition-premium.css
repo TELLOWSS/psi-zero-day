@@ -416,7 +416,29 @@
 }
 @media(max-width:670px) {
  .rg-home[data-reignition-concept=cinematic] .rg-header {
-  min-height:65px;gap:5px;padding:8px 9px;
+  min-height:65px;gap:6px;padding:8px 10px;
+ }
+ /* Icon-only compact toolbar: never paint clipped text over adjacent buttons. */
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools .rg-header-missions,
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button:nth-child(2){display:none}
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button{
+  display:flex;align-items:center;justify-content:center;
+  width:42px;min-width:42px;height:42px;min-height:42px;
+  padding:7px 4px;font-size:0!important;white-space:nowrap;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button:last-child span{
+  display:inline-block;font-size:19px;line-height:1;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary{
+  display:flex;align-items:center;justify-content:center;
+  width:43px;height:42px;min-width:43px;min-height:42px;
+  padding:7px 3px;font-size:0!important;overflow:hidden;white-space:nowrap;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary:before{
+  content:'A–D';font-size:11px;line-height:1;letter-spacing:-.03em;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary span{
+  font-size:12px;line-height:1;
  }
  .rg-home[data-reignition-concept=cinematic] .rg-brand{gap:6px}
  .rg-home[data-reignition-concept=cinematic] .rg-brand img{width:28px;height:33px}
