@@ -1,4 +1,5 @@
 import type { Hazard, HazardType } from '../domain/patrol-survivors';
+import type {PatrolDifficulty} from '../domain/survivors-challenge';
 
 /** Five encounter families per chapter; no dependence on weapons or device performance. */
 export function stageThreatFamily(stageNumber: number): number {
@@ -6,11 +7,11 @@ export function stageThreatFamily(stageNumber: number): number {
   return (stage - 1 + Math.floor((stage - 1) / 5) * 2) % 5;
 }
 
-export function stageThreatTraits(type: HazardType, stage: number, time: number, introductionTime: number, roll: number): Pick<Hazard, 'variant' | 'behavior'> {
+export function stageThreatTraits(type: HazardType, stage: number, time: number, introductionTime: number, roll: number, difficulty: PatrolDifficulty='standard'): Pick<Hazard, 'variant' | 'behavior'> {
   if (stage <= 1 || time < introductionTime + 8) return {};
   const family = stageThreatFamily(stage);
   // The first example is readable on its own; later waves mix specialist and baseline risks.
-  if (roll >= .68) return {};
+  if (roll >= (difficulty==='mastery'?.82:.68)) return {};
   if (type === 'GAS_LEAK') {
     if (family === 1) return { variant: 'pulse_gas' };
     if (family === 3) return { variant: 'split_gas' };
