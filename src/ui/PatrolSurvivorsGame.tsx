@@ -171,6 +171,8 @@ import './patrol-survivors.css';
 import './survivors-event-visibility.css';
 import './tactical-ui.css';
 import './survivors-boss-mobile.css';
+import './psi-experience-ui.css';
+import {MissionStatusRail} from './MissionStatusRail';
 
 interface PatrolSurvivorsGameProps {
   onExit: () => void;
@@ -3857,12 +3859,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* READY / START SCREEN WITH CHARACTER SELECT */}
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab}>
+          <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab} role="region" aria-label="시그널 워치 작전 준비">
             <div className="survivors-preflight-top"><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
               <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
             </header>
+            <MissionStatusRail mode="watch" label="현재 워치 출동 준비 현황" items={[
+              {label:"선택 현장",value:`${String(PATROL_STAGES[selectedStage].stageNumber).padStart(2,"0")} / 50`,note:PATROL_STAGES[selectedStage].name},
+              {label:"출동 대원",value:CHARACTER_PROFILES[selectedChar].name,note:"현재 선택"},
+              {label:"작전 난이도",value:challengeText[selectedDifficulty],note:selectedDifficulty==="mastery"?"보스 다단계 대응":"선택 난이도 반영"}
+            ]}/>
             {completedStages.length===50&&<section className="survivors-veteran-return" data-endgame-preflight="watch" aria-label="시그널 워치 엔드게임 복귀 작전">
               <div><small>SIGNAL WATCH · RE:IGNITION / VETERAN</small><h3>50개 스테이지 완주. 새로운 공략은 지금부터.</h3><div className="survivors-veteran-medal" aria-label={`마스터 별 3개 달성 ${masteryGoldCount}개 중 50개`}><b>MASTER ★★★</b><strong>{masteryGoldCount}<small>/ 50</small></strong><progress value={masteryGoldCount} max={50} aria-label="마스터 별 3개 달성 진행도"/></div><p>마스터 단계는 단순 화력 경쟁이 아닙니다. 중점 위험을 예측하고, 보스의 경고 패턴을 회피하며 약점을 여러 차례 공략하세요.</p></div>
               <button type="button" onClick={()=>{
@@ -3877,7 +3884,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 {(['original','covert','engineer'] as const).map(version=><option key={version} value={version}>{voiceVersionText[version]}</option>)}
               </select>
             </label>
-            <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
+            <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation} role="group">{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
             {preflightTab==='stage'&&workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)&&<section className="survivors-mission-brief"><h3>{workfaceCopy.title}</h3><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.name}</p><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.hint}</p></section>}
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
 
