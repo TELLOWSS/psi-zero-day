@@ -15,6 +15,8 @@ on:
       - 'tests/guard-watch-endgame-balance-audit.test.ts'
       - 'tests/watch-mastery-boss-containment.test.ts'
       - 'tests/watch-boss-ultimate-resistance.test.ts'
+      - 'tests/survivors-boss-readout.test.ts'
+      - 'src/ui/survivors-boss-readout.ts'
       - 'tests/survivors-boss-combat.test.ts'
       - 'tests/survivors-boss-pattern.test.ts'
       - 'tests/survivors-boss-encounter.test.ts'
@@ -41,7 +43,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Guard six scenarios, Watch fifty stage risk focus, gear stress simulations
-        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts tests/survivors-boss-pattern.test.ts tests/survivors-boss-encounter.test.ts tests/survivors-boss-gangform.test.ts tests/watch-mastery-boss-containment.test.ts tests/watch-boss-ultimate-resistance.test.ts
+        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts tests/survivors-boss-pattern.test.ts tests/survivors-boss-encounter.test.ts tests/survivors-boss-gangform.test.ts tests/survivors-boss-readout.test.ts tests/watch-mastery-boss-containment.test.ts tests/watch-boss-ultimate-resistance.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Build
