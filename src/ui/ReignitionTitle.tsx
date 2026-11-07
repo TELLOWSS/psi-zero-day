@@ -25,7 +25,7 @@ export interface ReignitionTitleProps {
  readonly emblem:string;
  readonly heroWide:string;
  readonly heroPortrait:string;
- readonly crew?:readonly {id:string;uri:string;name:string;role:string}[];
+ readonly crew?:readonly {id:string;uri?:string;name:string;role:string}[];
  readonly onMap?:()=>void;
  readonly onGuard?:()=>void;
  readonly onWatch?:()=>void;
