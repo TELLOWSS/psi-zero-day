@@ -58,5 +58,24 @@
     "rgbaRamBytes": 9437184,
     "ratioComparedToFullRes": "0.25",
     "note": "Prototype preview asset only. Device FPS and visual quality NOT verified."
+  },
+  "reviewLabV2": {
+    "status": "OFFLINE_REVIEW_ONLY",
+    "repoSource": "tools/omega-motion-review-v2.html",
+    "zipFilename": "PSI_ZERO_DAY_OMEGA_MOTION_REVIEW_LAB_V2.zip",
+    "zipSha256": "1eb96bf719d6b2af7428cf7caf7c38702523ec7e339a17beb443ce50fce31efb",
+    "offlineHtmlSha256": "e2ce16fd9a002ee2b41a4fd68666ccf5b81bd09b59b02771fe0b1157035d9fe3",
+    "includes": "Offline player with 8-direction controls, frame stepping, onion-skin, alpha-foot proxies, NE/NW mirror comparison, local JSON review export",
+    "browserQA": "BLOCKED_BY_ADMINISTRATOR_IN_THIS_AUTOMATED_ENVIRONMENT",
+    "javascriptSyntax": "pass",
+    "gameplayPlayable": false,
+    "artistApproved": false
+  },
+  "legIKGuide": {
+    "source": "src/ui/omega-leg-ik.ts",
+    "status": "NUMERICAL_FOOT_TARGETS_ONLY",
+    "motionRenderingIntegrated": false,
+    "hardwarePlaybackTested": false,
+    "proprietaryRigArtApproved": false
   }
 }
