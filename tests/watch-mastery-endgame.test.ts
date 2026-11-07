@@ -1,7 +1,9 @@
 import {describe,it,expect} from 'vitest';
 import {PATROL_DIFFICULTIES,counterplayBreather} from '../src/domain/survivors-challenge';
 import {resourceProfile} from '../src/engine/survivors-resources';
-import {spawnPressure} from '../src/engine/survivors-difficulty';
+import {spawnPressure,selectStageHazard} from '../src/engine/survivors-difficulty';
+import {masteryStageFocus,authoredStageHazardMix} from '../src/engine/survivors-mastery-focus';
+import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
 import {stageThreatTraits} from '../src/engine/survivors-stage-threats';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {awardDifficultyClear} from '../src/domain/survivors-difficulty-records';
@@ -34,5 +36,15 @@ describe('Signal Watch mastery: opt-in after campaign completion',()=>{
     expect(advanced).toEqual(next);
     expect(stageClearReward(stage,'mastery',false,3).first).toBe(0);
     expect(createInitialSurvivorsState('yoon',undefined,stage,'mastery').difficulty).toBe('mastery');
+  });
+  it('focuses one already authored stage hazard in Waves 2/3 without a Wave 1 surprise',()=>{
+    const stage=PATROL_STAGES.stage_05,before=JSON.stringify(stage),focus=masteryStageFocus(stage);
+    expect(focus).not.toBeNull();
+    expect(authoredStageHazardMix(stage)).toContain(focus!.type);
+    expect(selectStageHazard(stage,145,.5,180,.8,'mastery')).toBe(focus!.type);
+    expect(selectStageHazard(stage,0,.5,180,.8,'mastery')).toBe('UNHELMETED');
+    expect(selectStageHazard(stage,0,.5,180,.8,'extreme')).toBe('UNHELMETED');
+    expect(JSON.stringify(stage)).toBe(before);
+    expect(new Set(Object.values(PATROL_STAGES).map(s=>masteryStageFocus(s)?.type).filter(Boolean)).size).toBeGreaterThan(1);
   });
 });

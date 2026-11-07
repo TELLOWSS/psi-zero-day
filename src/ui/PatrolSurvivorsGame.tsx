@@ -108,6 +108,7 @@ import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
+import {masteryStageFocus} from '../engine/survivors-mastery-focus';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
 import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
 import { stageActorLight } from './survivors-stage-light';
@@ -3524,6 +3525,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const incidentPending=fieldIncident&&accountability.access==='active'&&!accountability.decisions.some(d=>d.caseId===fieldIncident.id);
   const fieldRadio=incidentPending?fieldIncident.line:accountability.decisions.at(-1)?accountabilityText.radioAfter[accountability.decisions.at(-1)!.outcome]:'';
   const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
+  const masteryFocus=selectedDifficulty==='mastery'?masteryStageFocus(PATROL_STAGES[selectedStage]):null;
   const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
@@ -3574,7 +3576,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
           <div className="survivors-wave-badge" title="현재 방호 웨이브 진행도">
             <span>WAVE {currentWave}/3</span>
-            <small>{currentWave === 1 ? '탐색 · 빌드업' : currentWave === 2 ? '압박 · 변칙' : 'RED ZONE'}</small>
+            <small>{currentWave === 1 ? '탐색 · 빌드업' : currentWave === 2 ? '압박 · 변칙' : 'RED ZONE'}{currentWave>1&&masteryFocus?` · ${masteryFocus.label}`:''}</small>
           </div>
           <div className="survivors-score-badge">
             <span>SAFE SCORE</span>
@@ -3876,12 +3878,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
               {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" disabled={id==='mastery'&&completedStages.length<50} aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
-              <p>{terrainText[selectedDifficulty]}</p>{completedStages.length<50&&<p>마스터 도전은 50개 스테이지를 모두 클리어하면 해금됩니다. 현재 {completedStages.length}/50</p>}<p>{terrainText.warning}</p>
+              <p>{terrainText[selectedDifficulty]}</p>{masteryFocus?<p className="survivors-mastery-focus" data-mastery-focus={masteryFocus.type}><b>이번 작전 · {masteryFocus.label}</b> — {masteryFocus.hint}. 2·3웨이브에 집중 출현하므로 진입 전 장비와 대피 경로를 준비하세요.</p>:null}{completedStages.length<50&&<p>마스터 도전은 50개 스테이지를 모두 클리어하면 해금됩니다. 현재 {completedStages.length}/50</p>}<p>{terrainText.warning}</p>
               <details><summary>{terrainText.title}</summary><p>{terrainText.brief}</p><p>{terrainText.cleanupHint}</p></details>
             </fieldset>
             <aside className="survivors-preflight-gear" aria-label={storeText.briefTitle}>
               <SurvivorsPremiumArt item={recommendedGear}/>
-              <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
+              <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'||selectedDifficulty==='mastery'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
                 <small>{storeInventory.equipped.includes(recommendedGear.id)?storeText.briefEquipped:storeInventory.owned.includes(recommendedGear.id)?storeText.briefOwned:`${recommendedGear.price.toLocaleString()} PSI · ${storeText.briefCredits}`}</small>
                 {storeInventory.owned.includes(recommendedGear.id)&&<small>{storeText.durability} {itemDurability(storeInventory,recommendedGear.id)}/100 {itemDurability(storeInventory,recommendedGear.id)===0?storeText.broken:''}</small>}
               </div>

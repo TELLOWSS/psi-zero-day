@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {guardContents} from '../src/content/guard-campaign';
 import {createDefenseRun,applyDefenseCommand,advanceDefense,defenseResult} from '../src/engine/defense';
-import {guardMasteryHp,guardMasterySpeed} from '../src/engine/guard-mastery';
+import {guardMasteryHp,guardMasterySpeed,guardMasteryWaveDirective} from '../src/engine/guard-mastery';
 import {emptyDefenseSaveDocument,decodeDefenseSave,encodeDefenseSave,applyDefenseOutcome} from '../src/app/defense-save';
 import type {DefenseRunState} from '../src/domain/defense';
 
@@ -43,5 +43,19 @@ describe('Signal Guard mastery replay',()=>{
     expect(after.document.records[0]?.bestMasteryStars).toBe(2);
     expect(after.document.claimIds).toEqual(first.document.claimIds);
     expect(applyDefenseOutcome(after.document,content,mastery,defenseResult(mastery)).applied).toBe(false);
+  });
+  it('briefs wave priority and costs extra shield only if that type leaks',()=>{
+    const wave=content.waves[1]!,directive=guardMasteryWaveDirective(content,wave.id);
+    expect(directive?.enemy).toBeDefined();
+    expect(directive?.advice.length).toBeGreaterThan(5);
+    expect(guardMasteryWaveDirective(content,1)).toBeNull();
+    const make=(mastery:boolean)=>{
+      const run=createDefenseRun(content,'COORDINATOR',mastery?'priority-master':'priority-normal',mastery?{masteryRun:true}:{});
+      const contact={id:'leak',enemyId:directive!.enemy,hp:1,distance:1e9,spawnSequence:1,revealUntilTick:0,slowEffects:[],bossPhaseTriggered:false,bossArmorFromTick:0,bossArmorUntilTick:0};
+      return {...run,status:'RUNNING' as const,waveId:wave.id,shield:20,enemies:[contact],spawnedByGroup:wave.groups.map(g=>g.count)};
+    };
+    const normal=advanceDefense(make(false),content),mastery=advanceDefense(make(true),content);
+    expect(normal.shield-mastery.shield).toBe(directive!.extraLeak);
+    expect(normal.leakedByEnemy).toEqual(mastery.leakedByEnemy);
   });
 });
