@@ -13,6 +13,7 @@ on:
       - 'tests/guard-mastery-endgame.test.ts'
       - 'tests/watch-mastery-endgame.test.ts'
       - 'tests/guard-watch-endgame-balance-audit.test.ts'
+      - 'tests/watch-mastery-boss-containment.test.ts'
       - '.github/workflows/verify-endgame-balance.yml'
 permissions:
   contents: read
@@ -31,7 +32,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Guard six scenarios, Watch fifty stage risk focus, gear stress simulations
-        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts
+        run: npx vitest run tests/guard-mastery-endgame.test.ts tests/watch-mastery-endgame.test.ts tests/guard-watch-endgame-balance-audit.test.ts tests/survivors-boss-combat.test.ts tests/watch-mastery-boss-containment.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Build
