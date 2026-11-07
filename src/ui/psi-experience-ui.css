@@ -1,0 +1,43 @@
+/* RE:IGNITION / common presentation & interaction, never altering canvas combat */
+:where(.rg-home,.guard-home,.survivors-container){--psi-ink:#f2f8f5;--psi-accent:#a4e8df;--psi-line:#72989a69;--psi-muted:#b8d1d3}
+:where(.rg-home,.guard-home,.survivors-container) :is(button,a,summary,select,input):focus-visible{outline:3px solid #f4d49a!important;outline-offset:3px}
+:where(.rg-home,.guard-home,.survivors-container) button:disabled{cursor:not-allowed}
+.rg-home .rg-skip-missions{position:fixed;top:12px;left:12px;z-index:5000;transform:translateY(-170%);padding:12px 16px;border-radius:10px;background:#f4d49a;color:#102632;font-weight:850}
+.rg-home .rg-skip-missions:focus-visible{transform:translateY(0)}
+.rg-home .rg-settings-panel{width:min(540px,calc(100vw - 32px));max-height:85dvh;overflow-y:auto;overscroll-behavior:contain;border:1px solid #a1bcb97d;border-radius:18px;background:linear-gradient(140deg,#1b3c47,#091c29 82%);box-shadow:0 24px 90px #000c}
+.rg-home .rg-settings-panel :is(button,input,select){min-height:44px}
+.rg-home .rg-settings-panel kbd{padding:2px 6px;border:1px solid #b6d5d575;border-radius:6px;color:#f4d49a}
+.psi-mission-rail{--psi-rail-accent:#a4e8df;box-sizing:border-box;width:min(1220px,calc(100% - 32px));margin:18px auto;padding:16px 20px;border:1px solid var(--psi-line);border-radius:16px;color:var(--psi-ink);background:linear-gradient(110deg,#17343fea,#0a202fea);box-shadow:0 10px 30px #010b154d,inset 0 1px #fff2}
+.psi-mission-rail[data-psi-mode=watch]{--psi-rail-accent:#efb6aa}
+.psi-mission-rail-eyebrow{display:flex;align-items:center;gap:9px;color:var(--psi-rail-accent);font-size:10px;font-weight:850;letter-spacing:.12em}
+.psi-mission-rail-eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--psi-rail-accent);box-shadow:0 0 12px var(--psi-rail-accent)}
+.psi-mission-rail dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 0}
+.psi-mission-rail dl>div{display:flex;flex-direction:column;min-width:0;gap:4px;padding:11px 12px;border:1px solid #b5dadb20;border-radius:11px;background:#06131e75}
+.psi-mission-rail dt{color:var(--psi-muted);font-size:11px;font-weight:650}
+.psi-mission-rail dd{margin:0;color:#f7faf7;font-size:clamp(15px,1.6vw,20px);font-weight:850;overflow-wrap:anywhere}
+.psi-mission-rail dl small{color:#b5cbd2;font-size:10px;line-height:1.4;overflow-wrap:anywhere}
+.guard-home .guard-stage-grid{gap:clamp(11px,1.6vw,20px)}
+.guard-home .guard-stage-grid article{position:relative;min-width:0;border:1px solid #779ca05c;border-radius:18px;background:linear-gradient(150deg,#173842,#0d2430);box-shadow:0 12px 30px #0005,inset 0 1px #fff2;transition:transform .18s,border-color .18s,box-shadow .18s}
+.guard-home .guard-stage-grid article.is-unlocked:is(:hover,:focus-within){transform:translateY(-3px);border-color:#b1e2d9bb;box-shadow:0 17px 38px #0007}
+.guard-home .guard-stage-grid article.is-locked{opacity:.68}
+.guard-home .guard-stage-grid article .guard-stage-state{display:inline-flex;margin:0 0 10px;padding:5px 10px;border-radius:999px;font-size:10px;letter-spacing:.1em;font-weight:850;background:#a1dec8;color:#0e2830}
+.guard-home .guard-stage-grid article .guard-stage-state[data-state=cleared]{background:#ebd19c}
+.guard-home .guard-stage-grid article .guard-stage-state[data-state=locked]{background:#8ba3a8}
+.guard-home .guard-stage-grid article button:not(:disabled){display:flex;justify-content:space-between;align-items:center;min-height:48px;margin-top:9px;border:1px solid #edfff1;background:linear-gradient(120deg,#d5e9d9,#9ccfc4);color:#102831;box-shadow:0 7px 20px #0003}
+.guard-home[data-selected-mode=mastery] .guard-stage-grid article button:not(:disabled){background:linear-gradient(120deg,#f1ddba,#d8bc82);color:#251c12}
+.guard-home .guard-mastery-choice{max-width:1200px;margin:20px auto;padding:17px;background:linear-gradient(120deg,#1b3b47,#0c2633)}
+.guard-home .guard-mastery-choice button[aria-pressed=true]{background:#a6dfd2;color:#0b2931;border-color:#e9fef4}
+.guard-home .guard-mastery-choice[data-selected-mode=mastery] button[aria-pressed=true]{background:#f0d19b;color:#291d10}
+.guard-home .guard-replace section{max-height:85dvh;overflow:auto;overscroll-behavior:contain;box-shadow:0 25px 88px #000c}
+.survivors-container .survivors-ready-dialog{border:1px solid #93b2ad88;border-radius:18px;background:linear-gradient(160deg,#182f3a,#091d2b 78%);box-shadow:0 26px 85px #000a;overscroll-behavior:contain}
+.survivors-container .survivors-ready-dialog>.psi-mission-rail{width:100%;margin:12px 0;padding:12px}
+.survivors-container .survivors-ready-dialog .survivors-ready-launch{gap:12px;padding:13px 12px;margin:0 -12px;background:#102a36ed;border-bottom:1px solid #9cbbad5b;backdrop-filter:blur(10px)}
+.survivors-container .survivors-ready-dialog .survivors-ready-launch .survivors-btn-primary{min-height:48px;border-radius:11px}
+.survivors-container .survivors-ready-dialog .survivors-preflight-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:6px;border:1px solid #8ba9b35a;border-radius:12px;background:#122d39}
+.survivors-container .survivors-ready-dialog .survivors-preflight-tabs button{min-width:0;min-height:44px;padding:7px 5px;border-radius:8px;border:1px solid transparent;background:transparent;color:#cadddf;font-weight:800}
+.survivors-container .survivors-ready-dialog .survivors-preflight-tabs button[aria-pressed=true]{background:#b9e1d5;color:#102b30;border-color:#effff1;box-shadow:0 4px 15px #0004}
+.survivors-container .survivors-ready-dialog .survivors-challenge-select button[aria-pressed=true]{border-color:#f3d3a0;box-shadow:0 0 0 2px #e9d6a444}
+.survivors-container .survivors-ready-dialog .survivors-preflight-gear{border-color:#8cc2af70;background:linear-gradient(130deg,#163845,#0b2331)}
+@media(max-width:700px){.psi-mission-rail{width:calc(100% - 24px);padding:12px}.psi-mission-rail dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.psi-mission-rail dl>div:nth-child(3){grid-column:1/-1}.guard-home .guard-home-hero nav{flex-wrap:wrap;gap:9px;letter-spacing:.04em}.survivors-container .survivors-ready-dialog .survivors-ready-launch{margin:0;padding:12px 8px}}
+@media(max-width:360px){.survivors-container .survivors-ready-dialog .survivors-preflight-tabs{gap:3px;padding:4px}.survivors-container .survivors-ready-dialog .survivors-preflight-tabs button{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.guard-home .guard-stage-grid article,.rg-home .rg-card{transition:none!important;transform:none!important}}

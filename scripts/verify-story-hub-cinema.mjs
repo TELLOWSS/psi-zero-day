@@ -18,6 +18,16 @@ try{
    await page.goto(root+(root.includes('?')?'&':'?')+'home=cinematic',{waitUntil:'domcontentloaded'});
    const home=page.locator('main.rg-home');
    await home.waitFor();
+   if(width===1440&&height===900){
+     const control=page.getByRole('button',{name:'게임 설정 열기'});
+     await control.click();
+     const dialog=page.getByRole('dialog',{name:'게임·화면 설정'});
+     await dialog.waitFor({state:'visible'});
+     if(!(await page.evaluate(()=>document.activeElement?.textContent?.includes('닫기'))))throw new Error('Settings initial focus is missing');
+     await page.keyboard.press('Escape');
+     await dialog.waitFor({state:'detached'});
+     if(!(await control.evaluate(el=>document.activeElement===el)))throw new Error('Settings did not restore opener focus');
+   }
    const designs=['cinematic','operations','terminal','elite'];
    const choices=await page.locator('.rg-theme-picker button').count();
    if(choices!==4)throw new Error('Four selectable title designs were not rendered: '+choices);

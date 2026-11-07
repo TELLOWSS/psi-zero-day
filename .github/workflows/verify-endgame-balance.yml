@@ -26,6 +26,9 @@ on:
       - 'src/engine/survivors-mastery-pressure.ts'
       - 'tests/watch-mastery-pressure-progression.test.ts'
       - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/MissionStatusRail.tsx'
+      - 'src/ui/psi-experience-ui.css'
+      - 'tests/psi-experience-ui.test.tsx'
       - 'src/domain/patrol-survivors.ts'
       - '.github/workflows/verify-endgame-balance.yml'
 permissions:

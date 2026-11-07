@@ -1,10 +1,12 @@
 import {useState,type ReactNode} from 'react';
+import {useDialogFocus} from './useDialogFocus';
 import type {EndgameHomeStatus} from '../app/endgame-home';
 import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import {SIGNAL_WATCH_KEY_ART} from './signal-watch-art';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import './reignition-title.css';
 import './reignition-premium.css';
+import './psi-experience-ui.css';
 
 export const HOME_THEMES=[
  {id:'cinematic',label:'A · 시네마틱',subtitle:'리바이벌'},
@@ -75,6 +77,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  });
  const [settings,setSettings]=useState(false);
  const [releaseOpen,setReleaseOpen]=useState(false);
+ const settingsDialog=useDialogFocus(settings,()=>setSettings(false));
  const {status}=props;
  const active=descriptions[theme];
  const guardUnlocked=status.guardUnlocked;
@@ -91,6 +94,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  };
  const scrollToMissions=()=>document.getElementById('reignition-missions')?.scrollIntoView({behavior:props.motionEnabled?'smooth':'auto',block:'start'});
  return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
+  <a className="rg-skip-missions" href="#reignition-missions">게임 선택 바로가기</a>
   <header className="rg-header">
    <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
    <details className="rg-appearance" aria-label="화면 디자인 선택">
@@ -152,7 +156,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     <section className="rg-missions" id="reignition-missions" aria-labelledby="rg-missions-title">
      <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">새로운 전선, 두 개의 선택.</h2></div><span>ENDGAME · 2026.11</span></div>
      <div className="rg-mission-grid" data-compact-entry="full-card">
-      <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard}>
+      <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard} aria-label={`시그널 가드 · 6개 중 ${status.guardClears}개 완료 · ${guardUnlocked?"마스터 작전":"일반 작전"} 진입`}>
        <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="eager" decoding="async"/>
        <span className="rg-card-screen"/><span className="rg-card-serial" aria-hidden="true">01</span>
        <span className="rg-card-info"><small>01 / TACTICAL DEFENSE</small><strong>시그널 가드</strong><em>SIGNAL GUARD</em>
@@ -161,7 +165,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
         <span className="rg-card-count">CLEAR {status.guardClears} / 06 <em>{guardUnlocked?`MASTER ★★★ ${status.guardMastered} / 06`:"CAMPAIGN"}</em></span>
         <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
       </button>
-      <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch}>
+      <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch} aria-label={`시그널 워치 · 50개 중 ${status.watchClears}개 완료 · ${watchUnlocked?"마스터 작전":"일반 작전"} 진입`}>
        <img src={SIGNAL_WATCH_KEY_ART} alt="" loading="eager" decoding="async"/>
        <span className="rg-card-screen"/><span className="rg-card-serial" aria-hidden="true">02</span>
        <span className="rg-card-info"><small>02 / SURVIVAL ACTION</small><strong>시그널 워치</strong><em>SIGNAL WATCH</em>
@@ -206,14 +210,14 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    <button type="button" onClick={props.onGuard} disabled={!props.onGuard} aria-label="시그널 가드 바로 실행"><small>01 / DEFENSE</small><strong>시그널 가드</strong><span aria-hidden="true">↗</span></button>
    <button type="button" onClick={props.onWatch} disabled={!props.onWatch} aria-label="시그널 워치 바로 실행"><small>02 / ACTION</small><strong>시그널 워치</strong><span aria-hidden="true">↗</span></button>
   </nav>
-  {settings?<div className="rg-settings-backdrop" role="presentation" onClick={()=>setSettings(false)}>
+  {settings?<div ref={settingsDialog.dialogRef} onKeyDown={settingsDialog.onKeyDown} className="rg-settings-backdrop" role="presentation" onClick={()=>setSettings(false)}>
    <section role="dialog" aria-modal="true" aria-labelledby="rg-settings-title" className="rg-settings-panel" onClick={e=>e.stopPropagation()}>
-    <header><h2 id="rg-settings-title">게임·화면 설정</h2><button type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>
+    <header><h2 id="rg-settings-title">게임·화면 설정</h2><button ref={settingsDialog.closeRef} type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>
     <SurvivorsGraphicsSettings/>
     <button type="button" className="rg-help-from-settings" onClick={()=>{setSettings(false);props.onManual();}}>게임 도움말 열기</button>
     <label>화면 애니메이션 <input type="checkbox" checked={props.motionEnabled} onChange={props.onToggleMotion}/></label>
     <label>배경음·효과음 <input type="checkbox" checked={!props.audioMuted} onChange={props.onToggleAudio}/></label>
-    <p>시안 선택은 해당 브라우저에 저장되며, 미리보기에서만 변경됩니다.</p>
+    <p>화면 스타일은 이 브라우저에 저장되며, 기존 게임 기록에는 영향을 주지 않습니다. <kbd>ESC</kbd>로 닫을 수 있습니다.</p>
    </section>
   </div>:null}
   {props.children}
