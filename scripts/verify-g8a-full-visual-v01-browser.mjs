@@ -272,7 +272,7 @@ async function enterRepresentativeBottomUp(cdp, impact = false) {
     return true;
   })()`);
   await enterLegacyTrainingViaGuard(cdp);
-  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`, 12000);
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="save-resume"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`, 12000);
   await clickButton(cdp, '이어서 훈련');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'`, 12000);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-wave') === '8'`, 12000);
