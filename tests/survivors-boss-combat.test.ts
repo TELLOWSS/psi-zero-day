@@ -2,7 +2,7 @@ import {expect,it} from 'vitest';
 import type {Hazard} from '../src/domain/patrol-survivors';
 import {bossGameplayForStage} from '../src/engine/survivors-boss-gameplay';
 import {createBossCombat,resolveBossSignature,tickBossCombat,bossCombatDamage} from '../src/engine/survivors-boss-combat';
-import {advanceBossPhase} from '../src/engine/survivors-boss-pattern';
+import {advanceBossPhase,bossCoreStatus,masteryBossCycleFloor} from '../src/engine/survivors-boss-pattern';
 import {isHazardContactActive} from '../src/engine/patrol-hazard-motion';
 
 function fixture(){
@@ -53,4 +53,17 @@ it('mastery requires four separate clean boss weak-point bursts, preserving extr
   }
  }
  expect(h.hp).toBe(0);expect(p.combatPhase).toBe('secured');
+});
+
+it('reports interlocked mastery cores when maximum damage per exposure has been reached',()=>{
+ const {h,definition,p}=fixture();resolveBossSignature(h);bossCombatDamage(h,1,definition,true,true);bossCombatDamage(h,1e8,definition,true,true);
+ expect(h.hp).toBe(750);expect(bossCoreStatus(h,true)).toBe('interlocked');
+ expect(bossCoreStatus(h,false)).toBe('exposed');
+ const finalBoss={...h,bossGameplay:undefined,bossPhase:1,bossAttackCycles:0,hp:1000};
+ expect(masteryBossCycleFloor(finalBoss)).toBe(1000);
+ expect(bossCoreStatus(finalBoss,true)).toBe('interlocked');
+ finalBoss.bossAttackCycles=1;finalBoss.hp=750;
+ expect(masteryBossCycleFloor(finalBoss)).toBe(750);
+ finalBoss.bossPhase=2;finalBoss.bossAttackCycles=4;finalBoss.hp=0;
+ expect(masteryBossCycleFloor(finalBoss)).toBe(0);
 });

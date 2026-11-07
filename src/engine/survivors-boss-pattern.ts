@@ -5,9 +5,13 @@ export function bossCoreFloor(h:Readonly<Hazard>):number {
   if(h.bossGameplay)return h.bossGameplay.combatPhase==='burst'||h.bossGameplay.combatPhase==='secured'?0:h.hp;
   return h.bossPhase!==2?h.maxHp*.5:(h.bossAttackCycles??0)<1?h.maxHp*.08:0;
 }
-export function bossCoreStatus(h:Readonly<Hazard>):'active'|'interlocked'|'exposed' {
-  if(h.bossGameplay)return h.bossGameplay.combatPhase==='weak_point'||h.bossGameplay.combatPhase==='burst'?'exposed':'interlocked';
-  const floor=bossCoreFloor(h);
+export function bossCoreStatus(h:Readonly<Hazard>,mastery=false):'active'|'interlocked'|'exposed' {
+  if(h.bossGameplay){
+    const gameplay=h.bossGameplay;
+    if(mastery&&gameplay.combatPhase==='burst'&&gameplay.burstFloorHp!==undefined&&h.hp<=gameplay.burstFloorHp+.001)return 'interlocked';
+    return gameplay.combatPhase==='weak_point'||gameplay.combatPhase==='burst'?'exposed':'interlocked';
+  }
+  const floor=mastery&&h.isStageBoss?Math.max(bossCoreFloor(h),masteryBossCycleFloor(h)):bossCoreFloor(h);
   if(floor>0&&h.hp<=floor+.001)return 'interlocked';
   return floor===0&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent')?'exposed':'active';
 }
