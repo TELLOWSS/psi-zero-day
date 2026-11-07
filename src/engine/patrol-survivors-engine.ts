@@ -2171,7 +2171,7 @@ export class SurvivorsEngine {
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
           // Shout (including revival shockwave) cannot stun, damage or
           // prematurely resolve a scripted boss during its warning cycle.
-          if(h.isStageBoss&&h.bossEncounterManaged&&p.kind==='shout_shockwave'){
+          if(h.isStageBoss&&h.bossEncounterManaged&&p.kind==='shout_shockwave'&&!p.id.startsWith('proj_signature_counter')){
             // Shockwaves repeat contact on ordinary hazards, but the immune
             // boss gets one clear blocked cue, not 90 repeated impacts.
             let blockedBosses=this.projectileHits.get(p);

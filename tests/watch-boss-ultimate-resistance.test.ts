@@ -49,6 +49,15 @@ describe('director ultimate versus authored boss contract',()=>{
   expect(boss.bossGameplay?.combatPhase).toBe('burst');
   expect(boss.isStunned??0).toBe(0);
  });
+ it('preserves legitimately earned signature counters without treating them as director ultimates',()=>{
+  const {state,engine,boss}=setup('standard');
+  boss.bossGameplay!.combatPhase='burst';boss.bossGameplay!.burstRemaining=4.5;
+  boss.bossGameplay!.signatureResolvedThisCycle=true;boss.bossGameplay!.burstFloorHp=600;
+  state.hazards=[boss];
+  state.projectiles=[{id:'proj_signature_counter_authored',kind:'shout_shockwave',x:boss.x,y:boss.y,vx:0,vy:0,radius:40,damage:50,duration:.6,pierce:99}];
+  engine.update(1/60,{moveX:0,moveY:0});
+  expect(boss.hp).toBeLessThan(1000);
+ });
  it('does not let rapid projectile contacts silently micro-stun a scripted boss',()=>{
   const {state,engine,boss}=setup('standard');
   boss.bossGameplay!.combatPhase='burst';boss.bossGameplay!.burstRemaining=4.5;
