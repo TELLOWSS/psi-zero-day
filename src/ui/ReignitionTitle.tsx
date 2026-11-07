@@ -210,6 +210,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    <section role="dialog" aria-modal="true" aria-labelledby="rg-settings-title" className="rg-settings-panel" onClick={e=>e.stopPropagation()}>
     <header><h2 id="rg-settings-title">게임·화면 설정</h2><button type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>
     <SurvivorsGraphicsSettings/>
+    <button type="button" className="rg-help-from-settings" onClick={()=>{setSettings(false);props.onManual();}}>게임 도움말 열기</button>
     <label>화면 애니메이션 <input type="checkbox" checked={props.motionEnabled} onChange={props.onToggleMotion}/></label>
     <label>배경음·효과음 <input type="checkbox" checked={!props.audioMuted} onChange={props.onToggleAudio}/></label>
     <p>시안 선택은 해당 브라우저에 저장되며, 미리보기에서만 변경됩니다.</p>
