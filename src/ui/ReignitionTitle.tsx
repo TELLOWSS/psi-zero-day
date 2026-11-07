@@ -5,6 +5,7 @@ import {SIGNAL_WATCH_KEY_ART} from './signal-watch-art';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import './reignition-title.css';
 import './reignition-premium.css';
+import './reignition-command-focus.css';
 
 export const HOME_THEMES=[
  {id:'cinematic',label:'A · 시네마틱',subtitle:'리바이벌'},
@@ -68,10 +69,45 @@ export function resolveHomePrimaryMission(status:EndgameHomeStatus,guardAvailabl
   return {mode,label:unlocked?'마스터 작전 개시':progress>0?'작전 이어하기':'첫 작전 시작'};
 }
 
+export type HomeMissionFocus='guard'|'watch';
+/** Describe only saved campaign and three-star mastery facts: do not imply new stages. */
+export function getHomeMissionBrief(status:EndgameHomeStatus,mode:HomeMissionFocus):{kicker:string;detail:string;action:string}{
+ const isGuard=mode==='guard';
+ const title=isGuard?'가드':'워치';
+ const total=isGuard?6:50;
+ const cleared=isGuard?status.guardClears:status.watchClears;
+ const mastered=isGuard?status.guardMastered:status.watchMastered;
+ const unlocked=isGuard?status.guardUnlocked:status.watchUnlocked;
+ if(unlocked&&mastered>=total)return {
+  kicker:'MASTER COMPLETE',
+  detail:`${title} 마스터 ★★★ ${total}/${total} 완료 · 자유 재도전 가능`,
+  action:`${title} 다시 도전`
+ };
+ if(unlocked)return {
+  kicker:'NEXT OBJECTIVE / MASTERY',
+  detail:`${title} 마스터 ★★★ ${mastered}/${total} · 남은 목표 ${Math.max(0,total-mastered)}개`,
+  action:`${title} 마스터 작전 선택`
+ };
+ if(cleared>0)return {
+  kicker:'CAMPAIGN IN PROGRESS',
+  detail:`${title} 기본 작전 ${cleared}/${total} 완료 · 이어서 도전`,
+  action:`${title} 작전 이어하기`
+ };
+ return {
+  kicker:'FIRST DEPLOYMENT',
+  detail:`${title} 첫 작전을 선택해 위험 신호에 대응하세요`,
+  action:'첫 작전 시작'
+ };
+}
+
 export function ReignitionTitle(props:ReignitionTitleProps){
  const [theme,setTheme]=useState<HomeTheme>(()=>{
   try{return resolveHomeTheme(typeof window==='undefined'?'':window.location.search,typeof window==='undefined'?null:window.localStorage.getItem(HOME_THEME_STORAGE_KEY));}
   catch{return 'cinematic';}
+ });
+ const [focusedMode,setFocusedMode]=useState<HomeMissionFocus>(()=>{
+  const initial=resolveHomePrimaryMission(props.status,Boolean(props.onGuard),Boolean(props.onWatch)).mode;
+  return initial==='watch'?'watch':'guard';
  });
  const [settings,setSettings]=useState(false);
  const [releaseOpen,setReleaseOpen]=useState(false);
@@ -82,7 +118,12 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const guardPercent=Math.max(0,Math.min(100,status.guardClears/6*100));
  const watchPercent=Math.max(0,Math.min(100,status.watchClears/50*100));
  const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
- const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
+ const selectedMode:HomeMissionFocus=focusedMode==='guard'&&!props.onGuard&&props.onWatch?'watch':
+  focusedMode==='watch'&&!props.onWatch&&props.onGuard?'guard':focusedMode;
+ const focusedBrief=getHomeMissionBrief(status,selectedMode);
+ const heroGo=theme==='cinematic'
+  ? selectedMode==='guard'?props.onGuard:props.onWatch
+  : mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
  const selectTheme=(next:HomeTheme)=>{
   setTheme(next);
   try{window.localStorage.setItem(HOME_THEME_STORAGE_KEY,next);
@@ -90,7 +131,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
   }catch{/* browser preferences are optional; selection still works */}
  };
  const scrollToMissions=()=>document.getElementById('reignition-missions')?.scrollIntoView({behavior:props.motionEnabled?'smooth':'auto',block:'start'});
- return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
+ return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme} data-focused-mission={selectedMode} data-motion={props.motionEnabled?"on":"off"}>
   <header className="rg-header">
    <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
    <details className="rg-appearance" aria-label="화면 디자인 선택">
@@ -140,8 +181,20 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span><small>WATCH</small><strong>{status.watchClears}<em>/ 50</em></strong></span>
        <span className="rg-hero-record-label">{status.veteran?'VETERAN RECORD SYNCED':'NEW OPERATOR'}</span>
       </div>
+      <div className="rg-mission-console" aria-label="다음 작전 브리핑">
+       <div className="rg-mission-console-head"><span>MISSION CONTROL</span><small>출격할 게임 선택</small></div>
+       <div className="rg-mission-console-tabs" role="group" aria-label="메인 실행 게임">
+        <button type="button" className="rg-mission-tab is-guard" aria-pressed={selectedMode==='guard'} disabled={!props.onGuard} onClick={()=>setFocusedMode('guard')}>
+         <span>01 / DEFENSE</span><strong>시그널 가드</strong><small>{guardUnlocked?`마스터 ${status.guardMastered}/6`:`작전 ${status.guardClears}/6`}</small>
+        </button>
+        <button type="button" className="rg-mission-tab is-watch" aria-pressed={selectedMode==='watch'} disabled={!props.onWatch} onClick={()=>setFocusedMode('watch')}>
+         <span>02 / SURVIVAL</span><strong>시그널 워치</strong><small>{watchUnlocked?`마스터 ${status.watchMastered}/50`:`스테이지 ${status.watchClears}/50`}</small>
+        </button>
+       </div>
+       <p className="rg-mission-console-next" role="status" aria-live="polite"><span>{focusedBrief.kicker}</span><strong>{focusedBrief.detail}</strong></p>
+      </div>
       <div className="rg-hero-buttons">
-       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?mission.label:active.primary}</button>
+       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?focusedBrief.action:active.primary}</button>
        <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>두 게임 보기 <span aria-hidden="true">↓</span></button>
       </div>
       <div className="rg-hero-caption"><span aria-hidden="true">✦</span><span>WATCH THE SIGNAL. MAKE THE CALL.</span></div>
