@@ -24,8 +24,9 @@ describe('Stage 50 mastery adaptive warning and dodge skill',()=>{
    if(n>1){zone.state='idle';zone.timer=0;internal.updateStageHazards(1/60);}
    expect(zone.state).toBe('warning');expect(zone.timer).toBe(MASTERY_WARNING_SECONDS);
    if(n===4)expect(zone.radius).toBe(132);
-   state.player.x=Math.min(1350,zone.x+zone.radius+45);
-   state.player.y=Math.min(850,zone.y+zone.radius+45);
+   // Alternate sides; otherwise the bot may run into a world boundary.
+   state.player.x=zone.x+(n%2===0?-1:1)*(zone.radius+45);
+   state.player.y=zone.y;
    tick(2.25);
    expect(state.masteryBossPressure?.streak).toBe(n);
    expect(state.masteryBossPressure?.bestStreak).toBe(n);
