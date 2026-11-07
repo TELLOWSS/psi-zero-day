@@ -1,7 +1,7 @@
 import {expect,it} from 'vitest';
 import type {Hazard} from '../src/domain/patrol-survivors';
 import {bossGameplayForStage} from '../src/engine/survivors-boss-gameplay';
-import {createBossCombat,resolveBossSignature,tickBossCombat,bossCombatDamage} from '../src/engine/survivors-boss-combat';
+import {createBossCombat,resolveBossSignature,tickBossCombat,bossCombatDamage,bossBurstFraction} from '../src/engine/survivors-boss-combat';
 import {advanceBossPhase,bossCoreStatus,masteryBossCycleFloor} from '../src/engine/survivors-boss-pattern';
 import {isHazardContactActive} from '../src/engine/patrol-hazard-motion';
 
@@ -16,7 +16,7 @@ it('blocks pre-burst raw DPS and passive activation, then uses the configured 4.
  resolveBossSignature(h);expect(p.combatPhase).toBe('weak_point');expect(p.cycleCount).toBe(1);
  bossCombatDamage(h,1e8,definition);expect(p.combatPhase).toBe('weak_point');
  bossCombatDamage(h,1,definition,true);expect(p.combatPhase).toBe('burst');expect(p.burstRemaining).toBe(4.5);expect(h.hp).toBe(1000);
- expect(isHazardContactActive(h)).toBe(false);bossCombatDamage(h,500,definition);expect(h.hp).toBe(0);expect(p.combatPhase).toBe('secured');
+ expect(isHazardContactActive(h)).toBe(false);bossCombatDamage(h,500,definition);expect(h.hp).toBe(600);expect(p.combatPhase).toBe('burst');
 });
 it('makes stronger builds matter and returns insufficient damage through recovery to a fresh pattern',()=>{
  const a=fixture(),b=fixture();
@@ -35,16 +35,16 @@ it('latches phase two only at recovery and does not alter ordinary hazards',()=>
  const ordinary={...h,bossGameplay:undefined,isStageBoss:false};expect(tickBossCombat(ordinary,1)).toBe(false);
 });
 
-it('mastery requires four separate clean boss weak-point bursts, preserving extreme instant damage',()=>{
+it('mastery requires four warned clean weak-point bursts and forbids one-shot victories',()=>{
  const {h,definition,p}=fixture();
  const originalMax=h.maxHp;
  for(let cycle=1;cycle<=4;cycle++){
   p.combatPhase='pattern';p.patternContact=false;
   resolveBossSignature(h);
   expect(p.combatPhase).toBe('weak_point');
-  bossCombatDamage(h,1,definition,true,true);
+  bossCombatDamage(h,1,definition,true,'mastery');
   expect(p.combatPhase).toBe('burst');
-  bossCombatDamage(h,1e8,definition,true,true);
+  bossCombatDamage(h,1e8,definition,true,'mastery');
   expect(h.hp).toBeCloseTo(originalMax*(1-cycle/4),5);
   if(cycle<4){
    expect(p.combatPhase).toBe('burst');
@@ -56,9 +56,9 @@ it('mastery requires four separate clean boss weak-point bursts, preserving extr
 });
 
 it('reports interlocked mastery cores when maximum damage per exposure has been reached',()=>{
- const {h,definition}=fixture();resolveBossSignature(h);bossCombatDamage(h,1,definition,true,true);bossCombatDamage(h,1e8,definition,true,true);
+ const {h,definition}=fixture();resolveBossSignature(h);bossCombatDamage(h,1,definition,true,'mastery');bossCombatDamage(h,1e8,definition,true,'mastery');
  expect(h.hp).toBe(750);expect(bossCoreStatus(h,true)).toBe('interlocked');
- expect(bossCoreStatus(h,false)).toBe('exposed');
+ expect(bossCoreStatus(h,false)).toBe('interlocked');
  const finalBoss:Hazard={...h,bossGameplay:undefined,bossPhase:1,bossAttackCycles:0,hp:1000};
  expect(masteryBossCycleFloor(finalBoss)).toBe(1000);
  expect(bossCoreStatus(finalBoss,true)).toBe('interlocked');
@@ -66,4 +66,22 @@ it('reports interlocked mastery cores when maximum damage per exposure has been 
  expect(masteryBossCycleFloor(finalBoss)).toBe(750);
  finalBoss.bossPhase=2;finalBoss.bossAttackCycles=4;finalBoss.hp=0;
  expect(masteryBossCycleFloor(finalBoss)).toBe(0);
+});
+
+it('requires a different, real weak-point read count for each Watch difficulty',()=>{
+ expect(['story','standard','hard','extreme','mastery'].map(d=>bossBurstFraction(d as import('../src/domain/survivors-challenge').PatrolDifficulty))).toEqual([.5,.4,.34,.25,.25]);
+ for(const [difficulty,minimum] of [['story',2],['standard',3],['hard',3],['extreme',4],['mastery',4]] as const){
+  const {h,definition,p}=fixture();
+  for(let i=0;i<minimum;i++){
+   p.combatPhase='pattern';p.patternContact=false;
+   resolveBossSignature(h);
+   bossCombatDamage(h,1,definition,true,difficulty);
+   bossCombatDamage(h,1e8,definition,true,difficulty);
+   if(i<minimum-1){
+    expect(h.hp).toBeGreaterThan(0);
+    tickBossCombat(h,definition.burstWindowSeconds);
+   }
+  }
+  expect(h.hp).toBe(0);
+ }
 });

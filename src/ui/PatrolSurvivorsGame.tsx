@@ -1901,7 +1901,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
-        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}:${bossCoreStatus(designatedBoss)}:${bossCombatReadout(designatedBoss)}`:'');
+        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}:${bossCoreStatus(designatedBoss,engine.state.difficulty)}:${bossCombatReadout(designatedBoss)}`:'');
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
@@ -3199,7 +3199,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const isWeakPoint = Boolean(
             h.weakPointExposed ||
             (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
-            (h.isStageBoss && bossCoreStatus(h) === 'exposed')
+            (h.isStageBoss && bossCoreStatus(h,engineRef.current?.state.difficulty) === 'exposed')
           );
           if (isWeakPoint) {
             ctx.save();
@@ -3689,12 +3689,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
         const deadline = Math.max(0, operationPlan(state.stage,state.maxTime).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
-        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
+        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss,state.difficulty):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
           {bossSecured ? <span>{bossText.secured}</span> : boss ? <>
             <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
             <strong>{state.stage.bossName}</strong>
             <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
-            <span>{bossCombatReadout(boss)} · {bossRisk}%</span>
+            <span>{bossCombatReadout(boss)} · {bossRisk}% · 궁극기 면역</span>
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}
@@ -3889,7 +3889,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
               {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" disabled={id==='mastery'&&completedStages.length<50} aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{challengeText.playStyle[id]}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small>{readDifficultyClearRecords()[selectedStage]?.[id]&&<small>{challengeText.bestRecord} ★{readDifficultyClearRecords()[selectedStage]?.[id]}/3</small>}</button>)}
-              <p>{terrainText[selectedDifficulty]}</p>{masteryFocus?<p className="survivors-mastery-focus" data-mastery-focus={masteryFocus.type}><b>이번 작전 · {masteryFocus.label}</b> — {masteryFocus.hint}. 2·3웨이브에 집중 출현하므로 진입 전 장비와 대피 경로를 준비하세요.</p>:null}{selectedDifficulty==='mastery'?<p className="survivors-mastery-boss-contract" data-mastery-boss-contract="multi-read"><b>마스터 보스 계약</b> · 최고 장비로도 보스 약점을 한 번에 제압할 수 없습니다. 경고 동작 회피 → 약점 노출 → 공격을 여러 차례 성공해야 최종 제압됩니다.{selectedStage==='stage_50'?' 최종 스테이지에서는 적색 원형 양중 경고가 현재 위치에 고정됩니다. 경고 시간 2.2초 동안 원 밖으로 이동하거나 정확히 회피하세요. 고급 보호막은 실수 시 피해를 흡수하지만 위치 대응을 대신하지는 않습니다.':''}</p>:null}{completedStages.length<50&&<p>마스터 도전은 50개 스테이지를 모두 클리어하면 해금됩니다. 현재 {completedStages.length}/50</p>}<p>{terrainText.warning}</p>
+              <p>{terrainText[selectedDifficulty]}</p>{masteryFocus?<p className="survivors-mastery-focus" data-mastery-focus={masteryFocus.type}><b>이번 작전 · {masteryFocus.label}</b> — {masteryFocus.hint}. 2·3웨이브에 집중 출현하므로 진입 전 장비와 대피 경로를 준비하세요.</p>:null}{selectedDifficulty==='mastery'?<p className="survivors-mastery-boss-contract" data-mastery-boss-contract="multi-read"><b>마스터 보스 계약</b> · 최고 장비로도 보스 약점을 한 번에 제압할 수 없습니다. 경고 동작 회피 → 약점 노출 → 공격을 여러 차례 성공해야 최종 제압됩니다.{selectedStage==='stage_50'?' 최종 스테이지에서는 적색 원형 양중 경고가 현재 위치에 고정됩니다. 경고 시간 2.2초 동안 원 밖으로 이동하거나 정확히 회피하세요. 고급 보호막은 실수 시 피해를 흡수하지만 위치 대응을 대신하지는 않습니다.':''}</p>:null}<p className="survivors-boss-resistance-brief"><b>보스 공략</b> · 궁극기는 일반 위험만 제압합니다. 보스는 경고 패턴을 회피한 뒤 약점이 열렸을 때 공격하세요. 이 난이도 최소 약점 공략: {selectedDifficulty==='story'?'2회':selectedDifficulty==='standard'||selectedDifficulty==='hard'?'3회':'4회'} (50스테이지는 별도 2단계 패턴).</p>{completedStages.length<50&&<p>마스터 도전은 50개 스테이지를 모두 클리어하면 해금됩니다. 현재 {completedStages.length}/50</p>}<p>{terrainText.warning}</p>
               <details><summary>{terrainText.title}</summary><p>{terrainText.brief}</p><p>{terrainText.cleanupHint}</p></details>
             </fieldset>
             <aside className="survivors-preflight-gear" aria-label={storeText.briefTitle}>
