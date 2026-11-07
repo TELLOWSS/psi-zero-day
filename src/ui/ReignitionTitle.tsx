@@ -59,15 +59,39 @@ const descriptions:Record<HomeTheme,{eyebrow:string,title:string,lead:string,pri
 
 /** The leading action must never advertise locked mastery to a first-time player. */
 export function resolveHomePrimaryMission(status:EndgameHomeStatus,guardAvailable:boolean,watchAvailable:boolean):{mode:'guard'|'watch'|'none';label:string} {
-  const mode: 'guard'|'watch'|'none' =
-    status.guardUnlocked&&guardAvailable ? 'guard' :
-    status.watchUnlocked&&watchAvailable ? 'watch' :
-    guardAvailable&&watchAvailable ?
-      (status.watchClears/50>status.guardClears/6?'watch':'guard') :
-    guardAvailable?'guard':watchAvailable?'watch':'none';
+  let mode:'guard'|'watch'|'none'='none';
+  if(guardAvailable&&watchAvailable&&status.guardUnlocked&&status.watchUnlocked){
+    const guardRemaining=Math.max(0,6-status.guardMastered);
+    const watchRemaining=Math.max(0,50-status.watchMastered);
+    // A completed mastery board must never take priority over unfinished work.
+    // When both remain, focus the mode with the lower three-star completion rate.
+    mode=guardRemaining===0&&watchRemaining>0?'watch':
+      watchRemaining===0&&guardRemaining>0?'guard':
+      status.watchMastered/50<status.guardMastered/6?'watch':'guard';
+  }else if(status.guardUnlocked&&guardAvailable)mode='guard';
+  else if(status.watchUnlocked&&watchAvailable)mode='watch';
+  else if(guardAvailable&&watchAvailable)mode=status.watchClears/50>status.guardClears/6?'watch':'guard';
+  else if(guardAvailable)mode='guard';
+  else if(watchAvailable)mode='watch';
   const unlocked=mode==='guard'?status.guardUnlocked:mode==='watch'?status.watchUnlocked:false;
+  const mastered=mode==='guard'?status.guardMastered>=6:mode==='watch'?status.watchMastered>=50:false;
   const progress=mode==='guard'?status.guardClears:mode==='watch'?status.watchClears:0;
-  return {mode,label:unlocked?'마스터 작전 개시':progress>0?'작전 이어하기':'첫 작전 시작'};
+  return {mode,label:unlocked?(mastered?'마스터 재도전':'마스터 작전 개시'):progress>0?'작전 이어하기':'첫 작전 시작'};
+}
+
+/** Uses only verified save totals; never invents a next-stage unlock or reward. */
+export function resolveHomeNextChallenge(status:EndgameHomeStatus,guardAvailable:boolean,watchAvailable:boolean){
+  const {mode}=resolveHomePrimaryMission(status,guardAvailable,watchAvailable);
+  if(mode==='none')return {mode,title:'실행 가능한 작전이 없습니다',detail:'게임 진입 상태를 확인해 주세요.'};
+  const guard=mode==='guard';
+  const name=guard?'시그널 가드':'시그널 워치';
+  const total=guard?6:50;
+  const clears=Math.min(total,Math.max(0,guard?status.guardClears:status.watchClears));
+  const unlocked=guard?status.guardUnlocked:status.watchUnlocked;
+  const mastered=Math.min(total,Math.max(0,guard?status.guardMastered:status.watchMastered));
+  if(!unlocked)return {mode,title:`${name} · 일반 작전 ${total-clears}개 남음`,detail:'현재 클리어 기록 기준 · 완료 시 마스터 난이도 해금'};
+  if(mastered<total)return {mode,title:`${name} · 마스터 3성 ${total-mastered}개 남음`,detail:`검증된 마스터 3성 기록 ${mastered}/${total} · 기존 데이터 유지`};
+  return {mode,title:`${name} · 마스터 전 구간 달성`,detail:'기존 기록을 유지하며 최고 성과에 다시 도전할 수 있습니다.'};
 }
 
 export function ReignitionTitle(props:ReignitionTitleProps){
@@ -84,7 +108,10 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const watchUnlocked=status.watchUnlocked;
  const guardPercent=Math.max(0,Math.min(100,status.guardClears/6*100));
  const watchPercent=Math.max(0,Math.min(100,status.watchClears/50*100));
+ const guardMasterPercent=Math.max(0,Math.min(100,status.guardMastered/6*100));
+ const watchMasterPercent=Math.max(0,Math.min(100,status.watchMastered/50*100));
  const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
+ const nextChallenge=resolveHomeNextChallenge(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
  const selectTheme=(next:HomeTheme)=>{
   setTheme(next);
@@ -162,7 +189,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span className="rg-card-info"><small>01 / TACTICAL DEFENSE</small><strong>시그널 가드</strong><em>SIGNAL GUARD</em>
         <span>6개 현장 완료 후, 더욱 날카로운 마스터 전술전</span>
         <span className="rg-card-progress" role="progressbar" aria-label="가드 완료 작전" aria-valuemin={0} aria-valuemax={6} aria-valuenow={status.guardClears}><i style={{width:guardPercent+"%"}}/></span>
-        <span className="rg-card-count">CLEAR {status.guardClears} / 06 <em>{guardUnlocked?`MASTER ★★★ ${status.guardMastered} / 06`:"CAMPAIGN"}</em></span>
+        <span className="rg-card-count">CLEAR {status.guardClears} / 06 <em>{guardUnlocked?'MASTER CHALLENGE':'CAMPAIGN'}</em></span>
+        {guardUnlocked?<span className="rg-card-mastery" aria-label={`가드 마스터 3성 ${status.guardMastered}개 / 6개`}><span className="rg-card-mastery-label">MASTER 3★ <strong>{status.guardMastered} / 06</strong></span><span className="rg-card-mastery-track" aria-hidden="true"><i style={{width:guardMasterPercent+'%'}}/></span></span>:null}
         <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
       </button>
       <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch} aria-label={`시그널 워치 · 50개 중 ${status.watchClears}개 완료 · ${watchUnlocked?"마스터 작전":"일반 작전"} 진입`}>
@@ -171,7 +199,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span className="rg-card-info"><small>02 / SURVIVAL ACTION</small><strong>시그널 워치</strong><em>SIGNAL WATCH</em>
         <span>50개 스테이지 이후, 변칙 위험과 패턴 대응 보스</span>
         <span className="rg-card-progress" role="progressbar" aria-label="워치 완료 스테이지" aria-valuemin={0} aria-valuemax={50} aria-valuenow={status.watchClears}><i style={{width:watchPercent+"%"}}/></span>
-        <span className="rg-card-count">CLEAR {status.watchClears} / 50 <em>{watchUnlocked?`MASTER ★★★ ${status.watchMastered} / 50`:"CAMPAIGN"}</em></span>
+        <span className="rg-card-count">CLEAR {status.watchClears} / 50 <em>{watchUnlocked?'MASTER CHALLENGE':'CAMPAIGN'}</em></span>
+        {watchUnlocked?<span className="rg-card-mastery" aria-label={`워치 마스터 3성 ${status.watchMastered}개 / 50개`}><span className="rg-card-mastery-label">MASTER 3★ <strong>{status.watchMastered} / 50</strong></span><span className="rg-card-mastery-track" aria-hidden="true"><i style={{width:watchMasterPercent+'%'}}/></span></span>:null}
         <b>{watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
       </button>
      </div>
@@ -181,7 +210,12 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <div><span>GUARD CLEAR</span><strong>{status.guardClears}<small>/6</small></strong><progress max={6} value={status.guardClears} aria-label="가드 작전 클리어 수"/><small>{guardUnlocked?'마스터 ★★★ '+status.guardMastered+'/6':'6개 작전 완료 시 마스터 해금'}</small></div>
        <div><span>WATCH CLEAR</span><strong>{status.watchClears}<small>/50</small></strong><progress max={50} value={status.watchClears} aria-label="워치 스테이지 클리어 수"/><small>{watchUnlocked?'마스터 ★★★ '+status.watchMastered+'/50':'50개 스테이지 완료 시 마스터 해금'}</small></div>
       </div>
-      <p>{status.veteran?'기존 완료 기록은 유지됩니다. 다음 도전은 마스터 별 3개를 완성하는 것입니다.':'기존 작전을 완료하면 각 모드의 마스터 난이도가 열립니다.'}</p>
+      <div className="rg-next-challenge" data-next-mode={nextChallenge.mode} aria-label="실제 기록 기반 다음 도전">
+       <span className="rg-next-kicker">NEXT CHALLENGE <small>VERIFIED SAVE</small></span>
+       <strong>{nextChallenge.title}</strong>
+       <span className="rg-next-description">{nextChallenge.detail}</span>
+      </div>
+      <p>{status.veteran?'기존 완료 기록은 유지됩니다. 마스터 기록과 새로운 도전 현황은 저장 데이터에 따라 표시됩니다.':'기존 작전을 완료하면 각 모드의 마스터 난이도가 열립니다.'}</p>
      </aside>
     </section>
     <section className="rg-shortcuts" aria-label="다른 게임과 기록">
