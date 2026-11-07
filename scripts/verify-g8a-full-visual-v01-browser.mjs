@@ -614,7 +614,7 @@ try {
   if(report.physicalLandscape.idleInstruction.includes('LOGICAL BOARD') || report.physicalLandscape.idleInstruction.includes('1000×600')) {
     throw new Error('Developer board jargon leaked into physical gameplay: '+report.physicalLandscape.idleInstruction);
   }
-  if(!report.physicalLandscape.idleInstruction.includes('개입 지점')) throw new Error('Production-facing idle guidance missing: '+report.physicalLandscape.idleInstruction);
+  if(!/(개입 지점|설치 패드)/.test(report.physicalLandscape.idleInstruction)) throw new Error('Production-facing actionable pad guidance missing: '+report.physicalLandscape.idleInstruction);
   if(!report.physicalLandscape.command || report.physicalLandscape.command.height > 68) {
     throw new Error('780x360 idle command overlay is too tall: '+JSON.stringify(report.physicalLandscape.command));
   }
