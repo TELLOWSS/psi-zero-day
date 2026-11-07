@@ -13,7 +13,9 @@ const c=await context(),p=await c.newPage();await p.addInitScript(key=>{const ol
 {
 const c=await context(),p=await c.newPage();let fail=true;await p.route('**/new-psi-crew-v2/player-map.webp*',r=>fail?r.abort():r.continue());await p.goto(base);await p.locator('.rg-story-button,.is-story-entry').click();await p.locator('.story-loading-recovery').waitFor({timeout:20000});a.equal(await p.locator('.episode-cold-open-cta').count(),0);a.equal(await p.evaluate(key=>localStorage.getItem(key),key),null);fail=false;await p.getByRole('button',{name:'다시 불러오기',exact:true}).click();await p.locator('.episode-cold-open-cta').waitFor({timeout:25000});rows.push('missing required art blocks entry; retry recovers without advancing save');await c.close();}
 {
-const c=await context(),p=await c.newPage();await p.addInitScript(receipts=>localStorage.setItem('psi.story.evidence.v1',JSON.stringify(receipts)),receipts);await p.goto(base);await enter(p);const seen=new Set();let watch=false,guard=false,missingFrames=0;
+const c=await context(),p=await c.newPage();await p.addInitScript(receipts=>localStorage.setItem('psi.story.evidence.v1',JSON.stringify(receipts)),receipts);await p.goto(base);await enter(p);const seen=new Set();let watch=false,guard=false,missingFrames=0;const errors=[],recent=[];
+p.on('pageerror',e=>errors.push('pageerror: '+e.message));
+p.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});
 for(let step=0;step<350;step++){
 // The finished frame unmounts the scene. During authored tactical interludes,
 // the same narrative session can legitimately show strategy actions instead.
@@ -21,12 +23,14 @@ if(await p.locator('.phase-complete').count())break;
 const scene=p.locator('.episode-immersive-scene');
 const visibleScene=(await scene.count())>0;
 const event=visibleScene?await scene.getAttribute('data-event',{timeout:2500}):null;
+if(event){recent.push({step,event});if(recent.length>12)recent.shift();}
 if(!visibleScene){
  const validInterlude=(await p.locator('.strategy-shell,.strategy-observe-card,.strategy-outcome-card,.strategy-action-confirm,.strategy-action-list,.strategy-map-worker,.strategy-risk-signal,.strategy-zone-target,.strategy-rail,.choice-panel,.continue-button,.story-skip-voice').count())>0;
  missingFrames=validInterlude?0:missingFrames+1;
  if(missingFrames>8){
-  const current=await p.evaluate(()=>({phaseComplete:!!document.querySelector('.phase-complete'),storyFrame:document.querySelector('.game-frame')?.className,hub:!!document.querySelector('.rg-home'),guard:!!document.querySelector('.guard-home'),watch:!!document.querySelector('.survivors-preflight-top'),actions:[...document.querySelectorAll('button')].slice(0,8).map(e=>e.textContent?.trim()),title:document.title}));
-  throw new Error('Story recovery left all valid narrative and tactical surfaces at step '+step+': '+JSON.stringify(current));
+  const current=await p.evaluate(()=>({url:location.href,phaseComplete:!!document.querySelector('.phase-complete'),storyFrame:document.querySelector('.game-frame')?.className,hub:!!document.querySelector('.rg-home'),guard:!!document.querySelector('.guard-home'),watch:!!document.querySelector('.survivors-preflight-top'),bodyChildren:[...document.body.children].map(el=>({tag:el.tagName,class:el.className,id:el.id,inner:el.innerHTML.slice(0,450)})),actions:[...document.querySelectorAll('button')].slice(0,8).map(e=>e.textContent?.trim()),title:document.title}));
+  await p.screenshot({path:out+'/story-route-lost.png'}).catch(()=>{});
+  throw new Error('Story recovery lost active scene at step '+step+': '+JSON.stringify({watch,guard,recent,errors,current}).slice(0,9000));
  }
 }else missingFrames=0;
 for(const el of await p.locator('[data-evidence-mode]').all())seen.add((await el.getAttribute('data-evidence-mode'))+':'+await el.getAttribute('data-evidence-outcome'));
