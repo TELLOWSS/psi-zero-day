@@ -10,6 +10,7 @@ import art from '../../content/defense/guard-art-v1.json';
 import p2 from '../../content/defense/guard-p2-art-v1.json';
 import './guard-campaign.css';
 import './psi-experience-ui.css';
+import './reignition-modes.css';
 import {GuardTacticalDebrief} from './GuardTacticalDebrief';
 import {GuardStagePreview} from './GuardStagePreview';
 
@@ -23,10 +24,11 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
  const masteryUnlocked=cleared===guardContents.length;
  const mastered=guardContents.filter(c=>(document.records.find(r=>r.scenarioId===c.scenario.id)?.bestMasteryStars??0)===3).length;
  const priority=guardContents.find(c=>(document.records.find(r=>r.scenarioId===c.scenario.id)?.bestMasteryStars??0)<3)??guardContents[0];
- return <main className="guard-home" data-defense-screen="guard-home" data-selected-mode={masterySelected?"mastery":"regular"}>
-  <header className="guard-home-hero" style={{backgroundImage:`linear-gradient(90deg,#071b27ed,#071b2755),url(/${DEFENSE_PREMIUM_HERO})`}}>
-   <nav><span>SIGNAL GUARD</span><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><button onClick={onExit}>{t('guard.hub')}</button></nav>
-   <small>{t('guard.subtitle')}</small><h1>{t('guard.title')}</h1><p>{t('guard.promise')}</p>
+ return <main className="guard-home" data-defense-screen="guard-home" data-reignition-season="2026" data-selected-mode={masterySelected?"mastery":"regular"}>
+  <header className="guard-home-hero" style={{backgroundImage:`linear-gradient(90deg,#04131bf6 0%,#06212cca 53%,#05293550 100%),url(/assets/reignition/guard-sector-command.svg),url(/${DEFENSE_PREMIUM_HERO})`}}>
+   <nav><span className="guard-season-nav-logo"><i aria-hidden="true">◇</i> SIGNAL GUARD <em>TACTICAL DEFENSE</em></span><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><button onClick={onExit}>{t('guard.hub')}</button></nav>
+   <div className="guard-season-ident"><span>PSI : ZERO DAY</span><b>RE:IGNITION // 2026.11</b><small>COMMAND CENTER · OPERATION GUARD</small></div>
+   <div className="guard-season-hero-copy"><small>{t('guard.subtitle')}</small><h1>{t('guard.title')}</h1><p>{t('guard.promise')}</p><div className="guard-season-intel"><span><small>ACTIVE SECTORS</small><strong>{cleared} <em>/ {guardContents.length}</em></strong></span><span><small>MASTER OPERATIONS</small><strong>{masteryUnlocked?`${mastered} / 6`:'LOCKED'}</strong></span><span><small>COMMAND STATUS</small><strong>{active?'ON MISSION':next?'READY':'ALL CLEAR'}</strong></span></div></div>
    {active&&onResume?<button className="guard-primary" onClick={onResume}>{t('guard.resume')}</button>:null}
    {!active&&next?<button className="guard-primary" onClick={()=>onSelect(next.scenario.id,false,false)}>{t('guard.next')} · {t(`guard.gd0${guardContents.indexOf(next)+1}.title`)}</button>:null}
    <span className="guard-progress">{t('guard.chapter')} · {cleared} / {guardContents.length} {t('guard.clear')}</span>
@@ -56,11 +58,11 @@ export function GuardCampaignHome({document,onSelect,onResume,onExit,onPractice}
    </div>
    <small>마스터 도전은 적 유형별 내구도와 고속·은폐 위험의 압박이 강화됩니다. 기존 별과 보상을 유지하며 마스터 최고 별을 따로 저장합니다.</small>
   </section>:null}
-  <section className="guard-operations"><h2>{t(cleared===guardContents.length?'guard.complete':'guard.chapter')}</h2><p>{t(cleared===guardContents.length?'guard.complete_hint':'guard.chapter_hint')}</p>
+  <section className="guard-operations"><div className="guard-season-operation-head"><div><small>FIELD OPERATIONS // SECTOR INDEX</small><h2>{t(cleared===guardContents.length?'guard.complete':'guard.chapter')}</h2><p>{t(cleared===guardContents.length?'guard.complete_hint':'guard.chapter_hint')}</p></div><span aria-hidden="true" className="guard-season-crosshair">◎</span></div>
    <div className="guard-stage-grid">{guardContents.map((content,i)=>{
     const record=document.records.find(r=>r.scenarioId===content.scenario.id),unlocked=guardStageUnlocked(content.scenario.id,document),key=`guard.gd0${i+1}`;
-    return <article key={key} className={unlocked?'is-unlocked':'is-locked'} data-guard-stage={content.scenario.id}>
-     <GuardStagePreview content={content} uri={'/'+[...art.boards,...p2.boards][i]!.uri}/><div><span className="guard-stage-state" data-state={!unlocked?"locked":record?.clears?"cleared":"ready"}>{!unlocked?"LOCKED":record?.clears?"CLEARED":"READY"}</span><small>GD-0{i+1} · {t(i<3?'guard.surface':'guard.underground')} · {content.waves.length}{t('guard.wave')} <span>{'★'.repeat(masterySelected?(record?.bestMasteryStars??0):(record?.bestStars??0))}</span></small>
+    return <article key={key} className={unlocked?'is-unlocked':'is-locked'} data-reignition-card="command" data-guard-stage={content.scenario.id}>
+     <GuardStagePreview content={content} uri={'/'+[...art.boards,...p2.boards][i]!.uri}/><div><div className="guard-sector-entry"><b>0{i+1}</b><span>SECTOR {i<3?"ABOVE GROUND":"SUBSTRUCTURE"}</span></div><span className="guard-stage-state" data-state={!unlocked?"locked":record?.clears?"cleared":"ready"}>{!unlocked?"LOCKED":record?.clears?"CLEARED":"READY"}</span><small>GD-0{i+1} · {t(i<3?'guard.surface':'guard.underground')} · {content.waves.length}{t('guard.wave')} <span>{'★'.repeat(masterySelected?(record?.bestMasteryStars??0):(record?.bestStars??0))}</span></small>
      <span className="guard-stage-tactic">{t(key+'.tactic')}</span>
      <h3>{t(key+'.title')}</h3><p>{t(key+'.hint')}</p><button type="button" disabled={!unlocked} aria-label={`GD-0${i+1} ${t(key+'.title')} · ${!unlocked?"잠금":masterySelected&&masteryUnlocked?"마스터 작전":"일반 작전"} 선택`} onClick={()=>active?setPending(content.scenario.id):onSelect(content.scenario.id,false,masterySelected&&masteryUnlocked)}>{!unlocked?t('guard.locked'):masterySelected&&masteryUnlocked?"마스터 작전 선택":t('guard.start')} <span aria-hidden="true">↗</span></button>
      {record?.lastTacticalReport?.contentVersion===content.contentVersion?<details className="guard-last-report"><summary>{t('guard.review.last')}</summary><GuardTacticalDebrief report={record.lastTacticalReport}/></details>:null}</div>

@@ -66,6 +66,7 @@ import './defense-premium.css';
 import './guard-usability.css';
 import './guard-mobile.css';
 import './combat-hud-clarity.css';
+import './reignition-modes.css';
 import {guardTacticalCue} from './combat-ux-cues';
 import {useGuardBoardFit} from './use-guard-board-fit';
 import {GuardMobileInfo} from './GuardMobileInfo';
@@ -876,7 +877,7 @@ export function DefenseGame({
   const needsTransition=!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id);
   const guardCue=guard?guardTacticalCue({status:state.status,paused:state.paused,shield:state.shield,enemyCount:state.enemies.length,mastery:state.masteryRun===true}):null;
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-guard-mastery={state.masteryRun?"true":"false"} data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-reignition-mode={guard?"guard-v2":undefined} data-guard-mastery={state.masteryRun?"true":"false"} data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
       data-guard-mobile={guardMobile?'true':undefined}
       data-mobile-info={mobileInfoOpen?'true':undefined}

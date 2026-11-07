@@ -173,6 +173,7 @@ import './tactical-ui.css';
 import './survivors-boss-mobile.css';
 import './psi-experience-ui.css';
 import './combat-hud-clarity.css';
+import './reignition-modes.css';
 import './combat-action-feel.css';
 import {watchBossTacticalCue} from './combat-ux-cues';
 import {MissionStatusRail} from './MissionStatusRail';
@@ -3561,7 +3562,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   return (
     <div
       ref={containerRef}
-      className={`survivors-container${phase === 'playing' ? ' is-combat' : ''}${bossFightVisible ? ' is-boss-fight' : ''}`}
+      className={`survivors-container sw-season-v2${phase === 'playing' ? ' is-combat' : ''}${bossFightVisible ? ' is-boss-fight' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEndOrCancel}
@@ -3883,8 +3884,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* READY / START SCREEN WITH CHARACTER SELECT */}
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab} role="region" aria-label="시그널 워치 작전 준비">
+          <div className="survivors-modal-content survivors-ready-dialog" data-reignition-ui="watch-v2" data-preflight={preflightTab} role="region" aria-label="시그널 워치 작전 준비">
             <div className="survivors-preflight-top"><button type="button" onClick={openEncounterIntel}>{encounterIntelTitle}</button><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
+            <div className="sw-season-showcase" data-reignition-screen="watch" aria-label="시그널 워치 리이그니션 전술 화면"><div className="sw-season-showcase-copy"><span className="sw-season-eyebrow">PSI : ZERO DAY // RE:IGNITION 2026.11</span><h3>SIGNAL <em>WATCH</em></h3><p>위험을 읽고, 살아남아, 다음 전선으로.</p><span className="sw-season-label">SURVIVAL OPERATION // NEW FRONT</span></div><div className="sw-season-showcase-counter"><small>MISSION READINESS</small><strong>{String(PATROL_STAGES[selectedStage].stageNumber).padStart(2,"0")} <span>/ 50</span></strong><small>{selectedDifficulty==="mastery"?"MASTER PROTOCOL":"MISSION SELECTED"}</small></div></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
               <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
