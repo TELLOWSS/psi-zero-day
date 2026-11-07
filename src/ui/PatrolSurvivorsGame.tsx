@@ -92,6 +92,8 @@ import {completedPatrolStages,stageClearReward,type StageClearReward} from '../d
 import recreationText from '../../content/localization/survivors-recreation-ko.json';
 import {persistStoreWallet,readClearRewardClaims,readDifficultyClearRecords,type StoreWallet} from '../app/survivors-store-wallet';
 import {awardDifficultyClear,type DifficultyClearRecords} from '../domain/survivors-difficulty-records';
+import {omegaOperatorEligibility} from '../domain/omega-operator-unlock';
+import './omega-operator-preview.css';
 import {settlePatrolCredits} from '../domain/survivors-credit-settlement';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import resultText from '../../content/localization/survivors-result-ko.json';
@@ -3553,6 +3555,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
   const masteryFocus=selectedDifficulty==='mastery'?masteryStageFocus(PATROL_STAGES[selectedStage]):null;
   const masteryGoldCount=completedStages.length===50?STAGE_IDS.filter(id=>readDifficultyClearRecords()[id]?.mastery===3).length:0;
+  const omegaProgress=omegaOperatorEligibility(completedStages,readDifficultyClearRecords());
   const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
@@ -4035,6 +4038,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <details open className="survivors-char-select-section survivors-ready-details" hidden={preflightTab!=='agent'}>
               <summary>{combatText.agent_select}</summary>
               <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
+              <section className="omega-operator-preview" data-omega-earned={omegaProgress.earned} aria-label="마스터 전용 오메가 요원 해금 현황">
+                <div className="omega-operator-art"><img src="/assets/reignition/veteran-return.webp" alt="" loading="lazy" decoding="async"/><span>MASTER EXCLUSIVE / OMEGA</span></div>
+                <div className="omega-operator-copy">
+                  <small>PSI : ZERO DAY // RE:IGNITION</small>
+                  <h3>OMEGA OPERATOR <em>마스터 전용 요원</em></h3>
+                  <p>메인화면 캐릭터를 전투에서 직접 사용할 수 있도록 제작하는 특별 요원입니다. 캐릭터별 8방향 전투 애니메이션과 장비 착용 연출은 별도로 검증합니다.</p>
+                  <div className="omega-operator-milestones">
+                    <span>일반 작전 <strong>{omegaProgress.clears} / {omegaProgress.total}</strong></span>
+                    <progress aria-label="오메가 해금 일반 스테이지 진행" value={omegaProgress.clears} max={omegaProgress.total}/>
+                    <span>마스터 3성 <strong>{omegaProgress.mastered} / {omegaProgress.total}</strong></span>
+                    <progress aria-label="오메가 해금 마스터 3성 진행" value={omegaProgress.mastered} max={omegaProgress.total}/>
+                  </div>
+                  <p className="omega-operator-state" role="status">{omegaProgress.earned?'해금 업적 달성 · 전용 캐릭터 아트 검수 후 장착 제공':`잠금 · 일반 작전 ${omegaProgress.remainingClears}개 / 마스터 3성 ${omegaProgress.remainingMastered}개 남음`}</p>
+                  <small className="omega-operator-disclaimer">현재는 개발 안내 화면입니다. 플레이어 선택과 전투 캐릭터 변경은 아직 활성화되지 않았습니다.</small>
+                </div>
+              </section>
               <div className="survivors-char-cards">
                 {CANONICAL_CHAR_IDS.map(id => CHARACTER_PROFILES[id]).filter(Boolean).map(char => (
                   <button
