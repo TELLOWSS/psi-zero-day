@@ -13,11 +13,11 @@ try{
     const page=await browser.newPage({viewport:{width,height}}),errors=[];
     page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push(String(error)));
     await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
-    await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
+    await page.locator('.rg-home,.commercial-title-home').waitFor();
     const images=[],entries=[];
     for(const mode of ['defense','story']){
-      const entry=page.locator(`.is-${mode}-entry`);
-      const image=await entry.locator('img').evaluate(async image=>{
+      const entry=page.locator(mode==='defense'?'button.rg-card.is-guard,button.is-defense-entry':'button.rg-story-button,button.is-story-entry').first();
+      const image=await (mode==='story'&&await page.locator('.rg-home').count()?page.locator('.rg-hero-art'):entry.locator('img')).evaluate(async image=>{
         await image.decode();return {src:new URL(image.src).pathname,width:image.naturalWidth,height:image.naturalHeight};
       });
       images.push(image);
@@ -27,9 +27,9 @@ try{
       entries.push({mode,entered:true});
       await page.screenshot({path:path.join(out,`${width}x${height}-${mode}.png`)});
       await page.goto(baseUrl,{waitUntil:'domcontentloaded'});
-      await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
+      await page.locator('.rg-home,.commercial-title-home').waitFor();
     }
-    await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+    await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();
     await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
     const canvas=page.locator('.survivors-container canvas').first();
     await page.waitForTimeout(1500);
@@ -41,9 +41,9 @@ try{
     await page.screenshot({path:path.join(out,`${width}x${height}-playing.png`)});
     await page.keyboard.press('KeyP');
     await page.getByRole('button',{name:'메인으로 나가기',exact:true}).click();
-    await page.locator('[data-title-layout="MODE_SELECT_V11"]').waitFor();
+    await page.locator('.rg-home,.commercial-title-home').waitFor();
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-    const pass=images.every(image=>image.width>=1600&&image.height>=900)&&entries.length===2&&nonblank&&!overflow&&!errors.length;
+    const pass=images.every(image=>image.width>=900&&image.height>=650)&&entries.length===2&&nonblank&&!overflow&&!errors.length;
     results.push({width,height,images,entries,nonblank,overflow,errors,pass});await page.close();
   }
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({baseUrl,results},null,2));

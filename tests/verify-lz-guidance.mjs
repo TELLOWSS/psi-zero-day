@@ -10,7 +10,7 @@ try{for(const [width,height] of [[1440,900],[390,844],[844,390]]){
  // Vite may move the engine into a shared chunk; capture by its update contract.
  await page.route('**/assets/*.js',async route=>{const response=await route.fetch(),body=await response.text(),pattern=/update\([^)]*\)\{(?=if\(this\.state\.phase!==)/g;const matches=[...body.matchAll(pattern)].length;if(matches>1)throw Error('Ambiguous engine capture');await route.fulfill({response,body:matches?body.replace(pattern,m=>`${m}window.lzEngine=this;`):body});});
  await page.addInitScript(()=>{window.lzGroundLabels=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){if(String(text).includes('랑데부 구역'))window.lzGroundLabels.push(String(text));return original.call(this,text,...args);};});
- await page.goto(url);await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.lzEngine?.state.phase==='playing');
+ await page.goto(url);await page.locator('button.rg-card.is-watch,button.is-survivors-entry').first().click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.lzEngine?.state.phase==='playing');
  // Complete the Wave 2 supply pause through its UI before the extraction fixture.
  await page.evaluate(()=>{window.lzEngine.state.gameTime=111;window.lzEngine.state.player.hp=window.lzEngine.state.player.maxHp=10000;window.lzEngine.state.hazards=[];});
  await page.getByRole('button',{name:'정비 완료 · 순찰 재개 (Wave 3) ≫',exact:true}).click();
