@@ -536,3 +536,57 @@
  /* Compact phones use the persistent two-game launcher instead of a header duplicate. */
  .rg-home .rg-header-tools .rg-header-missions{display:none}
 }
+
+/* 2026.11 / Return-player intelligence: truthful mastery depth beyond normal 100% clear. */
+.rg-home .rg-card-info>.rg-card-mastery{
+ display:grid;gap:6px;width:min(275px,100%);min-height:0;
+ margin:3px 0 9px;color:#c6e4d9;
+}
+.rg-home .rg-card-mastery-label{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;
+ font-size:9px;letter-spacing:.12em;font-weight:850;
+}
+.rg-home .rg-card-mastery-label strong{
+ margin:0;font-size:11px;letter-spacing:.02em;color:#f3d8a8;
+}
+.rg-home .rg-card-mastery-track{
+ display:block;width:100%;height:4px;min-height:4px;
+ background:#798a8a54;border-radius:100px;overflow:hidden;
+}
+.rg-home .rg-card-mastery-track i{
+ display:block;height:100%;max-width:100%;border-radius:100px;
+ background:linear-gradient(90deg,#6ee9db,#e6c08a);
+}
+.rg-home .rg-card.is-watch .rg-card-mastery-track i{
+ background:linear-gradient(90deg,#f077b8,#e9b393);
+}
+.rg-home .rg-next-challenge{
+ grid-column:1/-1;display:flex;flex-wrap:wrap;
+ align-items:center;gap:7px 18px;margin-top:16px;
+ padding:15px 17px;border:1px solid #a4c4ae48;
+ background:linear-gradient(105deg,#172d2aab,#101d26ad);
+ border-radius:8px;min-width:0;
+}
+.rg-home .rg-next-kicker{
+ display:flex;align-items:center;gap:7px;
+ font-size:10px;letter-spacing:.13em;font-weight:850;color:#e5cfaa;
+}
+.rg-home .rg-next-kicker small{font-size:8px;color:#91b9a9;letter-spacing:.09em}
+.rg-home .rg-next-challenge>strong{
+ margin:0;font-size:clamp(12px,1.35vw,16px);
+ font-weight:850;color:#f2f1e9;letter-spacing:-.02em;
+}
+.rg-home .rg-next-description{
+ font-size:10px;color:#a6c5be;line-height:1.45;
+}
+.rg-home .rg-next-challenge[data-next-mode=watch]{
+ border-color:#c59ba34b;background:linear-gradient(105deg,#2d1d2baf,#161b28bc);
+}
+.rg-home .rg-next-challenge[data-next-mode=watch] .rg-next-kicker{color:#e6b6c6}
+@media(max-width:800px){
+ .rg-home .rg-next-challenge{align-items:flex-start;flex-direction:column;gap:6px;padding:12px}
+ .rg-home .rg-card-info>.rg-card-mastery{margin-bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .rg-home .rg-card-mastery-track i{transition:none}
+}
