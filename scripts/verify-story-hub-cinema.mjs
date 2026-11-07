@@ -58,8 +58,12 @@ try{
          overflow:document.documentElement.scrollWidth>innerWidth+2};
      });
      await page.waitForFunction(()=>{const image=document.querySelector('.rg-hero-art');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0;},null,{timeout:20000});
-     if(visuals.heroHeight<260||visuals.overflow||visuals.homeWidth<width*.97||visuals.heroWidth<width*.97)
-       throw new Error('Main title must fill the actual viewport '+design+': '+JSON.stringify(visuals));
+     // Cinematic/elite use full-bleed heroes. Operations/terminal intentionally
+     // retain a ~200px command rail, so their hero has a smaller inner width.
+     const fullBleed=design==='cinematic'||design==='elite';
+     if(visuals.heroHeight<260||visuals.overflow||visuals.homeWidth<width*.97||
+        visuals.heroWidth<width*(fullBleed?.97:.72))
+       throw new Error('Main title must fit its authored layout '+design+': '+JSON.stringify(visuals));
      if(design==='cinematic'&&(visuals.wordmarkHeight>visuals.wordmarkLineHeight*1.18))
        throw new Error('RE:IGNITION title wrapped into broken lines: '+JSON.stringify(visuals));
      if(design==='cinematic'){
