@@ -2172,10 +2172,15 @@ export class SurvivorsEngine {
           // Shout (including revival shockwave) cannot stun, damage or
           // prematurely resolve a scripted boss during its warning cycle.
           if(h.isStageBoss&&h.bossEncounterManaged&&p.kind==='shout_shockwave'){
-            if(!hits){hits=new Set();this.projectileHits.set(p,hits);}
-            hits.add(h.id);
-            this.emitProjectileFeedback(p,'impact',h.x,h.y,false,false,h.type,true,0,h);
-            p.pierce-=1;
+            // Shockwaves repeat contact on ordinary hazards, but the immune
+            // boss gets one clear blocked cue, not 90 repeated impacts.
+            let blockedBosses=this.projectileHits.get(p);
+            if(!blockedBosses){blockedBosses=new Set();this.projectileHits.set(p,blockedBosses);}
+            if(!blockedBosses.has(h.id)){
+              blockedBosses.add(h.id);
+              this.emitProjectileFeedback(p,'impact',h.x,h.y,false,false,h.type,true,0,h);
+              p.pierce-=1;
+            }
             continue;
           }
           // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.

@@ -34,6 +34,8 @@ describe('director ultimate versus authored boss contract',()=>{
   expect(boss.hp).toBe(1000);
   expect(boss.bossGameplay?.combatPhase).toBe('pattern');
   expect(boss.isStunned??0).toBe(0);
+  const blocked=engine.drainProjectileFeedback().filter(event=>event.projectileId.startsWith('proj_shout')&&event.phase==='impact'&&event.blocked);
+  expect(blocked).toHaveLength(1);
  });
  it('rejects the 9999-damage shockwave even inside a legitimate weak-point burst',()=>{
   const {state,engine,boss}=setup('standard');
