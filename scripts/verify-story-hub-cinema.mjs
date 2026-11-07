@@ -49,6 +49,14 @@ try{
      await page.waitForFunction(()=>{const image=document.querySelector('.rg-hero-art');return image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0;},null,{timeout:20000});
      if(visuals.heroHeight<260||visuals.overflow)
        throw new Error('Main title viewport invalid '+design+': '+JSON.stringify(visuals));
+     if(design==='cinematic'){
+       await page.waitForFunction(()=>{
+         const art=document.querySelector('.rg-veteran-character');
+         return art instanceof HTMLImageElement&&art.complete&&art.naturalWidth>=500;
+       },null,{timeout:20000});
+       const heroArt=await page.locator('.rg-veteran-character').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
+       if(heroArt.width<500||heroArt.height<600)throw new Error('Approved RE:IGNITION artwork failed to load: '+JSON.stringify(heroArt));
+     }
      await page.screenshot({path:path.join(out,width+'x'+height+'-title-'+design+'.png'),animations:'disabled',fullPage:true});
      tested.push({design,...visuals});
    }

@@ -196,3 +196,25 @@
 @media(max-width:600px){.rg-home[data-reignition-concept=cinematic] .rg-hero{min-height:680px;padding:18px 17px 90px}.rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-50px 0 0!important;border-radius:15px 15px 0 0}.rg-home .rg-card{min-height:205px}.rg-home .rg-card-info{padding:18px}.rg-home .rg-card-info b{bottom:14px;right:14px;width:44px;height:44px}.rg-home .rg-card-info>span{max-width:230px}.rg-crew-grid figure{padding:7px}.rg-crew-grid img{width:42px;height:56px}.rg-crew-grid strong{font-size:11px}}
 @media(orientation:landscape) and (max-height:540px){.rg-home[data-reignition-concept=cinematic] .rg-hero{min-height:370px!important;padding:20px 27px 75px!important}.rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:60%}.rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-38px 0 0!important}.rg-home[data-reignition-concept=cinematic] .rg-card{min-height:205px}.rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.rg-home .rg-card{transform:none!important}}
+
+/* User-approved RE:IGNITION hero: a separate artwork layer, never screenshot UI. */
+.rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+ position:absolute;z-index:0;left:clamp(-28px,2.5vw,60px);bottom:-3%;
+ height:109%;width:auto;max-width:60%;object-fit:contain;object-position:left bottom;
+ pointer-events:none;user-select:none;
+ filter:drop-shadow(20px 12px 35px #0c1128c9) saturate(1.05);
+ -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 64%,transparent 96%);
+ mask-image:linear-gradient(90deg,#000 0%,#000 64%,transparent 96%);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-content{z-index:2}
+@media(max-width:800px){
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  height:80%;max-width:none;left:-80px;bottom:17%;opacity:.84;
+  -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 35%,#000 92%),linear-gradient(90deg,#000 65%,transparent 95%);
+  mask-image:linear-gradient(0deg,transparent 0%,#000 35%,#000 92%),linear-gradient(90deg,#000 65%,transparent 95%);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+ }
+}
+@media(orientation:landscape) and (max-height:540px){
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{height:103%;left:-14px;bottom:-6%;max-width:49%;opacity:.88}
+}
