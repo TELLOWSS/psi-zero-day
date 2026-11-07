@@ -291,8 +291,8 @@ export function useDefensePersistence(
     }
   }, [persistRun, settleFinishedRun, state]);
 
-  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content) => {
-    let run = createDefenseRun(launchContent, supportId, newRunId(),{ultimateUnlocked:launchContent.ultimateEnabled&&documentRef.current.records.some(r=>r.scenarioId==='guard-gd-03-v1'&&r.clears>0)});
+  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content, masteryRun = false) => {
+    let run = createDefenseRun(launchContent, supportId, newRunId(),{ultimateUnlocked:launchContent.ultimateEnabled&&documentRef.current.records.some(r=>r.scenarioId==='guard-gd-03-v1'&&r.clears>0),masteryRun});
     if (portrait) run = applyDefenseCommand(run, launchContent, { type: 'SetPaused', paused: true });
     stateRef.current = run;
     previousRunRef.current = run;
