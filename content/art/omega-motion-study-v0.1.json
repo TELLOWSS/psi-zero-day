@@ -17,7 +17,16 @@
     "columns": 8,
     "cellWidth": 384,
     "cellHeight": 512,
-    "directions": ["E","SE","S","SW","W","NW","N","NE"],
+    "directions": [
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE"
+    ],
     "arrangement": "x = directionIndex × 384, y = gaitPhaseIndex × 512",
     "transparentRGBA": true
   },
@@ -30,8 +39,24 @@
     "stanceFootIK": "not_verified",
     "independentNEDirection": "fail_mirrored_reference",
     "equipmentOcclusion": "not_verified",
-    "mobileDevicePerformance": "not_run"
+    "mobileDevicePerformance": "not_run",
+    "mobileAtlasDimensions": "pass",
+    "mobileFPS": "not_run"
   },
   "gate": "node scripts/check-omega-operator-art.mjs --release (MUST still fail until genuinely authored atlases + metadata pass)",
-  "preview": "omega-motion-preview.html is offline and has manual direction/frame/speed/reduced-motion controls"
+  "preview": "omega-motion-preview.html is offline and has manual direction/frame/speed/reduced-motion controls",
+  "mobileAtlas": {
+    "name": "omega-walk-MOTION-STUDY-mobile-8x6.webp",
+    "sha256": "b61d0cfa6f6bccf1e344cb21836e4e285ed38e947d5f9ba4e76d1213c2a2d650",
+    "sizeBytes": 1405236,
+    "width": 1536,
+    "height": 1536,
+    "rows": 6,
+    "columns": 8,
+    "cellWidth": 192,
+    "cellHeight": 256,
+    "rgbaRamBytes": 9437184,
+    "ratioComparedToFullRes": "0.25",
+    "note": "Prototype preview asset only. Device FPS and visual quality NOT verified."
+  }
 }
