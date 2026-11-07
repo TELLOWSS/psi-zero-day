@@ -826,7 +826,7 @@ export class SurvivorsEngine {
     if (this.state.phase !== 'playing') this.accumulator = 0;
   }
 
-  requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('support',this.state.player.x,this.state.player.y);return accepted; }
   private terrainCleanupCooldown=0;
   private rewardTerrainCleanup() {
     if(this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
@@ -843,7 +843,7 @@ export class SurvivorsEngine {
     if(o.hp===0)this.rewardTerrainCleanup();
     this.emitAudio('control',o.x,o.y);return true;
   }
-  deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control_line',this.state.player.x,this.state.player.y);return accepted; }
   triggerPlayerDash():boolean {
     if (this.state.phase !== 'playing') return false;
     const player = this.state.player;
@@ -860,7 +860,7 @@ export class SurvivorsEngine {
     player.dashDuration = 0.22;
     player.dashCooldown = player.dashMaxCooldown ?? 3.2;
     player.invincibleTime = Math.max(player.invincibleTime, 0.28);
-    this.emitAudio('control', player.x, player.y);
+    this.emitAudio('dash', player.x, player.y);
     return true;
   }
   requestHandoff():boolean {

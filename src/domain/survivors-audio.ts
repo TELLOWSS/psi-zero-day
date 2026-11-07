@@ -1,4 +1,4 @@
-export type SurvivorsAudioEventType = 'shoot' | 'spray' | 'laser' | 'impact' | 'control' | 'pickup' | 'hit' | 'levelup' | 'boss_alarm' | 'shout' | 'win' | 'defeat';
+export type SurvivorsAudioEventType = 'shoot' | 'spray' | 'laser' | 'impact' | 'control' | 'dash' | 'support' | 'control_line' | 'pickup' | 'hit' | 'levelup' | 'boss_alarm' | 'shout' | 'win' | 'defeat';
 export interface SurvivorsAudioEvent { id: number; type: SurvivorsAudioEventType; x?: number | undefined; y?: number | undefined; outcome?: 'critical' | 'boss'; actorKind?: string; collected?: boolean; }
 export type SurvivorsAudioBus = 'Music' | 'SFX' | 'Voice' | 'Ambience';
 export interface SurvivorsAudioAsset {
