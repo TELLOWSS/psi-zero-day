@@ -372,9 +372,9 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero-lead{font-size:12px;line-height:1.62;margin-bottom:13px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-brief{margin-bottom:14px;gap:12px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-brief strong{font-size:18px}
- .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button{
-  width:100%;min-height:48px;padding:9px 11px!important;font-size:11px;white-space:nowrap;
+  width:100%;min-width:0;max-width:100%;min-height:48px;padding:9px 11px!important;font-size:11px;white-space:nowrap;overflow:hidden;
  }
  .rg-home[data-reignition-concept=cinematic] .rg-hero-caption{margin-top:12px;font-size:8px}
  .rg-home[data-reignition-concept=cinematic] .rg-missions {
