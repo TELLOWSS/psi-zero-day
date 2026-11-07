@@ -194,7 +194,10 @@
 }
 .sw-season-v2 .survivors-ready-dialog[data-reignition-ui="watch-v2"]{
  border:1px solid #ee73c48c;border-radius:10px 21px 10px 21px;
- background:linear-gradient(146deg,#250d38,#140f29 62%,#1d0b31);
+ /* Solid fallback stays readable if gradients/GPU layers are unavailable.
+    It also preserves the established modal-surface browser contract. */
+ background-color:#161a1d;
+ background-image:linear-gradient(146deg,#250d38,#140f29 62%,#1d0b31);
  box-shadow:0 28px 100px #000c,0 0 0 1px #fe8dce16,inset 0 1px #fff3;
 }
 .sw-season-v2 .survivors-ready-dialog .survivors-preflight-top{
