@@ -17,6 +17,8 @@
   box-shadow:none;
 }
 .rg-home[data-reignition-concept=cinematic] .rg-brand {gap:14px}
+.rg-home[data-reignition-concept=cinematic] .rg-brand>div{min-width:0}
+.rg-home[data-reignition-concept=cinematic] .rg-brand :is(strong,small){overflow:hidden;text-overflow:ellipsis}
 .rg-home[data-reignition-concept=cinematic] .rg-brand img {
   width:36px;height:43px;filter:drop-shadow(0 0 11px #b9cabc2e);
 }
@@ -86,14 +88,15 @@
   linear-gradient(0deg,#060d17f0,transparent 40%,#07111a6d);
 }
 .rg-home[data-reignition-concept=cinematic] .rg-veteran-character {
-  position:absolute;z-index:0;inset:auto -2.5% -5% auto;
-  height:112%;width:62%;max-width:none;
-  object-fit:contain;object-position:right bottom;
+  position:absolute;z-index:0;inset:auto 9% -3% auto;
+  height:108%;width:min(36vw,540px);max-width:none;
+  /* Crop the right-hand mock-up labels baked into the approved source artwork. */
+  object-fit:cover;object-position:left center;
   transform:none;opacity:.94;pointer-events:none;
   filter:contrast(1.07) saturate(.86) brightness(.9) drop-shadow(-24px 15px 55px #01060cb8);
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 28%,#000 95%),
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 69%,transparent 91%),
                      linear-gradient(180deg,#000 0%,#000 78%,transparent 99%);
-  mask-image:linear-gradient(90deg,transparent 0%,#000 28%,#000 95%),
+  mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 69%,transparent 91%),
              linear-gradient(180deg,#000 0%,#000 78%,transparent 99%);
   -webkit-mask-composite:source-in;mask-composite:intersect;
 }
@@ -121,6 +124,7 @@
   position:relative;z-index:2;text-shadow:none;
 }
 .rg-home[data-reignition-concept=cinematic] .rg-hero-eyebrow {
+  display:block;
   color:#bed8ce;font-size:10px;font-weight:850;letter-spacing:.29em;
 }
 .rg-home[data-reignition-concept=cinematic] .rg-hero-update {
@@ -330,7 +334,7 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero-micro {left:6%;right:5%}
  .rg-home[data-reignition-concept=cinematic] .rg-hero:after{left:6%;right:5%}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:62%}
- .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{right:-7%;width:67%}
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{right:3%;width:42%;height:108%}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(42px,6.4vw,80px)}
 }
 @media(max-width:800px) {
@@ -343,13 +347,13 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero:after{bottom:58px;left:23px;right:23px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-micro {left:22px;right:22px;top:24px;font-size:8px}
  .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
-  top:-1%;right:-14%;left:auto;bottom:auto;
-  height:76%;width:115%;max-width:none;
-  object-fit:contain;object-position:right top;opacity:.86;
+  top:-1%;right:0;left:auto;bottom:auto;
+  height:76%;width:82%;max-width:none;
+  object-fit:cover;object-position:left top;opacity:.86;
   -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 39%,#000 90%),
-                     linear-gradient(90deg,transparent 0%,#000 45%);
+                     linear-gradient(90deg,transparent 0%,#000 17%,#000 74%,transparent 96%);
   mask-image:linear-gradient(0deg,transparent 0%,#000 39%,#000 90%),
-             linear-gradient(90deg,transparent 0%,#000 45%);
+             linear-gradient(90deg,transparent 0%,#000 17%,#000 74%,transparent 96%);
   -webkit-mask-composite:source-in;mask-composite:intersect;
  }
  .rg-home[data-reignition-concept=cinematic] .rg-hero-shade {
@@ -423,7 +427,7 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero-micro{top:15px;left:17px;right:17px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-micro span:last-child{display:none}
  .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
-  top:-2%;right:-29%;height:68%;width:137%;
+  top:-2%;right:-4%;height:69%;width:86%;
  }
  .rg-home[data-reignition-concept=cinematic] .rg-hero-eyebrow{font-size:9px;letter-spacing:.2em}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-update{margin:13px 0 8px;font-size:8px}
@@ -482,7 +486,7 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero-brief{margin-bottom:8px}
  .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button{min-height:38px;padding:6px 10px!important}
  .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
-  top:0;right:0;height:100%;width:50%;max-width:none;opacity:.8;
+  top:0;right:7%;height:100%;width:42%;max-width:none;opacity:.8;
  }
  .rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-18px 0 0!important}
  .rg-home .rg-mobile-dock{display:none}
