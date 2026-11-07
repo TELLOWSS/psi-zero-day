@@ -15,7 +15,16 @@ const c=await context(),p=await c.newPage();let fail=true;await p.route('**/new-
 {
 const c=await context(),p=await c.newPage();await p.addInitScript(receipts=>localStorage.setItem('psi.story.evidence.v1',JSON.stringify(receipts)),receipts);await p.goto(base);await enter(p);const seen=new Set();let watch=false,guard=false;
 for(let step=0;step<350;step++){
-const event=await p.locator('.episode-immersive-scene').getAttribute('data-event').catch(()=>null);if(await p.locator('.phase-complete').count())break;
+// The terminal frame unmounts the immersive scene; check completion FIRST.
+// Previous ordering retried a missing locator for 30 seconds per iteration
+// after a successful full playthrough, exhausting the workflow timeout.
+if(await p.locator('.phase-complete').count())break;
+const scene=p.locator('.episode-immersive-scene');
+if(!await scene.count()){
+ const current=await p.evaluate(()=>({phaseComplete:!!document.querySelector('.phase-complete'),screen:document.querySelector('main')?.getAttribute('class'),title:document.title}));
+ throw new Error('Story recovery lost its scene before completion at step '+step+': '+JSON.stringify(current));
+}
+const event=await scene.getAttribute('data-event',{timeout:2500});
 for(const el of await p.locator('[data-evidence-mode]').all())seen.add((await el.getAttribute('data-evidence-mode'))+':'+await el.getAttribute('data-evidence-outcome'));
 if((event==='e01_04_junho_signal'&&!watch)||(event==='e01_05_command'&&!guard)){
 const isWatch=!watch&&event==='e01_04_junho_signal',before=JSON.parse(await p.evaluate(key=>localStorage.getItem(key),key)).payload;
