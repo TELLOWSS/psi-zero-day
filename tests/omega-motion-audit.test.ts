@@ -42,6 +42,7 @@ describe('OMEGA pixel audit prevents unauthored and mirrored artwork releases',(
    expect(r.data.evidence.mirroredNWNE.suspectedMirror).toBe(true);
    expect(r.data.evidence.mirroredNWNE.maximumIoU).toBe(1);
    expect(r.data.interpretation.releaseBlockers).toContain('NE_IS_MIRRORED_NW');
+   expect(r.data.interpretation.releaseBlockers).toContain('MISSING_ATLAS_SHA256');
    expect(run(c.atlas,c.manifest,true).status).toBe(1);
   }finally{c.cleanup();}
  });
