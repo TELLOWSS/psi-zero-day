@@ -1,0 +1,538 @@
+/* RE:IGNITION / premium launcher
+ * Single editorial system for the shipped cinematic home. Other selectable
+ * design studies remain intact. No game data or save state is modified. */
+.rg-home[data-reignition-concept=cinematic] {
+  --rg-text:#f6f4ed;
+  --rg-muted:#aab9bf;
+  --rg-accent:#f2d3a3;
+  background:#070e14;
+  color:var(--rg-text);
+  /* Decorative hero layers must never enlarge the mobile document width. */
+  overflow-x:clip;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-header {
+  min-height:76px;
+  padding:12px clamp(22px,4.1vw,76px);
+  gap:20px;
+  background:linear-gradient(120deg,#081119f7,#09121bf5 60%,#101822f1);
+  border-bottom:1px solid #b8d0d322;
+  box-shadow:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-brand {gap:14px}
+.rg-home[data-reignition-concept=cinematic] .rg-brand>div{min-width:0}
+.rg-home[data-reignition-concept=cinematic] .rg-brand :is(strong,small){overflow:hidden;text-overflow:ellipsis}
+.rg-home[data-reignition-concept=cinematic] .rg-brand img {
+  width:36px;height:43px;filter:drop-shadow(0 0 11px #b9cabc2e);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-brand strong {
+  font-size:clamp(15px,1.28vw,20px);
+  font-weight:840;letter-spacing:.08em;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-brand small {
+  color:#b3c3bf;font-size:9px;letter-spacing:.23em;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-header-tools {align-items:center;gap:8px}
+.rg-home[data-reignition-concept=cinematic] .rg-header-tools button,
+.rg-home[data-reignition-concept=cinematic] .rg-appearance>summary {
+  background:transparent;border:1px solid #81979d42;
+  color:#d8e2dd;border-radius:7px;
+  min-height:42px;padding:9px 14px;
+  font-size:11px;font-weight:750;
+  transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-header-tools button:hover,
+.rg-home[data-reignition-concept=cinematic] .rg-appearance>summary:hover {
+  border-color:#dec49b90;background:#a3d8d20d;color:#fff;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-header-tools .rg-header-missions {
+  border-color:#e1cc9e77;color:#f1d7ae;background:#a7a77a0d;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-appearance .rg-theme-picker {
+  background:#0c1720;border-color:#a6b7b866;
+  box-shadow:0 22px 48px #01080cdc;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-appearance .rg-theme-picker button[aria-pressed=true] {
+  background:#edd6b3;color:#15232a;box-shadow:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-workspace {
+  width:100%;max-width:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero {
+  position:relative;
+  min-height:clamp(580px,73vh,760px);
+  padding:72px clamp(30px,8vw,150px) 156px;
+  display:flex;align-items:center;justify-content:flex-start;
+  background:
+   radial-gradient(ellipse at 78% 38%,#4d666945,transparent 50%),
+   radial-gradient(ellipse at 15% 92%,#936d3b19,transparent 60%),
+   #071018;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero:before {
+  content:"";position:absolute;z-index:0;inset:0;pointer-events:none;
+  background-image:linear-gradient(#a8d5c408 1px,transparent 1px),
+                   linear-gradient(90deg,#a8d5c408 1px,transparent 1px);
+  background-size:88px 88px;opacity:.46;
+  -webkit-mask-image:linear-gradient(90deg,#0000,#000a 65%,#0000);
+  mask-image:linear-gradient(90deg,#0000,#000a 65%,#0000);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero:after {
+  content:"";position:absolute;left:clamp(30px,8vw,150px);right:clamp(30px,8vw,150px);
+  bottom:121px;height:1px;background:linear-gradient(90deg,#e7c99672,#e7c99616,transparent);pointer-events:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-picture {z-index:-3}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-art {
+  object-fit:cover;object-position:65% 34%;transform:scale(1.15);
+  filter:blur(55px) saturate(.68) brightness(.25);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-shade {
+  z-index:-1;
+  background:linear-gradient(90deg,#07111af0 0%,#07121adb 37%,#07111a68 64%,#07121aa0 100%),
+  linear-gradient(0deg,#060d17f0,transparent 40%,#07111a6d);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-veteran-character {
+  position:absolute;z-index:0;inset:auto 9% -3% auto;
+  height:108%;width:min(36vw,540px);max-width:none;
+  /* Crop the right-hand mock-up labels baked into the approved source artwork. */
+  object-fit:cover;object-position:left center;
+  transform:none;opacity:.94;pointer-events:none;
+  filter:contrast(1.07) saturate(.86) brightness(.9) drop-shadow(-24px 15px 55px #01060cb8);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 69%,transparent 91%),
+                     linear-gradient(180deg,#000 0%,#000 78%,transparent 99%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 69%,transparent 91%),
+             linear-gradient(180deg,#000 0%,#000 78%,transparent 99%);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings {
+  position:absolute;z-index:0;top:5%;right:9%;
+  width:min(40vw,560px);aspect-ratio:1;
+  border:1px solid #d5dfcc2e;box-shadow:none;
+  border-radius:50%;opacity:.67;transform:none;pointer-events:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings:before {
+  inset:13%;border:1px dashed #dce2d128;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings:after {
+  content:"";position:absolute;inset:36%;border:1px solid #e3d1b52e;border-radius:50%;
+}
+.rg-hero-micro {
+  display:none;position:absolute;z-index:3;left:clamp(30px,8vw,150px);
+  right:clamp(30px,8vw,150px);top:31px;
+  align-items:center;justify-content:space-between;gap:12px;
+  color:#b2c6c2;font-size:10px;letter-spacing:.22em;font-weight:700;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-micro {display:flex}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-content {
+  margin:0;width:min(58%,745px);max-width:745px;
+  position:relative;z-index:2;text-shadow:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-eyebrow {
+  display:block;
+  color:#bed8ce;font-size:10px;font-weight:850;letter-spacing:.29em;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-update {
+  display:inline-flex;margin:22px 0 11px;padding:0;
+  border:0;border-radius:0;background:none;
+  color:#d6c5a8;font-size:10px;letter-spacing:.16em;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-led {
+  background:#8ce4c7;box-shadow:0 0 0 3px #80c9b215,0 0 12px #66d7b67a;
+  width:6px;height:6px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-name {
+  display:block;max-width:none;margin:8px 0 20px;
+  color:#f6f3e9;text-shadow:none;
+  font-size:clamp(46px,6.2vw,98px);font-weight:900;
+  letter-spacing:-.045em;line-height:.99;
+  white-space:nowrap;overflow:visible;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero h1 {
+  max-width:660px;margin:0 0 10px;
+  color:#f0ebdd;font-size:clamp(22px,2.5vw,35px);
+  font-weight:760;letter-spacing:-.065em;line-height:1.33;
+  word-break:keep-all;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-lead {
+  max-width:515px;margin:0 0 20px;
+  color:#a9bdbd;font-size:clamp(12px,1.02vw,15px);
+  line-height:1.8;word-break:keep-all;
+}
+.rg-hero-brief {
+  display:none;align-items:center;gap:18px;flex-wrap:wrap;
+  margin:0 0 25px;color:#f4f2ea;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-brief {display:flex}
+.rg-hero-brief>span:not(.rg-hero-record-label){display:flex;gap:10px;align-items:baseline}
+.rg-hero-brief small{font-size:9px;letter-spacing:.16em;color:#a7c5ba;font-weight:800}
+.rg-hero-brief strong{font-size:21px;font-weight:850;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+.rg-hero-brief strong em{font-size:11px;font-style:normal;font-weight:600;letter-spacing:.06em;color:#8da6a9;margin-left:4px}
+.rg-hero-brief>i{width:1px;height:21px;background:#b9ccc046}
+.rg-hero-brief .rg-hero-record-label{
+  font-size:8px;letter-spacing:.1em;color:#b9c9c3;
+  border-left:1px solid #abbab149;padding-left:17px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-buttons {align-items:center;gap:16px}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button {
+  min-height:52px;font-size:13px;font-weight:800;
+  border-radius:6px;transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-action {
+  background:linear-gradient(135deg,#f5ddbb,#cbb08a);
+  color:#1b282b;border:1px solid #fff0d1;
+  padding:12px 26px;box-shadow:0 15px 42px #02070b45;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-action span{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:23px;height:23px;border-radius:50%;margin-right:7px;
+  border:1px solid #1732346b;font-size:13px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-alt {
+  color:#dbe5df;background:#8bada70b;
+  border:1px solid #a8c6b552;padding:12px 18px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button:hover{
+  transform:translateY(-2px);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-alt:hover{background:#b2dcc51b;border-color:#d2e2cb8a}
+.rg-hero-caption {display:none;align-items:center;gap:10px;margin-top:17px;color:#a0b9b2;font-size:9px;letter-spacing:.17em}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-caption{display:flex}
+.rg-hero-caption>span:first-child{font-size:14px;color:#e0bd8c}
+.rg-home[data-reignition-concept=cinematic] .rg-hero-index{display:none}
+.rg-home[data-reignition-concept=cinematic] .rg-missions {
+  position:relative;z-index:5;max-width:1380px;
+  margin:-105px auto 0!important;
+  padding:28px clamp(20px,3.2vw,44px) 30px!important;
+  border:1px solid #718c9152;border-radius:16px 16px 0 0;
+  box-shadow:0 -26px 75px #03080e89,0 18px 55px #03060b69;
+  background:linear-gradient(140deg,#0c1921f6,#09131af7 52%,#0c161df8);
+  backdrop-filter:blur(22px);
+  scroll-margin-top:20px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-missions-heading{margin-bottom:20px;align-items:end}
+.rg-home[data-reignition-concept=cinematic] .rg-missions-heading small {
+  color:#a6c9ba;font-weight:850;letter-spacing:.22em;font-size:10px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-missions-heading h2 {
+  color:#f1eee5;letter-spacing:-.06em;
+  font-size:clamp(22px,2.4vw,32px);line-height:1.25;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-missions-heading>span{
+  color:#adc5bb;font-size:9px;border:1px solid #70898655;
+  padding:8px 12px;border-radius:4px;letter-spacing:.15em;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-mission-grid {gap:16px}
+.rg-home[data-reignition-concept=cinematic] .rg-card {
+  min-height:278px;border:1px solid #7b9b9b65;border-radius:12px;
+  background:#0d1e27;box-shadow:inset 0 0 0 1px #ffffff07,0 12px 28px #0000004a;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card.is-guard {border-color:#8daea57c}
+.rg-home[data-reignition-concept=cinematic] .rg-card.is-watch {border-color:#bd999676}
+.rg-home[data-reignition-concept=cinematic] .rg-card>img {
+  object-fit:cover;object-position:center 38%;
+  filter:brightness(.73) saturate(.8) contrast(1.09);
+  transform:scale(1);transition:transform .45s ease,filter .3s ease;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card-screen{
+  background:linear-gradient(90deg,#07151cf8 0%,#0c1821e9 38%,#0e1a22a0 70%,#0c1724a1 100%),
+             linear-gradient(0deg,#07121be6,transparent 65%);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card.is-watch .rg-card-screen{
+  background:linear-gradient(90deg,#17161af8 0%,#1b1a24e0 44%,#2e202797 78%,#2f202682),
+             linear-gradient(0deg,#0b1219dc,transparent 70%);
+}
+.rg-card-serial {display:none;position:absolute;right:22px;top:16px;font-size:54px;font-weight:900;line-height:1;color:#ffffff21;letter-spacing:-.07em}
+.rg-home[data-reignition-concept=cinematic] .rg-card-serial{display:block}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info{
+  position:relative;z-index:1;max-width:calc(100% - 42px);
+  width:100%;padding:22px 26px 29px;gap:6px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info small{font-size:9px;color:#a4c6bf;letter-spacing:.22em}
+.rg-home[data-reignition-concept=cinematic] .rg-card.is-watch .rg-card-info small{color:#deb5ad}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info strong{
+  margin:7px 0 0;color:#f7f5ec;font-size:clamp(25px,2.55vw,35px);
+  font-weight:840;letter-spacing:-.055em;text-shadow:none;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info em{
+  font-size:10px;font-weight:750;letter-spacing:.2em;color:#c6d5d0;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info>span:first-of-type {
+  font-size:11px;line-height:1.65;color:#b8c8c9;margin-top:8px;
+  min-height:auto;max-width:320px;
+}
+.rg-home .rg-card-info>.rg-card-progress{
+  display:block;position:relative;width:min(275px,100%);height:3px;
+  min-height:3px;margin:13px 0 3px;
+  background:#73878a50;border-radius:3px;overflow:hidden;
+}
+.rg-home .rg-card-info>.rg-card-progress>i{
+  display:block;height:100%;max-width:100%;
+  background:linear-gradient(90deg,#89ceb6,#f2d19d);border-radius:3px;
+}
+.rg-home .rg-card.is-watch .rg-card-info>.rg-card-progress>i{background:linear-gradient(90deg,#ca9a98,#f3d5ac)}
+.rg-home .rg-card-info>.rg-card-count{
+  min-height:0;font-size:9px;font-weight:750;letter-spacing:.08em;
+  color:#d4d9d1;margin-bottom:3px;max-width:min(275px,100%);
+  display:flex;justify-content:space-between;gap:8px;
+}
+.rg-home .rg-card-info>.rg-card-count em{font-size:8px;letter-spacing:.08em;color:#a6c4b8}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info b {
+  position:absolute;right:-3px;bottom:18px;
+  display:grid;place-items:center;
+  width:47px;height:47px;border-radius:50%;
+  border:1px solid #c9dcc278;background:#233d3a84!important;
+  box-shadow:none;backdrop-filter:blur(10px);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card.is-watch .rg-card-info b {
+  border-color:#d2b9b381;background:#52383a70!important;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card-info b span{color:#f1f3e9;font-size:22px}
+.rg-home[data-reignition-concept=cinematic] .rg-card:is(:hover,:focus-visible) {
+  transform:translateY(-4px);border-color:#e3dfc89c;
+  box-shadow:0 20px 38px #01070ac4,0 0 0 1px #d1dcaa26;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-card:is(:hover,:focus-visible)>img {
+  transform:scale(1.045);filter:brightness(.85) saturate(.86) contrast(1.06);
+}
+.rg-home[data-reignition-concept=cinematic] .rg-command-status {
+  display:grid;grid-template-columns:180px minmax(0,1fr);
+  align-items:center;column-gap:22px;margin-top:19px;
+  padding:20px 22px;border-radius:10px;
+  background:#0a141b;border:1px solid #829d9952;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-command-heading{display:grid;gap:8px;grid-template-columns:8px 1fr}
+.rg-home[data-reignition-concept=cinematic] .rg-command-heading strong{font-size:11px;letter-spacing:.16em}
+.rg-home[data-reignition-concept=cinematic] .rg-command-heading small{grid-column:2;margin:0;font-size:9px}
+.rg-home[data-reignition-concept=cinematic] .rg-stats {margin:0;gap:22px}
+.rg-home[data-reignition-concept=cinematic] .rg-stats>div>span{font-size:10px;color:#a8bebc}
+.rg-home[data-reignition-concept=cinematic] .rg-stats strong{color:#f3d4ae;font-size:24px}
+.rg-home[data-reignition-concept=cinematic] .rg-stats progress{height:4px;accent-color:#c1d2b5}
+.rg-home[data-reignition-concept=cinematic] .rg-stats>div>small{font-size:10px;color:#a7b9b8}
+.rg-home[data-reignition-concept=cinematic] .rg-command-status>p{
+  grid-column:1/-1;margin:15px 0 0;padding-top:13px;
+  border-top:1px solid #89a29d25;font-size:10px;color:#93aaa8;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-shortcuts{
+  max-width:1380px;margin:0 auto 20px;padding:14px clamp(18px,3vw,44px) 0;
+  gap:10px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-shortcuts :is(a,button){
+  background:#101c23;color:#c7d3d0;
+  border:1px solid #75908a39;border-radius:8px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-shortcuts :is(a,button):hover{border-color:#b4bfa489;background:#15252b}
+.rg-home[data-reignition-concept=cinematic] .rg-shortcuts :is(a,button)>span{color:#b9caaf}
+.rg-home[data-reignition-concept=cinematic] .rg-release {
+  max-width:1300px;margin:20px auto 24px;background:#0b171d;
+  border-color:#708c8546;border-radius:9px;
+}
+.rg-home[data-reignition-concept=cinematic] .rg-release-toggle{color:#d6c8ae}
+.rg-home[data-reignition-concept=cinematic] .rg-release-items p{background:#14252b}
+.rg-home[data-reignition-concept=cinematic] .rg-footer{border-color:#b2c5b41e;color:#748a8c}
+.rg-home .rg-settings-panel .rg-help-from-settings{
+  min-height:44px;padding:10px 14px;border:1px solid #9eada77b;
+  background:#1a3139;color:#f1ead7;border-radius:7px;
+  font-weight:750;font-size:13px;text-align:left;
+}
+.rg-mobile-dock {display:none}
+
+/* Medium displays: preserve an approachable reading column and full image. */
+@media(max-width:1100px) {
+ .rg-home[data-reignition-concept=cinematic] .rg-hero {padding-left:6%;padding-right:5%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-micro {left:6%;right:5%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero:after{left:6%;right:5%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{width:62%}
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{right:3%;width:42%;height:108%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(42px,6.4vw,80px)}
+}
+@media(max-width:800px) {
+ .rg-home[data-reignition-concept=cinematic] {padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero {
+  min-height:clamp(580px,82svh,710px)!important;
+  padding:56px 23px 84px!important;
+  align-items:flex-end!important;justify-content:flex-start;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero:after{bottom:58px;left:23px;right:23px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-micro {left:22px;right:22px;top:24px;font-size:8px}
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  top:-1%;right:0;left:auto;bottom:auto;
+  height:76%;width:82%;max-width:none;
+  object-fit:cover;object-position:left top;opacity:.86;
+  -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 39%,#000 90%),
+                     linear-gradient(90deg,transparent 0%,#000 17%,#000 74%,transparent 96%);
+  mask-image:linear-gradient(0deg,transparent 0%,#000 39%,#000 90%),
+             linear-gradient(90deg,transparent 0%,#000 17%,#000 74%,transparent 96%);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-shade {
+  background:linear-gradient(0deg,#07111afc 0%,#09161af9 22%,#091721c9 47%,#08121b44 78%,#08121b7d);
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-cinematic-rings{
+  width:80vw;top:11%;right:-16%;opacity:.35;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{
+  width:100%;max-width:630px;margin:0;z-index:2;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{
+  font-size:clamp(43px,8.4vw,72px)!important;margin:7px 0 13px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero h1{font-size:clamp(21px,3.4vw,31px)!important;line-height:1.3}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-lead{font-size:12px;line-height:1.62;margin-bottom:13px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief{margin-bottom:14px;gap:12px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief strong{font-size:18px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button{
+  width:100%;min-width:0;max-width:100%;min-height:48px;padding:9px 11px!important;font-size:11px;white-space:nowrap;overflow:hidden;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-caption{margin-top:12px;font-size:8px}
+ .rg-home[data-reignition-concept=cinematic] .rg-missions {
+  margin:-36px 11px 0!important;padding:20px 17px 22px!important;
+  border-radius:13px 13px 0 0;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-mission-grid{grid-template-columns:1fr;gap:11px}
+ .rg-home[data-reignition-concept=cinematic] .rg-card{min-height:224px}
+ .rg-home[data-reignition-concept=cinematic] .rg-command-status{grid-template-columns:1fr;gap:14px}
+ .rg-home[data-reignition-concept=cinematic] .rg-stats{margin:0}
+ .rg-home[data-reignition-concept=cinematic] .rg-shortcuts{grid-template-columns:1fr 1fr;padding:12px 12px 0}
+ .rg-home .rg-mobile-dock{
+  position:fixed;z-index:150;left:0;right:0;bottom:0;
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;
+  padding:9px max(12px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-right,0px));
+  background:linear-gradient(0deg,#08121af7,#0a161eea);
+  border-top:1px solid #a0b4a15d;
+  box-shadow:0 -12px 32px #03090ab8;backdrop-filter:blur(18px);
+ }
+ .rg-mobile-dock button{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+  min-height:52px;padding:6px 35px 6px 14px;
+  border:1px solid #a4c2ad65;border-radius:7px;background:#1b3130d9;color:#f4f2e9;
+  text-align:left;font:inherit;cursor:pointer;
+ }
+ .rg-mobile-dock button:nth-child(2){border-color:#cdaca365;background:#342a30df}
+ .rg-mobile-dock button small{color:#b6ccc4;font-size:8px;letter-spacing:.1em}
+ .rg-mobile-dock button strong{font-size:13px;font-weight:850;letter-spacing:-.04em}
+ .rg-mobile-dock button span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:20px;color:#e4d7bb}
+ .rg-mobile-dock button:disabled{opacity:.42;cursor:not-allowed}
+ .rg-mobile-dock button:focus-visible{outline:2px solid #e4c48b;outline-offset:1px}
+}
+@media(max-width:670px) {
+ .rg-home[data-reignition-concept=cinematic] .rg-header {
+  min-height:65px;gap:6px;padding:8px 10px;
+ }
+ /* Icon-only compact toolbar: never paint clipped text over adjacent buttons. */
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools .rg-header-missions,
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button:nth-child(2){display:none}
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button{
+  display:flex;align-items:center;justify-content:center;
+  width:42px;min-width:42px;height:42px;min-height:42px;
+  padding:7px 4px;font-size:0!important;white-space:nowrap;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-header-tools button:last-child span{
+  display:inline-block;font-size:19px;line-height:1;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary{
+  display:flex;align-items:center;justify-content:center;
+  width:43px;height:42px;min-width:43px;min-height:42px;
+  padding:7px 3px;font-size:0!important;overflow:hidden;white-space:nowrap;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary:before{
+  content:'A–D';font-size:11px;line-height:1;letter-spacing:-.03em;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary span{
+  font-size:12px;line-height:1;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-brand{gap:6px}
+ .rg-home[data-reignition-concept=cinematic] .rg-brand img{width:28px;height:33px}
+ .rg-home[data-reignition-concept=cinematic] .rg-brand strong{font-size:12px;letter-spacing:.01em}
+ .rg-home[data-reignition-concept=cinematic] .rg-brand small{font-size:7px;letter-spacing:.02em}
+ .rg-home .rg-header-tools button {width:39px;min-width:39px;height:42px;padding:7px 2px;font-size:0}
+ .rg-home .rg-header-tools .rg-header-missions:before {content:"▦";font-size:18px}
+ /* The help entry lives in Settings on phones, freeing a full 44px touch target. */
+ .rg-home .rg-header-tools button:nth-child(2){display:none}
+ .rg-home .rg-header-tools button:nth-child(2):before {content:"?";font-size:18px}
+ .rg-home .rg-header-tools button:last-child span {font-size:17px}
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance>summary{width:40px;min-height:42px;padding:7px 3px}
+ .rg-home[data-reignition-concept=cinematic] .rg-appearance .rg-theme-picker{position:fixed;top:62px;left:auto;right:10px;width:min(330px,calc(100vw - 20px))}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero{
+  min-height:620px!important;padding:46px 17px 67px!important;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero:after{left:17px;right:17px;bottom:43px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-micro{top:15px;left:17px;right:17px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-micro span:last-child{display:none}
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  top:-2%;right:-4%;height:69%;width:86%;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-eyebrow{font-size:9px;letter-spacing:.2em}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-update{margin:13px 0 8px;font-size:8px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{
+  font-size:clamp(36px,10.1vw,49px)!important;letter-spacing:-.055em;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero h1{font-size:22px!important;margin:0 0 7px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-lead{
+  font-size:11px;margin-bottom:11px;line-height:1.55;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief{
+  flex-wrap:nowrap;gap:12px;margin-bottom:12px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief .rg-hero-record-label{display:none}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief small{font-size:8px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief strong{font-size:17px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button{
+  min-height:46px;font-size:10px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-missions{
+  margin:-25px 0 0!important;padding:20px 12px 18px!important;border-radius:13px 13px 0 0;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-missions-heading h2{font-size:23px}
+ .rg-home[data-reignition-concept=cinematic] .rg-card{
+  min-height:220px;border-radius:10px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-card-info{
+  max-width:calc(100% - 35px);padding:19px 15px 20px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-card-info strong{font-size:26px}
+ .rg-home[data-reignition-concept=cinematic] .rg-card-info b{
+  right:-18px;bottom:15px;width:42px;height:42px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-card-serial{font-size:44px;right:15px}
+ .rg-home[data-reignition-concept=cinematic] .rg-command-status{padding:16px 14px}
+ .rg-home[data-reignition-concept=cinematic] .rg-stats{grid-template-columns:1fr;gap:14px}
+ .rg-home[data-reignition-concept=cinematic] .rg-release{margin:12px 13px 20px}
+}
+@media(orientation:landscape) and (max-height:540px) {
+ .rg-home[data-reignition-concept=cinematic] {padding-bottom:0}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero{
+  min-height:370px!important;padding:32px 4% 65px!important;
+  align-items:center!important;justify-content:flex-start!important;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero:after{bottom:38px;left:4%;right:4%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-micro{top:12px;left:4%;right:4%}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-content{
+  width:60%;margin:0;max-width:570px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-name{
+  font-size:clamp(32px,5.7vw,50px)!important;margin:3px 0 8px;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-hero h1{font-size:19px!important;margin:0 0 4px!important}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-lead{font-size:10px;margin:0 0 6px;line-height:1.35}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-update{margin:4px 0}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-brief{margin-bottom:8px}
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button{min-height:38px;padding:6px 10px!important}
+ .rg-home[data-reignition-concept=cinematic] .rg-veteran-character{
+  top:0;right:7%;height:100%;width:42%;max-width:none;opacity:.8;
+ }
+ .rg-home[data-reignition-concept=cinematic] .rg-missions{margin:-18px 0 0!important}
+ .rg-home .rg-mobile-dock{display:none}
+}
+@media(prefers-reduced-motion:reduce) {
+ .rg-home[data-reignition-concept=cinematic] .rg-card,
+ .rg-home[data-reignition-concept=cinematic] .rg-card>img,
+ .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button {transition:none!important;transform:none!important}
+}
+:root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-card,
+:root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-card>img,
+:root.psi-title-motion-off .rg-home[data-reignition-concept=cinematic] .rg-hero-buttons button {transition:none!important;transform:none!important}
+
+@media(max-width:380px){
+ /* Compact phones use the persistent two-game launcher instead of a header duplicate. */
+ .rg-home .rg-header-tools .rg-header-missions{display:none}
+}

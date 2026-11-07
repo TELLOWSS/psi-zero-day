@@ -44,4 +44,21 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(resolveHomePrimaryMission({...status,guardUnlocked:true},false,true).mode).toBe('watch');
   expect(resolveHomePrimaryMission(status,false,false).mode).toBe('none');
  });
+ it('exposes truthful in-card progress, editorial brief and independent mobile game launchers',()=>{
+  const html=renderToStaticMarkup(React.createElement(ReignitionTitle,{status,brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions}));
+  expect(html).toContain('class="rg-hero-micro"');
+  expect(html).toContain('class="rg-hero-brief"');
+  expect(html).toContain('aria-label="현재 저장된 작전 진행도"');
+  expect(html).toContain('aria-label="가드 완료 작전" aria-valuemin="0" aria-valuemax="6" aria-valuenow="6"');
+  expect(html).toContain('aria-label="워치 완료 스테이지" aria-valuemin="0" aria-valuemax="50" aria-valuenow="50"');
+  expect(html).toContain('style="width:100%"');
+  expect(html).toContain('aria-label="게임 빠른 실행"');
+  expect(html).toContain('aria-label="시그널 가드 바로 실행"');
+  expect(html).toContain('aria-label="시그널 워치 바로 실행"');
+  expect(html).toContain('class="rg-header-missions"');
+  const empty=renderToStaticMarkup(React.createElement(ReignitionTitle,{status:{...status,guardClears:0,watchClears:0,guardUnlocked:false,watchUnlocked:false,veteran:false},brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions}));
+  expect(empty).toContain('aria-label="가드 완료 작전" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"');
+  expect(empty).toContain('aria-label="워치 완료 스테이지" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0"');
+  expect(empty).not.toContain('VETERAN RECORD SYNCED');
+ });
 });

@@ -32,6 +32,34 @@ try{
      if(!hero||hero.height<height*.55||!headline||headline.height===0)
        throw new Error('Portrait hero / welcome message missing: '+JSON.stringify({hero,headline}));
      if(!nav||nav.height>90)throw new Error('Phone header wrapped into multiple rows: '+JSON.stringify(nav));
+     const compactHeader=await page.evaluate(()=>{
+      const summary=document.querySelector('.rg-appearance summary'),settings=document.querySelector('.rg-header-tools button:last-child'),brand=document.querySelector('.rg-brand');
+      const rect=el=>el?.getBoundingClientRect();
+      return {themeFont:summary?getComputedStyle(summary).fontSize:null,
+       settingsFont:settings?getComputedStyle(settings).fontSize:null,
+       brandRight:rect(brand)?.right??0,themeLeft:rect(summary)?.left??0,
+       themeRight:rect(summary)?.right??0,settingsLeft:rect(settings)?.left??0,
+       settingsRight:rect(settings)?.right??0};
+     });
+     if(compactHeader.themeFont!=='0px'||compactHeader.settingsFont!=='0px'||
+       compactHeader.brandRight>compactHeader.themeLeft+2||
+       compactHeader.themeRight>compactHeader.settingsLeft+2||
+       compactHeader.settingsRight>width+1)
+       throw new Error('Premium phone header controls overlap: '+JSON.stringify(compactHeader));
+     const dock=await page.locator('.rg-mobile-dock').evaluate(el=>({
+       position:getComputedStyle(el).position,
+       visible:getComputedStyle(el).display!=='none',
+       bottom:el.getBoundingClientRect().bottom,
+       buttons:[...el.querySelectorAll('button')].map(button=>({width:button.getBoundingClientRect().width,height:button.getBoundingClientRect().height,disabled:button.disabled}))
+     }));
+     if(dock.position!=='fixed'||!dock.visible||Math.abs(dock.bottom-height)>3||dock.buttons.length!==2||
+       dock.buttons.some(button=>button.disabled||button.width<130||button.height<44))
+       throw new Error('Premium mobile Guard/Watch quick launcher fails touch contract: '+JSON.stringify(dock));
+     const headerOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+     if(headerOverflow){
+      const offenders=await page.evaluate(()=>[...document.querySelectorAll('main.rg-home *')].map(el=>({selector:el.tagName.toLowerCase()+'.'+String(el.className||'').replace(/\\s+/g,'.'),left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),scroll:el.scrollWidth,client:el.clientWidth})).filter(x=>x.right>innerWidth+2||x.left< -2).slice(0,18));
+      throw new Error('Premium phone title overflow: '+JSON.stringify({scrollWidth:await page.evaluate(()=>document.documentElement.scrollWidth),offenders}));
+     }
    }
    const tested=[];
    for(const [index,design] of designs.entries()){
@@ -82,6 +110,11 @@ try{
    await page.locator('.rg-appearance summary').click();
    await page.locator('.rg-theme-picker button').first().click();
    await page.locator('.rg-appearance summary').click();
+   if(width===1440){
+     const topCard=await page.locator('.rg-card').first().boundingBox();
+     if(!topCard||topCard.y>=height*.96)
+       throw new Error('Premium desktop launcher is hidden below the first viewport: '+JSON.stringify(topCard));
+   }
    const panels=await page.locator('.rg-card').count();
    await page.locator('#reignition-missions').scrollIntoViewIfNeeded();
    const cardInfo=await launchers.evaluateAll(buttons=>buttons.map(b=>({
