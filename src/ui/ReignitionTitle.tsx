@@ -157,6 +157,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span className="rg-card-screen"/><span className="rg-card-serial" aria-hidden="true">01</span>
        <span className="rg-card-info"><small>01 / TACTICAL DEFENSE</small><strong>시그널 가드</strong><em>SIGNAL GUARD</em>
         <span>6개 현장 완료 후, 더욱 날카로운 마스터 전술전</span>
+        <span className="rg-card-progress" role="progressbar" aria-label="가드 완료 작전" aria-valuemin={0} aria-valuemax={6} aria-valuenow={status.guardClears}><i style={{width:guardPercent+"%"}}/></span>
+        <span className="rg-card-count">CLEAR {status.guardClears} / 06 <em>{guardUnlocked?`MASTER ★★★ ${status.guardMastered} / 06`:"CAMPAIGN"}</em></span>
         <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
       </button>
       <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch}>
@@ -164,6 +166,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span className="rg-card-screen"/><span className="rg-card-serial" aria-hidden="true">02</span>
        <span className="rg-card-info"><small>02 / SURVIVAL ACTION</small><strong>시그널 워치</strong><em>SIGNAL WATCH</em>
         <span>50개 스테이지 이후, 변칙 위험과 패턴 대응 보스</span>
+        <span className="rg-card-progress" role="progressbar" aria-label="워치 완료 스테이지" aria-valuemin={0} aria-valuemax={50} aria-valuenow={status.watchClears}><i style={{width:watchPercent+"%"}}/></span>
+        <span className="rg-card-count">CLEAR {status.watchClears} / 50 <em>{watchUnlocked?`MASTER ★★★ ${status.watchMastered} / 50`:"CAMPAIGN"}</em></span>
         <b>{watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
       </button>
      </div>
