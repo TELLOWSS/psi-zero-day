@@ -405,6 +405,7 @@ export function DefenseGame({
   const episodeState = session.getSnapshot?.().state ?? null;
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
+  const [selectedMastery,setSelectedMastery]=useState(false);
   const [planningStyle,setPlanningStyle]=useState(readGuardPlanningStyle);
   const selectedScenarioAllowed = (isGuardScenario(selectedScenarioId)&&guardStageUnlocked(selectedScenarioId!,persistence.document)) || selectedScenarioId === zeroBreachContent.scenario.id
     || selectedScenarioId === remodelDefense.scenario.id
@@ -759,13 +760,13 @@ export function DefenseGame({
     if(content.map.id==='ramp-01'||guard)audio.armAudio();
     if(guard&&!guardSupportUnlocked(supportId,persistence.document))return;
     audio.playCue('select');
-    persistence.startWithSupport(supportId, false, content);
+    persistence.startWithSupport(supportId, false, content,guard&&selectedMastery&&guardContents.every(c=>persistence.document.records.some(r=>r.scenarioId===c.scenario.id&&r.clears>0)));
     radioUntilTickRef.current=0;
     lastReportedWaveRef.current=0;
   };
 
   const retry = () => {
-    if (state) setSelectedScenarioId(state.scenarioId);
+    if (state) {setSelectedScenarioId(state.scenarioId);setSelectedMastery(state.masteryRun===true);}
     persistence.retryAfterResult();
     setSelectedPadId(null);
     setSelectedTowerId(null);
@@ -779,7 +780,7 @@ export function DefenseGame({
     && persistence.entry.run.eventId !== requestedScenarioId;
 
   const operations=async()=>{if(await persistence.returnToOperations()){setSelectedScenarioId(GUARD_ENTRY);setSelectedPadId(null);setSelectedTowerId(null);setSettingsOpen(false);}};
-  if(campaignEntry&&!state&&selectedScenarioId===GUARD_ENTRY&&(persistence.entry.kind==='select'||persistence.entry.kind==='resume'))return <GuardCampaignHome document={persistence.document} onExit={()=>{void persistence.exitToMain();}} onPractice={onPractice} onResume={persistence.entry.kind==='resume'?persistence.resumeSavedRun:undefined} onSelect={async(id,replace)=>{if(!guardStageUnlocked(id,persistence.document))return;if(replace&&!await persistence.discardSavedRun())return;setSelectedScenarioId(id);}}/>;
+  if(campaignEntry&&!state&&selectedScenarioId===GUARD_ENTRY&&(persistence.entry.kind==='select'||persistence.entry.kind==='resume'))return <GuardCampaignHome document={persistence.document} onExit={()=>{void persistence.exitToMain();}} onPractice={onPractice} onResume={persistence.entry.kind==='resume'?persistence.resumeSavedRun:undefined} onSelect={async(id,replace,mastery)=>{if(!guardStageUnlocked(id,persistence.document))return;if(replace&&!await persistence.discardSavedRun())return;setSelectedMastery(mastery);setSelectedScenarioId(id);}}/>;
 
   if (requestedResumeConflict && persistence.entry.kind === 'resume') {
     return <main className="zb-shell zb-save-gate" data-defense-screen="requested-scenario-conflict">
@@ -872,7 +873,7 @@ export function DefenseGame({
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
   const needsTransition=!!content.map.transition&&state.waveId===content.map.transition.beforeWave&&!state.appliedTransitionIds?.includes(content.map.transition.id);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-guard-mastery={state.masteryRun?"true":"false"} data-supplied-audio={guard?"true":undefined} data-guard-shift={guardIndex===2&&state.waveId>=5?"LATE":"EARLY"} data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={(content.map.id==='ramp-01'||guard)?defensePremiumArt.visualVersion:defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
       data-guard-mobile={guardMobile?'true':undefined}
       data-mobile-info={mobileInfoOpen?'true':undefined}
@@ -880,7 +881,7 @@ export function DefenseGame({
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
     <header className="zb-hud">
-      <div className="zb-brand"><small>{guard?"SIGNAL GUARD":"ZERO BREACH"}</small><strong>{t(guard?"guard.title":"defense.ui.hub.title")}</strong></div>
+      <div className="zb-brand"><small>{guard?(state.masteryRun?"SIGNAL GUARD · MASTER":"SIGNAL GUARD"):"ZERO BREACH"}</small><strong>{t(guard?"guard.title":"defense.ui.hub.title")}</strong></div>
       <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`}><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
@@ -1230,7 +1231,7 @@ export function DefenseGame({
       <div>
         <div className="zb-result-keyart" aria-hidden="true"><img src={DEFENSE_PREMIUM_HERO} alt=""/><span>{t('defense.art.result')}</span></div>
         <div className="zb-result-head">
-          <span className="zb-result-kicker">{t('defense.ui.result')}</span>
+          <span className="zb-result-kicker">{state.masteryRun?"마스터 도전 · ":""}{t('defense.ui.result')}</span>
           <div className="zb-result-stars" aria-hidden="true">{[1,2,3].map(star => <span key={star} className={star <= result.stars ? 'is-earned' : ''}>★</span>)}</div>
         </div>
         <h2 id="zb-result-title">{t(result.won ? 'defense.ui.won' : 'defense.ui.lost')}</h2>
