@@ -28,8 +28,10 @@ try{
    if(width===390){
      const hero=await page.locator('.rg-hero').boundingBox();
      const headline=await page.locator('.rg-hero h1').boundingBox();
+     const nav=await page.locator('.rg-header').boundingBox();
      if(!hero||hero.height<height*.55||!headline||headline.height===0)
        throw new Error('Portrait hero / welcome message missing: '+JSON.stringify({hero,headline}));
+     if(!nav||nav.height>90)throw new Error('Phone header wrapped into multiple rows: '+JSON.stringify(nav));
    }
    const tested=[];
    for(const [index,design] of designs.entries()){
