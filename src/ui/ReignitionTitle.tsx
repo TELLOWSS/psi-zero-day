@@ -12,7 +12,8 @@ export const HOME_THEMES=[
  {id:'elite',label:'D · 미니멀',subtitle:'엘리트'},
 ] as const;
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
-const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design';
+// Fresh production default; prior preview experiments must not override the approved theme.
+const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v2';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
   const requested=new URLSearchParams(query).get('home');
   const value=requested??stored;
@@ -53,6 +54,19 @@ const descriptions:Record<HomeTheme,{eyebrow:string,title:string,lead:string,pri
  elite:{eyebrow:'RE:IGNITION / THE VETERAN ERA',title:'다시, 현장으로.',lead:'전과 다른 압박. 같은 판단력. 오늘의 무사귀환을 완성하세요.',primary:'도전 시작'},
 };
 
+/** The leading action must never advertise locked mastery to a first-time player. */
+export function resolveHomePrimaryMission(status:EndgameHomeStatus,guardAvailable:boolean,watchAvailable:boolean):{mode:'guard'|'watch'|'none';label:string} {
+  const mode: 'guard'|'watch'|'none' =
+    status.guardUnlocked&&guardAvailable ? 'guard' :
+    status.watchUnlocked&&watchAvailable ? 'watch' :
+    guardAvailable&&watchAvailable ?
+      (status.watchClears/50>status.guardClears/6?'watch':'guard') :
+    guardAvailable?'guard':watchAvailable?'watch':'none';
+  const unlocked=mode==='guard'?status.guardUnlocked:mode==='watch'?status.watchUnlocked:false;
+  const progress=mode==='guard'?status.guardClears:mode==='watch'?status.watchClears:0;
+  return {mode,label:unlocked?'마스터 작전 개시':progress>0?'작전 이어하기':'첫 작전 시작'};
+}
+
 export function ReignitionTitle(props:ReignitionTitleProps){
  const [theme,setTheme]=useState<HomeTheme>(()=>{
   try{return resolveHomeTheme(typeof window==='undefined'?'':window.location.search,typeof window==='undefined'?null:window.localStorage.getItem(HOME_THEME_STORAGE_KEY));}
@@ -64,7 +78,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const active=descriptions[theme];
  const guardUnlocked=status.guardUnlocked;
  const watchUnlocked=status.watchUnlocked;
- const heroGo=props.onGuard??props.onWatch;
+ const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
+ const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
  const selectTheme=(next:HomeTheme)=>{
   setTheme(next);
   try{window.localStorage.setItem(HOME_THEME_STORAGE_KEY,next);
@@ -75,9 +90,12 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
   <header className="rg-header">
    <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
-   <div className="rg-theme-picker" role="group" aria-label="메인 화면 시안 선택">
-    {HOME_THEMES.map(option=><button key={option.id} type="button" aria-pressed={theme===option.id} onClick={()=>selectTheme(option.id)} title={option.subtitle}>{option.label}</button>)}
-   </div>
+   <details className="rg-appearance" aria-label="화면 디자인 선택">
+    <summary>화면 스타일 <span aria-hidden="true">⌄</span></summary>
+    <div className="rg-theme-picker" role="group" aria-label="메인 화면 시안 선택">
+     {HOME_THEMES.map(option=><button key={option.id} type="button" aria-pressed={theme===option.id} onClick={()=>selectTheme(option.id)} title={option.subtitle}>{option.label}</button>)}
+    </div>
+   </details>
    <div className="rg-header-tools">
     <button type="button" onClick={props.onManual}>도움말</button>
     <button type="button" onClick={()=>setSettings(true)} aria-label="게임 설정 열기">설정 <span aria-hidden="true">⚙</span></button>
@@ -98,8 +116,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    <div className="rg-main">
     <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
      <picture className="rg-hero-picture">
-      <source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>
-      <img src={theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
+      <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
      {theme==='cinematic'&&<img className="rg-veteran-character" src="/assets/reignition/veteran-return.webp" alt="" loading="eager" decoding="async"/>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
@@ -112,7 +130,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       <h1>{status.veteran?active.title:'위험을 읽고, 오늘을 지켜라.'}</h1>
       <p className="rg-hero-lead">{active.lead}</p>
       <div className="rg-hero-buttons">
-       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {active.primary}</button>
+       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?mission.label:active.primary}</button>
        <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>가드 / 워치 선택 <span aria-hidden="true">↓</span></button>
       </div>
      </div>
