@@ -54,6 +54,19 @@ const descriptions:Record<HomeTheme,{eyebrow:string,title:string,lead:string,pri
  elite:{eyebrow:'RE:IGNITION / THE VETERAN ERA',title:'다시, 현장으로.',lead:'전과 다른 압박. 같은 판단력. 오늘의 무사귀환을 완성하세요.',primary:'도전 시작'},
 };
 
+/** The leading action must never advertise locked mastery to a first-time player. */
+export function resolveHomePrimaryMission(status:EndgameHomeStatus,guardAvailable:boolean,watchAvailable:boolean):{mode:'guard'|'watch'|'none';label:string} {
+  const mode: 'guard'|'watch'|'none' =
+    status.guardUnlocked&&guardAvailable ? 'guard' :
+    status.watchUnlocked&&watchAvailable ? 'watch' :
+    guardAvailable&&watchAvailable ?
+      (status.watchClears/50>status.guardClears/6?'watch':'guard') :
+    guardAvailable?'guard':watchAvailable?'watch':'none';
+  const unlocked=mode==='guard'?status.guardUnlocked:mode==='watch'?status.watchUnlocked:false;
+  const progress=mode==='guard'?status.guardClears:mode==='watch'?status.watchClears:0;
+  return {mode,label:unlocked?'마스터 작전 개시':progress>0?'작전 이어하기':'첫 작전 시작'};
+}
+
 export function ReignitionTitle(props:ReignitionTitleProps){
  const [theme,setTheme]=useState<HomeTheme>(()=>{
   try{return resolveHomeTheme(typeof window==='undefined'?'':window.location.search,typeof window==='undefined'?null:window.localStorage.getItem(HOME_THEME_STORAGE_KEY));}
@@ -65,7 +78,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const active=descriptions[theme];
  const guardUnlocked=status.guardUnlocked;
  const watchUnlocked=status.watchUnlocked;
- const heroGo=props.onGuard??props.onWatch;
+ const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
+ const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
  const selectTheme=(next:HomeTheme)=>{
   setTheme(next);
   try{window.localStorage.setItem(HOME_THEME_STORAGE_KEY,next);
@@ -116,7 +130,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       <h1>{status.veteran?active.title:'위험을 읽고, 오늘을 지켜라.'}</h1>
       <p className="rg-hero-lead">{active.lead}</p>
       <div className="rg-hero-buttons">
-       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {active.primary}</button>
+       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?mission.label:active.primary}</button>
        <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>가드 / 워치 선택 <span aria-hidden="true">↓</span></button>
       </div>
      </div>
