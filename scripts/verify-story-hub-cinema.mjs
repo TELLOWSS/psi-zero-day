@@ -63,6 +63,15 @@ try{
    })));
    if(panels!==2||cardInfo.some(card=>card.disabled||card.height<150||card.cardWidth<180))
       throw new Error('Visible Guard and Watch cards must be playable: '+JSON.stringify(cardInfo));
+   // Mission artwork must be decoded before a launch screenshot is accepted.
+   const artReadiness=await page.locator('.rg-card>img').evaluateAll(async(images)=>{
+     return Promise.all(images.map(async image=>{
+       try{await image.decode();}catch{return false;}
+       return image.naturalWidth>0&&image.naturalHeight>0;
+     }));
+   });
+   if(artReadiness.length!==2||artReadiness.some(ok=>!ok))
+     throw new Error('Playable Guard/Watch cards missing finished key artwork: '+JSON.stringify(artReadiness));
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
    if(overflow)throw new Error('RE:IGNITION layout horizontally overflows '+width+'x'+height);
    await page.screenshot({path:path.join(out,width+'x'+height+'-game-choices.png'),animations:'disabled'});

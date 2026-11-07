@@ -114,14 +114,14 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">새로운 전선, 두 개의 선택.</h2></div><span>ENDGAME · 2026.11</span></div>
      <div className="rg-mission-grid">
       <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard}>
-       <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="lazy" decoding="async"/>
+       <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="eager" decoding="async"/>
        <span className="rg-card-screen"/>
        <span className="rg-card-info"><small>01 / TACTICAL DEFENSE</small><strong>시그널 가드</strong><em>SIGNAL GUARD</em>
         <span>6개 현장 완료 후, 더욱 날카로운 마스터 전술전</span>
         <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
       </button>
       <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch}>
-       <img src={SIGNAL_WATCH_KEY_ART} alt="" loading="lazy" decoding="async"/>
+       <img src={SIGNAL_WATCH_KEY_ART} alt="" loading="eager" decoding="async"/>
        <span className="rg-card-screen"/>
        <span className="rg-card-info"><small>02 / SURVIVAL ACTION</small><strong>시그널 워치</strong><em>SIGNAL WATCH</em>
         <span>50개 스테이지 이후, 변칙 위험과 패턴 대응 보스</span>
