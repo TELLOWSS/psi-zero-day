@@ -108,8 +108,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const watchUnlocked=status.watchUnlocked;
  const guardPercent=Math.max(0,Math.min(100,status.guardClears/6*100));
  const watchPercent=Math.max(0,Math.min(100,status.watchClears/50*100));
- const guardMasterPercent=Math.max(0,Math.min(100,status.guardMastered/6*100));
- const watchMasterPercent=Math.max(0,Math.min(100,status.watchMastered/50*100));
+ const guardMasterPercent=Math.round(Math.max(0,Math.min(100,status.guardMastered/6*100)));
+ const watchMasterPercent=Math.round(Math.max(0,Math.min(100,status.watchMastered/50*100)));
  const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const nextChallenge=resolveHomeNextChallenge(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
