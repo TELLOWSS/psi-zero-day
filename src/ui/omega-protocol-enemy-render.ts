@@ -1,12 +1,53 @@
 import type {Hazard} from '../domain/patrol-survivors';
 
 /**
+ * Wave-15-only original POWER WARDEN silhouette. This is authored technical
+ * QA geometry, not final character art: still driven by real CRANE_BOSS HP.
+ * Drawn at the existing boss origin/scale to preserve collision honesty.
+ */
+export function drawOmegaPowerWarden(ctx:CanvasRenderingContext2D,time:number,phase2=false):void{
+ const pulse=.5+.5*Math.sin(time*4);
+ const glow=phase2?'#ff8de1':'#8af3f7';
+ ctx.save();
+ // Heavy ground-mounted reactor with two raised induction pylons.
+ ctx.fillStyle='#12253a';ctx.fillRect(-30,-49,60,47);
+ ctx.fillStyle='#3a5571';ctx.fillRect(-38,-71,76,28);
+ ctx.strokeStyle=glow;ctx.lineWidth=4;ctx.strokeRect(-38,-71,76,28);
+ for(const side of [-1,1]){
+  ctx.fillStyle='#1c354d';ctx.fillRect(side<0?-53:37,-97,16,53);
+  ctx.strokeStyle='#bddef4';ctx.lineWidth=4;
+  ctx.beginPath();
+  ctx.moveTo(side*45,-93);ctx.lineTo(side*63,-120);
+  ctx.lineTo(side*77,-111);ctx.stroke();
+  ctx.fillStyle=glow;ctx.fillRect(side<0?-80:70,-116,10,7);
+ }
+ // Core takes almost half the silhouette so the power-sweep phase reads
+ // differently from wave 9's recognizable crane boom and hook arms.
+ ctx.fillStyle='#090e23';ctx.beginPath();ctx.moveTo(0,-84);
+ ctx.lineTo(30,-59);ctx.lineTo(0,-26);ctx.lineTo(-30,-59);ctx.closePath();ctx.fill();
+ ctx.strokeStyle=glow;ctx.lineWidth=4;ctx.stroke();
+ ctx.fillStyle=glow;ctx.globalAlpha=.6+.3*pulse;
+ ctx.beginPath();ctx.arc(0,-58,12+3*pulse,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ for(let i=0;i<3;i++){
+  ctx.strokeStyle=phase2?'#f7afd9':'#87e1ee';
+  ctx.globalAlpha=.45+i*.13;ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.arc(0,-58,22+i*10,time*.8+i,Math.PI*1.3+time*.8+i);ctx.stroke();
+ }
+ ctx.globalAlpha=1;
+ ctx.fillStyle=phase2?'#ef84c6':'#8de9ec';ctx.fillRect(-29,-18,58,7);
+ ctx.fillStyle='#cceaf2';ctx.font='bold 9px system-ui';
+ ctx.textAlign='center';ctx.fillText('CORE 15',0,-88);
+ ctx.restore();
+}
+
+/**
  * Original vector combat silhouettes for PROTOCOL's internal playable QA.
  * These are recognizable enemy archetypes, not approved production sprites
  * or licensed "Solo Leveling" monsters.
  */
 export function drawOmegaProtocolEnemy(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
+ options:Readonly<{finalBoss?:boolean}>={},
 ):void {
  if(h.hp<=0)return;
  const boss=Boolean(h.isStageBoss);
@@ -58,8 +99,10 @@ export function drawOmegaProtocolEnemy(
   ctx.strokeStyle='#879cab';ctx.lineWidth=3;ctx.beginPath();
   ctx.moveTo(-17,-28);ctx.lineTo(13,-10);ctx.moveTo(18,-25);ctx.lineTo(-8,-6);ctx.stroke();
   ctx.fillStyle='#e6aa73';ctx.fillRect(-12,-18,21,5);
+ }else if(h.type==='CRANE_BOSS'&&options.finalBoss){
+  drawOmegaPowerWarden(ctx,time,h.bossPhase===2);
  }else if(h.type==='CRANE_BOSS'){
-  // Unique foreground layers and central reactor silhouette.
+  // Wave-9 crane boss: separate original boom-and-hook silhouette.
   ctx.fillStyle='#22283d';ctx.fillRect(-23,-48,46,51);
   ctx.fillStyle='#9e4968';ctx.fillRect(-31,-72,62,30);
   ctx.strokeStyle='#ffcf81';ctx.lineWidth=5;ctx.strokeRect(-31,-72,62,30);
