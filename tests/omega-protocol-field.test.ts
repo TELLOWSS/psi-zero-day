@@ -5,6 +5,7 @@ import {
 } from '../src/domain/omega-protocol-field';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 import {terrainHit,terrainWaypoint} from '../src/engine/survivors-terrain';
+import {drawOmegaFieldMission} from '../src/ui/omega-protocol-field-render';
 const idle={moveX:0,moveY:0,triggerAction:false};
 const completeCombat=(s:OmegaProtocolCombatSession)=>{
  s.engine.state.hazards=[];
@@ -166,5 +167,39 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   s.update(1/60,idle);
   expect(s.run.phase).toBe('defeat');
   expect(s.interact().success).toBe(false);
+ });
+});
+
+describe('OMEGA mission world-space navigation cue',()=>{
+ const testCanvas=()=>{
+  const calls:string[]=[];
+  const ctx=new Proxy({},{
+   get:(_target,key)=> (..._args:unknown[])=>{calls.push(String(key));},
+   set:()=>true,
+  }) as unknown as CanvasRenderingContext2D;
+  return {ctx,calls};
+ };
+ it('only draws an arrow for an actionable distant objective or exit, never during combat',()=>{
+  const plan=omegaFieldPlan(20261108,1);
+  const initial=omegaFieldInitialProgress();
+  const objective={...initial,phase:'objective' as const};
+  const exit={...objective,phase:'exit' as const,eventComplete:true,exitUnlocked:true,
+   completedSteps:plan.event.steps.length};
+  const combat=testCanvas();
+  drawOmegaFieldMission(combat.ctx,plan,initial,plan.entry,3);
+  expect(combat.calls).not.toContain('rotate');
+  const far=testCanvas();
+  drawOmegaFieldMission(far.ctx,plan,objective,plan.entry,3);
+  expect(far.calls).toContain('translate');
+  expect(far.calls).toContain('rotate');
+  const near=testCanvas();
+  drawOmegaFieldMission(near.ctx,plan,objective,plan.event.steps[0]!.target,3);
+  expect(near.calls).not.toContain('rotate');
+  const leaving=testCanvas();
+  drawOmegaFieldMission(leaving.ctx,plan,exit,plan.entry,3);
+  expect(leaving.calls).toContain('rotate');
+  const invalid=testCanvas();
+  drawOmegaFieldMission(invalid.ctx,plan,objective,{x:NaN,y:10},3);
+  expect(invalid.calls).not.toContain('rotate');
  });
 });
