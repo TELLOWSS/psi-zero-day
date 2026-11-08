@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "OMEGA_AIRA_CANDIDATE_ART_20261108",
+  "identity": "AIRA_MASTER",
+  "status": "TECHNICAL_REVIEW_ONLY",
+  "artistApproval": false,
+  "releaseEligible": false,
+  "runtimeArtApproved": false,
+  "sourceViews": [
+    "S",
+    "SE",
+    "E",
+    "NE",
+    "N"
+  ],
+  "mirroredAndMustRedraw": [
+    "SW",
+    "W",
+    "NW"
+  ],
+  "candidateMotionFrames": 160,
+  "actualAuthoredAnimationFramesApproved": 0,
+  "equipmentFrontRearMasksApproved": 0,
+  "equipmentMasksRequired": 320,
+  "imageSpec": {
+    "dimensions": [
+      384,
+      512
+    ],
+    "channels": "RGBA",
+    "walkFootPivotY": 454
+  },
+  "motionFrameLayout": {
+    "walk": 6,
+    "fire": 3,
+    "dash": 3,
+    "hit": 3,
+    "ultimate": 3,
+    "finish": 2
+  },
+  "audit": {
+    "candidateFileCount": 160,
+    "distinctSha256": 160,
+    "allFramesRGBA": true,
+    "allWalkFeetPivotMatches": true,
+    "sourceNativeWidths": "61-96 px",
+    "sourceNativeHeights": "180-191 px",
+    "viewerJavascriptSyntax": "PASS",
+    "liveChromium": "BLOCKED_BY_ENVIRONMENT"
+  },
+  "reviewedArchive": {
+    "filename": "OMEGA_AIRA_8방향_160프레임_미승인원화후보_20261108.zip",
+    "sha256": "bf7bac6bd00abc70561ba5fdfacf450419b81314dd5a55527495607e216c2973",
+    "location": "conversation download only",
+    "binaryInGitHub": false
+  },
+  "rejectionReasons": [
+    "Only five original directions; three are mirrored",
+    "Retargeted sprites are transformed static original poses, not independent hand-authored arm/leg keyframes",
+    "No equipment occlusion masks",
+    "Native source views too small for commercial hi-res quality",
+    "Exact main-title appearance and commercial art approvals incomplete",
+    "Full engine and Android runtime validation not completed"
+  ],
+  "note": "Candidate source generated from an art-board still image. 160 image files must never be equated with 160 authored final animations. Existing release guard must remain blocked."
+}
