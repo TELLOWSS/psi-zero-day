@@ -36,6 +36,8 @@ export class OmegaGroundedGait {
  private lastWorld:OmegaWalkPoint|null=null;
  private lastTime:number|null=null;
  private lastNode:number|null=null;
+ private lastMoveAt:number|null=null;
+ private lastPose:OmegaWalkPose|null=null;
  private phase=0;
  private distanceTotal=0;
  private left=makeFoot();
@@ -43,6 +45,7 @@ export class OmegaGroundedGait {
  reset():void{
   this.lastWorld=null;this.lastTime=null;this.lastNode=null;
   this.phase=0;this.distanceTotal=0;
+  this.lastMoveAt=null;this.lastPose=null;
   this.left=makeFoot();this.right=makeFoot();
  }
  advance(world:OmegaWalkPoint,gameTime:number,node:number,dashing=false):OmegaWalkPose{
@@ -64,10 +67,15 @@ export class OmegaGroundedGait {
    return idle();
   }
   if(dashing||dist<.04||elapsed<=0){
-   // Dash uses separate animation and its previous stance anchors must not
-   // linger in space after the character quickly changes location.
-   if(dashing){this.left=makeFoot();this.right=makeFoot();}
-   // A collision-stalled player must NOT run in place.
+   if(dashing){
+    this.left=makeFoot();this.right=makeFoot();
+    this.lastPose=null;this.lastMoveAt=null;
+   }
+   // 120Hz visual rendering may see two frames for every 60Hz physics step.
+   // Hold the SAME planted pose <=60ms, without advancing its walk phase.
+   // Prolonged wall collision returns to idle (no running on the spot).
+   if(!dashing&&this.lastMoveAt!==null&&this.lastPose&&
+    gameTime-this.lastMoveAt<=.06)return this.lastPose;
    return {active:false,phase:this.phase,distanceTravelled:this.distanceTotal,
     left:blank(-9),right:blank(9)};
   }
@@ -76,7 +84,9 @@ export class OmegaGroundedGait {
   this.distanceTotal+=dist;
   const left=this.foot(this.left,current,heading,this.phase,-9);
   const right=this.foot(this.right,current,heading,(this.phase+.5)%1,9);
-  return {active:true,phase:this.phase,distanceTravelled:this.distanceTotal,left,right};
+  this.lastMoveAt=gameTime;
+  this.lastPose={active:true,phase:this.phase,distanceTravelled:this.distanceTotal,left,right};
+  return this.lastPose;
  }
  private foot(state:MutableFoot,root:OmegaWalkPoint,heading:OmegaWalkPoint,
   phase:number,side:number):OmegaWalkFoot{
