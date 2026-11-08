@@ -143,16 +143,25 @@ export function omegaFieldTargetGuide(
  return {
   degrees:Math.atan2(screenDy,screenDx)*180/Math.PI,
   distance:Math.round(route.length),
-  ready:omegaFieldCanInteract(actor,dest),
+  ready:route.length<=OMEGA_FIELD_INTERACT_RADIUS,
   label:progress.phase==='exit'?'출구':step?.label??'임무 지점',
  };
 }
 export function omegaFieldDistance(a:OmegaFieldPoint,b:OmegaFieldPoint):number{
  return Math.hypot(a.x-b.x,a.y-b.y);
 }
-export function omegaFieldCanInteract(actor:OmegaFieldPoint,target:OmegaFieldPoint):boolean{
- return Number.isFinite(actor.x)&&Number.isFinite(actor.y)&&
-  omegaFieldDistance(actor,target)<=OMEGA_FIELD_INTERACT_RADIUS;
+export function omegaFieldCanInteract(
+ actor:OmegaFieldPoint,target:OmegaFieldPoint,
+ obstacles?:readonly OmegaFieldObstacle[],
+):boolean{
+ if(!Number.isFinite(actor.x)||!Number.isFinite(actor.y)||
+  !Number.isFinite(target.x)||!Number.isFinite(target.y)||
+  omegaFieldDistance(actor,target)>OMEGA_FIELD_INTERACT_RADIUS)return false;
+ if(!obstacles?.length)return true;
+ // An objective behind solid cover is not operable through a wall even
+ // when world-space straight-line distance is inside the 100-unit radius.
+ const route=omegaFieldNextRoute(actor,target,obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
+ return route!==null&&route.length<=OMEGA_FIELD_INTERACT_RADIUS;
 }
 /** Player-vs-rect collision for independently authored field props.
  * Resolves x/y one axis at a time to prevent wall tunneling on normal steps.
