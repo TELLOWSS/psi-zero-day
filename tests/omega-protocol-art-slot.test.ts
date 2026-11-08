@@ -68,6 +68,30 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   });
   expect(omegaCanRenderApprovedArt(duplicates,true)).toBe(false);
  });
+ it('does not reuse stale approval after mutable manifest tampering',()=>{
+  const m=positive('mutabl');
+  expect(omegaCanRenderApprovedArt(m,true)).toBe(true);
+  Object.assign(m,{artistSignoff:''});
+  expect(omegaCanRenderApprovedArt(m,true)).toBe(false);
+  Object.assign(m,{artistSignoff:'restored for isolated test'});
+  expect(omegaCanRenderApprovedArt(m,true)).toBe(true);
+  Object.assign((m.frames.E as OmegaApprovedSpriteFrame[])[4]!,{
+   actorSha256:'0'.repeat(64),
+  });
+  // 0 is a valid shape, but duplicates break 160 unique actor digests.
+  expect(omegaCanRenderApprovedArt(m,true)).toBe(false);
+  const wrong=positive('badtype');
+  Object.assign(wrong,{artistSignoff:8});
+  expect(omegaCanRenderApprovedArt(wrong,true)).toBe(false);
+  const frozen=positive('frozen');
+  for(const h of OMEGA_DIRECTIONS){
+   for(const frame of frozen.frames[h])Object.freeze(frame);
+   Object.freeze(frozen.frames[h]);
+  }
+  Object.freeze(frozen.frames);Object.freeze(frozen);
+  expect(omegaCanRenderApprovedArt(frozen,true)).toBe(true);
+  expect(Object.isFrozen(frozen)).toBe(true);
+ });
  it('samples eight headings and exact 20-frame action windows without changing physics',()=>{
   expect(OMEGA_SPRITE_ACTIONS).toHaveLength(20);
   expect(omegaSpriteFrameForView(sample)).toEqual({heading:'E',frame:0,action:'walk'});

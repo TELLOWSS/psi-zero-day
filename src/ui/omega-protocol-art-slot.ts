@@ -54,12 +54,23 @@ const isFrame=(frame:OmegaApprovedSpriteFrame|undefined,action:OmegaSpriteAction
   hashes.every(value=>sha256.test(value));
 };
 const memo=new WeakMap<OmegaApprovedSpriteManifest,boolean>();
-/** Full-source contract check once per manifest; runtime can only read proof. */
+/** A WeakMap lookup must NEVER authorize a mutable manifest that was edited
+ * after its previous pass (including edited hashes/signoff, or revoked QA).
+ * Cache only a recursively frozen manifest; editable QA fixtures are rechecked.
+ */
+const immutable=(m:OmegaApprovedSpriteManifest):boolean=>
+ Object.isFrozen(m)&&Object.isFrozen(m.frames)&&
+ OMEGA_DIRECTIONS.every(h=>Array.isArray(m.frames[h])&&
+  Object.isFrozen(m.frames[h])&&m.frames[h].every(f=>Object.isFrozen(f)));
+/** Full-source contract check, memoized only for immutable build artifacts. */
 export function omegaCanRenderApprovedArt(
  manifest:OmegaApprovedSpriteManifest|null,buildAudit:boolean,
 ):boolean{
- if(!manifest||buildAudit!==true)return false;
- const prev=memo.get(manifest);if(prev!==undefined)return prev;
+ if(!manifest||buildAudit!==true||!manifest.frames||
+  typeof manifest.artistSignoff!=='string')return false;
+ const safeToCache=immutable(manifest);
+ const prev=safeToCache?memo.get(manifest):undefined;
+ if(prev!==undefined)return prev;
  const valid=manifest.identity==='AIRA_MASTER'&&
   manifest.status==='ARTIST_APPROVED'&&
   manifest.artistSignoff.trim().length>0&&
@@ -80,7 +91,7 @@ export function omegaCanRenderApprovedArt(
     new Set(allFrames.map(frame=>frame.actor)).size===160&&
     new Set(allFrames.map(frame=>frame.actorSha256)).size===160;
   })();
- memo.set(manifest,valid);
+ if(safeToCache)memo.set(manifest,valid);
  return valid;
 }
 export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:boolean;finished?:boolean;actionAge?:number}>):
