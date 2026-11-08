@@ -8,7 +8,7 @@ import {
  type OmegaBossTelegraph,
 } from './omega-protocol-boss-pattern';
 import {
- omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,
+ omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
 import {
@@ -98,6 +98,9 @@ export class OmegaProtocolCombatSession {
    this.engine.state.projectiles=[];
    this.engine.state.drops=[];
    this.engine.state.hazards=[];
+   // Native Watch combat resolves enemy routes and projectile cover against
+   // these SAME industrial objects (not just the hero's visual blockers).
+   this.engine.state.terrain=omegaFieldNativeTerrain(this.currentField);
    this.engine.state.player.x=this.currentField.entry.x;
    this.engine.state.player.y=this.currentField.entry.y;
   }
