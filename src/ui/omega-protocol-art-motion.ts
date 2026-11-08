@@ -11,6 +11,8 @@ export interface OmegaNativeActionSample {
  readonly dashRemaining:number;
  readonly hurtRemaining:number;
  readonly fireUntil:number;
+ /** Victory animation age from run-local render clock (not frozen gameTime). */
+ readonly terminalElapsed?:number;
 }
 export type OmegaArtAction='walk'|'fire'|'dash'|'hit'|'ultimate'|'finish';
 export interface OmegaArtActionFrame {
@@ -45,8 +47,29 @@ export function omegaResolveArtAction(sample:OmegaNativeActionSample):OmegaArtAc
   action==='hit'?2-duration(sample.hurtRemaining,2):
   action==='dash'?.22-duration(sample.dashRemaining,.22):
   action==='fire'?Math.max(0,gameTime-(sample.fireUntil-shotDuration)):
-  action==='finish'?1:0;
+  action==='finish'?duration(sample.terminalElapsed??0,1):0;
  return {action,shooting:action==='fire',dashing:action==='dash',
   hurt:action==='hit',ultimate:action==='ultimate',finished:action==='finish',
   actionAge:Math.max(0,start)};
+}
+
+/**
+ * Watch gameTime freezes after the final node. A terminal pose would remain
+ * forever on its first or last frame if driven by frozen simulation time.
+ * Use a per-session requestAnimationFrame clock ONLY for visual animation.
+ * This never advances enemies, physics, cooldowns or completion rewards.
+ */
+export class OmegaTerminalMotionClock {
+ private phaseStart:number|null=null;
+ private lastTime:number|null=null;
+ reset():void {this.phaseStart=null;this.lastTime=null;}
+ advance(runPhase:string,frameTimeSeconds:number):number{
+  if(runPhase!=='victory'){this.reset();return 0;}
+  if(!Number.isFinite(frameTimeSeconds)||frameTimeSeconds<0)return 0;
+  if(this.phaseStart===null||(this.lastTime!==null&&frameTimeSeconds<this.lastTime)){
+   this.phaseStart=frameTimeSeconds;
+  }
+  this.lastTime=frameTimeSeconds;
+  return Math.min(1,Math.max(0,frameTimeSeconds-this.phaseStart));
+ }
 }

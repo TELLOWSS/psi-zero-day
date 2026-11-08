@@ -8,7 +8,7 @@ import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
-import {omegaResolveArtAction} from './omega-protocol-art-motion';
+import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
 import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
@@ -20,7 +20,7 @@ const validKeys=new Set<string>(keys);
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -73,6 +73,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   enginePhase:state.phase,directorShoutTimer:state.directorShoutTimer,
   isDashing:Boolean(p.isDashing),dashRemaining:p.dashDuration??0,
   hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
+  terminalElapsed,
  });
  const artView={...actorView,...action};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
@@ -80,6 +81,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)){
   drawOmegaProtocolActor(ctx,{...actorView,
+   shooting:action.shooting&&pose.shooting,
+   dashing:action.dashing,hurt:action.hurt,
    ultimate:action.ultimate,finished:action.finished});
  }
  ctx.restore();
@@ -240,6 +243,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let impacts:OmegaImpactFx[]=[];
   const gaitController=new OmegaGroundedGait();
   const facingController=new OmegaActorFacingController();
+  const finishClock=new OmegaTerminalMotionClock();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
@@ -265,7 +269,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      playing:session.engine.state.phase==='playing'&&session.run.phase==='battle',
     });
    const ctx=canvasRef.current?.getContext('2d');
-   if(ctx)drawLab(ctx,session,fireCue,impacts,gait,pose);
+   if(ctx)drawLab(ctx,session,fireCue,impacts,gait,pose,
+    finishClock.advance(session.run.phase,now/1000));
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;

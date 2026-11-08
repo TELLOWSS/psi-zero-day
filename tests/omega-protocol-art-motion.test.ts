@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {omegaResolveArtAction,type OmegaNativeActionSample} from '../src/ui/omega-protocol-art-motion';
+import {omegaResolveArtAction,OmegaTerminalMotionClock,type OmegaNativeActionSample} from '../src/ui/omega-protocol-art-motion';
 import {omegaSpriteFrameForView} from '../src/ui/omega-protocol-art-slot';
 
 const normal:OmegaNativeActionSample={
@@ -38,7 +38,7 @@ describe('OMEGA AIRA 8x20 native action crossfade priority',()=>{
    [{fireUntil:12.07,isDashing:true,dashRemaining:.2},'dash',9],
    [{hurtRemaining:1.93},'hit',12],
    [{directorShoutTimer:2},'ultimate',15],
-   [{runPhase:'victory'},'finish',19],
+   [{runPhase:'victory'},'finish',18],
   ] as const;
   for(const [updates,expected,frame] of states){
    const action=sample(updates);
@@ -58,4 +58,35 @@ describe('OMEGA AIRA 8x20 native action crossfade priority',()=>{
   expect(sample({directorShoutTimer:NaN}).ultimate).toBe(false);
   expect(sample({isDashing:true,dashRemaining:0}).dashing).toBe(false);
  });
+ it('plays both final poses after Watch gameTime freezes on victory',()=>{
+  const clock=new OmegaTerminalMotionClock();
+  const samples=[
+   [100,18],[100.05,18],[100.13,18],[100.17,19],[101.5,19],
+  ] as const;
+  for(const [now,expected] of samples){
+   const terminalElapsed=clock.advance('victory',now);
+   const motion=sample({runPhase:'victory',terminalElapsed});
+   // gameTime stays 12 for every sample: presentation clock is separate.
+   expect(omegaSpriteFrameForView({...view,...motion}).frame).toBe(expected);
+  }
+  expect(clock.advance('battle',102)).toBe(0);
+  expect(clock.advance('victory',105)).toBe(0);
+  expect(clock.advance('victory',105.17)).toBeGreaterThan(.16);
+  expect(clock.advance('victory',NaN)).toBe(0);
+  expect(clock.advance('victory',104)).toBe(0); // clock rewind resets
+ });
+ it('avoids conflicting procedural dash/hurt/shoot labels during ultimate or victory',()=>{
+  const all={fireUntil:12.07,isDashing:true,dashRemaining:.2,
+   hurtRemaining:1.9,directorShoutTimer:1.8};
+  const supreme=sample(all);
+  expect(supreme).toMatchObject({
+   action:'ultimate',shooting:false,dashing:false,hurt:false,ultimate:true,finished:false,
+  });
+  const terminal=sample({...all,runPhase:'victory',terminalElapsed:.2});
+  expect(terminal).toMatchObject({
+   action:'finish',shooting:false,dashing:false,hurt:false,ultimate:false,finished:true,
+  });
+  expect(omegaSpriteFrameForView({...view,...terminal}).frame).toBe(19);
+ });
+
 });
