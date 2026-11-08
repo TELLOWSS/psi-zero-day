@@ -13,6 +13,8 @@ const targets=[
  ['desktop',1440,900,''],
  ['portrait',390,844,''],
  ['landscape',844,390,''],
+ ['objective',844,390,'objective'],
+ ['exit',844,390,'exit'],
  ['reward',844,390,'reward'],
  ['boss',844,390,'boss'],
 ];
@@ -30,7 +32,7 @@ for(const [name,width,height,checkpoint] of targets){
   await page.waitForTimeout(550);
   const metrics=await page.evaluate(()=>{
    const rect=s=>{const el=document.querySelector(s);if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,bottom:r.bottom,right:r.right};};
-   const controls=['.omega-protocol-pad','.omega-protocol-action-pad','.omega-protocol-bottom-toolbar','.omega-protocol-stats'];
+   const controls=['.omega-protocol-pad','.omega-protocol-action-pad','.omega-protocol-bottom-toolbar','.omega-protocol-stats','.omega-protocol-mission'];
    const boxes=Object.fromEntries(controls.map(s=>[s,rect(s)]));
    return {
     docHeight:document.documentElement.scrollHeight,docWidth:document.documentElement.scrollWidth,
@@ -45,12 +47,18 @@ for(const [name,width,height,checkpoint] of targets){
     title:document.querySelector('h1')?.textContent?.trim(),
     modalTitle:document.querySelector('.omega-protocol-rewards h2')?.textContent?.trim()||null,
     threatCount:document.querySelector('.omega-protocol-threat strong')?.textContent?.trim(),
+    missionTitle:document.querySelector('.omega-protocol-mission strong')?.textContent?.trim()||null,
+    missionInstructions:document.querySelector('.omega-protocol-mission span')?.textContent?.trim()||null,
    };
   });
   const scrollV=metrics.docHeight>height+2;
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
-  const correctModal=name==='reward' ? metrics.modalTitle==='전술 강화 선택' : name==='boss' ? metrics.threatCount!=='00' : true;
+  const correctModal=name==='reward' ? metrics.modalTitle==='전술 강화 선택'
+   : name==='boss' ? metrics.threatCount!=='00'&&metrics.missionTitle!==null
+   : name==='objective' ? (metrics.missionTitle||'').includes('조작')
+   : name==='exit' ? metrics.missionTitle==='다음 구역 출구 개방'
+   : metrics.missionTitle!==null;
   const stretchedCanvas=!metrics.canvas||!metrics.canvasIntrinsic.w||!metrics.canvasIntrinsic.h||
    Math.abs(metrics.canvas.w/metrics.canvas.h-metrics.canvasIntrinsic.w/metrics.canvasIntrinsic.h)>.06;
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
