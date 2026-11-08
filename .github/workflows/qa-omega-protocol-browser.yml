@@ -6,6 +6,7 @@ on:
       - 'src/ui/OmegaProtocolPlaytest.tsx'
       - 'src/ui/omega-protocol-field-render.ts'
       - 'src/ui/omega-protocol-actor-render.ts'
+      - 'src/ui/omega-protocol-grounded-gait.ts'
       - 'src/ui/omega-protocol-enemy-render.ts'
       - 'src/ui/omega-protocol-actor-cues.ts'
       - 'src/ui/omega-protocol-impact-vfx.ts'
