@@ -5,6 +5,7 @@ import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
+import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
@@ -100,8 +101,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(field){
   // Stable painter's order: the player, enemies, and original collision
   // objects share one actual world-foot depth. No translucent fake cover.
-  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y)){
+  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress)){
    if(item.kind==='prop')drawOmegaFieldProp(ctx,field.plan,field.plan.obstacles[item.index]!);
+   else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
+   else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
    else renderHero();
   }
