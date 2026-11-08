@@ -33,7 +33,7 @@ for(const [name,width,height,checkpoint] of targets){
   await page.waitForTimeout(550);
   // Actual browser input must move the real Watch-engine player, not only
   // paint a HUD screenshot. Only the landscape source QA uses this probe.
-  let walkTest=null;
+  let walkTest=null,stickTest=null;
   if(name==='landscape'){
    const arena=page.locator('.omega-protocol-arena');
    const startX=Number(await arena.getAttribute('data-omega-player-x'));
@@ -43,6 +43,30 @@ for(const [name,width,height,checkpoint] of targets){
    await page.waitForTimeout(180);
    const endX=Number(await arena.getAttribute('data-omega-player-x'));
    walkTest={startX,endX,pass:Number.isFinite(startX)&&Number.isFinite(endX)&&endX>startX+3};
+   // True Playwright pointer drag (not a direct state mutation): diagonal
+   // input must move both axes, and release must return the thumb to center.
+   const stick=page.locator('.omega-protocol-stick');
+   const box=await stick.boundingBox();
+   if(!box){stickTest={pass:false,reason:'stick not visible'};}
+   else{
+    const beforeX=Number(await arena.getAttribute('data-omega-player-x'));
+    const beforeY=Number(await arena.getAttribute('data-omega-player-y'));
+    const cx=box.x+box.width/2,cy=box.y+box.height/2;
+    await page.mouse.move(cx,cy);
+    await page.mouse.down();
+    await page.mouse.move(cx+34,cy+30,{steps:7});
+    await page.waitForTimeout(480);
+    await page.mouse.up();
+    await page.waitForTimeout(170);
+    const afterX=Number(await arena.getAttribute('data-omega-player-x'));
+    const afterY=Number(await arena.getAttribute('data-omega-player-y'));
+    const thumb=await page.locator('.omega-protocol-stick-thumb').evaluate(
+     el=>el.style.transform,
+    );
+    stickTest={beforeX,beforeY,afterX,afterY,thumb,
+     pass:afterX>beforeX+3&&afterY>beforeY+3&&
+      thumb==='translate3d(0,0,0)'};
+   }
   }
   const metrics=await page.evaluate(()=>{
    const rect=s=>{const el=document.querySelector(s);if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,bottom:r.bottom,right:r.right};};
@@ -81,9 +105,9 @@ for(const [name,width,height,checkpoint] of targets){
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
-  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||walkTest?.pass===false||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||walkTest?.pass===false||stickTest?.pass===false||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
