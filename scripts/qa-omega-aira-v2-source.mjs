@@ -18,6 +18,9 @@ try{
  await page.goto('http://127.0.0.1:4173/?omegaLab=1',
   {waitUntil:'domcontentloaded',timeout:45000});
  await page.locator('main[data-omega-protocol-internal="true"]').waitFor();
+ await page.waitForFunction(()=>document.querySelector('main[data-omega-protocol-internal="true"]')
+  ?.getAttribute('data-omega-aira-v2-ready')==='true',{timeout:15000});
+ await page.screenshot({path:resolve(root,'aira-v2-live-combat-1440x900.png'),fullPage:false});
  const frames=await page.evaluate(async()=>{
   const keys=['E','SE','S','SW','W','NW','N','NE'];
   const images=[];
