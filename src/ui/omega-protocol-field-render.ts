@@ -4,7 +4,7 @@ import type {
 import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract,omegaFieldCurrentStep}
  from '../domain/omega-protocol-field';
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
-import {drawOmegaSectorOneGround} from './omega-protocol-sector-one-scene';
+import {drawOmegaSectorOneGround,drawOmegaSectorOneObstacleDetail} from './omega-protocol-sector-one-scene';
 
 /**
  * Original technical field art, no borrowed game assets.
@@ -45,14 +45,14 @@ export function drawOmegaFieldGround(
  // Keep under native Watch obstacles, missions, combat and hitboxes.
  drawOmegaSectorOneGround(ctx,plan);
  // Equipment cages, containers and working platforms have their own depth.
- for(const o of plan.obstacles)drawObstacle(ctx,o,p.structures);
+ for(const o of plan.obstacles)drawObstacle(ctx,o,p.structures,plan.sector===1);
  ctx.font='800 20px system-ui';
  ctx.fillStyle=p.accent;ctx.fillText('SECTOR 0'+plan.sector+' · '+plan.sectorName,45,65);
  ctx.font='600 13px system-ui';
  ctx.fillStyle='#a1c3ce';ctx.fillText('NODE '+String(plan.wave).padStart(2,'0')+' / 15',45,88);
  ctx.restore();
 }
-function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:string){
+function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:string,sectorOne=false){
  const {x,y,width,height}=o;
  ctx.save();
  ctx.fillStyle='#06101bbb';ctx.fillRect(x+18,y+25,width,height);
@@ -105,6 +105,7 @@ function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:st
   ctx.fillStyle='#f3b34f';
   for(let i=0;i<6;i++){ctx.fillRect(x+i*width/6,y+15,width/13,height);}
  }
+ if(sectorOne)drawOmegaSectorOneObstacleDetail(ctx,o);
  ctx.restore();
 }
 /** Highlight a field objective and the currently locked/open extraction gate. */
