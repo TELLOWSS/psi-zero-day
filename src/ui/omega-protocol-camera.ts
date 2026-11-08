@@ -1,5 +1,6 @@
 import type {OmegaFieldPoint} from '../domain/omega-protocol-field';
-import {OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT} from '../domain/omega-protocol-field';
+import {OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT,OMEGA_QUARTER_VIEW} from '../domain/omega-protocol-field';
+export {OMEGA_QUARTER_VIEW} from '../domain/omega-protocol-field';
 
 /**
  * A 3/4 world projection for the actual Watch-engine field.
@@ -8,10 +9,6 @@ import {OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT} from '../domain/omega-protocol-fie
  * Only drawing uses skewed-horizontal / foreshortened-ground coordinates.
  * Actors can undo the vertical scale when their full-body sprite is drawn.
  */
-export const OMEGA_QUARTER_VIEW={
- skewX:-0.22,
- groundYScale:0.78,
-} as const;
 
 export interface OmegaCameraState{
  readonly scale:number;
