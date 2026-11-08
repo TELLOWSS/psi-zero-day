@@ -14,7 +14,8 @@ const distance=(a:OmegaFieldPoint,b:OmegaFieldPoint)=>Math.hypot(a.x-b.x,a.y-b.y
 const finite=(p:OmegaFieldPoint)=>Number.isFinite(p.x)&&Number.isFinite(p.y);
 type Box=Readonly<{left:number;top:number;right:number;bottom:number}>;
 function inside(p:OmegaFieldPoint,r:Box):boolean{
- return p.x>=r.left&&p.x<=r.right&&p.y>=r.top&&p.y<=r.bottom;
+ return p.x>r.left+1e-7&&p.x<r.right-1e-7&&
+  p.y>r.top+1e-7&&p.y<r.bottom-1e-7;
 }
 /** Segment-box overlap using closed intervals. Boundary tangency is blocked. */
 function crosses(a:OmegaFieldPoint,b:OmegaFieldPoint,r:Box):boolean{
@@ -33,7 +34,9 @@ function crosses(a:OmegaFieldPoint,b:OmegaFieldPoint,r:Box):boolean{
   leave=Math.min(leave,Math.max(v1,v2));
   if(enter>leave)return false;
  }
- return leave>=0&&enter<=1;
+ // Moving AWAY from a solid's exact edge must be allowed. Entering the
+ // interior is blocked; a single endpoint tangent is not an intersection.
+ return leave>enter+1e-8&&leave>0&&enter<1;
 }
 export function omegaFieldNextRoute(
  actor:OmegaFieldPoint,destination:OmegaFieldPoint,
@@ -42,7 +45,7 @@ export function omegaFieldNextRoute(
 ):OmegaFieldRoute|null{
  if(!finite(actor)||!finite(destination)||!Number.isFinite(width)||
   !Number.isFinite(height)||width<=0||height<=0)return null;
- const clearance=22; // actor radius 21 + clearance
+ const clearance=21; // matches the existing field player collision radius
  const boxes:Box[]=obstacles.map(o=>({
   left:o.x-clearance,right:o.x+o.width+clearance,
   top:o.y-clearance,bottom:o.y+o.height+clearance,
