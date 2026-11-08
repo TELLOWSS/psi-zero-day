@@ -22,6 +22,8 @@ export interface OmegaApprovedFrame{
  readonly sha256:string; // binary of the sprite pinned at approval time
  readonly frontOcclusion:string; // authored precise front mask, never auto-cropped preview
  readonly backOcclusion:string; // authored precise rear mask
+ readonly frontSha256:string;
+ readonly backSha256:string;
  readonly feet:Readonly<[OmegaPoint,OmegaPoint]>;
  readonly radio:OmegaPoint;
  readonly muzzle:OmegaPoint;
@@ -49,6 +51,7 @@ const validFrame=(f:OmegaApprovedFrame,expected:OmegaRequiredAction)=> Boolean(
  f?.action===expected && f.mirrored===false &&
  validSprite(f.art) && sha.test(f.sha256||'') &&
  validSprite(f.frontOcclusion) && validSprite(f.backOcclusion) &&
+ sha.test(f.frontSha256||'') && sha.test(f.backSha256||'') &&
  f.art!==f.frontOcclusion && f.art!==f.backOcclusion &&
  f.frontOcclusion!==f.backOcclusion &&
  Array.isArray(f.feet) && f.feet.length===2 && f.feet.every(finite) &&
