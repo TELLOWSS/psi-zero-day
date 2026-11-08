@@ -1,6 +1,6 @@
 import {describe,it,expect,vi} from 'vitest';
 import {
- OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView
+ OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom
 } from '../src/ui/omega-protocol-camera';
 import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldScreenMoveToWorld} from '../src/domain/omega-protocol-field';
 describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
@@ -41,6 +41,22 @@ describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
   expect(ctx.scale).toHaveBeenCalledWith(c.scale,c.scale);
   expect(ctx.translate).toHaveBeenCalledWith(c.projectedOffsetX,c.projectedOffsetY);
   expect(ctx.transform).toHaveBeenCalledWith(1,0,-.22,.78,0,0);
+ });
+ it('separates combat presence, boss visibility and objective wayfinding with no physics mutation',()=>{
+  const actor={x:700,y:450},saved={...actor};
+  const [combat,boss,explore]=(['battle','boss','traversal'] as const)
+   .map(mode=>omegaCameraTargetZoom(mode,844,390));
+  expect(combat).toBeGreaterThan(boss);
+  expect(boss).toBeGreaterThan(explore);
+  const wide=omegaQuarterViewCamera(actor,844,390,combat);
+  const roomy=omegaQuarterViewCamera(actor,844,390,explore);
+  expect(wide.scale).toBeGreaterThan(roomy.scale);
+  expect(actor).toEqual(saved);
+  expect(omegaCameraTargetZoom('battle',844,390)).toBeGreaterThan(
+   omegaCameraTargetZoom('battle',390,844));
+  expect(()=>omegaCameraTargetZoom('battle',0,390)).toThrow(RangeError);
+  expect(()=>omegaQuarterViewCamera(actor,844,390,0)).toThrow(RangeError);
+  expect(()=>omegaQuarterViewCamera(actor,844,390,Infinity)).toThrow(RangeError);
  });
  it('converts WASD and touch movement to intuitive screen-space directions',()=>{
   const up=omegaFieldScreenMoveToWorld(0,-1);
