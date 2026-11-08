@@ -149,6 +149,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const canvasRef=useRef<HTMLCanvasElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
+ const stickRef=useRef<HTMLButtonElement>(null);
+ const stickThumbRef=useRef<HTMLSpanElement>(null);
  // Multiple finger presses keep their own direction until released.
  const pointerMoves=useRef(new Map<number,{x:number;y:number}>());
  const lastHudAt=useRef(0);
@@ -176,6 +178,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   };
   const pauseOnBackground=()=>{
    keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
    if(session.run.phase==='battle'&&session.engine.state.phase==='playing'){
     session.pause();setPaused(true);setSnapshot(session.snapshot);
    }
@@ -241,6 +244,27 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   pointerMoves.current.delete(pointerId);
   const all=[...pointerMoves.current.values()];
   mobileDir.current={x:all.reduce((sum,p)=>sum+p.x,0),y:all.reduce((sum,p)=>sum+p.y,0)};
+ };
+ // Dragging the center pad provides proportional 360-degree analog control.
+ // The four cardinal touch buttons remain accessible. DOM-only thumb movement
+ // avoids a React state commit for every touch event.
+ const moveStick=(pointerId:number,clientX:number,clientY:number)=>{
+  const stick=stickRef.current;if(!stick)return;
+  const rect=stick.getBoundingClientRect();
+  const dx=clientX-(rect.left+rect.width/2);
+  const dy=clientY-(rect.top+rect.height/2);
+  const limit=Math.max(22,Math.min(54,rect.width*1.1));
+  const length=Math.hypot(dx,dy);
+  const factor=length>limit?limit/length:1;
+  const x=dx*factor,y=dy*factor;
+  if(stickThumbRef.current)stickThumbRef.current.style.transform=
+   'translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0)';
+  const strength=length<7?0:1/limit;
+  setDirection(pointerId,x*strength,y*strength);
+ };
+ const releaseStick=(pointerId:number)=>{
+  releaseDirection(pointerId);
+  if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  };
  const handleInteract=()=>{
   const outcome=session.interact();
@@ -329,7 +353,33 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        onPointerCancel={e=>releaseDirection(e.pointerId)}
        onLostPointerCapture={e=>releaseDirection(e.pointerId)}
        aria-label={({ '↑':'위로 이동','←':'왼쪽 이동','↓':'아래로 이동','→':'오른쪽 이동'} as Record<string,string>)[d.label]}>{d.label}</button>)}
-      <div className="omega-protocol-pad-center" aria-hidden="true">◇</div>
+      <button type="button" ref={stickRef}
+       className="omega-protocol-pad-center omega-protocol-stick"
+       disabled={snapshot.run.phase!=='battle'||paused}
+       aria-label="아날로그 이동 스틱 · 누른 채 방향 드래그"
+       onPointerDown={e=>{
+        e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);
+        moveStick(e.pointerId,e.clientX,e.clientY);
+       }}
+       onPointerMove={e=>{
+        if(e.currentTarget.hasPointerCapture(e.pointerId))
+         moveStick(e.pointerId,e.clientX,e.clientY);
+       }}
+       onPointerUp={e=>releaseStick(e.pointerId)}
+       onPointerCancel={e=>releaseStick(e.pointerId)}
+       onLostPointerCapture={e=>releaseStick(e.pointerId)}
+       onKeyDown={e=>{
+        const dir=({'ArrowUp':[0,-1],'ArrowDown':[0,1],
+         'ArrowLeft':[-1,0],'ArrowRight':[1,0]} as Record<string,number[]>)[e.key];
+        if(dir){e.preventDefault();setDirection(-100,dir[0]!,dir[1]!);}
+       }}
+       onKeyUp={e=>{
+        if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))
+         releaseDirection(-100);
+       }}
+      >
+       <span ref={stickThumbRef} className="omega-protocol-stick-thumb" aria-hidden="true"/>
+      </button>
      </div>
      <div className="omega-protocol-action-pad">
       <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
