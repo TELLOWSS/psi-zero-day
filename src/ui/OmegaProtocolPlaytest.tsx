@@ -7,8 +7,9 @@ import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-cam
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
+import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
-import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,OMEGA_ACTOR_FIRE_CUE_MS,type OmegaActorFireCue} from './omega-protocol-actor-cues';
+import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,OMEGA_ACTOR_FIRE_CUE_MS,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
 import './omega-protocol-playtest.css';
 
@@ -18,7 +19,7 @@ const validKeys=new Set<string>(keys);
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -53,12 +54,15 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  // Independent eight-heading tactical actor placeholder, not an AIRA skin.
  ctx.save();ctx.translate(p.x,p.y);
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
- const shooting=omegaActorCueActive(fireCue,state.gameTime,state.phase==='playing');
- const facing=shooting?{x:fireCue.screenX,y:fireCue.screenY}:session.facing;
+ // Torso turns with bounded speed while genuine launch feedback aims the
+ // muzzle instantly. Gameplay fire/aim physics are never changed.
  const actorView={
-  facingX:facing.x,facingY:facing.y,moving:gait.active,gait,
+  facingX:pose.bodyX,facingY:pose.bodyY,
+  weaponFacingX:pose.weaponX,weaponFacingY:pose.weaponY,
+  moving:gait.active,gait,
   time:state.gameTime,dashing:Boolean(p.isDashing),
-  shooting,hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
+  shooting:pose.shooting,
+  hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  };
  // Authored animations remain in action until their third one-shot frame;
  // the procedural muzzle flash itself remains limited to the true 90ms cue.
@@ -230,6 +234,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
   const gaitController=new OmegaGroundedGait();
+  const facingController=new OmegaActorFacingController();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
@@ -248,8 +253,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const gait=gaitController.advance(
     player,session.engine.state.gameTime,session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
+   const pose=facingController.advance(
+    session.engine.state.gameTime,session.facing,fireCue,{
+     dashing:Boolean(player.isDashing),
+     hurting:Boolean(session.engine.state.lastDamage&&session.engine.state.lastDamage.remaining>1.85),
+     playing:session.engine.state.phase==='playing'&&session.run.phase==='battle',
+    });
    const ctx=canvasRef.current?.getContext('2d');
-   if(ctx)drawLab(ctx,session,fireCue,impacts,gait);
+   if(ctx)drawLab(ctx,session,fireCue,impacts,gait,pose);
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
