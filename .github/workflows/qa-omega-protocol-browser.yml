@@ -17,6 +17,7 @@ on:
       - 'src/ui/omega-protocol-playtest.css'
       - 'src/engine/omega-protocol-combat.ts'
       - 'scripts/qa-omega-protocol-browser.mjs'
+      - 'scripts/qa-omega-actor-source-sheet.mjs'
       - '.github/workflows/qa-omega-protocol-browser.yml'
   workflow_dispatch:
 
@@ -61,6 +62,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-protocol-browser.mjs
+      - name: Render actual AIRA eight-heading source and action contact sheet
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-actor-source-sheet.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
