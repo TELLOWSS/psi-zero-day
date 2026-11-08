@@ -1,5 +1,6 @@
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
+import {drawOmegaAiraV2ShotVfx} from './omega-aira-v2-weapon-vfx';
 
 /**
  * AIRA V2: the 2026-11-09 user-selected black/rose tactical design.
@@ -105,6 +106,8 @@ export function drawOmegaAiraV2Candidate(
  }else{
   ctx.drawImage(image,-w/2,-h,w,h);
  }
+ // Source-dependent actual Watch shot bearing; not a fake static gun flash.
+ drawOmegaAiraV2ShotVfx(ctx,view,heading,h);
  ctx.restore();
  return true;
 }
