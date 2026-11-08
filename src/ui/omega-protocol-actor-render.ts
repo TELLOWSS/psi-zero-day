@@ -99,6 +99,19 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.strokeStyle='#ffa6d0';ctx.lineWidth=2;
  ctx.beginPath();ctx.moveTo(l.x-6,l.y-9);ctx.lineTo(l.x+5,l.y-9);
  ctx.moveTo(r.x-6,r.y-9);ctx.lineTo(r.x+5,r.y-9);ctx.stroke();
+ // Tiny ground-contact arcs fire ONLY on genuine swing->stance crossing,
+ // never on a timer, idle collision, dashing or an untrusted sprite guess.
+ if(view.gait?.active){
+  ctx.strokeStyle='#8ddfee';ctx.lineWidth=1.7;ctx.globalAlpha=.55;
+  for(const foot of [l,r]){
+   if(!foot.landed)continue;
+   ctx.beginPath();ctx.ellipse(foot.x,foot.y+1,12,3,0,0,Math.PI*2);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(foot.x-10,foot.y-3);
+   ctx.lineTo(foot.x-16,foot.y-6);ctx.moveTo(foot.x+10,foot.y-3);
+   ctx.lineTo(foot.x+16,foot.y-6);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+ }
  // Ribbed tactical torso / jacket.
  ctx.fillStyle='#1b3049';
  ctx.beginPath();ctx.moveTo(-20,-54+nod);ctx.lineTo(19,-54+nod);
