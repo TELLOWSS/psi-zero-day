@@ -1,0 +1,35 @@
+.omega-protocol-lab{box-sizing:border-box;min-height:100dvh;background:#09111e;color:#eaf6ff;padding:clamp(12px,3vw,28px);font-family:system-ui,-apple-system,sans-serif}
+.omega-protocol-lab *{box-sizing:border-box}
+.omega-protocol-lab header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;max-width:1400px;margin:0 auto 14px}
+.omega-protocol-lab h1{font-size:clamp(26px,4vw,48px);letter-spacing:.1em;font-weight:900;margin:3px 0}
+.omega-protocol-lab header p,.omega-protocol-warning{color:#b0c8d7;font-size:13px;margin:4px 0}
+.omega-protocol-tag{display:inline-block;font-size:11px;letter-spacing:.14em;color:#ffb8d8;font-weight:800}
+.omega-protocol-lab button{cursor:pointer;background:#1a3149;color:#f0fbff;border:1px solid #526e84;border-radius:9px;padding:10px 14px;touch-action:manipulation}
+.omega-protocol-lab button:disabled{opacity:.5;cursor:not-allowed}
+.omega-protocol-lab button:focus-visible{outline:2px solid #95f4f2;outline-offset:3px}
+.omega-protocol-stats{display:flex;flex-wrap:wrap;gap:8px;max-width:1400px;margin:0 auto 12px}
+.omega-protocol-stats>div{flex:1 1 150px;display:flex;justify-content:space-between;gap:8px;background:#162337;border:1px solid #34485a;padding:12px;border-radius:10px;font-size:12px}
+.omega-protocol-stats strong{color:#fff4ca}
+.omega-protocol-arena{max-width:1400px;margin:0 auto;overflow:hidden;border:1px solid #416175;border-radius:16px;background:#111a2b}
+.omega-protocol-arena canvas{display:block;width:100%;height:auto;aspect-ratio:14/9}
+.omega-protocol-lab footer{max-width:1400px;margin:16px auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.omega-protocol-pad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,44px);gap:3px}
+.omega-protocol-pad button:nth-child(1){grid-column:2;grid-row:1}
+.omega-protocol-pad button:nth-child(2){grid-column:1;grid-row:2}
+.omega-protocol-pad button:nth-child(3){grid-column:2;grid-row:3}
+.omega-protocol-pad button:nth-child(4){grid-column:3;grid-row:2}
+.omega-protocol-pad button{padding:0;font-size:20px;background:#29455a}
+.omega-protocol-pad button:active{background:#a74475}
+.omega-protocol-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.omega-protocol-tools label{color:#d1e5f1;font-size:13px}
+.omega-protocol-tools input{display:block;background:#15253b;border:1px solid #49647b;color:white;max-width:135px;border-radius:7px;padding:9px;margin-top:4px}
+.omega-protocol-rewards,.omega-protocol-end{position:relative;margin:-10px auto 0;max-width:1250px;background:#18283edc;border:1px solid #ae709f;border-radius:12px;padding:16px;text-align:center}
+.omega-protocol-rewards h2,.omega-protocol-end h2{font-size:22px;margin:0 0 3px}
+.omega-protocol-rewards p{font-size:12px;color:#b8cbdb}
+.omega-protocol-rewards>div{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.omega-protocol-rewards button{display:flex;flex-direction:column;align-items:center;gap:9px;background:#2d3659;border-color:#8d77aa}
+.omega-protocol-rewards button strong{font-size:17px;color:#fbe4fb}
+.omega-protocol-rewards button span{font-size:12px;color:#d8e7f7}
+.omega-protocol-rewards button small{font-size:11px;color:#b0bddb}
+.omega-protocol-warning{max-width:1400px;margin:12px auto}
+@media(max-width:640px){.omega-protocol-lab{padding:9px}.omega-protocol-lab header{align-items:center}.omega-protocol-lab header>button{font-size:11px;padding:8px}.omega-protocol-stats>div{flex-basis:31%;padding:7px;font-size:10px}.omega-protocol-rewards>div{grid-template-columns:1fr}.omega-protocol-rewards button{gap:4px}.omega-protocol-pad{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px)}}
