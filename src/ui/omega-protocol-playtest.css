@@ -363,3 +363,19 @@
  .omega-protocol-wayfinder{padding:2px 6px;margin-top:0}
  .omega-protocol-wayfinder-arrow{font-size:13px}
 }
+
+/* Boss battle owns the upper center; restore mission panel after boss defeat,
+   when the same field requires physical event interactions and exit traversal. */
+.omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-mission{display:none}
+@media(max-width:760px){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:73px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:132px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:108px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:162px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:44px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:89px}
+}
