@@ -77,6 +77,41 @@ describe('OMEGA PROTOCOL boss warning/strike combat acceptance',()=>{
   expect(p.center).toEqual(moved);
   expect(p.warningDuration).toBeGreaterThanOrEqual(1.15);
  });
+ it('has no silent boss contact damage and applies one real warned hit only once',()=>{
+  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  toWave(s,9);
+  const boss=s.engine.state.hazards.find(h=>h.isStageBoss);
+  expect(boss).toBeDefined();
+  if(!boss)throw new Error('Missing wave-nine boss');
+  // Ensure no surrounding enemies can contaminate the contact hit test.
+  s.engine.state.hazards=[boss];
+  const hero=s.engine.state.player;
+  const center=s.snapshot.bossTelegraph!.center;
+  hero.x=center.x;hero.y=center.y;
+  hero.invincibleTime=0;hero.regenRate=0;
+  boss.x=hero.x;boss.y=hero.y;boss.speed=0;
+  boss.hp=100000;boss.maxHp=100000;
+  const full=hero.hp;
+  // Before warning expires, standing beside the boss cannot cause damage.
+  for(let i=0;i<80;i++){
+   boss.x=hero.x;boss.y=hero.y;
+   s.update(1/60,zero);
+  }
+  expect(hero.hp).toBe(full);
+  // After the public warning, the same live HP changes once only.
+  for(let i=0;i<30;i++){
+   boss.x=hero.x;boss.y=hero.y;
+   s.update(1/60,zero);
+  }
+  expect(hero.hp).toBe(full-12);
+  expect(s.engine.state.lastDamage).toMatchObject({source:'CRANE_BOSS',amount:12});
+  const afterStrike=hero.hp;
+  for(let i=0;i<14;i++){
+   boss.x=hero.x;boss.y=hero.y;
+   s.update(1/60,zero);
+  }
+  expect(hero.hp).toBe(afterStrike);
+ });
  it('the real wave-nine session creates a timed boss warning, then clears it on defeat',()=>{
   const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
   toWave(s,9);
