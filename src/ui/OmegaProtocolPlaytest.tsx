@@ -15,6 +15,7 @@ import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-a
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
 import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
+import {omegaAdvanceDashEchoes,drawOmegaDashEnergy,drawOmegaGroundedSplash,type OmegaDashEcho} from './omega-protocol-dash-visuals';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -23,7 +24,7 @@ const validKeys=new Set<string>(keys);
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[]){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -46,6 +47,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
+ // Genuine dash trail remains under all live Watch enemies and hero.
+ drawOmegaDashEnergy(ctx,echoes,state.gameTime);
  for(const h of state.hazards){
   if(h.hp<=0)continue;
   ctx.save();ctx.translate(h.x,h.y);
@@ -92,6 +95,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    ultimate:action.ultimate,finished:action.finished,
    actionAge:action.actionAge});
  }
+ if(gait.active&&!p.isDashing)drawOmegaGroundedSplash(ctx,[gait.left,gait.right],state.gameTime);
  ctx.restore();
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  if(field){
@@ -252,6 +256,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
+  let dashEchoes:readonly OmegaDashEcho[]=[];
   const gaitController=new OmegaGroundedGait();
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
@@ -269,6 +274,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
+   dashEchoes=omegaAdvanceDashEchoes(dashEchoes,player,session.facing,
+    Boolean(player.isDashing),session.engine.state.gameTime,
+    session.run.phase==='battle'&&session.engine.state.phase==='playing');
    // Sample after Watch movement and physical cover collision correction.
    // No actual displacement => do not animate a run cycle.
    const gait=gaitController.advance(
@@ -292,7 +300,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     const easing=dt>0?1-Math.exp(-Math.min(dt,.05)*3.8):0;
     cinematicZoom+=(target-cinematicZoom)*easing;
     drawLab(ctx,session,fireCue,impacts,gait,pose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes);
    }
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
