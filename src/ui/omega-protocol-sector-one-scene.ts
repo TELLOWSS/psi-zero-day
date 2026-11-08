@@ -58,6 +58,7 @@ function paintGroundPanel(ctx:CanvasRenderingContext2D,x:number,y:number,w:numbe
 export function drawOmegaSectorOneGround(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan):void{
  if(!eligible(plan))return;
  ctx.save();
+ const budget=omegaSceneBudget(ctx.canvas.width,ctx.canvas.height);
  // Under-foot painted service grids and weathered steel plate seams:
  // deliberately no false walls, pickups, or interactive objects.
  paintGroundPanel(ctx,42,95,485,182);
@@ -81,7 +82,7 @@ export function drawOmegaSectorOneGround(ctx:CanvasRenderingContext2D,plan:Omega
  const wet:readonly (readonly [number,number,number])[]=[
   [165,341,76],[450,686,86],[830,290,101],[1190,435,115],[1045,787,78]
  ];
- for(const [x,y,r] of wet){
+ for(const [x,y,r] of wet.slice(0,budget.puddles)){
   ctx.fillStyle='rgba(50,114,145,.17)';
   ctx.beginPath();ctx.ellipse(x,y,r,13,-.09,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle='rgba(123,201,230,.18)';ctx.lineWidth=2;
@@ -94,7 +95,7 @@ export function drawOmegaSectorOneGround(ctx:CanvasRenderingContext2D,plan:Omega
   [1020,220,207,'rgba(94,192,231,.16)'],
   [1140,700,224,'rgba(246,163,80,.12)'],
  ];
- for(const [x,y,r,color] of lamps)softLight(ctx,x,y,r,color);
+ for(const [x,y,r,color] of lamps.slice(0,budget.floodlights))softLight(ctx,x,y,r,color);
  ctx.restore();
 }
 /** Real hero position controls this light; it never affects Watch visibility,
