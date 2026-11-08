@@ -5,6 +5,7 @@ import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
+import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -42,21 +43,15 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fillStyle='#7df3fa';ctx.beginPath();ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);ctx.fill();
  }
  const p=state.player;
- // Unapproved procedural humanoid (not the final 160-frame AIRA animation).
+ // Independent eight-heading tactical actor placeholder, not an AIRA skin.
  ctx.save();ctx.translate(p.x,p.y);
- // Shadow follows projected ground; upright actor body cancels the
- // 0.78 ground foreshortening (future sprites share the same plant point).
- ctx.fillStyle='#030c179c';ctx.beginPath();ctx.ellipse(0,20,20,8,0,0,Math.PI*2);ctx.fill();
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
- ctx.fillStyle='#151e36';ctx.fillRect(-10,7,8,16);ctx.fillRect(2,7,8,16);
- ctx.fillStyle=p.isDashing?'#f4afe3':'#d9e6f5';
- ctx.beginPath();ctx.moveTo(-14,-16);ctx.lineTo(13,-16);ctx.lineTo(10,10);ctx.lineTo(-10,10);ctx.closePath();ctx.fill();
- ctx.strokeStyle='#eb8ebf';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-13,-8);ctx.lineTo(-19,5);ctx.moveTo(13,-8);ctx.lineTo(21,4);ctx.stroke();
- ctx.fillStyle='#c4d5e8';ctx.beginPath();ctx.arc(0,-24,12,0,Math.PI*2);ctx.fill();
- ctx.fillStyle='#ffa7d5';ctx.fillRect(-10,-27,20,5);
- ctx.strokeStyle='#dd96d8';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(6,-32);ctx.lineTo(16,-41);ctx.stroke();
- ctx.strokeStyle='#0c2033';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(17,-2);ctx.lineTo(32,-8);ctx.stroke();
- ctx.fillStyle='#86f2ee';ctx.fillRect(28,-11,9,4);
+ const facing=session.facing;
+ drawOmegaProtocolActor(ctx,{
+  facingX:facing.x,facingY:facing.y,moving:session.moving,
+  time:state.gameTime,dashing:Boolean(p.isDashing),
+  shooting:state.projectiles.length>0,
+ });
  ctx.restore();
  if(field){
   drawOmegaFieldOcclusion(ctx,field.plan,p);
