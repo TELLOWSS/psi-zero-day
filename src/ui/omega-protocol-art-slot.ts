@@ -136,6 +136,33 @@ export class OmegaApprovedImageCache{
  }
  clear(){this.entries.clear();}
  get size():number{return this.entries.size;}
+ /** Warm a bounded number of approved URLs after the current frame renders.
+  * No unreviewed manifest, localStorage flag or paid network API can call this.
+  */
+ preload(uris:readonly string[]):void{
+  for(const uri of uris)this.get(uri);
+ }
+}
+/** Prime only one next frame and both neighboring body directions.
+ * 4 complete frames = at most 12 image paths; avoids a 480-file download
+ * and keeps the current proven render ahead of speculative loads.
+ * The next frame wraps inside WALK and clamps at the end of one-shot actions.
+ */
+export function omegaApprovedFrameLookahead(
+ manifest:OmegaApprovedSpriteManifest,
+ pose:Readonly<{heading:OmegaHeading;frame:number;action:OmegaSpriteAction}>,
+):readonly string[]{
+ const idx=OMEGA_DIRECTIONS.indexOf(pose.heading);
+ const groupStart=OMEGA_SPRITE_ACTIONS.indexOf(pose.action);
+ const groupEnd=OMEGA_SPRITE_ACTIONS.lastIndexOf(pose.action);
+ const candidate=pose.frame<groupEnd?pose.frame+1:
+  pose.action==='walk'?groupStart:pose.frame;
+ const slots=[
+  manifest.frames[pose.heading]?.[candidate],
+  manifest.frames[OMEGA_DIRECTIONS[(idx+1)%8]!]?.[pose.frame],
+  manifest.frames[OMEGA_DIRECTIONS[(idx+7)%8]!]?.[pose.frame],
+ ].filter((f):f is OmegaApprovedSpriteFrame=>Boolean(f));
+ return [...new Set(slots.flatMap(f=>[f.rearMask,f.actor,f.frontMask]))];
 }
 /** Stage is translated to physical player XY. Return false WITHOUT painting
  * when art is missing, so existing procedural gameplay art remains visible.
@@ -162,5 +189,8 @@ export function drawOmegaApprovedActor(
  ctx.drawImage(actor,-width/2,top,width,height);
  ctx.drawImage(front,-width/2,top,width,height);
  ctx.restore();
+ // Decode the next walk/attack frame and left/right body turns ahead of time;
+ // do not stall this paint on asynchronous image loads.
+ cache.preload(omegaApprovedFrameLookahead(manifest,pos));
  return true;
 }

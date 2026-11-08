@@ -4,7 +4,7 @@ import {OMEGA_DIRECTIONS} from '../src/ui/omega-protocol-actor-render';
 import {
  OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,
  OMEGA_SPRITE_ACTIONS,omegaCanRenderApprovedArt,omegaSpriteFrameForView,
- OmegaApprovedImageCache,drawOmegaApprovedActor,
+ OmegaApprovedImageCache,drawOmegaApprovedActor,omegaApprovedFrameLookahead,
  type OmegaApprovedSpriteManifest,type OmegaApprovedSpriteFrame,
 } from '../src/ui/omega-protocol-art-slot';
 
@@ -95,13 +95,44 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   const drawn=c.calls.filter(call=>call.name==='drawImage');
   expect(drawn).toHaveLength(3);
   expect(drawn[0]!.args.slice(1)).toEqual([-32.25,-86*454/512,64.5,86]);
-  expect(loaded.size).toBe(3);
+  // Render begins with three complete current layers; speculative prefetch
+  // uses no more than the configured ten-image cache for this fixture.
+  expect(loaded.size).toBeGreaterThanOrEqual(3);
+  expect(loaded.size).toBeLessThanOrEqual(10);
   const pending=new OmegaApprovedImageCache(10,()=>({
    complete:false,naturalWidth:0,naturalHeight:0,
   } as unknown as HTMLImageElement));
   const empty=canvas();
   expect(drawOmegaApprovedActor(empty.ctx,manifest,true,pending,sample)).toBe(false);
   expect(empty.calls).toHaveLength(0);
+ });
+ it('preloads only next and adjacent approved frames while retaining fallback',()=>{
+  const manifest=positive('warm');
+  const pose=omegaSpriteFrameForView(sample);
+  const upcoming=omegaApprovedFrameLookahead(manifest,pose);
+  expect(upcoming).toHaveLength(9); // next E frame, same-index SE and NE
+  expect(upcoming).toContain(manifest.frames.E[1]!.actor);
+  expect(upcoming).toContain(manifest.frames.SE[0]!.actor);
+  expect(upcoming).toContain(manifest.frames.NE[0]!.actor);
+  const loadLog:string[]=[];
+  const cache=new OmegaApprovedImageCache(36,uri=>{
+   loadLog.push(uri);
+   return {complete:true,naturalWidth:384,naturalHeight:512} as HTMLImageElement;
+  });
+  const c=canvas();
+  expect(drawOmegaApprovedActor(c.ctx,manifest,true,cache,sample)).toBe(true);
+  expect(loadLog).toHaveLength(12); // current 3 + 9 bounded lookahead
+  expect(cache.size).toBe(12);
+  // Preloaded current frame is reused; no duplicate loads on repeat draw.
+  drawOmegaApprovedActor(c.ctx,manifest,true,cache,sample);
+  expect(loadLog).toHaveLength(12);
+  const oneShot=omegaApprovedFrameLookahead(manifest,{
+   heading:'E',frame:8,action:'fire'});
+  expect(oneShot).toContain(manifest.frames.E[8]!.actor);
+  expect(oneShot).not.toContain(manifest.frames.E[9]!.actor);
+  const never=canvas();
+  expect(drawOmegaApprovedActor(never.ctx,manifest,false,cache,sample)).toBe(false);
+  expect(never.calls).toHaveLength(0);
  });
  it('does not mistake the offline 8×6 directional preview for released art',()=>{
   const data=JSON.parse(readFileSync(new URL(
