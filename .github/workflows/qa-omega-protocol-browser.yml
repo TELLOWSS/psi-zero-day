@@ -1,0 +1,55 @@
+name: Capture OMEGA PROTOCOL browser QA
+
+on:
+  pull_request:
+    paths:
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'src/engine/omega-protocol-combat.ts'
+      - 'scripts/qa-omega-protocol-browser.mjs'
+      - '.github/workflows/qa-omega-protocol-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prepare source art files as Vite normally does
+        run: npm run predev
+      - name: Install test-only browser driver (no browser download)
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Start development-only OMEGA cockpit
+        env:
+          VITE_OMEGA_PROTOCOL_LAB: '1'
+        run: |
+          npx vite --host 127.0.0.1 --port 4173 --strictPort > /tmp/omega-vite.log 2>&1 &
+          echo $! > /tmp/omega-vite.pid
+          for attempt in $(seq 1 70); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omega-vite.log
+          exit 1
+      - name: Real React/Canvas screenshots and viewport checks
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-protocol-browser.mjs
+      - name: Upload source-run screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-protocol-source-browser-screenshots
+          path: qa-omega-protocol-captures/
+          retention-days: 14
+          if-no-files-found: warn
