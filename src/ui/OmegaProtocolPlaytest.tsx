@@ -7,12 +7,13 @@ import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-cam
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
+import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
 const validKeys=new Set<string>(keys);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[]){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -55,6 +56,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting,hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  });
  ctx.restore();
+ drawOmegaImpactFx(ctx,impacts,state.gameTime);
  if(field){
   drawOmegaFieldOcclusion(ctx,field.plan,p);
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
@@ -208,6 +210,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let request=0,last=0,alive=true,fpsTotal=0,fpsCount=0,fpsAt=0;
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
+  let impacts:OmegaImpactFx[]=[];
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
@@ -217,9 +220,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
    if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
-   fireCue=omegaAdvanceActorFireCue(
-    fireCue,session.engine.drainProjectileFeedback(),session.engine.state.gameTime);
-   const ctx=canvasRef.current?.getContext('2d');if(ctx)drawLab(ctx,session,fireCue);
+   const engineEvents=session.engine.drainProjectileFeedback();
+   fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
+   impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
+   const ctx=canvasRef.current?.getContext('2d');if(ctx)drawLab(ctx,session,fireCue,impacts);
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
