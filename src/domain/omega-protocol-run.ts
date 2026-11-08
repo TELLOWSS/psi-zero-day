@@ -128,6 +128,8 @@ export function omegaStartRun(seed:number,access:OmegaProtocolAccess):OmegaProto
 export interface OmegaBattleResult {
  readonly won:boolean;
  readonly damageTaken:number;
+ /** Authoritative current HP snapshot from the isolated Watch combat engine. */
+ readonly remainingHp?:number;
 }
 /**
  * Wave resolution consumes exactly one battle. Interim cards are run-only.
@@ -137,7 +139,9 @@ export function omegaResolveBattle(run:OmegaProtocolRun,result:OmegaBattleResult
  if(run.phase!=='battle')throw new Error('Battle settlement is not allowed in '+run.phase);
  if(!Number.isFinite(result.damageTaken)||result.damageTaken<0)
   throw new RangeError('Invalid damage');
- const hp=clamp(run.hp-result.damageTaken,0,run.maxHp);
+ if(result.remainingHp!==undefined&&(!Number.isFinite(result.remainingHp)||result.remainingHp<0||result.remainingHp>run.maxHp))
+  throw new RangeError('Invalid authoritative remaining HP');
+ const hp=result.remainingHp??clamp(run.hp-result.damageTaken,0,run.maxHp);
  if(!result.won||hp<=0)return {...run,hp,phase:'defeat',offers:[]};
  const victories=run.victories+1;
  if(run.wave===OMEGA_PROTOCOL_TOTAL_WAVES)
