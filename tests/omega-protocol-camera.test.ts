@@ -45,7 +45,7 @@ describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
  it('separates combat presence, boss visibility and objective wayfinding with no physics mutation',()=>{
   const actor={x:700,y:450},saved={...actor};
   const [combat,boss,explore]=(['battle','boss','traversal'] as const)
-   .map(mode=>omegaCameraTargetZoom(mode,844,390));
+   .map(mode=>omegaCameraTargetZoom(mode,844,390)) as [number,number,number];
   expect(combat).toBeGreaterThan(boss);
   expect(boss).toBeGreaterThan(explore);
   const wide=omegaQuarterViewCamera(actor,844,390,combat);
