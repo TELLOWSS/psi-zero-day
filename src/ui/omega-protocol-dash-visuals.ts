@@ -16,13 +16,14 @@ const MIN_GAP=18;
 const finite=(v:number)=>Number.isFinite(v);
 export function omegaAdvanceDashEchoes(
  previous:readonly OmegaDashEcho[],player:OmegaFieldPoint,
- facing:OmegaFieldPoint,nativeDash:boolean,gameTime:number,
+ previousPlayer:OmegaFieldPoint,facing:OmegaFieldPoint,nativeDash:boolean,gameTime:number,
  active:boolean,
 ):readonly OmegaDashEcho[]{
- if(!finite(player.x)||!finite(player.y)||!finite(gameTime)||gameTime<0||
+ if(!finite(player.x)||!finite(player.y)||!finite(previousPlayer.x)||!finite(previousPlayer.y)||
+    !finite(gameTime)||gameTime<0||
     !finite(facing.x)||!finite(facing.y)||!active)return [];
  const keep=previous.filter(e=>gameTime>=e.time&&gameTime-e.time<OMEGA_DASH_ECHO_LIFETIME);
- if(!nativeDash)return keep;
+ if(!nativeDash||Math.hypot(player.x-previousPlayer.x,player.y-previousPlayer.y)<2)return keep;
  const last=keep.at(-1);
  if(last&&Math.hypot(player.x-last.x,player.y-last.y)<MIN_GAP)return keep;
  return [...keep,{x:player.x,y:player.y,time:gameTime,
