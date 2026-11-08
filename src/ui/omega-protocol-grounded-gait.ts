@@ -25,8 +25,9 @@ type MutableFoot={
  initialized:boolean;
 };
 // A planted stance cannot exceed the visible operator's 33px leg reach.
-// 48 projected units/cycle × .55 stance = 26.4 units of hip travel.
-const cycleDistance=48;
+// 44 projected units/cycle × .55 stance = 24.2 units of hip travel.
+// Measured maximal technical ankle offset: ~32.1, versus 45.3 before.
+const cycleDistance=44;
 const stancePortion=.55;
 const projected=(p:OmegaWalkPoint):OmegaWalkPoint=>({x:p.x-.22*p.y,y:p.y*.78});
 const length=(a:OmegaWalkPoint,b:OmegaWalkPoint)=>Math.hypot(a.x-b.x,a.y-b.y);
