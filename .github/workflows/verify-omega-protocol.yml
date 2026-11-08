@@ -22,6 +22,8 @@ on:
       - 'src/ui/omega-protocol-actor-cues.ts'
       - 'src/ui/omega-protocol-impact-vfx.ts'
       - 'src/ui/omega-protocol-art-slot.ts'
+      - 'src/ui/omega-protocol-motion-qa-gate.ts'
+      - 'tests/omega-protocol-motion-qa-gate.test.ts'
       - 'tests/omega-protocol-art-slot.test.ts'
       - 'tests/omega-protocol-impact-vfx.test.ts'
       - 'tests/omega-protocol-actor-cues.test.ts'
@@ -52,4 +54,4 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
