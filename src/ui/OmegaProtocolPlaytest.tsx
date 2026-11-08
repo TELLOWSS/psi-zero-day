@@ -108,9 +108,41 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.fillStyle='#91fff0';ctx.fill();
  ctx.restore();
 }
+function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
+ const session=new OmegaProtocolCombatSession(seed,10,false,{fieldTraversal:true});
+ if(!import.meta.env.DEV)return session;
+ const qa=new URLSearchParams(window.location.search).get('omegaQaState');
+ if(!['reward','boss','objective','exit'].includes(qa||''))return session;
+ const idle={moveX:0,moveY:0,triggerAction:false};
+ const clearAndOperate=(finishExit:boolean)=>{
+  session.engine.state.hazards=[];
+  session.update(1/60,idle);
+  const field=session.field;
+  if(!field||field.progress.phase!=='objective')return;
+  if(qa==='objective')return;
+  session.engine.state.player.x=field.plan.event.target.x;
+  session.engine.state.player.y=field.plan.event.target.y;
+  session.interact();
+  if(!finishExit)return;
+  session.engine.state.player.x=field.plan.exit.x;
+  session.engine.state.player.y=field.plan.exit.y;
+  session.interact();
+ };
+ if(qa==='objective'||qa==='exit'){
+  clearAndOperate(qa==='exit'?false:false);
+  return session;
+ }
+ const targetWave=qa==='reward'?3:9;
+ for(let safety=0;safety<15&&session.run.wave<targetWave;safety++){
+  clearAndOperate(true);
+  if(session.run.phase==='reward'&&(qa==='boss'||session.run.wave<targetWave))
+   session.selectUpgrade(session.run.offers[0]!);
+ }
+ return session;
+}
 export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [seedValue,setSeedValue]=useState('20261108');
- const [session,setSession]=useState(()=>new OmegaProtocolCombatSession(20261108,10,false));
+ const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
  const [fps,setFps]=useState(0);
@@ -122,7 +154,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const lastHudAt=useRef(0);
  const restart=useCallback(()=>{
   const n=Number(seedValue);
-  const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,10,false);
+  const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,10,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
  },[seedValue]);
@@ -185,26 +217,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    document.removeEventListener('visibilitychange',onVisibility);
   };
  },[session]);
- // Development-only browser screenshot fixture: advances real Watch-engine
- // waves (no fake DOM, no rewards saved). It is never enabled in production.
- useEffect(()=>{
-  if(!import.meta.env.DEV)return;
-  const mode=new URLSearchParams(window.location.search).get('omegaQaState');
-  if(mode!=='reward'&&mode!=='boss')return;
-  const ending=mode==='reward'?2:8;
-  for(let i=0;i<ending&&session.run.phase!=='victory';i++){
-   session.engine.state.hazards=[];
-   session.update(1/60,{moveX:0,moveY:0,triggerAction:false});
-   if(session.run.phase==='reward'&&i!==ending-1){
-    session.selectUpgrade(session.run.offers[0]!);
-   }
-  }
-  // Boss frame must enter wave 9; wave 8 has a mandatory card intermission.
-  if(mode==='boss'&&session.run.phase==='reward'){
-   session.selectUpgrade(session.run.offers[0]!);
-  }
-  setSnapshot(session.snapshot);
- },[session]);
+ // QA states are initialized synchronously in makeOmegaFieldSession().
  const setDirection=(pointerId:number,x:number,y:number)=>{
   pointerMoves.current.set(pointerId,{x,y});
   const all=[...pointerMoves.current.values()];
