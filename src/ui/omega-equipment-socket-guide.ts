@@ -22,7 +22,6 @@ export interface OmegaSocketFrame{
 }
 const CAM_DEGREES=[90,45,0,-45,-90,-135,180,135] as const;
 const px=(x:number,y:number):OmegaPoint=>({x:Math.round(x*100)/100,y:Math.round(y*100)/100});
-const clamp=(x:number,min:number,max:number)=>Math.max(min,Math.min(max,x));
 function footStep(time:number,offset:number):{delta:number;lift:number;planted:boolean}{
  const p=(time+offset)%1;
  if(p<.6)return {delta:(.5-p/.6)*34,lift:0,planted:true};
