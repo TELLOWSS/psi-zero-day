@@ -5,7 +5,11 @@
  * Procedural technical geometry: NOT approved 160-frame character art.
  */
 export interface OmegaWalkPoint {readonly x:number;readonly y:number}
-export interface OmegaWalkFoot {readonly x:number;readonly y:number;readonly planted:boolean}
+export interface OmegaWalkFoot {
+ readonly x:number;readonly y:number;readonly planted:boolean;
+ /** Exactly one visual sample when the swing foot meets ground. */
+ readonly landed?:boolean;
+}
 export interface OmegaWalkPose {
  readonly active:boolean;
  readonly phase:number;
@@ -20,8 +24,10 @@ type MutableFoot={
  planted:boolean;
  initialized:boolean;
 };
-const cycleDistance=64;
-const stancePortion=.58;
+// A planted stance cannot exceed the visible operator's 33px leg reach.
+// 48 projected units/cycle × .55 stance = 26.4 units of hip travel.
+const cycleDistance=48;
+const stancePortion=.55;
 const projected=(p:OmegaWalkPoint):OmegaWalkPoint=>({x:p.x-.22*p.y,y:p.y*.78});
 const length=(a:OmegaWalkPoint,b:OmegaWalkPoint)=>Math.hypot(a.x-b.x,a.y-b.y);
 const lerp=(a:number,b:number,f:number)=>a+(b-a)*f;
@@ -98,9 +104,11 @@ export class OmegaGroundedGait {
    state.initialized=true;state.planted=stance;
   }
   if(stance){
-   if(!state.planted)state.anchor=state.last;
+   const landed=!state.planted;
+   if(landed)state.anchor=state.last;
    state.planted=true;state.last=state.anchor;
-   return {x:state.anchor.x-root.x,y:state.anchor.y-root.y,planted:true};
+   return {x:state.anchor.x-root.x,y:state.anchor.y-root.y,planted:true,
+    landed};
   }
   if(state.planted)state.swingStart=state.last;
   state.planted=false;
