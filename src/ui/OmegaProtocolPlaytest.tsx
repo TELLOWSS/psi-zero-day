@@ -147,6 +147,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     session.selectUpgrade(session.run.offers[0]!);
    }
   }
+  // Boss frame must enter wave 9; wave 8 has a mandatory card intermission.
+  if(mode==='boss'&&session.run.phase==='reward'){
+   session.selectUpgrade(session.run.offers[0]!);
+  }
   setSnapshot(session.snapshot);
  },[session]);
  const setDirection=(pointerId:number,x:number,y:number)=>{
