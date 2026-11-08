@@ -29,6 +29,7 @@ on:
       - 'src/engine/omega-protocol-combat.ts'
       - 'scripts/qa-omega-protocol-browser.mjs'
       - 'scripts/qa-omega-actor-source-sheet.mjs'
+      - 'scripts/qa-omega-mission-source-sheet.mjs'
       - '.github/workflows/qa-omega-protocol-browser.yml'
   workflow_dispatch:
 
@@ -78,6 +79,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-actor-source-sheet.mjs
+      - name: Render real mission devices across all interaction states
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-mission-source-sheet.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
