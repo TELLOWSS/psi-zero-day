@@ -5,7 +5,7 @@
 ## What now works
 
 The separate user-deliverable `PSI_ZERO_DAY_OMEGA_FIELD_RIG_LAB_V1.zip`
-(SHA-256 `3bd33856ca11471a46b89ecd5c007531bb975a22d9ceaf8658e2752655d48ee2`)
+(SHA-256 `8e40cbf51a8ed3bcf8f9d338bd05c32b151a2626593dae03a217aa10e9c0ad70`)
 contains a complete, no-API HTML/Canvas field laboratory with the original
 8-direction × 6-pose vector research atlas, a mobile texture, frame-level
 socket JSON, offline source, screenshots, and a repeatable browser QA script.
@@ -66,3 +66,5 @@ Remaining required production steps:
 
 **No main or production merge** is justified merely by the preview working.
 The project must remain PR #234 DRAFT until asset and user-play release gates pass.
+
+The user download also includes `omega-field-8direction-playback.gif` (24 true Chromium Canvas capture frames: eight headings × three sampled gait phases), and desktop/mobile screenshots. This is evidence of the debug renderer operating, not evidence of released combat animation.
