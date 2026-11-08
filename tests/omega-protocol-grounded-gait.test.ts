@@ -2,6 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {OmegaGroundedGait} from '../src/ui/omega-protocol-grounded-gait';
 import {drawOmegaProtocolActor} from '../src/ui/omega-protocol-actor-render';
 import {omegaSpriteFrameForView} from '../src/ui/omega-protocol-art-slot';
+import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
 const base={facingX:1,facingY:0,moving:true,time:8,dashing:false,shooting:false};
 describe('OMEGA combat character moves feet from actual post-collision Watch position',()=>{
@@ -72,6 +73,31 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   expect(next.active).toBe(false);
   expect(track.advance({x:NaN,y:20},.1,2).active).toBe(false);
   expect(track.advance({x:150,y:450},.1,2).active).toBe(false);
+ });
+ it('uses the real field/Watch collision correction so pushing against cargo cannot animate running',()=>{
+  const session=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const plan=session.field?.plan;
+  expect(plan).toBeDefined();
+  const cargo=plan!.obstacles.find(o=>o.kind==='container')!;
+  session.engine.state.hazards=[]; // combat bypass ONLY for isolated collision test
+  const player=session.engine.state.player;
+  player.x=cargo.x-21;player.y=cargo.y+cargo.height/2;
+  const track=new OmegaGroundedGait();
+  track.advance(player,session.engine.state.gameTime,session.plan.wave);
+  for(let i=0;i<12;i++){
+   session.update(1/60,{moveX:1,moveY:0,triggerAction:false});
+   const pose=track.advance(player,session.engine.state.gameTime,session.plan.wave,
+    Boolean(player.isDashing));
+   expect(player.x).toBeLessThanOrEqual(cargo.x-21+1e-3);
+   expect(pose.active).toBe(false);
+  }
+  // Outside the obstacle's physical height, the same actual input may move.
+  player.y=cargo.y-50;
+  const away=new OmegaGroundedGait();
+  away.advance(player,session.engine.state.gameTime,session.plan.wave);
+  session.update(1/60,{moveX:1,moveY:0,triggerAction:false});
+  const pose=away.advance(player,session.engine.state.gameTime,session.plan.wave);
+  expect(pose.active).toBe(true);
  });
  it('the renderer consumes grounded foot positions without moving collision state',()=>{
   const calls:Array<{name:string;args:unknown[]}>= [];
