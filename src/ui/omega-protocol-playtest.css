@@ -296,3 +296,28 @@
  .omega-protocol-boss-alert{top:117px}
  .omega-protocol-action-pad button.omega-protocol-interact{width:48px;height:48px}
 }
+
+
+/* Distinct real boss telegraph HUD; all safety timing mirrors the engine state. */
+.omega-protocol-boss-phase{
+ z-index:5;position:absolute;top:148px;left:50%;transform:translateX(-50%);
+ min-width:245px;max-width:min(380px,calc(100% - 22px));
+ display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap;
+ padding:7px 15px;text-align:center;
+ border:1px solid rgba(255,135,132,.58);border-radius:11px;
+ background:linear-gradient(110deg,rgba(65,25,41,.91),rgba(39,27,53,.88));
+ box-shadow:0 0 23px #e9535933;
+ color:#ffe6df;pointer-events:none;font-size:11px
+}
+.omega-protocol-boss-phase strong{font-size:12px;color:#ffeac1}
+.omega-protocol-boss-phase span{font-size:11px}
+.omega-protocol-boss-phase em{font-size:9px;color:#ff9cce;font-weight:950;letter-spacing:.09em;font-style:normal}
+@media(max-width:760px){
+ .omega-protocol-boss-phase{top:119px;padding:4px 8px;min-width:0;width:max-content;max-width:calc(100% - 20px)}
+ .omega-protocol-boss-phase strong,.omega-protocol-boss-phase span{font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-boss-phase{top:139px;max-width:min(340px,calc(100% - 280px));padding:3px 7px;border-radius:7px}
+ .omega-protocol-boss-phase strong,.omega-protocol-boss-phase span{font-size:8px}
+ .omega-protocol-boss-phase em{font-size:7px}
+}
