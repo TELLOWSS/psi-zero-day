@@ -44,6 +44,8 @@ export class OmegaProtocolCombatSession {
  private currentField:OmegaFieldPlan|null=null;
  private fieldStatus:OmegaFieldProgress|null=null;
  private bossPattern:OmegaBossTelegraph|null=null;
+ private lastFacing={x:0,y:1};
+ private playerMoving=false;
  constructor(
   seed:number,watchClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean}>={},
@@ -64,6 +66,8 @@ export class OmegaProtocolCombatSession {
  }
  get run():OmegaProtocolRun{return this.active;}
  get plan():OmegaWavePlan{return this.latestPlan;}
+ get facing():Readonly<{x:number;y:number}>{return {...this.lastFacing};}
+ get moving():boolean{return this.playerMoving;}
  get field():Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null{
   return this.currentField&&this.fieldStatus
    ?{plan:this.currentField,progress:this.fieldStatus}
@@ -125,6 +129,11 @@ export class OmegaProtocolCombatSession {
   // player's permanent/current speed or touching the normal Watch engine.
   // Player controls remain screen-relative even though the construction
   // field is rendered with a skewed 3/4 camera.
+  const headingMagnitude=Math.hypot(input.moveX,input.moveY);
+  this.playerMoving=headingMagnitude>.08;
+  if(this.playerMoving){
+   this.lastFacing={x:input.moveX/headingMagnitude,y:input.moveY/headingMagnitude};
+  }
   const move=this.fieldTraversal
    ?omegaFieldScreenMoveToWorld(input.moveX,input.moveY)
    :{x:input.moveX,y:input.moveY};
