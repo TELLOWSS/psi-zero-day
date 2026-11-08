@@ -33,7 +33,22 @@ for(const [name,width,height,checkpoint] of targets){
   await page.waitForTimeout(550);
   // Actual browser input must move the real Watch-engine player, not only
   // paint a HUD screenshot. Only the landscape source QA uses this probe.
-  let walkTest=null,stickTest=null;
+  let walkTest=null,stickTest=null,padModeTest=null;
+  if(name==='portrait'){
+   const pad=page.locator('.omega-protocol-pad');
+   const defaultMode=await pad.getAttribute('data-omega-pad-mode');
+   const arrows=pad.locator('button:not(.omega-protocol-stick)');
+   const hiddenArrows=await arrows.evaluateAll(items=>items.every(el=>getComputedStyle(el).display==='none'));
+   await page.getByRole('button',{name:'방향키 모드로 전환'}).click();
+   const classic=await pad.getAttribute('data-omega-pad-mode');
+   const visibleArrows=await arrows.evaluateAll(items=>items.every(el=>
+    getComputedStyle(el).display!=='none'&&el.getBoundingClientRect().width>=40
+   ));
+   await page.getByRole('button',{name:'아날로그 스틱으로 전환'}).click();
+   const restored=await pad.getAttribute('data-omega-pad-mode');
+   padModeTest={defaultMode,classic,restored,hiddenArrows,visibleArrows,
+    pass:defaultMode==='analog'&&classic==='arrows'&&restored==='analog'&&hiddenArrows&&visibleArrows};
+  }
   if(name==='landscape'){
    const arena=page.locator('.omega-protocol-arena');
    const startX=Number(await arena.getAttribute('data-omega-player-x'));
@@ -80,6 +95,7 @@ for(const [name,width,height,checkpoint] of targets){
     canvas:rect('canvas'),
     canvasIntrinsic:{w:document.querySelector('canvas')?.width,h:document.querySelector('canvas')?.height},
     touchTargets:[...document.querySelectorAll('.omega-protocol-pad button,.omega-protocol-action-pad button')]
+     .filter(el=>getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden')
      .map(el=>{const r=el.getBoundingClientRect();return {w:r.width,h:r.height}}),
     boxes,
     title:document.querySelector('h1')?.textContent?.trim(),
@@ -90,6 +106,27 @@ for(const [name,width,height,checkpoint] of targets){
     missionTitle:document.querySelector('.omega-protocol-mission strong')?.textContent?.trim()||null,
     missionInstructions:document.querySelector('.omega-protocol-mission span')?.textContent?.trim()||null,
    };
+  });
+  // Probe actual rendered bitmap glyphs. If Korean is replaced by identical
+  // tofu squares, two different seven-syllable strings render identically.
+  // Width/font-family alone cannot prove glyph availability.
+  const hangul=await page.evaluate(async()=>{
+   await document.fonts.ready;
+   const canvas=document.createElement('canvas');
+   canvas.width=230;canvas.height=50;
+   const ctx=canvas.getContext('2d',{willReadFrequently:true});
+   if(!ctx)return {pass:false,reason:'canvas unavailable'};
+   const family=getComputedStyle(document.querySelector('.omega-protocol-lab')).fontFamily;
+   ctx.font='bold 26px '+family;
+   const bitmap=word=>{
+    ctx.clearRect(0,0,230,50);ctx.fillStyle='#ffffff';
+    ctx.fillText(word,5,34);
+    return ctx.getImageData(0,0,230,50).data.slice();
+   };
+   const left=bitmap('가나다라마바사'),right=bitmap('아자차카타파하');
+   let changed=0;
+   for(let i=3;i<left.length;i+=4)if(left[i]!==right[i])changed++;
+   return {pass:changed>150,changedPixels:changed,fontFamily:family};
   });
   const scrollV=metrics.docHeight>height+2;
   const scrollH=metrics.docWidth>width+2;
@@ -105,9 +142,11 @@ for(const [name,width,height,checkpoint] of targets){
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,errors,
+    actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
-  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||walkTest?.pass===false||stickTest?.pass===false||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
