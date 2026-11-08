@@ -17,6 +17,9 @@ export interface OmegaActorView {
  readonly dashing:boolean;
  readonly shooting:boolean;
  readonly hurt?:boolean;
+ /** Real Watch director-shout or OMEGA final victory, visual-only. */
+ readonly ultimate?:boolean;
+ readonly finished?:boolean;
  /** Independent, genuine native-shot muzzle bearing in screen coordinates. */
  readonly weaponFacingX?:number;
  readonly weaponFacingY?:number;
@@ -200,6 +203,20 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  }
  ctx.restore(); // rifle-local transform
  ctx.restore(); // upper-body perspective only
+ if(view.ultimate){
+  // This ring only displays while the actual Watch directorShoutTimer>0.
+  // Original procedural illustration, never a fake projectile/HP event.
+  ctx.strokeStyle='#b7fff2';ctx.lineWidth=3;ctx.globalAlpha=.7;
+  const pulse=1+.07*Math.sin(view.time*12);
+  ctx.beginPath();ctx.ellipse(0,-38,28*pulse,37*pulse,0,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='#baf8f0';ctx.beginPath();ctx.arc(0,-59,4,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+ }
+ if(view.finished){
+  ctx.strokeStyle='#f3caed';ctx.lineWidth=2;ctx.globalAlpha=.65;
+  ctx.beginPath();ctx.arc(0,-45,34,Math.PI*1.05,Math.PI*1.95);ctx.stroke();
+  ctx.globalAlpha=1;
+ }
  if(view.hurt){
   ctx.strokeStyle='#ff7f9f';ctx.lineWidth=3;ctx.globalAlpha=.85;
   ctx.beginPath();ctx.arc(0,-42,26,Math.PI*.1,Math.PI*1.1);ctx.stroke();

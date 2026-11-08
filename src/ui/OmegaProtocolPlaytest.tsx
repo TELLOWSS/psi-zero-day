@@ -8,8 +8,9 @@ import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
+import {omegaResolveArtAction} from './omega-protocol-art-motion';
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
-import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,OMEGA_ACTOR_FIRE_CUE_MS,type OmegaActorFireCue} from './omega-protocol-actor-cues';
+import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
 import './omega-protocol-playtest.css';
 
@@ -64,15 +65,21 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting:pose.shooting,
   hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  };
- // Authored animations remain in action until their third one-shot frame;
- // the procedural muzzle flash itself remains limited to the true 90ms cue.
- const shotAge=Math.max(0,state.gameTime-(fireCue.until-OMEGA_ACTOR_FIRE_CUE_MS/1000));
- const artShooting=state.phase==='playing'&&fireCue.until>0&&
-  state.gameTime<fireCue.until+.077;
- const artActionAge=artShooting?shotAge:
-  Boolean(p.isDashing)?Math.max(0,.22-(p.dashDuration??0)):
-  actorView.hurt?Math.max(0,2-(state.lastDamage?.remaining??2)):0;
- const artView={...actorView,shooting:artShooting,actionAge:artActionAge};
+ // AIRA's final authored 8x20 pack has six action groups. Read real native
+ // Watch states in priority order; never use the FIRE age for DASH/HIT or
+ // fabricate an ultimate animation from an uncharged HUD button.
+ const action=omegaResolveArtAction({
+  gameTime:state.gameTime,runPhase:session.run.phase,
+  enginePhase:state.phase,directorShoutTimer:state.directorShoutTimer,
+  isDashing:Boolean(p.isDashing),dashRemaining:p.dashDuration??0,
+  hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
+ });
+ const artView={...actorView,...action};
+ // The procedural actor also receives genuine shout/finish visual cues.
+ // Its muzzle still uses only the 90ms actual-shot signal, not the 75ms
+ // final sprite follow-through.
+ actorView.ultimate=action.ultimate;
+ actorView.finished=action.finished;
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)){
   drawOmegaProtocolActor(ctx,actorView);
