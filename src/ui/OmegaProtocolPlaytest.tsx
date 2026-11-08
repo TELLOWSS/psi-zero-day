@@ -4,15 +4,12 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
+import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
 const validKeys=new Set<string>(keys);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-const threatColors:Record<string,string>={
- UNHELMETED:'#f5b96d',RUNAWAY_CART:'#d887ff',GAS_LEAK:'#6cdbc2',
- FALLING_DEBRIS:'#ff9b9b',CRANE_BOSS:'#ffdf72'
-};
 function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -35,13 +32,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  for(const h of state.hazards){
   if(h.hp<=0)continue;
-  const tint=threatColors[h.type]??'#ddd';
-  ctx.beginPath();ctx.arc(h.x,h.y,h.radius,0,Math.PI*2);
-  ctx.fillStyle=tint;ctx.globalAlpha=.8;ctx.fill();ctx.globalAlpha=1;
-  ctx.strokeStyle=h.isStageBoss?'#fff3c3':'#233547';ctx.lineWidth=h.isStageBoss?6:2;ctx.stroke();
-  ctx.fillStyle='#161e2f';ctx.fillRect(h.x-h.radius,h.y-h.radius-16,h.radius*2,5);
-  ctx.fillStyle='#7bffd6';ctx.fillRect(h.x-h.radius,h.y-h.radius-16,h.radius*2*Math.max(0,h.hp/h.maxHp),5);
-  if(h.isStageBoss){ctx.fillStyle='#fff5bd';ctx.font='bold 18px sans-serif';ctx.fillText('BOSS',h.x-25,h.y-h.radius-28);}
+  ctx.save();ctx.translate(h.x,h.y);
+  // Enemy bodies stand upright over the same 3/4 projected ground.
+  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
+  drawOmegaProtocolEnemy(ctx,h,state.gameTime);
+  ctx.restore();
  }
  for(const projectile of state.projectiles){
   ctx.fillStyle='#7df3fa';ctx.beginPath();ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);ctx.fill();
