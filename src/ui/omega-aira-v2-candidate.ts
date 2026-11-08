@@ -19,6 +19,16 @@ export const OMEGA_AIRA_V2_IDENTITY='AIRA_V2_USER_APPROVED_20261109' as const;
 export function omegaAiraV2Path(heading:OmegaHeading):string{
  return OMEGA_AIRA_V2_ROOT+heading.toLowerCase()+'-idle.webp';
 }
+/** Lift AIRA's screen presence without touching native Watch hitboxes.
+ * Only 3 size bands are used to prevent constantly shifting character scale.
+ * On unknown/fake Canvas contexts retain the historical fallback size.
+ */
+export function omegaAiraV2VisualHeight(canvasWidth:number):number{
+ if(!Number.isFinite(canvasWidth)||canvasWidth<=0)return 118;
+ if(canvasWidth>=1200)return 140;
+ if(canvasWidth>=650)return 136;
+ return 126;
+}
 const allowed=new Set<string>(OMEGA_AIRA_V2_HEADINGS);
 interface CandidateImageRecord { image:HTMLImageElement; status:'loading'|'ready'|'failed' }
 export class OmegaAiraV2CandidateImages {
@@ -86,7 +96,7 @@ export function drawOmegaAiraV2Candidate(
  ctx.rotate(lean);
  if(view.hurt)ctx.globalAlpha=.80+.20*Math.sin(t*18)**2;
  // Natural-source aspect ratio 192:336. No horizontal flip.
- const h=118,w=h*192/336;
+ const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width)),w=h*192/336;
  if(walk&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished){
   // Real eight-source articulated gait with two independent boot limbs.
   // Still art is the user's selected V2; this is interim skeletal motion
