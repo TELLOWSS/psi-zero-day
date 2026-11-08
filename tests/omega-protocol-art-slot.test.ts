@@ -71,7 +71,12 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   expect(OMEGA_SPRITE_ACTIONS).toHaveLength(20);
   expect(omegaSpriteFrameForView(sample)).toEqual({heading:'E',frame:0,action:'walk'});
   expect(omegaSpriteFrameForView({...sample,moving:true,time:.11}).frame).toBe(1);
-  expect(omegaSpriteFrameForView({...sample,shooting:true}).frame).toBeGreaterThanOrEqual(6);
+  expect(omegaSpriteFrameForView({...sample,shooting:true,actionAge:0}).frame).toBe(6);
+  expect(omegaSpriteFrameForView({...sample,shooting:true,actionAge:.07}).frame).toBe(7);
+  expect(omegaSpriteFrameForView({...sample,shooting:true,actionAge:.15}).frame).toBe(8);
+  expect(omegaSpriteFrameForView({...sample,shooting:true,actionAge:5}).frame).toBe(8);
+  expect(omegaSpriteFrameForView({...sample,dashing:true,actionAge:0}).frame).toBe(9);
+  expect(omegaSpriteFrameForView({...sample,hurt:true,actionAge:0}).frame).toBe(12);
   expect(omegaSpriteFrameForView({...sample,dashing:true}).action).toBe('dash');
   expect(omegaSpriteFrameForView({...sample,hurt:true}).action).toBe('hit');
   expect(omegaSpriteFrameForView({...sample,ultimate:true}).action).toBe('ultimate');
