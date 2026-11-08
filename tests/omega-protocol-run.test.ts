@@ -18,13 +18,13 @@ describe('OMEGA PROTOCOL isolated roguelite core',()=>{
   const a=Array.from({length:15},(_,i)=>omegaWavePlan(20261108,i+1));
   expect(a).toEqual(Array.from({length:15},(_,i)=>omegaWavePlan(20261108,i+1)));
   expect(a.filter(x=>x.isBoss).map(x=>x.wave)).toEqual([9,15]);
-  expect(a[0].sector).toBe(1);
-  expect(a[14].sector).toBe(5);
-  expect(a[14].budget).toBeGreaterThan(a[0].budget);
+  expect(a[0]!.sector).toBe(1);
+  expect(a[14]!.sector).toBe(5);
+  expect(a[14]!.budget).toBeGreaterThan(a[0]!.budget);
   expect(a.every(x=>x.threatKinds.length>=2&&new Set(x.threatKinds).size===x.threatKinds.length)).toBe(true);
   const b=Array.from({length:15},(_,i)=>omegaWavePlan(99143,i+1));
-  expect(b.some((x,i)=>x.modifier!==a[i].modifier||
-    x.threatKinds.join(':')!==a[i].threatKinds.join(':'))).toBe(true);
+  expect(b.some((x,i)=>x.modifier!==a[i]!.modifier||
+    x.threatKinds.join(':')!==a[i]!.threatKinds.join(':'))).toBe(true);
   expect(omegaSeedHash(42,4)).toBe(omegaSeedHash(42,4));
   expect(()=>omegaWavePlan(7,0)).toThrow(RangeError);
   expect(()=>omegaWavePlan(7,16)).toThrow(RangeError);
