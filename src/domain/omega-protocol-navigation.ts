@@ -72,7 +72,7 @@ export function omegaFieldNextRoute(
  cost[0]=0;
  for(let step=0;step<size;step++){
   let current=-1;
-  for(let i=0;i<size;i++)if(!used[i]&&(current<0||cost[i]<cost[current]!))current=i;
+  for(let i=0;i<size;i++)if(!used[i]&&(current<0||cost[i]!<cost[current]!))current=i;
   if(current<0||!Number.isFinite(cost[current]??Infinity))break;
   if(current===1)break;
   used[current]=true;
