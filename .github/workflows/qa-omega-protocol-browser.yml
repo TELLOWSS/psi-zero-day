@@ -9,6 +9,7 @@ on:
       - 'src/ui/omega-protocol-grounded-gait.ts'
       - 'src/ui/omega-protocol-enemy-render.ts'
       - 'src/ui/omega-protocol-actor-cues.ts'
+      - 'src/ui/omega-protocol-action-facing.ts'
       - 'src/ui/omega-protocol-impact-vfx.ts'
       - 'src/ui/omega-protocol-art-slot.ts'
       - 'src/domain/omega-protocol-field.ts'
