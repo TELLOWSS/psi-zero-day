@@ -387,7 +387,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
      data-omega-field-phase={snapshot.field?.progress.phase??'none'}
      data-omega-player-x={snapshot.playerX.toFixed(1)}
-     data-omega-player-y={snapshot.playerY.toFixed(1)}>
+     data-omega-player-y={snapshot.playerY.toFixed(1)}
+     data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
+      Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
     <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     <div className="omega-protocol-stats" aria-label="전투 상태">
