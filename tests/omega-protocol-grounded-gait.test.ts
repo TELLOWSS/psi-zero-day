@@ -25,7 +25,7 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
     oldGroundX=null;swing++;
    }
   }
-  expect(stance).toBeGreaterThan(150);
+  expect(stance).toBeGreaterThan(120);
   expect(swing).toBeGreaterThan(50);
  });
  it('keeps ankle reach plausible and emits only true one-shot plant events',()=>{
@@ -76,6 +76,38 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
    }
    expect(maxRadius).toBeLessThan(33);
    expect(landings).toBeGreaterThan(10);
+  }
+ });
+ it('remains anatomically bounded under 30/60fps rapid direction changes',()=>{
+  const headings=[
+   [1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],
+  ] as const;
+  for(let seed=1;seed<=24;seed++){
+   const track=new OmegaGroundedGait();
+   let x=600,y=450,time=0;
+   let rng=seed>>>0;
+   const random=()=>{
+    rng=(Math.imul(rng,1664525)+1013904223)>>>0;
+    return rng/0x100000000;
+   };
+   track.advance({x,y},time,1);
+   for(let i=0;i<640;i++){
+    const frameScale=i%3===0?2:1; // mixed 30Hz/60Hz actual frames
+    time+=frameScale/60;
+    const direction=headings[Math.floor(i/(4+seed%15))%8]!;
+    const stride=random()<.2?0:random()*3.8*frameScale;
+    x+=direction[0]*stride;y+=direction[1]*stride;
+    const pose=track.advance({x,y},time,1);
+    const reach=Math.max(
+     Math.hypot(pose.left.x,pose.left.y),
+     Math.hypot(pose.right.x,pose.right.y),
+    );
+    expect(reach).toBeLessThan(33);
+    expect(Number.isFinite(pose.distanceTravelled)).toBe(true);
+    const held=track.advance({x,y},time+1/240,1);
+    expect(held.left.landed).toBeFalsy();
+    expect(held.right.landed).toBeFalsy();
+   }
   }
  });
  it('holds idle while a joystick pushes against solid cover',()=>{

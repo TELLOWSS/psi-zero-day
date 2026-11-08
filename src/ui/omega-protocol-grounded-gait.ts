@@ -24,11 +24,11 @@ type MutableFoot={
  planted:boolean;
  initialized:boolean;
 };
-// A planted stance cannot exceed the visible operator's 33px leg reach.
-// 44 projected units/cycle × .55 stance = 24.2 units of hip travel.
-// Measured maximal technical ankle offset: ~32.1, versus 45.3 before.
-const cycleDistance=44;
-const stancePortion=.55;
+// Grounded walk tuned with 60Hz + 30Hz random direction stress probes.
+// 38 projected units per cycle, 48% plant; 8-unit swing lead.
+// This is presentation-only and does not affect the native Watch speed.
+const cycleDistance=38;
+const stancePortion=.48;
 const projected=(p:OmegaWalkPoint):OmegaWalkPoint=>({x:p.x-.22*p.y,y:p.y*.78});
 const length=(a:OmegaWalkPoint,b:OmegaWalkPoint)=>Math.hypot(a.x-b.x,a.y-b.y);
 const lerp=(a:number,b:number,f:number)=>a+(b-a)*f;
@@ -93,10 +93,28 @@ export class OmegaGroundedGait {
     left:blank(-9),right:blank(9)};
   }
   const heading={x:(current.x-prior.x)/dist,y:(current.y-prior.y)/dist};
-  this.phase=(this.phase+dist/cycleDistance)%1;
-  this.distanceTotal+=dist;
-  const left=this.foot(this.left,current,heading,this.phase,-9);
-  const right=this.foot(this.right,current,heading,(this.phase+.5)%1,9);
+  // One 30Hz physics update can cover several 60Hz foot-contact frames.
+  // Integrate up to 2 projected units per microstep to avoid skipped
+  // swing->plant transitions, stretched knees and long-distance foot pops.
+  // This does NOT substep combat/physics or generate additional player input.
+  const count=Math.max(1,Math.ceil(dist/2));
+  let left:OmegaWalkFoot=blank(-9),right:OmegaWalkFoot=blank(9);
+  let leftLanded=false,rightLanded=false;
+  for(let sub=1;sub<=count;sub++){
+   const ratio=sub/count;
+   const root={x:prior.x+(current.x-prior.x)*ratio,
+    y:prior.y+(current.y-prior.y)*ratio};
+   this.phase=(this.phase+dist/count/cycleDistance)%1;
+   this.distanceTotal+=dist/count;
+   left=this.foot(this.left,root,heading,this.phase,-9);
+   right=this.foot(this.right,root,heading,(this.phase+.5)%1,9);
+   if(left.landed)leftLanded=true;
+   if(right.landed)rightLanded=true;
+  }
+  // An event is emitted once for the whole visual frame even when
+  // intermediate contacts occurred. No duplicate 120Hz landing effects.
+  left={...left,landed:Boolean(left.planted&&leftLanded)};
+  right={...right,landed:Boolean(right.planted&&rightLanded)};
   this.lastMoveAt=gameTime;
   this.lastPose={active:true,phase:this.phase,distanceTravelled:this.distanceTotal,left,right};
   return this.lastPose;
@@ -121,7 +139,7 @@ export class OmegaGroundedGait {
   state.planted=false;
   const t=Math.min(1,Math.max(0,(phase-stancePortion)/(1-stancePortion)));
   const eased=t*t*(3-2*t);
-  const next={x:root.x+lateral.x+heading.x*16,y:root.y+heading.y*16};
+  const next={x:root.x+lateral.x+heading.x*8,y:root.y+heading.y*8};
   const world={x:lerp(state.swingStart.x,next.x,eased),
    y:lerp(state.swingStart.y,next.y,eased)};
   state.last=world;
