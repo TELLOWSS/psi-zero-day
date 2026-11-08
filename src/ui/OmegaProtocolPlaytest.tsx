@@ -75,14 +75,12 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
  });
  const artView={...actorView,...action};
- // The procedural actor also receives genuine shout/finish visual cues.
- // Its muzzle still uses only the 90ms actual-shot signal, not the 75ms
- // final sprite follow-through.
- actorView.ultimate=action.ultimate;
- actorView.finished=action.finished;
+ // The fallback receives real ultimate/finish flags; its muzzle only uses
+ // the native 90ms fire event, not the 75ms authored-sprite follow-through.
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)){
-  drawOmegaProtocolActor(ctx,actorView);
+  drawOmegaProtocolActor(ctx,{...actorView,
+   ultimate:action.ultimate,finished:action.finished});
  }
  ctx.restore();
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
