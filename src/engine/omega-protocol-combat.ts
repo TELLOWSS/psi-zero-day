@@ -4,7 +4,7 @@ import {
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {
- omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,
+ omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
 import {
@@ -126,7 +126,7 @@ export class OmegaProtocolCombatSession {
   if(state.hazards.filter(h=>h.hp>0).length===0){
    if(this.currentField&&this.fieldStatus){
     if(this.fieldStatus.phase==='combat'){
-     this.fieldStatus={phase:'objective',eventComplete:false,exitUnlocked:false};
+     this.fieldStatus={phase:'objective',eventComplete:false,exitUnlocked:false,completedSteps:0};
     }
     // The player must physically reach the objective and then the exit.
     // Clearing the arena alone no longer advances an expedition.
@@ -150,16 +150,25 @@ export class OmegaProtocolCombatSession {
   }
  }
  /** Context-sensitive real field interactions, with range and combat gates. */
- interact():Readonly<{success:boolean;reason:'NOT_READY'|'OUT_OF_RANGE'|'EVENT_COMPLETE'|'EXIT_OPENED'}>{
+ interact():Readonly<{success:boolean;reason:'NOT_READY'|'OUT_OF_RANGE'|'STEP_COMPLETE'|'EVENT_COMPLETE'|'EXIT_OPENED'}>{
   if(!this.currentField||!this.fieldStatus||!this.armed||
      this.active.phase!=='battle'||this.engine.state.phase!=='playing')
    return {success:false,reason:'NOT_READY'};
   if(this.engine.state.hazards.some(h=>h.hp>0))return {success:false,reason:'NOT_READY'};
   if(this.fieldStatus.phase==='objective'){
-   if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.event.target))
+   const step=omegaFieldCurrentStep(this.currentField,this.fieldStatus);
+   if(!step)return {success:false,reason:'NOT_READY'};
+   if(!omegaFieldCanInteract(this.engine.state.player,step.target))
     return {success:false,reason:'OUT_OF_RANGE'};
-   this.fieldStatus={phase:'exit',eventComplete:true,exitUnlocked:true};
-   return {success:true,reason:'EVENT_COMPLETE'};
+   const completedSteps=this.fieldStatus.completedSteps+1;
+   const allDone=completedSteps>=this.currentField.event.steps.length;
+   this.fieldStatus={
+    phase:allDone?'exit':'objective',
+    eventComplete:allDone,
+    exitUnlocked:allDone,
+    completedSteps,
+   };
+   return {success:true,reason:allDone?'EVENT_COMPLETE':'STEP_COMPLETE'};
   }
   if(this.fieldStatus.phase==='exit'){
    if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.exit))
