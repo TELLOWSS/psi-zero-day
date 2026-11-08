@@ -59,7 +59,7 @@ describe('OMEGA original kinetic body framing (NOT approved 160-sprite art)',()=
    dash=draw('dash',.11),hit=draw('hit',.1);
   const rotations=([walk,fire,dash,hit]).map(calls=>calls.filter(c=>c.name==='rotate')
    .map(c=>c.args[0]));
-  expect(new Set(rotations.map(JSON.stringify)).size).toBe(4);
+  expect(new Set(rotations.map(v=>JSON.stringify(v))).size).toBe(4);
   // Native feet are drawn before the upper-body tilt, preserving ground pivot.
   for(const calls of [walk,fire,dash,hit]){
    const boot=calls.findIndex(c=>c.name==='fillRect');
