@@ -155,7 +155,7 @@ export function drawOmegaFieldMission(
    ctx.beginPath();ctx.arc(target.x,target.y,69,0,Math.PI*2);ctx.stroke();
    ctx.fillStyle='#b3ffff';ctx.font='bold 13px system-ui';
    ctx.fillText(step.label,target.x,target.y+49);
-   if(omegaFieldCanInteract(actor,target)){
+   if(omegaFieldCanInteract(actor,target,plan.obstacles)){
     ctx.fillText('E / 조작',target.x,target.y+68);
    }
   }
@@ -175,7 +175,7 @@ export function drawOmegaFieldMission(
  ctx.shadowBlur=0;
  ctx.fillStyle='#fff';ctx.font='900 13px system-ui';
  ctx.fillText(progress.exitUnlocked?'EXIT OPEN':'LOCKED',exit.x,exit.y-66);
- if(progress.exitUnlocked&&omegaFieldCanInteract(actor,exit)){
+ if(progress.exitUnlocked&&omegaFieldCanInteract(actor,exit,plan.obstacles)){
   ctx.fillStyle='#b4ffe2';ctx.fillText('E / 진입',exit.x,exit.y+82);
  }
  ctx.restore();
