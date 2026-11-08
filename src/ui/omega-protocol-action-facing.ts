@@ -44,9 +44,10 @@ export class OmegaActorFacingController{
   if(this.lastTime!==null&&gameTime<this.lastTime-1e-6)this.reset();
   const dt=this.lastTime===null?0:Math.min(.05,Math.max(0,gameTime-this.lastTime));
   this.lastTime=gameTime;
-  const shot=action.playing&&Number.isFinite(fire.until)&&
+  const fresh=action.playing&&Number.isFinite(fire.until)&&
    fire.until>gameTime&&gameTime>=0;
-  const fireDir=shot?normalize({x:fire.screenX,y:fire.screenY}):null;
+  const fireDir=fresh?normalize({x:fire.screenX,y:fire.screenY}):null;
+  const shot=fireDir!==null;
   const moveDir=normalize(requested);
   const desired=fireDir??moveDir;
   const locked=action.dashing||action.hurting||!action.playing;
