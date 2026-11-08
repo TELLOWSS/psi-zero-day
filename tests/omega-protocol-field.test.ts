@@ -59,6 +59,10 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   const corrected=omegaFieldResolveCollision(left,inside,p.obstacles,21);
   expect(corrected.x).toBe(left.x);
   expect(corrected.y).toBe(left.y);
+  // Swept collision is not defeated by a 250px displacement in one frame.
+  const dashed=omegaFieldResolveCollision(left,{x:c.x+c.width+40,y:left.y},p.obstacles,21);
+  expect(dashed.x).toBe(c.x-21);
+  expect(dashed.y).toBe(left.y);
   expect(()=>omegaFieldResolveCollision(left,{x:NaN,y:0},p.obstacles)).toThrow(RangeError);
  });
  it('requires clearing ACTUAL enemies, operating a field event in range, and reaching the exit',()=>{
