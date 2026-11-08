@@ -48,8 +48,8 @@ describe('OMEGA action-facing without altering Watch physics or fire rate',()=>{
   expect(last.headingIndex).toBe(0);
   last=c.advance(.15,vector(.56),OMEGA_EMPTY_FIRE_CUE,playing);
   expect(last.headingIndex).toBe(1);
-  for(const angle of [.47,.43,.48,.42]){
-   last=c.advance(.2+angle/10,vector(angle),OMEGA_EMPTY_FIRE_CUE,playing);
+  for(const [i,angle] of [.47,.43,.48,.42].entries()){
+   last=c.advance(.2+i*.05,vector(angle),OMEGA_EMPTY_FIRE_CUE,playing);
    expect(last.headingIndex).toBe(1);
   }
  });
