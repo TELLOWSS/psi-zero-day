@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "identity": "AIRA_MASTER",
+  "type": "GENERATED_COMBAT_ART_CANDIDATES",
+  "releaseApproved": false,
+  "characterSelectable": false,
+  "combatRendererWired": false,
+  "deliveredArchive": "PSI_ZERO_DAY_OMEGA_COMBAT_CANDIDATES_V1.zip",
+  "archiveSha256": "3f4e2a3cacb4d0f68ff1ca1d541ae76f03e2720e492ca5262dabfe5f0b070a96",
+  "originalGeneratedBoard": {
+    "filename": "AIRA_generated_action_source.png",
+    "sha256": "b68fc9665acc737a7c755e490b1281b9217d945429bfac576209e686cf5c1104"
+  },
+  "croppedArt": {
+    "filename": "aira-combat-CONCEPT-4x6.webp",
+    "sha256": "69a0abc97f2e2ccab2836083f303dfaab73677e348bb165cf7a0f1b7f74d931c",
+    "width": 1152,
+    "height": 768,
+    "columns": 6,
+    "rows": 4,
+    "frameSize": [
+      192,
+      192
+    ],
+    "actions": [
+      "fire",
+      "dash",
+      "hit",
+      "ultimate"
+    ],
+    "framesPerAction": 6,
+    "extractedCount": 24,
+    "directionCoverage": [
+      "E"
+    ],
+    "alphaPresent": true,
+    "alphaHandReview": false
+  },
+  "equipmentLayers": {
+    "frontCandidate": [
+      "head-goggles",
+      "shoulder-jacket",
+      "rifle"
+    ],
+    "backCandidate": [
+      "radio-pack",
+      "backpack"
+    ],
+    "maskApproved": false,
+    "gearSocketsVerified": false
+  },
+  "artQA": {
+    "sourceDate": "2026-11-08",
+    "result": "REJECT_FOR_RELEASE",
+    "issues": [
+      "Generated sheet not an isolated transparent 8-direction frame atlas",
+      "Background-matting residue and character fragments remain in candidate extractions",
+      "Only one primary action-facing is represented; no 8-direction combat",
+      "Continuity among six proposed poses is not enough to validate gameplay animation",
+      "Front/rear gear cutouts are not trusted per-frame occlusion masks",
+      "Main-character identity / exact clothing silhouette differs between marketing and sprite candidates",
+      "Existing Watch renderer expects twenty authored frames per facing"
+    ]
+  },
+  "offlineReview": "omega-combat-art-review.html",
+  "sourceScript": "build_combat_candidate.py",
+  "releaseGate": "scripts/verify-omega-approved-frames.mjs",
+  "releaseStatus": "BLOCKED"
+}
