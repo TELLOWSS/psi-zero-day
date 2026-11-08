@@ -8,7 +8,8 @@ export interface OmegaMotionAudit {
  readonly walkFramesPerDirection:number;
  readonly comparedPairs:number;
  readonly almostStaticPairs:number;
- readonly sourceFootPixel:number;
+ readonly sourceFootPixel:number; // opaque boot sole; alpha > 128
+ readonly shadowBottomPixel:number; // translucent world shadow; alpha > 16
  readonly approvedFootPixel:number;
  readonly independentHeroIdentityApproved:boolean;
  readonly handAuthoredActionFrames:number;
@@ -23,7 +24,7 @@ export interface OmegaMotionGate {
 export function omegaMotionReviewGate(audit:OmegaMotionAudit):OmegaMotionGate{
  const problems:string[]=[];
  const counts=[audit.sourceDirections,audit.walkFramesPerDirection,
-  audit.comparedPairs,audit.almostStaticPairs,audit.sourceFootPixel,
+  audit.comparedPairs,audit.almostStaticPairs,audit.sourceFootPixel,audit.shadowBottomPixel,
   audit.approvedFootPixel,audit.handAuthoredActionFrames,
   audit.approvedFrontBackMasks];
  if(counts.some(n=>!Number.isSafeInteger(n)||n<0)){
@@ -48,7 +49,7 @@ export function omegaMotionReviewGate(audit:OmegaMotionAudit):OmegaMotionGate{
  * signed-off 160-frame game-character atlas. */
 export const OMEGA_8DIR_STUDY_AUDIT:OmegaMotionAudit=Object.freeze({
  sourceDirections:8,walkFramesPerDirection:6,comparedPairs:40,
- almostStaticPairs:16,sourceFootPixel:460,approvedFootPixel:454,
+ almostStaticPairs:16,sourceFootPixel:441,shadowBottomPixel:460,approvedFootPixel:454,
  independentHeroIdentityApproved:false,handAuthoredActionFrames:0,
  approvedFrontBackMasks:0,approvedAssetDigestProof:false,realDevicePass:false,
 });
