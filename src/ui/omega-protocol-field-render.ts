@@ -3,6 +3,7 @@ import type {
 } from '../domain/omega-protocol-field';
 import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract,omegaFieldCurrentStep}
  from '../domain/omega-protocol-field';
+import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 
 /**
  * Original technical field art, no borrowed game assets.
@@ -114,10 +115,11 @@ export function drawOmegaFieldMission(
  // collision-free route through the scaffold/container cover.
  const destination=progress.phase==='exit'?plan.exit:active?.target;
  if(destination&&Number.isFinite(actor.x)&&Number.isFinite(actor.y)&&Number.isFinite(seconds)){
-  const dx=destination.x-actor.x,dy=destination.y-actor.y;
-  const distance=Math.hypot(dx,dy);
-  if(distance>100){
-   const ux=dx/distance,uy=dy/distance;
+  const route=omegaFieldNextRoute(actor,destination,plan.obstacles,W,H);
+  if(route&&route.length>100){
+   const dx=route.next.x-actor.x,dy=route.next.y-actor.y;
+   const distance=Math.hypot(dx,dy);
+   const ux=distance>0?dx/distance:0,uy=distance>0?dy/distance:0;
    ctx.save();
    ctx.translate(actor.x+ux*65,actor.y+uy*65);
    ctx.rotate(Math.atan2(uy,ux));
