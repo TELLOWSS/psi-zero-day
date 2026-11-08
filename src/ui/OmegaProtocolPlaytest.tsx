@@ -3,7 +3,8 @@ import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/ome
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
-import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
+import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
+import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
@@ -35,7 +36,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
  if(field){
-  drawOmegaFieldGround(ctx,field.plan);
+  drawOmegaFieldGround(ctx,field.plan,false);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
  }
  else{
@@ -49,18 +50,16 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Genuine dash trail remains under all live Watch enemies and hero.
  drawOmegaDashEnergy(ctx,echoes,state.gameTime);
- for(const h of state.hazards){
-  if(h.hp<=0)continue;
-  ctx.save();ctx.translate(h.x,h.y);
-  // Enemy bodies stand upright over the same 3/4 projected ground.
-  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
-  drawOmegaProtocolEnemy(ctx,h,state.gameTime,{finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15});
-  ctx.restore();
- }
- for(const projectile of state.projectiles){
-  ctx.fillStyle='#7df3fa';ctx.beginPath();ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);ctx.fill();
- }
  const p=state.player;
+ const renderHazard=(h:(typeof state.hazards)[number])=>{
+  if(h.hp<=0)return;
+  ctx.save();ctx.translate(h.x,h.y);
+  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
+  drawOmegaProtocolEnemy(ctx,h,state.gameTime,
+   {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15});
+  ctx.restore();
+ };
+ const renderHero=()=>{
  // Independent eight-heading tactical actor placeholder, not an AIRA skin.
  ctx.save();ctx.translate(p.x,p.y);
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
@@ -97,11 +96,29 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  if(gait.active&&!p.isDashing)drawOmegaGroundedSplash(ctx,[gait.left,gait.right],state.gameTime);
  ctx.restore();
+ };
+ if(field){
+  // Stable painter's order: the player, enemies, and original collision
+  // objects share one actual world-foot depth. No translucent fake cover.
+  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y)){
+   if(item.kind==='prop')drawOmegaFieldProp(ctx,field.plan,field.plan.obstacles[item.index]!);
+   else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
+   else renderHero();
+  }
+ }else{
+  for(const h of state.hazards)renderHazard(h);
+  renderHero();
+ }
+ // Native projectiles and impacts always render above solid geometry.
+ for(const projectile of state.projectiles){
+  ctx.fillStyle='#7df3fa';ctx.beginPath();
+  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
+  ctx.fill();
+ }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
-  drawOmegaFieldOcclusion(ctx,field.plan,p);
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
  }
  // Modifier fog is presentation-only; crosswind and unstable ground also
