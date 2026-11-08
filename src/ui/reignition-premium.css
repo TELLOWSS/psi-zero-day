@@ -590,3 +590,33 @@
 @media(prefers-reduced-motion:reduce){
  .rg-home .rg-card-mastery-track i{transition:none}
 }
+
+/* AIRA V2 selected on 2026-11-09: dark high ponytail and magenta accents.
+ * The source illustration has NO baked app controls: buttons remain native DOM.
+ * CSS mask hides the tiny paper-cropped edge of the source scene on right.
+ */
+.rg-home[data-reignition-concept=cinematic] .rg-aira-v2 {
+ object-position:52% 18%;
+ width:min(39vw,575px);height:112%;right:4%;bottom:-6%;
+ filter:contrast(1.04) saturate(1.12) brightness(.95)
+  drop-shadow(-25px 12px 45px rgba(18,8,33,.65));
+ opacity:1;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 13%,#000 87%,transparent 100%),
+   linear-gradient(180deg,#000 0%,#000 79%,transparent 100%);
+ mask-image:linear-gradient(90deg,transparent 0%,#000 13%,#000 87%,transparent 100%),
+   linear-gradient(180deg,#000 0%,#000 79%,transparent 100%);
+}
+@media (max-width:1100px){
+ .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{
+  right:0;width:48%;height:104%;object-position:50% 12%
+ }
+}
+@media (max-width:800px){
+ .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{
+  top:-2%;bottom:auto;right:-7%;width:88%;height:73%;
+  object-position:50% 9%;opacity:.95
+ }
+}
+@media (prefers-reduced-motion:reduce){
+ .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{animation:none;transform:none}
+}
