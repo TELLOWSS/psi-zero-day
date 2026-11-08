@@ -14,8 +14,14 @@ const threatColors:Record<string,string>={
 function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+ ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.save();
- ctx.scale(ctx.canvas.width/WORLD_WIDTH,ctx.canvas.height/WORLD_HEIGHT);
+ // Keep every sprite circular and never stretch on portrait or landscape.
+ // Camera follows the player; the run's collision/world bounds remain intact.
+ const zoom=Math.max(ctx.canvas.width/WORLD_WIDTH,ctx.canvas.height/WORLD_HEIGHT);
+ const cameraX=Math.max(ctx.canvas.width/zoom-WORLD_WIDTH,Math.min(0,ctx.canvas.width/(2*zoom)-state.player.x));
+ const cameraY=Math.max(ctx.canvas.height/zoom-WORLD_HEIGHT,Math.min(0,ctx.canvas.height/(2*zoom)-state.player.y));
+ ctx.scale(zoom,zoom);ctx.translate(cameraX,cameraY);
  ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
  ctx.strokeStyle='#243548';ctx.lineWidth=1;
  for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
@@ -146,53 +152,90 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();else session.pause();
   setPaused(!paused);setSnapshot(session.snapshot);
  };
- return <main className="omega-protocol-lab" data-omega-protocol-internal="true">
-  <header>
-   <div><span className="omega-protocol-tag">INTERNAL QA · NOT RELEASED</span>
-    <h1>OMEGA PROTOCOL</h1>
-    <p>시그널 워치 엔진 실전 연결 시험 · 미승인 캐릭터 대신 임시 도형 표시</p>
+ return <main className="omega-protocol-lab omega-protocol-v2" data-omega-protocol-internal="true">
+  <header className="omega-protocol-topbar">
+   <div className="omega-protocol-heading">
+    <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION</span>
+    <h1>OMEGA <em>PROTOCOL</em></h1>
+    <p>실제 SIGNAL WATCH 전투 엔진 · 승인 전 임시 그래픽</p>
    </div>
-   <button type="button" onClick={onExit}>게임 허브로 돌아가기</button>
+   <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
-  <section className="omega-protocol-stats" aria-label="특별판 전투 상황">
-   <div>전투 구역 <strong>{snapshot.plan.sector}/5</strong></div>
-   <div>웨이브 <strong>{Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave)}/15</strong></div>
-   <div>체력 <strong>{Math.ceil(snapshot.playerHp)}/{snapshot.run.maxHp}</strong></div>
-   <div>남은 위협 <strong>{snapshot.enemiesAlive}</strong></div>
-   <div>전투 상태 <strong>{snapshot.run.phase==='battle'?(snapshot.plan.isBoss?'BOSS':'교전 중'):snapshot.run.phase}</strong></div>
-   <div>환경 변칙 <strong>{({standard:'표준',crosswind:'횡풍',low_visibility:'시야 제한',unstable_ground:'불안정 지반'} as const)[snapshot.plan.modifier]}</strong></div>
-   <div>FPS 추정 <strong>{fps||'—'}</strong></div>
-  </section>
-  <div className="omega-protocol-arena"><canvas ref={canvasRef} width={1120} height={720} aria-label="시그널 워치 물리 엔진으로 움직이는 특별판 내부 시험 전장" /></div>
-  <p className="omega-protocol-controls-hint">키보드 WASD / 화살표 이동 · Space 또는 Shift 회피 · Q 궁극기 · 자동 조준/사격 · 모바일 방향키 및 행동 버튼</p>
-  {snapshot.run.phase==='reward'&&<section className="omega-protocol-rewards" aria-label="로그라이트 임시 강화 3가지 중 선택">
-   <h2>전술 강화 선택</h2><p>선택한 효과는 이번 도전에만 적용됩니다.</p>
-   <div>{snapshot.run.offers.map(id=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;return <button key={id} type="button" onClick={()=>choose(id)}>
-    <strong>{u.label}</strong><span>{u.description}</span><small>{u.role} · {snapshot.run.owned[id]??0}/{u.maxStacks}</small>
-   </button>;})}</div>
-  </section>}
-  {(snapshot.run.phase==='defeat'||snapshot.run.phase==='victory')&&<section className="omega-protocol-end" role="status">
-   <h2>{snapshot.run.phase==='victory'?'작전 완료':'작전 실패'}</h2>
-   <p>성공한 웨이브 {snapshot.run.victories}/15 · 임시 강화는 재도전 시 초기화됩니다.</p>
-  </section>}
-  <footer>
-   <div className="omega-protocol-pad" aria-label="모바일 이동 방향">
-    {buttonDirections.map(d=><button type="button" key={d.label}
-     onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);setDirection(e.pointerId,d.x,d.y);}}
-     onPointerUp={e=>releaseDirection(e.pointerId)}
-     onPointerCancel={e=>releaseDirection(e.pointerId)}
-     onLostPointerCapture={e=>releaseDirection(e.pointerId)}
-     aria-label={({ '↑':'위로 이동','←':'왼쪽 이동','↓':'아래로 이동','→':'오른쪽 이동'} as Record<string,string>)[d.label]}>{d.label}</button>)}
+  <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
+   <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}>
+    <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    <div className="omega-protocol-stage-shade" aria-hidden="true"/>
+    <div className="omega-protocol-stats" aria-label="전투 상태">
+     <div className="omega-protocol-wave">
+      <small>SECTOR {snapshot.plan.sector.toString().padStart(2,'0')} / 05</small>
+      <strong>WAVE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
+     </div>
+     <div className="omega-protocol-hp">
+      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.run.maxHp}</span>
+      <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.run.maxHp} aria-valuenow={Math.max(0,Math.ceil(snapshot.playerHp))}>
+       <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.run.maxHp)))*100)+'%'}} />
+      </div>
+     </div>
+     <div className="omega-protocol-threat"><small>THREATS</small><strong>{snapshot.enemiesAlive.toString().padStart(2,'0')}</strong></div>
+     <div className="omega-protocol-modifier"><small>ENVIRONMENT</small><strong>{({standard:'표준',crosswind:'횡풍',low_visibility:'시야 제한',unstable_ground:'불안정 지반'} as const)[snapshot.plan.modifier]}</strong></div>
+    </div>
+    {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
+    <div className="omega-protocol-controls">
+     <div className="omega-protocol-pad" aria-label="모바일 이동 방향">
+      {buttonDirections.map(d=><button type="button" key={d.label} disabled={snapshot.run.phase!=='battle'||paused}
+       onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);setDirection(e.pointerId,d.x,d.y);}}
+       onPointerUp={e=>releaseDirection(e.pointerId)}
+       onPointerCancel={e=>releaseDirection(e.pointerId)}
+       onLostPointerCapture={e=>releaseDirection(e.pointerId)}
+       aria-label={({ '↑':'위로 이동','←':'왼쪽 이동','↓':'아래로 이동','→':'오른쪽 이동'} as Record<string,string>)[d.label]}>{d.label}</button>)}
+      <div className="omega-protocol-pad-center" aria-hidden="true">◇</div>
+     </div>
+     <div className="omega-protocol-action-pad">
+      <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
+       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
+       aria-label="회피 · 스페이스 또는 시프트">
+       <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span>
+      </button>
+      <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}}
+       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
+       aria-label={'궁극기 · 충전 '+Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))+'퍼센트'}>
+       <span className="omega-protocol-action-glyph" aria-hidden="true">✦</span><span>궁극기</span>
+       <small>{Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))}%</small>
+      </button>
+     </div>
+    </div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>Q · 궁극기</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
+    {snapshot.run.phase==='reward'&&<div className="omega-protocol-overlay omega-protocol-reward-overlay" role="presentation">
+      <section className="omega-protocol-rewards" role="dialog" aria-modal="true" aria-label="전술 강화 선택">
+       <span className="omega-protocol-modal-kicker">TACTICAL EVOLUTION</span>
+       <h2>전술 강화 선택</h2>
+       <p>세 가지 중 하나를 선택하세요. 강화 효과는 이번 도전에만 유지됩니다.</p>
+       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;return <button key={id} type="button" onClick={()=>choose(id)}>
+         <small className="omega-protocol-card-index">0{i+1} · {u.role.toUpperCase()}</small>
+         <strong>{u.label}</strong><span>{u.description}</span>
+         <small className="omega-protocol-card-rank">LV {(snapshot.run.owned[id]??0)+1} / {u.maxStacks}</small>
+       </button>;})}</div>
+      </section>
+    </div>}
+    {(snapshot.run.phase==='defeat'||snapshot.run.phase==='victory')&&<div className="omega-protocol-overlay">
+      <section className="omega-protocol-end" role="status">
+       <span className="omega-protocol-modal-kicker">{snapshot.run.phase==='victory'?'MISSION COMPLETED':'OPERATION TERMINATED'}</span>
+       <h2>{snapshot.run.phase==='victory'?'작전 완료':'작전 실패'}</h2>
+       <p>성공한 웨이브 {snapshot.run.victories}/15 · 임시 강화는 재도전 시 초기화됩니다.</p>
+       <button type="button" onClick={restart}>다시 출격</button>
+      </section>
+    </div>}
    </div>
-   <div className="omega-protocol-tools">
-    <button type="button" className="omega-protocol-action" onClick={()=>{session.dash();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}>회피</button>
-    <button type="button" className="omega-protocol-action" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}>궁극기 {Math.floor(session.engine.state.ultimateCharge)}%</button>
-    <label>재현용 시드 <input inputMode="numeric" value={seedValue} onChange={e=>setSeedValue(e.target.value)} /></label>
+  </section>
+  <footer className="omega-protocol-bottom-toolbar">
+   <div className="omega-protocol-run-tools">
+    <label>SEED <input inputMode="numeric" aria-label="재현용 시드" value={seedValue} onChange={e=>setSeedValue(e.target.value)} /></label>
     <button type="button" onClick={togglePause} disabled={snapshot.run.phase!=='battle'}>{paused?'계속하기':'일시정지'}</button>
     <button type="button" onClick={restart}>새 도전</button>
     <button type="button" onClick={()=>{session.abandon();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase==='defeat'||snapshot.run.phase==='victory'}>도전 포기</button>
    </div>
+   <p className="omega-protocol-warning">미출시 내부 시험 · 원화·장비 마스크 미승인 · 기존 저장기록과 분리</p>
   </footer>
-  <p className="omega-protocol-warning">개발용 전투 시험입니다. 기존 보상·저장기록과 연결되지 않으며, 적 및 캐릭터 원화·장비 마스크·모바일 실기기 성능은 최종 승인 전입니다.</p>
  </main>;
 }
