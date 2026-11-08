@@ -68,9 +68,12 @@ export function omegaCanRenderApprovedArt(
 ):boolean{
  if(!manifest||buildAudit!==true||!manifest.frames||
   typeof manifest.artistSignoff!=='string')return false;
- const safeToCache=immutable(manifest);
- const prev=safeToCache?memo.get(manifest):undefined;
+ // An entry exists only if EVERY nested object was frozen before caching.
+ // Cached data therefore cannot be modified, and the expensive 160-frame
+ // deep-freeze proof does not need repeating at every animation frame.
+ const prev=memo.get(manifest);
  if(prev!==undefined)return prev;
+ const safeToCache=immutable(manifest);
  const valid=manifest.identity==='AIRA_MASTER'&&
   manifest.status==='ARTIST_APPROVED'&&
   manifest.artistSignoff.trim().length>0&&
