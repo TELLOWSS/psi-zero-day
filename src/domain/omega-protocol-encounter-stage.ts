@@ -16,8 +16,8 @@ export interface OmegaStagedThreat{
 const MARGIN=48;
 const SAFE_ENTRY=182;
 const SEPARATION=73;
-const ANGLES=[0,.42,-.42,.88,-.88,1.25,-1.25,1.55,-1.55] as const;
-const RADII=[200,280,360,450,550,670,790,910] as const;
+const ANGLES=[0,.33,-.33,.66,-.66,.99,-.99,1.32,-1.32,1.58,-1.58,2,-2] as const;
+const RADII=[200,280,360,450,550,670,790,910,1050,1200] as const;
 export function omegaStageEncounterPositions(
  plan:OmegaFieldPlan,
  hero:OmegaFieldPoint,
