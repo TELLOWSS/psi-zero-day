@@ -7,7 +7,7 @@ import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-cam
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
-import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
+import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,OMEGA_ACTOR_FIRE_CUE_MS,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
 import './omega-protocol-playtest.css';
 
@@ -59,8 +59,17 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   time:state.gameTime,dashing:Boolean(p.isDashing),
   shooting,hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  };
+ // Authored animations remain in action until their third one-shot frame;
+ // the procedural muzzle flash itself remains limited to the true 90ms cue.
+ const shotAge=Math.max(0,state.gameTime-(fireCue.until-OMEGA_ACTOR_FIRE_CUE_MS/1000));
+ const artShooting=state.phase==='playing'&&fireCue.until>0&&
+  state.gameTime<fireCue.until+.077;
+ const artActionAge=artShooting?shotAge:
+  Boolean(p.isDashing)?Math.max(0,.22-(p.dashDuration??0)):
+  actorView.hurt?Math.max(0,2-(state.lastDamage?.remaining??2)):0;
+ const artView={...actorView,shooting:artShooting,actionAge:artActionAge};
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
-     OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,actorView)){
+     OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)){
   drawOmegaProtocolActor(ctx,actorView);
  }
  ctx.restore();
