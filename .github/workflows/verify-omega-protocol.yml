@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/domain/omega-protocol-run.ts'
       - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-encounter-stage.ts'
       - 'src/domain/omega-protocol-navigation.ts'
       - 'tests/omega-protocol-navigation.test.ts'
       - 'tests/omega-protocol-live-traversal.test.ts'
@@ -15,6 +16,7 @@ on:
       - 'src/ui/omega-protocol-camera.ts'
       - 'tests/omega-protocol-camera.test.ts'
       - 'tests/omega-protocol-field.test.ts'
+      - 'tests/omega-protocol-encounter-stage.test.ts'
       - 'tests/omega-protocol-sector-one-scene.test.ts'
       - 'tests/omega-protocol-authored-scene.test.ts'
       - 'src/engine/omega-protocol-combat.ts'
@@ -77,4 +79,4 @@ jobs:
       - name: Reject corrupt, duplicate, ungrounded and unapproved sprite fixtures
         run: npm run omega:art-test
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-protocol-encounter-stage.test.ts tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
