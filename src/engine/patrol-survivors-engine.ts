@@ -1454,6 +1454,10 @@ export class SurvivorsEngine {
       // Continuous aura + chain lightning
       for (const h of hazards) {
         if (h.hp <= 0) continue;
+        // Only the isolated PROTOCOL boss uses its visible warning/strike
+        // collision. Unannounced native contact hits would cause misleading
+        // double damage. Default Signal Watch contact remains unchanged.
+        if (this.protocolExternalEncounter && h.isStageBoss && h.type === 'CRANE_BOSS') continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
           this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt);
