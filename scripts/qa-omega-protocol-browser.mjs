@@ -31,6 +31,19 @@ for(const [name,width,height,checkpoint] of targets){
   await page.goto('http://127.0.0.1:4173/'+query,{waitUntil:'domcontentloaded',timeout:45000});
   await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
   await page.waitForTimeout(550);
+  // Actual browser input must move the real Watch-engine player, not only
+  // paint a HUD screenshot. Only the landscape source QA uses this probe.
+  let walkTest=null;
+  if(name==='landscape'){
+   const arena=page.locator('.omega-protocol-arena');
+   const startX=Number(await arena.getAttribute('data-omega-player-x'));
+   await page.keyboard.down('ArrowRight');
+   await page.waitForTimeout(430);
+   await page.keyboard.up('ArrowRight');
+   await page.waitForTimeout(180);
+   const endX=Number(await arena.getAttribute('data-omega-player-x'));
+   walkTest={startX,endX,pass:Number.isFinite(startX)&&Number.isFinite(endX)&&endX>startX+3};
+  }
   const metrics=await page.evaluate(()=>{
    const rect=s=>{const el=document.querySelector(s);if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,bottom:r.bottom,right:r.right};};
    const controls=['.omega-protocol-pad','.omega-protocol-action-pad','.omega-protocol-bottom-toolbar','.omega-protocol-stats','.omega-protocol-mission'];
@@ -68,9 +81,9 @@ for(const [name,width,height,checkpoint] of targets){
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
-  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||walkTest?.pass===false||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
