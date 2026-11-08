@@ -146,6 +146,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
  const [fps,setFps]=useState(0);
+ const [interactionMessage,setInteractionMessage]=useState('');
  const canvasRef=useRef<HTMLCanvasElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
@@ -164,6 +165,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
+   if(e.key.toLowerCase()==='e'&&!e.repeat){
+    e.preventDefault();
+    const outcome=session.interact();
+    setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+    setSnapshot(session.snapshot);
+   }
   };
   const onKeyUp=(e:KeyboardEvent)=>{
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
@@ -228,6 +235,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const all=[...pointerMoves.current.values()];
   mobileDir.current={x:all.reduce((sum,p)=>sum+p.x,0),y:all.reduce((sum,p)=>sum+p.y,0)};
  };
+ const handleInteract=()=>{
+  const outcome=session.interact();
+  setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+  setSnapshot(session.snapshot);
+ };
  const choose=(id:OmegaUpgradeId)=>{
   try{setSnapshot(session.selectUpgrade(id));setPaused(false);}
   catch(error){console.error('OMEGA internal reward choice rejected',error);}
@@ -264,6 +276,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <div className="omega-protocol-threat"><small>THREATS</small><strong>{snapshot.enemiesAlive.toString().padStart(2,'0')}</strong></div>
      <div className="omega-protocol-modifier"><small>ENVIRONMENT</small><strong>{({standard:'표준',crosswind:'횡풍',low_visibility:'시야 제한',unstable_ground:'불안정 지반'} as const)[snapshot.plan.modifier]}</strong></div>
     </div>
+    {snapshot.field&&<div className="omega-protocol-mission" role="status">
+      <small>{snapshot.field.plan.sectorName} · NODE {String(snapshot.field.plan.wave).padStart(2,'0')}</small>
+      <strong>{snapshot.field.progress.phase==='combat'?'주변 위협 제압':snapshot.field.progress.phase==='objective'?
+       snapshot.field.plan.event.label+' 조작':'다음 구역 출구 개방'}</strong>
+      <span>{snapshot.field.progress.phase==='combat'?'적을 처치하면 현장 장치가 활성화됩니다.':
+       snapshot.field.progress.phase==='objective'?snapshot.field.plan.event.instructions:'녹색 출구까지 이동 후 상호작용하세요.'}</span>
+      {interactionMessage&&<em>{interactionMessage}</em>}
+    </div>}
     {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
     <div className="omega-protocol-controls">
      <div className="omega-protocol-pad" aria-label="모바일 이동 방향">
@@ -276,6 +296,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <div className="omega-protocol-pad-center" aria-hidden="true">◇</div>
      </div>
      <div className="omega-protocol-action-pad">
+      <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
+       disabled={snapshot.run.phase!=='battle'||paused||snapshot.enemiesAlive>0}
+       aria-label="현장 상호작용 E">
+       <span className="omega-protocol-action-glyph" aria-hidden="true">E</span><span>조작</span>
+      </button>
       <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
        aria-label="회피 · 스페이스 또는 시프트">
@@ -289,7 +314,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>Q · 궁극기</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
     {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
     {snapshot.run.phase==='reward'&&<div className="omega-protocol-overlay omega-protocol-reward-overlay" role="presentation">
       <section className="omega-protocol-rewards" role="dialog" aria-modal="true" aria-label="전술 강화 선택">
