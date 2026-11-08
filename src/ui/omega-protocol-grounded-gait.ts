@@ -81,7 +81,13 @@ export class OmegaGroundedGait {
    // Hold the SAME planted pose <=60ms, without advancing its walk phase.
    // Prolonged wall collision returns to idle (no running on the spot).
    if(!dashing&&this.lastMoveAt!==null&&this.lastPose&&
-    gameTime-this.lastMoveAt<=.06)return this.lastPose;
+    gameTime-this.lastMoveAt<=.06){
+    // Retain the same stance pose at 120Hz, but landing is an EVENT and
+    // must never be replayed during a physics frame with zero displacement.
+    return {...this.lastPose,
+     left:{...this.lastPose.left,landed:false},
+     right:{...this.lastPose.right,landed:false}};
+   }
    return {active:false,phase:this.phase,distanceTravelled:this.distanceTotal,
     left:blank(-9),right:blank(9)};
   }
