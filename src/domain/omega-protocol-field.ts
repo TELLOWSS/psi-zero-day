@@ -1,4 +1,5 @@
 import type {TerrainObject} from './survivors-terrain';
+import {omegaFieldNextRoute} from './omega-protocol-navigation';
 
 /**
  * OMEGA PROTOCOL: location-driven construction/industrial operation nodes.
@@ -132,13 +133,17 @@ export function omegaFieldTargetGuide(
  const step=omegaFieldCurrentStep(plan,progress);
  const dest=progress.phase==='objective'?step?.target:progress.phase==='exit'?plan.exit:undefined;
  if(!dest||!Number.isFinite(actor.x)||!Number.isFinite(actor.y))return null;
- const dx=dest.x-actor.x,dy=dest.y-actor.y;
+ // Follow a collision-safe waypoint when structures block the straight
+ // bearing. Readiness still depends on the genuine interaction radius.
+ const route=omegaFieldNextRoute(actor,dest,plan.obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
+ if(!route)return null;
+ const dx=route.next.x-actor.x,dy=route.next.y-actor.y;
  const screenDx=dx+OMEGA_QUARTER_VIEW.skewX*dy;
  const screenDy=OMEGA_QUARTER_VIEW.groundYScale*dy;
  return {
   degrees:Math.atan2(screenDy,screenDx)*180/Math.PI,
-  distance:Math.round(Math.hypot(dx,dy)),
-  ready:Math.hypot(dx,dy)<=OMEGA_FIELD_INTERACT_RADIUS,
+  distance:Math.round(route.length),
+  ready:omegaFieldCanInteract(actor,dest),
   label:progress.phase==='exit'?'출구':step?.label??'임무 지점',
  };
 }
