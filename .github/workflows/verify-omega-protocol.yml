@@ -7,6 +7,7 @@ on:
       - 'src/engine/omega-protocol-combat.ts'
       - 'src/engine/patrol-survivors-engine.ts'
       - 'tests/omega-protocol-combat.test.ts'
+      - 'tests/omega-protocol-performance.test.ts'
       - 'tests/omega-protocol-run.test.ts'
       - '.github/workflows/verify-omega-protocol.yml'
   workflow_dispatch:
@@ -29,4 +30,4 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts --maxConcurrency=1
