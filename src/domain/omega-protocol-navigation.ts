@@ -92,6 +92,11 @@ export function omegaFieldNextRoute(
  }
  if(backward.length>size)return null;
  const waypoints=backward.reverse().map(index=>nodes[index]!);
- return {next:waypoints[0]!,length:cost[1]!,
-  detour:true,waypoints};
+ // The actor may be standing exactly on a generated graph corner.
+ // Skip duplicate start nodes so an analog stick never receives a 0-length
+ // bearing and a wayfinder never points at its own current position.
+ const actionable=waypoints.filter(p=>distance(p,actor)>1e-4);
+ if(!actionable.length)return null;
+ return {next:actionable[0]!,length:cost[1]!,
+  detour:true,waypoints:actionable};
 }
