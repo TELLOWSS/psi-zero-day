@@ -16,6 +16,9 @@ export interface OmegaActorView {
  readonly dashing:boolean;
  readonly shooting:boolean;
  readonly hurt?:boolean;
+ /** Independent, genuine native-shot muzzle bearing in screen coordinates. */
+ readonly weaponFacingX?:number;
+ readonly weaponFacingY?:number;
  /** Actual collision-corrected movement, not joystick input or global time. */
  readonly gait?:OmegaWalkPose;
 }
@@ -182,9 +185,13 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  // shot poses never claim a projectile was launched behind the character.
  // Mirrored left poses flip the local weapon as well; no physics rotation.
  const rifleY=side?-45:-41;
- const rifleAngle=heading==='N'?-Math.PI/2:heading==='S'?Math.PI/2:
-  (heading==='NE'||heading==='NW')?-Math.PI/4:
-  (heading==='SE'||heading==='SW')?Math.PI/4:0;
+ // The torso may turn smoothly through eight authored heading buckets, but
+ // the rifle must point EXACTLY at the actual fired projectile angle.
+ // Undo mirror for local weapon geometry when the body faces left.
+ const aimX=Number.isFinite(view.weaponFacingX)?view.weaponFacingX!:view.facingX;
+ const aimY=Number.isFinite(view.weaponFacingY)?view.weaponFacingY!:view.facingY;
+ const localAimX=left?-aimX:aimX;
+ const rifleAngle=(localAimX===0&&aimY===0)?0:Math.atan2(aimY,localAimX);
  const recoil=view.shooting?3:0;
  ctx.save();ctx.translate(side?18:12,rifleY+3+nod);ctx.rotate(rifleAngle);
  ctx.fillStyle='#14283e';ctx.fillRect(-recoil,-3,27,6);
