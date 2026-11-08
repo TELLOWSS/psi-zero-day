@@ -54,11 +54,11 @@ const validFrame=(f:OmegaApprovedFrame,expected:OmegaRequiredAction)=> Boolean(
  Array.isArray(f.feet) && f.feet.length===2 && f.feet.every(finite) &&
  finite(f.radio) && finite(f.muzzle)
 );
-export function omegaReleaseDecision(earned:boolean,manifest:OmegaApprovedManifest|null|undefined):OmegaAssetDecision{
+export function omegaReleaseDecision(earned:boolean,manifest:OmegaApprovedManifest|null|undefined,binaryAuditPassed=false):OmegaAssetDecision{
  const problems:string[]=[];
  if(!manifest)problems.push('APPROVED_MANIFEST_MISSING');
  else{
-  if(manifest.identity!=='AIRA_MASTER'||manifest.approval!=='ARTIST_APPROVED'||!manifest.artistSignoff.trim())
+  if(manifest.identity!=='AIRA_MASTER'||manifest.approval!=='ARTIST_APPROVED'||typeof manifest.artistSignoff!=='string'||!manifest.artistSignoff.trim())
    problems.push('ARTIST_SIGNOFF_MISSING');
   if(manifest.visualQa!=='PASS')problems.push('VISUAL_QA_NOT_PASSED');
   if(manifest.combatQa!=='PASS')problems.push('COMBAT_QA_NOT_PASSED');
@@ -74,6 +74,7 @@ export function omegaReleaseDecision(earned:boolean,manifest:OmegaApprovedManife
    if(new Set(uris).size!==uris.length)problems.push(heading+'_DUPLICATED_ART');
   }
  }
+ if(!binaryAuditPassed)problems.push('SOURCE_BINARY_AUDIT_MISSING');
  if(!earned)problems.push('MASTER_50_OF_50_3STAR_REQUIRED');
  return Object.freeze({
   playable:problems.length===0,earned,missing:Object.freeze(problems),
@@ -84,7 +85,9 @@ export function omegaReleaseDecision(earned:boolean,manifest:OmegaApprovedManife
 /**
  * Runtime compositing primitive. Only call after omegaReleaseDecision is
  * playable AND every image is loaded; draw order respects occlusion.
- * The actual artist frames have not yet been imported into the repository.
+ * This is a pure renderer component. The actual artist frames have not yet
+ * been imported. The binaryAuditPassed flag must be based on a separate
+ * build-time hash/alpha/size check, never a frontend toggle or local storage.
  */
 export function drawOmegaApprovedLayers(
  ctx:CanvasRenderingContext2D,
