@@ -4,11 +4,11 @@ import {
 } from '../src/ui/omega-protocol-motion-qa-gate';
 
 describe('OMEGA 8-view source sprite quality is not faked by unique PNG hashes',()=>{
- it('blocks known study with actual 16/40 nearly motionless transitions and 6px foot mismatch',()=>{
+ it('blocks 16/40 nearly-static transitions and 13px boot contact mismatch',()=>{
   const actual=omegaMotionReviewGate(OMEGA_8DIR_STUDY_AUDIT);
   expect(OMEGA_8DIR_STUDY_AUDIT).toMatchObject({
    sourceDirections:8,walkFramesPerDirection:6,comparedPairs:40,
-   almostStaticPairs:16,sourceFootPixel:460,approvedFootPixel:454,
+   almostStaticPairs:16,sourceFootPixel:441,shadowBottomPixel:460,approvedFootPixel:454,
   });
   expect(actual.releaseEligible).toBe(false);
   expect(actual.problems).toContain('ALMOST_STATIC_GAIT_TRANSITIONS');
@@ -30,7 +30,7 @@ describe('OMEGA 8-view source sprite quality is not faked by unique PNG hashes',
  it('requires every independently checked technical and release gate',()=>{
   const complete=omegaMotionReviewGate({
    sourceDirections:8,walkFramesPerDirection:6,comparedPairs:40,
-   almostStaticPairs:0,sourceFootPixel:454,approvedFootPixel:454,
+   almostStaticPairs:0,sourceFootPixel:454,shadowBottomPixel:460,approvedFootPixel:454,
    independentHeroIdentityApproved:true,handAuthoredActionFrames:160,
    approvedFrontBackMasks:320,approvedAssetDigestProof:true,realDevicePass:true,
   });
