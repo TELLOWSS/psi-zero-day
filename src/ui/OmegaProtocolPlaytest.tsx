@@ -83,7 +83,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaProtocolActor(ctx,{...actorView,
    shooting:action.shooting&&pose.shooting,
    dashing:action.dashing,hurt:action.hurt,
-   ultimate:action.ultimate,finished:action.finished});
+   ultimate:action.ultimate,finished:action.finished,
+   actionAge:action.actionAge});
  }
  ctx.restore();
  drawOmegaImpactFx(ctx,impacts,state.gameTime);

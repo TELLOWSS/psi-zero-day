@@ -20,6 +20,8 @@ export interface OmegaActorView {
  /** Real Watch director-shout or OMEGA final victory, visual-only. */
  readonly ultimate?:boolean;
  readonly finished?:boolean;
+ /** Actual per-run terminal pose age; engine gameTime may be frozen. */
+ readonly actionAge?:number;
  /** Independent, genuine native-shot muzzle bearing in screen coordinates. */
  readonly weaponFacingX?:number;
  readonly weaponFacingY?:number;
@@ -213,8 +215,16 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
   ctx.globalAlpha=1;
  }
  if(view.finished){
-  ctx.strokeStyle='#f3caed';ctx.lineWidth=2;ctx.globalAlpha=.65;
-  ctx.beginPath();ctx.arc(0,-45,34,Math.PI*1.05,Math.PI*1.95);ctx.stroke();
+  // The technical fallback gets two visible completion key poses even
+  // without the approved art pack. Engine gameTime is already frozen,
+  // so drive this exclusively from the run-local terminal render clock.
+  const elapsed=Number.isFinite(view.actionAge)?Math.max(0,view.actionAge!):0;
+  const resolved=Math.min(1,elapsed*6);
+  ctx.strokeStyle='#f3caed';ctx.lineWidth=2.5;ctx.globalAlpha=.5+.3*resolved;
+  ctx.beginPath();ctx.arc(0,-45,30+resolved*12,
+   Math.PI*1.05,Math.PI*(1.55+.40*resolved));ctx.stroke();
+  ctx.fillStyle='#fff1d5';ctx.beginPath();
+  ctx.arc(0,-89-9*resolved,3+resolved*2,0,Math.PI*2);ctx.fill();
   ctx.globalAlpha=1;
  }
  if(view.hurt){

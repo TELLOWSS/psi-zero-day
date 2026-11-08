@@ -98,6 +98,13 @@ try{
    drawCell(8+i,label,view);
    actionProof.push({label,...fingerprint(view)});
   }
+  // The finished state is not a static badge: both authored completion
+  // key poses must be distinguishable even with frozen Watch gameTime.
+  const finishA=fingerprint({...base,finished:true,actionAge:0});
+  const finishB=fingerprint({...base,finished:true,actionAge:.2});
+  const genuineUltimate=fingerprint({...base,ultimate:true});
+  const terminalPoseChanges=finishA.hash!==finishB.hash&&
+   finishA.hash!==genuineUltimate.hash;
   // A checksum-only uniqueness check is too weak: in the original source
   // the E/S pixels differed by just 5.6% of actor ink despite unique hashes.
   // Compare actual image differences normalized to visible character pixels.
@@ -118,6 +125,7 @@ try{
   }
   const minimumDirectionContrast=Math.min(...comparisons.map(c=>c.changedOverInk));
   const pass=headings.length===8&&minimumDirectionContrast>=.18&&
+   terminalPoseChanges&&
    headings.every(h=>h.heading===h.actual&&h.count>400)&&
    new Set(headings.map(h=>h.hash)).size===8&&
    actionProof.every(a=>a.count>400)&&
@@ -129,7 +137,8 @@ try{
    report:{pass,source:'Vite actual OMEGA actor renderer in Chromium',
     evidence:'isolated source-rendered technical contact sheet, NOT full game',
     finalAiraArtApproved:false,renderSize:[920,750],
-    headings,actionProof,minimumDirectionContrast,
+    headings,actionProof,finishA,finishB,genuineUltimate,terminalPoseChanges,
+    minimumDirectionContrast,
     closestDirectionPairs:comparisons.sort((a,b)=>a.changedOverInk-b.changedOverInk).slice(0,4)}};
  });
  const bytes=Buffer.from(result.sheet.split(',')[1],'base64');

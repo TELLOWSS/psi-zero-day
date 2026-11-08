@@ -77,4 +77,31 @@ describe('OMEGA PROCEDURAL actor QA (not approved AIRA art)',()=>{
    expect(idle.some(v=>v.method==='drawImage')).toBe(false);
   }
  });
+ it('visually advances the procedural terminal pose with frozen gameTime',()=>{
+  const draw=(actionAge:number)=>{
+   const calls:Array<{method:string;args:unknown[]}>= [];
+   const ctx=new Proxy({},{
+    get(_target,key){return (...args:unknown[])=>{
+     calls.push({method:String(key),args});
+    };},
+    set(){return true;},
+   }) as unknown as CanvasRenderingContext2D;
+   drawOmegaProtocolActor(ctx,{
+    facingX:1,facingY:0,moving:false,time:12,
+    dashing:false,shooting:false,finished:true,actionAge,
+   });
+   return calls;
+  };
+  const first=draw(0),last=draw(.2),steady=draw(999);
+  const completionRings=(calls:typeof first)=>
+   calls.filter(c=>c.method==='arc'&&typeof c.args[2]==='number'&&
+    (c.args[2] as number)>=30&&(c.args[2] as number)<=42);
+  expect(completionRings(first).length).toBeGreaterThanOrEqual(1);
+  expect(completionRings(last).length).toBeGreaterThanOrEqual(1);
+  expect(completionRings(first).map(x=>x.args)).not.toEqual(
+   completionRings(last).map(x=>x.args));
+  expect(completionRings(last).map(x=>x.args)).toEqual(
+   completionRings(steady).map(x=>x.args));
+ });
+
 });
