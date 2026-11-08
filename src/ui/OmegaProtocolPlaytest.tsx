@@ -89,9 +89,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-7);
  if(field){
   for(const [loc,shade] of [
-   [field.plan.event.target,'#87edff'],
-   [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'],
-  ] as const){
+   ...field.plan.event.steps.map((step,i)=>[step.target,
+    i<field.progress.completedSteps?'#6bfaac':i===field.progress.completedSteps?'#87edff':'#578dae'] as const),
+   [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'] as const,
+  ]){
    ctx.fillStyle=shade;ctx.fillRect(mx+loc.x/WORLD_WIDTH*mw-2,my+loc.y/WORLD_HEIGHT*mh-2,5,5);
   }
  }
@@ -120,16 +121,18 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   const field=session.field;
   if(!field||field.progress.phase!=='objective')return;
   if(qa==='objective')return;
-  session.engine.state.player.x=field.plan.event.target.x;
-  session.engine.state.player.y=field.plan.event.target.y;
-  session.interact();
+  for(const step of field.plan.event.steps){
+   session.engine.state.player.x=step.target.x;
+   session.engine.state.player.y=step.target.y;
+   session.interact();
+  }
   if(!finishExit)return;
   session.engine.state.player.x=field.plan.exit.x;
   session.engine.state.player.y=field.plan.exit.y;
   session.interact();
  };
  if(qa==='objective'||qa==='exit'){
-  clearAndOperate(qa==='exit'?false:false);
+  clearAndOperate(false);
   return session;
  }
  const targetWave=qa==='reward'?3:9;
@@ -168,7 +171,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(e.key.toLowerCase()==='e'&&!e.repeat){
     e.preventDefault();
     const outcome=session.interact();
-    setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+    setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
     setSnapshot(session.snapshot);
    }
   };
@@ -237,7 +240,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  };
  const handleInteract=()=>{
   const outcome=session.interact();
-  setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+  setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
   setSnapshot(session.snapshot);
  };
  const choose=(id:OmegaUpgradeId)=>{
@@ -279,9 +282,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     {snapshot.field&&<div className="omega-protocol-mission" role="status">
       <small>{snapshot.field.plan.sectorName} · NODE {String(snapshot.field.plan.wave).padStart(2,'0')}</small>
       <strong>{snapshot.field.progress.phase==='combat'?'주변 위협 제압':snapshot.field.progress.phase==='objective'?
-       snapshot.field.plan.event.label+' 조작':'다음 구역 출구 개방'}</strong>
+       snapshot.field.plan.event.steps[snapshot.field.progress.completedSteps]?.label+' 조작':'다음 구역 출구 개방'}</strong>
       <span>{snapshot.field.progress.phase==='combat'?'적을 처치하면 현장 장치가 활성화됩니다.':
-       snapshot.field.progress.phase==='objective'?snapshot.field.plan.event.instructions:'녹색 출구까지 이동 후 상호작용하세요.'}</span>
+       snapshot.field.progress.phase==='objective'?(
+       snapshot.field.plan.event.instructions+' · '+(snapshot.field.progress.completedSteps+1)+'/'+snapshot.field.plan.event.steps.length
+      ):'녹색 출구까지 이동 후 상호작용하세요.'}</span>
       {interactionMessage&&<em>{interactionMessage}</em>}
     </div>}
     {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
