@@ -58,6 +58,7 @@ try{
    ctx.fillStyle='#6d9eb9';ctx.font='10px sans-serif';
    ctx.fillText('SOURCE: procedural / NOT FINAL ART',left+16,top+231);
   };
+  const directionPixels=[];
   const fingerprint=view=>{
    const test=document.createElement('canvas');
    test.width=210;test.height=200;
@@ -66,6 +67,9 @@ try{
    g.translate(105,175);
    drawOmegaProtocolActor(g,view);
    const rgba=g.getImageData(0,0,210,200).data;
+   // Only the first eight fingerprint calls are direction samples.
+   // Keep pixels in-browser; never serialize the 1.3MB RGBA arrays.
+   if(directionPixels.length<8)directionPixels.push(rgba);
    let count=0,hash=2166136261>>>0;
    for(let i=0;i<rgba.length;i+=4){
     if(rgba[i+3]>32)count++;
@@ -94,7 +98,26 @@ try{
    drawCell(8+i,label,view);
    actionProof.push({label,...fingerprint(view)});
   }
-  const pass=headings.length===8&&
+  // A checksum-only uniqueness check is too weak: in the original source
+  // the E/S pixels differed by just 5.6% of actor ink despite unique hashes.
+  // Compare actual image differences normalized to visible character pixels.
+  const comparisons=[];
+  for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){
+   let changed=0,ink=0;
+   const left=directionPixels[i],right=directionPixels[j];
+   for(let k=0;k<left.length;k+=4){
+    if(left[k+3]>32)ink++;
+    const delta=Math.abs(left[k]-right[k])+
+      Math.abs(left[k+1]-right[k+1])+
+      Math.abs(left[k+2]-right[k+2])+
+      Math.abs(left[k+3]-right[k+3]);
+    if(delta>60)changed++;
+   }
+   comparisons.push({pair:headings[i].heading+'-'+headings[j].heading,
+    changedOverInk:Math.round(changed/Math.max(1,ink)*10000)/10000});
+  }
+  const minimumDirectionContrast=Math.min(...comparisons.map(c=>c.changedOverInk));
+  const pass=headings.length===8&&minimumDirectionContrast>=.18&&
    headings.every(h=>h.heading===h.actual&&h.count>400)&&
    new Set(headings.map(h=>h.hash)).size===8&&
    actionProof.every(a=>a.count>400)&&
@@ -106,7 +129,8 @@ try{
    report:{pass,source:'Vite actual OMEGA actor renderer in Chromium',
     evidence:'isolated source-rendered technical contact sheet, NOT full game',
     finalAiraArtApproved:false,renderSize:[920,750],
-    headings,actionProof}};
+    headings,actionProof,minimumDirectionContrast,
+    closestDirectionPairs:comparisons.sort((a,b)=>a.changedOverInk-b.changedOverInk).slice(0,4)}};
  });
  const bytes=Buffer.from(result.sheet.split(',')[1],'base64');
  await writeFile(resolve(root,'aira-source-8direction-920x750.png'),bytes);
