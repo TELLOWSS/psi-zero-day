@@ -1,4 +1,4 @@
-import type {OmegaFieldPlan,OmegaFieldPoint} from '../domain/omega-protocol-field';
+import type {OmegaFieldPlan,OmegaFieldPoint,OmegaFieldObstacle} from '../domain/omega-protocol-field';
 
 /**
  * Original procedural art direction for the first construction-site sector.
@@ -149,5 +149,61 @@ export function drawOmegaSectorOneGrade(
  sky.addColorStop(.5,'rgba(37,80,115,0)');
  sky.addColorStop(1,'rgba(184,105,67,.047)');
  ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+ ctx.restore();
+}
+
+/** Detail overlay is anchored to an existing native Watch collision object,
+ * so no decorative object falsely promises obstruction or grants cover. */
+export function drawOmegaSectorOneObstacleDetail(
+ ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,
+):void{
+ const {x,y,width:w,height:h}=o;
+ ctx.save();
+ // Edge light catches the actual raised object top and only its own footprint.
+ const edge=ctx.createLinearGradient(x,y,x+w,y+h);
+ edge.addColorStop(0,'rgba(237,245,246,.19)');
+ edge.addColorStop(.42,'rgba(135,189,217,.07)');
+ edge.addColorStop(1,'rgba(5,15,27,.03)');
+ ctx.fillStyle=edge;ctx.fillRect(x+4,y+17,w-8,9);
+ ctx.strokeStyle='rgba(159,207,215,.39)';ctx.lineWidth=1.3;
+ ctx.beginPath();ctx.moveTo(x+4,y+17);ctx.lineTo(x+w-5,y+17);ctx.stroke();
+ if(o.kind==='container'){
+  ctx.strokeStyle='rgba(180,217,227,.29)';ctx.lineWidth=2;
+  for(let i=0;i<7;i++){
+   const px=x+14+i*(w-28)/7;
+   ctx.beginPath();ctx.moveTo(px,y+27);ctx.lineTo(px-8,y+h+4);ctx.stroke();
+  }
+  ctx.fillStyle='#f1bc77';ctx.fillRect(x+17,y+35,53,13);
+  ctx.fillStyle='#1d3040';ctx.fillRect(x+21,y+38,45,7);
+  ctx.fillStyle='rgba(231,248,251,.55)';
+  for(const px of [x+8,x+w-8])for(const py of [y+28,y+h+4]){
+   ctx.beginPath();ctx.arc(px,py,2.3,0,Math.PI*2);ctx.fill();
+  }
+ }else if(o.kind==='scaffold'){
+  ctx.strokeStyle='rgba(238,202,139,.83)';ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(x+8,y+25);ctx.lineTo(x+w-8,y+25);ctx.stroke();
+  ctx.strokeStyle='rgba(141,203,220,.62)';ctx.lineWidth=2;
+  for(let i=1;i<6;i++){
+   const px=x+w*i/6;
+   ctx.beginPath();ctx.moveTo(px,y+28);ctx.lineTo(px+8,y+h+11);ctx.stroke();
+  }
+  // Light deck rungs on existing solid scaffold top.
+  ctx.fillStyle='rgba(251,194,115,.42)';
+  for(let i=0;i<7;i++)ctx.fillRect(x+9+i*(w-20)/7,y+1,8,12);
+ }else if(o.kind==='machine'){
+  ctx.fillStyle='#071e29';ctx.fillRect(x+w*.47,y+h*.35,w*.30,h*.24);
+  ctx.strokeStyle='rgba(124,215,231,.49)';ctx.lineWidth=1.4;
+  for(let i=0;i<4;i++){
+   const sx=x+w*(.50+i*.068);
+   ctx.beginPath();ctx.moveTo(sx,y+h*.36);ctx.lineTo(sx,y+h*.56);ctx.stroke();
+  }
+  ctx.fillStyle='#d9a95c';ctx.fillRect(x+w*.09,y+h*.2,33,7);
+  ctx.fillStyle='#78c4d6';ctx.fillRect(x+w*.22,y+h*.67,w*.42,6);
+ }else if(o.kind==='barrier'){
+  ctx.strokeStyle='rgba(249,190,94,.95)';ctx.lineWidth=3.8;
+  ctx.beginPath();ctx.moveTo(x,y+25);ctx.lineTo(x+w,y+25);ctx.stroke();
+  ctx.fillStyle='rgba(32,45,57,.75)';
+  for(let i=0;i<4;i++)ctx.fillRect(x+10+i*w/4,y+37,w/11,12);
+ }
  ctx.restore();
 }
