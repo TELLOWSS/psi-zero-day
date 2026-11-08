@@ -2,6 +2,7 @@ import {useCallback,useEffect,useRef,useState} from 'react';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
+import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion} from './omega-protocol-field-render';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -22,10 +23,14 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const cameraX=Math.max(ctx.canvas.width/zoom-WORLD_WIDTH,Math.min(0,ctx.canvas.width/(2*zoom)-state.player.x));
  const cameraY=Math.max(ctx.canvas.height/zoom-WORLD_HEIGHT,Math.min(0,ctx.canvas.height/(2*zoom)-state.player.y));
  ctx.scale(zoom,zoom);ctx.translate(cameraX,cameraY);
- ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
- ctx.strokeStyle='#243548';ctx.lineWidth=1;
- for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
- for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
+ const field=session.field;
+ if(field)drawOmegaFieldGround(ctx,field.plan);
+ else{
+  ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
+  ctx.strokeStyle='#243548';ctx.lineWidth=1;
+  for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
+  for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
+ }
  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
  for(const h of state.hazards){
   if(h.hp<=0)continue;
@@ -41,10 +46,23 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fillStyle='#7df3fa';ctx.beginPath();ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);ctx.fill();
  }
  const p=state.player;
- ctx.fillStyle='#071c28';ctx.beginPath();ctx.ellipse(p.x,p.y+22,22,9,0,0,Math.PI*2);ctx.fill();
- ctx.fillStyle=p.isDashing?'#ffb3e7':'#e9f9fc';ctx.beginPath();ctx.arc(p.x,p.y,19,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle='#e78cd7';ctx.lineWidth=4;ctx.stroke();
- ctx.fillStyle='#0d2335';ctx.beginPath();ctx.arc(p.x+7,p.y-4,5,0,Math.PI*2);ctx.fill();
+ // Unapproved procedural humanoid (not the final 160-frame AIRA animation).
+ ctx.save();ctx.translate(p.x,p.y);
+ ctx.fillStyle='#030c179c';ctx.beginPath();ctx.ellipse(0,20,20,8,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#151e36';ctx.fillRect(-10,7,8,16);ctx.fillRect(2,7,8,16);
+ ctx.fillStyle=p.isDashing?'#f4afe3':'#d9e6f5';
+ ctx.beginPath();ctx.moveTo(-14,-16);ctx.lineTo(13,-16);ctx.lineTo(10,10);ctx.lineTo(-10,10);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#eb8ebf';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-13,-8);ctx.lineTo(-19,5);ctx.moveTo(13,-8);ctx.lineTo(21,4);ctx.stroke();
+ ctx.fillStyle='#c4d5e8';ctx.beginPath();ctx.arc(0,-24,12,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ffa7d5';ctx.fillRect(-10,-27,20,5);
+ ctx.strokeStyle='#dd96d8';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(6,-32);ctx.lineTo(16,-41);ctx.stroke();
+ ctx.strokeStyle='#0c2033';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(17,-2);ctx.lineTo(32,-8);ctx.stroke();
+ ctx.fillStyle='#86f2ee';ctx.fillRect(28,-11,9,4);
+ ctx.restore();
+ if(field){
+  drawOmegaFieldOcclusion(ctx,field.plan,p);
+  drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
+ }
  // Modifier fog is presentation-only; crosswind and unstable ground also
  // affect the actual enemy motion or movement input in the run-scoped engine.
  if(session.plan.modifier==='low_visibility'){
@@ -69,6 +87,14 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.lineWidth=1;ctx.strokeRect(mx,my,mw,mh);
  ctx.font='bold 10px system-ui,sans-serif';
  ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-7);
+ if(field){
+  for(const [loc,shade] of [
+   [field.plan.event.target,'#87edff'],
+   [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'],
+  ] as const){
+   ctx.fillStyle=shade;ctx.fillRect(mx+loc.x/WORLD_WIDTH*mw-2,my+loc.y/WORLD_HEIGHT*mh-2,5,5);
+  }
+ }
  for(const h of state.hazards.slice(0,32)){
   if(h.hp<=0)continue;
   const dotX=mx+Math.max(0,Math.min(1,h.x/WORLD_WIDTH))*mw;
