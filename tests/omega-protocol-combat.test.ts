@@ -97,6 +97,59 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(fresh.run.hp).toBe(100);
   expect(fresh.engine.state.activePerks).not.toEqual(s.engine.state.activePerks);
  });
+
+ it('exposes the genuine Watch cooldown dash instead of a cosmetic animation',()=>{
+  const s=new OmegaProtocolCombatSession(1701,10);
+  s.update(1/60,{moveX:1,moveY:0,triggerAction:true});
+  const before={x:s.engine.state.player.x,cooldown:s.engine.state.player.dashCooldown};
+  expect(s.dash()).toBe(true);
+  expect(s.dash()).toBe(false);
+  expect(s.engine.state.player.isDashing).toBe(true);
+  expect(s.engine.state.player.dashCooldown).toBeGreaterThan(before.cooldown??0);
+  s.update(1/60,{moveX:1,moveY:0,triggerAction:true});
+  expect(s.engine.state.player.x).toBeGreaterThan(before.x);
+  s.pause();
+  expect(s.dash()).toBe(false);
+  expect(s.ultimate()).toBe(false);
+ });
+ it('applies unstable ground to movement input only in that run, without mutating player speed',()=>{
+  const input={moveX:1,moveY:0,triggerAction:false};
+  const slowSeed=Array.from({length:120},(_,i)=>i+1).find(seed=>omegaWavePlan(seed,1).modifier==='unstable_ground');
+  const normalSeed=Array.from({length:120},(_,i)=>i+1).find(seed=>omegaWavePlan(seed,1).modifier==='standard');
+  expect(slowSeed).toBeDefined();expect(normalSeed).toBeDefined();
+  const slow=new OmegaProtocolCombatSession(slowSeed!,10),normal=new OmegaProtocolCombatSession(normalSeed!,10);
+  const initialSpeed=slow.engine.state.player.speed;
+  slow.update(1/30,input);normal.update(1/30,input);
+  expect(slow.engine.state.player.speed).toBe(initialSpeed);
+  const slowTravel=slow.engine.state.player.x-700;
+  const normalTravel=normal.engine.state.player.x-700;
+  expect(slowTravel).toBeGreaterThan(0);
+  expect(slowTravel).toBeLessThan(normalTravel);
+ });
+ it('prevents one repeatedly contacting ultimate projectile from deleting the actual protocol boss',()=>{
+  const s=new OmegaProtocolCombatSession(20261108,10);
+  for(let w=1;w<9;w++){
+   clearWave(s);
+   if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
+  }
+  expect(s.run.wave).toBe(9);
+  const boss=s.engine.state.hazards.find(h=>h.isStageBoss);
+  expect(boss).toBeDefined();
+  if(!boss)throw new Error('Boss wave failed');
+  const hero=s.engine.state.player;
+  hero.invincibleTime=999;
+  boss.x=hero.x+20;boss.y=hero.y;boss.speed=0;
+  // Ordinary hazards are eliminated by the ultimate; leave the boss close
+  // so its expanding wave makes many repeated overlap tests.
+  s.engine.state.ultimateCharge=s.engine.state.maxUltimateCharge;
+  const fullHp=boss.hp;
+  expect(s.ultimate()).toBe(true);
+  expect(s.ultimate()).toBe(false);
+  for(let tick=0;tick<110;tick++)s.update(1/60,idle);
+  expect(boss.maxHp).toBe(fullHp);
+  expect(boss.hp).toBeGreaterThan(fullHp*.55);
+  expect(s.run.phase).toBe('battle');
+ });
  it('settles actual damage/defeat and supports non-paying leave and pause',()=>{
   const s=new OmegaProtocolCombatSession(19,10);
   s.pause();
