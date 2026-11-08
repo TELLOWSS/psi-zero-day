@@ -53,6 +53,17 @@ describe('OMEGA obstacle-aware navigation: only visible and reachable objectives
   const wall:OmegaFieldObstacle={id:'full-wall',kind:'barrier',x:630,y:0,width:100,height:900};
   expect(omegaFieldNextRoute({x:200,y:450},{x:900,y:450},[wall])).toBeNull();
  });
+ it('does not return a zero-distance waypoint after reaching a graph corner',()=>{
+  const start={x:400,y:405},target={x:700,y:405};
+  const first=omegaFieldNextRoute(start,target,[block]);
+  expect(first?.detour).toBe(true);
+  if(!first)throw Error('No initial detour');
+  const reached=first.next;
+  const continuation=omegaFieldNextRoute(reached,target,[block]);
+  expect(continuation).not.toBeNull();
+  expect(continuation?.next).not.toEqual(reached);
+  expect(continuation?.length).toBeGreaterThan(0);
+ });
  it('can navigate all 15 seeded rooms to every real event and their exits',()=>{
   const plans=Array.from({length:15},(_,i)=>omegaFieldPlan(20261108,i+1));
   let total=0;
