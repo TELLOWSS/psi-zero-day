@@ -4,6 +4,7 @@ import type {
 import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract,omegaFieldCurrentStep}
  from '../domain/omega-protocol-field';
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
+import {drawOmegaSectorOneGround} from './omega-protocol-sector-one-scene';
 
 /**
  * Original technical field art, no borrowed game assets.
@@ -40,6 +41,9 @@ export function drawOmegaFieldGround(
   g.addColorStop(0,'rgba(161,219,246,.16)');g.addColorStop(1,'rgba(161,219,246,0)');
   ctx.fillStyle=g;ctx.fillRect(x-235,y-235,470,470);
  }
+ // Additional world-space floor art only for the first-sector visual slice.
+ // Keep under native Watch obstacles, missions, combat and hitboxes.
+ drawOmegaSectorOneGround(ctx,plan);
  // Equipment cages, containers and working platforms have their own depth.
  for(const o of plan.obstacles)drawObstacle(ctx,o,p.structures);
  ctx.font='800 20px system-ui';
