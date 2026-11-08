@@ -109,6 +109,25 @@ export function omegaFieldCurrentStep(
 ):OmegaFieldEventStep|null{
  return progress.phase==='objective'?plan.event.steps[progress.completedSteps]??null:null;
 }
+/** Compass guidance for event consoles and extraction gates. Projected
+ * heading matches the actual 3/4 camera, not raw top-down world coordinates.
+ */
+export function omegaFieldTargetGuide(
+ plan:OmegaFieldPlan,progress:OmegaFieldProgress,actor:OmegaFieldPoint,
+):Readonly<{degrees:number;distance:number;ready:boolean;label:string}>|null {
+ const step=omegaFieldCurrentStep(plan,progress);
+ const dest=progress.phase==='objective'?step?.target:progress.phase==='exit'?plan.exit:undefined;
+ if(!dest||!Number.isFinite(actor.x)||!Number.isFinite(actor.y))return null;
+ const dx=dest.x-actor.x,dy=dest.y-actor.y;
+ const screenDx=dx+OMEGA_QUARTER_VIEW.skewX*dy;
+ const screenDy=OMEGA_QUARTER_VIEW.groundYScale*dy;
+ return {
+  degrees:Math.atan2(screenDy,screenDx)*180/Math.PI,
+  distance:Math.round(Math.hypot(dx,dy)),
+  ready:Math.hypot(dx,dy)<=OMEGA_FIELD_INTERACT_RADIUS,
+  label:progress.phase==='exit'?'출구':step?.label??'임무 지점',
+ };
+}
 export function omegaFieldDistance(a:OmegaFieldPoint,b:OmegaFieldPoint):number{
  return Math.hypot(a.x-b.x,a.y-b.y);
 }
