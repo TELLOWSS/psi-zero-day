@@ -109,7 +109,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const session=new OmegaProtocolCombatSession(seed,10,false,{fieldTraversal:true});
  if(!import.meta.env.DEV)return session;
  const qa=new URLSearchParams(window.location.search).get('omegaQaState');
- if(!['reward','boss','objective','exit'].includes(qa||''))return session;
+ if(!['reward','boss','finalBoss','objective','exit'].includes(qa||''))return session;
  const idle={moveX:0,moveY:0,triggerAction:false};
  const clearAndOperate=(finishExit:boolean)=>{
   session.engine.state.hazards=[];
@@ -131,7 +131,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   clearAndOperate(false);
   return session;
  }
- const targetWave=qa==='reward'?3:9;
+ const targetWave=qa==='reward'?3:qa==='finalBoss'?15:9;
  for(let safety=0;safety<15&&session.run.wave<targetWave;safety++){
   clearAndOperate(true);
   if(session.run.phase==='reward'&&(qa==='boss'||session.run.wave<targetWave))
