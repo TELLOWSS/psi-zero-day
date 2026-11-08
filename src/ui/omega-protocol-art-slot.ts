@@ -95,10 +95,14 @@ export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:
   action==='ultimate'?{start:15,count:3,fps:12}:{start:18,count:2,fps:6};
  const t=Number.isFinite(view.time)?Math.max(0,view.time):0;
  const age=Number.isFinite(view.actionAge)?Math.max(0,view.actionAge!):t;
- // Run cycles loop; one-shot attack/dash/hurt/ultimate/finish poses CLAMP
- // instead of jumping to arbitrary mid-animation frame at global gameTime.
- const subframe=action==='walk'?
-  (view.moving?Math.floor(t*group.fps)%group.count:0):
+ const realGait=view.gait;
+ // The future approved 8x20 sprite shares the SAME travel-driven walk phase
+ // as the fallback actor; wall collision must freeze walk at frame zero.
+ // One-shot fire/dash/hit/ultimate frames still CLAMP from real action age.
+ const walkIndex=realGait?
+  (realGait.active?Math.min(group.count-1,Math.floor(realGait.phase*group.count)):0):
+  (view.moving?Math.floor(t*group.fps)%group.count:0);
+ const subframe=action==='walk'?walkIndex:
   Math.min(group.count-1,Math.floor(age*group.fps));
  return {heading,frame:group.start+subframe,action};
 }
