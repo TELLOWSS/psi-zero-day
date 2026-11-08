@@ -4,6 +4,7 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
+import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
@@ -254,6 +255,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const gaitController=new OmegaGroundedGait();
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
+  omegaPrepareAuthoredScene();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
