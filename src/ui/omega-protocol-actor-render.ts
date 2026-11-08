@@ -93,20 +93,26 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
   ctx.fillStyle='#d676a9';ctx.fillRect(side?1:-9,-68+nod,side?9:18,5);
   ctx.fillStyle='#fff0ab';ctx.fillRect(side?4:-5,-67+nod,side?4:10,3);
  }
- // The weapon reacts ONLY to recent real handheld projectile launch cues.
- // Current AI drones/area effects must not fake a muzzle flash here.
+ // The weapon rotates in eight screen-relative directions, so idle and
+ // shot poses never claim a projectile was launched behind the character.
+ // Mirrored left poses flip the local weapon as well; no physics rotation.
  const rifleY=side?-45:-41;
+ const rifleAngle=heading==='N'?-Math.PI/2:heading==='S'?Math.PI/2:
+  (heading==='NE'||heading==='NW')?-Math.PI/4:
+  (heading==='SE'||heading==='SW')?Math.PI/4:0;
  const recoil=view.shooting?3:0;
- ctx.fillStyle='#14283e';ctx.fillRect((side?18:7)-recoil,rifleY+nod,27,6);
- ctx.fillStyle='#95becf';ctx.fillRect((side?30:22)-recoil,rifleY+nod,13,3);
+ ctx.save();ctx.translate(side?18:12,rifleY+3+nod);ctx.rotate(rifleAngle);
+ ctx.fillStyle='#14283e';ctx.fillRect(-recoil,-3,27,6);
+ ctx.fillStyle='#95becf';ctx.fillRect(13-recoil,-2,22,3);
  if(view.shooting){
-  const mx=(side?48:35)-recoil,my=rifleY+3+nod;
-  ctx.fillStyle='#a9fff5';ctx.beginPath();ctx.arc(mx,my,5.5,0,Math.PI*2);ctx.fill();
+  const mx=37-recoil;
+  ctx.fillStyle='#a9fff5';ctx.beginPath();ctx.arc(mx,0,5.5,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle='#eaffd5';ctx.lineWidth=2.5;ctx.beginPath();
-  ctx.moveTo(mx+4,my);ctx.lineTo(mx+17,my);
-  ctx.moveTo(mx+2,my-2);ctx.lineTo(mx+11,my-7);
-  ctx.moveTo(mx+2,my+2);ctx.lineTo(mx+11,my+7);ctx.stroke();
+  ctx.moveTo(mx+4,0);ctx.lineTo(mx+17,0);
+  ctx.moveTo(mx+2,-2);ctx.lineTo(mx+11,-7);
+  ctx.moveTo(mx+2,2);ctx.lineTo(mx+11,7);ctx.stroke();
  }
+ ctx.restore();
  if(view.hurt){
   ctx.strokeStyle='#ff7f9f';ctx.lineWidth=3;ctx.globalAlpha=.85;
   ctx.beginPath();ctx.arc(0,-42,26,Math.PI*.1,Math.PI*1.1);ctx.stroke();
