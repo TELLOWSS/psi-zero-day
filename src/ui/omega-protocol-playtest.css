@@ -252,3 +252,47 @@
  .omega-protocol-run-tools button{padding:5px 10px;font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.omega-protocol-lab button{transition:none}}
+
+
+/* Mission-first traversal HUD; display only the current sector objective. */
+.omega-protocol-mission{
+ position:absolute;z-index:4;left:50%;top:87px;transform:translateX(-50%);
+ width:min(370px,calc(100% - 34px));display:flex;flex-direction:column;
+ align-items:center;gap:3px;pointer-events:none;text-align:center;
+ background:linear-gradient(155deg,rgba(6,22,37,.9),rgba(13,36,52,.82));
+ border:1px solid #66c4c073;border-radius:12px;padding:9px 14px;
+ box-shadow:0 7px 24px #0005;backdrop-filter:blur(8px)
+}
+.omega-protocol-mission small{font-size:9px;color:#96e0d9;letter-spacing:.1em;font-weight:800}
+.omega-protocol-mission strong{font-size:15px;color:#f6faff}
+.omega-protocol-mission span{font-size:10px;color:#c2d4de}
+.omega-protocol-mission em{font-style:normal;font-size:10px;color:#ffd29a;font-weight:800}
+.omega-protocol-action-pad button.omega-protocol-interact{
+ width:70px;height:70px;border-color:#74e3d5!important;
+ background:linear-gradient(150deg,#2b9587,#1e5765)!important;
+ box-shadow:0 7px 19px #0008,inset 0 0 0 1px #c9fff44d
+}
+.omega-protocol-action-pad button.omega-protocol-interact .omega-protocol-action-glyph{
+ color:#dbfff5;font-size:24px;font-weight:950
+}
+@media(max-width:760px){
+ .omega-protocol-mission{top:67px;width:min(300px,calc(100% - 24px));padding:6px 9px}
+ .omega-protocol-mission strong{font-size:12px}
+ .omega-protocol-mission span{font-size:9px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:61px;height:61px}
+ .omega-protocol-action-pad button.omega-protocol-interact .omega-protocol-action-glyph{font-size:18px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-mission{top:130px;left:9px;transform:none;align-items:flex-start;text-align:left;width:min(238px,calc(100% - 24px))}
+ .omega-protocol-mission span{font-size:9px;line-height:1.3}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:55px;height:55px}
+ .omega-protocol-action-pad{gap:5px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission{left:50%;top:54px;width:min(275px,calc(100% - 290px));padding:4px 9px;gap:1px}
+ .omega-protocol-mission small{font-size:7px}
+ .omega-protocol-mission strong{font-size:10px}
+ .omega-protocol-mission span{font-size:8px}
+ .omega-protocol-boss-alert{top:117px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:48px;height:48px}
+}
