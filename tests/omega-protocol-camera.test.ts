@@ -2,7 +2,7 @@ import {describe,it,expect,vi} from 'vitest';
 import {
  OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView
 } from '../src/ui/omega-protocol-camera';
-import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H} from '../src/domain/omega-protocol-field';
+import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldScreenMoveToWorld} from '../src/domain/omega-protocol-field';
 describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
  it('projects each world coordinate to a foreshortened view without changing the source point',()=>{
   const actor={x:450,y:300};
@@ -41,6 +41,19 @@ describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
   expect(ctx.scale).toHaveBeenCalledWith(c.scale,c.scale);
   expect(ctx.translate).toHaveBeenCalledWith(c.projectedOffsetX,c.projectedOffsetY);
   expect(ctx.transform).toHaveBeenCalledWith(1,0,-.22,.78,0,0);
+ });
+ it('converts WASD and touch movement to intuitive screen-space directions',()=>{
+  const up=omegaFieldScreenMoveToWorld(0,-1);
+  const right=omegaFieldScreenMoveToWorld(1,0);
+  const none=omegaFieldScreenMoveToWorld(0,0);
+  const screenUp=omegaProjectFieldPoint(up);
+  const screenRight=omegaProjectFieldPoint(right);
+  expect(Math.abs(screenUp.x)).toBeLessThan(1e-10);
+  expect(screenUp.y).toBeLessThan(0);
+  expect(screenRight.x).toBeGreaterThan(0);
+  expect(Math.abs(screenRight.y)).toBeLessThan(1e-10);
+  expect(none).toEqual({x:0,y:0});
+  expect(()=>omegaFieldScreenMoveToWorld(Infinity,0)).toThrow(RangeError);
  });
  it('rejects invalid dimensions and illegal hero positions',()=>{
   expect(()=>omegaQuarterViewCamera({x:0,y:NaN},844,390)).toThrow(RangeError);
