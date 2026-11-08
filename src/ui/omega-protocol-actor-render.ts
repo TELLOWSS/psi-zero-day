@@ -1,3 +1,4 @@
+import type {OmegaWalkPose} from './omega-protocol-grounded-gait';
 export const OMEGA_DIRECTIONS=['E','SE','S','SW','W','NW','N','NE'] as const;
 export type OmegaHeading=typeof OMEGA_DIRECTIONS[number];
 export function omegaFieldHeading(x:number,y:number):OmegaHeading{
@@ -15,6 +16,8 @@ export interface OmegaActorView {
  readonly dashing:boolean;
  readonly shooting:boolean;
  readonly hurt?:boolean;
+ /** Actual collision-corrected movement, not joystick input or global time. */
+ readonly gait?:OmegaWalkPose;
 }
 /**
  * Internally authored PROCEDURAL technical placeholder, never an approved
@@ -26,8 +29,10 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  const left=heading==='W'||heading==='NW'||heading==='SW';
  const back=heading==='N'||heading==='NW'||heading==='NE';
  const side=heading==='E'||heading==='W';
- const stride=view.moving?Math.sin(view.time*12)*9:0;
- const nod=view.moving?Math.cos(view.time*24)*1.8:0;
+ const gaitActive=view.gait?view.gait.active:view.moving;
+ const stepAngle=view.gait?view.gait.phase*Math.PI*2:view.time*12;
+ const stride=gaitActive?Math.sin(stepAngle)*9:0;
+ const nod=gaitActive?Math.cos(stepAngle*2)*1.8:0;
  ctx.save();
  if(left)ctx.scale(-1,1);
  // Explicit AIRA identity anchors: silver hair with magenta ribbon, amber
@@ -68,24 +73,27 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.lineTo(16,-80+nod);ctx.lineTo(14,-72+nod);
  ctx.lineTo(19,-66+nod+hairBounce);ctx.lineTo(10,-70+nod);
  ctx.closePath();ctx.fill();
- // Two-joint leg arcs make planted steps legible without fake horizontal
- // translation of the physics contact point.
+ // 2-joint legs read the actual post-collision stance-foot positions:
+ // stance anchors remain fixed in WORLD projection, swing soles rise in air.
+ // The fallback keeps legacy technical poses in direct canvas unit tests.
+ const l=view.gait?.active?view.gait.left:{x:-9+stride*.55,y:0,planted:true};
+ const r=view.gait?.active?view.gait.right:{x:9-stride*.55,y:0,planted:true};
  ctx.strokeStyle='#182b40';ctx.lineWidth=9;ctx.lineCap='round';
  ctx.beginPath();
- ctx.moveTo(-7,-34);ctx.lineTo(-10+stride*.20,-20);
- ctx.lineTo(-9+stride*.55,-7);
- ctx.moveTo(8,-34);ctx.lineTo(10-stride*.20,-20);
- ctx.lineTo(9-stride*.55,-7);ctx.stroke();
- // Original armored boots: black soles, pearly toe caps, rose seams.
+ ctx.moveTo(-7,-34);ctx.lineTo((-7+l.x)*.5-2,-19+l.y*.24-(l.planted?0:2));
+ ctx.lineTo(l.x,l.y-7);
+ ctx.moveTo(8,-34);ctx.lineTo((8+r.x)*.5+2,-19+r.y*.24-(r.planted?0:2));
+ ctx.lineTo(r.x,r.y-7);ctx.stroke();
+ // Boots follow the feet instead of an unrelated global sine wave.
  ctx.fillStyle='#070f1b';
- ctx.fillRect(-17+stride*.5,-10,17,10);
- ctx.fillRect(3-stride*.5,-10,17,10);
+ ctx.fillRect(l.x-8,l.y-10,17,10);
+ ctx.fillRect(r.x-8,r.y-10,17,10);
  ctx.fillStyle='#e9f1f5';
- ctx.fillRect(-16+stride*.5,-10,14,5);
- ctx.fillRect(4-stride*.5,-10,14,5);
+ ctx.fillRect(l.x-7,l.y-10,14,5);
+ ctx.fillRect(r.x-7,r.y-10,14,5);
  ctx.strokeStyle='#ffa6d0';ctx.lineWidth=2;
- ctx.beginPath();ctx.moveTo(-14+stride*.5,-9);ctx.lineTo(-3+stride*.5,-9);
- ctx.moveTo(5-stride*.5,-9);ctx.lineTo(16-stride*.5,-9);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(l.x-6,l.y-9);ctx.lineTo(l.x+5,l.y-9);
+ ctx.moveTo(r.x-6,r.y-9);ctx.lineTo(r.x+5,r.y-9);ctx.stroke();
  // Ribbed tactical torso / jacket.
  ctx.fillStyle='#1b3049';
  ctx.beginPath();ctx.moveTo(-20,-54+nod);ctx.lineTo(19,-54+nod);
