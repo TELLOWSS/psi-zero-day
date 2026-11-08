@@ -249,6 +249,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();else session.pause();
   setPaused(!paused);setSnapshot(session.snapshot);
  };
+ const guide=snapshot.field?omegaFieldTargetGuide(
+  snapshot.field.plan,snapshot.field.progress,{x:snapshot.playerX,y:snapshot.playerY},
+ ):null;
  return <main className="omega-protocol-lab omega-protocol-v2" data-omega-protocol-internal="true">
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-heading">
@@ -284,6 +287,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        snapshot.field.progress.phase==='objective'?(
        snapshot.field.plan.event.instructions+' · '+(snapshot.field.progress.completedSteps+1)+'/'+snapshot.field.plan.event.steps.length
       ):'녹색 출구까지 이동 후 상호작용하세요.'}</span>
+      {guide&&<div className="omega-protocol-wayfinder" role="status"
+       aria-label={guide.label+'까지 '+guide.distance+'월드 단위'}>
+       <b className="omega-protocol-wayfinder-arrow" style={{transform:'rotate('+guide.degrees+'deg)'}} aria-hidden="true">➤</b>
+       <span>{guide.label}</span>
+       <strong>{guide.ready?'조작 가능':guide.distance+' 거리'}</strong>
+      </div>}
       {interactionMessage&&<em>{interactionMessage}</em>}
     </div>}
     {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
