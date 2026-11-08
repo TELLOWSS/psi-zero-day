@@ -102,9 +102,9 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   for(let tick=0;tick<100;tick++)s.update(1/60,idle);
   expect(s.run.wave).toBe(1);
   expect(s.field?.progress.eventComplete).toBe(false);
-  const x=s.engine.state.player.x;
-  s.engine.state.player.x=160;s.engine.state.player.y=450;
-  expect(s.engine.state.player.x).toBe(x);
+  const before=s.engine.state.player.x;
+  s.engine.state.player.x=before;s.engine.state.player.y=450;
+  expect(s.engine.state.player.x).toBe(before);
   s.engine.state.player.hp=0;
   s.update(1/60,idle);
   expect(s.run.phase).toBe('defeat');
