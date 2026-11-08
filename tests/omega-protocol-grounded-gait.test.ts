@@ -34,13 +34,17 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   const running=track.advance({x:104,y:300},1/60,1);
   expect(running.active).toBe(true);
   const blocked=track.advance({x:104,y:300},2/60,1);
-  expect(blocked.active).toBe(false);
+  // 120Hz renderer may observe a zero-displacement render between two
+  // 60Hz physics steps: keep the last POSE but never advance it.
+  expect(blocked.active).toBe(true);
   expect(blocked.phase).toBe(running.phase);
   expect(blocked.distanceTravelled).toBe(running.distanceTravelled);
   const again=track.advance({x:104,y:300},3/60,1);
-  expect(again.active).toBe(false);
-  const future=omegaSpriteFrameForView({...base,gait:again});
-  expect(future.frame).toBe(0); // no fake foot cycling behind a wall
+  expect(again.phase).toBe(running.phase);
+  const wallStop=track.advance({x:104,y:300},.15,1);
+  expect(wallStop.active).toBe(false);
+  const future=omegaSpriteFrameForView({...base,gait:wallStop});
+  expect(future.frame).toBe(0); // prolonged wall contact returns to idle
  });
  it('is distance-driven and independent of 30fps/60fps visual render cadence',()=>{
   const sixty=new OmegaGroundedGait(),thirty=new OmegaGroundedGait();
@@ -111,7 +115,10 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   drawOmegaProtocolActor(ctx,{...base,gait});
   expect(calls.filter(c=>c.name==='lineTo').length).toBeGreaterThan(10);
   expect(calls.filter(c=>c.name==='drawImage')).toHaveLength(0);
-  const stopped=track.advance({x:102,y:250},2/60,1);
+  const held=track.advance({x:102,y:250},2/60,1);
+  expect(held.phase).toBe(gait.phase);
+  const stopped=track.advance({x:102,y:250},.2,1);
+  expect(stopped.active).toBe(false);
   expect(omegaSpriteFrameForView({...base,gait:stopped}).frame).toBe(0);
  });
 });
