@@ -181,6 +181,20 @@ for(const [name,width,height,checkpoint] of targets){
    return {pass:loaded&&entirelyInHeader&&notCoverArena,
     loaded,entirelyInHeader,notCoverArena,naturalWidth:img.naturalWidth};
   });
+  // Layout acceptance: in 844×390 action play the objective plate may not
+  // sit over the character's central on-screen combat corridor.
+  const missionClearCombatCorridor=await page.evaluate(()=>{
+   const landscape=innerHeight<=430&&innerWidth>innerHeight;
+   if(!landscape)return {applicable:false,pass:true};
+   const mission=document.querySelector('.omega-protocol-mission')?.getBoundingClientRect();
+   const canvas=document.querySelector('.omega-protocol-arena canvas')?.getBoundingClientRect();
+   if(!mission||!canvas)return {applicable:true,pass:false,reason:'missing bounds'};
+   const safeLeft=canvas.left+canvas.width*.31;
+   const safeRight=canvas.left+canvas.width*.70;
+   const pass=mission.right<=safeLeft||mission.left>=safeRight;
+   return {applicable:true,pass,
+    missionLeft:mission.left,missionRight:mission.right,safeLeft,safeRight};
+  });
   const compactLandscapeHeader=await page.evaluate(()=>{
    const shortLandscape=window.innerHeight<=430&&window.innerWidth>window.innerHeight;
    const header=document.querySelector('.omega-protocol-topbar');
@@ -204,11 +218,11 @@ for(const [name,width,height,checkpoint] of targets){
    ? openingNearThreatCount>=2 : true;
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,errors,
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
     authoredArt,openingNearThreatCount,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!missionClearCombatCorridor.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
