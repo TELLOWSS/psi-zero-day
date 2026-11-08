@@ -47,6 +47,11 @@ for(const [name,width,height,checkpoint] of targets){
     }catch(error){return {src,loaded:false,error:String(error)};}
    }));
   });
+  // Acceptance of the INITIAL encounter belongs before movement/combat QA.
+  // Threats can legitimately be killed, chase, or move out of the radius
+  // during keyboard/stick probes; that must not invalidate opening staging.
+  const openingNearThreatCount=Number(await page.locator('.omega-protocol-arena')
+   .getAttribute('data-omega-near-threats')??'0');
   if(name==='combat-action'){
    // A genuine player-input movement/dash capture. No debug teleport,
    // forced enemy deaths, fake character sprite or composited marketing art.
@@ -196,11 +201,11 @@ for(const [name,width,height,checkpoint] of targets){
    Math.abs(metrics.canvas.w/metrics.canvas.h-metrics.canvasIntrinsic.w/metrics.canvasIntrinsic.h)>.06;
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   const openingHasCombat=name==='desktop'||name==='portrait'||name==='landscape'||name==='combat-action'
-   ? metrics.nearThreatCount>=2 : true;
+   ? openingNearThreatCount>=2 : true;
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
     correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,errors,
-    authoredArt,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
+    authoredArt,openingNearThreatCount,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
     walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
