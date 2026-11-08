@@ -6,6 +6,17 @@
 export const OMEGA_FIELD_WIDTH=1400 as const;
 export const OMEGA_FIELD_HEIGHT=900 as const;
 export const OMEGA_FIELD_INTERACT_RADIUS=100 as const;
+/** Shared terrain-camera projection, intentionally not part of Watch physics. */
+export const OMEGA_QUARTER_VIEW={skewX:-0.22,groundYScale:0.78} as const;
+/** Convert joystick/screen axes to world movement so UP actually looks UP. */
+export function omegaFieldScreenMoveToWorld(dx:number,dy:number):{x:number;y:number}{
+ if(!Number.isFinite(dx)||!Number.isFinite(dy))throw new RangeError('Invalid movement');
+ const y=dy/OMEGA_QUARTER_VIEW.groundYScale;
+ const x=dx-OMEGA_QUARTER_VIEW.skewX*y;
+ const len=Math.hypot(x,y);
+ const amount=Math.min(1,Math.hypot(dx,dy));
+ return len>0?{x:x/len*amount,y:y/len*amount}:{x:0,y:0};
+}
 export type OmegaFieldEventKind='power_lockout'|'worker_evacuation'|'structure_stabilization';
 export type OmegaFieldPhase='combat'|'objective'|'exit';
 export interface OmegaFieldPoint {readonly x:number;readonly y:number}
