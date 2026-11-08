@@ -37,6 +37,10 @@ for(const [name,width,height,checkpoint] of targets){
     viewportHeight:window.innerHeight,viewportWidth:window.innerWidth,
     arena:rect('.omega-protocol-arena'),
     overlay:rect('.omega-protocol-overlay'),
+    canvas:rect('canvas'),
+    canvasIntrinsic:{w:document.querySelector('canvas')?.width,h:document.querySelector('canvas')?.height},
+    touchTargets:[...document.querySelectorAll('.omega-protocol-pad button,.omega-protocol-action-pad button')]
+     .map(el=>{const r=el.getBoundingClientRect();return {w:r.width,h:r.height}}),
     boxes,
     title:document.querySelector('h1')?.textContent?.trim(),
     modalTitle:document.querySelector('.omega-protocol-rewards h2')?.textContent?.trim()||null,
@@ -47,11 +51,14 @@ for(const [name,width,height,checkpoint] of targets){
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
   const correctModal=name==='reward' ? metrics.modalTitle==='전술 강화 선택' : name==='boss' ? metrics.threatCount!=='00' : true;
+  const stretchedCanvas=!metrics.canvas||!metrics.canvasIntrinsic.w||!metrics.canvasIntrinsic.h||
+   Math.abs(metrics.canvas.w/metrics.canvas.h-metrics.canvasIntrinsic.w/metrics.canvasIntrinsic.h)>.06;
+  const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
+    correctModal,stretchedCanvas,undersizedTouchTarget,errors,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
-  if(scrollH||scrollV||outside||!correctModal||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+  if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
