@@ -262,7 +262,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
-   <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}>
+   <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
+     data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}>
     <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     <div className="omega-protocol-stats" aria-label="전투 상태">
