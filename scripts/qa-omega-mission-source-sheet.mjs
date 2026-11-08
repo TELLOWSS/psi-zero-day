@@ -50,7 +50,12 @@ try{
    if(!g)throw new Error('No mission stage QA context');
    g.fillStyle='#142b3e';g.fillRect(0,0,270,220);
    g.save();g.translate(135,187);g.scale(2,2);
-   if(entry.exit)drawOmegaExtractionUnit(g,entry.plan.exit,entry.unlocked,2.1);
+   if(entry.exit){
+    // The actual renderer is in world XY. Translate back to an isolated
+    // contact-sheet cell; otherwise the exit at (1210,730) is fully clipped.
+    g.translate(-entry.plan.exit.x,-entry.plan.exit.y);
+    drawOmegaExtractionUnit(g,entry.plan.exit,entry.unlocked,2.1);
+   }
    else{
     const progress={...omegaFieldInitialProgress(),phase:entry.phase,
      completedSteps:entry.done};
