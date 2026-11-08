@@ -13,7 +13,10 @@ on:
       - 'src/engine/omega-protocol-boss-pattern.ts'
       - 'tests/omega-protocol-boss-pattern.test.ts'
       - 'src/ui/omega-protocol-enemy-render.ts'
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-protocol-playtest.css'
       - 'src/ui/omega-protocol-actor-render.ts'
+      - 'tests/omega-protocol-boss-visuals.test.ts'
       - 'tests/omega-protocol-actor-render.test.ts'
       - 'src/engine/patrol-survivors-engine.ts'
       - 'tests/omega-protocol-combat.test.ts'
@@ -40,4 +43,4 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-actor-render.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts --maxConcurrency=1
