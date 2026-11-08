@@ -220,7 +220,7 @@ export class OmegaProtocolCombatSession {
   if(this.fieldStatus.phase==='objective'){
    const step=omegaFieldCurrentStep(this.currentField,this.fieldStatus);
    if(!step)return {success:false,reason:'NOT_READY'};
-   if(!omegaFieldCanInteract(this.engine.state.player,step.target))
+   if(!omegaFieldCanInteract(this.engine.state.player,step.target,this.currentField.obstacles))
     return {success:false,reason:'OUT_OF_RANGE'};
    const completedSteps=this.fieldStatus.completedSteps+1;
    const allDone=completedSteps>=this.currentField.event.steps.length;
@@ -233,7 +233,7 @@ export class OmegaProtocolCombatSession {
    return {success:true,reason:allDone?'EVENT_COMPLETE':'STEP_COMPLETE'};
   }
   if(this.fieldStatus.phase==='exit'){
-   if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.exit))
+   if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.exit,this.currentField.obstacles))
     return {success:false,reason:'OUT_OF_RANGE'};
    this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
