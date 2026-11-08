@@ -4,6 +4,10 @@ import {
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {
+ omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,
+ type OmegaFieldPlan,type OmegaFieldProgress,
+} from '../domain/omega-protocol-field';
+import {
  omegaProtocolAccess,omegaStartRun,omegaWavePlan,omegaResolveBattle,omegaChooseUpgrade,omegaSeedHash,
  type OmegaProtocolRun,type OmegaUpgradeId,type OmegaWavePlan,
 } from '../domain/omega-protocol-run';
@@ -17,6 +21,7 @@ export interface OmegaCombatSnapshot {
  readonly playerX:number;
  readonly playerY:number;
  readonly armed:boolean;
+ readonly field:Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null;
 }
 export const OMEGA_MAX_LIVE_THREATS=15;
 
@@ -30,9 +35,14 @@ export class OmegaProtocolCombatSession {
  private active:OmegaProtocolRun;
  private latestPlan:OmegaWavePlan;
  private armed=false;
+ private readonly fieldTraversal:boolean;
+ private currentField:OmegaFieldPlan|null=null;
+ private fieldStatus:OmegaFieldProgress|null=null;
  constructor(
   seed:number,watchClears:number,masterCosmeticEligible=false,
+  options:Readonly<{fieldTraversal?:boolean}>={},
  ){
+  this.fieldTraversal=options.fieldTraversal===true;
   const access=omegaProtocolAccess(watchClears,masterCosmeticEligible);
   const run=omegaStartRun(seed,access);
   if(!run)throw new Error('Complete 10 Watch stages before entering OMEGA PROTOCOL');
@@ -48,6 +58,11 @@ export class OmegaProtocolCombatSession {
  }
  get run():OmegaProtocolRun{return this.active;}
  get plan():OmegaWavePlan{return this.latestPlan;}
+ get field():Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null{
+  return this.currentField&&this.fieldStatus
+   ?{plan:this.currentField,progress:this.fieldStatus}
+   :null;
+ }
  get snapshot():OmegaCombatSnapshot {
   return {
    run:this.active,plan:this.latestPlan,
@@ -57,12 +72,19 @@ export class OmegaProtocolCombatSession {
    playerX:this.engine.state.player.x,
    playerY:this.engine.state.player.y,
    armed:this.armed,
+   field:this.field,
   };
  }
  private beginWave(){
   if(this.active.phase!=='battle')throw new Error('Cannot spawn during reward/terminal phase');
   this.latestPlan=omegaWavePlan(this.active.seed,this.active.wave);
   const plan=this.latestPlan;
+  if(this.fieldTraversal){
+   this.currentField=omegaFieldPlan(this.active.seed,plan.wave);
+   this.fieldStatus=omegaFieldInitialProgress();
+   this.engine.state.player.x=this.currentField.entry.x;
+   this.engine.state.player.y=this.currentField.entry.y;
+  }
   const enemyCount=Math.max(4,Math.min(OMEGA_MAX_LIVE_THREATS-(plan.isBoss?1:0),
    Math.floor(plan.budget/9)));
   const specs:Array<{type:HazardType;boss?:boolean;hpScale:number;speedScale:number}>=[];
@@ -87,8 +109,13 @@ export class OmegaProtocolCombatSession {
   const adjusted= this.latestPlan.modifier==='unstable_ground'
    ? {...input,moveX:input.moveX*.78,moveY:input.moveY*.78}
    : input;
+  const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
   this.engine.update(dt,adjusted);
   const state=this.engine.state;
+  if(this.currentField&&state.phase==='playing'){
+   const corrected=omegaFieldResolveCollision(prior,state.player,this.currentField.obstacles,21);
+   state.player.x=corrected.x;state.player.y=corrected.y;
+  }
   if(state.phase==='defeat'||state.player.hp<=0){
    this.armed=false;
    this.active=omegaResolveBattle(this.active,{won:false,
@@ -96,19 +123,51 @@ export class OmegaProtocolCombatSession {
    return this.snapshot;
   }
   if(state.phase!=='playing')return this.snapshot;
-  if(state.hazards.length===0){
-   this.armed=false;
-   this.active=omegaResolveBattle(this.active,{won:true,damageTaken:0,
-    remainingHp:Math.max(0,Math.min(state.player.maxHp,state.player.hp))});
-   if(this.active.phase==='reward'){
-    this.engine.setPaused(true);
-   }else if(this.active.phase==='battle'){
-    this.beginWave();
+  if(state.hazards.filter(h=>h.hp>0).length===0){
+   if(this.currentField&&this.fieldStatus){
+    if(this.fieldStatus.phase==='combat'){
+     this.fieldStatus={phase:'objective',eventComplete:false,exitUnlocked:false};
+    }
+    // The player must physically reach the objective and then the exit.
+    // Clearing the arena alone no longer advances an expedition.
    }else{
-    this.engine.setPaused(true);
+    this.settleWave();
    }
   }
   return this.snapshot;
+ }
+ /** Finish a defeated encounter only after the actual exit interaction. */
+ private settleWave():void{
+  if(!this.armed||this.active.phase!=='battle')return;
+  this.armed=false;
+  const state=this.engine.state;
+  this.active=omegaResolveBattle(this.active,{won:true,damageTaken:0,
+   remainingHp:Math.max(0,Math.min(state.player.maxHp,state.player.hp))});
+  if(this.active.phase==='reward'||this.active.phase==='victory'){
+   this.engine.setPaused(true);
+  }else{
+   this.beginWave();
+  }
+ }
+ /** Context-sensitive real field interactions, with range and combat gates. */
+ interact():Readonly<{success:boolean;reason:'NOT_READY'|'OUT_OF_RANGE'|'EVENT_COMPLETE'|'EXIT_OPENED'}>{
+  if(!this.currentField||!this.fieldStatus||!this.armed||
+     this.active.phase!=='battle'||this.engine.state.phase!=='playing')
+   return {success:false,reason:'NOT_READY'};
+  if(this.engine.state.hazards.some(h=>h.hp>0))return {success:false,reason:'NOT_READY'};
+  if(this.fieldStatus.phase==='objective'){
+   if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.event.target))
+    return {success:false,reason:'OUT_OF_RANGE'};
+   this.fieldStatus={phase:'exit',eventComplete:true,exitUnlocked:true};
+   return {success:true,reason:'EVENT_COMPLETE'};
+  }
+  if(this.fieldStatus.phase==='exit'){
+   if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.exit))
+    return {success:false,reason:'OUT_OF_RANGE'};
+   this.settleWave();
+   return {success:true,reason:'EXIT_OPENED'};
+  }
+  return {success:false,reason:'NOT_READY'};
  }
  /**
   * Real engine dash. Not a visual fake: uses Watch cooldown, direction and
