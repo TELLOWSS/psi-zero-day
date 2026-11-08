@@ -17,6 +17,7 @@ const targets=[
  ['exit',844,390,'exit'],
  ['reward',844,390,'reward'],
  ['boss',844,390,'boss'],
+ ['final-boss',844,390,'finalBoss'],
 ];
 const report=[];
 let failures=0;
@@ -47,6 +48,8 @@ for(const [name,width,height,checkpoint] of targets){
     title:document.querySelector('h1')?.textContent?.trim(),
     modalTitle:document.querySelector('.omega-protocol-rewards h2')?.textContent?.trim()||null,
     threatCount:document.querySelector('.omega-protocol-threat strong')?.textContent?.trim(),
+    bossBanner:document.querySelector('.omega-protocol-boss-alert')?.textContent?.trim()||null,
+    bossMeter:document.querySelector('.omega-protocol-boss-hp')?.getAttribute('aria-valuenow')||null,
     missionTitle:document.querySelector('.omega-protocol-mission strong')?.textContent?.trim()||null,
     missionInstructions:document.querySelector('.omega-protocol-mission span')?.textContent?.trim()||null,
    };
@@ -55,7 +58,8 @@ for(const [name,width,height,checkpoint] of targets){
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
   const correctModal=name==='reward' ? metrics.modalTitle==='전술 강화 선택'
-   : name==='boss' ? metrics.threatCount!=='00'&&metrics.missionTitle!==null
+   : name==='boss' ? metrics.threatCount!=='00'&&Boolean(metrics.bossBanner?.includes('BOSS 01'))&&metrics.bossMeter!==null
+   : name==='final-boss' ? metrics.threatCount!=='00'&&Boolean(metrics.bossBanner?.includes('FINAL BOSS'))&&metrics.bossMeter!==null
    : name==='objective' ? (metrics.missionTitle||'').includes('조작')
    : name==='exit' ? metrics.missionTitle==='다음 구역 출구 개방'
    : metrics.missionTitle!==null;
