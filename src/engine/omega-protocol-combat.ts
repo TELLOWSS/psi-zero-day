@@ -22,6 +22,8 @@ export interface OmegaCombatSnapshot {
  readonly enemiesAlive:number;
  readonly enginePhase:string;
  readonly playerHp:number;
+ readonly bossHp:number|null;
+ readonly bossMaxHp:number|null;
  readonly playerX:number;
  readonly playerY:number;
  readonly armed:boolean;
@@ -74,11 +76,14 @@ export class OmegaProtocolCombatSession {
    :null;
  }
  get snapshot():OmegaCombatSnapshot {
+  const liveBoss=this.engine.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
   return {
    run:this.active,plan:this.latestPlan,
    enemiesAlive:this.engine.state.hazards.filter(h=>h.hp>0).length,
    enginePhase:this.engine.state.phase,
    playerHp:this.engine.state.player.hp,
+   bossHp:liveBoss?Math.max(0,liveBoss.hp):null,
+   bossMaxHp:liveBoss?Math.max(1,liveBoss.maxHp):null,
    playerX:this.engine.state.player.x,
    playerY:this.engine.state.player.y,
    armed:this.armed,
