@@ -10,6 +10,7 @@ import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
+import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
@@ -25,6 +26,7 @@ const validKeys=new Set<string>(keys);
 // Explicit fail-closed sprite slot: binaries from PR #234 are not yet approved
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
+const userApprovedAiraV2=new OmegaAiraV2CandidateImages();
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
 function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[]){
  const state=session.engine.state;
@@ -88,7 +90,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
-     OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)){
+     OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)&&
+    !drawOmegaAiraV2Candidate(ctx,artView,userApprovedAiraV2)){
   drawOmegaProtocolActor(ctx,{...actorView,
    shooting:action.shooting&&pose.shooting,
    dashing:action.dashing,hurt:action.hurt,
@@ -282,6 +285,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
   omegaPrepareAuthoredScene();
+  userApprovedAiraV2.prepare();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
@@ -398,9 +402,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
-     title="기존 메인화면 AIRA 원화 · 전투 캐릭터 스프라이트 아님">
-     <img src="/assets/reignition/veteran-return.webp"
-      alt="메인화면 AIRA 캐릭터 초상" width={56} height={56}
+     title="사용자가 채택한 AIRA V2 · 8방향 후보 원화 적용">
+     <img src="/assets/omega/aira-v2/portrait.webp"
+      onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}
+      alt="AIRA V2 캐릭터 초상" width={56} height={56}
       decoding="async" draggable={false} />
      <span aria-hidden="true">Ω</span>
     </div>
