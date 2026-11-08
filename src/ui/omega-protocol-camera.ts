@@ -10,6 +10,21 @@ export {OMEGA_QUARTER_VIEW} from '../domain/omega-protocol-field';
  * Actors can undo the vertical scale when their full-body sprite is drawn.
  */
 
+export type OmegaCameraFocus='battle'|'boss'|'traversal';
+/** Screen-space cinematography, not a physics or camera-collision change.
+ * A moving player gets more presence in combat, while objective traversal
+ * exposes more of the mission path. Boss attacks preserve spatial awareness.
+ */
+export function omegaCameraTargetZoom(
+ focus:OmegaCameraFocus,width:number,height:number,
+):number{
+ if(!Number.isFinite(width)||!Number.isFinite(height)||width<=0||height<=0)
+  throw new RangeError('Invalid camera viewport');
+ const landscapeTouch=width/height>=1.8&&height<=540;
+ const base=focus==='battle'?1.78:focus==='boss'?1.58:1.38;
+ return base+(landscapeTouch?.09:0);
+}
+
 export interface OmegaCameraState{
  readonly scale:number;
  readonly skewX:number;
@@ -30,10 +45,13 @@ function cameraCenter(value:number,min:number,max:number,viewLength:number):numb
 }
 export function omegaQuarterViewCamera(
  actor:OmegaFieldPoint,viewWidth:number,viewHeight:number,
+ zoomMultiplier=1.55,
 ):OmegaCameraState{
  if(!Number.isFinite(actor.x)||!Number.isFinite(actor.y)||
     !Number.isFinite(viewWidth)||!Number.isFinite(viewHeight)||
-    viewWidth<=0||viewHeight<=0)throw new RangeError('Invalid camera inputs');
+    viewWidth<=0||viewHeight<=0||
+    !Number.isFinite(zoomMultiplier)||zoomMultiplier<1||zoomMultiplier>2.5)
+  throw new RangeError('Invalid camera inputs');
  const {skewX,groundYScale}=OMEGA_QUARTER_VIEW;
  const boundLeft=Math.min(0,skewX*OMEGA_FIELD_HEIGHT);
  const boundRight=OMEGA_FIELD_WIDTH+Math.max(0,skewX*OMEGA_FIELD_HEIGHT);
@@ -42,7 +60,7 @@ export function omegaQuarterViewCamera(
  // Combat camera: ~1.55x closer than the former full-field spectator
  // view. Keep the actor readable (~18% of typical 844x390 screen height).
  // Arena bounds and actual Watch physics are unaffected.
- const fit=Math.max(viewWidth/(boundRight-boundLeft),viewHeight/(boundBottom-boundTop))*1.55;
+ const fit=Math.max(viewWidth/(boundRight-boundLeft),viewHeight/(boundBottom-boundTop))*zoomMultiplier;
  const worldVisibleWidth=viewWidth/fit,worldVisibleHeight=viewHeight/fit;
  const centerX=cameraCenter(projected.x,boundLeft,boundRight,worldVisibleWidth);
  const centerY=cameraCenter(projected.y,boundTop,boundBottom,worldVisibleHeight);
