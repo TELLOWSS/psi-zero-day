@@ -606,3 +606,24 @@
  .omega-protocol-mission strong{font-size:10px;line-height:1.2}
  .omega-protocol-mission>span{font-size:8px;line-height:1.2}
 }
+
+/* AIRA V2 live-combat composition. At 844x390 the previous Environment
+ * status ended over the centered hero's hair; move it above the radar and
+ * keep the middle third of the screen free for actual actor animation.
+ * All meters remain in the DOM and readable.
+ */
+@media (max-height:430px) and (orientation:landscape){
+ .omega-protocol-stats{
+  inset:5px 6px auto 6px;
+  width:auto;max-width:none;gap:5px;align-items:flex-start;
+ }
+ .omega-protocol-wave{flex:0 0 135px!important;min-width:135px!important}
+ .omega-protocol-hp{
+  flex:0 0 135px!important;max-width:135px!important;min-width:135px!important
+ }
+ .omega-protocol-threat{flex:0 0 55px!important;min-width:55px!important}
+ .omega-protocol-modifier{
+  margin-left:auto;flex:0 0 108px!important;
+  max-width:108px;min-width:108px!important
+ }
+}
