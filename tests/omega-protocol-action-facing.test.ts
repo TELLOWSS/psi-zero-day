@@ -61,6 +61,8 @@ describe('OMEGA action-facing without altering Watch physics or fire rate',()=>{
   expect(c.advance(.06,{x:0,y:1},cue(1,0,.06),playing).shooting).toBe(false);
   expect(c.advance(.08,{x:NaN,y:Infinity},OMEGA_EMPTY_FIRE_CUE,playing)
    .headingIndex).toBe(2);
+  expect(c.advance(.09,{x:0,y:1},cue(0,0,.2),playing)
+   .shooting).toBe(false);
   const reset=c.advance(NaN,{x:1,y:0},OMEGA_EMPTY_FIRE_CUE,playing);
   expect(reset.headingIndex).toBe(2);
  });
