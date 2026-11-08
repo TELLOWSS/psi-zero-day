@@ -257,6 +257,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
   let dashEchoes:readonly OmegaDashEcho[]=[];
+  let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
   const gaitController=new OmegaGroundedGait();
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
@@ -274,9 +275,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
-   dashEchoes=omegaAdvanceDashEchoes(dashEchoes,player,session.facing,
+   dashEchoes=omegaAdvanceDashEchoes(dashEchoes,player,priorPlayer,session.facing,
     Boolean(player.isDashing),session.engine.state.gameTime,
     session.run.phase==='battle'&&session.engine.state.phase==='playing');
+   priorPlayer={x:player.x,y:player.y};
    // Sample after Watch movement and physical cover collision correction.
    // No actual displacement => do not animate a run cycle.
    const gait=gaitController.advance(
