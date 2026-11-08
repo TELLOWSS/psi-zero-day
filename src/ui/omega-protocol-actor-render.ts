@@ -14,6 +14,7 @@ export interface OmegaActorView {
  readonly time:number;
  readonly dashing:boolean;
  readonly shooting:boolean;
+ readonly hurt?:boolean;
 }
 /**
  * Internally authored PROCEDURAL technical placeholder, never an approved
@@ -36,10 +37,21 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  if(view.dashing){
   ctx.globalAlpha=.35;ctx.fillStyle='#f47ec8';
   ctx.beginPath();ctx.ellipse(-15,0,35,13,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  // Short trailing strokes, not extra entities or collision ghosts.
+  ctx.strokeStyle='#90e5f8';ctx.lineWidth=3;
+  for(let i=0;i<3;i++){
+   const y=-10-i*16;
+   ctx.beginPath();ctx.moveTo(-52-i*4,y);ctx.lineTo(-33-i*2,y+3);ctx.stroke();
+  }
  }
+ // Two-joint leg arcs make planted steps legible without fake horizontal
+ // translation of the physics contact point.
  ctx.strokeStyle='#182b40';ctx.lineWidth=9;ctx.lineCap='round';
- ctx.beginPath();ctx.moveTo(-7,-34);ctx.lineTo(-9+stride*.55,-7);
- ctx.moveTo(8,-34);ctx.lineTo(9-stride*.55,-7);ctx.stroke();
+ ctx.beginPath();
+ ctx.moveTo(-7,-34);ctx.lineTo(-10+stride*.20,-20);
+ ctx.lineTo(-9+stride*.55,-7);
+ ctx.moveTo(8,-34);ctx.lineTo(10-stride*.20,-20);
+ ctx.lineTo(9-stride*.55,-7);ctx.stroke();
  ctx.fillStyle='#e6ecfa';
  ctx.fillRect(-15+stride*.5,-9,14,8);
  ctx.fillRect(4-stride*.5,-9,14,8);
@@ -81,12 +93,24 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
   ctx.fillStyle='#d676a9';ctx.fillRect(side?1:-9,-68+nod,side?9:18,5);
   ctx.fillStyle='#fff0ab';ctx.fillRect(side?4:-5,-67+nod,side?4:10,3);
  }
- // Visible rifle facing direction; muzzle pulse is action-only.
+ // The weapon reacts ONLY to recent real handheld projectile launch cues.
+ // Current AI drones/area effects must not fake a muzzle flash here.
  const rifleY=side?-45:-41;
- ctx.fillStyle='#14283e';ctx.fillRect(side?18:7,rifleY+nod,27,6);
- ctx.fillStyle='#95becf';ctx.fillRect(side?30:22,rifleY+nod,13,3);
+ const recoil=view.shooting?3:0;
+ ctx.fillStyle='#14283e';ctx.fillRect((side?18:7)-recoil,rifleY+nod,27,6);
+ ctx.fillStyle='#95becf';ctx.fillRect((side?30:22)-recoil,rifleY+nod,13,3);
  if(view.shooting){
-  ctx.fillStyle='#83fff4';ctx.beginPath();ctx.arc(side?49:36,rifleY+3+nod,4+Math.sin(view.time*24)*1.4,0,Math.PI*2);ctx.fill();
+  const mx=(side?48:35)-recoil,my=rifleY+3+nod;
+  ctx.fillStyle='#a9fff5';ctx.beginPath();ctx.arc(mx,my,5.5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#eaffd5';ctx.lineWidth=2.5;ctx.beginPath();
+  ctx.moveTo(mx+4,my);ctx.lineTo(mx+17,my);
+  ctx.moveTo(mx+2,my-2);ctx.lineTo(mx+11,my-7);
+  ctx.moveTo(mx+2,my+2);ctx.lineTo(mx+11,my+7);ctx.stroke();
+ }
+ if(view.hurt){
+  ctx.strokeStyle='#ff7f9f';ctx.lineWidth=3;ctx.globalAlpha=.85;
+  ctx.beginPath();ctx.arc(0,-42,26,Math.PI*.1,Math.PI*1.1);ctx.stroke();
+  ctx.globalAlpha=1;
  }
  ctx.restore();
 }
