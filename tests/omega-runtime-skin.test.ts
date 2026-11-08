@@ -7,9 +7,9 @@ import {OMEGA_ACTION_LAYOUT,type OmegaApprovedManifest} from '../src/ui/omega-co
 const base={moving:true,dashing:false,hit:false,shooting:false,ultimate:false,finished:false,facingRadians:0,gameTimeSeconds:0,reducedMotion:false} as const;
 function fixture():OmegaApprovedManifest{
  const frames=Object.fromEntries(OMEGA_DIRECTIONS.map(d=>[d,OMEGA_ACTION_LAYOUT.map((action,i)=>({
-  action,art:'/assets/omega/approved/'+d+'_'+i+'_actor.png',sha256:'a'.repeat(64),
-  frontOcclusion:'/assets/omega/approved/'+d+'_'+i+'_front.png',frontSha256:'b'.repeat(64),
-  backOcclusion:'/assets/omega/approved/'+d+'_'+i+'_back.png',backSha256:'c'.repeat(64),
+  action,art:'/assets/omega/approved/'+d.toLowerCase()+'_'+i+'_actor.png',sha256:'a'.repeat(64),
+  frontOcclusion:'/assets/omega/approved/'+d.toLowerCase()+'_'+i+'_front.png',frontSha256:'b'.repeat(64),
+  backOcclusion:'/assets/omega/approved/'+d.toLowerCase()+'_'+i+'_back.png',backSha256:'c'.repeat(64),
   feet:[{x:100,y:454},{x:200,y:454}] as const,radio:{x:70,y:180},muzzle:{x:315,y:230},mirrored:false
  }))])) as OmegaApprovedManifest['frames'];
  return {identity:'AIRA_MASTER',approval:'ARTIST_APPROVED',artistSignoff:'fixture',visualQa:'PASS',deviceQa:'PASS',combatQa:'PASS',frames};
