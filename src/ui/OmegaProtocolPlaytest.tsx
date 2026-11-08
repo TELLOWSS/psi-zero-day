@@ -189,9 +189,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const canvas=canvasRef.current,container=canvas?.parentElement;
    if(!canvas||!container)return;
    const cssWidth=container.clientWidth||1120;
-   // Keep mobile drawing workload proportional to on-screen size.
-   const pixelWidth=Math.max(320,Math.min(1120,Math.round(cssWidth*Math.min(1.25,window.devicePixelRatio||1))));
-   const pixelHeight=Math.max(160,Math.min(1200,Math.round((container.clientHeight||720)*Math.min(1.25,window.devicePixelRatio||1))));
+   const cssHeight=container.clientHeight||720;
+   // A single scale on BOTH axes: avoids distorted characters when
+   // the 1120px desktop GPU budget clamps only the horizontal dimension.
+   const scale=Math.max(.1,Math.min(1.25,window.devicePixelRatio||1,1120/cssWidth,1200/cssHeight));
+   const pixelWidth=Math.max(1,Math.round(cssWidth*scale));
+   const pixelHeight=Math.max(1,Math.round(cssHeight*scale));
    if(canvas.width!==pixelWidth||canvas.height!==pixelHeight){
     canvas.width=pixelWidth;canvas.height=pixelHeight;
    }
