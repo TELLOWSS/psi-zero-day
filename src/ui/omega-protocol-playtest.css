@@ -181,7 +181,7 @@
  .omega-protocol-threat{min-width:48px!important}
  .omega-protocol-threat strong{font-size:15px}
  .omega-protocol-modifier{display:none!important}
- .omega-protocol-pad{width:136px;height:136px;bottom:43px;left:12px;gap:4px}
+ .omega-protocol-pad{width:144px;height:144px;bottom:43px;left:12px;gap:4px}
  .omega-protocol-pad button{border-radius:11px;font-size:20px}
  .omega-protocol-action-pad{right:12px;bottom:52px;gap:9px}
  .omega-protocol-action-pad button{width:65px;height:65px;font-size:10px}
@@ -206,7 +206,7 @@
  .omega-protocol-stats{flex-wrap:wrap}
  .omega-protocol-modifier{display:none!important}
  .omega-protocol-boss-alert{top:96px;font-size:9px}
- .omega-protocol-pad{bottom:55px;left:10px;width:126px;height:126px}
+ .omega-protocol-pad{bottom:55px;left:10px;width:144px;height:144px}
  .omega-protocol-action-pad{bottom:70px;right:10px;gap:7px}
  .omega-protocol-action-pad button{width:60px;height:60px}
  .omega-protocol-ultimate{width:76px!important;height:76px!important}
@@ -233,7 +233,7 @@
  .omega-protocol-wave{min-width:105px!important}
  .omega-protocol-threat{min-width:45px!important}
  .omega-protocol-boss-alert{top:50px;padding:3px 9px;font-size:8px}
- .omega-protocol-pad{width:94px;height:94px;bottom:21px;left:17px;gap:2px}
+ .omega-protocol-pad{width:140px;height:140px;bottom:19px;left:17px;gap:2px}
  .omega-protocol-pad button{font-size:16px;border-radius:7px}
  .omega-protocol-action-pad{right:24px;bottom:22px;gap:9px}
  .omega-protocol-action-pad button{width:48px;height:48px;font-size:9px}
