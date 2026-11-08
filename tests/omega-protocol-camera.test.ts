@@ -1,0 +1,49 @@
+import {describe,it,expect,vi} from 'vitest';
+import {
+ OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView
+} from '../src/ui/omega-protocol-camera';
+import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H} from '../src/domain/omega-protocol-field';
+describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
+ it('projects each world coordinate to a foreshortened view without changing the source point',()=>{
+  const actor={x:450,y:300};
+  const before={...actor};
+  const projected=omegaProjectFieldPoint(actor);
+  expect(actor).toEqual(before);
+  expect(projected).toEqual({
+   x:actor.x+OMEGA_QUARTER_VIEW.skewX*actor.y,
+   y:OMEGA_QUARTER_VIEW.groundYScale*actor.y,
+  });
+  expect(projected).not.toEqual(actor);
+ });
+ it.each([[1440,900],[390,844],[844,390],[320,240]])(
+  'keeps projected camera and scale finite at %i×%i', (width,height)=>{
+   const c=omegaQuarterViewCamera({x:700,y:450},width,height);
+   expect(c.scale).toBeGreaterThan(0);
+   for(const n of Object.values(c))expect(Number.isFinite(n)).toBe(true);
+   expect(c.playerScreenX).toBeGreaterThan(0);
+   expect(c.playerScreenX).toBeLessThan(width);
+   expect(c.playerScreenY).toBeGreaterThan(0);
+   expect(c.playerScreenY).toBeLessThan(height);
+  }
+ );
+ it('moves the camera toward the actual actor instead of dragging terrain with it',()=>{
+  const left=omegaQuarterViewCamera({x:80,y:450},390,844);
+  const right=omegaQuarterViewCamera({x:W-80,y:450},390,844);
+  expect(left.projectedOffsetX).toBeGreaterThan(right.projectedOffsetX);
+  const near=omegaQuarterViewCamera({x:700,y:70},844,390);
+  const far=omegaQuarterViewCamera({x:700,y:H-70},844,390);
+  expect(near.projectedOffsetY).toBeGreaterThanOrEqual(far.projectedOffsetY);
+ });
+ it('applies a world projection with exact matrix order to a Canvas context',()=>{
+  const ctx={scale:vi.fn(),translate:vi.fn(),transform:vi.fn()} as unknown as CanvasRenderingContext2D;
+  const c=omegaQuarterViewCamera({x:300,y:350},844,390);
+  applyOmegaQuarterView(ctx,c);
+  expect(ctx.scale).toHaveBeenCalledWith(c.scale,c.scale);
+  expect(ctx.translate).toHaveBeenCalledWith(c.projectedOffsetX,c.projectedOffsetY);
+  expect(ctx.transform).toHaveBeenCalledWith(1,0,-.22,.78,0,0);
+ });
+ it('rejects invalid dimensions and illegal hero positions',()=>{
+  expect(()=>omegaQuarterViewCamera({x:0,y:NaN},844,390)).toThrow(RangeError);
+  expect(()=>omegaQuarterViewCamera({x:0,y:0},844,0)).toThrow(RangeError);
+ });
+});
