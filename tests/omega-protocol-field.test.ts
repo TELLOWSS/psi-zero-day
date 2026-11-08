@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {
  omegaFieldPlan,omegaFieldDistance,omegaFieldResolveCollision,
- omegaFieldCanInteract,OMEGA_FIELD_INTERACT_RADIUS,
+ omegaFieldCanInteract,OMEGA_FIELD_INTERACT_RADIUS,omegaFieldTargetGuide,omegaFieldInitialProgress,
 } from '../src/domain/omega-protocol-field';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 const idle={moveX:0,moveY:0,triggerAction:false};
@@ -50,6 +50,27 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(omegaFieldCanInteract({x:0,y:0},{x:OMEGA_FIELD_INTERACT_RADIUS,y:0})).toBe(true);
   expect(omegaFieldCanInteract({x:0,y:0},{x:101,y:0})).toBe(false);
   expect(()=>omegaFieldPlan(1,16)).toThrow(RangeError);
+ });
+ it('points a screen-relative compass at each on-map mission step and then the exit',()=>{
+  const plan=omegaFieldPlan(20261108,1);
+  const start=omegaFieldInitialProgress();
+  expect(omegaFieldTargetGuide(plan,start,plan.entry)).toBeNull();
+  const step=plan.event.steps[0]!;
+  const active={...start,phase:'objective' as const};
+  const guide=omegaFieldTargetGuide(plan,active,plan.entry)!;
+  expect(guide).not.toBeNull();
+  expect(guide.label).toBe(step.label);
+  expect(guide.ready).toBe(false);
+  const atStep=omegaFieldTargetGuide(plan,active,step.target)!;
+  expect(atStep.distance).toBe(0);
+  expect(atStep.ready).toBe(true);
+  const opened={...active,phase:'exit' as const,completedSteps:plan.event.steps.length,exitUnlocked:true,eventComplete:true};
+  const exit=omegaFieldTargetGuide(plan,opened,plan.entry)!;
+  expect(exit.label).toBe('출구');
+  expect(exit.distance).toBeGreaterThan(100);
+  expect(exit.degrees).toBeGreaterThan(-180);
+  expect(exit.degrees).toBeLessThanOrEqual(180);
+  expect(omegaFieldTargetGuide(plan,opened,{x:NaN,y:20})).toBeNull();
  });
  it('blocks entry into solid industrial props without changing normal Watch physics',()=>{
   const p=omegaFieldPlan(11,1);
