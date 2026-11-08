@@ -588,3 +588,21 @@
  .omega-protocol-heading h1{font-size:15px;line-height:1.02;margin:1px 0 0}
  .omega-protocol-hero-identity{width:29px;height:29px;flex-basis:29px}
 }
+
+/* 2026-11-09 Director review: the prior centered mobile mission plaque
+ * covered AIRA's head/torso in real 844×390 gameplay captures. Reserve
+ * the middle for actual combat silhouettes. Left stack fits below HP
+ * and above the virtual stick, without changing desktop/portrait HUD.
+ */
+@media (max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission{
+  left:12px;top:110px;transform:none;
+  width:min(220px,calc(100% - 322px));max-width:220px;
+  align-items:flex-start;text-align:left;
+  padding:5px 9px;gap:2px;border-radius:9px;
+  background:linear-gradient(145deg,rgba(8,23,37,.89),rgba(12,31,44,.78));
+ }
+ .omega-protocol-mission small{font-size:7px}
+ .omega-protocol-mission strong{font-size:10px;line-height:1.2}
+ .omega-protocol-mission>span{font-size:8px;line-height:1.2}
+}
