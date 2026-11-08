@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import vm from 'node:vm';
+import {runInNewContext} from 'node:vm';
 
 const src=readFileSync(fileURLToPath(new URL('../tools/omega-rig-annotation-lab.html',import.meta.url)),'utf8');
 const inline=src.match(/<script>([\s\S]*?)<\/script>/)?.[1];
@@ -36,7 +36,7 @@ function launchMock(){
   Blob:class MockBlob{constructor(_data:unknown,_options:unknown){}},
   setTimeout(){},console,
  };
- vm.runInNewContext(inline,globals,{timeout:2000});
+ runInNewContext(inline,globals,{timeout:2000});
  return {el,tick:(time:number)=>{if(raf)(raf as (t:number)=>void)(time)},wasDownloaded:()=>downloaded};
 }
 
