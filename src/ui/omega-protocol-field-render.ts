@@ -27,7 +27,7 @@ export function drawOmegaFieldGround(
  ctx.fillStyle='#263c46';ctx.fillRect(90,388,W-170,132);
  ctx.strokeStyle='#f5ba6388';ctx.lineWidth=4;ctx.setLineDash([22,16]);
  ctx.strokeRect(90,388,W-170,132);ctx.setLineDash([]);
- const lightPools=[[290,160],[650,260],[1020,220],[1120,710]];
+ const lightPools:readonly (readonly [number,number])[]=[[290,160],[650,260],[1020,220],[1120,710]];
  for(const [x,y] of lightPools){
   const g=ctx.createRadialGradient(x,y,8,x,y,235);
   g.addColorStop(0,'rgba(161,219,246,.16)');g.addColorStop(1,'rgba(161,219,246,0)');
