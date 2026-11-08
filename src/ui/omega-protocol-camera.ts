@@ -39,7 +39,10 @@ export function omegaQuarterViewCamera(
  const boundRight=OMEGA_FIELD_WIDTH+Math.max(0,skewX*OMEGA_FIELD_HEIGHT);
  const boundTop=0,boundBottom=OMEGA_FIELD_HEIGHT*groundYScale;
  const projected=omegaProjectFieldPoint(actor);
- const fit=Math.max(viewWidth/(boundRight-boundLeft),viewHeight/(boundBottom-boundTop));
+ // Combat camera: ~1.55x closer than the former full-field spectator
+ // view. Keep the actor readable (~18% of typical 844x390 screen height).
+ // Arena bounds and actual Watch physics are unaffected.
+ const fit=Math.max(viewWidth/(boundRight-boundLeft),viewHeight/(boundBottom-boundTop))*1.55;
  const worldVisibleWidth=viewWidth/fit,worldVisibleHeight=viewHeight/fit;
  const centerX=cameraCenter(projected.x,boundLeft,boundRight,worldVisibleWidth);
  const centerY=cameraCenter(projected.y,boundTop,boundBottom,worldVisibleHeight);
