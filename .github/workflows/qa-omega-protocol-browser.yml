@@ -6,6 +6,8 @@ on:
       - 'src/ui/OmegaProtocolPlaytest.tsx'
       - 'src/ui/omega-protocol-field-render.ts'
       - 'src/ui/omega-protocol-sector-one-scene.ts'
+      - 'src/ui/omega-protocol-authored-scene.ts'
+      - 'public/assets/omega/sector01/**'
       - 'src/ui/omega-protocol-actor-render.ts'
       - 'src/ui/omega-protocol-directional-identity.ts'
       - 'src/ui/omega-protocol-grounded-gait.ts'
