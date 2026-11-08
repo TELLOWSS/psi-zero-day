@@ -57,7 +57,7 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   const left={x:c.x-24,y:c.y+c.height/2};
   const inside={x:c.x+10,y:c.y+c.height/2};
   const corrected=omegaFieldResolveCollision(left,inside,p.obstacles,21);
-  expect(corrected.x).toBe(left.x);
+  expect(corrected.x).toBe(c.x-21); // swept stop at the collision boundary
   expect(corrected.y).toBe(left.y);
   // Swept collision is not defeated by a 250px displacement in one frame.
   const dashed=omegaFieldResolveCollision(left,{x:c.x+c.width+40,y:left.y},p.obstacles,21);
