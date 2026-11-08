@@ -99,3 +99,16 @@ A downloadable offline artist-annotation package has been created and verified l
 - **Release gate remains closed:** source NE is mirrored; gait art consists of pixel deformations, human-approved joint anchors and true walk/attack sprites do not exist, and no playable character is enabled.
 
 This is the first usable manual artist review handoff. A future commit can consume approved reviewed JSON as **input data**, but only after all 48 frames have been calibrated and fully redrawn where needed.
+
+
+## 2026-11-08 — Independent NE + redrawn 48-frame technical art
+
+The work package \`PSI_ZERO_DAY_OMEGA_RIGGED_GAIT_NE_v1.zip\` includes freshly rendered 384×512 transparent original SVG-derived vector poses, not warped versions of prior PNG art. It contains E/SE/S/SW/W/NW/N/NE × six gait states, a full 3072×3072 RGBA atlas, WebP optimized atlas, individual PNGs, dedicated NE source, comparison board, an animated preview, editable Python generator, and the SHA-256/geometry verification report.
+
+**Quality: ARTIST_APPROVAL_FALSE.** Although NE no longer borrows NW bitmap pixels within this *new vector technical mock-up*, the vectors are significantly simpler than the released key artwork. They are not production-level natural/anime illustrated poses; the old premium rendered NE still has the mirror defect, and this does **not** approve the canonical art replacement.
+
+The pack's image QA reports 48 unique rendered PNGs; all 16 frame-level sockets remain in 384×512; planted feet have consistent screen-space floor Y; NE versus horizontally mirrored NW has alpha-mask overlaps of 0.66–0.704 (versus up to 0.9952 in the old pixel-deformed atlas). This measures technical independence, **not** naturalism or equipment clipping.
+
+Code handoff: \`src/ui/omega-equipment-socket-guide.ts\` now independently recomputes all 48 guide positions from camera azimuth and gait phase. It exposes exact guide anchors for the physical left-shoulder radio, right-side muzzle origin, left/right foot contacts, knees, hips, wrists and torso, with \`avatarEnabled: false\` and explicit provisional provenance. \`tests/omega-equipment-socket-guide.test.ts\` verifies independent NE coordinates, all 48 poses, valid sockets, grounded phases, and non-playable status.
+
+**Runtime asset binaries are not in the GitHub release tree.** Technical frames remain in the user-deliverable ZIP; do not substitute them for final artist-approved gameplay textures. The existing production release checks remain deliberately blocked.
