@@ -4,7 +4,7 @@ import {
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {
- omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,
+ omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
 import {
@@ -111,9 +111,14 @@ export class OmegaProtocolCombatSession {
   if(!this.armed||this.active.phase!=='battle')return this.snapshot;
   // Unstable-ground temporarily limits input magnitude without changing the
   // player's permanent/current speed or touching the normal Watch engine.
+  // Player controls remain screen-relative even though the construction
+  // field is rendered with a skewed 3/4 camera.
+  const move=this.fieldTraversal
+   ?omegaFieldScreenMoveToWorld(input.moveX,input.moveY)
+   :{x:input.moveX,y:input.moveY};
   const adjusted= this.latestPlan.modifier==='unstable_ground'
-   ? {...input,moveX:input.moveX*.78,moveY:input.moveY*.78}
-   : input;
+   ? {...input,moveX:move.x*.78,moveY:move.y*.78}
+   :{...input,moveX:move.x,moveY:move.y};
   const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
   this.engine.update(dt,adjusted);
   const state=this.engine.state;
