@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-protocol-field-render.ts'
+      - 'src/domain/omega-protocol-field.ts'
       - 'src/ui/omega-protocol-playtest.css'
       - 'src/engine/omega-protocol-combat.ts'
       - 'scripts/qa-omega-protocol-browser.mjs'
@@ -29,6 +31,12 @@ jobs:
         run: npm run predev
       - name: Install test-only browser driver (no browser download)
         run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Enable Korean typography for visual QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+          fc-match "Noto Sans CJK KR"
       - name: Start development-only OMEGA cockpit
         env:
           VITE_OMEGA_PROTOCOL_LAB: '1'
