@@ -152,7 +152,7 @@ export function drawOmegaBossTelegraph(
  if(!warning&&!strike)return;
  const pulse=.65+.25*Math.sin(time*11);
  ctx.save();
- ctx.globalAlpha=warning?.15+pulse*.14:.5;
+ ctx.globalAlpha=warning ? 0.15+pulse*0.14 : 0.5;
  ctx.fillStyle=strike?'#ff4f70':'#ffbc66';
  ctx.strokeStyle=strike?'#ff86a1':'#ffd48e';
  ctx.lineWidth=strike?7:4;
@@ -161,7 +161,7 @@ export function drawOmegaBossTelegraph(
   ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,signal.radius,0,Math.PI*2);
   ctx.fill();ctx.stroke();
   ctx.setLineDash([]);
-  ctx.globalAlpha=warning?.7:1;
+  ctx.globalAlpha=warning ? 0.7 : 1;
   ctx.beginPath();ctx.moveTo(signal.center.x-22,signal.center.y);
   ctx.lineTo(signal.center.x+22,signal.center.y);
   ctx.moveTo(signal.center.x,signal.center.y-22);
