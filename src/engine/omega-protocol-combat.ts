@@ -4,6 +4,10 @@ import {
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {
+ omegaCreateBossTelegraph,omegaAdvanceBossTelegraph,
+ type OmegaBossTelegraph,
+} from './omega-protocol-boss-pattern';
+import {
  omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
@@ -22,6 +26,7 @@ export interface OmegaCombatSnapshot {
  readonly playerY:number;
  readonly armed:boolean;
  readonly field:Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null;
+ readonly bossTelegraph:OmegaBossTelegraph|null;
 }
 export const OMEGA_MAX_LIVE_THREATS=15;
 
@@ -38,6 +43,7 @@ export class OmegaProtocolCombatSession {
  private readonly fieldTraversal:boolean;
  private currentField:OmegaFieldPlan|null=null;
  private fieldStatus:OmegaFieldProgress|null=null;
+ private bossPattern:OmegaBossTelegraph|null=null;
  constructor(
   seed:number,watchClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean}>={},
@@ -73,6 +79,7 @@ export class OmegaProtocolCombatSession {
    playerY:this.engine.state.player.y,
    armed:this.armed,
    field:this.field,
+   bossTelegraph:this.bossPattern,
   };
  }
  private beginWave(){
@@ -101,6 +108,11 @@ export class OmegaProtocolCombatSession {
   }
   if(plan.isBoss)specs.push({type:'CRANE_BOSS',boss:true,hpScale:1.3+plan.intensity*.35,speedScale:1});
   this.engine.spawnProtocolEncounter(specs);
+  this.bossPattern=null;
+  if(this.fieldTraversal&&(plan.wave===9||plan.wave===15)){
+   const boss=this.engine.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+   if(boss)this.bossPattern=omegaCreateBossTelegraph(plan.wave,this.engine.state.player);
+  }
   if(plan.modifier==='crosswind')
    for(const hazard of this.engine.state.hazards)if(!hazard.isStageBoss)hazard.behavior='crosswind';
   this.armed=true;
@@ -125,6 +137,23 @@ export class OmegaProtocolCombatSession {
   if(this.currentField&&state.phase==='playing'){
    const corrected=omegaFieldResolveCollision(prior,state.player,this.currentField.obstacles,21);
    state.player.x=corrected.x;state.player.y=corrected.y;
+  }
+  // One serverless, in-run boss warning/strike. No damage occurs before a
+  // visibly timed warning; each attack has a one-time collision event.
+  if(this.bossPattern&&state.phase==='playing'){
+   const boss=state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+   if(!boss){
+    this.bossPattern=null;
+   }else{
+    const result=omegaAdvanceBossTelegraph(
+     this.bossPattern,Math.min(.05,dt),state.player,boss.hp/Math.max(1,boss.maxHp));
+    this.bossPattern=result.next;
+    if(result.hit&&!state.player.isDashing&&(state.player.invincibleTime??0)<=0){
+     const damage=result.next.empowered?18:12;
+     state.player.hp=Math.max(0,state.player.hp-damage);
+     state.player.invincibleTime=Math.max(state.player.invincibleTime??0,.55);
+    }
+   }
   }
   if(state.phase==='defeat'||state.player.hp<=0){
    this.armed=false;
