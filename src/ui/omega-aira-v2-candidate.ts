@@ -1,4 +1,5 @@
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
+import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
 
 /**
  * AIRA V2: the 2026-11-09 user-selected black/rose tactical design.
@@ -86,7 +87,14 @@ export function drawOmegaAiraV2Candidate(
  if(view.hurt)ctx.globalAlpha=.80+.20*Math.sin(t*18)**2;
  // Natural-source aspect ratio 192:336. No horizontal flip.
  const h=118,w=h*192/336;
- ctx.drawImage(image,-w/2,-h,w,h);
+ if(walk&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished){
+  // Real eight-source articulated gait with two independent boot limbs.
+  // Still art is the user's selected V2; this is interim skeletal motion
+  // until independent painted production walk frames pass the art gate.
+  drawOmegaAiraV2WalkRig(ctx,image,heading,phase,h);
+ }else{
+  ctx.drawImage(image,-w/2,-h,w,h);
+ }
  ctx.restore();
  return true;
 }
