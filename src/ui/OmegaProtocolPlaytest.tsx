@@ -133,6 +133,22 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    document.removeEventListener('visibilitychange',onVisibility);
   };
  },[session]);
+ // Development-only browser screenshot fixture: advances real Watch-engine
+ // waves (no fake DOM, no rewards saved). It is never enabled in production.
+ useEffect(()=>{
+  if(!import.meta.env.DEV)return;
+  const mode=new URLSearchParams(window.location.search).get('omegaQaState');
+  if(mode!=='reward'&&mode!=='boss')return;
+  const ending=mode==='reward'?2:8;
+  for(let i=0;i<ending&&session.run.phase!=='victory';i++){
+   session.engine.state.hazards=[];
+   session.update(1/60,{moveX:0,moveY:0,triggerAction:false});
+   if(session.run.phase==='reward'&&i!==ending-1){
+    session.selectUpgrade(session.run.offers[0]!);
+   }
+  }
+  setSnapshot(session.snapshot);
+ },[session]);
  const setDirection=(pointerId:number,x:number,y:number)=>{
   pointerMoves.current.set(pointerId,{x,y});
   const all=[...pointerMoves.current.values()];
