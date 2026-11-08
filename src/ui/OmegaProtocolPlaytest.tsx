@@ -3,6 +3,7 @@ import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/ome
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion} from './omega-protocol-field-render';
+import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -17,12 +18,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.save();
- // Keep every sprite circular and never stretch on portrait or landscape.
- // Camera follows the player; the run's collision/world bounds remain intact.
- const zoom=Math.max(ctx.canvas.width/WORLD_WIDTH,ctx.canvas.height/WORLD_HEIGHT);
- const cameraX=Math.max(ctx.canvas.width/zoom-WORLD_WIDTH,Math.min(0,ctx.canvas.width/(2*zoom)-state.player.x));
- const cameraY=Math.max(ctx.canvas.height/zoom-WORLD_HEIGHT,Math.min(0,ctx.canvas.height/(2*zoom)-state.player.y));
- ctx.scale(zoom,zoom);ctx.translate(cameraX,cameraY);
+ // 3/4 field view is strictly visual: world XY hitboxes and Watch
+ // movement are unchanged. Follow the projected hero and bound the map.
+ const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height);
+ applyOmegaQuarterView(ctx,camera);
  const field=session.field;
  if(field)drawOmegaFieldGround(ctx,field.plan);
  else{
@@ -48,7 +47,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const p=state.player;
  // Unapproved procedural humanoid (not the final 160-frame AIRA animation).
  ctx.save();ctx.translate(p.x,p.y);
+ // Shadow follows projected ground; upright actor body cancels the
+ // 0.78 ground foreshortening (future sprites share the same plant point).
  ctx.fillStyle='#030c179c';ctx.beginPath();ctx.ellipse(0,20,20,8,0,0,Math.PI*2);ctx.fill();
+ ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
  ctx.fillStyle='#151e36';ctx.fillRect(-10,7,8,16);ctx.fillRect(2,7,8,16);
  ctx.fillStyle=p.isDashing?'#f4afe3':'#d9e6f5';
  ctx.beginPath();ctx.moveTo(-14,-16);ctx.lineTo(13,-16);ctx.lineTo(10,10);ctx.lineTo(-10,10);ctx.closePath();ctx.fill();
