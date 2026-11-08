@@ -4,7 +4,7 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
-import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
+import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
@@ -22,14 +22,14 @@ const validKeys=new Set<string>(keys);
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.save();
  // 3/4 field view is strictly visual: world XY hitboxes and Watch
  // movement are unchanged. Follow the projected hero and bound the map.
- const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height);
+ const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height,cameraZoom);
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
  if(field){
@@ -247,6 +247,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   window.addEventListener('resize',scaleCanvas);
   document.addEventListener('visibilitychange',onVisibility);
   let request=0,last=0,alive=true,fpsTotal=0,fpsCount=0,fpsAt=0;
+  let cinematicZoom=1.55;
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
@@ -278,8 +279,19 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      playing:session.engine.state.phase==='playing'&&session.run.phase==='battle',
     });
    const ctx=canvasRef.current?.getContext('2d');
-   if(ctx)drawLab(ctx,session,fireCue,impacts,gait,pose,
-    finishClock.advance(session.run.phase,now/1000));
+   if(ctx){
+    const bossLive=session.snapshot.bossHp!==null;
+    const fieldPhase=session.field?.progress.phase;
+    const focus:OmegaCameraFocus=bossLive?'boss':fieldPhase==='objective'||fieldPhase==='exit'
+     ?'traversal':'battle';
+    const target=omegaCameraTargetZoom(focus,ctx.canvas.width,ctx.canvas.height);
+    // Continuous transition prevents a sudden snap when the last enemy dies.
+    // Purely visual: Watch XY, movement and dash physics are unchanged.
+    const easing=dt>0?1-Math.exp(-Math.min(dt,.05)*3.8):0;
+    cinematicZoom+=(target-cinematicZoom)*easing;
+    drawLab(ctx,session,fireCue,impacts,gait,pose,
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom);
+   }
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
