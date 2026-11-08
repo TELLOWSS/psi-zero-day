@@ -1,7 +1,7 @@
 import type {
  OmegaFieldPlan,OmegaFieldProgress,OmegaFieldObstacle,OmegaFieldPoint,
 } from '../domain/omega-protocol-field';
-import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract}
+import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract,omegaFieldCurrentStep}
  from '../domain/omega-protocol-field';
 
 /**
@@ -75,29 +75,39 @@ export function drawOmegaFieldMission(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,
  progress:OmegaFieldProgress,actor:OmegaFieldPoint,seconds:number,
 ):void{
- const target=plan.event.target;
- const objectiveReady=progress.phase==='objective';
+ const active=omegaFieldCurrentStep(plan,progress);
  const pulse=.65+.35*Math.sin(seconds*3);
- const drawRing=(x:number,y:number,color:string,size:number)=>{
-  ctx.strokeStyle=color;ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y,size,0,Math.PI*2);ctx.stroke();
- };
  ctx.save();
- ctx.shadowColor='#6bf9ee';ctx.shadowBlur=objectiveReady?19:5;
- ctx.fillStyle='#102f49';ctx.fillRect(target.x-33,target.y-33,66,66);
- ctx.strokeStyle=progress.eventComplete?'#56f3c2':'#5dc7ec';
- ctx.lineWidth=4;ctx.strokeRect(target.x-33,target.y-33,66,66);
- ctx.fillStyle='#8bedff';ctx.fillRect(target.x-18,target.y-11,36,21);
- ctx.fillStyle='#fff';ctx.font='bold 13px system-ui';ctx.textAlign='center';
- ctx.fillText('EVENT',target.x,target.y-46);
- ctx.shadowBlur=0;
- if(objectiveReady)drawRing(target.x,target.y,'rgba(104,249,238,'+pulse+')',72);
- if(omegaFieldCanInteract(actor,target)&&objectiveReady){
-  ctx.fillStyle='#b2fff3';ctx.fillText('E / 조작',target.x,target.y+61);
+ for(const [index,step] of plan.event.steps.entries()){
+  const target=step.target;
+  const completed=index<progress.completedSteps;
+  const activeStep=active?.id===step.id;
+  ctx.shadowColor=activeStep?'#6bf9ee':'#4f9dce';
+  ctx.shadowBlur=activeStep?18:3;
+  ctx.fillStyle=completed?'#164c4b':'#102f49';
+  ctx.fillRect(target.x-27,target.y-27,54,54);
+  ctx.strokeStyle=completed?'#73f3bb':activeStep?'#7be9ff':'#5f89a4';
+  ctx.lineWidth=completed?3:4;
+  ctx.strokeRect(target.x-27,target.y-27,54,54);
+  ctx.fillStyle=completed?'#8bf4c2':'#8bedff';
+  ctx.fillRect(target.x-14,target.y-8,28,16);
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#eefaff';ctx.font='bold 12px system-ui';ctx.textAlign='center';
+  ctx.fillText(completed?'✓':String(index+1),target.x,target.y-37);
+  if(activeStep){
+   ctx.strokeStyle='rgba(104,249,238,'+pulse+')';ctx.lineWidth=4;
+   ctx.beginPath();ctx.arc(target.x,target.y,69,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle='#b3ffff';ctx.font='bold 13px system-ui';
+   ctx.fillText(step.label,target.x,target.y+49);
+   if(omegaFieldCanInteract(actor,target)){
+    ctx.fillText('E / 조작',target.x,target.y+68);
+   }
+  }
  }
  const exit=plan.exit;
  if(progress.exitUnlocked){
   ctx.strokeStyle='#a4efd59d';ctx.lineWidth=4;ctx.setLineDash([15,9]);
-  ctx.beginPath();ctx.moveTo(target.x,target.y);ctx.lineTo(exit.x,exit.y);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(plan.event.steps[plan.event.steps.length-1]!.target.x,plan.event.steps[plan.event.steps.length-1]!.target.y);ctx.lineTo(exit.x,exit.y);ctx.stroke();
   ctx.setLineDash([]);
  }
  ctx.shadowColor=progress.exitUnlocked?'#77ffc2':'#ffbd81';
