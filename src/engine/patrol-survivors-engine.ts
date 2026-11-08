@@ -2228,6 +2228,15 @@ export class SurvivorsEngine {
             }
             continue;
           }
+          // In the isolated roguelite a single expanding Shout is allowed
+          // ONE boss hit, not 60-90 repeated 8%-HP hits over its lifetime.
+          // The campaign's scripted boss immunity above remains untouched.
+          if(this.protocolExternalEncounter&&h.isStageBoss&&p.kind==='shout_shockwave'){
+            let bossPulseHits=this.projectileHits.get(p);
+            if(!bossPulseHits){bossPulseHits=new Set();this.projectileHits.set(p,bossPulseHits);}
+            if(bossPulseHits.has(h.id))continue;
+            bossPulseHits.add(h.id);
+          }
           // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
           if(!repeatContact){
             if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
