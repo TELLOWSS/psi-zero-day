@@ -55,6 +55,32 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fillStyle=radial;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
  }
  ctx.restore();
+ // Portrait camera follows the player: preserve off-screen enemy awareness
+ // with a cheap, always-visible whole-arena radar in screen coordinates.
+ const mw=Math.max(70,Math.min(118,ctx.canvas.width*.155));
+ const mh=mw*WORLD_HEIGHT/WORLD_WIDTH;
+ const pad=ctx.canvas.width<600?10:16;
+ const mx=ctx.canvas.width-mw-pad;
+ const my=ctx.canvas.height<400?58:90;
+ ctx.save();
+ ctx.fillStyle='rgba(10,20,35,.83)';
+ ctx.fillRect(mx-5,my-20,mw+10,mh+25);
+ ctx.strokeStyle='rgba(126,205,227,.6)';
+ ctx.lineWidth=1;ctx.strokeRect(mx,my,mw,mh);
+ ctx.font='bold 10px system-ui,sans-serif';
+ ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-7);
+ for(const h of state.hazards.slice(0,32)){
+  if(h.hp<=0)continue;
+  const dotX=mx+Math.max(0,Math.min(1,h.x/WORLD_WIDTH))*mw;
+  const dotY=my+Math.max(0,Math.min(1,h.y/WORLD_HEIGHT))*mh;
+  ctx.beginPath();ctx.arc(dotX,dotY,h.isStageBoss?4:2.2,0,Math.PI*2);
+  ctx.fillStyle=h.isStageBoss?'#ffe18e':'#fb94c6';ctx.fill();
+ }
+ ctx.beginPath();
+ ctx.arc(mx+Math.max(0,Math.min(1,p.x/WORLD_WIDTH))*mw,
+         my+Math.max(0,Math.min(1,p.y/WORLD_HEIGHT))*mh,3.2,0,Math.PI*2);
+ ctx.fillStyle='#91fff0';ctx.fill();
+ ctx.restore();
 }
 export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [seedValue,setSeedValue]=useState('20261108');
