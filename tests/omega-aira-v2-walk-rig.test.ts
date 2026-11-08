@@ -28,6 +28,14 @@ describe('AIRA V2 user-chosen image: distance-driven interim cutout walk',()=>{
    ]))).size).toBe(6);
   }
   expect(omegaAiraV2WalkFrame('S',Number.NaN).frameIndex).toBe(0);
+  const firstContact=omegaAiraV2WalkFrame('S',.25);
+  const oppositeContact=omegaAiraV2WalkFrame('S',.75);
+  expect(firstContact.leftFootLift).toBeGreaterThan(9);
+  expect(firstContact.rightFootLift).toBe(0);
+  expect(oppositeContact.rightFootLift).toBeGreaterThan(9);
+  expect(oppositeContact.leftFootLift).toBe(0);
+  expect(firstContact.leftStrideX).toBeGreaterThan(0);
+  expect(oppositeContact.leftStrideX).toBeLessThan(0);
  });
  it('cuts two native legs and overlays intact torso while retaining fixed world-foot pivot',()=>{
   const {ctx,trace}=canvasTrace();
