@@ -1,0 +1,89 @@
+{
+  "id": "OMEGA_AIRA_8x20_HD_PROCEDURAL_ART_CANDIDATE_V3",
+  "identity": "AIRA_MASTER",
+  "status": "CONCEPT_REVIEW_ONLY",
+  "artistApproved": false,
+  "playable": false,
+  "source": "newly generated high-detail eight-view turnaround (2026-11-08)",
+  "sourceSha256": "8556a45840a0c8867d5e13ebd8e51ab331a55662d6f7abf951a991d70d4ee391",
+  "deliveredFullZip": "PSI_ZERO_DAY_OMEGA_160_FRAME_ART_REVIEW_V3.zip",
+  "fullZipSha256": "4e27434ec8ddbd5910effd848c8ece4d74b74c205cbc5965f5264f639f66476e",
+  "deliveredPreviewZip": "PSI_ZERO_DAY_OMEGA_160_FRAME_PREVIEW_V3.zip",
+  "previewZipSha256": "d8bf0d0b2927db38a116af2a8f8b7bce51ab82c21a7c35888bb65b00df9a1c0a",
+  "frames": {
+    "headings": [
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE"
+    ],
+    "perHeading": 20,
+    "total": 160,
+    "actorPng": 160,
+    "approximateEquipmentFrontPng": 160,
+    "approximateEquipmentBackPng": 160,
+    "size": [
+      384,
+      512
+    ],
+    "actionLayout": [
+      "walk x6",
+      "fire x3",
+      "dash x3",
+      "hit x3",
+      "ultimate x3",
+      "finish x2"
+    ],
+    "allFrameBinaryShaUnique": true,
+    "atlasesWebp": 18
+  },
+  "neMirrorAudit": {
+    "flippedNorthWestAlphaOverlap": [
+      0.6552,
+      0.6485,
+      0.6479,
+      0.6495,
+      0.6524,
+      0.6584
+    ],
+    "suspiciousExactFlip": false
+  },
+  "browserPreviewQA": [
+    {
+      "viewport": "1440x900",
+      "jsExceptions": 0,
+      "horizontalOverflow": 0,
+      "result": "PASS"
+    },
+    {
+      "viewport": "390x844",
+      "jsExceptions": 0,
+      "horizontalOverflow": 0,
+      "result": "PASS"
+    },
+    {
+      "viewport": "844x390",
+      "jsExceptions": 0,
+      "horizontalOverflow": 0,
+      "result": "PASS"
+    }
+  ],
+  "candidateLimitations": [
+    "All 160 pixels files are derivatives of eight high-quality neutral poses, not 160 manually authored fight or gait drawings.",
+    "The leg warp does not establish planted world-space boot IK, and combat silhouette changes remain subtle.",
+    "320 occlusion candidate images are heuristic regions, not individually authored gear masks.",
+    "Art pack binaries are in the user-download ZIP only, not in GitHub production asset paths.",
+    "Main hero exact outfit/face continuity, full 8x20 animation, and PPE/weapon collision remain unapproved.",
+    "Real Android GPU FPS/thermal/memory acceptance and signed commercial art inspection are outstanding."
+  ],
+  "sourceGenerator": "OMEGA_160_V3/build_aira_160.py",
+  "reviewHtml": "OMEGA_160_V3/preview/omega-160-review.html",
+  "unlockedByLocalRecordsOnly": "50 normal clears + 50 master 3-star clears, browser-local saves not tamper-proof",
+  "gate": "omegaReleaseDecision(..., OMEGA_APPROVED_RELEASE, OMEGA_RELEASE_BINARY_AUDIT_PASSED)",
+  "gateCurrentlyReady": false,
+  "next": "artist hand-redraw, actual foot/limb IK, 160 signed sprites + 320 signed front/back wearable masks, versioned QA and real-device gameplay"
+}
