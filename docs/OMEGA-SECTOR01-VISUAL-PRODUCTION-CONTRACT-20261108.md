@@ -6,7 +6,7 @@ Status: **DIRECTOR REFERENCE, NOT ART APPROVAL OR SHIPPABLE SPRITE SOURCE**.
 ## 0. Source-of-truth identity before illustration integration
 The 2026-11-08 chat generated two reference boards: an AIRA concept dossier and a cinematic rainy construction-site gameplay *target*. These are presentation images, **not screenshots produced by the game's engine** and not 8×20 sprite-frame assets.
 
-**Identity priority:** current `/assets/reignition/veteran-return.webp` and the actual game AIRA visual identity precede the new illustration. Existing hero: recognizable silver/white long high ponytail, pink ribbon, black goggles with amber lens, asymmetric charcoal/pink/white tactical suit and holstered field gear. The new concept board illustrates a **dark-haired variant**: this discrepancy is **NOT approved** for silent replacement. Match final hair/face/equipment to the canonical game art before producing action sprites. Do not switch the canonical hero to the concept variant without a separate art decision.
+**Director change order (2026-11-09):** the user explicitly selected the NEW dark charcoal/purple high-ponytail AIRA with magenta streaks, amber goggles, graphite/white tactical suit and rose accents, superseding the legacy silver-haired title art. That design decision is approved for **identity and menu/candidate stage presentation**. It does NOT approve commercial 8×20 action sprites, 320 masks, mobile performance or a production release. The eight non-mirrored neutral direction cutouts in `public/assets/omega/aira-v2` are now imported into the actual OMEGA field renderer (fallback remains if an asset fails). See `content/art/omega-aira-v2-user-approved.json` for independently verified binary SHA-256 provenance.
 
 Keep the silhouette and safety-operative identity original and respectful: no borrowed character models, franchise logos, licensed music, or temporary commercial-game sprites.
 
@@ -17,7 +17,7 @@ Keep the silhouette and safety-operative identity original and respectful: no bo
 - **Performance:** independent low/medium/high tiers; scenery budget must degrade on mobile. No runtime third-party AI, paid API, live image fetch, or heavy filters required.
 - **UX:** the mission label, movement pad, real HP, action and dash buttons must stay legible on 390×844 and 844×390. Avoid a fake level or boss HP in the concept storyboard.
 
-## 2. AIRA 8-way production delivery (NOT yet present)
+## 2. AIRA 8-way production delivery (8 neutral cutouts present, 160 action frames NOT yet present)
 Use **world-screen directional conventions of `omegaFieldHeading()`**:
 E/right, SE/front-right, S/front, SW/front-left, W/left, NW/back-left, N/back, NE/back-right.
 The reference concept sheet's arrows/N-front labels are illustration-only and do not set engine axes.
