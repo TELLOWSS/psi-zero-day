@@ -80,7 +80,7 @@ export function omegaWavePlan(seed:number,wave:number):OmegaWavePlan {
   budget:Math.round((12+wave*4+intensity*5)*(isBoss?1.75:1)),
  };
 }
-export type OmegaOwnedUpgrades=ReadOnly<Partial<Record<OmegaUpgradeId,number>>>;
+export type OmegaOwnedUpgrades=Readonly<Partial<Record<OmegaUpgradeId,number>>>;
 export interface OmegaProtocolRun {
  readonly version:typeof OMEGA_PROTOCOL_VERSION;
  readonly seed:number;
