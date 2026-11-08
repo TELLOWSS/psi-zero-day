@@ -578,3 +578,13 @@
  .omega-protocol-brand{gap:7px}
  .omega-protocol-hero-identity span{font-size:7px}
 }
+
+/* On 844×390-style landscape phones every vertical pixel is gameplay space.
+   Preserve title and AIRA portrait, suppress lengthy descriptive copy. */
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-topbar{min-height:42px;height:42px;padding:3px 10px}
+ .omega-protocol-heading p{display:none}
+ .omega-protocol-tag{font-size:7px;line-height:1;letter-spacing:.12em}
+ .omega-protocol-heading h1{font-size:15px;line-height:1.02;margin:1px 0 0}
+ .omega-protocol-hero-identity{width:29px;height:29px;flex-basis:29px}
+}

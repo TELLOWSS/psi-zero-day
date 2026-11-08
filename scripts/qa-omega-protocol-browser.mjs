@@ -143,6 +143,13 @@ for(const [name,width,height,checkpoint] of targets){
    return {pass:loaded&&entirelyInHeader&&notCoverArena,
     loaded,entirelyInHeader,notCoverArena,naturalWidth:img.naturalWidth};
   });
+  const compactLandscapeHeader=await page.evaluate(()=>{
+   const shortLandscape=window.innerHeight<=430&&window.innerWidth>window.innerHeight;
+   const header=document.querySelector('.omega-protocol-topbar');
+   const height=header?.getBoundingClientRect().height??Infinity;
+   return {applicable:shortLandscape,headerHeight:height,
+    pass:!shortLandscape||height<=48};
+  });
   const scrollV=metrics.docHeight>height+2;
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
@@ -157,11 +164,11 @@ for(const [name,width,height,checkpoint] of targets){
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,errors,
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,errors,
     actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
