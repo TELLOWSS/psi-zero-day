@@ -1,5 +1,7 @@
 import type {OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {drawOmegaDirectionalGear,drawOmegaDirectionalHead} from './omega-protocol-directional-identity';
+import {omegaAiraKineticPose} from './omega-protocol-aira-kinetics';
+import type {OmegaArtAction} from './omega-protocol-art-motion';
 export const OMEGA_DIRECTIONS=['E','SE','S','SW','W','NW','N','NE'] as const;
 export type OmegaHeading=typeof OMEGA_DIRECTIONS[number];
 export function omegaFieldHeading(x:number,y:number):OmegaHeading{
@@ -39,8 +41,16 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  const back=heading==='N'||heading==='NW'||heading==='NE';
  const side=heading==='E'||heading==='W';
  const gaitActive=view.gait?view.gait.active:view.moving;
+ // The real native action selected by the Watch-derived state now changes
+ // torso, shoulders, hair inertia and rifle recoil, not just a colored ring.
+ const action:OmegaArtAction=view.finished?'finish':view.ultimate?'ultimate':
+  view.hurt?'hit':view.dashing?'dash':view.shooting?'fire':'walk';
+ const elapsed=action==='walk'
+  ?(gaitActive?(view.gait?.phase??(view.time*2%1))*.59:0)
+  :(Number.isFinite(view.actionAge)?Math.max(0,view.actionAge!):0);
+ const kinetic=omegaAiraKineticPose(heading,action,elapsed);
  const stepAngle=view.gait?view.gait.phase*Math.PI*2:view.time*12;
- const stride=gaitActive?Math.sin(stepAngle)*9:0;
+ const stride=gaitActive?Math.sin(stepAngle)*9*kinetic.strideScale:0;
  const nod=gaitActive?Math.cos(stepAngle*2)*1.8:0;
  ctx.save();
  if(left)ctx.scale(-1,1);
@@ -48,7 +58,7 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  // goggles, black plated suit and asymmetric rose-white field jacket.
  // These drawings remain development geometry, NOT approved sprite art.
  const helmet=back?'#eff5fa':'#fcfcff';
- const hairBounce=view.moving?Math.sin(view.time*10)*2:Math.sin(view.time*1.8)*.8;
+ const hairBounce=(view.moving?Math.sin(view.time*10)*2:Math.sin(view.time*1.8)*.8)+kinetic.hairSweep*.45;
  // Stride/plant feet at local y = 0, preserving the actual contact point.
  ctx.fillStyle='#08152598';
  ctx.beginPath();ctx.ellipse(0,2,23,6,0,0,Math.PI*2);ctx.fill();
@@ -127,7 +137,9 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  // This is an original technical placeholder, not artist-approved 8x20 art.
  const upperWidth=side?.73:
   (heading==='SE'||heading==='SW'||heading==='NW'||heading==='NE')?.88:1;
- ctx.save();ctx.scale(upperWidth,1);
+ ctx.save();ctx.translate(0,kinetic.torsoYOffset);
+ ctx.rotate(kinetic.torsoTilt);
+ ctx.scale(upperWidth,1);
  // Ribbed tactical torso / jacket.
  ctx.fillStyle='#1b3049';
  ctx.beginPath();ctx.moveTo(-20,-54+nod);ctx.lineTo(19,-54+nod);
@@ -163,8 +175,8 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.moveTo(-18,-61+nod);ctx.lineTo(-20,-78+nod);ctx.stroke();
  ctx.strokeStyle='#f8aad4';ctx.lineWidth=5;ctx.lineCap='round';
  const armMove=back?-1:1;
- ctx.beginPath();ctx.moveTo(-19,-49+nod);ctx.lineTo(-21,-34+nod+stride*.17);
- ctx.moveTo(17,-49+nod);ctx.lineTo(23,-35+nod-stride*.17*armMove);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(-19,-49+nod);ctx.lineTo(-21,-34+nod+stride*.17+kinetic.shoulderYOffset);
+ ctx.moveTo(17,-49+nod);ctx.lineTo(23,-35+nod-stride*.17*armMove+kinetic.shoulderYOffset);ctx.stroke();
  ctx.fillStyle='#26364a';ctx.fillRect(-25,-39+nod,11,7);ctx.fillRect(17,-41+nod,10,7);
  drawOmegaDirectionalGear(ctx,heading,nod);
  // Hair frame overlays the face and reads as silver, never a helmet.
@@ -191,7 +203,7 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  const aimY=Number.isFinite(view.weaponFacingY)?view.weaponFacingY!:view.facingY;
  const localAimX=left?-aimX:aimX;
  const rifleAngle=(localAimX===0&&aimY===0)?0:Math.atan2(aimY,localAimX);
- const recoil=view.shooting?3:0;
+ const recoil=view.shooting?kinetic.weaponRecoil:0;
  ctx.save();ctx.translate(side?18:12,rifleY+3+nod);ctx.rotate(rifleAngle);
  ctx.fillStyle='#14283e';ctx.fillRect(-recoil,-3,27,6);
  ctx.fillStyle='#95becf';ctx.fillRect(13-recoil,-2,22,3);
