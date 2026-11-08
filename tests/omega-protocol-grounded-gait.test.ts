@@ -28,6 +28,29 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   expect(stance).toBeGreaterThan(150);
   expect(swing).toBeGreaterThan(50);
  });
+ it('keeps ankle reach plausible and emits only true one-shot plant events',()=>{
+  const track=new OmegaGroundedGait();
+  track.advance({x:100,y:300},0,1);
+  let plantedEvents=0,heldEvents=0,maxReach=0;
+  for(let i=1;i<=300;i++){
+   const position={x:100+i*2,y:300};
+   const sample=track.advance(position,i/60,1);
+   if(sample.active){
+    maxReach=Math.max(maxReach,Math.abs(sample.left.x),Math.abs(sample.right.x));
+   }
+   if(sample.left.landed||sample.right.landed){
+    plantedEvents++;
+    const hold=track.advance(position,i/60+1/120,1);
+    if(hold.left.landed||hold.right.landed)heldEvents++;
+    expect(hold.phase).toBe(sample.phase);
+   }
+  }
+  // Source operator has ~33-unit visible ankle/knee reach; the previous
+  // 64-unit stride let one planted foot drift 37 world units behind her.
+  expect(maxReach).toBeLessThan(33);
+  expect(plantedEvents).toBeGreaterThan(10);
+  expect(heldEvents).toBe(0);
+ });
  it('holds idle while a joystick pushes against solid cover',()=>{
   const track=new OmegaGroundedGait();
   track.advance({x:100,y:300},0,1);
