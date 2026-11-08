@@ -7,12 +7,12 @@ import type {OmegaPoint} from './omega-leg-ik';
  * unverified 6-frame concept strip. Do not silently duplicate walk frames.
  */
 export const OMEGA_ACTION_LAYOUT=[
- ...Array(6).fill('walk'),
- ...Array(3).fill('fire'),
- ...Array(3).fill('dash'),
- ...Array(3).fill('hit'),
- ...Array(3).fill('ultimate'),
- ...Array(2).fill('finish'),
+ 'walk','walk','walk','walk','walk','walk',
+ 'fire','fire','fire',
+ 'dash','dash','dash',
+ 'hit','hit','hit',
+ 'ultimate','ultimate','ultimate',
+ 'finish','finish',
 ] as const;
 export type OmegaRequiredAction=(typeof OMEGA_ACTION_LAYOUT)[number];
 export type OmegaFacing=(typeof OMEGA_DIRECTIONS)[number];
