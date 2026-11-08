@@ -71,7 +71,15 @@ export function omegaCanRenderApprovedArt(
    return Array.isArray(frames)&&frames.length===20&&
     frames.every((frame,i)=>isFrame(frame,OMEGA_SPRITE_ACTIONS[i]!))&&
     new Set(frames.map(frame=>frame.actor)).size===20;
-  });
+  })&&(()=>{
+   const allFrames=OMEGA_DIRECTIONS.flatMap(heading=>manifest.frames[heading]);
+   // A 160-filename pack containing repeated identical silhouettes is NOT
+   // uniquely authored gameplay motion; an independent binary audit remains
+   // mandatory as well.
+   return allFrames.length===160&&
+    new Set(allFrames.map(frame=>frame.actor)).size===160&&
+    new Set(allFrames.map(frame=>frame.actorSha256)).size===160;
+  })();
  memo.set(manifest,valid);
  return valid;
 }
