@@ -5,9 +5,10 @@
  * binary checksum, physical NE view or QA signoff is missing.
  */
 import {existsSync,readFileSync} from 'node:fs';
-import {resolve,join,relative,sep} from 'node:path';
+import {resolve,sep} from 'node:path';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
+import {omegaDetectNWNEBitmapMirroring} from './omega-art-mirror-audit.mjs';
 const ACTIONS=['walk','walk','walk','walk','walk','walk','fire','fire','fire',
  'dash','dash','dash','hit','hit','hit','ultimate','ultimate','ultimate','finish','finish'];
 const DIR=['E','SE','S','SW','W','NW','N','NE'];
@@ -36,7 +37,10 @@ async function checkFile(uri,digest,kind){
   const stats=await sharp(bytes).stats();
   // At least some transparency is required; opaque collage background is forbidden.
   const alpha=stats.channels[3];
-  if(!alpha||alpha.min>=255){issue('OPAQUE_'+kind+':'+uri);return false}
+  if(!alpha||alpha.min>=250){issue('OPAQUE_'+kind+':'+uri);return false}
+  if(alpha.max<24||alpha.mean<(kind==='ACTOR'?6:0.15)){
+   issue('EMPTY_OR_INVALID_ALPHA_'+kind+':'+uri);return false;
+  }
   return true;
  }catch(e){issue('UNDECODABLE_'+kind+':'+uri);return false}
 }
@@ -62,6 +66,21 @@ async function main(){
     ['ACTOR',f.art,f.sha256],['FRONT_OCCLUSION',f.frontOcclusion,f.frontSha256],['BACK_OCCLUSION',f.backOcclusion,f.backSha256]
    ])if(!await checkFile(uri,digest,kind))allOk=false;
   }
+ }
+ if(allOk&&result.reason.length===0&&result.pathsChecked===480){
+  try{
+   const sixNW=m.frames.NW.slice(0,6).map(f=>safeUri(f.art));
+   const sixNE=m.frames.NE.slice(0,6).map(f=>safeUri(f.art));
+   const mirror=await omegaDetectNWNEBitmapMirroring(sixNW,sixNE);
+   result.mirrorAudit={
+    method:mirror.method,
+    scores:mirror.scores.map(score=>Math.round(score*10000)/10000),
+    peak:Math.round(mirror.peak*10000)/10000,
+    mean:Math.round(mirror.mean*10000)/10000,
+    suspectedMirror:mirror.suspectedMirror
+   };
+   if(mirror.suspectedMirror)issue('NE_IS_FLIPPED_NW_BITMAP');
+  }catch(e){issue('MIRROR_ANALYSIS_FAILED:'+String(e))}
  }
  if(allOk&&result.reason.length===0&&result.pathsChecked===480)result.status='ready';
  else if(result.pathsChecked!==480)issue('LESS_THAN_480_BINARY_CHECKS');
