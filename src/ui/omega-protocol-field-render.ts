@@ -137,3 +137,52 @@ export function drawOmegaFieldOcclusion(
   ctx.restore();
  }
 }
+
+
+/**
+ * Physical boss danger zones: reads the SAME state used to apply HP damage.
+ * This is combat UI/technical VFX, not a final cinematic boss character.
+ */
+export function drawOmegaBossTelegraph(
+ ctx:CanvasRenderingContext2D,
+ signal:import('../engine/omega-protocol-boss-pattern').OmegaBossTelegraph,
+ time:number,
+):void{
+ const warning=signal.phase==='warning',strike=signal.phase==='strike';
+ if(!warning&&!strike)return;
+ const pulse=.65+.25*Math.sin(time*11);
+ ctx.save();
+ ctx.globalAlpha=warning?.15+pulse*.14:.5;
+ ctx.fillStyle=strike?'#ff4f70':'#ffbc66';
+ ctx.strokeStyle=strike?'#ff86a1':'#ffd48e';
+ ctx.lineWidth=strike?7:4;
+ ctx.setLineDash(warning?[21,11]:[]);
+ if(signal.attack==='crane_drop'){
+  ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,signal.radius,0,Math.PI*2);
+  ctx.fill();ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.globalAlpha=warning?.7:1;
+  ctx.beginPath();ctx.moveTo(signal.center.x-22,signal.center.y);
+  ctx.lineTo(signal.center.x+22,signal.center.y);
+  ctx.moveTo(signal.center.x,signal.center.y-22);
+  ctx.lineTo(signal.center.x,signal.center.y+22);ctx.stroke();
+ }else{
+  const r=signal.laneHalfWidth;
+  const x=signal.lane==='vertical'?signal.center.x-r:0;
+  const y=signal.lane==='horizontal'?signal.center.y-r:0;
+  const width=signal.lane==='vertical'?r*2:W;
+  const height=signal.lane==='horizontal'?r*2:H;
+  ctx.fillRect(x,y,width,height);
+  ctx.strokeRect(x,y,width,height);
+  ctx.setLineDash([]);
+  ctx.globalAlpha=.8;
+  ctx.fillStyle=strike?'#ff90b0':'#ffe6b7';
+  // Alternating hazard stripes communicate direction without relying on color.
+  const span=signal.lane==='horizontal'?width:height;
+  for(let dist=0;dist<span;dist+=70){
+   if(signal.lane==='horizontal')ctx.fillRect(x+dist,y,8,height);
+   else ctx.fillRect(x,y+dist,width,8);
+  }
+ }
+ ctx.restore();
+}
