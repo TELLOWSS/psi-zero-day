@@ -10,6 +10,7 @@ function validManifest():OmegaApprovedManifest {
    sha256:(i.toString(16)+n.toString(16)).padEnd(64,'a'),
    frontOcclusion:'/assets/omega/approved/front_'+id+'.png',
    backOcclusion:'/assets/omega/approved/back_'+id+'.png',
+   frontSha256:'b'.repeat(64),backSha256:'c'.repeat(64),
    feet:[{x:11,y:52},{x:19,y:53}],radio:{x:7,y:16},muzzle:{x:34,y:30},
    mirrored:false,
   };
