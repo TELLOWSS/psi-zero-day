@@ -31,6 +31,12 @@ export async function omegaReadSilhouette(file){
   silhouette[i]=data[i*4+3]>=ALPHA_THRESHOLD?1:0;
  return silhouette;
 }
+export function omegaMirrorVerdict(scores){
+ if(!Array.isArray(scores)||scores.length!==6||scores.some(x=>!Number.isFinite(x)||x<0||x>1))
+  throw new Error('OMEGA mirror QA requires six alpha overlap scores in 0..1');
+ const peak=Math.max(...scores),mean=scores.reduce((a,b)=>a+b,0)/scores.length;
+ return {peak,mean,suspectedMirror:peak>=.965&&mean>=.94};
+}
 export async function omegaDetectNWNEBitmapMirroring(nwFiles,neFiles){
  if(nwFiles.length!==6||neFiles.length!==6)throw new Error('OMEGA mirror QA requires 6 NW + 6 NE walk keyframes');
  const scores=[];
@@ -38,11 +44,11 @@ export async function omegaDetectNWNEBitmapMirroring(nwFiles,neFiles){
   const [nw,ne]=await Promise.all([omegaReadSilhouette(nwFiles[i]),omegaReadSilhouette(neFiles[i])]);
   scores.push(omegaMirroredAlphaIoU(nw,ne,SAMPLE_WIDTH,SAMPLE_HEIGHT));
  }
- const peak=Math.max(...scores),mean=scores.reduce((a,b)=>a+b,0)/scores.length;
+ const verdict=omegaMirrorVerdict(scores);
  return {
-  scores,mean,peak,
-  // Aggregate matching prevents one symmetric idle pose from rejecting a distinct turn.
-  suspectedMirror:peak>=.99&&mean>=.94,
+  scores,...verdict,
+  // Calibrated against the actual known-mirrored 48-frame study at 64x96.
+  // Its max ~0.968 and six-frame mean ~0.948; 0.99 would miss that real defect.
   method:'FLIPPED_ALPHA_64x96',
  };
 }
