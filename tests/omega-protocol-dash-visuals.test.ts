@@ -1,4 +1,4 @@
-import {describe,it,expect,vi} from 'vitest';
+import {describe,it,expect} from 'vitest';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 import {
  OMEGA_MAX_DASH_ECHOES,OMEGA_DASH_ECHO_LIFETIME,
