@@ -30,7 +30,11 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  const nod=view.moving?Math.cos(view.time*24)*1.8:0;
  ctx.save();
  if(left)ctx.scale(-1,1);
- const helmet=back?'#bdcbdf':'#e1eaf5';
+ // Explicit AIRA identity anchors: silver hair with magenta ribbon, amber
+ // goggles, black plated suit and asymmetric rose-white field jacket.
+ // These drawings remain development geometry, NOT approved sprite art.
+ const helmet=back?'#eff5fa':'#fcfcff';
+ const hairBounce=view.moving?Math.sin(view.time*10)*2:Math.sin(view.time*1.8)*.8;
  // Stride/plant feet at local y = 0, preserving the actual contact point.
  ctx.fillStyle='#08152598';
  ctx.beginPath();ctx.ellipse(0,2,23,6,0,0,Math.PI*2);ctx.fill();
@@ -44,6 +48,26 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
    ctx.beginPath();ctx.moveTo(-52-i*4,y);ctx.lineTo(-33-i*2,y+3);ctx.stroke();
   }
  }
+ // Long high silver ponytail sits BEHIND her back and weapons. This keeps
+ // the signature identity legible from front, side and back at small scale.
+ const tailRootX=back?4:11,tailRootY=-74+nod;
+ ctx.strokeStyle='#ab70b8';ctx.lineWidth=15;ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(tailRootX,tailRootY);
+ ctx.bezierCurveTo(24,-92+hairBounce,35,-75+hairBounce,29,-54+hairBounce);
+ ctx.bezierCurveTo(28,-38+hairBounce,42,-31+hairBounce,33,-22+hairBounce);ctx.stroke();
+ ctx.strokeStyle='#f4f8ff';ctx.lineWidth=11;
+ ctx.beginPath();ctx.moveTo(tailRootX,tailRootY);
+ ctx.bezierCurveTo(24,-92+hairBounce,35,-75+hairBounce,29,-54+hairBounce);
+ ctx.bezierCurveTo(28,-38+hairBounce,42,-31+hairBounce,33,-22+hairBounce);ctx.stroke();
+ ctx.strokeStyle='#ff86c9';ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(tailRootX+2,tailRootY+2);
+ ctx.bezierCurveTo(29,-84+hairBounce,31,-67+hairBounce,29,-51+hairBounce);
+ ctx.bezierCurveTo(28,-36+hairBounce,39,-28+hairBounce,33,-21+hairBounce);ctx.stroke();
+ // Distinct pink high-tie, including a small fluttering ribbon tab.
+ ctx.fillStyle='#f45ba9';ctx.beginPath();ctx.moveTo(7,-78+nod);
+ ctx.lineTo(16,-80+nod);ctx.lineTo(14,-72+nod);
+ ctx.lineTo(19,-66+nod+hairBounce);ctx.lineTo(10,-70+nod);
+ ctx.closePath();ctx.fill();
  // Two-joint leg arcs make planted steps legible without fake horizontal
  // translation of the physics contact point.
  ctx.strokeStyle='#182b40';ctx.lineWidth=9;ctx.lineCap='round';
@@ -52,9 +76,13 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.lineTo(-9+stride*.55,-7);
  ctx.moveTo(8,-34);ctx.lineTo(10-stride*.20,-20);
  ctx.lineTo(9-stride*.55,-7);ctx.stroke();
- ctx.fillStyle='#e6ecfa';
- ctx.fillRect(-15+stride*.5,-9,14,8);
- ctx.fillRect(4-stride*.5,-9,14,8);
+ // Original armored boots: black soles, pearly toe caps, rose seams.
+ ctx.fillStyle='#070f1b';
+ ctx.fillRect(-17+stride*.5,-10,17,10);
+ ctx.fillRect(3-stride*.5,-10,17,10);
+ ctx.fillStyle='#e9f1f5';
+ ctx.fillRect(-16+stride*.5,-10,14,5);
+ ctx.fillRect(4-stride*.5,-10,14,5);
  ctx.strokeStyle='#ffa6d0';ctx.lineWidth=2;
  ctx.beginPath();ctx.moveTo(-14+stride*.5,-9);ctx.lineTo(-3+stride*.5,-9);
  ctx.moveTo(5-stride*.5,-9);ctx.lineTo(16-stride*.5,-9);ctx.stroke();
@@ -62,10 +90,19 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.fillStyle='#1b3049';
  ctx.beginPath();ctx.moveTo(-20,-54+nod);ctx.lineTo(19,-54+nod);
  ctx.lineTo(15,-31+nod);ctx.lineTo(-16,-31+nod);ctx.closePath();ctx.fill();
- ctx.fillStyle='#dfe7f5';
- ctx.beginPath();ctx.moveTo(-17,-53+nod);ctx.lineTo(15,-53+nod);
- ctx.lineTo(11,-39+nod);ctx.lineTo(-11,-39+nod);ctx.closePath();ctx.fill();
- ctx.fillStyle='#fd9ccf';ctx.fillRect(-14,-43+nod,27,4);
+ // Asymmetric split field jacket: white left shoulder, black tactical
+ // corset harness and a small pink/white NEW-PSI chest accent.
+ ctx.fillStyle='#eaf1f8';
+ ctx.beginPath();ctx.moveTo(-17,-55+nod);ctx.lineTo(-4,-53+nod);
+ ctx.lineTo(-7,-38+nod);ctx.lineTo(-17,-42+nod);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#0b1526';
+ ctx.beginPath();ctx.moveTo(-7,-52+nod);ctx.lineTo(15,-54+nod);
+ ctx.lineTo(10,-33+nod);ctx.lineTo(-11,-34+nod);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#db72b7';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(-3,-51+nod);ctx.lineTo(8,-32+nod);
+ ctx.moveTo(9,-51+nod);ctx.lineTo(-5,-36+nod);ctx.stroke();
+ ctx.fillStyle='#fd9ccf';ctx.fillRect(-14,-43+nod,27,3);
+ ctx.fillStyle='#eaf7fa';ctx.fillRect(4,-49+nod,8,3);
  ctx.fillStyle='#18293c';ctx.fillRect(-16,-35+nod,31,8);
  if(back){
   ctx.fillStyle='#273850';ctx.fillRect(-15,-53+nod,29,24);
@@ -77,22 +114,44 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.beginPath();ctx.arc(-18,-50+nod,8,0,Math.PI*2);
  ctx.arc(17,-49+nod,8,0,Math.PI*2);ctx.fill();
  ctx.fillStyle='#192d49';ctx.fillRect(-24,-49+nod,9,16);
+ // Radio pack, amber status lens and independent short antenna.
+ ctx.fillStyle='#122136';ctx.fillRect(-25,-62+nod,12,18);
+ ctx.fillStyle='#f1ad57';ctx.fillRect(-23,-58+nod,7,3);
+ ctx.strokeStyle='#95afc5';ctx.lineWidth=2;ctx.beginPath();
+ ctx.moveTo(-18,-61+nod);ctx.lineTo(-20,-78+nod);ctx.stroke();
  ctx.strokeStyle='#f8aad4';ctx.lineWidth=5;ctx.lineCap='round';
  const armMove=back?-1:1;
  ctx.beginPath();ctx.moveTo(-19,-49+nod);ctx.lineTo(-21,-34+nod+stride*.17);
  ctx.moveTo(17,-49+nod);ctx.lineTo(23,-35+nod-stride*.17*armMove);ctx.stroke();
  ctx.fillStyle='#26364a';ctx.fillRect(-25,-39+nod,11,7);ctx.fillRect(17,-41+nod,10,7);
- // Character head and silver ponytail.
- ctx.fillStyle='#c3d1e6';ctx.beginPath();ctx.arc(0,-64+nod,13,0,Math.PI*2);ctx.fill();
+ // Hair frame overlays the face and reads as silver, never a helmet.
+ // The actual safety helmet belongs to the construction-world context,
+ // while her signature orange-lens goggles are worn on her head.
+ ctx.fillStyle=back?'#dae6f6':'#eec5c6';
+ ctx.beginPath();ctx.arc(0,-64+nod,12,0,Math.PI*2);ctx.fill();
  ctx.fillStyle=helmet;
- ctx.beginPath();ctx.arc(0,-68+nod,12,Math.PI,0);ctx.lineTo(12,-65+nod);ctx.lineTo(-12,-65+nod);ctx.closePath();ctx.fill();
- ctx.strokeStyle='#f5acd7';ctx.lineWidth=6;
- ctx.beginPath();ctx.moveTo(side?5:11,-71+nod);ctx.lineTo(17,-81+nod);
- ctx.lineTo(26,-72+nod+Math.sin(view.time*9)*3);ctx.stroke();
+ ctx.beginPath();ctx.arc(-1,-70+nod,13,Math.PI,Math.PI*2);
+ ctx.lineTo(12,-69+nod);ctx.lineTo(6,-64+nod);
+ ctx.lineTo(-3,-66+nod);ctx.lineTo(-8,-61+nod);
+ ctx.lineTo(-11,-66+nod);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#f5efff';ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(-11,-70+nod);ctx.lineTo(6,-78+nod);ctx.stroke();
+ // Two amber glass goggle lenses + black nose bridge, above the fringe.
+ ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(-5,-79+nod,6,0,Math.PI*2);
+ ctx.arc(7,-79+nod,6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ec9d51';ctx.beginPath();ctx.arc(-5,-79+nod,4,0,Math.PI*2);
+ ctx.arc(7,-79+nod,4,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ffe0a3';ctx.fillRect(-7,-82+nod,3,2);ctx.fillRect(5,-82+nod,3,2);
  if(!back){
-  ctx.fillStyle='#d676a9';ctx.fillRect(side?1:-9,-68+nod,side?9:18,5);
-  ctx.fillStyle='#fff0ab';ctx.fillRect(side?4:-5,-67+nod,side?4:10,3);
+  ctx.fillStyle='#392c45';
+  ctx.fillRect(side?3:-7,-64+nod,side?4:3,2);
+  if(!side)ctx.fillRect(4,-64+nod,3,2);
+  ctx.strokeStyle='#bf6d93';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(-2,-59+nod);ctx.lineTo(3,-59+nod);ctx.stroke();
  }
+ // Pink and silver strand across left eye emphasizes AIRA's custom silhouette.
+ ctx.strokeStyle='#f3efff';ctx.lineWidth=4;ctx.beginPath();
+ ctx.moveTo(-6,-77+nod);ctx.quadraticCurveTo(-2,-68+nod,-9,-59+nod);ctx.stroke();
  // The weapon rotates in eight screen-relative directions, so idle and
  // shot poses never claim a projectile was launched behind the character.
  // Mirrored left poses flip the local weapon as well; no physics rotation.
