@@ -22,7 +22,7 @@ export function omegaCameraTargetZoom(
   throw new RangeError('Invalid camera viewport');
  const landscapeTouch=width/height>=1.8&&height<=540;
  const base=focus==='battle'?1.78:focus==='boss'?1.58:1.38;
- return base+(landscapeTouch?.09:0);
+ return base+(landscapeTouch ? 0.09 : 0);
 }
 
 export interface OmegaCameraState{
