@@ -64,6 +64,9 @@ export class OmegaGroundedGait {
    return idle();
   }
   if(dashing||dist<.04||elapsed<=0){
+   // Dash uses separate animation and its previous stance anchors must not
+   // linger in space after the character quickly changes location.
+   if(dashing){this.left=makeFoot();this.right=makeFoot();}
    // A collision-stalled player must NOT run in place.
    return {active:false,phase:this.phase,distanceTravelled:this.distanceTotal,
     left:blank(-9),right:blank(9)};
