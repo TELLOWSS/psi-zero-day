@@ -7,9 +7,9 @@ function fakeCanvas(){
  const calls:string[]=[];
  const gradient={addColorStop(_offset:number,_color:string){calls.push('stop');}};
  const handler={
-  get(_target:object,key:string){
-   if(key==='createRadialGradient')return ()=>{calls.push(key);return gradient;};
-   return (..._args:unknown[])=>{calls.push(key);};
+  get(_target:object,key:string|symbol){
+   if(key==='createRadialGradient')return ()=>{calls.push(String(key));return gradient;};
+   return (..._args:unknown[])=>{calls.push(String(key));};
   },
   set(){return true;},
  };
