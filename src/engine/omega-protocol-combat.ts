@@ -159,8 +159,14 @@ export class OmegaProtocolCombatSession {
     this.bossPattern=result.next;
     if(result.hit&&!state.player.isDashing&&(state.player.invincibleTime??0)<=0){
      const damage=result.next.empowered?18:12;
-     state.player.hp=Math.max(0,state.player.hp-damage);
+     const inflicted=Math.min(damage,Math.max(0,state.player.hp));
+     state.player.hp=Math.max(0,state.player.hp-inflicted);
      state.player.invincibleTime=Math.max(state.player.invincibleTime??0,.55);
+     // Feed existing Watch damage indicators and inspection statistics;
+     // don't grant credits, campaign XP or permanent achievements.
+     state.lastDamage={source:'CRANE_BOSS',amount:inflicted,remaining:2};
+     if(state.terrainRecord)state.terrainRecord.damageTaken+=inflicted;
+     state.hitStopTimer=Math.max(state.hitStopTimer??0,.04);
     }
    }
   }
