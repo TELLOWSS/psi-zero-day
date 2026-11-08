@@ -1,3 +1,5 @@
+import type {TerrainObject} from './survivors-terrain';
+
 /**
  * OMEGA PROTOCOL: location-driven construction/industrial operation nodes.
  * Deterministic mission layout and collision geometry; no account save,
@@ -100,6 +102,18 @@ export function omegaFieldPlan(seed:number,wave:number):OmegaFieldPlan{
   obstacles,
   palette:{floor:sectorTheme.floor,structures:sectorTheme.structures,accent:sectorTheme.accent},
  };
+}
+/** Reuse native Watch steering, projectile cover and terrain collision for
+ * exactly the same physical props drawn by the special-edition field renderer.
+ * Only scoped to a new OMEGA combat session; campaign maps are untouched.
+ */
+export function omegaFieldNativeTerrain(plan:OmegaFieldPlan):TerrainObject[]{
+ return plan.obstacles.map(o=>({
+  id:'omega:'+plan.wave+':'+o.id,
+  kind:o.kind==='scaffold'?'pillar' as const:'cover' as const,
+  x:o.x,y:o.y,width:o.width,height:o.height,
+  hp:1,maxHp:1,
+ }));
 }
 export function omegaFieldInitialProgress():OmegaFieldProgress{
  return {phase:'combat',eventComplete:false,exitUnlocked:false,completedSteps:0};
