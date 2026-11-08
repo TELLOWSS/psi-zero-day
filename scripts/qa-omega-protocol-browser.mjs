@@ -13,6 +13,7 @@ const targets=[
  ['desktop',1440,900,''],
  ['portrait',390,844,''],
  ['landscape',844,390,''],
+ ['combat-action',844,390,''],
  ['objective',844,390,'objective'],
  ['exit',844,390,'exit'],
  ['reward',844,390,'reward'],
@@ -46,6 +47,20 @@ for(const [name,width,height,checkpoint] of targets){
     }catch(error){return {src,loaded:false,error:String(error)};}
    }));
   });
+  if(name==='combat-action'){
+   // A genuine player-input movement/dash capture. No debug teleport,
+   // forced enemy deaths, fake character sprite or composited marketing art.
+   await page.keyboard.down('ArrowRight');
+   await page.waitForTimeout(1600);
+   await page.keyboard.up('ArrowRight');
+   await page.keyboard.down('ArrowDown');
+   await page.waitForTimeout(800);
+   await page.keyboard.up('ArrowDown');
+   await page.keyboard.press('Space');
+   await page.waitForTimeout(90);
+   await page.screenshot({path:root+'/combat-live-844x390.png',
+    animations:'disabled',fullPage:false});
+  }
   // Actual browser input must move the real Watch-engine player, not only
   // paint a HUD screenshot. Only the landscape source QA uses this probe.
   let walkTest=null,stickTest=null,padModeTest=null;
