@@ -14,7 +14,7 @@ function validManifest():OmegaApprovedManifest {
    feet:[{x:11,y:52},{x:19,y:53}],radio:{x:7,y:16},muzzle:{x:34,y:30},
    mirrored:false,
   };
- }])) as OmegaApprovedManifest['frames'];
+ })])) as OmegaApprovedManifest['frames'];
  return {
   identity:'AIRA_MASTER',approval:'ARTIST_APPROVED',artistSignoff:'reviewer-sample',
   visualQa:'PASS',deviceQa:'PASS',combatQa:'PASS',frames,
