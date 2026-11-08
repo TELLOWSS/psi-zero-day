@@ -144,6 +144,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
+ const [classicPad,setClassicPad]=useState(false);
  const [fps,setFps]=useState(0);
  const [interactionMessage,setInteractionMessage]=useState('');
  const canvasRef=useRef<HTMLCanvasElement>(null);
@@ -301,6 +302,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
+     data-omega-field-phase={snapshot.field?.progress.phase??'none'}
      data-omega-player-x={snapshot.playerX.toFixed(1)}
      data-omega-player-y={snapshot.playerY.toFixed(1)}>
     <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
@@ -352,7 +354,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       {snapshot.bossTelegraph.empowered&&<em>PHASE 2</em>}
     </div>}
     <div className="omega-protocol-controls">
-     <div className="omega-protocol-pad" aria-label="모바일 이동 방향">
+     <div className="omega-protocol-pad" data-omega-pad-mode={classicPad?'arrows':'analog'}
+      aria-label={classicPad?'방향 버튼 이동':'360도 아날로그 스틱 이동'}>
       {buttonDirections.map(d=><button type="button" key={d.label} disabled={snapshot.run.phase!=='battle'||paused}
        onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);setDirection(e.pointerId,d.x,d.y);}}
        onPointerUp={e=>releaseDirection(e.pointerId)}
@@ -432,6 +435,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   </section>
   <footer className="omega-protocol-bottom-toolbar">
    <div className="omega-protocol-run-tools">
+    <button type="button" className="omega-protocol-control-switch"
+     aria-pressed={classicPad}
+     aria-label={classicPad?'아날로그 스틱으로 전환':'방향키 모드로 전환'}
+     onClick={()=>{
+      setClassicPad(mode=>!mode);
+      pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+      if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
+     }}>{classicPad?'스틱':'방향키'}</button>
     <label>SEED <input inputMode="numeric" aria-label="재현용 시드" value={seedValue} onChange={e=>setSeedValue(e.target.value)} /></label>
     <button type="button" onClick={togglePause} disabled={snapshot.run.phase!=='battle'}>{paused?'계속하기':'일시정지'}</button>
     <button type="button" onClick={restart}>새 도전</button>
