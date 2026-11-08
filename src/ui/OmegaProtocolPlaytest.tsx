@@ -344,10 +344,19 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  ):null;
  return <main className="omega-protocol-lab omega-protocol-v2" data-omega-protocol-internal="true">
   <header className="omega-protocol-topbar">
-   <div className="omega-protocol-heading">
+   <div className="omega-protocol-brand">
+    <div className="omega-protocol-hero-identity"
+     title="기존 메인화면 AIRA 원화 · 전투 캐릭터 스프라이트 아님">
+     <img src="/assets/reignition/veteran-return.webp"
+      alt="메인화면 AIRA 캐릭터 초상" width={56} height={56}
+      decoding="async" draggable={false} />
+     <span aria-hidden="true">Ω</span>
+    </div>
+    <div className="omega-protocol-heading">
     <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION</span>
     <h1>OMEGA <em>PROTOCOL</em></h1>
     <p>실제 SIGNAL WATCH 전투 엔진 · 승인 전 임시 그래픽</p>
+   </div>
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>

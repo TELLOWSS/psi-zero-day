@@ -128,6 +128,21 @@ for(const [name,width,height,checkpoint] of targets){
    for(let i=3;i<left.length;i+=4)if(left[i]!==right[i])changed++;
    return {pass:changed>150,changedPixels:changed,fontFamily:family};
   });
+  // Original AIRA title portrait stays a header identity cue ONLY:
+  // a real local asset should load and never cover the gameplay canvas.
+  const heroIdentity=await page.evaluate(()=>{
+   const img=document.querySelector('.omega-protocol-hero-identity img');
+   if(!(img instanceof HTMLImageElement))return {pass:false,reason:'missing AIRA portrait'};
+   const rect=img.getBoundingClientRect();
+   const header=document.querySelector('.omega-protocol-topbar')?.getBoundingClientRect();
+   const canvas=document.querySelector('.omega-protocol-arena canvas')?.getBoundingClientRect();
+   const loaded=img.complete&&img.naturalWidth>0&&img.naturalHeight>0;
+   const entirelyInHeader=!!header&&rect.left>=header.left-1&&
+    rect.right<=header.right+1&&rect.top>=header.top-1&&rect.bottom<=header.bottom+1;
+   const notCoverArena=!!canvas&&rect.bottom<=canvas.top+1;
+   return {pass:loaded&&entirelyInHeader&&notCoverArena,
+    loaded,entirelyInHeader,notCoverArena,naturalWidth:img.naturalWidth};
+  });
   const scrollV=metrics.docHeight>height+2;
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
@@ -142,11 +157,11 @@ for(const [name,width,height,checkpoint] of targets){
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,errors,
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,errors,
     actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});

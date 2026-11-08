@@ -532,3 +532,49 @@
 .omega-protocol-mission :is(strong,small,span),
 .omega-protocol-action-pad button,
 .omega-protocol-run-tools button{word-break:keep-all}
+
+
+/* AIRA identity anchor: existing title art, never gameplay sprite approval.
+   Keep the actual battle canvas and controls free of decorative overlays. */
+.omega-protocol-brand{
+ display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;
+}
+.omega-protocol-hero-identity{
+ width:58px;height:58px;flex:0 0 58px;position:relative;
+ border-radius:15px;overflow:hidden;isolation:isolate;
+ background:linear-gradient(135deg,#31354f,#202641 70%,#44274a);
+ border:1px solid rgba(252,161,214,.62);
+ box-shadow:0 0 0 2px rgba(15,25,47,.8),0 0 18px rgba(255,122,185,.2);
+ pointer-events:none;
+}
+.omega-protocol-hero-identity img{
+ position:absolute;width:100%;height:100%;inset:0;
+ object-fit:cover;object-position:54% 18%;
+ filter:saturate(.98) contrast(1.08);
+}
+.omega-protocol-hero-identity span{
+ position:absolute;right:0;bottom:0;font-size:9px;font-weight:950;
+ padding:1px 4px;color:#f6eafb;
+ background:rgba(35,21,48,.93);border-radius:5px 0 0 0;
+}
+@media(max-width:760px){
+ .omega-protocol-brand{gap:8px}
+ .omega-protocol-hero-identity{
+  width:42px;height:42px;flex-basis:42px;border-radius:11px
+ }
+ .omega-protocol-heading p{display:none}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-hero-identity{
+  width:36px;height:36px;flex-basis:36px;border-radius:9px
+ }
+ .omega-protocol-brand{gap:7px}
+ .omega-protocol-exit{padding:6px 9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-hero-identity{
+  width:29px;height:29px;flex-basis:29px;border-radius:8px
+ }
+ .omega-protocol-brand{gap:7px}
+ .omega-protocol-hero-identity span{font-size:7px}
+}
