@@ -154,18 +154,15 @@ export function drawOmegaFieldMission(
   const target=step.target;
   const completed=index<progress.completedSteps;
   const activeStep=active?.id===step.id;
+  // The original collidable-world console now renders in depth order.
+  // This pass is ONLY a status glyph and interaction text, not a second
+  // flat square painted over AIRA and every nearby enemy.
   ctx.shadowColor=activeStep?'#6bf9ee':'#4f9dce';
-  ctx.shadowBlur=activeStep?18:3;
-  ctx.fillStyle=completed?'#164c4b':'#102f49';
-  ctx.fillRect(target.x-27,target.y-27,54,54);
-  ctx.strokeStyle=completed?'#73f3bb':activeStep?'#7be9ff':'#5f89a4';
-  ctx.lineWidth=completed?3:4;
-  ctx.strokeRect(target.x-27,target.y-27,54,54);
-  ctx.fillStyle=completed?'#8bf4c2':'#8bedff';
-  ctx.fillRect(target.x-14,target.y-8,28,16);
+  ctx.shadowBlur=activeStep?12:0;
+  ctx.fillStyle=completed?'#8bf4c2':activeStep?'#8bedff':'#aab9c4';
+  ctx.font='bold 12px system-ui';ctx.textAlign='center';
+  ctx.fillText(completed?'✓':String(index+1),target.x,target.y-78);
   ctx.shadowBlur=0;
-  ctx.fillStyle='#eefaff';ctx.font='bold 12px system-ui';ctx.textAlign='center';
-  ctx.fillText(completed?'✓':String(index+1),target.x,target.y-37);
   if(activeStep){
    ctx.strokeStyle='rgba(104,249,238,'+pulse+')';ctx.lineWidth=4;
    ctx.beginPath();ctx.arc(target.x,target.y,69,0,Math.PI*2);ctx.stroke();
@@ -182,15 +179,13 @@ export function drawOmegaFieldMission(
   ctx.beginPath();ctx.moveTo(plan.event.steps[plan.event.steps.length-1]!.target.x,plan.event.steps[plan.event.steps.length-1]!.target.y);ctx.lineTo(exit.x,exit.y);ctx.stroke();
   ctx.setLineDash([]);
  }
+ // Extraction portal is now a 3/4 device in the real Y-depth pass.
+ ctx.fillStyle=progress.exitUnlocked?'#b3ffdf':'#ffbf8c';
  ctx.shadowColor=progress.exitUnlocked?'#77ffc2':'#ffbd81';
- ctx.shadowBlur=progress.exitUnlocked?23:0;
- ctx.fillStyle=progress.exitUnlocked?'#1a805d':'#6b5347';
- ctx.fillRect(exit.x-35,exit.y-55,70,110);
- ctx.strokeStyle=progress.exitUnlocked?'#b3ffdf':'#ffac72';ctx.lineWidth=6;
- ctx.strokeRect(exit.x-35,exit.y-55,70,110);
+ ctx.shadowBlur=progress.exitUnlocked?8:0;
+ ctx.font='900 13px system-ui';
+ ctx.fillText(progress.exitUnlocked?'EXIT OPEN':'LOCKED',exit.x,exit.y-126);
  ctx.shadowBlur=0;
- ctx.fillStyle='#fff';ctx.font='900 13px system-ui';
- ctx.fillText(progress.exitUnlocked?'EXIT OPEN':'LOCKED',exit.x,exit.y-66);
  if(progress.exitUnlocked&&omegaFieldCanInteract(actor,exit,plan.obstacles)){
   ctx.fillStyle='#b4ffe2';ctx.fillText('E / 진입',exit.x,exit.y+82);
  }
