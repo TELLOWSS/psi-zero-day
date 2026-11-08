@@ -3,7 +3,7 @@ import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaSceneBudget,omegaSectorOneDust,
  drawOmegaSectorOneGround,drawOmegaSectorOneActorLight,
- drawOmegaSectorOneAir,drawOmegaSectorOneGrade,
+ drawOmegaSectorOneAir,drawOmegaSectorOneGrade,drawOmegaSectorOneObstacleDetail,
 } from '../src/ui/omega-protocol-sector-one-scene';
 
 function makeCanvas(w=844,h=390){
@@ -17,7 +17,7 @@ function makeCanvas(w=844,h=390){
   fill:mark('fill'),stroke:mark('stroke'),
   fillRect:mark('fillRect'),strokeRect:mark('strokeRect'),
   moveTo:mark('moveTo'),lineTo:mark('lineTo'),
-  ellipse:mark('ellipse'),translate:mark('translate'),
+  ellipse:mark('ellipse'),arc:mark('arc'),translate:mark('translate'),
   createRadialGradient:()=>{calls.push('radial');return gradient;},
   createLinearGradient:()=>{calls.push('linear');return gradient;},
  } as unknown as CanvasRenderingContext2D;
@@ -70,6 +70,8 @@ describe('OMEGA original sector-one visual vertical slice',()=>{
   expect(calls.filter(s=>s==='stroke').length).toBeGreaterThan(10);
   expect(JSON.stringify(plan)).toBe(before);
   // Existing solids and interaction geometry are the single source of truth.
+  for(const obstacle of plan.obstacles)drawOmegaSectorOneObstacleDetail(ctx,obstacle);
+  expect(calls.filter(s=>s==='linear').length).toBe(5); // screen tone + 4 real obstacles
   expect(plan.obstacles).toHaveLength(4);
   expect(plan.event.steps.length).toBeGreaterThanOrEqual(2);
  });
