@@ -82,6 +82,11 @@ export class OmegaProtocolCombatSession {
   if(this.fieldTraversal){
    this.currentField=omegaFieldPlan(this.active.seed,plan.wave);
    this.fieldStatus=omegaFieldInitialProgress();
+   // No leftover projectiles, drops or defeated enemy sprites can leak from
+   // the previous room into a newly entered field node.
+   this.engine.state.projectiles=[];
+   this.engine.state.drops=[];
+   this.engine.state.hazards=[];
    this.engine.state.player.x=this.currentField.entry.x;
    this.engine.state.player.y=this.currentField.entry.y;
   }
