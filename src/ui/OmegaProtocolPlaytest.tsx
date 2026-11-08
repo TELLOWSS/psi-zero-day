@@ -6,12 +6,13 @@ import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawO
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
+import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
 const validKeys=new Set<string>(keys);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -46,11 +47,12 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  // Independent eight-heading tactical actor placeholder, not an AIRA skin.
  ctx.save();ctx.translate(p.x,p.y);
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
- const facing=session.facing;
+ const shooting=omegaActorCueActive(fireCue,state.gameTime,state.phase==='playing');
+ const facing=shooting?{x:fireCue.screenX,y:fireCue.screenY}:session.facing;
  drawOmegaProtocolActor(ctx,{
   facingX:facing.x,facingY:facing.y,moving:session.moving,
   time:state.gameTime,dashing:Boolean(p.isDashing),
-  shooting:state.projectiles.length>0,
+  shooting,hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  });
  ctx.restore();
  if(field){
@@ -199,6 +201,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   window.addEventListener('resize',scaleCanvas);
   document.addEventListener('visibilitychange',onVisibility);
   let request=0,last=0,alive=true,fpsTotal=0,fpsCount=0,fpsAt=0;
+  // Visual-only gun pulse. Each new session owns its own timer and heading.
+  let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
+  session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
    const dt=last?Math.min(.05,Math.max(0,(now-last)/1000)):0;last=now;
@@ -207,7 +212,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
    if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
-   const ctx=canvasRef.current?.getContext('2d');if(ctx)drawLab(ctx,session);
+   fireCue=omegaAdvanceActorFireCue(
+    fireCue,session.engine.drainProjectileFeedback(),session.engine.state.gameTime);
+   const ctx=canvasRef.current?.getContext('2d');if(ctx)drawLab(ctx,session,fireCue);
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
