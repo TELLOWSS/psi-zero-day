@@ -31,6 +31,21 @@ for(const [name,width,height,checkpoint] of targets){
   await page.goto('http://127.0.0.1:4173/'+query,{waitUntil:'domcontentloaded',timeout:45000});
   await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
   await page.waitForTimeout(550);
+  // Unlike a promotional image, each original world-space source must
+  // actually decode inside the browser before its React/Canvas screenshot.
+  const authoredArt=await page.evaluate(async()=>{
+   const names=['night-yard-floor','container','scaffold','machine','barrier'];
+   return Promise.all(names.map(async name=>{
+    const src='/assets/omega/sector01/'+name+'.svg';
+    const image=new Image();
+    image.src=src;
+    try{
+     await image.decode();
+     return {src,loaded:image.naturalWidth>0&&image.naturalHeight>0,
+      width:image.naturalWidth,height:image.naturalHeight};
+    }catch(error){return {src,loaded:false,error:String(error)};}
+   }));
+  });
   // Actual browser input must move the real Watch-engine player, not only
   // paint a HUD screenshot. Only the landscape source QA uses this probe.
   let walkTest=null,stickTest=null,padModeTest=null;
@@ -167,10 +182,10 @@ for(const [name,width,height,checkpoint] of targets){
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
     correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,errors,
-    actualRepoBrowser:true,originalAiraArtApproved:false};
+    authoredArt,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
