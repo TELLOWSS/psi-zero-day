@@ -48,7 +48,18 @@ export function omegaStageEncounterPositions(
  const placed:Array<OmegaFieldPoint|undefined>=new Array(threats.length);
  for(const {threat,i} of indexed){
   let selected:OmegaFieldPoint|undefined;
-  for(const radius of RADII){
+  // Three opening compositions cover both landscape and portrait:
+  // front opponent, north-side flank, south-side flank. No device-dependent
+  // game physics and no unsafe spawn inside the cargo/scaffold.
+  const intro:readonly OmegaFieldPoint[]=[
+   {x:Math.round(hero.x+205),y:Math.round(hero.y)},
+   {x:Math.round(hero.x-20),y:Math.round(hero.y-210)},
+   {x:Math.round(hero.x-20),y:Math.round(hero.y+210)},
+  ];
+  for(const point of intro){
+   if(safe(point,threat.radius,plan.obstacles)){selected=point;break;}
+  }
+  if(!selected)for(const radius of RADII){
    for(const angle of ANGLES){
     const candidate={x:Math.round(hero.x+radius*Math.cos(angle)),
                      y:Math.round(hero.y+radius*Math.sin(angle))};
