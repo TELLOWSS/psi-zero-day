@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import {mkdtempSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {omegaMirroredAlphaIoU,omegaDetectNWNEBitmapMirroring} from '../scripts/omega-art-mirror-audit.mjs';
+import {omegaMirroredAlphaIoU,omegaDetectNWNEBitmapMirroring,omegaMirrorVerdict} from '../scripts/omega-art-mirror-audit.mjs';
 
 const W=64,H=96;
 async function generateSprite(file,frame,side){
@@ -51,6 +51,15 @@ describe('OMEGA image-based independent NE audit',()=>{
    const acceptedForFurtherHumanReview=await omegaDetectNWNEBitmapMirroring(nw,ne);
    expect(acceptedForFurtherHumanReview.suspectedMirror).toBe(false);
   }finally{rmSync(dir,{recursive:true,force:true})}
+ });
+ it('blocks previously observed mirrored source despite 64x96 downsample loss',()=>{
+  const measured=[0.9663,0.9493,0.9564,0.9678,0.9243,0.9243];
+  const old=omegaMirrorVerdict(measured);
+  expect(old.mean).toBeGreaterThan(.94);
+  expect(old.peak).toBeGreaterThan(.965);
+  expect(old.suspectedMirror).toBe(true);
+  expect(omegaMirrorVerdict([.680,.704,.660,.688,.699,.665]).suspectedMirror).toBe(false);
+  expect(()=>omegaMirrorVerdict([1,.9])).toThrow('six');
  });
  it('requires complete six-phase files on both headings',async()=>{
   await expect(omegaDetectNWNEBitmapMirroring([],[])).rejects.toThrow('6 NW');
