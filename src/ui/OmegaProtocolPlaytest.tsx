@@ -86,7 +86,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
   terminalElapsed,
  });
- const artView={...actorView,...action};
+ const artView={...actorView,...action,
+  // A muzzle flash is valid only while genuine Watch fire feedback remains.
+  shooting:Boolean(action.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
