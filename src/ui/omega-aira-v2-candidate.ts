@@ -51,8 +51,7 @@ export class OmegaAiraV2CandidateImages {
   return OMEGA_AIRA_V2_HEADINGS.every(h=>this.image(h)!==null);
  }
  status():Readonly<Record<OmegaHeading,boolean>> {
-  return Object.fromEntries(OMEGA_AIRA_V2_HEADINGS.map(h=>[h,this.image(h)!==null]))
-   as Record<OmegaHeading,boolean>;
+  return Object.fromEntries(OMEGA_AIRA_V2_HEADINGS.map(h=>[h,this.image(h)!==null])) as Record<OmegaHeading,boolean>;
  }
 }
 /**
