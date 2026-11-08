@@ -122,7 +122,24 @@ export function omegaFieldResolveCollision(
   return (x-nearestX)**2+(y-nearestY)**2<radius*radius;
  };
  let x=clamp(proposed.x,radius,OMEGA_FIELD_WIDTH-radius),y=clamp(proposed.y,radius,OMEGA_FIELD_HEIGHT-radius);
+ // Stop fast dashes from crossing a box entirely between frames.
+ for(const o of obstacles){
+  const left=o.x-radius,right=o.x+o.width+radius;
+  const top=o.y-radius,bottom=o.y+o.height+radius;
+  if(previous.y>=top&&previous.y<=bottom){
+   if(previous.x<=left&&x>left)x=left;
+   else if(previous.x>=right&&x<right)x=right;
+  }
+ }
  for(const o of obstacles)if(collide(x,previous.y,o)){x=previous.x;break;}
+ for(const o of obstacles){
+  const left=o.x-radius,right=o.x+o.width+radius;
+  const top=o.y-radius,bottom=o.y+o.height+radius;
+  if(x>=left&&x<=right){
+   if(previous.y<=top&&y>top)y=top;
+   else if(previous.y>=bottom&&y<bottom)y=bottom;
+  }
+ }
  for(const o of obstacles)if(collide(x,y,o)){y=previous.y;break;}
  return {x:clamp(x,radius,OMEGA_FIELD_WIDTH-radius),y:clamp(y,radius,OMEGA_FIELD_HEIGHT-radius)};
 }
