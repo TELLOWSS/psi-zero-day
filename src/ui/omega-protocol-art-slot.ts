@@ -89,11 +89,11 @@ export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:
  const subframe=action==='walk'&&!view.moving?0:Math.floor(t*group.fps)%group.count;
  return {heading,frame:group.start+subframe,action};
 }
-interface OmegaImageLike extends CanvasImageSource{
- readonly complete:boolean;
- readonly naturalWidth:number;
- readonly naturalHeight:number;
-}
+type OmegaImageLike=CanvasImageSource&Readonly<{
+ complete:boolean;
+ naturalWidth:number;
+ naturalHeight:number;
+}>;
 export class OmegaApprovedImageCache{
  private entries=new Map<string,{image:OmegaImageLike;seen:number}>();
  private tick=0;
