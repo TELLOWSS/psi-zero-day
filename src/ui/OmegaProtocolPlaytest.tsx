@@ -7,6 +7,7 @@ import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawO
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
+import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -31,7 +32,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height);
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
- if(field)drawOmegaFieldGround(ctx,field.plan);
+ if(field){
+  drawOmegaFieldGround(ctx,field.plan);
+  drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
+ }
  else{
   ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
   ctx.strokeStyle='#243548';ctx.lineWidth=1;
@@ -90,6 +94,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.restore();
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  if(field){
+  drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
+   omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
   drawOmegaFieldOcclusion(ctx,field.plan,p);
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
  }
@@ -103,6 +109,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fillStyle=radial;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
  }
  ctx.restore();
+ if(field)drawOmegaSectorOneGrade(ctx,field.plan,ctx.canvas.width,ctx.canvas.height);
  // Portrait camera follows the player: preserve off-screen enemy awareness
  // with a cheap, always-visible whole-arena radar in screen coordinates.
  const mw=Math.max(70,Math.min(118,ctx.canvas.width*.155));
