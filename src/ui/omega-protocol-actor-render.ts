@@ -76,8 +76,13 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  // 2-joint legs read the actual post-collision stance-foot positions:
  // stance anchors remain fixed in WORLD projection, swing soles rise in air.
  // The fallback keeps legacy technical poses in direct canvas unit tests.
- const l=view.gait?.active?view.gait.left:{x:-9+stride*.55,y:0,planted:true};
- const r=view.gait?.active?view.gait.right:{x:9-stride*.55,y:0,planted:true};
+ // The procedural fallback mirrors its entire body in left headings.
+ // Undo that mirror for measured foot offsets so stance feet stay anchored
+ // at the SAME projected world coordinates on all eight headings.
+ const l=view.gait?.active?{...view.gait.left,
+  x:left?-view.gait.left.x:view.gait.left.x}:{x:-9+stride*.55,y:0,planted:true};
+ const r=view.gait?.active?{...view.gait.right,
+  x:left?-view.gait.right.x:view.gait.right.x}:{x:9-stride*.55,y:0,planted:true};
  ctx.strokeStyle='#182b40';ctx.lineWidth=9;ctx.lineCap='round';
  ctx.beginPath();
  ctx.moveTo(-7,-34);ctx.lineTo((-7+l.x)*.5-2,-19+l.y*.24-(l.planted?0:2));
