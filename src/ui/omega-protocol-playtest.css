@@ -72,6 +72,26 @@
  box-shadow:0 0 25px #ff817e37;padding:7px 16px;border-radius:20px;
  font-size:10px;font-weight:850;letter-spacing:.1em;pointer-events:none;white-space:nowrap
 }
+
+/* Real engine boss health, visually different from the player HP meter. */
+.omega-protocol-boss-alert{
+ display:flex;flex-direction:column;align-items:center;gap:5px;
+ min-width:min(280px,calc(100% - 20px));
+ border-radius:11px;white-space:normal;text-align:center;
+}
+.omega-protocol-boss-hp{
+ width:100%;height:7px;overflow:hidden;border-radius:10px;
+ background:#180e1a;box-shadow:inset 0 0 0 1px #efab9c4f
+}
+.omega-protocol-boss-hp i{
+ display:block;height:100%;border-radius:10px;
+ background:linear-gradient(90deg,#ff7a9b,#ffd2a0);transition:width .12s linear;
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-boss-alert{top:47px;min-width:170px;max-width:calc(100% - 300px);gap:2px;font-size:8px;padding:3px 7px}
+ .omega-protocol-boss-hp{height:4px}
+}
+
 .omega-protocol-controls{position:absolute;inset:0;pointer-events:none;z-index:4}
 .omega-protocol-pad{
  position:absolute;bottom:clamp(40px,5vh,60px);left:clamp(14px,4vw,46px);
