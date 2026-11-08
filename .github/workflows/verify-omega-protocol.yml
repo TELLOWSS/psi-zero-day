@@ -1,0 +1,29 @@
+name: Verify OMEGA PROTOCOL roguelite core
+
+on:
+  pull_request:
+    paths:
+      - 'src/domain/omega-protocol-run.ts'
+      - 'tests/omega-protocol-run.test.ts'
+      - '.github/workflows/verify-omega-protocol.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  protocol-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Run deterministic roguelite contract
+        run: npx vitest run tests/omega-protocol-run.test.ts --maxConcurrency=1
