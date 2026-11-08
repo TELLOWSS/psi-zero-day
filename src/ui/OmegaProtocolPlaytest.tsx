@@ -405,7 +405,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
         aria-valuemax={snapshot.bossMaxHp} aria-valuenow={Math.ceil(snapshot.bossHp)}>
         <i style={{width:Math.max(0,Math.min(100,100*snapshot.bossHp/Math.max(1,snapshot.bossMaxHp)))+'%'}} />
        </div>}
-      </div>
+      </div>}
     {snapshot.bossTelegraph&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-phase" role="status">
       <strong>{snapshot.bossTelegraph.attack==='crane_drop'?'크레인 집중 낙하':'제어 코어 전력 방출'}</strong>
       <span>{snapshot.bossTelegraph.phase==='warning'
