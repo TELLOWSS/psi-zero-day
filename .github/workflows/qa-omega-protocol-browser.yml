@@ -20,6 +20,7 @@ on:
       - 'content/art/omega-approved-v1.json'
       - 'public/assets/omega/approved/**'
       - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-encounter-stage.ts'
       - 'src/domain/omega-protocol-navigation.ts'
       - 'src/ui/omega-protocol-playtest.css'
       - 'src/engine/omega-protocol-combat.ts'
