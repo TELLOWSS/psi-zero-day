@@ -1,11 +1,11 @@
 # PSI : ZERO DAY — OMEGA PROTOCOL / Special Edition
-Status: **DRAFT GAMEPLAY RULES PROTOTYPE** (no released game, no menu card, no Production merge).
+Status: **DRAFT — REAL WATCH-ENGINE INTERNAL QA LAB** (no released mode, no public menu card, no Production merge).
 
 ## Product direction
 Build an original, high-replayability 2.5D roguelite action **special mode** while preserving the existing SIGNAL GUARD and SIGNAL WATCH campaigns unchanged. Keep original workplace-safety identity, industrial enemy taxonomy, OMEGA/AIRA character art, premium equipment ownership and baseline damage logic separate from the new run.
 This is not an entitlement to use the unfinished OMEGA master-character skin.
 
-## Current technical implementation (pure domain, no UI)
+## Seeded planning and progression contracts (pure domain)
 - Module: \`src/domain/omega-protocol-run.ts\`.
 - Deterministic 32-bit-seeded encounter director, no \`Math.random\`; 5 sectors × 3 waves = 15 waves and mid/final boss encounters at wave 9 and 15.
 - Encounter variety: existing Watch-type threats (no invented server inventory) plus changing environmental modifier: crosswind, reduced visibility, unstable footing or standard.
@@ -25,3 +25,23 @@ This is not an entitlement to use the unfinished OMEGA master-character skin.
 
 ## Release/branch rules
 The current prototype lives on its own draft PR based on \`main\`, isolated from PR #234's 49-file art work. Do **not** merge both as one unverified change. The special-mode's menu CTA stays absent until the playable loop works, and the OMEGA master skin stays inaccessible until real signed-off assets and achievement requirements pass.
+
+
+## 2026-11-08 integration: real Watch combat physics in an isolated session
+
+**Implemented on PR #235, not main:**
+- \`SurvivorsEngine.enableProtocolEncounter()\` is an explicit opt-in per engine instance. It disables old campaign automatic spawns, signature events, stage-star/victory settlement and XP level-up during that instance, while preserving the existing movement, attack/projectile, collision, contact damage, dodge and targeting systems. The default Watch mode runs with the new flag OFF.
+- \`SurvivorsEngine.spawnProtocolEncounter(...)\` calls the actual engine's private hazard creator for 1–32 validated hazards. The planned run caps active threats at **15**. Two boss waves instantiate actual CRANE_BOSS hazard physics, but cannot end the native campaign or be eliminated by a single huge Shout hit.
+- \`src/engine/omega-protocol-combat.ts\` bridges deterministic 15-wave encounter plans to real spawned enemy instances, terminal damage and wave settlement; it freezes the real engine for the 3-choice intermission and resumes after a selected temporary upgrade. Specific cards call actual \`applyPerk()\` to change weapon/passive behavior; mobility/survival cards change the current isolated engine actor's stats only.
+- \`tests/omega-protocol-combat.test.ts\` simulates seeded real spawn coordinates, Watch movement, award intermissions, all fifteen waves and both bosses, run-only builds, pause/death/abandon, and non-mutating default Watch engine behavior. Running individual synthetic clear actions in tests is NOT a full user playthrough.
+- \`tests/omega-protocol-performance.test.ts\` profiles 360 simulation steps at 60Hz and logs Node/CI CPU step cost, projectile and hazard maxima. It **cannot** establish mobile GPU FPS, heat, memory pressure or touch responsiveness.
+- \`src/ui/OmegaProtocolPlaytest.tsx\` is an opt-in keyboard/touch internal Canvas QA screen. It draws basic geometric placeholders for enemies and the player; **no OMEGA premium art** is granted. It supports pause, seeded retry, combat progress, 3-choice cards and loss/win. An internal route \`?omegaLab=1\` is available only when Vite \`DEV\` or explicit \`VITE_OMEGA_PROTOCOL_LAB=1\`; the default live build does not expose a menu item or entry path.
+- No changes were made to Watch's persistent stage records, player wallet, cosmetic ownership, paid item counts, premium inventory, campaign difficulty awards, or store schema. No save is written by the special edition.
+
+**Real release acceptance is separate from developer tests:** new OMEGA animation is still warped/derived and 320 masks still lack artist signoff. The v3 archive was also found to contain a **0-byte** \`OMEGA_finish_front_8x2.webp\`. A repaired v3.1 *candidate* ZIP was delivered separately in chat (not in GitHub and not release-approved), but this does not fix gait/occlusion quality. PR #234 art QA and real Android/tablet performance must pass on their own merits before enabling the cosmetic.
+
+### Remaining QA gates (not completed by PR #235)
+1. Character: human-reviewed source drawings for all 8×20 action frames, individual front/back alpha masks and true equipment/socket fit, approved SHA manifest, independent NE and in-game collision checks.
+2. Device: at least two distinct Android performance tiers, long-run worst-wave FPS/frame-time and memory/thermal budgets, portrait/landscape UI, touch/auto-aim, real pause/resume; collect measured evidence rather than assumptions.
+3. Complete playable mode: actual player run from wave 1→15 with boss telegraphs, viable upgrade combinations, death/retry, audio feedback, accessibility and save continuity.
+4. Release: audit both PRs separately, retain draft status until required QA passes, then opt in to preview/staging before an explicit main/Production release decision.
