@@ -12,9 +12,12 @@ const completeCombat=(s:OmegaProtocolCombatSession)=>{
 const finishField=(s:OmegaProtocolCombatSession)=>{
  const field=s.field;
  if(!field)throw Error('Missing field plan');
- s.engine.state.player.x=field.plan.event.target.x;
- s.engine.state.player.y=field.plan.event.target.y;
- expect(s.interact()).toEqual({success:true,reason:'EVENT_COMPLETE'});
+ for(const [i,step] of field.plan.event.steps.entries()){
+  s.engine.state.player.x=step.target.x;
+  s.engine.state.player.y=step.target.y;
+  expect(s.interact()).toEqual({success:true,reason:i===field.plan.event.steps.length-1?'EVENT_COMPLETE':'STEP_COMPLETE'});
+  expect(s.field?.progress.completedSteps).toBe(i+1);
+ }
  expect(s.run.wave).toBe(field.plan.wave);
  expect(s.field?.progress.phase).toBe('exit');
  s.engine.state.player.x=field.plan.exit.x;
@@ -28,6 +31,10 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
    1,1,1,2,2,2,3,3,3,4,4,4,5,5,5
   ]);
   expect(new Set(plans.map(p=>p.event.kind)).size).toBe(3);
+  expect(plans.filter(p=>p.event.kind==='power_lockout').every(p=>p.event.steps.length===3)).toBe(true);
+  expect(plans.filter(p=>p.event.kind==='worker_evacuation').every(p=>p.event.steps.length===2)).toBe(true);
+  expect(plans.filter(p=>p.event.kind==='structure_stabilization').every(p=>p.event.steps.length===3)).toBe(true);
+  expect(plans.every(p=>new Set(p.event.steps.map(step=>step.id)).size===p.event.steps.length)).toBe(true);
   expect(new Set(plans.map(p=>p.sectorName)).size).toBe(5);
   expect(plans.every(p=>p.entry.x!==p.exit.x&&p.event.target.x!==p.exit.x)).toBe(true);
   for(const p of plans){
@@ -65,8 +72,13 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(s.interact()).toEqual({success:false,reason:'OUT_OF_RANGE'});
   const mission=s.field!.plan.event.target;
   s.engine.state.player.x=mission.x;s.engine.state.player.y=mission.y;
-  expect(s.interact()).toEqual({success:true,reason:'EVENT_COMPLETE'});
+  expect(s.interact()).toEqual({success:true,reason:'STEP_COMPLETE'});
   expect(s.interact()).toEqual({success:false,reason:'OUT_OF_RANGE'});
+  for(const [i,step] of s.field!.plan.event.steps.entries()){
+   if(i===0)continue;
+   s.engine.state.player.x=step.target.x;s.engine.state.player.y=step.target.y;
+   expect(s.interact().reason).toBe(i===s.field!.plan.event.steps.length-1?'EVENT_COMPLETE':'STEP_COMPLETE');
+  }
   expect(s.snapshot.field?.progress.exitUnlocked).toBe(true);
   const exit=s.field!.plan.exit;
   s.engine.state.player.x=exit.x;s.engine.state.player.y=exit.y;
