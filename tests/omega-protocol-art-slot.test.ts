@@ -76,9 +76,9 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   Object.assign(m,{artistSignoff:'restored for isolated test'});
   expect(omegaCanRenderApprovedArt(m,true)).toBe(true);
   Object.assign((m.frames.E as OmegaApprovedSpriteFrame[])[4]!,{
-   actorSha256:'0'.repeat(64),
+   actorSha256:m.frames.E[0]!.actorSha256,
   });
-  // 0 is a valid shape, but duplicates break 160 unique actor digests.
+  // Two valid SHA-shaped entries for one binary digest must be rejected.
   expect(omegaCanRenderApprovedArt(m,true)).toBe(false);
   const wrong=positive('badtype');
   Object.assign(wrong,{artistSignoff:8});
