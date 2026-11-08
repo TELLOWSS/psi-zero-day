@@ -51,6 +51,33 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   expect(plantedEvents).toBeGreaterThan(10);
   expect(heldEvents).toBe(0);
  });
+ it('locks world stance and bounds visible foot reach in all eight directions',()=>{
+  const vectors=[
+   [1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],
+  ] as const;
+  for(const [dx,dy] of vectors){
+   const track=new OmegaGroundedGait();
+   track.advance({x:700,y:450},0,1);
+   let previous:{x:number;y:number}|null=null;
+   let landings=0,maxRadius=0;
+   for(let i=1;i<=180;i++){
+    const world={x:700+2*dx*i,y:450+2*dy*i};
+    const pose=track.advance(world,i/60,1);
+    expect(pose.active).toBe(true);
+    maxRadius=Math.max(maxRadius,
+     Math.hypot(pose.left.x,pose.left.y),Math.hypot(pose.right.x,pose.right.y));
+    if(pose.left.landed||pose.right.landed)landings++;
+    if(pose.left.planted){
+     const planted={x:world.x-.22*world.y+pose.left.x,y:.78*world.y+pose.left.y};
+     if(previous)expect(Math.hypot(planted.x-previous.x,planted.y-previous.y))
+      .toBeLessThan(1e-5);
+     previous=planted;
+    }else previous=null;
+   }
+   expect(maxRadius).toBeLessThan(33);
+   expect(landings).toBeGreaterThan(10);
+  }
+ });
  it('holds idle while a joystick pushes against solid cover',()=>{
   const track=new OmegaGroundedGait();
   track.advance({x:100,y:300},0,1);
