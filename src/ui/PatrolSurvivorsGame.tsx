@@ -3339,7 +3339,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const omegaDrawn=omegaEquippedRef.current && omegaGateRef.current.playable
               && drawOmegaRuntimeSkin(ctx,OMEGA_APPROVED_RELEASE,omegaGateRef.current,omegaCacheRef.current,{
                 moving:playerPose.moving,
-                dashing:player.isDashing,
+                dashing:Boolean(player.isDashing),
                 hit:playerPose.reaction>0,
                 shooting:playerPose.action>0,
                 ultimate:false,
