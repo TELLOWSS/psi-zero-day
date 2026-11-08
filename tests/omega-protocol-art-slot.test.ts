@@ -1,4 +1,5 @@
 import {describe,it,expect} from 'vitest';
+import {readFileSync} from 'node:fs';
 import {OMEGA_DIRECTIONS} from '../src/ui/omega-protocol-actor-render';
 import {
  OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,
@@ -102,4 +103,24 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   expect(drawOmegaApprovedActor(empty.ctx,manifest,true,pending,sample)).toBe(false);
   expect(empty.calls).toHaveLength(0);
  });
+ it('does not mistake the offline 8×6 directional preview for released art',()=>{
+  const data=JSON.parse(readFileSync(new URL(
+   '../content/art/omega-protocol-8dir-tech-preview-20261108.json',import.meta.url,
+  ),'utf8')) as {
+   status:string;playable:boolean;artistApproved:boolean;totalPreviewPng:number;
+   finalRequiredFrames:number;finalRequiredMasks:number;githubBinaryAssetsIncluded:boolean;
+   runtimeReleasePermitted:boolean;archiveSha256:string;
+  };
+  expect(data.status).toBe('TECHNICAL_PREVIEW_ONLY');
+  expect(data.playable).toBe(false);
+  expect(data.artistApproved).toBe(false);
+  expect(data.githubBinaryAssetsIncluded).toBe(false);
+  expect(data.runtimeReleasePermitted).toBe(false);
+  expect(data.totalPreviewPng).toBe(48);
+  expect(data.finalRequiredFrames).toBe(160);
+  expect(data.finalRequiredMasks).toBe(320);
+  expect(data.archiveSha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(OMEGA_PROTOCOL_APPROVED_ART).toBeNull();
+ });
+
 });
