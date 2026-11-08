@@ -121,9 +121,9 @@ export class OmegaProtocolCombatSession {
    else this.engine.state.player.damageMultiplier+=.03;
   }else{
    switch(id){
-    case 'dash_reflex':p.dashMaxCooldown=Math.max(1,p.dashMaxCooldown-.16);break;
+    case 'dash_reflex':p.dashMaxCooldown=Math.max(1,(p.dashMaxCooldown??3.2)-.16);break;
     case 'rapid_step':p.speed+=14;break;
-    case 'phase_boots':p.dashMaxCooldown=Math.max(1,p.dashMaxCooldown-.2);p.speed+=4;break;
+    case 'phase_boots':p.dashMaxCooldown=Math.max(1,(p.dashMaxCooldown??3.2)-.2);p.speed+=4;break;
     case 'recovery_protocol':p.hp=Math.min(p.maxHp,p.hp+12);break;
     case 'shield_matrix':p.maxHp+=12;p.hp+=12;break;
    }
