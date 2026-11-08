@@ -83,3 +83,19 @@ The image-derived foot-position marks are **not** a skeleton, actual foot joints
 Independent rear-right (NE) source art was attempted again. The image generator returned a promotional collage, not the requested isolated full-body NE image. It was **rejected** from the asset pack. The mirror defect remains. No result from marketing key art or IK math has been substituted for a final 8-way character atlas.
 
 **Next genuine art gate:** artist-approved NE view, six uniquely authored gait poses for each direction, pelvis/ankle/weapon sockets, pre/post-occlusion layers, live character selection with actual equipment/ranged-fire integration and 4-device gameplay acceptance testing.
+
+## 2026-11-08 / Joint-anchor annotation lab v1 (next art handoff)
+
+A downloadable offline artist-annotation package has been created and verified locally:
+`PSI_ZERO_DAY_OMEGA_RIG_ANCHOR_LAB_V1.zip` (the atlas is **not** uploaded to runtime assets).
+
+- `tools/omega-rig-annotation-lab.html`: standalone HTML with the existing quarter-size 1536×1536 reference atlas; no network or paid API.
+- Every one of 48 source frames has independently editable guide points for head, chest, both hips, knees, feet, wrists and equipment. All initial anchors are explicitly **estimates**, not joint recognition.
+- Drag points manually by mouse/touch; choose E/SE/S/SW/W/NW/N/NE, replay six phases, optionally inspect the preceding frame as a ghost.
+- A two-bone knee IK suggestion acts on the user's specified hips and feet. It changes JSON guide coordinates **only**, not pixel art or the game's animator.
+- Export all 48 frame records as a local JSON review, or import prior reviews. No account uploads or hidden storage.
+- The GitHub test `tests/omega-rig-annotation-lab.test.ts` exercises controls, IK proposals, reset and export in a mocked DOM. Local Node smoke: PASS.
+- Chromium headless UI screenshot test timed out in the current sandbox. An actual desktop/mobile browser session was **not** verified.
+- **Release gate remains closed:** source NE is mirrored; gait art consists of pixel deformations, human-approved joint anchors and true walk/attack sprites do not exist, and no playable character is enabled.
+
+This is the first usable manual artist review handoff. A future commit can consume approved reviewed JSON as **input data**, but only after all 48 frames have been calibrated and fully redrawn where needed.
