@@ -16,7 +16,7 @@ function mockCanvas(){
    return (...args:unknown[])=>{events.push({op:String(key),args});};
   },
   set(){return true;},
- }) as CanvasRenderingContext2D;
+ }) as unknown as CanvasRenderingContext2D;
  return {ctx,events};
 }
 describe('AIRA V2 artist-identity-preserving native tactical sidearm overlay',()=>{
