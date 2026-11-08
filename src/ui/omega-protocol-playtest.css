@@ -33,3 +33,23 @@
 .omega-protocol-rewards button small{font-size:11px;color:#b0bddb}
 .omega-protocol-warning{max-width:1400px;margin:12px auto}
 @media(max-width:640px){.omega-protocol-lab{padding:9px}.omega-protocol-lab header{align-items:center}.omega-protocol-lab header>button{font-size:11px;padding:8px}.omega-protocol-stats>div{flex-basis:31%;padding:7px;font-size:10px}.omega-protocol-rewards>div{grid-template-columns:1fr}.omega-protocol-rewards button{gap:4px}.omega-protocol-pad{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px)}}
+
+
+/* QA arena: preserve layout and touch responsiveness under portrait & landscape. */
+.omega-protocol-controls-hint{max-width:1400px;margin:7px auto 0;color:#a8c5d7;font-size:11px;line-height:1.5}
+.omega-protocol-pad{touch-action:none;user-select:none;-webkit-user-select:none}
+.omega-protocol-pad button{touch-action:none;min-height:40px}
+.omega-protocol-tools .omega-protocol-action{background:linear-gradient(135deg,#544066,#6c355d);border-color:#ba86bb;font-weight:800;min-height:44px}
+.omega-protocol-tools .omega-protocol-action:disabled{background:#243447;color:#a3b4c6}
+.omega-protocol-arena canvas{touch-action:pan-y;image-rendering:auto;max-width:100%}
+@media (max-height:440px) and (orientation:landscape){
+ .omega-protocol-lab{padding:7px}
+ .omega-protocol-lab header{margin-bottom:4px}
+ .omega-protocol-lab h1{font-size:24px}
+ .omega-protocol-stats{margin-bottom:5px}
+ .omega-protocol-stats>div{padding:5px}
+ .omega-protocol-lab footer{margin:8px auto}
+ .omega-protocol-pad{grid-template-columns:repeat(3,36px);grid-template-rows:repeat(3,32px)}
+ .omega-protocol-pad button{min-height:32px}
+ .omega-protocol-controls-hint{font-size:10px;margin-top:4px}
+}
