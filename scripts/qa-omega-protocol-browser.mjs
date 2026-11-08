@@ -133,6 +133,7 @@ for(const [name,width,height,checkpoint] of targets){
     title:document.querySelector('h1')?.textContent?.trim(),
     modalTitle:document.querySelector('.omega-protocol-rewards h2')?.textContent?.trim()||null,
     threatCount:document.querySelector('.omega-protocol-threat strong')?.textContent?.trim(),
+    nearThreatCount:Number(document.querySelector('.omega-protocol-arena')?.getAttribute('data-omega-near-threats')??'0'),
     bossBanner:document.querySelector('.omega-protocol-boss-alert')?.textContent?.trim()||null,
     bossMeter:document.querySelector('.omega-protocol-boss-hp')?.getAttribute('aria-valuenow')||null,
     missionTitle:document.querySelector('.omega-protocol-mission strong')?.textContent?.trim()||null,
@@ -194,13 +195,15 @@ for(const [name,width,height,checkpoint] of targets){
   const stretchedCanvas=!metrics.canvas||!metrics.canvasIntrinsic.w||!metrics.canvasIntrinsic.h||
    Math.abs(metrics.canvas.w/metrics.canvas.h-metrics.canvasIntrinsic.w/metrics.canvasIntrinsic.h)>.06;
   const undersizedTouchTarget=width<=844&&metrics.touchTargets.some(b=>b.w<40||b.h<40);
+  const openingHasCombat=name==='desktop'||name==='portrait'||name==='landscape'||name==='combat-action'
+   ? metrics.nearThreatCount>=2 : true;
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
     correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,errors,
-    authoredArt,actualRepoBrowser:true,originalAiraArtApproved:false};
+    authoredArt,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
