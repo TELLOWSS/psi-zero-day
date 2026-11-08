@@ -93,6 +93,7 @@ import recreationText from '../../content/localization/survivors-recreation-ko.j
 import {persistStoreWallet,readClearRewardClaims,readDifficultyClearRecords,type StoreWallet} from '../app/survivors-store-wallet';
 import {awardDifficultyClear,type DifficultyClearRecords} from '../domain/survivors-difficulty-records';
 import {omegaOperatorEligibility} from '../domain/omega-operator-unlock';
+import {omegaReleaseDecision} from './omega-combat-art-contract';
 import './omega-operator-preview.css';
 import {settlePatrolCredits} from '../domain/survivors-credit-settlement';
 import storeText from '../../content/localization/survivors-store-ko.json';
@@ -3556,6 +3557,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const masteryFocus=selectedDifficulty==='mastery'?masteryStageFocus(PATROL_STAGES[selectedStage]):null;
   const masteryGoldCount=completedStages.length===50?STAGE_IDS.filter(id=>readDifficultyClearRecords()[id]?.mastery===3).length:0;
   const omegaProgress=omegaOperatorEligibility(completedStages,readDifficultyClearRecords());
+  // Art has not passed signed binary QA; mastery alone never enables this skin.
+  const omegaArtGate=omegaReleaseDecision(omegaProgress.earned,null);
   const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
@@ -4038,7 +4041,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <details open className="survivors-char-select-section survivors-ready-details" hidden={preflightTab!=='agent'}>
               <summary>{combatText.agent_select}</summary>
               <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
-              <section className="omega-operator-preview" data-omega-earned={omegaProgress.earned} aria-label="마스터 전용 오메가 요원 해금 현황">
+              <section className="omega-operator-preview" data-omega-earned={omegaProgress.earned} data-omega-playable={omegaArtGate.playable} aria-label="마스터 전용 오메가 요원 해금 현황">
                 <div className="omega-operator-art"><img src="/assets/reignition/veteran-return.webp" alt="" loading="lazy" decoding="async"/><span>MASTER EXCLUSIVE / OMEGA</span></div>
                 <div className="omega-operator-copy">
                   <small>PSI : ZERO DAY // RE:IGNITION</small>
@@ -4051,7 +4054,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     <progress aria-label="오메가 해금 마스터 3성 진행" value={omegaProgress.mastered} max={omegaProgress.total}/>
                   </div>
                   <p className="omega-operator-state" role="status">{omegaProgress.earned?'해금 업적 달성 · 전용 캐릭터 아트 검수 후 장착 제공':`잠금 · 일반 작전 ${omegaProgress.remainingClears}개 / 마스터 3성 ${omegaProgress.remainingMastered}개 남음`}</p>
-                  <small className="omega-operator-disclaimer">현재는 개발 안내 화면입니다. 플레이어 선택과 전투 캐릭터 변경은 아직 활성화되지 않았습니다.</small>
+                  <small className="omega-operator-disclaimer">전투 아트 24프레임은 후보 시안입니다. 정식 8방향×20프레임, 장비 가림 마스크 및 파일 무결성 검증이 완료되기 전까지 OMEGA 장착은 차단됩니다.</small>
                 </div>
               </section>
               <div className="survivors-char-cards">
