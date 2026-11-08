@@ -14,7 +14,8 @@ const positive=(letter:string):OmegaApprovedSpriteManifest=>{
    actor:'/assets/omega/approved/'+letter+'_'+d+'_'+i+'_actor.png',
    rearMask:'/assets/omega/approved/'+letter+'_'+d+'_'+i+'_rear.png',
    frontMask:'/assets/omega/approved/'+letter+'_'+d+'_'+i+'_front.png',
-   actorSha256:'a'.repeat(64),rearSha256:'b'.repeat(64),
+   actorSha256:(1+OMEGA_DIRECTIONS.indexOf(d)+i*8).toString(16).padStart(64,'0'),
+   rearSha256:'b'.repeat(64),
    frontSha256:'c'.repeat(64),
   } as OmegaApprovedSpriteFrame)),
  ])) as OmegaApprovedSpriteManifest['frames'];
@@ -60,6 +61,11 @@ describe('OMEGA art release slot: no provisional character is misrepresented',()
   const invalid=positive('teste');
   Object.assign((invalid.frames.E as OmegaApprovedSpriteFrame[])[0]!,{actor:'/private.png'});
   expect(omegaCanRenderApprovedArt(invalid,true)).toBe(false);
+  const duplicates=positive('testg');
+  Object.assign((duplicates.frames.NE as OmegaApprovedSpriteFrame[])[19]!,{
+   actorSha256:duplicates.frames.E[0]!.actorSha256,
+  });
+  expect(omegaCanRenderApprovedArt(duplicates,true)).toBe(false);
  });
  it('samples eight headings and exact 20-frame action windows without changing physics',()=>{
   expect(OMEGA_SPRITE_ACTIONS).toHaveLength(20);
