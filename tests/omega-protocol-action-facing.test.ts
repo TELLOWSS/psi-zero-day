@@ -83,7 +83,11 @@ describe('OMEGA action-facing without altering Watch physics or fire rate',()=>{
    weaponFacingX:body.weaponX,weaponFacingY:body.weaponY,
    moving:false,time:0,dashing:false,shooting:body.shooting,
   });
-  expect(rotations).toHaveLength(1);
-  expect(Math.abs(rotations[0]!)).toBeCloseTo(Math.PI);
+  // Renderer now rotates the kinetic torso and the independently aimed
+  // weapon. The final transform, NOT the first torso transform, is the real
+  // Watch fire bearing (east shot while AIRA's body is facing west).
+  expect(rotations).toHaveLength(2);
+  expect(Math.abs(rotations[0]!)).toBeLessThan(.4);
+  expect(Math.abs(rotations.at(-1)!)).toBeCloseTo(Math.PI);
  });
 });
