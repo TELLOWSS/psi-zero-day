@@ -112,6 +112,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const watchMasterPercent=Math.round(Math.max(0,Math.min(100,status.watchMastered/50*100)));
  const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const nextChallenge=resolveHomeNextChallenge(status,Boolean(props.onGuard),Boolean(props.onWatch));
+ const omegaEarned=status.watchClears===50&&status.watchMastered===50;
+ const omegaMastered=Math.max(0,Math.min(50,status.watchMastered));
  const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
  const selectTheme=(next:HomeTheme)=>{
   setTheme(next);
@@ -209,6 +211,15 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       <div className="rg-stats">
        <div><span>GUARD CLEAR</span><strong>{status.guardClears}<small>/6</small></strong><progress max={6} value={status.guardClears} aria-label="가드 작전 클리어 수"/><small>{guardUnlocked?'마스터 ★★★ '+status.guardMastered+'/6':'6개 작전 완료 시 마스터 해금'}</small></div>
        <div><span>WATCH CLEAR</span><strong>{status.watchClears}<small>/50</small></strong><progress max={50} value={status.watchClears} aria-label="워치 스테이지 클리어 수"/><small>{watchUnlocked?'마스터 ★★★ '+status.watchMastered+'/50':'50개 스테이지 완료 시 마스터 해금'}</small></div>
+      </div>
+      <div className="rg-omega-unlock" data-omega-earned={omegaEarned} aria-label="OMEGA 마스터 전용 캐릭터 업적">
+       <span className="rg-omega-symbol" aria-hidden="true">Ω</span>
+       <div className="rg-omega-unlock-copy">
+        <small>MASTER EXCLUSIVE / OMEGA OPERATOR</small>
+        <strong>{omegaEarned?'마스터 요원 업적 달성':'마스터 전용 요원 · 잠금'}</strong>
+        <span>{omegaEarned?'8방향 전투 아트 제작·검수 후 장착 가능':`시그널 워치 일반 50/50 · 마스터 3★ ${omegaMastered}/50 달성 시 업적 해금`}</span>
+       </div>
+       <span className="rg-omega-tag">{omegaEarned?'ART IN PRODUCTION':'LOCKED'}</span>
       </div>
       <div className="rg-next-challenge" data-next-mode={nextChallenge.mode} aria-label="실제 기록 기반 다음 도전">
        <span className="rg-next-kicker">NEXT CHALLENGE <small>VERIFIED SAVE</small></span>

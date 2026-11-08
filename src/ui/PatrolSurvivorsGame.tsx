@@ -92,6 +92,11 @@ import {completedPatrolStages,stageClearReward,type StageClearReward} from '../d
 import recreationText from '../../content/localization/survivors-recreation-ko.json';
 import {persistStoreWallet,readClearRewardClaims,readDifficultyClearRecords,type StoreWallet} from '../app/survivors-store-wallet';
 import {awardDifficultyClear,type DifficultyClearRecords} from '../domain/survivors-difficulty-records';
+import {omegaOperatorEligibility} from '../domain/omega-operator-unlock';
+import {omegaReleaseDecision} from './omega-combat-art-contract';
+import {OMEGA_APPROVED_RELEASE,OMEGA_RELEASE_BINARY_AUDIT_PASSED} from './omega-approved-release';
+import {OmegaRuntimeImageCache,drawOmegaRuntimeSkin} from './omega-runtime-skin';
+import './omega-operator-preview.css';
 import {settlePatrolCredits} from '../domain/survivors-credit-settlement';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import resultText from '../../content/localization/survivors-result-ko.json';
@@ -473,6 +478,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
+  const [omegaEquipped,setOmegaEquipped]=useState(false);
+  const omegaEquippedRef=useRef(false);
+  const omegaCacheRef=useRef<OmegaRuntimeImageCache>(new OmegaRuntimeImageCache());
+  useEffect(()=>()=>{omegaCacheRef.current.clear();},[]);
   const preparedCharacter=usePreparedSurvivorsActor(selectedChar,spritesRef.current.characterMaps);
   useEffect(() => {
     let disposed = false;
@@ -3324,7 +3333,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             applyActorTorsoTransform(ctx,playerPose,sprH,Boolean(ACTOR_RIGS[charMapSpr.src.split('/').pop()??'']));
             drawPremiumPresence(ctx,spritesRef.current.premiumPresence,engine.state.premiumGear?.equipped??[],engine.state.gameTime,reducedMotionRef.current,visualBudget.detailBusy,direction.auraStrength*visualBudget.presenceStrength);
             ctx.restore();
-            // Draw grounded with feet touching ground contact shadow (0, 0)
+            // Approved OMEGA art is only rendered after the Master achievement,
+            // artist signoff and independent build-time 480-file binary QA pass.
+            // Any missing image falls back to the previously verified base actor.
+            const omegaDrawn=omegaEquippedRef.current && omegaGateRef.current.playable
+              && drawOmegaRuntimeSkin(ctx,OMEGA_APPROVED_RELEASE,omegaGateRef.current,omegaCacheRef.current,{
+                moving:playerPose.moving,
+                dashing:Boolean(player.isDashing),
+                hit:playerPose.reaction>0,
+                shooting:playerPose.action>0,
+                ultimate:false,
+                finished:false,
+                facingRadians:facingAngle,
+                gameTimeSeconds:engine.state.gameTime,
+                reducedMotion:reducedMotionRef.current,
+              },sprH);
+            // Preserve the exact original art, PPE and equipment fallback.
+            if(!omegaDrawn){
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
             // Static scene fill remains under reduced motion; only combat pulses use flash strength.
@@ -3332,6 +3357,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18)*feelSettingsRef.current.flash);}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current,Boolean(spritesRef.current.wearables?.communication),Boolean(spritesRef.current.wearables?.normalWorn));
+            }
 
           } else {
             // High-Quality Procedural 2.5D Construction Safety Officer
@@ -3553,6 +3579,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
   const masteryFocus=selectedDifficulty==='mastery'?masteryStageFocus(PATROL_STAGES[selectedStage]):null;
   const masteryGoldCount=completedStages.length===50?STAGE_IDS.filter(id=>readDifficultyClearRecords()[id]?.mastery===3).length:0;
+  const omegaProgress=omegaOperatorEligibility(completedStages,readDifficultyClearRecords());
+  // Art has not passed signed binary QA; mastery alone never enables this skin.
+  const omegaArtGate=omegaReleaseDecision(omegaProgress.earned,OMEGA_APPROVED_RELEASE,OMEGA_RELEASE_BINARY_AUDIT_PASSED);
+  const omegaGateRef=useRef(omegaArtGate);
+  omegaGateRef.current=omegaArtGate;
+  if(!omegaArtGate.playable)omegaEquippedRef.current=false;
   const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
@@ -4035,6 +4067,30 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <details open className="survivors-char-select-section survivors-ready-details" hidden={preflightTab!=='agent'}>
               <summary>{combatText.agent_select}</summary>
               <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
+              <section className="omega-operator-preview" data-omega-earned={omegaProgress.earned} data-omega-playable={omegaArtGate.playable} aria-label="마스터 전용 오메가 요원 해금 현황">
+                <div className="omega-operator-art"><img src="/assets/reignition/veteran-return.webp" alt="" loading="lazy" decoding="async"/><span>MASTER EXCLUSIVE / OMEGA</span></div>
+                <div className="omega-operator-copy">
+                  <small>PSI : ZERO DAY // RE:IGNITION</small>
+                  <h3>OMEGA OPERATOR <em>마스터 전용 요원</em></h3>
+                  <p>메인화면 캐릭터를 전투에서 직접 사용할 수 있도록 제작하는 특별 요원입니다. 캐릭터별 8방향 전투 애니메이션과 장비 착용 연출은 별도로 검증합니다.</p>
+                  <div className="omega-operator-milestones">
+                    <span>일반 작전 <strong>{omegaProgress.clears} / {omegaProgress.total}</strong></span>
+                    <progress aria-label="오메가 해금 일반 스테이지 진행" value={omegaProgress.clears} max={omegaProgress.total}/>
+                    <span>마스터 3성 <strong>{omegaProgress.mastered} / {omegaProgress.total}</strong></span>
+                    <progress aria-label="오메가 해금 마스터 3성 진행" value={omegaProgress.mastered} max={omegaProgress.total}/>
+                  </div>
+                  <p className="omega-operator-state" role="status">{omegaProgress.earned?'해금 업적 달성 · 전용 캐릭터 아트 검수 후 장착 제공':`잠금 · 일반 작전 ${omegaProgress.remainingClears}개 / 마스터 3성 ${omegaProgress.remainingMastered}개 남음`}</p>
+                  <small className="omega-operator-disclaimer">새 8방향×20프레임 제작 후보는 수작업 승인 전이며, 장비 가림 마스크·원본 SHA·실기기 검증이 통과하기 전까지 게임 장착은 비활성화됩니다.</small>
+                  <button type="button" className="omega-operator-equip" data-omega-selected={omegaEquipped} disabled={!omegaArtGate.playable}
+                    onClick={()=>{
+                      if(!omegaArtGate.playable)return;
+                      omegaEquippedRef.current=!omegaEquippedRef.current;
+                      setOmegaEquipped(omegaEquippedRef.current);
+                    }}>
+                    {omegaArtGate.playable?(omegaEquipped?'OMEGA 전용 요원 장착 중 · 해제':'OMEGA 전용 요원 장착'):'전투 원화·장비 가림 검수 후 장착 가능'}
+                  </button>
+                </div>
+              </section>
               <div className="survivors-char-cards">
                 {CANONICAL_CHAR_IDS.map(id => CHARACTER_PROFILES[id]).filter(Boolean).map(char => (
                   <button

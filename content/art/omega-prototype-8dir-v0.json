@@ -1,0 +1,29 @@
+{
+  "identity": "AIRA_MASTER",
+  "assetVersion": "directional-concept-v0",
+  "status": "CONCEPT_REVIEW_ONLY",
+  "canonicalMainArt": "/assets/reignition/veteran-return.webp",
+  "sourcePack": "PSI_ZERO_DAY_OMEGA_8direction_prototype.zip (chat deliverable; not committed to repository)",
+  "sourceLayout": {"columns": 4, "rows": 2, "cellWidth": 384, "cellHeight": 512},
+  "candidateAtlas": {"columns": 8, "rows": 1, "width": 3072, "height": 512},
+  "hasTransparentAlpha": true,
+  "approvedForGameplay": false,
+  "directions": [
+    {"id":"E",  "sourceCell":2, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"SE", "sourceCell":1, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"S",  "sourceCell":7, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"SW", "sourceCell":6, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"W",  "sourceCell":5, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"NW", "sourceCell":4, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"N",  "sourceCell":3, "mirrored":false, "status":"PENDING_ART_REVIEW"},
+    {"id":"NE", "sourceCell":4, "mirrored":true,  "status":"REQUIRES_NEW_REAR_RIGHT_ART"}
+  ],
+  "requiredForGameplay": [
+    "approved unique eight-direction model and PPE/gear asymmetry",
+    "8x6 transparent locomotion contact atlas",
+    "8x8 attack, dash/hit atlases",
+    "8x14 ultimate atlas and 8x10 finish atlas",
+    "rigged body/gear sockets and consistent foot anchors",
+    "actual on-device combat, save, performance and accessibility validation"
+  ]
+}

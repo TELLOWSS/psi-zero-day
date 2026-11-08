@@ -1,0 +1,46 @@
+{
+  "id": "OMEGA_AIRA_VECTOR_GAIT_NE_V1",
+  "stage": "DIRECTIONAL_KEYFRAME_TECHNICAL_ART",
+  "approvedForGame": false,
+  "approvedForCommercialArt": false,
+  "independentNEVectorGuide": true,
+  "previousConceptNEIsStillMirrored": true,
+  "newVectorAtlas": {
+    "width": 3072,
+    "height": 3072,
+    "cols": 8,
+    "rows": 6,
+    "frameWidth": 384,
+    "frameHeight": 512
+  },
+  "source": "User download PSI_ZERO_DAY_OMEGA_RIGGED_GAIT_NE_v1.zip",
+  "sourceZipSha256": "7d4b3a385202b9c9715f93e4e7cb59219f5677fa2e3d5f5778bdae585c645a8e",
+  "atlasWebpSha256": "d5432f8097a3469bf3a77e9c176fa4ff962e1eb05e286721b1a448d45c035d4b",
+  "sourceGeneratorInZip": "build_omega_keyframes.py",
+  "sourceQATestInZip": "validate_omega_keyframes.py",
+  "reviewScope": "48 individual 2D vector poses, 16 coordinate anchors per pose, 8x6 atlas + standalone NE vector.",
+  "measured": {
+    "frameCount": 48,
+    "allDirectionsUniqueFrames": true,
+    "neVsMirroredNwAlphaIoU": [
+      0.6798,
+      0.704,
+      0.66,
+      0.6875,
+      0.6994,
+      0.6654
+    ],
+    "floorStanceLockedY": true,
+    "allAnchorsWithinFrame": true,
+    "unitQA": "passed"
+  },
+  "blockers": [
+    "Art differs in fidelity from canonical hero image; artist redraw required",
+    "Original premium standalone NE anime-quality illustration still missing",
+    "Character mesh weights and hand-authored occlusion not approved",
+    "Game actor renderer and collision equipment tests not connected",
+    "No actual device performance or animator sign-off"
+  ],
+  "developerCode": "src/ui/omega-equipment-socket-guide.ts",
+  "lock": "OMEGA_NOT_EQUIPPABLE"
+}

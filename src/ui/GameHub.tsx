@@ -352,7 +352,27 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const [showSongPlayer, setShowSongPlayer] = useState(false);
   const [showManual, setShowManual] = useState(false);
   const [page, setPage] = useState<HubPage>('home');
-  const [endgameStatus] = useState(()=>readEndgameHomeStatus(typeof window==='undefined'?undefined:window.localStorage));
+  const [endgameStatus,setEndgameStatus] = useState(()=>readEndgameHomeStatus(typeof window==='undefined'?undefined:window.localStorage));
+  // A returning player must see newly earned Master medals without a hard refresh.
+  // The wallet emits psi:meta-updated after durable settlement; storage covers
+  // other tabs and focus covers returning from a full-screen game.
+  useEffect(()=>{
+    const refresh=()=>{
+      try{setEndgameStatus(readEndgameHomeStatus(window.localStorage));}
+      catch{/* A denied storage read must not unmount the game hub. */}
+    };
+    const onVisible=()=>{if(document.visibilityState==='visible')refresh();};
+    window.addEventListener('psi:meta-updated',refresh);
+    window.addEventListener('storage',refresh);
+    window.addEventListener('focus',refresh);
+    document.addEventListener('visibilitychange',onVisible);
+    return ()=>{
+      window.removeEventListener('psi:meta-updated',refresh);
+      window.removeEventListener('storage',refresh);
+      window.removeEventListener('focus',refresh);
+      document.removeEventListener('visibilitychange',onVisible);
+    };
+  },[]);
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
   const [showTitleSettings, setShowTitleSettings] = useState(false);

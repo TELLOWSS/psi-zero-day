@@ -1,0 +1,62 @@
+{
+  "schema": "OMEGA_VFX_V2_PROVENANCE",
+  "identity": "OMEGA_AIRA",
+  "status": "ORIGINAL_VFX_REVIEW_ART_NOT_GAMEPLAY_CHARACTER",
+  "created": "2026-11-08",
+  "counts": {
+    "actions": 4,
+    "framesPerAction": 8,
+    "transparentFrames": 32,
+    "cell": [
+      384,
+      384
+    ],
+    "atlasGrid": [
+      8,
+      4
+    ],
+    "atlasPixels": [
+      3072,
+      1536
+    ]
+  },
+  "actionOrder": [
+    "muzzle",
+    "dash",
+    "hit",
+    "ultimate"
+  ],
+  "licenseNote": "New procedurally authored VFX, no third-party sprite sheets. Character render and rights approval are separate.",
+  "fileReferences": {
+    "zip": "PSI_ZERO_DAY_OMEGA_ORIGINAL_VFX_V2.zip",
+    "zipSha256": "909b9e94d676dc658a43c9a0d9eab01eb3b0b4d7310aab15b32e197d68595f44",
+    "atlasPngSha256": "d25b752022d37594745cb326df56563005e419258a36c534a8b971a98340b253",
+    "atlasWebpSha256": "98c74193dcb9a901500901df70bf6c4b12f4bb9b71e9ee1689782cf35b79d372",
+    "reviewHtml": "omega-vfx-review.html",
+    "previewGifSha256": "d9a7a84d0ccc2011f6d57a94d195958e6d72fa5d6e0da11d8868b3c8232b1ac4"
+  },
+  "quality": {
+    "all32FramesUnique": true,
+    "all32FramesRgba": true,
+    "alphaCoverageRange": "5.4%-19.8% (threshold alpha>20)",
+    "testedSizes": [
+      "1280x900",
+      "390x844"
+    ],
+    "chromiumInlineQA": "PASS: image loaded, switching, stepping, reduced-motion, no JS errors, no horizontal overflow",
+    "directFileQA": "NOT VERIFIED: file:// navigation blocked in automated environment",
+    "releaseApproved": false,
+    "fullWatchCharacterIntegration": false,
+    "requiredNext": [
+      "real character action art 8 x 20 approved",
+      "aligned directional muzzle socket",
+      "equipment occlusion masks",
+      "actual Android/Tablet gameplay profiling",
+      "signed binary release audit"
+    ]
+  },
+  "code": "src/ui/omega-combat-vfx.ts",
+  "tests": "tests/omega-combat-vfx.test.ts",
+  "sourceGenerator": "build_omega_vfx_v2.py (included in user ZIP; not yet a repo file)",
+  "repositoryBinariesImported": false
+}

@@ -1,0 +1,81 @@
+{
+  "id": "PSI-OMEGA-8x6-MOTION-STUDY-v0.1",
+  "status": "CONCEPT_DEFORMATION_ONLY",
+  "releaseApproved": false,
+  "doNotInstallAsPlayableCharacter": true,
+  "basis": "Previously generated eight static RGBA directional concept images, locally pixel-warped into six distinct phase references per direction",
+  "rightsReview": "Pending final model identity, character design and commercial content review",
+  "assetDelivery": "Separate user-download ZIP: PSI_ZERO_DAY_OMEGA_WALK_8x6_STUDY_20261108.zip; NOT committed as GitHub production binary",
+  "atlas": {
+    "name": "omega-walk-MOTION-STUDY-8x6.png",
+    "sha256": "9fbac6535fe41ed572d942a3c6612289dc7cbb0544e8b640cb759cf237188b41",
+    "sizeBytes": 7305971,
+    "width": 3072,
+    "height": 3072,
+    "frames": 48,
+    "rows": 6,
+    "columns": 8,
+    "cellWidth": 384,
+    "cellHeight": 512,
+    "directions": [
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE"
+    ],
+    "arrangement": "x = directionIndex × 384, y = gaitPhaseIndex × 512",
+    "transparentRGBA": true
+  },
+  "qa": {
+    "all48Cells": "pass",
+    "frameUniqueWithinEachDirection": "pass",
+    "transparentAlpha": "pass",
+    "floorBoundaryAlignment": "pass",
+    "naturalKneeArt": "not_verified",
+    "stanceFootIK": "not_verified",
+    "independentNEDirection": "fail_mirrored_reference",
+    "equipmentOcclusion": "not_verified",
+    "mobileDevicePerformance": "not_run",
+    "mobileAtlasDimensions": "pass",
+    "mobileFPS": "not_run"
+  },
+  "gate": "node scripts/check-omega-operator-art.mjs --release (MUST still fail until genuinely authored atlases + metadata pass)",
+  "preview": "omega-motion-preview.html is offline and has manual direction/frame/speed/reduced-motion controls",
+  "mobileAtlas": {
+    "name": "omega-walk-MOTION-STUDY-mobile-8x6.webp",
+    "sha256": "b61d0cfa6f6bccf1e344cb21836e4e285ed38e947d5f9ba4e76d1213c2a2d650",
+    "sizeBytes": 1405236,
+    "width": 1536,
+    "height": 1536,
+    "rows": 6,
+    "columns": 8,
+    "cellWidth": 192,
+    "cellHeight": 256,
+    "rgbaRamBytes": 9437184,
+    "ratioComparedToFullRes": "0.25",
+    "note": "Prototype preview asset only. Device FPS and visual quality NOT verified."
+  },
+  "reviewLabV2": {
+    "status": "OFFLINE_REVIEW_ONLY",
+    "repoSource": "tools/omega-motion-review-v2.html",
+    "zipFilename": "PSI_ZERO_DAY_OMEGA_MOTION_REVIEW_LAB_V2.zip",
+    "zipSha256": "1eb96bf719d6b2af7428cf7caf7c38702523ec7e339a17beb443ce50fce31efb",
+    "offlineHtmlSha256": "e2ce16fd9a002ee2b41a4fd68666ccf5b81bd09b59b02771fe0b1157035d9fe3",
+    "includes": "Offline player with 8-direction controls, frame stepping, onion-skin, alpha-foot proxies, NE/NW mirror comparison, local JSON review export",
+    "browserQA": "BLOCKED_BY_ADMINISTRATOR_IN_THIS_AUTOMATED_ENVIRONMENT",
+    "javascriptSyntax": "pass",
+    "gameplayPlayable": false,
+    "artistApproved": false
+  },
+  "legIKGuide": {
+    "source": "src/ui/omega-leg-ik.ts",
+    "status": "NUMERICAL_FOOT_TARGETS_ONLY",
+    "motionRenderingIntegrated": false,
+    "hardwarePlaybackTested": false,
+    "proprietaryRigArtApproved": false
+  }
+}
