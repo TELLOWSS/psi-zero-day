@@ -5,6 +5,22 @@ import {
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
 const zero={moveX:0,moveY:0,triggerAction:false};
+/** Advance with bounded real-game frames, never feeding a 1.55s hitch into
+ * the production boss timer (which correctly rejects frame deltas > 0.25s).
+ * A 5ms buffer avoids floating-point drift at an exact phase boundary. */
+function advanceBossFrames(
+ initial:ReturnType<typeof omegaCreateBossTelegraph>,seconds:number,
+ actor:{x:number;y:number},hpFraction:number,
+){
+ let state=initial,hit=false,wentToStrike=false,remaining=seconds+0.005;
+ while(remaining>1e-8){
+  const dt=Math.min(0.2,remaining);
+  const result=omegaAdvanceBossTelegraph(state,dt,actor,hpFraction);
+  state=result.next;hit=hit||result.hit;wentToStrike=wentToStrike||result.wentToStrike;
+  remaining-=dt;
+ }
+ return {next:state,hit,wentToStrike};
+}
 function toWave(s:OmegaProtocolCombatSession,target:number){
  while(s.run.wave<target){
   s.engine.state.hazards=[];
@@ -59,7 +75,7 @@ describe('OMEGA PROTOCOL boss warning/strike combat acceptance',()=>{
   const a={x:500,y:400};
   const initial=omegaCreateBossTelegraph(9,a);
   const moved={x:900,y:650};
-  const v=omegaAdvanceBossTelegraph(initial,initial.warningDuration,moved,1);
+  const v=advanceBossFrames(initial,initial.warningDuration,moved,1);
   expect(v.wentToStrike).toBe(true);
   expect(v.hit).toBe(false);
   expect(v.next.center).toEqual(a);
@@ -68,11 +84,11 @@ describe('OMEGA PROTOCOL boss warning/strike combat acceptance',()=>{
  });
  it('re-locks new warnings and speeds up at half boss HP without zero warning time',()=>{
   let p=omegaCreateBossTelegraph(15,{x:300,y:200},.8);
-  p=omegaAdvanceBossTelegraph(p,p.warningDuration,{x:300,y:200},.8).next;
+  p=advanceBossFrames(p,p.warningDuration,{x:300,y:200},.8).next;
   p=omegaAdvanceBossTelegraph(p,.20,{x:300,y:200},.8).next;
   expect(p.phase).toBe('recovery');
   const moved={x:800,y:680};
-  p=omegaAdvanceBossTelegraph(p,p.timer,moved,.4).next;
+  p=advanceBossFrames(p,p.timer,moved,.4).next;
   expect(p).toMatchObject({phase:'warning',empowered:true,attackNumber:1,lane:'vertical'});
   expect(p.center).toEqual(moved);
   expect(p.warningDuration).toBeGreaterThanOrEqual(1.15);
