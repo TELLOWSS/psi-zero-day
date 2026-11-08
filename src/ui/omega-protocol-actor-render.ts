@@ -115,6 +115,13 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
   }
   ctx.globalAlpha=1;
  }
+ // Narrow only the upper silhouette in side view, moderately in diagonal
+ // view, and keep full shoulder breadth at front/back. Keep lower limbs and
+ // true collision-corrected stance feet OUTSIDE this perspective transform.
+ // This is an original technical placeholder, not artist-approved 8x20 art.
+ const upperWidth=side?.73:
+  (heading==='SE'||heading==='SW'||heading==='NW'||heading==='NE')?.88:1;
+ ctx.save();ctx.scale(upperWidth,1);
  // Ribbed tactical torso / jacket.
  ctx.fillStyle='#1b3049';
  ctx.beginPath();ctx.moveTo(-20,-54+nod);ctx.lineTo(19,-54+nod);
@@ -204,7 +211,8 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
   ctx.moveTo(mx+2,-2);ctx.lineTo(mx+11,-7);
   ctx.moveTo(mx+2,2);ctx.lineTo(mx+11,7);ctx.stroke();
  }
- ctx.restore();
+ ctx.restore(); // rifle-local transform
+ ctx.restore(); // upper-body perspective only
  if(view.hurt){
   ctx.strokeStyle='#ff7f9f';ctx.lineWidth=3;ctx.globalAlpha=.85;
   ctx.beginPath();ctx.arc(0,-42,26,Math.PI*.1,Math.PI*1.1);ctx.stroke();

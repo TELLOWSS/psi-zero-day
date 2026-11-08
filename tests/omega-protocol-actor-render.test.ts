@@ -12,6 +12,32 @@ describe('OMEGA PROCEDURAL actor QA (not approved AIRA art)',()=>{
   expect(omegaFieldHeading(0,0)).toBe('S');
   expect(omegaFieldHeading(NaN,0)).toBe('S');
  });
+ it('makes side and diagonal upper-body silhouettes legible without moving feet',()=>{
+  const draw=(facingX:number,facingY:number)=>{
+   const scales:Array<[number,number]>=[];
+   const events:string[]=[];
+   const ctx=new Proxy({},{
+    get(_target,key){return (...args:unknown[])=>{
+     events.push(String(key));
+     if(key==='scale')scales.push(args as [number,number]);
+    };},
+    set(){return true;},
+   }) as unknown as CanvasRenderingContext2D;
+   drawOmegaProtocolActor(ctx,{facingX,facingY,moving:false,
+    time:1,dashing:false,shooting:false});
+   return {scales,events};
+  };
+  const east=draw(1,0),diagonal=draw(1,1),front=draw(0,1),west=draw(-1,0);
+  expect(east.scales).toContainEqual([.73,1]);
+  expect(diagonal.scales).toContainEqual([.88,1]);
+  expect(front.scales).toContainEqual([1,1]);
+  expect(west.scales).toContainEqual([-1,1]);
+  expect(west.scales).toContainEqual([.73,1]);
+  // The ankle and sole geometry must be drawn before upper-body scaling.
+  const firstScale=east.events.indexOf('scale');
+  const sole=east.events.indexOf('fillRect');
+  expect(firstScale).toBeGreaterThan(sole);
+ });
  it('uses actual player input for cosmetic facing without affecting saved combat upgrades',()=>{
   const s=new OmegaProtocolCombatSession(1001,10,false,{fieldTraversal:true});
   expect(s.facing).toEqual({x:0,y:1});
