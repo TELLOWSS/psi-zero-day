@@ -62,8 +62,15 @@ describe('AIRA V2 user-selected eight-direction identity in live Watch Canvas',(
   const c=new OmegaAiraV2CandidateImages();
   const trace=(flags:{shooting?:boolean;dashing?:boolean;hurt?:boolean})=>{
    const moves:number[][]=[];
+   // The mock must support CanvasGradient's methods now that actual source
+   // AIRA V2 firearms have a multi-stop metal and muzzle-light material.
+   const gradient={addColorStop:(_offset:number,_color:string)=>{}};
    const ctx=new Proxy({},{
-    get(_t,k){return(...args:unknown[])=>{if(k==='translate')moves.push(args as number[]);};},
+    get(_t,k){
+     if(k==='createLinearGradient'||k==='createRadialGradient')
+      return ()=>gradient;
+     return(...args:unknown[])=>{if(k==='translate')moves.push(args as number[]);};
+    },
     set(){return true;},
    }) as unknown as CanvasRenderingContext2D;
    drawOmegaAiraV2Candidate(ctx,{
