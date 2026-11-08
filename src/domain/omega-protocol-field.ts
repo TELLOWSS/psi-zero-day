@@ -15,11 +15,17 @@ export interface OmegaFieldObstacle {
  readonly width:number; readonly height:number;
  readonly kind:'container'|'scaffold'|'machine'|'barrier';
 }
+export interface OmegaFieldEventStep{
+ readonly id:string;
+ readonly label:string;
+ readonly target:OmegaFieldPoint;
+}
 export interface OmegaFieldEvent {
  readonly kind:OmegaFieldEventKind;
  readonly label:string;
  readonly instructions:string;
  readonly target:OmegaFieldPoint;
+ readonly steps:readonly OmegaFieldEventStep[];
 }
 export interface OmegaFieldPlan {
  readonly wave:number;
@@ -35,6 +41,7 @@ export interface OmegaFieldProgress {
  readonly phase:OmegaFieldPhase;
  readonly eventComplete:boolean;
  readonly exitUnlocked:boolean;
+ readonly completedSteps:number;
 }
 const sectors=[
  {name:'야간 현장 진입로',floor:'#182838',structures:'#3d6071',accent:'#9fe3fb'},
@@ -56,6 +63,18 @@ export function omegaFieldPlan(seed:number,wave:number):OmegaFieldPlan{
  const local=(wave-1)%3;
  const event=events[(wave+sector+Math.abs(Math.trunc(seed)))%events.length]!;
  const target={x:1040+(local-1)*54,y:235+local*105};
+ const stepData:readonly OmegaFieldEventStep[]=event.kind==='power_lockout'?[
+  {id:'breaker_a',label:'제1 차단기 분리',target:{x:635,y:265}},
+  {id:'breaker_b',label:'제2 차단기 분리',target},
+  {id:'isolation_check',label:'잔류 전원 확인',target:{x:1065,y:380}},
+ ]:event.kind==='worker_evacuation'?[
+  {id:'worker_contact',label:'작업자 위치 확인',target},
+  {id:'safe_handoff',label:'안전 집결지 인계',target:{x:390,y:605}},
+ ]:[
+  {id:'brace_a',label:'A 지지대 설치',target:{x:1065,y:210}},
+  {id:'brace_b',label:'B 지지대 설치',target:{x:635,y:360}},
+  {id:'stability_check',label:'구조물 안정화 확인',target},
+ ];
  const obstacles:OmegaFieldObstacle[]=[
   {id:'cargo',x:240,y:185+local*16,width:170,height:120,kind:'container'},
   {id:'scaffold',x:565,y:680-local*25,width:190,height:115,kind:'scaffold'},
@@ -66,13 +85,18 @@ export function omegaFieldPlan(seed:number,wave:number):OmegaFieldPlan{
   wave,sector,sectorName:sectorTheme.name,
   entry:{x:150,y:450},
   exit:{x:1210,y:730-local*115},
-  event:{...event,target},
+  event:{...event,target:stepData[0]!.target,steps:stepData},
   obstacles,
   palette:{floor:sectorTheme.floor,structures:sectorTheme.structures,accent:sectorTheme.accent},
  };
 }
 export function omegaFieldInitialProgress():OmegaFieldProgress{
- return {phase:'combat',eventComplete:false,exitUnlocked:false};
+ return {phase:'combat',eventComplete:false,exitUnlocked:false,completedSteps:0};
+}
+export function omegaFieldCurrentStep(
+ plan:OmegaFieldPlan,progress:OmegaFieldProgress,
+):OmegaFieldEventStep|null{
+ return progress.phase==='objective'?plan.event.steps[progress.completedSteps]??null:null;
 }
 export function omegaFieldDistance(a:OmegaFieldPoint,b:OmegaFieldPoint):number{
  return Math.hypot(a.x-b.x,a.y-b.y);
