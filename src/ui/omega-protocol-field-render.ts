@@ -27,6 +27,12 @@ export function drawOmegaFieldGround(
  ctx.fillStyle='#263c46';ctx.fillRect(90,388,W-170,132);
  ctx.strokeStyle='#f5ba6388';ctx.lineWidth=4;ctx.setLineDash([22,16]);
  ctx.strokeRect(90,388,W-170,132);ctx.setLineDash([]);
+ // Low-cost, original lane-light details retain contrast in small landscape
+ // views. These are floor markings, not playable collision objects.
+ for(let x=112;x<W-95;x+=110){
+  ctx.fillStyle='#f5b56d';ctx.fillRect(x,385,29,5);
+  ctx.fillStyle='#74c5d5';ctx.fillRect(x+42,519,19,4);
+ }
  const lightPools:readonly (readonly [number,number])[]=[[290,160],[650,260],[1020,220],[1120,710]];
  for(const [x,y] of lightPools){
   const g=ctx.createRadialGradient(x,y,8,x,y,235);
@@ -64,6 +70,32 @@ function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:st
    ctx.beginPath();ctx.moveTo(x,y+dy);ctx.lineTo(x+width,y+dy);ctx.stroke();
   }
  }
+ if(o.kind==='container'){
+  // Distinct cargo door ribs, latch and identification panel.
+  ctx.strokeStyle='#a0bdc8';ctx.lineWidth=2;
+  for(let i=1;i<=5;i++){
+   const px=x+i*width/6;
+   ctx.beginPath();ctx.moveTo(px,y+22);ctx.lineTo(px,y+height+8);ctx.stroke();
+  }
+  ctx.fillStyle='#c3d9da';ctx.fillRect(x+width-29,y+height/2,5,22);
+  ctx.fillStyle='#f4c784';ctx.fillRect(x+10,y+height-5,36,5);
+ }
+ if(o.kind==='machine'){
+  // A readable machine body rather than another anonymous rectangular box.
+  ctx.fillStyle='#111d2b';ctx.fillRect(x+width*.28,y+height*.28,width*.47,height*.43);
+  ctx.fillStyle='#7ae4ee';ctx.fillRect(x+width*.34,y+height*.35,width*.32,height*.13);
+  ctx.fillStyle='#f5bb62';ctx.fillRect(x+width*.35,y+height*.55,width*.19,5);
+  ctx.strokeStyle='#b7dae6';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(x+width*.17,y+height*.76,12,0,Math.PI*2);ctx.stroke();
+ }
+ if(o.kind==='scaffold'){
+  ctx.strokeStyle='#ffe0aa';ctx.lineWidth=2;
+  for(let i=0;i<4;i++){
+   const sx=x+i*width/4;
+   ctx.beginPath();ctx.moveTo(sx,y+32);ctx.lineTo(sx+width/4,y+height+10);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(sx+width/4,y+32);ctx.lineTo(sx,y+height+10);ctx.stroke();
+  }
+ }
  if(o.kind==='barrier'){
   ctx.fillStyle='#f3b34f';
   for(let i=0;i<6;i++){ctx.fillRect(x+i*width/6,y+15,width/13,height);}
@@ -78,6 +110,28 @@ export function drawOmegaFieldMission(
  const active=omegaFieldCurrentStep(plan,progress);
  const pulse=.65+.35*Math.sin(seconds*3);
  ctx.save();
+ // Compass-like in-world objective cue. It indicates bearing, NOT a
+ // collision-free route through the scaffold/container cover.
+ const destination=progress.phase==='exit'?plan.exit:active?.target;
+ if(destination&&Number.isFinite(actor.x)&&Number.isFinite(actor.y)&&Number.isFinite(seconds)){
+  const dx=destination.x-actor.x,dy=destination.y-actor.y;
+  const distance=Math.hypot(dx,dy);
+  if(distance>100){
+   const ux=dx/distance,uy=dy/distance;
+   ctx.save();
+   ctx.translate(actor.x+ux*65,actor.y+uy*65);
+   ctx.rotate(Math.atan2(uy,ux));
+   ctx.globalAlpha=.73+.22*Math.sin(seconds*5);
+   ctx.shadowColor=progress.phase==='exit'?'#7dffd5':'#7ddaf5';
+   ctx.shadowBlur=12;
+   ctx.strokeStyle=progress.phase==='exit'?'#8effd8':'#b2f3ff';
+   ctx.lineWidth=5;ctx.lineJoin='round';ctx.lineCap='round';
+   ctx.beginPath();
+   ctx.moveTo(-12,-11);ctx.lineTo(8,0);ctx.lineTo(-12,11);
+   ctx.stroke();
+   ctx.restore();
+  }
+ }
  for(const [index,step] of plan.event.steps.entries()){
   const target=step.target;
   const completed=index<progress.completedSteps;
