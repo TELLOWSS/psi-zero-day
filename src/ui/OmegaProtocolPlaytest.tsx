@@ -398,7 +398,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const guide=snapshot.field?omegaFieldTargetGuide(
   snapshot.field.plan,snapshot.field.progress,{x:snapshot.playerX,y:snapshot.playerY},
  ):null;
- return <main className="omega-protocol-lab omega-protocol-v2" data-omega-protocol-internal="true">
+ return <main className="omega-protocol-lab omega-protocol-v2"
+  data-omega-protocol-internal="true"
+  data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
+  data-omega-aira-v2-status="user-selected-8-direction-neutral-art">
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
