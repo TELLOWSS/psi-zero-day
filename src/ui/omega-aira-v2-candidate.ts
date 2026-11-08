@@ -1,6 +1,7 @@
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
 import {drawOmegaAiraV2ShotVfx} from './omega-aira-v2-weapon-vfx';
+import {OmegaAiraV2FireFrames} from './omega-aira-v2-fire-frames';
 
 /**
  * AIRA V2: the 2026-11-09 user-selected black/rose tactical design.
@@ -34,9 +35,11 @@ const allowed=new Set<string>(OMEGA_AIRA_V2_HEADINGS);
 interface CandidateImageRecord { image:HTMLImageElement; status:'loading'|'ready'|'failed' }
 export class OmegaAiraV2CandidateImages {
  private readonly cache=new Map<OmegaHeading,CandidateImageRecord>();
+ readonly fireFrames=new OmegaAiraV2FireFrames();
  prepare():void {
   if(typeof Image==='undefined')return;
   for(const heading of OMEGA_AIRA_V2_HEADINGS)this.load(heading);
+  this.fireFrames.prepare();
  }
  private load(heading:OmegaHeading):CandidateImageRecord|null {
   if(typeof Image==='undefined'||!allowed.has(heading))return null;
@@ -98,7 +101,10 @@ export function drawOmegaAiraV2Candidate(
  if(view.hurt)ctx.globalAlpha=.80+.20*Math.sin(t*18)**2;
  // Natural-source aspect ratio 192:336. No horizontal flip.
  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width)),w=h*192/336;
- if(walk&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished){
+ const paintedFire=cache.fireFrames.draw(ctx,heading,view,h*1.14);
+ if(paintedFire){
+  // Real illustrated keyframes take precedence over artificial limb cuts.
+ }else if(walk&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished){
   // Real eight-source articulated gait with two independent boot limbs.
   // Still art is the user's selected V2; this is interim skeletal motion
   // until independent painted production walk frames pass the art gate.
@@ -107,7 +113,7 @@ export function drawOmegaAiraV2Candidate(
   ctx.drawImage(image,-w/2,-h,w,h);
  }
  // Source-dependent actual Watch shot bearing; not a fake static gun flash.
- drawOmegaAiraV2ShotVfx(ctx,view,heading,h);
+ if(!paintedFire)drawOmegaAiraV2ShotVfx(ctx,view,heading,h);
  ctx.restore();
  return true;
 }
