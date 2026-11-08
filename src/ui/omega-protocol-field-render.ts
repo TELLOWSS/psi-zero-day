@@ -14,6 +14,7 @@ import {omegaDrawAuthoredFloor,omegaDrawAuthoredProp} from './omega-protocol-aut
  */
 export function drawOmegaFieldGround(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,
+ includeProps=true,
 ):void{
  const p=plan.palette;
  ctx.fillStyle=p.floor;ctx.fillRect(0,0,W,H);
@@ -48,14 +49,19 @@ export function drawOmegaFieldGround(
  // Actual terrain-aligned artwork, not a static screenshot with baked enemies/HUD.
  omegaDrawAuthoredFloor(ctx,plan);
  // Every detailed object is anchored to an existing native collision solid.
- for(const o of plan.obstacles){
-  if(!omegaDrawAuthoredProp(ctx,plan,o))drawObstacle(ctx,o,p.structures,plan.sector===1);
- }
+ if(includeProps)for(const o of plan.obstacles)drawOmegaFieldProp(ctx,plan,o);
  ctx.font='800 20px system-ui';
  ctx.fillStyle=p.accent;ctx.fillText('SECTOR 0'+plan.sector+' · '+plan.sectorName,45,65);
  ctx.font='600 13px system-ui';
  ctx.fillStyle='#a1c3ce';ctx.fillText('NODE '+String(plan.wave).padStart(2,'0')+' / 15',45,88);
  ctx.restore();
+}
+/** Paint one native solid at its independently sorted depth. */
+export function drawOmegaFieldProp(
+ ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,o:OmegaFieldObstacle,
+):void {
+ if(!omegaDrawAuthoredProp(ctx,plan,o))
+  drawObstacle(ctx,o,plan.palette.structures,plan.sector===1);
 }
 function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:string,sectorOne=false){
  const {x,y,width,height}=o;
