@@ -3,6 +3,7 @@ import {
  type GameInput,PERK_CATALOG,
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
+import {omegaStageEncounterPositions} from '../domain/omega-protocol-encounter-stage';
 import {
  omegaCreateBossTelegraph,omegaAdvanceBossTelegraph,
  type OmegaBossTelegraph,
@@ -120,6 +121,21 @@ export class OmegaProtocolCombatSession {
   }
   if(plan.isBoss)specs.push({type:'CRANE_BOSS',boss:true,hpScale:1.3+plan.intensity*.35,speedScale:1});
   this.engine.spawnProtocolEncounter(specs);
+  if(this.currentField&&this.fieldTraversal){
+   // Native Watch spawns at map edges by design. That makes our player-
+   // controlled close-camera first field visually empty. Stage existing
+   // REAL threats where the player can see them, without creating fake actors
+   // or changing their Watch AI, damage, speed, HP, or projectile behavior.
+   const hazards=this.engine.state.hazards;
+   const positions=omegaStageEncounterPositions(
+    this.currentField,this.engine.state.player,
+    hazards.map(h=>({x:h.x,y:h.y,radius:h.radius,isStageBoss:h.isStageBoss})),
+   );
+   for(let i=0;i<hazards.length;i++){
+    hazards[i]!.x=positions[i]!.x;
+    hazards[i]!.y=positions[i]!.y;
+   }
+  }
   this.bossPattern=null;
   if(this.fieldTraversal&&(plan.wave===9||plan.wave===15)){
    const boss=this.engine.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
