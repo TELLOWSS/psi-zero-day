@@ -159,6 +159,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,10,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+  if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
@@ -277,7 +278,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  };
  const togglePause=()=>{
   if(session.run.phase!=='battle')return;
-  if(paused)session.resume();else session.pause();
+  if(paused)session.resume();
+  else{
+   session.pause();
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
+  }
   setPaused(!paused);setSnapshot(session.snapshot);
  };
  const guide=snapshot.field?omegaFieldTargetGuide(
