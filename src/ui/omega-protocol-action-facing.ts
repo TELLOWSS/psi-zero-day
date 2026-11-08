@@ -31,9 +31,8 @@ export class OmegaActorFacingController{
  private angle:number|null=null;
  private index=2; // down / south
  private lastTime:number|null=null;
- private wasLocked=false;
  reset():void{
-  this.angle=null;this.index=2;this.lastTime=null;this.wasLocked=false;
+  this.angle=null;this.index=2;this.lastTime=null;
  }
  advance(
   gameTime:number,requested:OmegaFacingVector,
@@ -69,7 +68,6 @@ export class OmegaActorFacingController{
    if(Math.abs(wrap(this.angle-center))>QUARTER/2+HYSTERESIS)
     this.index=asIndex(this.angle);
   }
-  this.wasLocked=locked;
   return this.snapshot(shot,fireDir??{x:Math.cos(this.angle),y:Math.sin(this.angle)});
  }
  private snapshot(shooting:boolean,aim:OmegaFacingVector):OmegaActorDirectionPose{
