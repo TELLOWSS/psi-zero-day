@@ -36,7 +36,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.save();ctx.translate(h.x,h.y);
   // Enemy bodies stand upright over the same 3/4 projected ground.
   ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
-  drawOmegaProtocolEnemy(ctx,h,state.gameTime);
+  drawOmegaProtocolEnemy(ctx,h,state.gameTime,{finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15});
   ctx.restore();
  }
  for(const projectile of state.projectiles){
@@ -295,7 +295,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </div>}
       {interactionMessage&&<em>{interactionMessage}</em>}
     </div>}
-    {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
+    {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">
+       {snapshot.plan.wave===15?'FINAL BOSS · 중앙 제어 코어':'BOSS 01 · 크레인 위협체'}
+       {snapshot.bossHp!==null&&snapshot.bossMaxHp!==null&&<div className="omega-protocol-boss-hp"
+        role="meter" aria-label="보스 남은 체력" aria-valuemin={0}
+        aria-valuemax={snapshot.bossMaxHp} aria-valuenow={Math.ceil(snapshot.bossHp)}>
+        <i style={{width:Math.max(0,Math.min(100,100*snapshot.bossHp/Math.max(1,snapshot.bossMaxHp)))+'%'}} />
+       </div>}
+      </div>
     {snapshot.bossTelegraph&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-phase" role="status">
       <strong>{snapshot.bossTelegraph.attack==='crane_drop'?'크레인 집중 낙하':'제어 코어 전력 방출'}</strong>
       <span>{snapshot.bossTelegraph.phase==='warning'
