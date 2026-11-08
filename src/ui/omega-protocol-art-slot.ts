@@ -44,7 +44,7 @@ export const OMEGA_PROTOCOL_APPROVED_ART:OmegaApprovedSpriteManifest|null=null;
 export const OMEGA_PROTOCOL_BINARY_AUDIT_PASSED=false;
 
 const sha256=/^[a-f\d]{64}$/i;
-const localAsset=/^\/assets\/omega\/approved\/[a-z0-9_-]+\.(png|webp)$/;
+const localAsset=/^\/assets\/omega\/approved\/[a-z0-9_-]+\.(png|webp)$/i;
 const accepted=(path:string)=>localAsset.test(path)&&!path.includes('..');
 const isFrame=(frame:OmegaApprovedSpriteFrame|undefined,action:OmegaSpriteAction)=>{
  if(!frame||frame.action!==action||frame.authoredUnmirrored!==true)return false;
