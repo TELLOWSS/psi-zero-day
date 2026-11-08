@@ -14,6 +14,10 @@ export interface OmegaAiraV2WalkFrame{
  readonly frameIndex:number;
  readonly leftLegAngle:number;
  readonly rightLegAngle:number;
+ readonly leftFootLift:number;
+ readonly rightFootLift:number;
+ readonly leftStrideX:number;
+ readonly rightStrideX:number;
  readonly torsoX:number;
  readonly torsoY:number;
  readonly direction:OmegaHeading;
@@ -34,20 +38,24 @@ export function omegaAiraV2WalkFrame(heading:OmegaHeading,phase:number):OmegaAir
  const strength=directions[heading];
  return {
   phase:safe,frameIndex:step,direction:heading,
-  leftLegAngle:wave*.092*strength,
-  rightLegAngle:-wave*.092*strength,
+  leftLegAngle:wave*.13*strength,
+  rightLegAngle:-wave*.13*strength,
+  leftFootLift:Math.max(0,wave)*11*strength,
+  rightFootLift:Math.max(0,-wave)*11*strength,
+  leftStrideX:wave*5*strength,
+  rightStrideX:-wave*5*strength,
   torsoX:Math.sin(safe*Math.PI*4)*1.1,
   torsoY:-Math.abs(wave)*1.5,
  };
 }
 function legCut(
  ctx:CanvasRenderingContext2D,img:CanvasImageSource,
- side:'left'|'right',angle:number,
+ side:'left'|'right',angle:number,lift:number,stride:number,
 ):void {
  const sx=side==='left'?0:96;
  const hip=side==='left'?leftHipX:rightHipX;
  ctx.save();
- ctx.translate(hip,cutY);
+ ctx.translate(hip+stride,cutY-lift);
  ctx.rotate(angle);
  ctx.translate(-hip,-cutY);
  ctx.drawImage(img,sx,cutY,96,sourceH-cutY,sx,cutY,96,sourceH-cutY);
@@ -69,8 +77,8 @@ export function drawOmegaAiraV2WalkRig(
  ctx.translate(-sourceW/2,-sourceH);
  // Legs FIRST. Whole top of original illustration overlaps the seam so
  // the hip remains visually continuous; boots keep the world-space pivot.
- legCut(ctx,img,'left',frame.leftLegAngle);
- legCut(ctx,img,'right',frame.rightLegAngle);
+ legCut(ctx,img,'left',frame.leftLegAngle,frame.leftFootLift,frame.leftStrideX);
+ legCut(ctx,img,'right',frame.rightLegAngle,frame.rightFootLift,frame.rightStrideX);
  ctx.save();
  ctx.translate(frame.torsoX,frame.torsoY);
  ctx.drawImage(img,0,0,sourceW,overlapY,0,0,sourceW,overlapY);
