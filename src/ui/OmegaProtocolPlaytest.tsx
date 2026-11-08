@@ -97,7 +97,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const cssWidth=container.clientWidth||1120;
    // Keep mobile drawing workload proportional to on-screen size.
    const pixelWidth=Math.max(320,Math.min(1120,Math.round(cssWidth*Math.min(1.25,window.devicePixelRatio||1))));
-   const pixelHeight=Math.round(pixelWidth*720/1120);
+   const pixelHeight=Math.max(160,Math.min(1200,Math.round((container.clientHeight||720)*Math.min(1.25,window.devicePixelRatio||1))));
    if(canvas.width!==pixelWidth||canvas.height!==pixelHeight){
     canvas.width=pixelWidth;canvas.height=pixelHeight;
    }
