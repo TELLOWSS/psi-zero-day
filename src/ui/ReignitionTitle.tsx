@@ -154,7 +154,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
       <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
-     {theme==='cinematic'&&<img className="rg-veteran-character" src="/assets/reignition/veteran-return.webp" alt="" loading="eager" decoding="async"/>}
+     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2" src="/assets/omega/aira-v2/hero-splash.webp" alt="AIRA V2 캐릭터 원화" loading="eager" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}/>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
      <div className="rg-hero-shade" aria-hidden="true"/>
      <div className="rg-cinematic-rings" aria-hidden="true"><span/><span/></div>
