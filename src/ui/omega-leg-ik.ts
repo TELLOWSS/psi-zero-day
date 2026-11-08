@@ -79,7 +79,7 @@ export function omegaSolveLeg(
  };
  return {
   hip,knee,ankle,desiredAnkle,upperLength,lowerLength,
-  adjustedForReach:Math.abs(reach-actualDistance)>1e-5,
+  adjustedForReach:actualDistance<minReach||actualDistance>maxReach,
  };
 }
 
