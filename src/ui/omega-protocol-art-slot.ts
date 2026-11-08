@@ -83,7 +83,7 @@ export function omegaCanRenderApprovedArt(
  memo.set(manifest,valid);
  return valid;
 }
-export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:boolean;finished?:boolean}>):
+export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:boolean;finished?:boolean;actionAge?:number}>):
  Readonly<{heading:OmegaHeading;frame:number;action:OmegaSpriteAction}>{
  const heading=omegaFieldHeading(view.facingX,view.facingY);
  const action:OmegaSpriteAction=view.finished?'finish':view.ultimate?'ultimate':
@@ -94,7 +94,12 @@ export function omegaSpriteFrameForView(view:OmegaActorView&Readonly<{ultimate?:
   action==='hit'?{start:12,count:3,fps:12}:
   action==='ultimate'?{start:15,count:3,fps:12}:{start:18,count:2,fps:6};
  const t=Number.isFinite(view.time)?Math.max(0,view.time):0;
- const subframe=action==='walk'&&!view.moving?0:Math.floor(t*group.fps)%group.count;
+ const age=Number.isFinite(view.actionAge)?Math.max(0,view.actionAge!):t;
+ // Run cycles loop; one-shot attack/dash/hurt/ultimate/finish poses CLAMP
+ // instead of jumping to arbitrary mid-animation frame at global gameTime.
+ const subframe=action==='walk'?
+  (view.moving?Math.floor(t*group.fps)%group.count:0):
+  Math.min(group.count-1,Math.floor(age*group.fps));
  return {heading,frame:group.start+subframe,action};
 }
 type OmegaImageLike=CanvasImageSource&Readonly<{
@@ -136,7 +141,7 @@ export function drawOmegaApprovedActor(
  manifest:OmegaApprovedSpriteManifest|null,
  buildAudit:boolean,
  cache:OmegaApprovedImageCache,
- view:OmegaActorView&Readonly<{ultimate?:boolean;finished?:boolean}>,
+ view:OmegaActorView&Readonly<{ultimate?:boolean;finished?:boolean;actionAge?:number}>,
  height=86,
 ):boolean{
  if(!omegaCanRenderApprovedArt(manifest,buildAudit)||!manifest||
