@@ -1,4 +1,5 @@
 import type {OmegaWalkPose} from './omega-protocol-grounded-gait';
+import {drawOmegaDirectionalGear,drawOmegaDirectionalHead} from './omega-protocol-directional-identity';
 export const OMEGA_DIRECTIONS=['E','SE','S','SW','W','NW','N','NE'] as const;
 export type OmegaHeading=typeof OMEGA_DIRECTIONS[number];
 export function omegaFieldHeading(x:number,y:number):OmegaHeading{
@@ -160,6 +161,7 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.beginPath();ctx.moveTo(-19,-49+nod);ctx.lineTo(-21,-34+nod+stride*.17);
  ctx.moveTo(17,-49+nod);ctx.lineTo(23,-35+nod-stride*.17*armMove);ctx.stroke();
  ctx.fillStyle='#26364a';ctx.fillRect(-25,-39+nod,11,7);ctx.fillRect(17,-41+nod,10,7);
+ drawOmegaDirectionalGear(ctx,heading,nod);
  // Hair frame overlays the face and reads as silver, never a helmet.
  // The actual safety helmet belongs to the construction-world context,
  // while her signature orange-lens goggles are worn on her head.
@@ -172,22 +174,7 @@ export function drawOmegaProtocolActor(ctx:CanvasRenderingContext2D,view:OmegaAc
  ctx.lineTo(-11,-66+nod);ctx.closePath();ctx.fill();
  ctx.strokeStyle='#f5efff';ctx.lineWidth=3;
  ctx.beginPath();ctx.moveTo(-11,-70+nod);ctx.lineTo(6,-78+nod);ctx.stroke();
- // Two amber glass goggle lenses + black nose bridge, above the fringe.
- ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(-5,-79+nod,6,0,Math.PI*2);
- ctx.arc(7,-79+nod,6,0,Math.PI*2);ctx.fill();
- ctx.fillStyle='#ec9d51';ctx.beginPath();ctx.arc(-5,-79+nod,4,0,Math.PI*2);
- ctx.arc(7,-79+nod,4,0,Math.PI*2);ctx.fill();
- ctx.fillStyle='#ffe0a3';ctx.fillRect(-7,-82+nod,3,2);ctx.fillRect(5,-82+nod,3,2);
- if(!back){
-  ctx.fillStyle='#392c45';
-  ctx.fillRect(side?3:-7,-64+nod,side?4:3,2);
-  if(!side)ctx.fillRect(4,-64+nod,3,2);
-  ctx.strokeStyle='#bf6d93';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(-2,-59+nod);ctx.lineTo(3,-59+nod);ctx.stroke();
- }
- // Pink and silver strand across left eye emphasizes AIRA's custom silhouette.
- ctx.strokeStyle='#f3efff';ctx.lineWidth=4;ctx.beginPath();
- ctx.moveTo(-6,-77+nod);ctx.quadraticCurveTo(-2,-68+nod,-9,-59+nod);ctx.stroke();
+ drawOmegaDirectionalHead(ctx,heading,nod);
  // The weapon rotates in eight screen-relative directions, so idle and
  // shot poses never claim a projectile was launched behind the character.
  // Mirrored left poses flip the local weapon as well; no physics rotation.

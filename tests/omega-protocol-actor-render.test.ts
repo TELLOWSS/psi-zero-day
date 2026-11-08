@@ -66,7 +66,9 @@ describe('OMEGA PROCEDURAL actor QA (not approved AIRA art)',()=>{
    // 2 curved high-ponytail layers + magenta braid detail,
    // orange eyewear, white/black tactical jacket and independent radio.
    expect(idle.filter(v=>v.method==='bezierCurveTo').length).toBeGreaterThanOrEqual(6);
-   expect(idle.filter(v=>v.method==='arc'&&v.args[2]===4).length).toBe(2);
+   // Front: two amber lenses. Side: one large lens, rear: no eye lens.
+   const lens4=idle.filter(v=>v.method==='arc'&&v.args[2]===4).length;
+   expect(lens4).toBe(x===0&&y===1?2:0);
    const muzzle=(records:typeof idle)=>
     records.filter(v=>v.method==='arc'&&v.args[2]===5.5).length;
    expect(muzzle(idle)).toBe(0);
