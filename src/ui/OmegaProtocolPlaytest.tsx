@@ -168,7 +168,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const targetWave=qa==='reward'?3:qa==='finalBoss'?15:9;
  for(let safety=0;safety<15&&session.run.wave<targetWave;safety++){
   clearAndOperate(true);
-  if(session.run.phase==='reward'&&(qa==='boss'||session.run.wave<targetWave))
+  if(session.run.phase==='reward'&&(qa==='boss'||qa==='finalBoss'||session.run.wave<targetWave))
    session.selectUpgrade(session.run.offers[0]!);
  }
  return session;

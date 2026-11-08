@@ -78,9 +78,11 @@ for(const [name,width,height,checkpoint] of targets){
     const thumb=await page.locator('.omega-protocol-stick-thumb').evaluate(
      el=>el.style.transform,
     );
-    stickTest={beforeX,beforeY,afterX,afterY,thumb,
-     pass:afterX>beforeX+3&&afterY>beforeY+3&&
-      thumb==='translate3d(0,0,0)'};
+    // Chromium normalizes style.transform to 'translate3d(0px, 0px, 0px)';
+    // pixel units in the CSS serialization are not a thumb motion failure.
+    const thumbCentered=/^translate3d\(\s*0(?:px)?\s*,\s*0(?:px)?\s*,\s*0(?:px)?\s*\)$/.test(thumb);
+    stickTest={beforeX,beforeY,afterX,afterY,thumb,thumbCentered,
+     pass:afterX>beforeX+3&&afterY>beforeY+3&&thumbCentered};
    }
   }
   const metrics=await page.evaluate(()=>{
