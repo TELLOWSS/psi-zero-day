@@ -2,7 +2,7 @@ import {useCallback,useEffect,useRef,useState} from 'react';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
-import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion} from './omega-protocol-field-render';
+import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import './omega-protocol-playtest.css';
 
@@ -31,6 +31,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
  }
  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ const telegraph=session.snapshot.bossTelegraph;
+ if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  for(const h of state.hazards){
   if(h.hp<=0)continue;
   const tint=threatColors[h.type]??'#ddd';
@@ -295,6 +297,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       {interactionMessage&&<em>{interactionMessage}</em>}
     </div>}
     {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">BOSS ENCOUNTER · 특수 위협 격리</div>}
+    {snapshot.bossTelegraph&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-phase" role="status">
+      <strong>{snapshot.bossTelegraph.attack==='crane_drop'?'크레인 집중 낙하':'제어 코어 전력 방출'}</strong>
+      <span>{snapshot.bossTelegraph.phase==='warning'
+       ?'공격 예고 · 회피까지 '+snapshot.bossTelegraph.timer.toFixed(1)+'초'
+       :snapshot.bossTelegraph.phase==='strike'?'공격 발동 · 위험구역 이탈'
+       :'재정비 · 반격 기회'}</span>
+      {snapshot.bossTelegraph.empowered&&<em>PHASE 2</em>}
+    </div>}
     <div className="omega-protocol-controls">
      <div className="omega-protocol-pad" aria-label="모바일 이동 방향">
       {buttonDirections.map(d=><button type="button" key={d.label} disabled={snapshot.run.phase!=='battle'||paused}
