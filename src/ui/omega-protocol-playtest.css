@@ -401,3 +401,134 @@
 @media(prefers-reduced-motion:reduce){
  .omega-protocol-stick-thumb{transition:none}
 }
+
+
+/* OMEGA CJK AND FOCUS — source-browser and Android-compatible system fonts.
+   The QA runner installs Noto CJK locally; production phones use installed
+   Korean system fonts. Never rely solely on Latin-only Segoe UI/system-ui. */
+.omega-protocol-lab{
+ font-family:'Noto Sans CJK KR','Noto Sans KR','Apple SD Gothic Neo',
+  'Malgun Gothic','SamsungOneKorean','Nanum Gothic',
+  'Arial Unicode MS',system-ui,sans-serif;
+}
+.omega-protocol-lab button,.omega-protocol-lab input{
+ font-family:inherit;
+}
+.omega-protocol-run-tools .omega-protocol-control-switch{
+ color:#aefff0;border-color:#4ca8ac9c;background:#163d49;
+ font-weight:850;letter-spacing:0;white-space:nowrap;
+}
+.omega-protocol-control-switch[aria-pressed="true"]{
+ color:#ffe2f7!important;background:#603b5b!important;border-color:#bd7fa8!important;
+}
+/* First-person-looking combat is not served by four gigantic cardinal keys.
+   Default to a single, touch-proportional stick; preserve an explicit option
+   to display all four legacy direction buttons for accessibility. */
+.omega-protocol-pad[data-omega-pad-mode="analog"]{
+ width:116px!important;height:116px!important;display:block!important;
+ gap:0;touch-action:none;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"]>button:not(.omega-protocol-stick){
+ display:none!important;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"]>.omega-protocol-stick{
+ display:flex!important;width:100%!important;height:100%!important;
+ align-items:center;justify-content:center;
+ border-radius:50%;min-height:0;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"] .omega-protocol-stick-thumb{
+ width:38px;height:38px;
+ background:radial-gradient(circle at 31% 28%,#c7fff6,#55baca 72%);
+ border-width:2px;
+}
+.omega-protocol-pad[data-omega-pad-mode="arrows"] .omega-protocol-stick-thumb{
+ width:20px;height:20px;
+}
+.omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission>span{
+ display:none;
+}
+.omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission{
+ gap:2px;min-width:0;
+}
+/* Key fighting information remains; less editorial text covers the arena. */
+@media(max-width:760px){
+ .omega-protocol-mission{max-width:calc(100% - 112px)}
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{bottom:34px;left:12px}
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{bottom:34px}
+ .omega-protocol-stats>div{backdrop-filter:none}
+ .omega-protocol-mission{backdrop-filter:blur(4px)}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-topbar{min-height:54px;padding:5px 10px}
+ .omega-protocol-tag{font-size:7px;letter-spacing:.12em}
+ .omega-protocol-heading h1{font-size:18px;letter-spacing:.04em}
+ .omega-protocol-exit{font-size:10px!important}
+ .omega-protocol-stats{inset:6px 6px auto;gap:4px;flex-wrap:nowrap}
+ .omega-protocol-stats>div{padding:5px 6px;border-radius:8px}
+ .omega-protocol-wave{min-width:96px!important}
+ .omega-protocol-wave strong{font-size:13px}
+ .omega-protocol-hp{min-width:0!important}
+ .omega-protocol-hp>span{font-size:9px}
+ .omega-protocol-threat{min-width:43px!important}
+ .omega-protocol-threat strong{font-size:14px}
+ .omega-protocol-mission{
+  top:84px;left:8px;transform:none;align-items:flex-start;text-align:left;
+  width:min(246px,calc(100% - 106px));padding:6px 9px;
+  gap:2px;border-radius:9px
+ }
+ .omega-protocol-mission small{font-size:8px}
+ .omega-protocol-mission strong{font-size:12px}
+ .omega-protocol-mission>span{font-size:9px;line-height:1.35}
+ .omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission{
+  width:min(190px,calc(100% - 112px));
+ }
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{
+  width:103px!important;height:103px!important;bottom:41px;left:10px
+ }
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{
+  width:125px;height:125px;bottom:34px;left:9px
+ }
+ .omega-protocol-action-pad{right:8px;bottom:48px;gap:5px}
+ .omega-protocol-action-pad button{width:52px;height:52px;font-size:9px}
+ .omega-protocol-ultimate{width:65px!important;height:65px!important}
+ .omega-protocol-action-pad button.omega-protocol-interact{
+  width:53px;height:53px
+ }
+ .omega-protocol-action-glyph{font-size:18px}
+ .omega-protocol-ultimate .omega-protocol-action-glyph{font-size:23px}
+ .omega-protocol-stage-meta{display:none}
+ .omega-protocol-bottom-toolbar{min-height:42px;padding:3px 6px}
+ .omega-protocol-run-tools{gap:5px;justify-content:space-between}
+ .omega-protocol-run-tools>label{display:none}
+ .omega-protocol-run-tools button{padding:7px 8px;font-size:10px;min-width:0}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-topbar{min-height:34px;padding:3px 10px}
+ .omega-protocol-heading h1{font-size:16px}
+ .omega-protocol-stage-meta{display:none}
+ .omega-protocol-mission{
+  top:47px;left:50%;width:min(212px,calc(100% - 320px));
+  padding:4px 8px;gap:1px
+ }
+ .omega-protocol-mission small{font-size:8px}
+ .omega-protocol-mission strong{font-size:10px}
+ .omega-protocol-mission>span{font-size:8px}
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{
+  width:90px!important;height:90px!important;bottom:13px;left:12px
+ }
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{
+  width:126px;height:126px;bottom:12px;left:12px
+ }
+ .omega-protocol-action-pad{right:11px;bottom:13px;gap:7px}
+ .omega-protocol-action-pad button{width:47px;height:47px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:47px;height:47px}
+ .omega-protocol-ultimate{width:56px!important;height:56px!important}
+ .omega-protocol-bottom-toolbar{min-height:33px;padding:3px 8px}
+ .omega-protocol-run-tools>label{display:none}
+ .omega-protocol-run-tools{width:100%;justify-content:space-between;gap:5px}
+ .omega-protocol-run-tools button{padding:5px 9px;font-size:9px}
+}
+/* Do not apply the browser's Latin font-style expansion to Korean headings. */
+.omega-protocol-mission :is(strong,small,span),
+.omega-protocol-action-pad button,
+.omega-protocol-run-tools button{word-break:keep-all}
