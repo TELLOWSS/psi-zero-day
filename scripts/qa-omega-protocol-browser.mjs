@@ -187,13 +187,18 @@ for(const [name,width,height,checkpoint] of targets){
    const landscape=innerHeight<=430&&innerWidth>innerHeight;
    if(!landscape)return {applicable:false,pass:true};
    const mission=document.querySelector('.omega-protocol-mission')?.getBoundingClientRect();
+   const environment=document.querySelector('.omega-protocol-modifier')?.getBoundingClientRect();
    const canvas=document.querySelector('.omega-protocol-arena canvas')?.getBoundingClientRect();
    if(!mission||!canvas)return {applicable:true,pass:false,reason:'missing bounds'};
    const safeLeft=canvas.left+canvas.width*.31;
    const safeRight=canvas.left+canvas.width*.70;
-   const pass=mission.right<=safeLeft||mission.left>=safeRight;
-   return {applicable:true,pass,
-    missionLeft:mission.left,missionRight:mission.right,safeLeft,safeRight};
+   const missionClear=mission.right<=safeLeft||mission.left>=safeRight;
+   const environmentClear=!!environment&&
+    (environment.right<=safeLeft||environment.left>=safeRight);
+   return {applicable:true,pass:missionClear&&environmentClear,
+    missionClear,environmentClear,missionLeft:mission.left,
+    missionRight:mission.right,environmentLeft:environment?.left,
+    environmentRight:environment?.right,safeLeft,safeRight};
   });
   const compactLandscapeHeader=await page.evaluate(()=>{
    const shortLandscape=window.innerHeight<=430&&window.innerWidth>window.innerHeight;
