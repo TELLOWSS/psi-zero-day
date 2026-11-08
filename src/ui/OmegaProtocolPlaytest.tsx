@@ -6,6 +6,7 @@ import {drawOmegaFieldGround,drawOmegaFieldMission,drawOmegaFieldOcclusion,drawO
 import {omegaQuarterViewCamera,applyOmegaQuarterView} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
+import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from './omega-protocol-art-slot';
 import {omegaAdvanceActorFireCue,omegaActorCueActive,OMEGA_EMPTY_FIRE_CUE,OMEGA_ACTOR_FIRE_CUE_MS,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
@@ -17,7 +18,7 @@ const validKeys=new Set<string>(keys);
 // or present in this branch. Cache allocates images only after a real approval.
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[]){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -55,7 +56,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const shooting=omegaActorCueActive(fireCue,state.gameTime,state.phase==='playing');
  const facing=shooting?{x:fireCue.screenX,y:fireCue.screenY}:session.facing;
  const actorView={
-  facingX:facing.x,facingY:facing.y,moving:session.moving,
+  facingX:facing.x,facingY:facing.y,moving:gait.active,gait,
   time:state.gameTime,dashing:Boolean(p.isDashing),
   shooting,hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
  };
@@ -228,6 +229,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
+  const gaitController=new OmegaGroundedGait();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
@@ -240,7 +242,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const engineEvents=session.engine.drainProjectileFeedback();
    fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
-   const ctx=canvasRef.current?.getContext('2d');if(ctx)drawLab(ctx,session,fireCue,impacts);
+   const player=session.engine.state.player;
+   // Sample after Watch movement and physical cover collision correction.
+   // No actual displacement => do not animate a run cycle.
+   const gait=gaitController.advance(
+    player,session.engine.state.gameTime,session.plan.wave,
+    Boolean(player.isDashing)||session.run.phase!=='battle');
+   const ctx=canvasRef.current?.getContext('2d');
+   if(ctx)drawLab(ctx,session,fireCue,impacts,gait);
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
