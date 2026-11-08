@@ -5,6 +5,8 @@ on:
     paths:
       - 'src/domain/omega-protocol-run.ts'
       - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-navigation.ts'
+      - 'tests/omega-protocol-navigation.test.ts'
       - 'src/ui/omega-protocol-field-render.ts'
       - 'src/ui/omega-protocol-camera.ts'
       - 'tests/omega-protocol-camera.test.ts'
@@ -45,4 +47,4 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-actor-cues.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-actor-cues.test.ts --maxConcurrency=1
