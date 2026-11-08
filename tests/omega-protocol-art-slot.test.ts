@@ -19,7 +19,7 @@ const positive=(letter:string):OmegaApprovedSpriteManifest=>{
    rearSha256:'b'.repeat(64),
    frontSha256:'c'.repeat(64),
   } as OmegaApprovedSpriteFrame)),
- ])) as OmegaApprovedSpriteManifest['frames'];
+ ])) as unknown as OmegaApprovedSpriteManifest['frames'];
  return {identity:'AIRA_MASTER',status:'ARTIST_APPROVED',artistSignoff:'QA synthetic test',
   visualQa:'PASS',combatQa:'PASS',mobileDeviceQa:'PASS',width:384,height:512,
   feetLine:454,frames};
