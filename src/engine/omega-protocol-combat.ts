@@ -82,7 +82,12 @@ export class OmegaProtocolCombatSession {
  update(dt:number,input:GameInput):OmegaCombatSnapshot {
   if(!Number.isFinite(dt)||dt<0)throw new RangeError('Invalid frame time');
   if(!this.armed||this.active.phase!=='battle')return this.snapshot;
-  this.engine.update(dt,input);
+  // Unstable-ground temporarily limits input magnitude without changing the
+  // player's permanent/current speed or touching the normal Watch engine.
+  const adjusted= this.latestPlan.modifier==='unstable_ground'
+   ? {...input,moveX:input.moveX*.78,moveY:input.moveY*.78}
+   : input;
+  this.engine.update(dt,adjusted);
   const state=this.engine.state;
   if(state.phase==='defeat'||state.player.hp<=0){
    this.armed=false;
@@ -104,6 +109,19 @@ export class OmegaProtocolCombatSession {
    }
   }
   return this.snapshot;
+ }
+ /**
+  * Real engine dash. Not a visual fake: uses Watch cooldown, direction and
+  * invulnerability. Cannot be called during a reward or terminal outcome.
+  */
+ dash():boolean {
+  return this.armed && this.active.phase==='battle'
+   && this.engine.triggerPlayerDash();
+ }
+ /** Watch's existing charge-gated director intervention, run-only. */
+ ultimate():boolean{
+  return this.armed && this.active.phase==='battle'
+   && this.engine.triggerDirectorShout();
  }
  /** Choices change real in-session engine weapons and player stats. */
  selectUpgrade(id:OmegaUpgradeId):OmegaCombatSnapshot {
