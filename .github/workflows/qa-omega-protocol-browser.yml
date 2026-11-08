@@ -14,6 +14,8 @@ on:
       - 'src/ui/omega-protocol-art-motion.ts'
       - 'src/ui/omega-protocol-impact-vfx.ts'
       - 'src/ui/omega-protocol-art-slot.ts'
+      - 'content/art/omega-approved-v1.json'
+      - 'public/assets/omega/approved/**'
       - 'src/domain/omega-protocol-field.ts'
       - 'src/domain/omega-protocol-navigation.ts'
       - 'src/ui/omega-protocol-playtest.css'
