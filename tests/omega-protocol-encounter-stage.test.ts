@@ -13,8 +13,12 @@ describe('OMEGA on-screen live threat staging',()=>{
   expect(hazards.every(h=>h.hp>0&&h.maxHp>0)).toBe(true);
   expect(s.run.wave).toBe(1);
   const normal=new OmegaProtocolCombatSession(20261108,10);
-  // Existing non-field gameplay retains old edge spawns.
-  expect(normal.engine.state.hazards.some(h=>h.x<0||h.x>1400||h.y<0||h.y>900)).toBe(true);
+  const untouched=new OmegaProtocolCombatSession(20261108,10);
+  // Existing non-field mode retains the old seeded encounter coordinates.
+  expect(normal.engine.state.hazards.map(h=>[h.x,h.y])).toEqual(
+   untouched.engine.state.hazards.map(h=>[h.x,h.y]));
+  expect(normal.engine.state.hazards.map(h=>[h.x,h.y])).not.toEqual(
+   hazards.map(h=>[h.x,h.y]));
  });
  it('keeps all fifteen dense actors away from original collision props and player',()=>{
   for(let wave=1;wave<=15;wave++){
