@@ -29,7 +29,7 @@ const idle={moveX:0,moveY:0,triggerAction:false};
  * movement commands. */
 function tacticalStep(
  s:OmegaProtocolCombatSession,enemy:{x:number;y:number;id:string},
-):Readonly<{moveX:number;moveY:number;triggerAction:false}>{
+):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
  if(gap>350){
