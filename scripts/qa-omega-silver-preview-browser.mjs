@@ -11,8 +11,44 @@ import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
+import {deflateRawSync} from 'node:zlib';
 import {chromium} from 'playwright-core';
 
+function crc32(data){
+ let crc=0xffffffff;
+ for(const byte of data){
+  crc^=byte;
+  for(let i=0;i<8;i++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);
+ }
+ return (crc^0xffffffff)>>>0;
+}
+function zipDeflated(images){
+ const locals=[],centers=[];let offset=0;
+ for(const {slot,bytes} of images){
+  const name=Buffer.from('game_sprites_384x512/'+slot.toLowerCase()+'-silver-review.webp');
+  const payload=deflateRawSync(bytes);
+  const crc=crc32(bytes);
+  const loc=Buffer.alloc(30);
+  loc.writeUInt32LE(0x04034b50,0);loc.writeUInt16LE(20,4);
+  loc.writeUInt16LE(8,8);loc.writeUInt32LE(crc,14);
+  loc.writeUInt32LE(payload.length,18);loc.writeUInt32LE(bytes.length,22);
+  loc.writeUInt16LE(name.length,26);
+  locals.push(loc,name,payload);
+  const cen=Buffer.alloc(46);
+  cen.writeUInt32LE(0x02014b50,0);cen.writeUInt16LE(20,4);
+  cen.writeUInt16LE(20,6);cen.writeUInt16LE(8,10);
+  cen.writeUInt32LE(crc,16);cen.writeUInt32LE(payload.length,20);
+  cen.writeUInt32LE(bytes.length,24);cen.writeUInt16LE(name.length,28);
+  cen.writeUInt32LE(offset,42);centers.push(cen,name);
+  offset+=loc.length+name.length+payload.length;
+ }
+ const center=Buffer.concat(centers);
+ const end=Buffer.alloc(22);
+ end.writeUInt32LE(0x06054b50,0);
+ end.writeUInt16LE(images.length,8);end.writeUInt16LE(images.length,10);
+ end.writeUInt32LE(center.length,12);end.writeUInt32LE(offset,16);
+ return Buffer.concat([...locals,center,end]);
+}
 const directions=['E','SE','S','SW','W','NW','N','NE'];
 const base='http://127.0.0.1:4173';
 const out=resolve('qa-omega-protocol-captures');
@@ -23,7 +59,7 @@ await mkdir(folder,{recursive:true});
 let browser,page,report={pass:false};
 const errors=[];
 try{
- const hashes={};
+ const hashes={},images=[];
  for(const [i,h] of directions.entries()){
   const color=['#dd2bff','#14aacb','#ec953b','#81efb7','#f95f67','#80a6ed','#f5d877','#906eeb'][i];
   const svg='<svg xmlns="http://www.w3.org/2000/svg" width="384" height="512">'+
@@ -35,8 +71,11 @@ try{
   const filename=join(folder,h.toLowerCase()+'-silver-review.webp');
   await writeFile(filename,buf);
   hashes[h]=createHash('sha256').update(buf).digest('hex');
+  images.push({slot:h,bytes:buf});
  }
  hashes.M01='f'.repeat(64);
+ const zipPath=join(dir,'synthetic-eight-dir-review.zip');
+ await writeFile(zipPath,zipDeflated(images));
  const roster={
   schema_version:1,stage:'review_only',production_approved:false,
   main_games:['SIGNAL GUARD','SIGNAL WATCH'],sha256_by_slot:hashes,
@@ -66,8 +105,10 @@ try{
  // The review page intentionally caches its roster promise per page load.
  // Revisit it when switching from a poisoned fixture to the clean fixture.
  await page.reload({waitUntil:'domcontentloaded'});
- await page.locator('#folder').setInputFiles(folder);
- if(await apply.isDisabled())throw Error('Verified 8-view pack was not selectable');
+ // Success path uses the actual direct ZIP UI with DEFLATE level-8 sources;
+ // nobody must unzip or individually select eight files by hand.
+ await page.locator('#zip').setInputFiles(zipPath);
+ if(await apply.isDisabled())throw Error('Verified ZIP art pack was not selectable');
  await apply.click();
  await page.waitForURL(/omegaLab=1.*omegaSilverPreview=1/,{timeout:20000});
  await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:18000});
