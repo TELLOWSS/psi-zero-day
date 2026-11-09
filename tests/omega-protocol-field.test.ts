@@ -89,7 +89,7 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(()=>omegaFieldResolveCollision(left,{x:NaN,y:0},p.obstacles)).toThrow(RangeError);
  });
  it('makes industrial props real native Watch cover for enemy routing and projectiles',()=>{
-  const run=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const run=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   const plan=run.field!.plan;
   const native=run.engine.state.terrain??[];
   expect(native).toEqual(omegaFieldNativeTerrain(plan));
@@ -104,11 +104,11 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(waypoint.x).toBeGreaterThanOrEqual(0);
   expect(waypoint.y).toBeGreaterThanOrEqual(0);
   expect(native.every(t=>t.kind==='cover'||t.kind==='pillar')).toBe(true);
-  const original=new OmegaProtocolCombatSession(20261108,10);
+  const original=new OmegaProtocolCombatSession(20261108,50);
   expect(original.engine.state.terrain??[]).toHaveLength(0);
  });
  it('requires clearing ACTUAL enemies, operating a field event in range, and reaching the exit',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   expect(s.snapshot.field?.progress.phase).toBe('combat');
   expect(s.engine.state.player.x).toBe(s.field?.plan.entry.x);
   expect(s.interact().reason).toBe('NOT_READY');
@@ -134,7 +134,7 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(s.engine.state.player.x).toBe(s.field?.plan.entry.x);
  });
  it('still completes 15 physical event-gated nodes, both bosses, and 7 tactical upgrades',()=>{
-  const s=new OmegaProtocolCombatSession(37000,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(37000,50,false,{fieldTraversal:true});
   let bossCount=0,rewardCount=0;
   for(let wave=1;wave<=15;wave++){
    expect(s.run.wave).toBe(wave);
@@ -155,7 +155,7 @@ describe('OMEGA PROTOCOL real field traversal / event / boss mission',()=>{
   expect(s.interact().success).toBe(false);
  });
  it('retains current wave while a mandatory event is unresolved; losing still ends it',()=>{
-  const s=new OmegaProtocolCombatSession(991,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(991,50,false,{fieldTraversal:true});
   completeCombat(s);
   for(let tick=0;tick<100;tick++)s.update(1/60,idle);
   expect(s.run.wave).toBe(1);
