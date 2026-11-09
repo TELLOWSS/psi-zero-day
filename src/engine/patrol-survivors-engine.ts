@@ -2379,7 +2379,10 @@ export class SurvivorsEngine {
         if(h.variant==='split_gas'&&hazards.length+fragments.length<spawnPressure(this.state.stage.stageNumber,this.state.gameTime,this.state.difficulty).activeLimit-1){
           for(const side of [-1,1])fragments.push({...h,id:this.genId('gas_fragment'),variant:undefined,x:Math.max(30,Math.min(WORLD_WIDTH-30,h.x+side*30)),hp:Math.max(12,Math.round(h.maxHp*.22)),maxHp:Math.max(12,Math.round(h.maxHp*.22)),radius:16,speed:h.speed*1.2,expValue:2});
         }
-        if (h.type === 'UNHELMETED') {
+        // In the isolated fictional OMEGA quarantine mode, an infected
+        // zombie never transforms into a 'rescued ordinary worker' silhouette
+        // on death. Regular WATCH education still creates resolved workers.
+        if (h.type === 'UNHELMETED'&&!this.protocolExternalEncounter) {
           const workers = this.state.resolvedWorkers ??= [];
           workers.push(createResolvedWorker(h.id,h.x,h.y,workerRouteTerrain(this.state.terrain??[],this.state.interactiveHazards),WORLD_WIDTH,WORLD_HEIGHT));
           if (workers.length > 128) workers.shift();
@@ -2466,6 +2469,10 @@ export class SurvivorsEngine {
     if (player.invincibleTime <= 0 && !player.isDashing) {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
+        // OMEGA infected actors apply damage ONLY after their own visible
+        // warning timer. Zero-damage generic Watch collision would otherwise
+        // grant false .6s immunity and 30px knockback without telegraph.
+        if(this.protocolExternalEncounter&&h.type==='UNHELMETED'&&h.damage===0)continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
           if(h.signatureEventId)this.signatureEventsFailed.add(h.signatureEventId);
