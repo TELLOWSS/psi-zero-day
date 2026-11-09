@@ -165,4 +165,76 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
   expect(s.run.phase).toBe('battle');
  });
 
+ it.each([
+  [6,7,'crane_elevator',24],
+  [9,10,'service_tunnel',-12],
+  [12,13,'control_airlock',6],
+ ] as const)('M04-C ACT %i→%i: true paired entry, exit and unique passage kind',(
+  from,to,kind,verticalMeters
+ )=>{
+  const p1=omegaFieldPlan(20261109,from),p2=omegaFieldPlan(20261109,to);
+  const source=omegaActBoundaryDock(p1)!,destination=omegaActBoundaryDock(p2)!;
+  const link=omegaGateTransitLink(p1,p2);
+  expect(source).toMatchObject({fromWave:from,toWave:to,kind,
+   role:'departure',point:p1.exit,verticalMeters});
+  expect(destination).toMatchObject({fromWave:from,toWave:to,kind,
+   role:'arrival',point:p2.entry,verticalMeters});
+  expect(source.linkId).toBe(destination.linkId);
+  expect(link).toMatchObject({kind,departure:p1.exit,arrival:p2.entry,
+   linkId:source.linkId});
+  expect(link.fromSector+1).toBe(link.toSector);
+  expect(omegaGateTransitStart(link).opacity).toBe(0);
+  expect(omegaGateTransitArrive(link).opacity).toBe(1);
+ });
+ it.each([
+  [6,7,'crane_elevator'],
+  [9,10,'service_tunnel'],
+  [12,13,'control_airlock'],
+ ] as const)('M04-C native engine actually loads destination at %i→%i without stage selection',(
+  from,to,kind
+ )=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,
+  });
+  // Preroll only in the unit setup; real browser QA separately tests
+  // the last exit via held arrow/visible joystick. Never fabricate battle results.
+  for(let wave=1;wave<from;wave++){
+   expect(s.run.wave).toBe(wave);
+   const exit=s.field!.plan.exit;
+   s.engine.state.player.x=exit.x-45;
+   s.engine.state.player.y=exit.y;
+   expect(s.interact().success).toBe(true);
+   advance(s,15);
+   if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
+   advance(s,14);
+  }
+  expect(s.run.wave).toBe(from);
+  expect(s.field?.plan.wave).toBe(from);
+  const exit=s.field!.plan.exit;
+  const target=omegaActBoundaryDock(s.field!.plan)!;
+  expect(target.kind).toBe(kind);
+  expect(target.point).toEqual(exit);
+  expect(s.interact()).toMatchObject({success:false,reason:'OUT_OF_RANGE'});
+  s.engine.state.player.x=exit.x-50;s.engine.state.player.y=exit.y;
+  expect(s.interact()).toMatchObject({success:true,reason:'EXIT_OPENED'});
+  const depart=s.snapshot.gateTransit!;
+  expect(depart).toMatchObject({phase:'depart',link:{kind,fromWave:from,toWave:to}});
+  expect(s.field?.plan.wave).toBe(from);
+  expect(s.blade()).toBeNull();
+  advance(s,15);
+  if(s.run.phase==='reward'){
+   expect(s.snapshot.gateTransit).toBeNull();
+   s.selectUpgrade(s.run.offers[0]!);
+  }
+  expect(s.field?.plan.wave).toBe(to);
+  expect(s.snapshot.gateTransit?.phase).toBe('arrive');
+  expect(s.snapshot.gateTransit?.link.kind).toBe(kind);
+  expect(s.engine.state.player.x).toBe(s.field!.plan.entry.x);
+  expect(s.engine.state.player.y).toBe(s.field!.plan.entry.y);
+  expect(omegaActBoundaryDock(s.field!.plan)?.role).toBe('arrival');
+  advance(s,14);
+  expect(s.snapshot.gateTransit).toBeNull();
+  expect(s.run.phase).toBe('battle');
+ });
+
 });
