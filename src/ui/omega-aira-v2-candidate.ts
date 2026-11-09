@@ -51,14 +51,19 @@ export class OmegaAiraV2CandidateImages {
   * and never attribute old BLACK/ROSE E animation to silver AIRA.
   */
  setSilverReviewSources(sources:ReadonlyMap<OmegaHeading,string>|null):void{
-  this.cache.clear();this.reviewSources.clear();
+  // Verify all original angles before touching the active renderer; a
+  // partially selected or fabricated direction must never be accepted.
+  const next=new Map<OmegaHeading,string>();
   if(sources){
    for(const heading of OMEGA_AIRA_V2_HEADINGS){
     const source=sources.get(heading);
-    if(!source||!source.startsWith('blob:'))throw Error('Invalid silver preview source '+heading);
-    this.reviewSources.set(heading,source);
+    if(!source||!source.startsWith('blob:'))
+     throw Error('Invalid silver preview source '+heading);
+    next.set(heading,source);
    }
   }
+  this.cache.clear();this.reviewSources.clear();
+  for(const [heading,source] of next)this.reviewSources.set(heading,source);
   this.prepare();
  }
  readonly fireFrames=new OmegaAiraV2FireFrames();
