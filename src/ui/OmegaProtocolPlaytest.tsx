@@ -474,7 +474,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <div className="omega-protocol-heading">
     <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION</span>
     <h1>OMEGA <em>PROTOCOL</em></h1>
-    <p>극한 50/50 이후 해금 · 지도 탐험형 총·검 로그라이트 · 승인 전 QA</p>
+    <p>극한 50/50 이후 해금 · 오염 산업단지 좀비 총·검 로그라이트 · 승인 전 QA</p>
    </div>
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
@@ -587,7 +587,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <button type="button" className="omega-protocol-action omega-protocol-blade"
        onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
-       aria-label="공진 검격 · F 키 · 기계형 위협에 3단 연속 공격">
+       aria-label="공진 검격 · F 키 · 안전모 감염 좀비 및 기계형 적 3단 연속 공격">
        <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
        <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s': 'READY'}</small>
       </button>
