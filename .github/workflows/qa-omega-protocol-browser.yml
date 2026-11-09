@@ -43,6 +43,7 @@ on:
       - 'scripts/qa-omega-aira-v2-walk-source.mjs'
       - 'scripts/qa-omega-aira-v2-fire-source.mjs'
       - 'scripts/qa-omega-aira-e-fire-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-dash-atlas.mjs'
       - 'src/ui/ReignitionTitle.tsx'
       - 'src/ui/reignition-premium.css'
       - '.github/workflows/qa-omega-protocol-browser.yml'
@@ -124,6 +125,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-aira-e-fire-atlas.mjs
+      - name: Verify committed E dash illustrated source and original Watch pose integration
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-dash-atlas.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
