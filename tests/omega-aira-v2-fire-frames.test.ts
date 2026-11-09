@@ -46,7 +46,7 @@ describe('AIRA V2 independent, original-source E firing pose ingest gate',()=>{
   const ctx={drawImage:(...args:unknown[])=>calls.push(args)} as unknown as CanvasRenderingContext2D;
   for(const [age,sx] of [[0,0],[.07,240],[.125,480]] as const){
    expect(frames.draw(ctx,'E',{...actor,actionAge:age},136)).toBe(true);
-   expect(calls.at(-1)?.slice(1)).toEqual([sx,0,240,240,-77.52,-155.04,155.04,155.04]);
+   expect(calls.at(-1)?.slice(1)).toEqual([sx,0,240,240,-68,-136,136,136]);
   }
   expect(calls).toHaveLength(3);
   for(const other of ['SE','S','SW','W','NW','N','NE'] as const)
