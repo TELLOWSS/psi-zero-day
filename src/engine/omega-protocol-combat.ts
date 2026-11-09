@@ -137,7 +137,10 @@ export class OmegaProtocolCombatSession {
    Math.floor(plan.budget/9)));
   const specs:Array<{type:HazardType;boss?:boolean;hpScale:number;speedScale:number}>=[];
   for(let i=0;i<enemyCount;i++){
-   const type=plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
+   // The first native enemy in every quarantine zone is a fictional
+   // HELMET_ZOMBIE (legacy engine UNHELMETED ID). This is intentional,
+   // not merely a possible random archetype in the encounter pool.
+   const type=i===0?'UNHELMETED':plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
    const scale=1+Math.min(2,plan.intensity*.16);
    const speed=plan.modifier==='crosswind'?1.13:plan.modifier==='unstable_ground'?.93:1;
    specs.push({type,hpScale:scale,speedScale:speed});
