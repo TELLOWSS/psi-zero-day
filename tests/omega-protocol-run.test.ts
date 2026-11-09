@@ -6,13 +6,13 @@ import {
 } from '../src/domain/omega-protocol-run';
 
 describe('OMEGA PROTOCOL isolated roguelite core',()=>{
- const access=omegaProtocolAccess(10,false);
- it('opens the mode at ten Watch clears without granting the Master-only cosmetic',()=>{
-  expect(OMEGA_PROTOCOL_ENTRY_CLEARS).toBe(10);
-  expect(omegaProtocolAccess(9,true)).toMatchObject({canEnter:false,masterCosmeticEligible:false});
-  expect(omegaProtocolAccess(10,false)).toMatchObject({canEnter:true,masterCosmeticEligible:false});
+ const access=omegaProtocolAccess(50,false);
+ it('unlocks only after all 50 extreme clears without granting unapproved cosmetic',()=>{
+  expect(OMEGA_PROTOCOL_ENTRY_CLEARS).toBe(50);
+  expect(omegaProtocolAccess(49,true)).toMatchObject({canEnter:false,masterCosmeticEligible:false});
+  expect(omegaProtocolAccess(50,false)).toMatchObject({canEnter:true,masterCosmeticEligible:false});
   expect(omegaProtocolAccess(50,true)).toMatchObject({canEnter:true,masterCosmeticEligible:true});
-  expect(omegaStartRun(5,omegaProtocolAccess(9,false))).toBeNull();
+  expect(omegaStartRun(5,omegaProtocolAccess(49,false))).toBeNull();
  });
  it('generates fifteen deterministic but variable waves with two final bosses',()=>{
   const a=Array.from({length:15},(_,i)=>omegaWavePlan(20261108,i+1));
