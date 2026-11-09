@@ -61,6 +61,7 @@ on:
       - 'scripts/qa-omega-aira-e-hit-atlas.mjs'
       - 'scripts/qa-omega-aira-e-special-source.mjs'
       - 'src/ui/ReignitionTitle.tsx'
+      - 'src/ui/reignition-title.css'
       - 'src/ui/reignition-premium.css'
       - '.github/workflows/qa-omega-protocol-browser.yml'
   workflow_dispatch:
