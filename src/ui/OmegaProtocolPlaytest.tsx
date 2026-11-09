@@ -13,6 +13,7 @@ import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-m
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
+import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
@@ -61,6 +62,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
+ // Native-only locked headings; unchanged Watch hitboxes/timers.
+ drawOmegaCounterplayCues(ctx,omegaCounterplayCues(state.hazards,id=>session.zombieBrain(id)),state.gameTime);
  // Genuine dash trail remains under all live Watch enemies and hero.
  drawOmegaDashEnergy(ctx,echoes,state.gameTime);
  const p=state.player;
@@ -564,6 +567,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   setPaused(!paused);setSnapshot(session.snapshot);
  };
+ const dashFeedback=omegaDashAvailability(session.engine.state.player);
+ const counterplay=omegaNearestCounterplayCue(
+  omegaCounterplayCues(session.engine.state.hazards,id=>session.zombieBrain(id)),
+  {x:snapshot.playerX,y:snapshot.playerY});
  const guide=snapshot.field?omegaFieldTargetGuide(
   snapshot.field.plan,snapshot.field.progress,{x:snapshot.playerX,y:snapshot.playerY},
  ):null;
@@ -634,6 +641,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-blade-hits={snapshot.blade?.hits??0}
      data-omega-player-x={snapshot.playerX.toFixed(1)}
      data-omega-player-y={snapshot.playerY.toFixed(1)}
+     data-omega-counterplay-kind={counterplay?.kind??'none'}
+     data-omega-counterplay-phase={counterplay?.phase??'none'}
+     data-omega-counterplay-id={counterplay?.id??'none'}
+     data-omega-dash-remaining={dashFeedback.remaining.toFixed(2)}
+     data-omega-dash-ready={String(dashFeedback.ready)}
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
       Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
     <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
@@ -684,6 +696,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        :snapshot.bossTelegraph.phase==='strike'?'공격 발동 · 위험구역 이탈'
        :'재정비 · 반격 기회'}</span>
       {snapshot.bossTelegraph.empowered&&<em>PHASE 2</em>}
+    </div>}
+    {counterplay&&snapshot.run.phase==='battle'&&<div className="omega-protocol-counterplay-hud"
+     data-omega-counterplay-warning={counterplay.label} aria-live="off">
+     <strong>{counterplay.phase==='charge'?'돌진 중 · 즉시 회피':counterplay.label+' · '+counterplay.seconds.toFixed(1)+'초'}</strong>
+     <span>잠금 방향 확인 · {dashFeedback.label}</span>
     </div>}
     <div className="omega-protocol-controls">
      <div className="omega-protocol-pad" data-omega-pad-mode={classicPad?'arrows':'analog'}
@@ -738,7 +755,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
        aria-label="회피 · 스페이스 또는 시프트">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span>
+       <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
