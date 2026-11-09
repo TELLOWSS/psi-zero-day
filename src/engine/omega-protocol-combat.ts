@@ -5,6 +5,10 @@ import {
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_COOLDOWN,OMEGA_BLADE_RANGE,type OmegaBladeComboStep} from '../domain/omega-protocol-blade';
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
+import {
+ omegaZombieKindForSlot,omegaCreateZombieBrain,omegaAdvanceZombieBrain,
+ type OmegaZombieBrain,type OmegaZombieKind,
+} from '../domain/omega-protocol-zombie-ai';
 import {omegaStageEncounterPositions} from '../domain/omega-protocol-encounter-stage';
 import {
  omegaCreateBossTelegraph,omegaAdvanceBossTelegraph,
@@ -66,6 +70,7 @@ export class OmegaProtocolCombatSession {
  private bladeLastTime=-Infinity;
  private bladeStep:OmegaBladeComboStep=1;
  private bladeResult:OmegaBladeStrike|null=null;
+ private readonly zombieBrains=new Map<string,OmegaZombieBrain>();
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean}>={},
@@ -97,6 +102,15 @@ export class OmegaProtocolCombatSession {
  get facing():Readonly<{x:number;y:number}>{return {...this.lastFacing};}
  get moving():boolean{return this.playerMoving;}
  get lastBladeStrike():OmegaBladeStrike|null{return this.bladeResult;}
+ zombieBrain(id:string):OmegaZombieBrain|null{return this.zombieBrains.get(id)??null;}
+ get zombieTelemetry():readonly Readonly<{id:string;kind:OmegaZombieKind;phase:string;
+  x:number;y:number;hp:number;warnings:number;attacks:number;hits:number;damageDone:number}>[]{
+  return this.engine.state.hazards.flatMap(h=>{
+   const b=this.zombieBrains.get(h.id);
+   return b?[{id:h.id,kind:b.kind,phase:b.phase,x:h.x,y:h.y,hp:h.hp,
+    warnings:b.warnings,attacks:b.attacks,hits:b.hits,damageDone:b.damageDone}]:[];
+  });
+ }
  get field():Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null{
   return this.currentField&&this.fieldStatus
    ?{plan:this.currentField,progress:this.fieldStatus}
@@ -127,6 +141,7 @@ export class OmegaProtocolCombatSession {
   this.bladeLastTime=-Infinity;
   this.bladeStep=1;
   this.bladeResult=null;
+  this.zombieBrains.clear();
   if(this.fieldTraversal){
    this.currentField=omegaFieldPlan(this.active.seed,plan.wave);
    this.fieldStatus=omegaFieldInitialProgress();
@@ -148,13 +163,22 @@ export class OmegaProtocolCombatSession {
    // The first native enemy in every quarantine zone is a fictional
    // HELMET_ZOMBIE (legacy engine UNHELMETED ID). This is intentional,
    // not merely a possible random archetype in the encounter pool.
-   const type=i===0?'UNHELMETED':plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
+   // Four separate infected zombie AI types occupy the first four
+   // genuine native hazard slots. Additional industry machinery remains.
+   const type=i<4?'UNHELMETED':plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
    const scale=1+Math.min(2,plan.intensity*.16);
    const speed=plan.modifier==='crosswind'?1.13:plan.modifier==='unstable_ground'?.93:1;
    specs.push({type,hpScale:scale,speedScale:speed});
   }
   if(plan.isBoss)specs.push({type:'CRANE_BOSS',boss:true,hpScale:1.3+plan.intensity*.35,speedScale:1});
   this.engine.spawnProtocolEncounter(specs);
+  let infectedSlot=0;
+  for(const h of this.engine.state.hazards){
+   if(h.type!=='UNHELMETED'||h.isStageBoss)continue;
+   const kind=omegaZombieKindForSlot(infectedSlot,plan.wave);
+   this.zombieBrains.set(h.id,omegaCreateZombieBrain(h,kind,infectedSlot));
+   infectedSlot++;
+  }
   if(this.currentField&&this.fieldTraversal){
    // Native Watch spawns at map edges by design. That makes our player-
    // controlled close-camera first field visually empty. Stage existing
@@ -204,6 +228,29 @@ export class OmegaProtocolCombatSession {
   if(this.currentField&&state.phase==='playing'){
    const corrected=omegaFieldResolveCollision(prior,state.player,this.currentField.obstacles,21);
    state.player.x=corrected.x;state.player.y=corrected.y;
+  }
+  // OMEGA ONLY: independent, telegraphed infected movement/attacks.
+  // Native WATCH handles projectiles and player collision, but generic
+  // workers have zero OMEGA contact damage and no generic auto-chase.
+  // Every zombie remains an actual Watch hazard with real HP.
+  if(state.phase==='playing'){
+   const obstacles=this.currentField?.obstacles??[];
+   for(const h of state.hazards){
+    const brain=this.zombieBrains.get(h.id);
+    if(!brain||h.hp<=0)continue;
+    const tick=omegaAdvanceZombieBrain(h,brain,state.player,obstacles,Math.min(.05,dt));
+    if(tick.contactDamage>0&&!state.player.isDashing&&
+       (state.player.invincibleTime??0)<=0){
+     const amount=Math.min(state.player.hp,tick.contactDamage);
+     state.player.hp=Math.max(0,state.player.hp-amount);
+     state.player.invincibleTime=.6;
+     state.lastDamage={source:'UNHELMETED',amount,remaining:2};
+     if(state.terrainRecord)state.terrainRecord.damageTaken+=amount;
+     state.hitStopTimer=Math.max(state.hitStopTimer??0,.035);
+     brain.hits++;
+     brain.damageDone+=amount;
+    }
+   }
   }
   // One serverless, in-run boss warning/strike. No damage occurs before a
   // visibly timed warning; each attack has a one-time collision event.
