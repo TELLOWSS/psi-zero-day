@@ -99,7 +99,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    }
   }
   simSeconds+=DT;
-  if(s.run.wave!==wave||s.run.phase==='reward'||s.run.phase==='victory')break;
+  if(s.run.wave!==wave)break;
  }
  if(s.run.wave===wave&&s.run.phase==='battle')
   throw Error('NO-SKIP M04-D node '+wave+' did NOT finish under simulation budget: '+JSON.stringify({
