@@ -5,6 +5,8 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
+import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
+import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
@@ -47,6 +49,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const field=session.field;
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
+  drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
  }
  else{
@@ -589,6 +592,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
      data-omega-field-phase={snapshot.field?.progress.phase??'none'}
      data-omega-world-wave={snapshot.field?.plan.wave??0}
+     data-omega-act-dock-role={snapshot.field?omegaActBoundaryDock(snapshot.field.plan)?.role??'none':'none'}
+     data-omega-act-dock-id={snapshot.field?omegaActBoundaryDock(snapshot.field.plan)?.linkId??'none':'none'}
+     data-omega-act-dock-x={snapshot.field?omegaActBoundaryDock(snapshot.field.plan)?.point.x??0:0}
+     data-omega-act-dock-y={snapshot.field?omegaActBoundaryDock(snapshot.field.plan)?.point.y??0:0}
+     data-omega-transit-link-id={snapshot.gateTransit?.link.linkId??'none'}
+     data-omega-transit-kind={snapshot.gateTransit?.link.kind??'none'}
+     data-omega-transit-depart-x={snapshot.gateTransit?.link.departure.x??0}
+     data-omega-transit-arrive-x={snapshot.gateTransit?.link.arrival.x??0}
      data-omega-transit-phase={snapshot.gateTransit?.phase??'none'}
      data-omega-transit-to={snapshot.gateTransit?.link.toWave??0}
      data-omega-transit-opacity={snapshot.gateTransit?.opacity.toFixed(3)??'0'}
@@ -716,11 +727,24 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
       data-omega-passage-kind={snapshot.gateTransit.link.kind}
       style={{opacity:snapshot.gateTransit.opacity}}>
-      <div className="omega-protocol-gate-doors" aria-hidden="true"><i/><i/></div>
+      {snapshot.gateTransit.link.kind==='scaffold_lift'
+       ?<div className="omega-protocol-lift-cross-section" aria-hidden="true">
+         <div className="omega-protocol-lift-rail"><i/><i/><i/><i/></div>
+         <div className="omega-protocol-lift-cage"
+          style={{top:(snapshot.gateTransit.phase==='depart'
+           ?68-43*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration
+           :25+43*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration)+'%'}}>
+          <span>SC-04</span><b>18M ↑</b>
+         </div>
+         <small>LEVEL 01 <b>→</b> LEVEL 02</small>
+        </div>
+       :<div className="omega-protocol-gate-doors" aria-hidden="true"><i/><i/></div>}
       <div className="omega-protocol-gate-sign">
        <span>OMEGA · QUARANTINE LINK</span>
        <strong>{snapshot.gateTransit.link.passageLabel}</strong>
        <p>{snapshot.gateTransit.link.fromName} → {snapshot.gateTransit.link.toName}</p>
+       {snapshot.gateTransit.link.kind==='scaffold_lift'&&
+        <p className="omega-protocol-lift-depth">비계 연결데크 · 18m 수직 이동 · 다음 구역 현장 진입</p>}
        <small>{snapshot.gateTransit.phase==='depart'?'격리문 폐쇄 · 다음 구역 연결':'격리문 개방 · 현장 탐험 계속'}</small>
       </div>
      </div>}
