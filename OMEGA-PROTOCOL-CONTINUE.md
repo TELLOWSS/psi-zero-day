@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-09 (KST) · M01/M01-QA·M02·M03 브라우저 기술검증 완료  
+**관리일:** 2026-11-09 (KST) · M01~M03 기술검증 완료, M04-A 두 번의 실제 구역 이동 기술검증 완료  
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -34,7 +34,7 @@
 | M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거; Vite·Chromium 9개 체크포인트 브라우저 검사 | **TESTED: PR #237 브라우저 전체 workflow PASS, 실제 React/Canvas 및 `data-omega-real-extreme-clears` QA 검사 통과. 실기기 Android/운영 CTA 아님** |
 | M02 | OMEGA 원거리 무기 + 검 3타, HP 감소, 방향·엄폐·보스 피해 상한, PC/모바일 입력 | OMEGA 전용 시작 원거리 총기 `radio_boost=1`, 검 3연격, 실제 native 투사체/HP·거리·장애물·F키/모바일 터치 검격, 2개 검 강화 | **TESTED 기술검증: PR #238 CI 45파일/193테스트 + DEV 실제 React/Canvas 브라우저 E2E 4/4 통과. 고품질 독립 총/검 원화, 실기기 Android, 상업 출시 품질은 미완** |
 | M03 | 안전모 좀비 기본·질주·장갑·정예 4종의 차별화 추격·예고·실제 HP 피해 | 기존 Watch 네이티브 감염체 위에 OMEGA 전용 4개 독립 AI, 각 1종 필수 배치+산업 장비형 적 1종, HP·속도·돌진·측면기동·공격 예고·충돌 처리·임시 차별 실루엣 | **TESTED 기술검증: PR #239 Core 46파일/203테스트 + Vite/Chromium 데스크톱·모바일 AI 4종 모두 예고 후 실제 HP 피해. 정식 8방향 고품질 좀비 원화·군집 전술·Android 실기기 미완** |
-| M04 | 5막 15지점 이벤트, 물리적 길 찾기, 연속 연결 카메라 | 기본 FieldTraversal/3종 이벤트/출구, 오염 스토리 15개 라디오 표시 | **심리스 전환·환경 미술·연출 미완** |
+| M04 | 5막 15지점 이벤트, 물리적 길 찾기, 연속 연결 카메라 | **M04-A 구현:** 현실 출구 접근·E/터치→격리문 닫힘→실제 다음 지도 입장→문 열림, 구역별 통로 명칭·이동 연출; 기존 현장 장치/사건·라디오 유지 | **PARTIALLY TESTED:** PR #240 실제 PC 방향키/모바일 아날로그 터치로 1→2→3 연속 2회 이동 PASS. **15지점 전체 하나의 심리스 월드, 3→4 등 막 간 경로, 정식 배경 연출·실기기 미완** |
 | M05 | 중간 보스 TITAN HOOK/최종 BLACK SIGNAL CORE의 차별화 3페이즈 | 기존 실제 보스/예고/HP 스케치 | **최종 기믹·완성 아트 미완** |
 | M06 | 은백색 AIRA 8방향 정지 원화 기준 및 **정확한 NW 후면 좌측** | GitHub 은백색 8방향 연구본, NW 후보는 대화에서만 생성 | **원화 최종 승인/리포지토리 정식 적용 미완** |
 | M07 | 은백색 AIRA **독립 160액션 프레임 + 마스크 320**, 장비 정렬, 발 접지 | Watch 8방향 원화 선택/실제 idle/walk/fire/dash/hit 상태 판별, GUARD 원화 관찰용 연결 | **은백색 승인 독립 프레임 0/160, 마스크 미완** |
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리):** **M04 공간적으로 연결된 5막·15개 내부 탐험 지점**. 현재 출구 조작 시 새 지도/입구 좌표로 즉시 교체하는 코드를 점검한다. 플레이어가 실제 출구에 접근→E/터치 조작→문/리프트/계단의 카메라·전환 연출→연결된 다음 구역 등장까지 게임 흐름이 끊기지 않도록 개선. 전투만 끝났다고 자동 이동하거나 15개를 선택하는 UI는 절대 금지. 첫 테스트는 기존 `src/engine/omega-protocol-combat.ts`의 `interact()/settleWave()/beginWave()`와 `src/domain/omega-protocol-field.ts`, `src/domain/omega-protocol-navigation.ts`, `src/ui/OmegaProtocolPlaytest.tsx`를 확인하고 **실제 브라우저 사용자 입력으로 두 개 이상의 연속 구역을 건너는 회귀 테스트**. 다음 M05는 2개 보스 특화 패턴. `main`/Production 병합 금지, QA PR을 개발 브랜치 대상으로 먼저 개설.
+**다음 실행 작업(하나씩 처리): M04-B — 첫 막 경계 3→4 실제 승강기 이동 및 5막 구역 전체의 연결 검증.** M04-A는 1→2→3에서 물리적 출구·E/터치·격리 게이트 연출의 브라우저 기술검증까지만 완료. 아직 각 구역마다 동일한 단일 지도를 새로 불러오기 때문에 15개 지점이 공간적으로 연속된 월드인 것은 아님. 3→4 경계에 **리프트·철골 비계·차별화된 다음 지역 입장**을 구현하고, 카메라 공간 보존/이전-다음 구역 출구·입구 연속성, 이벤트 조작 미완료 시 게이트 차단, 보상 모달이 탐험을 과도하게 끊지 않도록 개선. 기존 `src/domain/omega-protocol-field-transit.ts`, `src/engine/omega-protocol-combat.ts`, `src/ui/OmegaProtocolPlaytest.tsx`, `src/domain/omega-protocol-field.ts`, `scripts/qa-omega-connected-gates-browser.mjs` 확인 후 새 QA PR에서 TypeScript/Vitest + 실제 Chrome PC/모바일 입력 증빙. **`main`/Production 반영 금지.** M04 전체가 인증될 때까지 M05로 넘어갔다고 주장하지 않는다.
 
 ## 4. 코드별 찾아가기
 
@@ -105,9 +105,9 @@
 
 **CI가 없었던 근본 이유:** PR #235는 `main`과 충돌(`mergeable=false / dirty`)이어서 `pull_request` Actions 트리거가 실행되지 않았다. 정식 출시 전까지 별도 QA PR을 **개발 브랜치만 대상으로** 개설하여 테스트하고 그곳으로 병합하는 방식을 유지한다. PR #235와 `main`의 충돌 해결은 최종 품질게이트 이후 별도 검토, 운영 배포 금지.
 
-**여전히 미완:** 실제 유저 해금 CTA, 승인된 AIRA 독립 160프레임(현재 0/160), 12종 이상의 정식 8방향 좀비/적 원화·군집 전술, 심리스 5막 지도 연결·시네마틱, Android/태블릿 실기기 실측. **M02 총·검 기술검증 PR #238 및 M03 4종 좀비 AI 기술검증 PR #239는 PASS**. 운영 및 최종 미술/음향 품질 검수 미완.
+**여전히 미완:** 실제 유저 해금 CTA, 승인된 AIRA 독립 160프레임(현재 0/160), 12종 이상 정식 8방향 좀비/적 원화·군집 전술, **진정한 5막/15지점 심리스 세계 연결 및 전환 시네마틱**(M04-A는 1→2→3 게이트 연출만), Android/태블릿 실기기 실측, 보스 다단계. **PR #237(M01), #238(M02), #239(M03), #240(M04-A) 기술검증 PASS**, 운영·최종 아트/음향 품질 승인 미완.
 
-**다음 시작 커밋:** PR #235 **최신 HEAD를 다시 조회하고 인계 10절의 M03 근거를 확인한 뒤 M04 심리스 공간 연결/실제 출구 이동 검증**부터 시작한다. M01~M03 기술검증 PASS를 재작성하는 데 시간을 낭비하지 말고, 새 브라우저 E2E로 M04를 단계별 인증한다.
+**다음 시작 커밋:** PR #235 최신 HEAD를 다시 조회하고 **인계 11절 M04-A 검증 범위**부터 읽어라. 중복된 1→2→3 게이트 시험이 아니라 **M04-B 3→4 경계(승강기/실제 첫 지역 변경)·맵 연결감·보상 흐름 개선**을 시작할 것. 반드시 실제 플레이어 조작 QA로 검증하고 인계 갱신.
 
 ## 9. M02 총·검 실전투 기술검증 — 2026-11-09 최신 결과
 
@@ -149,4 +149,19 @@
 
 **정확한 완료 판정:** `M03 = CODED + TESTED(자동/실제 Chromium 게임 브라우저 기술검증)`. 이 결과는 실물 Android 폰, 게임 상용 출시 또는 승인된 고해상도 좀비 원화·12종 적/보스·오디오 품질을 인증하지 않는다. 일부 장면에서는 AI 시야/군집 전술을 이후 M08로 보강해야 한다.
 
-**NEXT = M04:** 5막·15 내부 이벤트 지점을 별도 스테이지 클리어창 없는 **끊김 없는 공간 이동**으로 체감시키는 실제 플레이 개선. 출구 탐색·상호작용·리프트/계단 이동·지역 전환의 이음새를 먼저 구현하고, 2곳 이상 연결의 실제 브라우저 조작 증빙을 얻은 뒤 인계표를 갱신한다. M05 보스 다단계와 M06/M07 AIRA 은백색 원화 최종 제작은 이후 순서로 관리한다.
+**당시 M04 시작 요청(이력):** 1→2→3 두 번의 실제 입력 기반 게이트 이동은 PR #240에서 기술검증 완료. 그러나 **M04 전체=미완**이며, 후속 M04-B는 3→4 지역 경계와 5막의 체감 연결성 검증이다. M05 보스·M06/M07 AIRA 원화는 이후 진행한다.
+
+## 11. M04-A 연결형 게이트 1→2→3 실제 화면 입력 기술검증 (2026-11-09)
+
+**검증 출처:** [QA PR #240](https://github.com/TELLOWSS/psi-zero-day/pull/240) HEAD `ed244f012da27d3673cea58c0b5fabf82dda4a78`를 전수 검증 후 **OMEGA 개발 브랜치에만 squash 병합** `caed677df1748f861dbadc454695d53f85b036c5`. PR #235 Draft/미병합·`main` 불변·Production 미배포.
+
+- [Core Actions #42583435960](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42583435960) **PASS**: TypeScript, 아트 SHA-256/승인 차단, Vitest **47개 파일·208개 테스트**. 내부 출구 반경/이웃 구역 링크·구역 경계 통로 이름·구역 교체 타이밍·전술 강화 선택·일반 모드 이벤트 차단 회귀검사 포함.
+- [Browser Actions #42583436073](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42583436073) **PASS 전체 34/34 workflow 단계**. 실제 Vite/Chromium React/Canvas에서 PC 방향키, 모바일 화면 390×844의 **가시적 아날로그 스틱을 CDP touchStart→touchMove→touchEnd로 직접 누르는 시험**. 화면 좌표 임의 텔레포트, 게임 엔진 함수 직접 호출, 성공 결과 주입 **없음**.
+- [M04 실제 화면 QA 로그](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42583436073): `QA_PASS M04 PC-keyboard` 실제 이동 거리 **168.7 / 154.0**, `worldSequence [1,2,3]`, 두 번째 출구 후 **run-only reward** 선택; `QA_PASS M04 mobile-touch` 실제 이동 거리 **172.3 / 172.3**, `worldSequence [1,2,3]`, 같은 보상 처리.
+- 일반 OMEGA 게임: **적 제압→여러 현장 장치 실제 조작→출구 접근**이 완료돼야 게이트를 열 수 있다. 거리 밖 E는 실패하며, 구역 연결 전 출구를 열었다고 적 처치/이벤트를 자동 완료하지 않는다.
+- 검증 화면의 `?omegaQaState=gateTravel`은 **Vite DEV 한정 출발 고정 상황**으로 매 구역의 전투/장치 절차를 **사전에 해결한 상태**만 만든다. 그 이후 출구까지 가는 이동·실제 조작 버튼·이전 지도를 문 닫힘까지 보존·다음 지도를 문 뒤에서 로드·문 열림/강화 선택은 전부 일반 엔진. 이는 **전투·이벤트 실제 15개 무스킵 플레이 검증이 아니다**.
+- 추가 코드: `src/domain/omega-protocol-field-transit.ts` (cargo/lift/service-tunnel/airlock 연속 링크 정의, 0.75초 출발→0.7초 도착), `src/engine/omega-protocol-combat.ts` (원본 맵을 문 닫힘까지 유지, 닫힌 상태에서 다음 구역 초기화, 필요 시 안전 구역 카드 보상 유지), `src/ui/OmegaProtocolPlaytest.tsx` 및 CSS (반응형 두 문짝·행선지 라벨/실제 구역 UI), `tests/omega-protocol-field-transit.test.ts`, `scripts/qa-omega-connected-gates-browser.mjs`, CI 두 파일.
+
+**정확한 판정: `M04-A = CODED + TESTED (2개 실제 게이트 이동, PC/모바일 브라우저)` · `M04 전체 = INCOMPLETE`.** 현재 연출은 닫힌 문 뒤에서 1400×900 지도를 새로 로드하는 **격리 통로형 장면 이음새**다. 15개 지점을 하나의 스트리밍 월드 좌표로 이어 붙인 **완전한 심리스 공간은 아니며**, 구역별 내부 `wave`는 엔진에 여전히 존재한다. 2회 출구 방문 후 기존 게임의 전술 강화 선택 오버레이도 아직 나타나므로 몰입형 연속성은 후속 M04-B에서 보완할 것. 이것을 5막 완성 또는 15개 무스킵 탐험 완료로 주장하지 마라.
+
+**NEXT M04-B:** **3→4(첫 번째 Act 경계)** 리프트/비계가 서로 맞닿은 진짜 공간 이동을 우선 구현·브라우저 2해상도 실제 입장 검증. 이후 6→7/9→10/12→13까지 5막을 한 세계로 연결하고, 최소 15구역 무스킵 탐험 및 장시간 FPS/Android 실제 터치 QA를 별도 완료해야 M04 전체 완료 판정 검토 가능. `main` 병합·Vercel Production 배포·유료 빌드 전환은 계속 금지.
