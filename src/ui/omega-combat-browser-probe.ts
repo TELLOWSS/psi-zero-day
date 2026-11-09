@@ -4,7 +4,7 @@ import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
 
 /**
- * DEV-ONLY, explicit omegaQaState=combatGun|combatBlade|combatCover browser
+ * DEV-ONLY, explicit omegaQaState=combatGun|combatBlade|combatCover|combatRear browser
  * fixture. The mounted React/Canvas screen still runs the genuine WATCH
  * auto-fire, collision, enemy HP and OMEGA blade actions. This sets initial
  * actors/positions exactly once; no synthetic impact, HP mutation *after*
@@ -12,7 +12,7 @@ import {omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
  *
  * This module must never be invoked from ordinary Watch or published OMEGA.
  */
-export type OmegaCombatProbeMode='combatGun'|'combatBlade'|'combatCover';
+export type OmegaCombatProbeMode='combatGun'|'combatBlade'|'combatCover'|'combatRear';
 export interface OmegaCombatProbeFixture{
  readonly mode:OmegaCombatProbeMode;
  readonly zombieId:string;
@@ -22,7 +22,7 @@ export interface OmegaCombatProbeFixture{
 }
 export function omegaCombatProbeMode(query:string):OmegaCombatProbeMode|null{
  const value=new URLSearchParams(query).get('omegaQaState');
- return value==='combatGun'||value==='combatBlade'||value==='combatCover'?value:null;
+ return value==='combatGun'||value==='combatBlade'||value==='combatCover'||value==='combatRear'?value:null;
 }
 export function omegaSetupCombatProbe(
  session:OmegaProtocolCombatSession,
@@ -57,7 +57,7 @@ export function omegaSetupCombatProbe(
  }
  // Disable ONLY the fixture's Watch gun when verifying pure sword damage;
  // default gameplay always keeps its actual original auto-fire perk.
- if(mode==='combatBlade')state.activePerks.radio_boost=0;
+ if(mode==='combatBlade'||mode==='combatRear')state.activePerks.radio_boost=0;
  return {mode,zombieId:infected.id,initialHp:800,coverDetour,
   gunEnabled:state.activePerks.radio_boost>0};
 }
