@@ -40,6 +40,55 @@ export function drawOmegaPowerWarden(ctx:CanvasRenderingContext2D,time:number,ph
  ctx.restore();
 }
 
+/** OMEGA-exclusive visual mapping for the existing Watch engine type.
+ * Every UNHELMETED hazard here is a FICTIONAL INFECTED WORKER ZOMBIE
+ * with an unmistakable safety helmet and reflective vest.
+ * This renderer is never imported into the ordinary Watch game view.
+ * Geometry is an early QA placeholder, NOT high-resolution production art.
+ */
+export const OMEGA_INFECTED_VISUAL_ID='HELMET_ZOMBIE' as const;
+export function drawOmegaHelmetZombie(
+ ctx:CanvasRenderingContext2D,h:Hazard,time:number,
+):void {
+ const variant=Array.from(h.id??'zombie').reduce((v,ch)=>v+ch.charCodeAt(0),0)%3;
+ const vest=['#b56c31','#b8a43a','#638969'][variant]!;
+ const helmet=['#ffcb3e','#f6da68','#ff9d40'][variant]!;
+ const sway=Math.sin(time*5+variant*2+h.x*.02)*2.5;
+ const bob=Math.sin(time*7+variant)*1.4;
+ ctx.save();
+ ctx.translate(0,bob);
+ // Work trousers, mismatched steps and torn-looking but bloodless coveralls.
+ ctx.fillStyle='#26343b';
+ ctx.fillRect(-11,-15,9,20);ctx.fillRect(4,-13+sway*.25,9,19);
+ ctx.fillStyle='#111b24';ctx.fillRect(-13,3,13,5);ctx.fillRect(4,3,13,5);
+ // Contaminated coverall and high-visibility reflective vest.
+ ctx.fillStyle=vest;
+ ctx.beginPath();ctx.moveTo(-17,-40);ctx.lineTo(17,-40);
+ ctx.lineTo(14,-15);ctx.lineTo(-14,-15);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#f3d9a1';ctx.fillRect(-14,-29,28,4);
+ ctx.fillStyle='#bddfd6';ctx.fillRect(-3,-40,6,22);
+ // Unsettling hunched reaches; distinctly hostile from ordinary Watch NPC.
+ ctx.strokeStyle='#718f83';ctx.lineWidth=7;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(-16,-36);ctx.lineTo(-21+sway,-21);
+ ctx.lineTo(-30+sway*2,-13);ctx.moveTo(16,-36);
+ ctx.lineTo(23-sway,-21);ctx.lineTo(31-sway*2,-18);ctx.stroke();
+ // Ill complexion and bright infected eyes, with no blood or exposed injury.
+ ctx.fillStyle='#789c87';ctx.beginPath();ctx.ellipse(0,-48,12,13,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ecff86';ctx.fillRect(-8,-51,5,2.8);ctx.fillRect(4,-51,5,2.8);
+ ctx.fillStyle='#1a2b2c';ctx.fillRect(-4,-42,8,2);
+ // Safety helmet — full dome, protruding brim, light reflective patch,
+ // chin strap. Always retained for every zombie appearance variant.
+ ctx.fillStyle=helmet;ctx.beginPath();ctx.arc(0,-55,14,Math.PI,Math.PI*2);ctx.fill();
+ ctx.fillRect(-15,-56,31,6);
+ ctx.fillStyle='#fff8d2';ctx.fillRect(-4,-65,8,3);
+ ctx.strokeStyle='#ffe6a7';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(-10,-55);ctx.lineTo(-9,-42);
+ ctx.lineTo(10,-42);ctx.lineTo(10,-55);ctx.stroke();
+ ctx.strokeStyle='rgba(138,255,182,.45)';ctx.lineWidth=2;
+ ctx.beginPath();ctx.arc(0,-45,16+Math.sin(time*4)*1,0,Math.PI*2);ctx.stroke();
+ ctx.restore();
+}
+
 /**
  * Original vector combat silhouettes for PROTOCOL's internal playable QA.
  * These are recognizable enemy archetypes, not approved production sprites
@@ -59,15 +108,7 @@ export function drawOmegaProtocolEnemy(
  ctx.fillStyle='rgba(1,7,14,.55)';
  ctx.beginPath();ctx.ellipse(0,4,boss?46:23,boss?11:6,0,0,Math.PI*2);ctx.fill();
  if(h.type==='UNHELMETED'){
-  ctx.fillStyle='#222b39';ctx.fillRect(-10,-2,9,13);ctx.fillRect(3,-2,9,13);
-  ctx.fillStyle='#d6a071';ctx.beginPath();ctx.arc(0,-29,10,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#c87845';ctx.fillRect(-13,-20,26,20);
-  ctx.fillStyle='#303647';ctx.fillRect(-13,-15,26,7);
-  ctx.strokeStyle='#eac294';ctx.lineWidth=5;
-  ctx.beginPath();ctx.moveTo(-13,-15);ctx.lineTo(-20,-3+sway);
-  ctx.moveTo(13,-15);ctx.lineTo(20,-6-sway);ctx.stroke();
-  ctx.strokeStyle='#a6dff0';ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(-8,-33);ctx.lineTo(9,-33);ctx.stroke();
+  drawOmegaHelmetZombie(ctx,h,time);
  }else if(h.type==='RUNAWAY_CART'){
   ctx.fillStyle='#39485a';ctx.fillRect(-28,-25,58,24);
   ctx.strokeStyle='#ffce73';ctx.lineWidth=4;ctx.strokeRect(-27,-25,54,24);
