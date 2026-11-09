@@ -11,6 +11,7 @@ import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type 
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
+import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
@@ -218,6 +219,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [classicPad,setClassicPad]=useState(false);
  const [fps,setFps]=useState(0);
  const [interactionMessage,setInteractionMessage]=useState('');
+ const silverPreviewRequested=typeof window!=='undefined'&&
+  omegaSilverPreviewEnabled(window.location.search);
+ const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
+  silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
@@ -233,6 +238,30 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
+ useEffect(()=>{
+  if(!silverPreviewRequested){
+   userApprovedAiraV2.setSilverReviewSources(null);
+   return;
+  }
+  let mounted=true;
+  let lease:OmegaSilverPreviewSession|null=null;
+  omegaLoadSilverPreview().then(session=>{
+   if(!mounted){session.revoke();return;}
+   lease=session;
+   userApprovedAiraV2.setSilverReviewSources(session.urls);
+   setSilverPreviewStatus('ready');
+  }).catch(error=>{
+   if(mounted){
+    setSilverPreviewStatus('failed');
+    console.warn('Silver AIRA review unavailable; original gameplay unchanged',error);
+   }
+  });
+  return ()=>{
+   mounted=false;
+   userApprovedAiraV2.setSilverReviewSources(null);
+   lease?.revoke();
+  };
+ },[silverPreviewRequested]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
@@ -403,7 +432,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  return <main className="omega-protocol-lab omega-protocol-v2"
   data-omega-protocol-internal="true"
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
-  data-omega-aira-v2-status="user-selected-8-direction-neutral-art">
+  data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
+  data-omega-silver-preview={silverPreviewStatus}>
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
@@ -422,6 +452,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
+  {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
+    <strong>은백색 AIRA · 로컬 원화 시험</strong>
+    <span>{silverPreviewStatus==='ready'
+     ?'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 방향 원화 미승인'
+     :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
+     :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
+    <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
+   </aside>}
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
