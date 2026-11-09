@@ -13,6 +13,8 @@ on:
       - 'src/ui/omega-protocol-actor-render.ts'
       - 'src/ui/omega-aira-v2-candidate.ts'
       - 'src/ui/omega-canonical-local-preview.ts'
+      - 'src/ui/omega-silver-watch-native.ts'
+      - 'src/ui/PatrolSurvivorsGame.tsx'
       - 'src/ui/omega-aira-v2-directional-action-rig.ts'
       - 'src/ui/omega-aira-v2-directional-parity.ts'
       - 'src/ui/omega-aira-v2-walk-rig.ts'
