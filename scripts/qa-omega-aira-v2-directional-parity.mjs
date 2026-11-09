@@ -130,8 +130,8 @@ try{
   const audit=omegaAiraV2ArtParity();
   // Successful technical motion checks NEVER rewrite the official art
   // coverage: 14 independent E poses / 146 missing, masks all missing.
-  const truthfulCount=audit.independentlyPaintedFrames===14&&
-   audit.missingActionFrames===146&&!audit.fullProductionApproved;
+  const truthfulCount=audit.independentlyPaintedFrames===18&&
+   audit.missingActionFrames===142&&!audit.fullProductionApproved;
   const pass=source8Unique&&sourceFootAligned&&sourceHeightParity&&
    all40Changed&&all40Visible&&truthfulCount;
   return {
@@ -140,9 +140,10 @@ try{
     pass,source8Unique,sourceFootAligned,sourceHeightParity,
     sourceSilhouetteHeightRatio:silhouetteRatio,
     all40Changed,all40Visible,
-    eightOriginalNeutralViews:true,allFivePaintedEStudiesReady:readyE(),
-    independentIllustratedActionFrames:14,
-    independentlyPaintedFramesMissing:146,
+    eightOriginalNeutralViews:true,
+    originalPaintedEWalkFrames:4,allFivePaintedEStudiesReady:readyE(),
+    independentIllustratedActionFrames:18,
+    independentlyPaintedFramesMissing:142,
     approved320OcclusionMasks:0,
     commercialArtApproved:false,
     actuallyRenderedGameSource:true,
