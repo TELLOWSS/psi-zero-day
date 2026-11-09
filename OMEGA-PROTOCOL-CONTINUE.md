@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-09 (KST) · M01~M03, M04-A/B/C ACT 경계 브라우저 기술검증 완료
+**관리일:** 2026-11-09 (KST) · M01~M03/M04-A~C 검증 완료, M04-D1 실전 무스킵 자동 조작 QA 진행 중
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리): M04-D 실제 15개 전 구역 전투·현장 이벤트·출구 이동의 무스킵 장시간 완주 및 보상 인터페이스 몰입 개선.** M04-A/B/C는 실제 출구·도크·공간 전환을 부분 검증했으나, DEV 환경의 사전 전투/장치 완료 fixture를 사용했다. 다음은 사전 완료 없이 진짜 감염 좀비·기계형 적을 처치하고 E/터치로 장치를 순차 조작하고 15구역 출구까지 진행하는 실제 고정 시드 회귀, 장시간 FPS/CPU·메모리·모바일 입력 안정성 확보. 15개의 독립 1400×900 지도 장면 교체는 진정한 스트리밍 심리스 월드가 아니므로 구분할 것. QA Draft PR은 OMEGA 개발 브랜치 대상으로 생성, 검증 후에만 개발 브랜치 병합. main/Production·유료 플랜 금지.
+**다음 실행 작업(하나씩 처리): M04-D1 실전 무스킵 QA PR #243 검증 완료까지 진행.** 실제 전투·총격/검격·현장 장치 3회·물리적 출구를 **DEV 전투/임무 사전 완료 없이** 수행하는 초기 2구역 시뮬레이션 PASS 기록이 있다. 그러나 체력 100→62→16으로 감소했으며, 회피형 자동조작 변경 후에는 2구역 마지막 적이 엄폐물 뒤에 머무는 상태에서 추적 실패를 검출했다. `tests/omega-protocol-noskip-pilot.test.ts`의 길찾기 강제 접근 수정 HEAD를 GitHub Actions로 재검증하고, 게임 난이도/HP 조작 없이 세 번째 구역까지 통과 여부를 판정할 것. `src/ui/OmegaProtocolPlaytest.tsx`와 CSS의 보급 패널 전장 맥락 개선 및 변경된 브라우저 QA도 검증 후에만 병합할 것. PR #243은 검증용 Draft 브랜치로, `main`과 Production에 병합/배포 금지.
 
 ## 4. 코드별 찾아가기
 
@@ -199,3 +199,17 @@
 **엄격한 완료 범위:** M04-C는 개발용 초기 상황 `?omegaQaState=actBoundary6|actBoundary9|actBoundary12`에서 **앞선 전투/목표를 브라우저 진입 전에 완료 처리**한 뒤, 해당 경계의 실입력 이동·E/터치·전환·정확한 도착 좌표를 시험한 것이다. 이것은 1~15 전 지역의 실제 적 처치와 장치 조작이 모두 끝난 무스킵 게임 플레이 인증이 아니다. 구역은 여전히 문 뒤에서 별도 필드로 교체된다. 완전 심리스 스트리밍, 고품질 AIRA 정식 원화, Android 실기기 테스트, 최종 출시 승인은 **미완료**.
 
 **NEXT M04-D:** DEV 사전 완료 없이 전체 15구역 실제 플레이·상호작용·장시간 안정성과 탐험 연속성, 보상 카드 화면의 몰입 방해 제거를 검증한다. 별도 QA PR로 검증 성공 후에만 OMEGA 개발 브랜치에 반영. main/Production 병합·유료 업그레이드 금지.
+
+## 14. M04-D1 무스킵 실전 감사 진행 기록 (2026-11-09, 완료 아님)
+
+**QA PR:** [#243](https://github.com/TELLOWSS/psi-zero-day/pull/243), 브랜치 `qa/omega-m04d-no-skip-expedition-audit-20261109` → **OMEGA 개발 브랜치 대상 Draft, 현재 미병합**. 인계 시 반드시 PR #243 최신 HEAD와 Actions/체크 결과를 먼저 조회할 것.
+
+- **검증된 기준:** [Core #42596736369](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42596736369): 최초 **M04-D 첫 구역** 실제 native Watch 적 5개 처치, 총격 피격 기록 5회/검격 230 피해, 현장 E 장치 3단계, 실제 출구, 플레이어 HP 100→62, 13.6초 게임 시뮬레이션. TypeScript/Vitest **48파일·217테스트 전체 통과**.
+- **다음 확장:** [Core #42596936770](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42596936770): **M04-D 첫 2개 구역 무스킵** 적 각 5개 실제 전투로 제거, 각 현장 E 장치 3단계, 두 출구, 첫 13.6초 + 둘째 10.9초 게임 시뮬레이션. HP **100→62→16**, 타입 검사 및 **48파일·218테스트 PASS**. 이 로그는 실제 2구역 연속 진행이 가능하나 순진한 근접 자동조작으로 체력이 크게 소진됨을 동시에 보여준다.
+- **발견된 실패:** [Core #42597833167](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42597833167): 실제 보급 선택 후 3구역 확장 시험은 **FAIL**. 초기 두 구역에 남은 HP가 적고 3구역 현장 장치까지 도달하지 못함. 허위로 완료 처리하지 않는다.
+- **회피 전략으로 전환한 후:** [Core #42598396594](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42598396594): 1구역 실제 전투/장치 모두 완료, **HP 100 유지**, 총격 13회·검격 35 피해. **2구역 마지막 적이 엄폐물 뒤**에 있어 자동 조작이 총격 사선을 회복하지 못하고 HP 진행 15초 교착으로 FAIL. 이에 적이 가려진 경우 기존 장애물 길찾기로 실제 접근하는 시험 코드 수정. 새로운 커밋은 아직 **최종 CI PASS 미확인**. 시험 조작의 실패와 게임 전체 진행 불능을 혼동하지 말 것.
+- **보급 UI 개선 후보:** `src/ui/OmegaProtocolPlaytest.tsx`, `src/ui/omega-protocol-playtest.css`의 기존 짙은 전체 화면 강화 모달을 **전장과 다음 목적지 맥락이 보이는 지역 보급 패널**로 재설계. 기존 전술 강화 3개 선택과 런 전용 효과 유지. `scripts/qa-omega-connected-gates-browser.mjs`에 실제 패널 표시·이동 재개 검사, `scripts/qa-omega-protocol-browser.mjs`의 오래된 제목 검사 교체. [Browser #42597833206](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42597833206) 전체 35단계 PASS(당시 수정본), **최신 변경 커밋의 재검증은 별도 필요**.
+
+**정확한 상태:** `M04-D1 = FIRST 2 NODE PASS ON ORIGINAL MELEE PILOT; ENHANCED KITE BOT + REWARD UI QA IN PROGRESS`. `M04 전체 = INCOMPLETE`. 현재도 15개 전장/출구가 각각 별도 필드로 교체되는 방식이며, 실제 적/장치 15구역 무스킵 완주, Android 하드웨어, 승인된 AIRA V2 독립 원화 160프레임, 완전 스트리밍 심리스 맵은 미완이다. **검증 실패하거나 미확인인 QA 브랜치의 코드를 개발 브랜치나 운영에 자동 병합 금지**.
+
+**NEXT:** [PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243)의 최신 코어 및 브라우저 Actions를 확인→실제 3구역까지 정상 전투·임무·출구가 연결되는지 확인→미완이면 실제 원인 파악 및 수정→성공한 단계만 QA 증거를 동반해 개발 브랜치로 병합→인계 14절과 마스터 기획서 갱신. 이후 실제 15구역 무스킵 완주와 장시간 기기 테스트를 순차 확대한다. `main`/Vercel Production은 최종 사용자 승인까지 보류.
