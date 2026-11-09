@@ -51,6 +51,7 @@ on:
       - 'scripts/qa-omega-canonical-review.mjs'
       - 'scripts/qa-omega-silver-preview-browser.mjs'
       - 'scripts/qa-omega-silver-github-binaries-browser.mjs'
+      - 'scripts/qa-omega-silver-native-watch.mjs'
       - 'scripts/qa-omega-silver-real-motion-lab.mjs'
       - 'public/omega-canonical-art-review/**'
       - 'public/assets/omega/canonical-review/**'
@@ -189,6 +190,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-silver-real-motion-lab.mjs
+      - name: Verify ORIGINAL AIRA player renders in actual SIGNAL WATCH Canvas at PC/mobile sizes
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-native-watch.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
