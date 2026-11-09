@@ -62,9 +62,9 @@ for(const [label,width,height] of [['desktop',1440,900],['mobile-portrait',390,8
    const a=document.querySelector('.omega-protocol-arena');
    if(!a)return false;
    const z=JSON.parse(a.getAttribute('data-omega-zombie-telemetry')??'[]');
-   return z.length===4&&z.every(e=>e.warnings>=1&&e.attacks>=1)&&
+   return z.length===4&&z.every(e=>e.warnings>=1&&e.attacks>=1&&e.hits>=1&&e.damageDone>0)&&
     Number(a.getAttribute('data-omega-zombie-player-hp'))<800;
-  },undefined,{timeout:18000});
+  },undefined,{timeout:25000});
   const finale=await read(page);
   if(finale.hp>=800||finale.hp<=0)throw Error('Native warned attack damage absent/defeat '+JSON.stringify(finale));
   if(finale.zombies.some(z=>z.hp!==25000))
@@ -72,8 +72,8 @@ for(const [label,width,height] of [['desktop',1440,900],['mobile-portrait',390,8
   for(const initial of opening.zombies){
    const current=finale.zombies.find(z=>z.id===initial.id);
    if(!current)throw Error('Zombie engine identity was replaced');
-   if(!(current.warnings>=1&&current.attacks>=1))
-    throw Error('Zombie never entered a telegraphed real attack '+JSON.stringify(current));
+   if(!(current.warnings>=1&&current.attacks>=1&&current.hits>=1&&current.damageDone>0))
+    throw Error('Zombie never dealt genuinely warned native player HP damage '+JSON.stringify(current));
    const moved=Math.hypot(current.x-initial.x,current.y-initial.y);
    if(moved<6)throw Error('Zombie did not physically move '+JSON.stringify({initial,current}));
   }
