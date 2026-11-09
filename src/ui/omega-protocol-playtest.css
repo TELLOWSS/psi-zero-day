@@ -1021,3 +1021,27 @@
  .omega-protocol-safe-room .omega-protocol-reward-cards button strong{font-size:11px}
  .omega-protocol-safe-room .omega-protocol-reward-cards button span{font-size:8px}
 }
+
+/* M04-D5 native-locked-direction warning; presentation only. */
+.omega-protocol-counterplay-hud{
+ position:absolute;z-index:5;pointer-events:none;left:50%;bottom:clamp(132px,18vh,180px);
+ transform:translateX(-50%);width:min(310px,calc(100% - 32px));
+ display:flex;flex-direction:column;align-items:center;gap:2px;
+ padding:7px 12px;border:1px solid #ffbb78b5;border-radius:10px;
+ background:linear-gradient(110deg,#3b1d2bee,#27182cea);color:#fff0de;
+ box-shadow:0 5px 15px #0009;text-align:center;
+}
+.omega-protocol-counterplay-hud strong{font-size:12px;line-height:1.2}
+.omega-protocol-counterplay-hud span{font-size:10px;color:#ffe0ad}
+.omega-protocol-dash small{font-size:9px;color:#c1ebff;line-height:1}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-counterplay-hud{bottom:168px;width:min(255px,calc(100% - 28px));padding:6px 9px}
+ .omega-protocol-counterplay-hud strong{font-size:10px}
+ .omega-protocol-counterplay-hud span{font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-counterplay-hud{bottom:74px;width:min(245px,calc(100% - 300px));padding:4px 8px;gap:1px}
+ .omega-protocol-counterplay-hud strong{font-size:10px}
+ .omega-protocol-counterplay-hud span{font-size:9px}
+ .omega-protocol-dash small{font-size:8px}
+}
