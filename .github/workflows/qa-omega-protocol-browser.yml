@@ -16,6 +16,7 @@ on:
       - 'src/ui/omega-aira-v2-weapon-vfx.ts'
       - 'src/ui/omega-aira-v2-fire-frames.ts'
       - 'src/ui/omega-aira-v2-dash-frames.ts'
+      - 'src/ui/omega-aira-v2-hit-frames.ts'
       - 'public/assets/omega/aira-v2/**'
       - 'content/art/omega-aira-v2-user-approved.json'
       - 'src/ui/omega-protocol-aira-kinetics.ts'
@@ -44,6 +45,7 @@ on:
       - 'scripts/qa-omega-aira-v2-fire-source.mjs'
       - 'scripts/qa-omega-aira-e-fire-atlas.mjs'
       - 'scripts/qa-omega-aira-e-dash-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-hit-atlas.mjs'
       - 'src/ui/ReignitionTitle.tsx'
       - 'src/ui/reignition-premium.css'
       - '.github/workflows/qa-omega-protocol-browser.yml'
@@ -130,6 +132,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-aira-e-dash-atlas.mjs
+      - name: Real E-direction AIRA hit keyframe pixel and native-cue QA
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-hit-atlas.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
