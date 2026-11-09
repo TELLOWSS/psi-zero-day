@@ -34,6 +34,12 @@ try{
   while(!cache.hasAllDirections()&&performance.now()<deadline)
    await new Promise(done=>setTimeout(done,60));
   if(!cache.hasAllDirections())throw new Error('One or more original AIRA angle images absent');
+  const readyE=()=>cache.fireFrames.ready&&cache.dashFrames.ready&&
+   cache.hitFrames.ready&&cache.specialFrames.ready('ultimate')&&
+   cache.specialFrames.ready('finish');
+  while(!readyE()&&performance.now()<deadline)
+   await new Promise(done=>setTimeout(done,60));
+  if(!readyE())throw new Error('E source action atlases failed image decode: cannot prove painted comparison');
   const states={
    fire:[.025,.085],dash:[.03,.11],hit:[.024,.085],
    ultimate:[.2,.96],finish:[.12,.72],
@@ -134,7 +140,7 @@ try{
     pass,source8Unique,sourceFootAligned,sourceHeightParity,
     sourceSilhouetteHeightRatio:silhouetteRatio,
     all40Changed,all40Visible,
-    eightOriginalNeutralViews:true,
+    eightOriginalNeutralViews:true,allFivePaintedEStudiesReady:readyE(),
     independentIllustratedActionFrames:14,
     independentlyPaintedFramesMissing:146,
     approved320OcclusionMasks:0,
