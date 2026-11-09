@@ -62,11 +62,14 @@ try{
  const hashes={},images=[];
  for(const [i,h] of directions.entries()){
   const color=['#dd2bff','#14aacb','#ec953b','#81efb7','#f95f67','#80a6ed','#f5d877','#906eeb'][i];
+  const details=Array.from({length:150},(_,k)=>
+   '<rect x="'+((k*47+i*19)%375)+'" y="'+((k*83+i*13)%507)+
+   '" width="6" height="5" fill="'+(k%2?'#f3eafa':'#1b1436')+'"/>').join('');
   const svg='<svg xmlns="http://www.w3.org/2000/svg" width="384" height="512">'+
     '<circle cx="'+(120+i*12)+'" cy="115" r="64" fill="'+color+'"/>'+
     '<path d="M85 205 L300 205 L340 450 L50 450 Z" fill="'+color+'"/>'+
     '<path d="M130 435 L140 501 L172 501 L190 435 M200 435 L210 501 L240 501 L250 435" stroke="'+color+'" stroke-width="20"/>'+
-    '</svg>';
+    details+'</svg>';
   const buf=await sharp(Buffer.from(svg)).ensureAlpha().webp({quality:72}).toBuffer();
   const filename=join(folder,h.toLowerCase()+'-silver-review.webp');
   await writeFile(filename,buf);
