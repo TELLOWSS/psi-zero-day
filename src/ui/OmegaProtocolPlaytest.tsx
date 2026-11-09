@@ -388,6 +388,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     const h=session.engine.state.hazards.find(item=>item.id===fixture.zombieId);
     const arena=arenaRef.current;
     arena.dataset.omegaQaZombieHp=h?String(h.hp):'MISSING';
+    arena.dataset.omegaQaZombieX=h?String(h.x):'MISSING';
+    arena.dataset.omegaQaZombieY=h?String(h.y):'MISSING';
+    arena.dataset.omegaQaPlayerX=String(session.engine.state.player.x);
+    arena.dataset.omegaQaPlayerY=String(session.engine.state.player.y);
+    arena.dataset.omegaQaFacing=JSON.stringify(session.facing);
+    arena.dataset.omegaQaBladeDamage=String(session.lastBladeStrike?.totalDamage??0);
+    arena.dataset.omegaQaBladeTime=String(session.lastBladeStrike?.time??-1);
     arena.dataset.omegaQaGunHits=String(qaRadioHits);
     arena.dataset.omegaQaGunDamage=qaRadioDamage.toFixed(3);
     arena.dataset.omegaQaGunBlocked=String(qaRadioBlocked);
