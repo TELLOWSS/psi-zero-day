@@ -674,3 +674,15 @@
  .omega-protocol-action-pad button.omega-protocol-blade{width:47px;height:47px}
  .omega-protocol-action-pad button.omega-protocol-ultimate{width:56px!important;height:56px!important}
 }
+
+/* Subtitled AIRA story transmissions: briefings, not persistent screen cover. */
+.omega-protocol-mission .omega-protocol-story-radio{
+ max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ font-size:10px;color:#d9b6ff;letter-spacing:0;display:block;
+}
+@media(max-width:760px){
+ .omega-protocol-mission .omega-protocol-story-radio{font-size:9px;max-width:100%}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission .omega-protocol-story-radio{display:none}
+}
