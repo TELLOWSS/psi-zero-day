@@ -23,9 +23,13 @@ describe('OMEGA 50-extreme epilogue is a contiguous exploration, NOT 15 Watch st
   expect(omegaStoryNode(9).boss).toBe('titan_hook');
   expect(omegaStoryNode(15).boss).toBe('black_signal_core');
  });
- it('keeps the gun/blade conflict fictional and excludes hostile real workers',()=>{
-  expect(OMEGA_STORY_NODES.some(n=>n.reveal.includes('시뮬레이션'))).toBe(true);
-  expect(OMEGA_STORY_NODES.some(n=>n.airaRadio.includes('사람을 공격하지 마십시오'))).toBe(true);
+ it('records the fictional industrial contamination and preserves uninfected rescue targets',()=>{
+  expect(omegaStoryNode(1).reveal).toContain('안전모');
+  expect(omegaStoryNode(1).reveal).toContain('좀비');
+  expect(omegaStoryNode(5).reveal).toContain('감염');
+  expect(omegaStoryNode(11).reveal).toContain('건강한 사람');
+  expect(omegaStoryNode(15).reveal).toContain('코어');
+  expect(OMEGA_STORY_ACTS.some(x=>x.title==='INFECTED SKYFRAME')).toBe(true);
   expect(()=>omegaStoryNode(0)).toThrow(RangeError);
   expect(()=>omegaStoryNode(16)).toThrow(RangeError);
  });
