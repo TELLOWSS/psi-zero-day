@@ -11,7 +11,7 @@ import type {OmegaArtAction} from './omega-protocol-art-motion';
 export const OMEGA_AIRA_V2_AUTHORED_ACTION_COUNTS:Readonly<Record<
  OmegaHeading,Readonly<Record<OmegaArtAction,number>>
 >>=Object.freeze({
- E:Object.freeze({walk:0,fire:3,dash:3,hit:3,ultimate:3,finish:2}),
+ E:Object.freeze({walk:4,fire:3,dash:3,hit:3,ultimate:3,finish:2}),
  SE:Object.freeze({walk:0,fire:0,dash:0,hit:0,ultimate:0,finish:0}),
  S:Object.freeze({walk:0,fire:0,dash:0,hit:0,ultimate:0,finish:0}),
  SW:Object.freeze({walk:0,fire:0,dash:0,hit:0,ultimate:0,finish:0}),
