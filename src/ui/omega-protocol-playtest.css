@@ -724,3 +724,69 @@
  .omega-protocol-gate-sign strong{font-size:18px}
  .omega-protocol-gate-sign span,.omega-protocol-gate-sign small{font-size:9px}
 }
+
+/* M04-B: sector 01→02 scaffold-lift section.  The cage's top value is
+   driven by the real game-clock portal state, not a CSS auto-timer. */
+.omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"]{
+ background:linear-gradient(113deg,#0c2236,#223f50 57%,#0a1a2d);
+}
+.omega-protocol-lift-cross-section{
+ position:absolute;inset:0;overflow:hidden;opacity:.78;
+ background:
+  repeating-linear-gradient(0deg,transparent 0 33px,#8bc7cf22 34px 36px,transparent 37px 71px),
+  repeating-linear-gradient(90deg,#142b3b 0 10px,#203749 12px 15px,#102334 18px 24px);
+}
+.omega-protocol-lift-rail{
+ position:absolute;left:50%;top:-2%;bottom:-2%;
+ width:min(350px,70vw);transform:translateX(-50%);
+ border-left:12px solid #81a6b4;border-right:12px solid #81a6b4;
+ box-shadow:inset 0 0 80px #000d,0 0 35px #5ec6bd33;
+}
+.omega-protocol-lift-rail i{
+ position:absolute;left:0;right:0;top:15%;height:5px;
+ background:#c2d1c9;box-shadow:0 85px 0 #c2d1c9,0 170px 0 #c2d1c9,0 255px 0 #c2d1c9;
+}
+.omega-protocol-lift-rail i:nth-child(2){top:20%}
+.omega-protocol-lift-rail i:nth-child(3){top:40%}
+.omega-protocol-lift-rail i:nth-child(4){top:60%}
+.omega-protocol-lift-cage{
+ position:absolute;left:50%;width:min(280px,64vw);
+ height:min(140px,30vh);transform:translate(-50%,-50%);
+ background:linear-gradient(135deg,#567a83d9,#192d3c 70%,#0e2232);
+ border:8px solid #9db5c1;border-top:13px solid #f2be78;
+ outline:3px solid #1b3446;
+ box-shadow:inset 0 0 32px #000b,0 0 55px #4fc9ca55;
+ display:flex;align-items:center;justify-content:space-around;
+ color:#f5e8b5;letter-spacing:.11em;font-size:13px;font-weight:900;
+}
+.omega-protocol-lift-cage:before{
+ content:"";position:absolute;left:20%;right:20%;top:-300px;
+ border-left:3px solid #b2c7cd;border-right:3px solid #b2c7cd;height:300px;
+}
+.omega-protocol-lift-cage b{color:#a0ffde}
+.omega-protocol-lift-cross-section>small{
+ position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+ color:#d6eedf;white-space:nowrap;font-weight:850;letter-spacing:.2em;
+ background:#112b3eb9;padding:6px 14px;border:1px solid #9ae4cb8a;
+}
+.omega-protocol-lift-cross-section>small b{color:#f3c476}
+.omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+ margin-left: min(47vw,430px);max-width:min(48vw,390px);
+}
+.omega-protocol-lift-depth{color:#a7e8c6!important;font-size:11px!important}
+@media(max-width:600px) and (orientation:portrait){
+ .omega-protocol-lift-cage{width:min(215px,64vw);height:100px}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+  margin-left:0;align-self:end;margin-bottom:7vh;max-width:calc(100% - 32px);
+  padding:9px 15px;gap:4px;
+ }
+ .omega-protocol-lift-cross-section>small{bottom:33%}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign strong{font-size:19px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lift-cage{height:85px}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+  max-width:min(44vw,390px);margin-left:min(48vw,420px);gap:3px;
+ }
+ .omega-protocol-lift-cross-section>small{bottom:4%;font-size:8px}
+}
