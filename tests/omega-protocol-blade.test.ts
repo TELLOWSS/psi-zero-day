@@ -8,17 +8,21 @@ import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 const machine:OmegaBladeTarget={id:'unit-1',x:85,y:0,hp:160,maxHp:160,radius:15,type:'RUNAWAY_CART'};
 const input={moveX:1,moveY:0,triggerAction:false};
 describe('OMEGA blade is an actual native special-edition hit, not a fake animation',()=>{
- it('honors facing, range, target identity and forbids human/worker archetypes',()=>{
+ it('honors facing/range and admits fictional helmet-zombies only in this special-edition blade system',()=>{
   const origin={x:0,y:0};
   expect(omegaBladeTargetInArc(origin,machine,{x:1,y:0})).toBe(true);
   expect(omegaBladeTargetInArc(origin,machine,{x:-1,y:0})).toBe(false);
   expect(omegaBladeTargetInArc(origin,{...machine,x:250},{x:1,y:0})).toBe(false);
-  for(const type of ['UNHELMETED','GAS_LEAK'] as const){
-   const target={...machine,type};
-   expect(omegaBladeEligible(target)).toBe(false);
-   expect(omegaBladeTargetInArc(origin,target,{x:1,y:0})).toBe(false);
-   expect(omegaBladeDamage(1,target)).toBe(0);
-  }
+  // The old Watch compatibility ID UNHELMETED is a helmeted infected
+  // zombie in OMEGA; GAS_LEAK is still a non-targetable environment hazard.
+  const infected={...machine,type:'UNHELMETED' as const};
+  expect(omegaBladeEligible(infected)).toBe(true);
+  expect(omegaBladeTargetInArc(origin,infected,{x:1,y:0})).toBe(true);
+  expect(omegaBladeDamage(1,infected)).toBeGreaterThan(0);
+  const gas={...machine,type:'GAS_LEAK' as const};
+  expect(omegaBladeEligible(gas)).toBe(false);
+  expect(omegaBladeTargetInArc(origin,gas,{x:1,y:0})).toBe(false);
+  expect(omegaBladeDamage(1,gas)).toBe(0);
   expect(omegaBladeTargetInArc(origin,machine,{x:NaN,y:1})).toBe(false);
  });
  it('produces a finite three-hit combo within the real cooldown and boss damage cap',()=>{
@@ -37,7 +41,7 @@ describe('OMEGA blade is an actual native special-edition hit, not a fake animat
   const target=session.engine.state.hazards[0]!;
   session.update(1/60,input);
   const hero=session.engine.state.player;
-  target.type='RUNAWAY_CART';target.x=hero.x+65;target.y=hero.y;
+  target.type='UNHELMETED';target.x=hero.x+65;target.y=hero.y;
   target.radius=18;target.hp=200;target.maxHp=200;target.speed=0;
   const originalHp=target.hp;
   const swing=session.blade();
