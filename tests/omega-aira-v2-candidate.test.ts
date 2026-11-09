@@ -53,6 +53,39 @@ describe('AIRA V2 user-selected eight-direction identity in live Watch Canvas',(
   expect(events.filter(e=>e.name==='scale').length).toBe(0);
   expect(events.some(e=>e.name==='ellipse')).toBe(true);
  });
+ it('orders real canvas gun pixels behind original back views and ahead of front views',()=>{
+  class LoadedImage{
+   complete=true;naturalWidth=192;naturalHeight=336;decoding='';
+   src='';onload=null;onerror=null;
+  }
+  vi.stubGlobal('Image',LoadedImage);
+  const cache=new OmegaAiraV2CandidateImages();
+  cache.prepare();
+  const sample=(direction:'N'|'S')=>{
+   const event:string[]=[];
+   const gradient={addColorStop:(_a:number,_b:string)=>{}};
+   const ctx=new Proxy({},{
+    get(_t,k){
+     if(k==='createLinearGradient'||k==='createRadialGradient')return()=>{
+      event.push(String(k));return gradient;
+     };
+     return (..._args:unknown[])=>{event.push(String(k));};
+    },
+    set(){return true;},
+   }) as unknown as CanvasRenderingContext2D;
+   const view={facingX:0,facingY:direction==='N'?-1:1,moving:false,time:2.4,
+    shooting:true,dashing:false,actionAge:.04,weaponFacingX:1,weaponFacingY:0};
+   expect(drawOmegaAiraV2Candidate(ctx,view,cache)).toBe(true);
+   return event;
+  };
+  const back=sample('N'),front=sample('S');
+  expect(back.indexOf('createRadialGradient')).toBeGreaterThanOrEqual(0);
+  expect(front.indexOf('createRadialGradient')).toBeGreaterThanOrEqual(0);
+  expect(back.indexOf('createRadialGradient')).toBeLessThan(back.indexOf('drawImage'));
+  expect(front.indexOf('createRadialGradient')).toBeGreaterThan(front.indexOf('drawImage'));
+  expect(back.filter(k=>k==='createRadialGradient')).toHaveLength(1);
+  expect(front.filter(k=>k==='createRadialGradient')).toHaveLength(1);
+ });
  it('adds only visual motion derived from native action booleans',()=>{
   class LoadedImage{
    complete=true;naturalWidth=192;naturalHeight=336;decoding='';
