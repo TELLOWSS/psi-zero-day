@@ -1,5 +1,6 @@
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
+import {drawOmegaAiraV2DirectionalAction} from './omega-aira-v2-directional-action-rig';
 import {drawOmegaAiraV2ShotVfx} from './omega-aira-v2-weapon-vfx';
 import {OmegaAiraV2FireFrames} from './omega-aira-v2-fire-frames';
 import {OmegaAiraV2DashFrames} from './omega-aira-v2-dash-frames';
@@ -116,7 +117,11 @@ export function drawOmegaAiraV2Candidate(
  const paintedDash=!paintedSpecial&&!paintedHit&&cache.dashFrames.draw(ctx,heading,view,h*1.43);
  const paintedFire=!paintedSpecial&&!paintedHit&&!paintedDash&&cache.fireFrames.draw(ctx,heading,view,h*1.14);
  if(paintedSpecial||paintedHit||paintedDash||paintedFire){
-  // Real illustrated keyframes take precedence over artificial limb cuts.
+  // Independent artist-illustrated E keyframes take precedence when ready.
+ }else if(drawOmegaAiraV2DirectionalAction(ctx,image,heading,view,h)){
+  // On all eight ORIGINAL angle images, native fire/dash/hit/ultimate/finish
+  // now have dedicated anatomical motion. This is an INTERIM technical rig,
+  // never misreported as 146 separately hand-painted missing frames.
  }else if(walk&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished){
   // Real eight-source articulated gait with two independent boot limbs.
   // Still art is the user's selected V2; this is interim skeletal motion
