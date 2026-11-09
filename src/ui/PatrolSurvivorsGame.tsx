@@ -3294,6 +3294,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           ctx.restore();
         } else if (item.kind === 'player') {
+          // The QA Canvas marker describes the CURRENT native player draw,
+          // never a prior successful frame or a preload-only source.
+          if(silverNativePreviewRequested){
+            ctx.canvas.dataset.omegaSilverWatchPainted='false';
+            delete ctx.canvas.dataset.omegaSilverWatchHeading;
+          }
           // 7. RENDER PLAYER (2.5D Standing Billboard + Realistic Ground Shadow + Equipment)
           ctx.save();
           ctx.translate(player.x, player.y);
@@ -3364,6 +3370,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // Browser QA proof is set ONLY by the actual native draw branch,
             // not by image preload or React's loading indicator.
             ctx.canvas.dataset.omegaSilverWatchPainted='true';
+            ctx.canvas.dataset.omegaSilverWatchHeading=OMEGA_SILVER_NATIVE_WATCH_HEADINGS[playerPose.direction??-1]??'';
             // Native Watch player physics/HP/projectiles/VFX unchanged.
             // Old character's skin/equipment overlays must not cover AIRA.
           }else if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
