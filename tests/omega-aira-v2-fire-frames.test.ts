@@ -20,30 +20,54 @@ describe('AIRA V2 independent, original-source E firing pose ingest gate',()=>{
   expect(OMEGA_AIRA_E_FIRE_STUDY.expectedAtlasWidth).toBe(
    OMEGA_AIRA_E_FIRE_STUDY.columns*OMEGA_AIRA_E_FIRE_STUDY.sourceWidth);
  });
- it('does not fetch missing binary or claim that a 3-key E pose is 160 approved assets',()=>{
-  let imagesCreated=0;
-  class FakeImage{constructor(){imagesCreated++}}
-  vi.stubGlobal('Image',FakeImage);
-  const frames=new OmegaAiraV2FireFrames();
-  frames.prepare();
-  expect(frames.ready).toBe(false);
-  expect(imagesCreated).toBe(0);
-  expect(OMEGA_AIRA_E_FIRE_STUDY.binaryPresent).toBe(false);
-  expect(OMEGA_AIRA_E_FIRE_STUDY.productionApproved).toBe(false);
-  expect(OMEGA_AIRA_E_FIRE_STUDY.sha256).toMatch(/^[a-f0-9]{64}$/);
- });
- it('keeps native shot renderer fail-closed until real binary and QA arrive',()=>{
-  const frames=new OmegaAiraV2FireFrames();
-  const recorded:string[]=[];
-  const ctx=new Proxy({},{
-   get(_t,k){return (..._args:unknown[])=>{recorded.push(String(k));}},
-   set(){return true;},
-  }) as unknown as CanvasRenderingContext2D;
-  for(const heading of ['E','SE','S','SW','W','NW','N','NE'] as const){
-   expect(frames.draw(ctx,heading,actor,136)).toBe(false);
+ it('loads one committed local asset, not 160 imaginary production sprites',()=>{
+  const loaded:string[]=[];
+  class ReadyAtlas{
+   complete=true;naturalWidth=720;naturalHeight=240;
+   decoding='';onload:(()=>void)|null=null;onerror:(()=>void)|null=null;
+   private path='';
+   set src(value:string){loaded.push(value);this.path=value;}
+   get src(){return this.path;}
   }
+  vi.stubGlobal('Image',ReadyAtlas);
+  const frames=new OmegaAiraV2FireFrames();
+  expect(frames.ready).toBe(false);
+  frames.prepare();
+  expect(frames.ready).toBe(true);
+  expect(loaded).toEqual([OMEGA_AIRA_E_FIRE_STUDY.path]);
+  frames.prepare();
+  expect(loaded).toHaveLength(1);
+  expect(OMEGA_AIRA_E_FIRE_STUDY.binaryPresent).toBe(true);
+  expect(OMEGA_AIRA_E_FIRE_STUDY.productionApproved).toBe(false);
+  expect(OMEGA_AIRA_E_FIRE_STUDY.path).toMatch(/\/e-fire-3key-atlas\.svg$/);
+  expect(OMEGA_AIRA_E_FIRE_STUDY.sha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(OMEGA_AIRA_E_FIRE_STUDY.svgSha256).toMatch(/^[a-f0-9]{64}$/);
+  const calls:unknown[][]=[];
+  const ctx={drawImage:(...args:unknown[])=>calls.push(args)} as unknown as CanvasRenderingContext2D;
+  for(const [age,sx] of [[0,0],[.07,240],[.125,480]] as const){
+   expect(frames.draw(ctx,'E',{...actor,actionAge:age},136)).toBe(true);
+   expect(calls.at(-1)?.slice(1)).toEqual([sx,0,240,240,-77.52,-155.04,155.04,155.04]);
+  }
+  expect(calls).toHaveLength(3);
+  for(const other of ['SE','S','SW','W','NW','N','NE'] as const)
+   expect(frames.draw(ctx,other,actor,136)).toBe(false);
   expect(frames.draw(ctx,'E',{...actor,shooting:false},136)).toBe(false);
   expect(frames.draw(ctx,'E',{...actor,actionAge:.2},136)).toBe(false);
-  expect(recorded).toEqual([]);
+  expect(frames.draw(ctx,'E',{...actor,dashing:true},136)).toBe(false);
+  expect(calls).toHaveLength(3);
  });
+ it('fails closed on decode errors and wrong dimensions; never draws invalid art',()=>{
+  class BrokenAtlas{
+   complete=true;naturalWidth=240;naturalHeight=240;
+   decoding='';onload:(()=>void)|null=null;onerror:(()=>void)|null=null;src='';
+  }
+  vi.stubGlobal('Image',BrokenAtlas);
+  const frames=new OmegaAiraV2FireFrames();frames.prepare();
+  expect(frames.ready).toBe(false);
+  const calls:unknown[][]=[];
+  const ctx={drawImage:(...args:unknown[])=>calls.push(args)} as unknown as CanvasRenderingContext2D;
+  expect(frames.draw(ctx,'E',actor,136)).toBe(false);
+  expect(calls).toEqual([]);
+ });
+
 });
