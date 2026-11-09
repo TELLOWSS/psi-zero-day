@@ -95,6 +95,38 @@ try{
  await page.screenshot({path:resolve(out,'silver-ORIGINAL-GITHUB-main-1440x900.png'),fullPage:true});
  screens.push({viewport:'main-1440x900',filename:'silver-ORIGINAL-GITHUB-main-1440x900.png',
   realSource:true,modeLabels:['SIGNAL GUARD','SIGNAL WATCH']});
+ // M01 is a separate neutral design candidate, not a playable eight-way
+ // game character. Users may compare its original source on this DEV home.
+ const maleButton=page.getByRole('button',{name:'M01 · 남성 후보'});
+ await maleButton.waitFor({timeout:15000});
+ if(await maleButton.isDisabled())throw Error('Real GitHub male M01 portrait not available in DEV review');
+ await maleButton.click();
+ if(await maleButton.getAttribute('aria-pressed')!=='true')
+  throw Error('M01 source art comparison did not select male');
+ const maleSrc=await hero.getAttribute('src');
+ if(!maleSrc?.startsWith('blob:')||maleSrc===heroSrc)
+  throw Error('M01 original artwork is not a unique cached image');
+ await page.waitForFunction(()=>{const a=document.querySelector('.rg-aira-v2');
+  return a instanceof HTMLImageElement&&a.complete&&
+   a.naturalWidth===384&&a.naturalHeight===512;},
+  undefined,{timeout:15000});
+ await page.screenshot({path:resolve(out,'OMEGA-M01-ORIGINAL-GITHUB-home-1440x900.png'),fullPage:true});
+ screens.push({viewport:'main-M01-1440x900',filename:'OMEGA-M01-ORIGINAL-GITHUB-home-1440x900.png',
+  realSource:true,designCandidateOnly:true});
+ await page.getByRole('button',{name:'AIRA V2'}).click();
+ if(await hero.getAttribute('src')!==heroSrc)
+  throw Error('Silver AIRA portrait did not return after male review');
+ // On mobile this is a comparison toolbar, not a game-mode selector.
+ await page.setViewportSize({width:390,height:844});
+ const bannerSize=await page.locator('.rg-silver-review-banner').evaluate(el=>{
+  const r=el.getBoundingClientRect();
+  return {left:r.left,right:r.right,viewport:innerWidth};
+ });
+ if(bannerSize.left<0||bannerSize.right>bannerSize.viewport+1)
+  throw Error('Mobile male/AIRA art comparison controls overflow width');
+ await page.screenshot({path:resolve(out,'silver-ORIGINAL-GITHUB-main-MOBILE-390x844.png'),fullPage:true});
+ screens.push({viewport:'main-390x844',filename:'silver-ORIGINAL-GITHUB-main-MOBILE-390x844.png',
+  realSource:true,modeLabels:['SIGNAL GUARD','SIGNAL WATCH']});
  // A replaced response in the repo MUST fail closed before drawing.
  await page.route('**/assets/omega/canonical-review/aira-v2/nw.webp',r=>
   r.fulfill({status:200,contentType:'image/webp',body:Buffer.from('forged-silver-binary')}));
