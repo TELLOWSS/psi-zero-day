@@ -43,6 +43,28 @@ describe('AIRA V2 artist-identity-preserving native tactical sidearm overlay',()
    drawOmegaAiraV2ShotVfx(ctx,view,'S',126);expect(events).toEqual([]);
   }
  });
+ it('keeps back-facing weapon behind AIRA instead of painting it over hair and armor',()=>{
+  const back=['NW','N','NE'] as const;
+  const front=['E','SE','S','SW','W'] as const;
+  for(const heading of back){
+   const view=make(),frame=omegaAiraV2ShotFrame(view,heading,136);
+   expect(frame.layer).toBe('rear');
+   const {ctx,events}=mockCanvas();
+   drawOmegaAiraV2ShotVfx(ctx,view,heading,136,'front');
+   expect(events).toHaveLength(0);
+   drawOmegaAiraV2ShotVfx(ctx,view,heading,136,'rear');
+   expect(events.some(x=>x.op==='createRadialGradient')).toBe(true);
+  }
+  for(const heading of front){
+   const view=make(),frame=omegaAiraV2ShotFrame(view,heading,136);
+   expect(frame.layer).toBe('front');
+   const {ctx,events}=mockCanvas();
+   drawOmegaAiraV2ShotVfx(ctx,view,heading,136,'rear');
+   expect(events).toHaveLength(0);
+   drawOmegaAiraV2ShotVfx(ctx,view,heading,136,'front');
+   expect(events.some(x=>x.op==='createRadialGradient')).toBe(true);
+  }
+ });
  it('has bounded recoil and a true distinct shooter angle at all 8 headings',()=>{
   for(const [heading,x,y] of [
    ['E',1,0],['SE',1,1],['S',0,1],['SW',-1,1],
