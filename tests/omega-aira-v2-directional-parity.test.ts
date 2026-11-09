@@ -108,14 +108,14 @@ describe('AIRA V2 eight-heading visual parity — no false complete-art claims',
     expect(drawOmegaAiraV2DirectionalAction(ctx,img,heading,view,136)).toBe(true);
     expect(call.drawImage).toHaveLength(3);
     // The actual original image for that heading is used across all 3 layers.
-    expect(call.drawImage.every(args=>args[0]===img)).toBe(true);
+    expect(call.drawImage!.every(args=>args[0]===img)).toBe(true);
     expect(call.scale).toEqual([[136/336,136/336]]);
     // Feet are layered first; each source region uses its own half of
     // the correct original direction image, not a mirrored left sprite.
-    expect(call.drawImage[0]?.slice(1,5)).toEqual([0,179,96,157]);
-    expect(call.drawImage[1]?.slice(1,5)).toEqual([96,179,96,157]);
-    expect(call.drawImage[2]?.slice(1,5)).toEqual([0,0,192,198]);
-    expect(call.scale.every(v=>v.every(n=>typeof n==='number'&&n>0))).toBe(true);
+    expect(call.drawImage![0]?.slice(1,5)).toEqual([0,179,96,157]);
+    expect(call.drawImage![1]?.slice(1,5)).toEqual([96,179,96,157]);
+    expect(call.drawImage![2]?.slice(1,5)).toEqual([0,0,192,198]);
+    expect(call.scale!.every(v=>v.every(n=>typeof n==='number'&&n>0))).toBe(true);
     expect(call.save).toHaveLength(call.restore?.length??0);
    }
   }
