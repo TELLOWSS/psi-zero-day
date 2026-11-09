@@ -63,6 +63,11 @@ try{
  if(!rejected?.includes('SE'))throw Error('Mismatched source hash was not rejected');
  if(!page.url().includes('omega-canonical-art-review'))throw Error('Hash mismatch escaped review');
  allow=true;
+ // The review page intentionally caches its roster promise per page load.
+ // Revisit it when switching from a poisoned fixture to the clean fixture.
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.locator('#folder').setInputFiles(folder);
+ if(await apply.isDisabled())throw Error('Verified 8-view pack was not selectable');
  await apply.click();
  await page.waitForURL(/omegaLab=1.*omegaSilverPreview=1/,{timeout:20000});
  await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:18000});
