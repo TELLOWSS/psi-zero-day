@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import type {Hazard} from '../src/domain/patrol-survivors';
 import {
  OMEGA_ZOMBIE_KINDS,omegaZombieKindForSlot,omegaCreateZombieBrain,
- omegaAdvanceZombieBrain,omegaZombieThreatLabel,type OmegaZombieKind,
+ omegaAdvanceZombieBrain,omegaZombieThreatLabel,
 } from '../src/domain/omega-protocol-zombie-ai';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
