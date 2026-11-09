@@ -36,6 +36,7 @@ on:
       - 'src/ui/omega-aira-v2-fire-frames.ts'
       - 'src/ui/omega-aira-v2-dash-frames.ts'
       - 'src/ui/omega-aira-v2-hit-frames.ts'
+      - 'src/ui/omega-aira-v2-special-frames.ts'
       - 'public/assets/omega/aira-v2/**'
       - 'content/art/omega-aira-v2-user-approved.json'
       - 'src/ui/omega-protocol-aira-kinetics.ts'
@@ -71,10 +72,12 @@ on:
       - 'tests/omega-aira-v2-fire-frames.test.ts'
       - 'tests/omega-aira-v2-dash-frames.test.ts'
       - 'tests/omega-aira-v2-hit-frames.test.ts'
+      - 'tests/omega-aira-v2-special-frames.test.ts'
       - 'scripts/check-omega-aira-v2-assets.mjs'
       - 'scripts/check-omega-aira-e-fire-atlas.mjs'
       - 'scripts/check-omega-aira-e-dash-atlas.mjs'
       - 'scripts/check-omega-aira-e-hit-atlas.mjs'
+      - 'scripts/check-omega-aira-e-special-atlas.mjs'
       - 'tests/omega-protocol-aira-kinetics.test.ts'
       - 'src/engine/patrol-survivors-engine.ts'
       - 'tests/omega-protocol-combat.test.ts'
@@ -108,9 +111,11 @@ jobs:
         run: node scripts/check-omega-aira-e-dash-atlas.mjs
       - name: Verify AIRA E-hit original source atlas digests
         run: node scripts/check-omega-aira-e-hit-atlas.mjs
+      - name: Verify original E-only ultimate and finisher source digests
+        run: node scripts/check-omega-aira-e-special-atlas.mjs
       - name: Source-art structural audit (missing final art remains BLOCKED, not deployed)
         run: npm run omega:art-status
       - name: Reject corrupt, duplicate, ungrounded and unapproved sprite fixtures
         run: npm run omega:art-test
       - name: Run deterministic roguelite contract
-        run: npx vitest run tests/omega-aira-v2-hit-frames.test.ts tests/omega-aira-v2-dash-frames.test.ts tests/omega-aira-v2-fire-frames.test.ts tests/omega-aira-v2-weapon-vfx.test.ts tests/omega-aira-v2-walk-rig.test.ts tests/omega-aira-v2-candidate.test.ts tests/omega-protocol-aira-kinetics.test.ts tests/omega-protocol-mission-visuals.test.ts tests/omega-protocol-depth-scene.test.ts tests/omega-protocol-dash-visuals.test.ts tests/omega-protocol-encounter-stage.test.ts tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
+        run: npx vitest run tests/omega-aira-v2-special-frames.test.ts tests/omega-aira-v2-hit-frames.test.ts tests/omega-aira-v2-dash-frames.test.ts tests/omega-aira-v2-fire-frames.test.ts tests/omega-aira-v2-weapon-vfx.test.ts tests/omega-aira-v2-walk-rig.test.ts tests/omega-aira-v2-candidate.test.ts tests/omega-protocol-aira-kinetics.test.ts tests/omega-protocol-mission-visuals.test.ts tests/omega-protocol-depth-scene.test.ts tests/omega-protocol-dash-visuals.test.ts tests/omega-protocol-encounter-stage.test.ts tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
