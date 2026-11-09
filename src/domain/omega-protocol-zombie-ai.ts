@@ -53,10 +53,10 @@ const SPEC:Record<OmegaZombieKind,Readonly<{
  hp:number;speed:number;radius:number;damage:number;
  warning:number;reach:number;trigger:number;cooldown:number;chargeSpeed:number;chargeTime:number;
 }>>={
- drifter:{hp:1,speed:74,radius:19,damage:11,warning:.62,reach:53,trigger:60,cooldown:.9,chargeSpeed:0,chargeTime:0},
- sprinter:{hp:.86,speed:116,radius:17,damage:16,warning:.52,reach:47,trigger:205,cooldown:1.1,chargeSpeed:340,chargeTime:.41},
- armored:{hp:3.1,speed:47,radius:30,damage:24,warning:.94,reach:76,trigger:91,cooldown:1.45,chargeSpeed:0,chargeTime:0},
- stalker:{hp:1.65,speed:98,radius:21,damage:19,warning:.66,reach:59,trigger:145,cooldown:1.2,chargeSpeed:245,chargeTime:.33},
+ drifter:{hp:1,speed:74,radius:19,damage:11,warning:.62,reach:53,trigger:54,cooldown:.9,chargeSpeed:0,chargeTime:0},
+ sprinter:{hp:.86,speed:116,radius:17,damage:16,warning:.52,reach:47,trigger:205,cooldown:1.1,chargeSpeed:340,chargeTime:.55},
+ armored:{hp:3.1,speed:47,radius:30,damage:24,warning:.94,reach:76,trigger:77,cooldown:1.45,chargeSpeed:0,chargeTime:0},
+ stalker:{hp:1.65,speed:98,radius:21,damage:19,warning:.66,reach:59,trigger:125,cooldown:1.2,chargeSpeed:260,chargeTime:.45},
 };
 const distance=(a:OmegaFieldPoint,b:OmegaFieldPoint)=>Math.hypot(a.x-b.x,a.y-b.y);
 export function omegaZombieKindForSlot(slot:number,wave:number):OmegaZombieKind{
