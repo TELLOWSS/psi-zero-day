@@ -199,10 +199,15 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.restore();
 }
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
- const gateWalk=import.meta.env.DEV&&typeof window!=='undefined'&&
-  new URLSearchParams(window.location.search).get('omegaQaState')==='gateTravel';
+ const qaMode=import.meta.env.DEV&&typeof window!=='undefined'
+  ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
+ const gateWalk=qaMode==='gateTravel';
+ // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
+ // preserve them ONLY in those explicit DEV modes. Ordinary M04 play and
+ // gateTravel use the actual timed physical airlock transfer.
+ const legacyStageSnapshot=['reward','boss','finalBoss','objective','exit'].includes(qaMode??'');
  const session=new OmegaProtocolCombatSession(seed,50,false,{
-  fieldTraversal:true,gateTransition:true,qaGateTravel:gateWalk,
+  fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
  });
  if(!import.meta.env.DEV)return session;
  const combatMode=omegaCombatProbeMode(window.location.search);
