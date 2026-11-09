@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1020">
+<title>PSI : ZERO DAY · OMEGA 캐릭터 동작 검수실</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Malgun Gothic","Noto Sans KR",sans-serif;--ink:#e9ecff;--muted:#9babc7;--purple:#c480ff;--line:#59638c68;--soft:#161b31;--orange:#ffc982;background:#080d18;color:var(--ink)}
+*{box-sizing:border-box}html{font-size:14px}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% -10%,#35294c,#090e1b 54%)}button{font:inherit;cursor:pointer;touch-action:manipulation;color:inherit}button:focus-visible{outline:2px solid #dfbaff;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.38}h1,h2,h3,p{margin:0}
+header{display:flex;align-items:center;gap:18px;justify-content:space-between;flex-wrap:wrap;padding:18px clamp(14px,3vw,46px);border-bottom:1px solid #a47be12c;background:#0a0d1ec7}
+.logo{display:flex;gap:16px;align-items:center}.omega{font:700 46px Georgia,serif;color:#ecd3ff;line-height:1;text-shadow:0 0 20px #a84cff90}.kicker{font-size:10px;letter-spacing:.23em;color:var(--purple);font-weight:700}.logo h1{font-size:clamp(19px,2.4vw,27px);letter-spacing:.025em}.logo p{font-size:11px;color:var(--muted);margin-top:3px}.games{display:flex;gap:8px}.games span{font-size:11px;border:1px solid #9c77d950;border-radius:12px;padding:9px 11px;color:#d7cbeb}
+.shell{max-width:1600px;margin:0 auto;padding:22px clamp(12px,2.5vw,35px);display:grid;grid-template-columns:290px minmax(320px,1fr) 270px;gap:16px;align-items:start}.panel{background:linear-gradient(155deg,#182039ee,#0c1222ef);border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 17px 45px #05091866}.panel h2{font-size:14px;letter-spacing:.07em;margin-bottom:14px}.muted{color:var(--muted);font-size:11px;line-height:1.65}.alert{background:#5d3f1c3b;border:1px solid #e7ad5370;border-radius:11px;color:#ffe0ac;padding:11px;line-height:1.6;font-size:11px;margin:12px 0}
+.selector{display:flex;gap:8px;margin-bottom:16px}.chip{flex:1;min-width:0;border:1px solid #866cb758;background:#1f203e;border-radius:10px;padding:9px 5px;font-size:12px}.chip[aria-pressed=true]{border-color:#dcabff;background:#6636a8a0;box-shadow:inset 0 0 18px #9f51eb55}.dirgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.dir{border:1px solid #66749b65;min-height:58px;border-radius:10px;background:#1d2843;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.dir b{font-size:14px}.dir small{font-size:10px;color:#adbad6}.dir[aria-pressed=true]{background:#723fbd;border-color:#e3b6ff;box-shadow:0 0 18px #9e51f366}.emptycell{background:#0c1529;border:1px dashed #54628533;border-radius:10px}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.action{min-height:43px;border:1px solid #8070aa65;border-radius:10px;background:#1b2440}.action[aria-pressed=true]{border-color:#ffbce7;background:#683b8f}.foot{font-size:10px;color:#a7b2ca;margin-top:11px;line-height:1.6}
+.arena{position:relative;border:1px solid #976bcc82;border-radius:19px;overflow:hidden;min-height:550px;background:#0c1325;box-shadow:0 20px 60px #0008}.arena canvas{width:100%;height:auto;aspect-ratio:16/9;display:block}.arena-head{position:absolute;top:12px;left:14px;right:14px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;gap:9px}.arena-head span{background:#081528bf;padding:7px 11px;border:1px solid #b882ec59;border-radius:9px;font-size:10px;letter-spacing:.06em;max-width:60%}.arena-head b{color:#ffd3ff}.arena-footer{position:absolute;left:12px;right:12px;bottom:13px;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}.stat{background:#10182ade;padding:9px 12px;border:1px solid #6864a080;border-radius:11px;font-size:11px}.stat b{font-size:13px}.motion-bar{height:3px;background:#32304e;border-radius:3px;margin-top:6px;max-width:190px;width:180px;overflow:hidden}.motion-fill{height:100%;background:#ce7fff;width:0}.avatar{color:#b5ceef;opacity:.7;font-size:10px;text-align:right;max-width:200px;line-height:1.5}
+.progress{height:6px;background:#222940;border-radius:6px;overflow:hidden;margin:12px 0}.progress>div{width:0;height:100%;background:linear-gradient(90deg,#a665ef,#f5addc)}.evidence{display:grid;gap:7px;margin-top:13px}.evidence div{border-bottom:1px solid #7689b12b;padding:6px 0;display:flex;justify-content:space-between;gap:8px;color:#aebbd2;font-size:11px}.evidence strong{color:#f0e6fa;font-weight:600;text-align:right}.hint{font-size:11px;line-height:1.7;color:#d1c8e4}.legend{display:inline-block;padding:3px 7px;color:#ffc78e;background:#8e512d48;border:1px solid #d78e5788;border-radius:5px;font-weight:700;font-size:10px}.status{font-size:10px;line-height:1.6;color:#d2baff;margin-top:12px;overflow-wrap:anywhere}
+footer{max-width:1600px;margin:auto;padding:8px 30px 32px;color:#8494b1;font-size:11px;line-height:1.6}kbd{font:600 10px monospace;background:#29334c;padding:2px 5px;border-radius:3px;border:1px solid #758bb14b}
+@media(max-width:1090px){.shell{grid-template-columns:240px minmax(0,1fr)}.side{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:15px}.side .evidence{grid-column:2}.arena{min-height:0}.arena canvas{aspect-ratio:16/9}}
+@media(max-width:700px){header{gap:10px;padding:14px}.omega{font-size:32px}.logo{gap:9px}.games{width:100%;justify-content:flex-end}.games span{padding:5px 7px;font-size:9px}.shell{padding:9px;display:flex;flex-direction:column;gap:9px}.controls{order:2;width:100%}.arena{order:1;width:100%}.side{order:3;width:100%;display:block}.arena canvas{aspect-ratio:4/5}.arena-head{top:9px;left:9px;right:9px}.arena-head span{font-size:9px;padding:6px}.arena-footer{bottom:7px}.stat{padding:6px 8px}.stat b{font-size:10px}.avatar{font-size:8px}.motion-bar{width:95px}.panel{padding:12px}.dirgrid{grid-template-columns:repeat(8,1fr)}.dir{min-height:44px}.emptycell{display:none}.dir b{font-size:12px}.dir small{font-size:8px}.actions{grid-template-columns:repeat(4,1fr)}.action{min-height:40px;font-size:12px}.panel h2{margin-bottom:9px}}
+@media(max-height:440px) and (orientation:landscape){header{padding:6px 12px}.logo h1{font-size:17px}.logo p{display:none}.omega{font-size:27px}.games span{padding:5px 8px}.shell{padding:7px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(245px,.85fr);align-items:start}.arena{grid-column:1;grid-row:1;min-height:0}.arena canvas{aspect-ratio:16/9}.controls{grid-column:2;grid-row:1;max-height:78vh;overflow:auto}.side{grid-column:1/-1;grid-row:2}.dirgrid{grid-template-columns:repeat(8,1fr)}.actions{grid-template-columns:repeat(4,1fr)}.panel{padding:8px}.panel h2{font-size:11px;margin-bottom:5px}.alert,.foot{display:none}.selector{margin-bottom:7px}.selector .chip{padding:5px}.dir{min-height:37px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="logo"><span class="omega">Ω</span><div><div class="kicker">PSI : ZERO DAY · OMEGA PROTOCOL</div><h1>CHARACTER MOTION LAB</h1><p>은백색 AIRA V2 & 신규 Ω 요원 · 원화/동작 기술 검수</p></div></div><div class="games"><span>SIGNAL GUARD</span><span>SIGNAL WATCH</span></div></header>
+<main class="shell">
+<section class="panel controls"><h2>캐릭터 / 시점 / 움직임</h2><div class="selector"><button class="chip" type="button" id="female" aria-pressed="true">AIRA V2 · 여성</button><button class="chip" type="button" id="male" aria-pressed="false">M01 · 남성</button></div>
+<div class="dirgrid" id="directions"></div><div style="height:13px"></div><div class="actions" id="actions"></div><p class="foot">키보드 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 방향 전환 · <kbd>SPACE</kbd> 사격 · <kbd>SHIFT</kbd> 대시 · <kbd>H</kbd> 피격</p><p class="alert">방향·동작 검수용 시뮬레이션입니다. 시그널 가드/워치 실제 엔진과 충돌·공격판정을 공유하지 않으며, 독립 원화 160프레임 완성본이 아닙니다.</p></section>
+<section class="arena" aria-label="실제 AIRA 원화의 방향별 동작 미리보기"><canvas id="battle" width="1280" height="720" role="img" aria-label="원본 원화를 사용하는 8방향 동작 시연"></canvas><div class="arena-head"><span>SECTOR 01 · <b id="phase">IDLE</b></span><span id="category">AIRA V2 / SILVER ART REVIEW</span></div><div class="arena-footer"><div class="stat"><b id="headingLabel">S · 정면</b><div class="motion-bar"><div class="motion-fill" id="motionFill"></div></div></div><div class="avatar">REVIEW ONLY<br>LOCAL FILES · NO API · NO DEPLOY</div></div></section>
+<aside class="panel side"><div><h2>원화 무결성·품질 게이트</h2><p class="hint">은백색·연보라 하이 포니테일과 흰 Ω 외투가 기준입니다. NW는 후면 좌측 각도 재제작 대상이며 남성 M01은 별도 정면 콘셉트만 존재합니다.</p><div class="progress"><div id="loadProgress"></div></div><div class="status" id="loadStatus" aria-live="polite">이미지 원본 9개를 불러오는 중입니다.</div></div><div class="evidence"><div><span>기본 원화 로딩</span><strong id="loaded">0 / 9</strong></div><div><span>원본 방향</span><strong>8개 검수 후보</strong></div><div><span>정확한 8방향 승인</span><strong>보류 · NW 재작화</strong></div><div><span>움직임</span><strong>기술용 리그, 독립 원화 아님</strong></div><div><span>남성 요원</span><strong>정면 후보만</strong></div><div><span>운영 게임 반영</span><strong>차단 · Draft PR</strong></div></div></aside>
+</main>
+<footer>이 검수 화면에서 동작의 일관성을 점검할 수 있지만, 정식 AIRA 8방향 160프레임 및 시그널 가드·시그널 워치 게임 적용을 증명하지는 않습니다. 이미지는 현재 폴더의 GitHub 개발 브랜치에 저장된 원본 WebP를 읽습니다.</footer>
+<script>
+(()=>{'use strict';
+const slots=['E','SE','S','SW','W','NW','N','NE'];
+const directions=[['NW','↖','후좌'],['N','↑','후면'],['NE','↗','후우'],['W','←','좌측'],['S','↓','정면'],['E','→','우측'],['SW','↙','전좌'],['SE','↘','전우']];
+const labels={E:'E · 우측',SE:'SE · 전우',S:'S · 정면',SW:'SW · 전좌',W:'W · 좌측',NW:'NW · 후좌 (재제작)',N:'N · 후면',NE:'NE · 후우',M01:'M01 · 남성'};
+const actions=[['idle','대기'],['walk','걷기'],['fire','사격'],['dash','대시'],['hit','피격'],['ultimate','필살기'],['finish','마무리']];
+const assets=new Map();let selected='S',actor='AIRA',action='idle',actionStart=performance.now(),phase=0,freeze=false,queued=false;
+const $=id=>document.getElementById(id),canvas=$('battle'),ctx=canvas.getContext('2d',{alpha:false});
+const params=new URLSearchParams(location.search);
+if(slots.includes((params.get('heading')||'').toUpperCase()))selected=params.get('heading').toUpperCase();
+if(actions.some(a=>a[0]===params.get('action')))action=params.get('action');
+if(params.get('character')==='male')actor='M01';
+freeze=params.get('freeze')==='1';phase=Math.max(0,Math.min(1,Number(params.get('phase')||0.4)));
+const dirEl=$('directions');
+for(const [id,arrow,ko] of directions){const b=document.createElement('button');b.className='dir';b.type='button';b.dataset.heading=id;b.innerHTML='<b>'+arrow+'</b><small>'+id+'</small>';b.title=ko;b.onclick=()=>{if(actor==='M01')return;selected=id;actionStart=performance.now();update();};dirEl.append(b)}
+const actionEl=$('actions');for(const [id,text] of actions){const b=document.createElement('button');b.type='button';b.className='action';b.dataset.action=id;b.textContent=text;b.onclick=()=>{action=id;actionStart=performance.now();update();};actionEl.append(b)}
+$('female').onclick=()=>{actor='AIRA';actionStart=performance.now();update()};$('male').onclick=()=>{actor='M01';selected='S';action='idle';actionStart=performance.now();update()};
+function update(){for(const b of dirEl.children){b.setAttribute('aria-pressed',String(b.dataset.heading===selected));b.disabled=actor==='M01'}for(const b of actionEl.children){b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=actor==='M01'&&b.dataset.action!=='idle'}
+ $('female').setAttribute('aria-pressed',String(actor!=='M01'));$('male').setAttribute('aria-pressed',String(actor==='M01'));
+ $('category').textContent=actor==='M01'?'M01 / DESIGN CANDIDATE':'AIRA V2 / SILVER ART REVIEW';
+ $('headingLabel').textContent=actor==='M01'?labels.M01:labels[selected];$('phase').textContent=action.toUpperCase();
+ document.body.dataset.heading=selected;document.body.dataset.action=action;document.body.dataset.character=actor;
+}
+window.addEventListener('keydown',e=>{if(e.repeat||e.target instanceof HTMLInputElement)return;const k=e.key.toLowerCase();let target=null;
+ if(['arrowup','w'].includes(k))target='N';else if(['arrowdown','s'].includes(k))target='S';else if(['arrowleft','a'].includes(k))target='W';else if(['arrowright','d'].includes(k))target='E';
+ else if(e.key===' ')action='fire';else if(e.key==='Shift')action='dash';else if(k==='h')action='hit';
+ if(target&&actor!=='M01')selected=target;if(target||e.key===' '||e.key==='Shift'||k==='h'){actionStart=performance.now();update();e.preventDefault()}});
+async function load(){const promises=[];for(const name of [...slots,'M01']){const url=name==='M01'?'/assets/omega/canonical-review/male/m01.webp':'/assets/omega/canonical-review/aira-v2/'+name.toLowerCase()+'.webp';const img=new Image();img.decoding='async';img.src=url;
+ promises.push(img.decode().then(()=>{if(img.naturalWidth!==384||img.naturalHeight!==512)throw Error('규격 오류 '+name);assets.set(name,img);const n=assets.size;$('loaded').textContent=n+' / 9';$('loadProgress').style.width=n/9*100+'%';},()=>{throw Error('원화 누락 '+name)}))}
+ const result=await Promise.allSettled(promises);const failed=result.filter(r=>r.status==='rejected');$('loadStatus').textContent=failed.length?failed.map(x=>String(x.reason)).join(' | '):'원본 WebP 9개 디코딩 완료 · 방향 승인 및 160프레임은 미완료';document.body.dataset.assetsReady=failed.length?'failed':'ready';}
+const rand=(seed)=>{let x=Math.sin(seed*133.1)*22417.82;return x-Math.floor(x)};
+function drawWorld(t){const w=canvas.width,h=canvas.height;const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#171d37');g.addColorStop(.48,'#29243c');g.addColorStop(1,'#131a2d');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+ const halo=ctx.createRadialGradient(w*.58,h*.39,8,w*.58,h*.39,w*.52);halo.addColorStop(0,'#9547c055');halo.addColorStop(1,'#05081600');ctx.fillStyle=halo;ctx.fillRect(0,0,w,h);
+ ctx.save();ctx.strokeStyle='#6477a15b';ctx.lineWidth=2;for(let x=60;x<w+100;x+=170){let ht=120+Math.round(rand(x)*175);ctx.strokeRect(x,h*.51-ht,78,ht);ctx.beginPath();ctx.moveTo(x+39,h*.51-ht);ctx.lineTo(x+39,h*.51-ht-110);ctx.lineTo(x+125,h*.51-ht-110);ctx.stroke();ctx.moveTo(x+39,h*.51-ht-110);ctx.lineTo(x+39,h*.51-ht+20);ctx.stroke()}
+ ctx.restore();ctx.fillStyle='#131b2b';ctx.fillRect(0,h*.66,w,h*.34);ctx.strokeStyle='#a56fe340';ctx.lineWidth=2;
+ for(let i=-4;i<=4;i++){ctx.beginPath();ctx.moveTo(w*.5,h*.66);ctx.lineTo(w*.5+i*w*.27,h);ctx.stroke()}
+ for(let i=0;i<8;i++){const y=h*.67+(i/7)**1.8*h*.35;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ const pool=ctx.createRadialGradient(w*.5,h*.86,5,w*.5,h*.86,w*.25);pool.addColorStop(0,'#994add22');pool.addColorStop(1,'#160b2a00');ctx.fillStyle=pool;ctx.fillRect(w*.25,h*.55,w*.5,h*.45);
+ ctx.font='600 12px system-ui';ctx.fillStyle='#abc1e17a';ctx.fillText('OMEGA SECTOR / TRAINING ONLY',24,h-24);
+}
+function strokeLimb(img,sx,xwidth,pivot,angle,lift,lean){const sy=340;ctx.save();ctx.translate(pivot,lift);ctx.rotate(angle+lean);ctx.translate(-pivot,0);ctx.drawImage(img,sx,sy,xwidth,512-sy,sx,sy,xwidth,512-sy);ctx.restore()}
+function drawActor(t){const name=actor==='M01'?'M01':selected,img=assets.get(name);if(!img)return;
+ const w=canvas.width,h=canvas.height,groundY=h*.855,sourceW=384,sourceH=512;
+ const drawHeight=actor==='M01'?Math.min(h*.66,470):Math.min(h*.73,500),scale=drawHeight/sourceH;
+ const d=freeze?phase:((t-actionStart)*.001);const wave=Math.sin((freeze?phase:d*1.7)*Math.PI*2);
+ let lean=0,up=0,stride=0,bodyShift=0;switch(action){case 'walk':lean=.025*wave;up=-Math.abs(wave)*4;stride=13*wave;bodyShift=3*Math.sin(d*7);break;case 'fire':lean=-.06*(1-Math.min(1,d/.33));bodyShift=-4*(1-Math.min(1,d/.25));break;case 'dash':lean=.2;up=-7;stride=21*wave;bodyShift=14;break;case 'hit':lean=-.12+Math.sin(d*18)*.05;bodyShift=-9;break;case 'ultimate':up=-5+Math.sin(d*4)*4;lean=-.05;break;case 'finish':lean=-.07;up=-3;break;default:up=Math.sin(t*.0018)*1.5}
+ if(actor==='M01'){lean=0;up=Math.sin(t*.0013)*1.5;stride=0}
+ ctx.save();ctx.translate(w*.5,groundY+up);ctx.scale(scale,scale);ctx.translate(-sourceW/2,-sourceH);
+ // Prevent opaque debug cutouts: split only when there is real source transparency.
+ if((action==='walk'||action==='dash')&&actor!=='M01'){
+  strokeLimb(img,0,192,134,stride*.003,Math.max(0,wave)*-12+bodyShift*.1,0);
+  strokeLimb(img,192,192,254,-stride*.003,Math.max(0,-wave)*-12-bodyShift*.1,0);
+  ctx.save();ctx.translate(192,320);ctx.rotate(lean);ctx.translate(-192,-320);ctx.translate(bodyShift,-Math.abs(wave)*2);
+  ctx.drawImage(img,0,0,384,364,0,0,384,364);ctx.restore();
+ }else{ctx.translate(bodyShift,0);ctx.rotate(lean);ctx.drawImage(img,0,0)}
+ ctx.restore();
+ if(action==='fire'&&actor!=='M01'){const ang={E:0,SE:.78,S:1.57,SW:2.36,W:3.14,NW:-2.36,N:-1.57,NE:-.78}[selected],alpha=freeze?phase:Math.max(0,1-d/.32);if(alpha>0){const cx=w*.5+Math.cos(ang)*80,cy=groundY-drawHeight*.62+Math.sin(ang)*25;ctx.save();ctx.globalAlpha=alpha;const fire=ctx.createRadialGradient(cx,cy,3,cx,cy,65);fire.addColorStop(0,'#fffbe7');fire.addColorStop(.2,'#ffbaee');fire.addColorStop(.5,'#b74df188');fire.addColorStop(1,'#b74df100');ctx.fillStyle=fire;ctx.beginPath();ctx.arc(cx,cy,65,0,7);ctx.fill();ctx.restore()}}
+ if(action==='hit'&&actor!=='M01'){ctx.save();ctx.strokeStyle='#f57eac';ctx.globalAlpha=.38;ctx.lineWidth=3;ctx.beginPath();ctx.arc(w*.5,groundY-drawHeight*.53,drawHeight*.4,0,Math.PI*2);ctx.stroke();ctx.restore()}
+ const p=freeze?phase:(d%1);$('motionFill').style.width=p*100+'%';document.body.dataset.frame=String(Math.floor((p%1)*6));
+}
+let prev=performance.now(),frames=0,elapsed=0;
+function loop(now){const dt=Math.min(0.05,(now-prev)/1000);prev=now;drawWorld(now);drawActor(now);frames++;elapsed+=dt;if(elapsed>=1){document.body.dataset.approxFps=String(Math.round(frames/elapsed));frames=0;elapsed=0}requestAnimationFrame(loop)}
+update();load();requestAnimationFrame(loop);
+})();
+</script>
+</body></html>
