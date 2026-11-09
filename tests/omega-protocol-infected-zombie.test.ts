@@ -63,6 +63,32 @@ describe('OMEGA infected hard-hat worker ZOMBIE is fictional special-edition ene
   expect(hit?.hits).toBeGreaterThanOrEqual(1);
   expect(target.hp).toBeLessThan(100);
  });
+ it('actually damages the infected helmet zombie with a native Watch radio projectile',()=>{
+  const expedition=new OmegaProtocolCombatSession(20261109,50);
+  const state=expedition.engine.state;
+  const player=state.player;
+  player.invincibleTime=999;
+  const infected=state.hazards[0]!;
+  infected.type='UNHELMETED';infected.radius=24;infected.speed=0;
+  infected.x=player.x+115;infected.y=player.y;infected.hp=120;infected.maxHp=120;
+  for(const h of state.hazards.slice(1))h.hp=0;
+  // This is the actual existing engine projectile class, not a mock damage call.
+  state.projectiles.push({
+   id:'omega-real-gun-vs-zombie',kind:'radio',x:infected.x-12,y:infected.y,
+   vx:720,vy:0,radius:7,damage:20,duration:1,pierce:1,
+  });
+  expedition.update(1/60,{moveX:0,moveY:0,triggerAction:false});
+  expect(infected.hp).toBeLessThan(120);
+  const impacts=expedition.engine.drainProjectileFeedback();
+  expect(impacts.some(e=>e.phase==='impact'&&e.targetId===infected.id)).toBe(true);
+ });
+ it('spawns an actual helmet-zombie first in the real contaminated expedition',()=>{
+  for(const seed of [20261109,777,2026]){
+   const run=new OmegaProtocolCombatSession(seed,50);
+   expect(run.plan.threatKinds).toContain('UNHELMETED');
+   expect(run.engine.state.hazards.some(h=>h.type==='UNHELMETED'&&h.hp>0)).toBe(true);
+  }
+ });
  it('does not draw the helmet zombie when HP reaches zero',()=>{
   const dead=render({...zombie('zombie-05'),hp:0});
   expect(dead.calls).toHaveLength(0);
