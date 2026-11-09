@@ -71,12 +71,34 @@ const pick=(action:CutoutAction,age:number):number=>{
  const safe=Math.max(0,Math.min(duration[action],age));
  return Math.min(count-1,Math.floor((safe/duration[action])*count));
 };
+/** Sub-frame ease between individually authored TECHNICAL skeleton keys.
+ * This does not fabricate new painted source frames and never edits input
+ * images; it prevents abrupt one-frame body jumps on 60Hz and 120Hz devices.
+ */
+const blend=(a:number,b:number,t:number)=>a+(b-a)*t;
+const interpolate=(action:CutoutAction,age:number):ActionKey=>{
+ const source=keys[action];
+ const scaled=Math.min(source.length-1,Math.max(0,age)/duration[action]*source.length);
+ const lower=Math.floor(scaled),upper=Math.min(source.length-1,lower+1);
+ const frac=scaled-lower,ease=frac*frac*(3-2*frac);
+ const from=source[lower]!,to=source[upper]!;
+ return {
+  lean:blend(from.lean,to.lean,ease),
+  rise:blend(from.rise,to.rise,ease),
+  backX:blend(from.backX,to.backX,ease),
+  leftLift:blend(from.leftLift,to.leftLift,ease),
+  rightLift:blend(from.rightLift,to.rightLift,ease),
+  leftStride:blend(from.leftStride,to.leftStride,ease),
+  rightStride:blend(from.rightStride,to.rightStride,ease),
+  hairLag:blend(from.hairLag,to.hairLag,ease),
+ };
+};
 export function omegaAiraDirectionActionPose(
  heading:OmegaHeading,action:CutoutAction,age:number,
 ):OmegaAiraDirectionActionPose{
  const safe=Number.isFinite(age)?Math.max(0,age):0;
  const index=pick(action,safe);
- const k=keys[action][index]!;
+ const k=interpolate(action,safe);
  const h=bearing[heading];
  return {
   direction:heading,action,index,
