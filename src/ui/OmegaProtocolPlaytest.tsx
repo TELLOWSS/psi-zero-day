@@ -11,6 +11,7 @@ import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-m
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
+import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
 import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
@@ -31,6 +32,9 @@ const validKeys=new Set<string>(keys);
 const approvedHeroCache=new OmegaApprovedImageCache(36);
 const userApprovedAiraV2=new OmegaAiraV2CandidateImages();
 const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'↓',x:0,y:1},{label:'→',x:1,y:0}];
+// In-memory only, development QA provenance. Never available to production
+// users, never writes a profile/save and never bypasses a real unlock CTA.
+const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
 function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[]){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -196,6 +200,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const session=new OmegaProtocolCombatSession(seed,50,false,{fieldTraversal:true});
  if(!import.meta.env.DEV)return session;
+ const combatMode=omegaCombatProbeMode(window.location.search);
+ if(combatMode){
+  omegaCombatBrowserFixtures.set(session,omegaSetupCombatProbe(session,combatMode));
+  return session;
+ }
  const qa=new URLSearchParams(window.location.search).get('omegaQaState');
  if(!['reward','boss','finalBoss','objective','exit'].includes(qa||''))return session;
  const idle={moveX:0,moveY:0,triggerAction:false};
@@ -236,6 +245,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  });
  const [seedValue,setSeedValue]=useState('20261108');
  const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
+ const combatProbe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
  const [classicPad,setClassicPad]=useState(false);
@@ -246,6 +256,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
+ const arenaRef=useRef<HTMLDivElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
  const stickRef=useRef<HTMLButtonElement>(null);
@@ -344,6 +355,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
+  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0;
+  const fixture=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
   let dashEchoes:readonly OmegaDashEcho[]=[];
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
   const gaitController=new OmegaGroundedGait();
@@ -361,6 +374,25 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const length=Math.hypot(mx,my)||1;
    if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
+   // QA read-only evidence of native projectile events and actual target HP.
+   // No damage is synthesized, injected or applied from telemetry.
+   if(fixture&&arenaRef.current){
+    for(const e of engineEvents){
+     if(e.kind!=='radio'||e.phase!=='impact')continue;
+     if(e.targetId===fixture.zombieId&&(e.appliedDamage??0)>0){
+      qaRadioHits++;
+      qaRadioDamage+=e.appliedDamage??0;
+     }
+     if(e.blocked)qaRadioBlocked++;
+    }
+    const h=session.engine.state.hazards.find(item=>item.id===fixture.zombieId);
+    const arena=arenaRef.current;
+    arena.dataset.omegaQaZombieHp=h?String(h.hp):'MISSING';
+    arena.dataset.omegaQaGunHits=String(qaRadioHits);
+    arena.dataset.omegaQaGunDamage=qaRadioDamage.toFixed(3);
+    arena.dataset.omegaQaGunBlocked=String(qaRadioBlocked);
+    arena.dataset.omegaQaGameTime=session.engine.state.gameTime.toFixed(3);
+   }
    fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
@@ -498,7 +530,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
    </aside>}
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
-   <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
+   <div ref={arenaRef} className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
+     data-omega-qa-mode={combatProbe?.mode}
+     data-omega-qa-provenance={combatProbe?'dev-fixture-genuine-engine':undefined}
+     data-omega-qa-gun-enabled={combatProbe?String(combatProbe.gunEnabled):undefined}
+     data-omega-qa-cover-detour={combatProbe?String(combatProbe.coverDetour):undefined}
+     data-omega-qa-zombie-id={combatProbe?.zombieId}
+     data-omega-qa-start-hp={combatProbe?.initialHp}
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
      data-omega-field-phase={snapshot.field?.progress.phase??'none'}
      data-omega-blade-combo={snapshot.blade?.combo??0}
