@@ -821,12 +821,21 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </div>
      </div>}
     {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
-    {snapshot.run.phase==='reward'&&<div className="omega-protocol-overlay omega-protocol-reward-overlay" role="presentation">
-      <section className="omega-protocol-rewards" role="dialog" aria-modal="true" aria-label="전술 강화 선택">
-       <span className="omega-protocol-modal-kicker">TACTICAL EVOLUTION</span>
-       <h2>전술 강화 선택</h2>
-       <p>세 가지 중 하나를 선택하세요. 강화 효과는 이번 도전에만 유지됩니다.</p>
-       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;return <button key={id} type="button" onClick={()=>choose(id)}>
+    {snapshot.run.phase==='reward'&&<div
+      className="omega-protocol-overlay omega-protocol-reward-overlay omega-protocol-safe-room"
+      role="presentation" data-omega-reward-context="in-world-safe-room"
+      data-omega-reward-next-wave={snapshot.run.wave}>
+      <section className="omega-protocol-rewards" role="dialog" aria-modal="true"
+       aria-label="연결 통로 전술 보급 · 다음 구역 탐험 준비">
+       <div className="omega-protocol-safe-room-head">
+        <span className="omega-protocol-modal-kicker">OMEGA · FIELD SUPPLY / SAFE PASSAGE</span>
+        <small>현재 {snapshot.field?.plan.sectorName??'격리 통로'} · 통로는 유지됩니다</small>
+        <h2>전술 보급 지점</h2>
+        <p>다음 목적지: {omegaStoryNode(snapshot.run.wave).district} · {omegaStoryNode(snapshot.run.wave).title}</p>
+        <span className="omega-protocol-safe-room-live">전투 일시 중지 · 강화 선택 후 바로 탐험 재개</span>
+       </div>
+       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;return <button key={id} type="button" onClick={()=>choose(id)}
+         aria-label={'전술 보급 '+(i+1)+'번 · '+u.label+' · '+u.description}>
          <small className="omega-protocol-card-index">0{i+1} · {u.role.toUpperCase()}</small>
          <strong>{u.label}</strong><span>{u.description}</span>
          <small className="omega-protocol-card-rank">LV {(snapshot.run.owned[id]??0)+1} / {u.maxStacks}</small>
