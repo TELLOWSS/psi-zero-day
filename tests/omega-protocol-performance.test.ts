@@ -8,7 +8,7 @@ import {OmegaProtocolCombatSession,OMEGA_MAX_LIVE_THREATS} from '../src/engine/o
  */
 describe('OMEGA PROTOCOL bounded CPU integration profile',()=>{
  it('reports 60Hz engine-step cost without confusing it with real device FPS',()=>{
-  const session=new OmegaProtocolCombatSession(20261108,10);
+  const session=new OmegaProtocolCombatSession(20261108,50);
   session.engine.state.player.invincibleTime=999;
   const sampleMs:number[]=[];
   let maxThreats=0,maxProjectiles=0;
@@ -46,7 +46,7 @@ describe('OMEGA PROTOCOL bounded CPU integration profile',()=>{
  });
 
  it('profiles the actual fifteenth-wave boss pressure with maximum run threat cap',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10);
+  const s=new OmegaProtocolCombatSession(20261108,50);
   for(let wave=1;wave<15;wave++){
    s.engine.state.hazards=[];
    s.update(1/60,{moveX:0,moveY:0,triggerAction:false});
