@@ -44,7 +44,7 @@ describe('OMEGA special-edition boss differentiation is visual-only',()=>{
   expect(phaseTwo.calls.some(x=>x.method==='fillText'&&x.args[0]==='CORE 15')).toBe(true);
  });
  it('reports exact live engine boss HP and hides the meter after death',()=>{
-  const session=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const session=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   const state=session.engine.state;
   const initial=session.snapshot;
   expect(initial.bossHp).toBeNull();
