@@ -9,7 +9,12 @@ import {OmegaAiraV2HitFrames} from './omega-aira-v2-hit-frames';
 import {OmegaAiraV2SpecialFrames} from './omega-aira-v2-special-frames';
 
 /**
- * AIRA V2: the 2026-11-09 user-selected black/rose tactical design.
+ * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
+ * white Ω tactical jacket, black armor and violet emissive trim.
+ * The user explicitly reconfirmed this canonical appearance on 2026-11-09.
+ * Earlier BLACK/ROSE candidate assets are NOT approved substitutions.
+ * Current images require a fresh binary identity audit and must not be
+ * counted as final silver AIRA sprites until reviewed against the source.
  *
  * This stage uses EIGHT independently illustrated neutral turnaround views,
  * extracted from the user's approved design sheet. No left/right mirroring.
