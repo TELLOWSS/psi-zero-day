@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
- omegaGateTransitStep,
+ omegaGateTransitStep,omegaActBoundaryDock,
 } from '../src/domain/omega-protocol-field-transit';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
@@ -102,4 +102,67 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
   expect(s.interact()).toEqual({success:false,reason:'NOT_READY'});
   expect(s.snapshot.gateTransit).toBeNull();
  });
+ it('M04-B: first ACT lift has exactly one matching 3→4 link and dock-foot collision coordinates',()=>{
+  const p3=omegaFieldPlan(20261109,3),p4=omegaFieldPlan(20261109,4);
+  const exit=omegaActBoundaryDock(p3)!,entry=omegaActBoundaryDock(p4)!;
+  const link=omegaGateTransitLink(p3,p4);
+  expect(exit).toMatchObject({role:'departure',kind:'scaffold_lift',
+   point:p3.exit,fromWave:3,toWave:4,verticalMeters:18});
+  expect(entry).toMatchObject({role:'arrival',kind:'scaffold_lift',
+   point:p4.entry,fromWave:3,toWave:4,verticalMeters:18});
+  expect(exit.linkId).toBe(entry.linkId);
+  expect(exit.linkId).toBe(link.linkId);
+  expect(link.departure).toEqual(exit.point);
+  expect(link.arrival).toEqual(entry.point);
+  expect(omegaActBoundaryDock(omegaFieldPlan(20261109,2))).toBeNull();
+  expect(omegaActBoundaryDock(omegaFieldPlan(20261109,5))).toBeNull();
+  for(const [from,to,kind] of [[6,7,'crane_elevator'],[9,10,'service_tunnel'],
+   [12,13,'control_airlock']] as const){
+   const source=omegaActBoundaryDock(omegaFieldPlan(20261109,from))!;
+   const dest=omegaActBoundaryDock(omegaFieldPlan(20261109,to))!;
+   expect(source.linkId).toBe(dest.linkId);
+   expect(source.kind).toBe(kind);
+  }
+ });
+ it('M04-B: real 3→4 lift retains old exit during departure then enters sector-2 at the true entry',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,
+  });
+  for(let wave=1;wave<=3;wave++){
+   expect(s.field?.plan.wave).toBe(wave);
+   const exit=s.field!.plan.exit;
+   // Unit test prepares a known in-range player state; browser QA separately
+   // proves ALL 3 exits by genuine keyboard/touch movement.
+   s.engine.state.player.x=exit.x-50;s.engine.state.player.y=exit.y;
+   expect(s.interact()).toEqual({success:true,reason:'EXIT_OPENED'});
+   if(wave===3){
+    const depart=s.snapshot.gateTransit!;
+    expect(depart).toMatchObject({phase:'depart',
+     link:{fromWave:3,toWave:4,kind:'scaffold_lift'}});
+    expect(s.field?.plan.wave).toBe(3);
+    expect(s.run.wave).toBe(3);
+    expect(s.blade()).toBeNull();
+    expect(s.interact().success).toBe(false);
+   }
+   advance(s,15);
+   if(s.run.phase==='reward'){
+    s.selectUpgrade(s.run.offers[0]!);
+   }
+   if(wave===3){
+    expect(s.field?.plan.wave).toBe(4);
+    expect(s.field?.plan.sector).toBe(2);
+    expect(s.snapshot.gateTransit?.phase).toBe('arrive');
+    expect(s.snapshot.gateTransit?.link.kind).toBe('scaffold_lift');
+    expect(s.engine.state.player.x).toBe(s.field!.plan.entry.x);
+    expect(s.engine.state.player.y).toBe(s.field!.plan.entry.y);
+    expect(omegaActBoundaryDock(s.field!.plan)?.role).toBe('arrival');
+   }
+   advance(s,14);
+   expect(s.snapshot.gateTransit).toBeNull();
+  }
+  expect(s.run.wave).toBe(4);
+  expect(s.run.victories).toBe(3);
+  expect(s.run.phase).toBe('battle');
+ });
+
 });

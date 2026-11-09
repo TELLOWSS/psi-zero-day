@@ -18,6 +18,7 @@ on:
       - 'tests/omega-protocol-story.test.ts'
       - 'src/domain/omega-protocol-field.ts'
       - 'src/domain/omega-protocol-field-transit.ts'
+      - 'src/ui/omega-protocol-act-lift.ts'
       - 'tests/omega-protocol-field-transit.test.ts'
       - 'src/domain/omega-protocol-encounter-stage.ts'
       - 'src/domain/omega-protocol-navigation.ts'

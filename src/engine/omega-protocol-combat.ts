@@ -229,8 +229,16 @@ export class OmegaProtocolCombatSession {
    this.bossPattern=null;
    this.fieldStatus={phase:'exit',eventComplete:true,exitUnlocked:true,
     completedSteps:this.currentField.event.steps.length};
-   this.engine.state.player.x=this.currentField.exit.x-190;
-   this.engine.state.player.y=this.currentField.exit.y;
+   if(this.currentField.wave===4){
+    // M04-B boundary proof: after actual 3→4 lift, preserve the genuine
+    // wave-4 entry point. All earlier DEV gates still start 190 units
+    // outside the exit for real keyboard/touch distance validation.
+    this.engine.state.player.x=this.currentField.entry.x;
+    this.engine.state.player.y=this.currentField.entry.y;
+   }else{
+    this.engine.state.player.x=this.currentField.exit.x-190;
+    this.engine.state.player.y=this.currentField.exit.y;
+   }
    this.engine.state.player.invincibleTime=999;
   }
   this.armed=true;

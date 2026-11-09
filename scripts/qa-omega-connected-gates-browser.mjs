@@ -37,6 +37,14 @@ for(const s of scenarios){
   field:el.getAttribute('data-omega-field-phase'),
   transit:el.getAttribute('data-omega-transit-phase'),
   target:Number(el.getAttribute('data-omega-transit-to')??'0'),
+  kind:el.getAttribute('data-omega-transit-kind'),
+  dockRole:el.getAttribute('data-omega-act-dock-role'),
+  dockId:el.getAttribute('data-omega-act-dock-id'),
+  dockX:Number(el.getAttribute('data-omega-act-dock-x')??'0'),
+  dockY:Number(el.getAttribute('data-omega-act-dock-y')??'0'),
+  transitLinkId:el.getAttribute('data-omega-transit-link-id'),
+  departureX:Number(el.getAttribute('data-omega-transit-depart-x')??'0'),
+  arrivalX:Number(el.getAttribute('data-omega-transit-arrive-x')??'0'),
   x:Number(el.getAttribute('data-omega-player-x')??'0'),
   y:Number(el.getAttribute('data-omega-player-y')??'0'),
  }));
@@ -162,18 +170,66 @@ for(const s of scenarios){
   const finale=await read();
   if(finale.wave!==3||finale.phase!=='battle'||finale.field!=='exit')
    throw Error('Linked 3-zone world not reached with actual controls');
+  // M04-B: ACT 01 -> ACT 02 is NOT a generic shutter. There is one
+  // scaffold lift at the real wave-3 exit and a matching lift landing on
+  // wave-4 entry in the game scene. Cross via actual movement + E/touch.
+  const actDepart=await read();
+  if(actDepart.dockRole!=='departure'||actDepart.dockId!=='OMEGA-LINK-03-04'||
+     actDepart.dockX!==1210)
+   throw Error('ACT-1 lift was not painted at actual 3rd-world exit '+JSON.stringify(actDepart));
+  const thirdWalk=await travelToGate();
+  if(thirdWalk.finalX-thirdWalk.initialX<75)
+   throw Error('Actual key/touch movement to first ACT boundary failed '+JSON.stringify(thirdWalk));
+  await pressE();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='3'&&
+    el?.getAttribute('data-omega-transit-to')==='4'&&
+    el?.getAttribute('data-omega-transit-phase')==='depart'&&
+    el?.getAttribute('data-omega-transit-kind')==='scaffold_lift'&&
+    el?.getAttribute('data-omega-transit-link-id')==='OMEGA-LINK-03-04';
+  },undefined,{timeout:4000});
+  const liftDepart=await read();
+  if(liftDepart.departureX!==actDepart.dockX||liftDepart.arrivalX!==150)
+   throw Error('The actual lift anchors are not paired '+JSON.stringify(liftDepart));
+  const shaft=page.locator('.omega-protocol-lift-cross-section');
+  await shaft.waitFor({state:'visible',timeout:2000});
+  await page.waitForFunction(()=>Number(document.querySelector('.omega-protocol-arena')
+   ?.getAttribute('data-omega-transit-opacity'))>.18,
+   undefined,{timeout:3000});
+  await page.screenshot({path:output+'/m04b-3to4-18m-lift-'+s.name+'.png',
+   animations:'disabled',fullPage:false});
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='4'&&
+    el?.getAttribute('data-omega-transit-phase')==='arrive'&&
+    el?.getAttribute('data-omega-act-dock-role')==='arrival'&&
+    el?.getAttribute('data-omega-act-dock-id')==='OMEGA-LINK-03-04';
+  },undefined,{timeout:7000});
+  const actArrive=await read();
+  if(actArrive.dockX!==150||actArrive.dockY!==450||
+     actArrive.x!==actArrive.dockX||actArrive.y!==actArrive.dockY||
+     actArrive.kind!=='scaffold_lift')
+   throw Error('Sector-2 landing does not coincide with native player entry '+JSON.stringify(actArrive));
+  await page.waitForFunction(()=>document.querySelector('.omega-protocol-arena')
+   ?.getAttribute('data-omega-transit-phase')==='none',
+   undefined,{timeout:6000});
+  const fourthWorld=await read();
+  if(fourthWorld.wave!==4||fourthWorld.phase!=='battle'||
+     fourthWorld.field!=='exit')
+   throw Error('Failed to arrive inside the actual fourth industrial zone '+JSON.stringify(fourthWorld));
   if(errors.length)throw Error(errors.join('; '));
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,firstWalk,arrived2,secondWalk,reward,finale,
+   provenance,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
-   worldTransitions:2,
+   worldTransitions:3,
    normalMissionSkipAllowed:false,
    approvedSeamless15Map:false,realPhone:false});
   console.log('QA_PASS M04',s.name,JSON.stringify({
-   physicalWalks:[firstWalk.finalX-firstWalk.initialX,secondWalk.finalX-secondWalk.initialX],
-   worldSequence:[1,arrived2.wave,finale.wave],
+   physicalWalks:[firstWalk.finalX-firstWalk.initialX,secondWalk.finalX-secondWalk.initialX,thirdWalk.finalX-thirdWalk.initialX],
+   worldSequence:[1,arrived2.wave,finale.wave,actArrive.wave],
    safeRoomReward:reward.phase,
   }));
  }catch(error){
