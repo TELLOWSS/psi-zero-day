@@ -106,7 +106,6 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    }
    const sorted=[...enemies].sort((a,b)=>dist(player,a)-dist(player,b));
    const target=sorted[0]!;
-   const range=dist(player,target);
    // Actual held-stick input, normal auto-fire and hit-cone sword only;
    // dodge/chase remains an external test-player decision, not an engine
    // cheat, HP reset or modification of enemy AI/difficulty.
