@@ -2,7 +2,7 @@ import {describe,it,expect,vi,afterEach} from 'vitest';
 import {
  OMEGA_SILVER_REVIEW_DB,OMEGA_SILVER_REVIEW_STORE,
  OMEGA_SILVER_HEADINGS,omegaSilverPreviewEnabled,
- omegaSilverPreviewAcceptableRoster,omegaSilverReviewUrl,
+ omegaSilverRepoPreviewEnabled,omegaSilverPreviewAcceptableRoster,omegaSilverReviewUrl,
 } from '../src/ui/omega-canonical-local-preview';
 import {
  OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate,
@@ -20,6 +20,13 @@ describe('silver AIRA 8-view browser-only original-art preview contract',()=>{
   expect(omegaSilverPreviewEnabled('?omegaLab=1&omegaSilverPreview=1')).toBe(true);
   expect(omegaSilverPreviewEnabled('?omegaSilverPreview=0')).toBe(false);
   expect(omegaSilverPreviewEnabled('?omegaSilverPreview=true')).toBe(false);
+  // Explicit source-GitHub preview is available only in DEV / feature-flag
+  // lab. Production normal URLs must never enable this comparator.
+  const repoRequested=omegaSilverRepoPreviewEnabled('?omegaSilverPreview=repo');
+  expect(omegaSilverPreviewEnabled('?omegaSilverPreview=repo')).toBe(repoRequested);
+  expect(omegaSilverRepoPreviewEnabled('?omegaSilverPreview=repo1')).toBe(false);
+  expect(omegaSilverRepoPreviewEnabled('?omegaSilverPreview=REPO')).toBe(false);
+  expect(omegaSilverRepoPreviewEnabled('')).toBe(false);
   expect(omegaSilverReviewUrl()).toContain('omegaLab=1');
   expect(OMEGA_SILVER_REVIEW_DB).toContain('review');
   expect(OMEGA_SILVER_REVIEW_STORE).toBe('sprites');
