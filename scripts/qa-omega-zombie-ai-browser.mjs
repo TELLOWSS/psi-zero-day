@@ -50,6 +50,22 @@ for(const [label,width,height] of [['desktop',1440,900],['mobile-portrait',390,8
    return z.length===4&&Number(a?.getAttribute('data-omega-zombie-clock'))>.25;
   },undefined,{timeout:10000});
   const opening=await read(page);
+  // Actual React/Canvas warning, without mocked event clocks or fake entities.
+  await page.waitForFunction(()=>{
+   const a=document.querySelector('.omega-protocol-arena');
+   return a?.getAttribute('data-omega-counterplay-kind')==='zombie'&&
+    a.getAttribute('data-omega-counterplay-phase')==='warning'&&
+    a.querySelector('.omega-protocol-counterplay-hud strong')?.textContent?.includes('초');
+  },undefined,{timeout:25000});
+  const counterplay=await page.locator('.omega-protocol-arena').evaluate(el=>({
+   kind:el.dataset.omegaCounterplayKind,phase:el.dataset.omegaCounterplayPhase,
+   dashReady:el.dataset.omegaDashReady,dashRemaining:el.dataset.omegaDashRemaining,
+   text:el.querySelector('.omega-protocol-counterplay-hud')?.textContent,
+  }));
+  if(!['true','false'].includes(counterplay.dashReady)||!Number.isFinite(Number(counterplay.dashRemaining)))
+   throw Error('Dash counterplay does not reflect native Watch state');
+  await page.screenshot({path:out+'/m04d5-live-infected-counterplay-'+label+'.png',
+   fullPage:false,animations:'disabled'});
   const kinds=opening.zombies.map(z=>z.kind);
   if(new Set(kinds).size!==4||
      !['drifter','sprinter','armored','stalker'].every(k=>kinds.includes(k)))
@@ -80,7 +96,7 @@ for(const [label,width,height] of [['desktop',1440,900],['mobile-portrait',390,8
   if(errors.length)throw Error('Actual mounted React/Canvas JS errors '+errors.join('; '));
   await page.screenshot({path:out+'/m03-four-zombies-attack-'+label+'.png',
    fullPage:false,animations:'disabled'});
-  const record={label,width,height,opening,finale,
+  const record={label,width,height,opening,finale,counterplay,
    actualNativeWatchHazards:true,readOnlyGameTelemetry:true,
    realPlayerHpDamage:true,approvedZombieSprites:false,androidHardware:false};
   results.push({pass:true,...record});
