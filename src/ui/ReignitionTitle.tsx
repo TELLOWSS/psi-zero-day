@@ -134,7 +134,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
   }catch{/* browser preferences are optional; selection still works */}
  };
  const scrollToMissions=()=>document.getElementById('reignition-missions')?.scrollIntoView({behavior:props.motionEnabled?'smooth':'auto',block:'start'});
- return <main className="rg-home" data-title-layout="REIGNITION_V1" data-reignition-concept={theme}>
+ return <main className="rg-home" data-title-layout="REIGNITION_V1"
+ data-reignition-concept={theme} data-omega-silver-preview={silverPortrait?'ready':silverPreviewRequested?'loading':'off'}>
   <a className="rg-skip-missions" href="#reignition-missions">게임 선택 바로가기</a>
   <header className="rg-header">
    <div className="rg-brand"><img src={props.emblem} alt="" width={50} height={56}/><div><strong>PSI : ZERO DAY</strong><small>{props.brand} / RE:IGNITION</small></div></div>
