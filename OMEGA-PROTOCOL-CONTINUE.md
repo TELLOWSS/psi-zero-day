@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D5 실전 위험 경고/회피 가시성 개선 PR #248 Core 51파일/227테스트 및 PC·모바일 Chromium QA PASS. QA 브랜치 검증 완료; main/Production 미배포, 15구역 완주/정식 아트/Android 미완
+**관리일:** 2026-11-10 (KST) · M04-D5 실전 위험 경고/회피 가시성 개선 PR #248 Core 51파일/227테스트 및 PC·모바일 Chromium QA PASS. 검증 PR #248 개발 브랜치에만 squash 병합 f66d08a94fe241159bd9f34879961b1f21f1730f; main/Production 미배포, 15구역 완주/정식 아트/Android 미완
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -295,5 +295,7 @@
 - **비변경:** 공격/적HP/체력/AI/회피 시간/충돌 판정/일반 WATCH 저장·해금·지갑·보상·과금·정식 미술. 일반 인간 구조대상은 공격 대상이 아니며 OMEGA 감염 좀비·가상 무인 기계만 경고 대상.
 
 **판정:** M04-D5 CODED + TESTED (Core 227 & Chromium PC/모바일 세로). 전체 15/15 무스킵 승리, Android 실기기, 모바일 가로 가림/경고 타이밍, 보스 9/15 경고, 독립 AIRA 160프레임/320 마스크 승인, 완전 스트리밍 지도는 미완.
+
+**개발 브랜치 반영 확인:** [PR #248](https://github.com/TELLOWSS/psi-zero-day/pull/248) 성공적으로 OMEGA 개발 브랜치에만 squash 병합되었음. 해당 병합 SHA `f66d08a94fe241159bd9f34879961b1f21f1730f`; 작업용 PR #235는 계속 Draft 및 미병합이며 `main`과 Production에는 반영하지 않음. 실제 Actions 증거는 병합 이전 코드 동일한 검증 PR SHA `56e2812f8f0db07c3376fb3db363fd4b0881e243` 기준이며, 후속 인계 문서 단독 편집은 실행 코드 테스트를 대체하지 않음.
 
 **NEXT M04-D6:** RUNAWAY_CART warning 단계에서도 native 접촉 피해가 들어가는지 실제 엔진 테스트, 감염체/카트/보스 경고와 충돌 판정 타이밍 일치 여부, LOS 및 지형/회피 경로, 모바일 가로 844×390 QA. 원래 난도 무단 하향/HP 손대기 금지. main/Production/유료 업그레이드 금지.
