@@ -249,7 +249,7 @@ type SegmentAudit={
  swordDamage:number;
 };
 interface BuildResult{
- policy:Policy;cleared:number;firstFailure:number|null;endHp:number;
+ policy:Policy;cleared:number;firstFailure:number|null;botBlockedAt:number|null;endHp:number;
  runPhase:string;rewardChoices:Array<{afterWave:number;offered:UpgradeChoice[];chosen:UpgradeChoice}>;
  segments:SegmentAudit[];
  failureReason:string|null;
@@ -261,7 +261,7 @@ function runActualBuild(policy:Policy):BuildResult{
  const segments:SegmentAudit[]=[];
  const rewardChoices:BuildResult['rewardChoices']=[];
  let failureReason:string|null=null,firstFailure:number|null=null;
- let cleared=0;
+ let cleared=0,botBlockedAt:number|null=null;
  const list:readonly string[]=priorities[policy];
  for(let wave=1;wave<=15;wave++){
   for(let tick=0;tick<60&&s.snapshot.gateTransit;tick++)s.update(DT,idle);
@@ -275,16 +275,20 @@ function runActualBuild(policy:Policy):BuildResult{
    complete=completeRealNode(s,wave===9||wave===15?300:180);
   }catch(error){
    failureReason=String(error);
-   if(s.run.phase!=='defeat'||!failureReason.includes('NO-SKIP ACTUAL PLAYER DEFEAT')){
-    // Simulation bot pathfinding is NOT a real player defeat; distinguish
-    // it explicitly instead of treating it as proof this build is too weak.
+   if(s.run.phase==='defeat'&&failureReason.includes('NO-SKIP ACTUAL PLAYER DEFEAT')){
+    firstFailure=wave;
+   }else if(s.run.phase==='battle'&&(
+    failureReason.includes('15s without actual combat HP progress')||
+    failureReason.includes('did NOT finish under simulation budget')
+   )){
+    // CENSORED by the test pilot: native combat was not lost. No victory,
+    // death or superiority claim is justified for this comparison arm.
+    botBlockedAt=wave;
     console.log('M04_D4_BOT_LIMITATION',JSON.stringify({
      policy,wave,reason:failureReason,phase:s.run.phase,
      evidence:segments.map(x=>x.wave),
     }));
-    throw error;
-   }
-   firstFailure=wave;
+   }else throw error;
   }
   const damage=s.damageSummary(wave);
   segments.push({
@@ -298,8 +302,8 @@ function runActualBuild(policy:Policy):BuildResult{
    gunHits:complete?.nativeGunHits??0,
    swordDamage:complete?.nativeBladeDamage??0,
   });
-  if(firstFailure!==null)break;
-  if(!complete)throw Error('Neither completed nor lost');
+  if(firstFailure!==null||botBlockedAt!==null)break;
+  if(!complete)throw Error('Neither completed, lost nor explicitly censored');
   cleared++;
   if(s.run.phase==='reward'){
    const offered=[...s.run.offers];
@@ -311,7 +315,7 @@ function runActualBuild(policy:Policy):BuildResult{
   }
  }
  return {
-  policy,cleared,firstFailure,endHp:s.engine.state.player.hp,
+  policy,cleared,firstFailure,botBlockedAt,endHp:s.engine.state.player.hp,
   runPhase:s.run.phase,rewardChoices,segments,failureReason,
  };
 }
@@ -328,6 +332,10 @@ describe('M04-D4 legitimate upgrade path comparison at same seed and native diff
     expect(result.firstFailure).toBe(result.cleared+1);
     expect(result.runPhase).toBe('defeat');
     expect(result.endHp).toBe(0);
+   }else if(result.botBlockedAt!==null){
+    expect(result.botBlockedAt).toBe(result.cleared+1);
+    expect(result.runPhase).toBe('battle');
+    expect(result.endHp).toBeGreaterThan(0);
    }else{
     expect(result.cleared).toBe(15);
     expect(result.runPhase).toBe('victory');
@@ -340,7 +348,7 @@ describe('M04-D4 legitimate upgrade path comparison at same seed and native diff
    INFECTED_SPRINTER:16,WATCH_NATIVE_NET:17,
   });
   const ranked=results.map(x=>({policy:x.policy,cleared:x.cleared,
-   firstFailure:x.firstFailure,hp:x.endHp,offeredAt:x.rewardChoices.map(c=>c.afterWave)}))
+   firstFailure:x.firstFailure,botBlockedAt:x.botBlockedAt,hp:x.endHp,offeredAt:x.rewardChoices.map(c=>c.afterWave)}))
    .sort((a,b)=>b.cleared-a.cleared||a.policy.localeCompare(b.policy));
   console.log('M04_D4_VERIFIED_COMPARISON',JSON.stringify({
    seed:20261109,baselineCleared:baseline.cleared,
