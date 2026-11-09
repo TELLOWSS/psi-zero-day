@@ -101,8 +101,15 @@ try{
  await maleButton.waitFor({timeout:15000});
  if(await maleButton.isDisabled())throw Error('Real GitHub male M01 portrait not available in DEV review');
  await maleButton.click();
- if(await maleButton.getAttribute('aria-pressed')!=='true')
-  throw Error('M01 source art comparison did not select male');
+ await page.waitForFunction((original)=>{
+  const image=document.querySelector('.rg-aira-v2');
+  const button=[...document.querySelectorAll('.rg-silver-character-selector button')]
+   .find(b=>b.textContent?.includes('M01'));
+  return image instanceof HTMLImageElement&&
+   button?.getAttribute('aria-pressed')==='true'&&
+   image.getAttribute('src')?.startsWith('blob:')&&
+   image.getAttribute('src')!==original;
+ },heroSrc,{timeout:14000});
  const maleSrc=await hero.getAttribute('src');
  if(!maleSrc?.startsWith('blob:')||maleSrc===heroSrc)
   throw Error('M01 original artwork is not a unique cached image');
@@ -114,6 +121,10 @@ try{
  screens.push({viewport:'main-M01-1440x900',filename:'OMEGA-M01-ORIGINAL-GITHUB-home-1440x900.png',
   realSource:true,designCandidateOnly:true});
  await page.getByRole('button',{name:'AIRA V2'}).click();
+ await page.waitForFunction(original=>{
+  const img=document.querySelector('.rg-aira-v2');
+  return img instanceof HTMLImageElement&&img.getAttribute('src')===original;
+ },heroSrc,{timeout:14000});
  if(await hero.getAttribute('src')!==heroSrc)
   throw Error('Silver AIRA portrait did not return after male review');
  // On mobile this is a comparison toolbar, not a game-mode selector.
