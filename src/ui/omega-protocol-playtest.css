@@ -627,3 +627,18 @@
   max-width:108px;min-width:108px!important
  }
 }
+
+/* Silver AIRA production-art QA is explicitly opt-in and never covers the
+ * central action corridor. Static review notice lives above the world. */
+.omega-silver-review-bar{
+ display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+ gap:7px 15px;padding:7px 14px;background:#352848;color:#f2e9ff;
+ border-block:1px solid #ab79d855;font-size:11px;line-height:1.35;
+}
+.omega-silver-review-bar strong{font-size:12px;color:#f3deff}
+.omega-silver-review-bar span{flex:1;min-width:170px}
+.omega-silver-review-bar a{color:#f0d4ff;text-decoration:underline;text-underline-offset:3px}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-silver-review-bar{padding:3px 9px;font-size:9px;gap:4px 8px}
+ .omega-silver-review-bar strong{font-size:10px}
+}
