@@ -80,6 +80,10 @@ on:
       - 'tests/omega-aira-v2-hit-frames.test.ts'
       - 'tests/omega-aira-v2-special-frames.test.ts'
       - 'scripts/check-omega-aira-v2-assets.mjs'
+      - 'scripts/stage-omega-canonical-art.mjs'
+      - 'tests/omega-canonical-art-import.test.mjs'
+      - 'content/art/omega-canonical-silver-roster.json'
+      - 'public/assets/omega/canonical-review/**'
       - 'scripts/check-omega-aira-e-fire-atlas.mjs'
       - 'scripts/check-omega-aira-e-dash-atlas.mjs'
       - 'scripts/check-omega-aira-e-hit-atlas.mjs'
@@ -107,6 +111,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Ensure new silver AIRA and male art never bypass approval or change Guard/Watch
+        run: node --test tests/omega-canonical-art-import.test.mjs
       - name: Typecheck
         run: npm run typecheck
       - name: Verify user-selected AIRA V2 binary assets and SHA-256
