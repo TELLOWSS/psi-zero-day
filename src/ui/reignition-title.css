@@ -342,3 +342,17 @@
  .rg-home .rg-header-tools button:first-child:before{content:'?';font-size:18px;font-weight:900}
  .rg-home .rg-header-tools button:last-child span{font-size:17px;line-height:1}
 }
+
+/* Opt-in canonical art review, never visible in normal Guard/Watch home. */
+.rg-silver-review-banner{
+ position:absolute;z-index:12;top:14px;right:14px;
+ display:flex;gap:10px;align-items:center;justify-content:space-between;
+ max-width:min(490px,60%);padding:7px 12px;
+ font-size:11px;line-height:1.4;color:#f0e7ff;
+ background:rgba(32,19,48,.84);border:1px solid rgba(191,139,255,.47);
+ border-radius:10px;backdrop-filter:blur(10px);
+}
+.rg-silver-review-banner a{color:#fff;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+@media(max-width:670px){
+ .rg-silver-review-banner{top:8px;right:8px;left:8px;max-width:none;padding:5px 8px;font-size:10px}
+}
