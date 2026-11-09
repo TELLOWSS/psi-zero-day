@@ -223,4 +223,50 @@ describe('M04-D real OMEGA expedition without DEV preclear or direct HP mutation
    offers:offerProof,chosen,evidence,latestHp:s.engine.state.player.hp,
   }));
  },200000);
+ it('M04-D: ACTUAL full 15-zone no-skip pilot with 2 genuine bosses, every device and 7 offered cards',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true, // explicitly NO qaGateTravel
+  });
+  const proof:NodeEvidence[]=[];
+  const picks:Array<{afterWave:number;offered:readonly string[];chosen:string}>=[];
+  const pref=['recovery_protocol','shield_matrix','radio_overdrive','blade_edge',
+   'rapid_step','shockwave','emp_link'];
+  for(let wave=1;wave<=15;wave++){
+   // The previous real gate has already updated the run. No mid-play
+   // teleport, enemy HP writes, mission completion injection or artificial
+   // invulnerability; only let the ACTUAL timed shutters finish opening.
+   for(let i=0;i<60&&s.snapshot.gateTransit;i++)s.update(DT,idle);
+   expect(s.snapshot.gateTransit).toBeNull();
+   expect(s.run.wave).toBe(wave);
+   expect(s.run.phase).toBe('battle');
+   expect(s.field?.plan.wave).toBe(wave);
+   const result=completeRealNode(s,wave===9||wave===15?300:180);
+   proof.push(result);
+   console.log('QA_M04D_NO_SKIP_NODE',JSON.stringify(result));
+   if(s.run.phase==='reward'){
+    const offered=[...s.run.offers];
+    expect(offered).toHaveLength(3);
+    const chosen=offered.find(id=>pref.includes(id))??offered[0]!;
+    s.selectUpgrade(chosen as Parameters<typeof s.selectUpgrade>[0]);
+    picks.push({afterWave:wave,offered,chosen});
+   }
+   if(wave===15)expect(s.run.phase).toBe('victory');
+   else expect(s.run.phase).toBe('battle');
+  }
+  expect(s.run).toMatchObject({phase:'victory',victories:15,wave:16});
+  expect(proof).toHaveLength(15);
+  expect(proof.filter(e=>e.boss).map(e=>e.wave)).toEqual([9,15]);
+  expect(picks).toHaveLength(7);
+  expect(proof.every(e=>e.nativeKills>=5&&e.steps>=2)).toBe(true);
+  console.log('QA_M04D_FULL_15_REAL_RUN',JSON.stringify({
+   allCombatAndStations:true,devPreclear:false,
+   victories:s.run.victories,bossWaves:proof.filter(e=>e.boss).map(e=>e.wave),
+   nativeEnemies:proof.reduce((a,e)=>a+e.nativeKills,0),
+   nativeProjectileImpacts:proof.reduce((a,e)=>a+e.nativeGunHits,0),
+   devicesOperated:proof.reduce((a,e)=>a+e.steps,0),
+   rewards:picks,remainingHp:s.engine.state.player.hp,
+   simulatedSeconds:proof.reduce((a,e)=>a+e.simulationSeconds,0),
+   sceneTransitionKind:'closed-door sequential field loading; not seamless streaming',
+  }));
+ },240000);
 });
