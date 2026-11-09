@@ -70,8 +70,7 @@ import './reignition-modes.css';
 import {guardTacticalCue} from './combat-ux-cues';
 import {useGuardBoardFit} from './use-guard-board-fit';
 import {GuardMobileInfo} from './GuardMobileInfo';
-import {OmegaSilverGuardReview} from './OmegaSilverGuardReview';
-import {omegaSilverRepoPreviewEnabled} from './omega-canonical-local-preview';
+import {OmegaSilverGuardReview,omegaGuardSourcePreviewAllowed} from './OmegaSilverGuardReview';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -425,8 +424,8 @@ export function DefenseGame({
   const guard=isGuardMap(content.map.id);
   // Developer opt-in ONLY: Guard has no walking player avatar. AIRA is an
   // in-world, non-interactive operator visual with no gameplay/save effects.
-  const silverGuardPreview=guard&&typeof window!=='undefined'&&
-    omegaSilverRepoPreviewEnabled(window.location.search);
+  const silverGuardPreview=omegaGuardSourcePreviewAllowed(guard,
+    typeof window==='undefined'?'':window.location.search);
   useEffect(()=>{
    if(content.scenario.id!=='guard-gd-06-v1'||!state)return;
    if(state.waveId>=5&&state.status!=='READY')recordEncounterIntel('guard','GD-06','observed');
