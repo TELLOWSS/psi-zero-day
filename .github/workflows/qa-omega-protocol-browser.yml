@@ -45,6 +45,9 @@ on:
       - 'scripts/qa-omega-mission-source-sheet.mjs'
       - 'scripts/qa-omega-aira-action-motion-sheet.mjs'
       - 'scripts/qa-omega-aira-v2-source.mjs'
+      - 'scripts/qa-omega-canonical-review.mjs'
+      - 'public/omega-canonical-art-review/**'
+      - 'public/assets/omega/canonical-review/**'
       - 'scripts/qa-omega-aira-v2-directional-parity.mjs'
       - 'scripts/qa-omega-aira-v2-walk-source.mjs'
       - 'scripts/qa-omega-aira-e-walk-atlas.mjs'
@@ -159,6 +162,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-aira-e-walk-atlas.mjs
+      - name: Check canonical silver AIRA and male review UI (no game deployment)
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-canonical-review.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
