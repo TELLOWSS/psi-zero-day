@@ -686,3 +686,41 @@
 @media(max-height:430px) and (orientation:landscape){
  .omega-protocol-mission .omega-protocol-story-radio{display:none}
 }
+
+/* M04: sector-aware quarantine shutter inside the LIVE game viewport.
+   The old world remains under this until opaque; new terrain is then loaded
+   at the portal seam and the shutters reopen over the actual next field.
+   This is a transitional corridor study, not a fully streamed 15-zone map. */
+.omega-protocol-gate-transit{
+ position:absolute;z-index:8;inset:0;pointer-events:auto;
+ display:grid;place-items:center;isolation:isolate;
+ background:radial-gradient(circle at center,#263d50,#06131f 78%);
+ transition:none;overflow:hidden;color:#e1f8f6;
+}
+.omega-protocol-gate-doors{
+ position:absolute;inset:0;display:flex;gap:6px;
+}
+.omega-protocol-gate-doors i{
+ flex:1;display:block;
+ background:repeating-linear-gradient(90deg,#13283c 0 12px,#243f53 13px 15px,#142d40 17px 23px);
+ border-inline:6px solid #496377;box-shadow:inset 0 0 90px #07111b;
+ transform:skewX(-5deg);
+}
+.omega-protocol-gate-doors i:last-child{transform:skewX(5deg)}
+.omega-protocol-gate-sign{
+ position:relative;z-index:1;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;text-align:center;gap:10px;
+ max-width:min(92%,520px);padding:25px clamp(20px,4vw,42px);
+ border:1px solid #89e6cd9c;border-radius:14px;
+ background:linear-gradient(135deg,#071b2af0,#123746ee);
+ box-shadow:0 0 0 3px #0b1728,0 0 65px #1ccda53c;
+}
+.omega-protocol-gate-sign span{font-size:10px;letter-spacing:.22em;color:#93ead7;font-weight:850}
+.omega-protocol-gate-sign strong{font-size:clamp(19px,3.5vw,32px);color:#f1fffb;line-height:1.16}
+.omega-protocol-gate-sign p{margin:0;color:#b7d4d6;font-size:clamp(11px,1.6vw,15px)}
+.omega-protocol-gate-sign small{color:#e8b984;font-size:11px}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-gate-sign{padding:9px 18px;gap:3px}
+ .omega-protocol-gate-sign strong{font-size:18px}
+ .omega-protocol-gate-sign span,.omega-protocol-gate-sign small{font-size:9px}
+}
