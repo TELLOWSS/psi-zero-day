@@ -54,8 +54,8 @@ describe('OMEGA infected hard-hat worker ZOMBIE is fictional special-edition ene
   const omega=new OmegaProtocolCombatSession(20261109,50);
   omega.engine.state.player.invincibleTime=999;
   omega.update(1/60,{moveX:1,moveY:0,triggerAction:false});
-  const target=omega.engine.state.hazards[0]!;
-  target.type='UNHELMETED';
+  const target={...omega.engine.state.hazards[0]!,type:'UNHELMETED' as const};
+  omega.engine.state.hazards[0]=target;
   target.hp=100;target.maxHp=100;target.radius=20;target.speed=0;
   target.x=omega.engine.state.player.x+60;
   target.y=omega.engine.state.player.y;
@@ -68,8 +68,9 @@ describe('OMEGA infected hard-hat worker ZOMBIE is fictional special-edition ene
   const state=expedition.engine.state;
   const player=state.player;
   player.invincibleTime=999;
-  const infected=state.hazards[0]!;
-  infected.type='UNHELMETED';infected.radius=24;infected.speed=0;
+  const infected={...state.hazards[0]!,type:'UNHELMETED' as const};
+  state.hazards[0]=infected;
+  infected.radius=24;infected.speed=0;
   infected.x=player.x+115;infected.y=player.y;infected.hp=120;infected.maxHp=120;
   for(const h of state.hazards.slice(1))h.hp=0;
   // This is the actual existing engine projectile class, not a mock damage call.
