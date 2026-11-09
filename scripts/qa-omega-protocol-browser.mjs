@@ -55,6 +55,18 @@ for(const [name,width,height,checkpoint] of targets){
   // during keyboard/stick probes; that must not invalidate opening staging.
   const openingNearThreatCount=Number(await page.locator('.omega-protocol-arena')
    .getAttribute('data-omega-near-threats')??'0');
+  // The QA battle can run at 50/50 as a test fixture, but it may not
+  // declare the real user's Extreme completion or grant a public unlock.
+  const realGate=await page.locator('main[data-omega-protocol-internal="true"]')
+   .evaluate(el=>({
+     actualClears:Number(el.getAttribute('data-omega-real-extreme-clears')),
+     unlocked:el.getAttribute('data-omega-real-unlock-eligible'),
+     source:el.getAttribute('data-omega-session-unlock-source'),
+   }));
+  const honestQaGate=realGate.source==='dev-qa-fixture'&&
+    Number.isInteger(realGate.actualClears)&&
+    realGate.actualClears>=0&&realGate.actualClears<=50&&
+    realGate.unlocked===(realGate.actualClears===50?'yes':'no');
   let swordTest=null;
   if(name==='combat-action'){
    // A genuine player-input movement/dash capture. No debug teleport,
@@ -248,10 +260,11 @@ for(const [name,width,height,checkpoint] of targets){
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
     correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,swordTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
-    authoredArt,openingNearThreatCount,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
+    authoredArt,openingNearThreatCount,openingHasCombat,realGate,honestQaGate,
+    actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||swordTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!missionClearCombatCorridor.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||swordTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!missionClearCombatCorridor.pass||!openingHasCombat||!honestQaGate||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
