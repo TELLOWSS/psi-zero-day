@@ -165,7 +165,7 @@ export class OmegaProtocolCombatSession {
    // not merely a possible random archetype in the encounter pool.
    // Four separate infected zombie AI types occupy the first four
    // genuine native hazard slots. Additional industry machinery remains.
-   const type=i<4?'UNHELMETED':plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
+   const type=i<4?'UNHELMETED':i===4?'RUNAWAY_CART':plan.threatKinds[omegaSeedHash(this.active.seed,plan.wave*31+i)%plan.threatKinds.length]!;
    const scale=1+Math.min(2,plan.intensity*.16);
    const speed=plan.modifier==='crosswind'?1.13:plan.modifier==='unstable_ground'?.93:1;
    specs.push({type,hpScale:scale,speedScale:speed});
