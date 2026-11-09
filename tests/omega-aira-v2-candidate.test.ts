@@ -86,6 +86,50 @@ describe('AIRA V2 user-selected eight-direction identity in live Watch Canvas',(
   expect(back.filter(k=>k==='createRadialGradient')).toHaveLength(1);
   expect(front.filter(k=>k==='createRadialGradient')).toHaveLength(1);
  });
+ it('uses original E walking art with planted boots and NO old extra bob',()=>{
+  class SourceArt{
+   complete=true;naturalWidth=192;naturalHeight=336;decoding='';
+   onload:(()=>void)|null=null;onerror:(()=>void)|null=null;
+   private path='';
+   get src(){return this.path;}
+   set src(p:string){
+    this.path=p;
+    if(p.endsWith('e-walk-4key-atlas.svg')){
+     this.naturalWidth=960;this.naturalHeight=232;
+    }
+   }
+  }
+  vi.stubGlobal('Image',SourceArt);
+  const cache=new OmegaAiraV2CandidateImages();cache.prepare();
+  expect(cache.walkFrames.ready).toBe(true);
+  const observe=(facingX:number,facingY:number)=>{
+   const events:Array<{name:string;args:unknown[]}>= [];
+   const ctx=new Proxy({canvas:{width:844}},{
+    get(target,k:string|symbol){
+     if(k==='canvas')return target.canvas;
+     return (...args:unknown[])=>{events.push({name:String(k),args});};
+    },
+    set(){return true;},
+   }) as unknown as CanvasRenderingContext2D;
+   const view={
+    facingX,facingY,moving:true,time:5.5,dashing:false,shooting:false,
+    gait:{active:true,phase:.375,distanceTravelled:14.25,
+     left:{x:-9,y:0,planted:true},right:{x:9,y:0,planted:true}},
+   };
+   expect(drawOmegaAiraV2Candidate(ctx,view,cache)).toBe(true);
+   return events;
+  };
+  const e=observe(1,0),s=observe(0,1);
+  expect(e.filter(v=>v.name==='drawImage')).toHaveLength(1);
+  expect(e.find(v=>v.name==='drawImage')?.args.slice(1,5))
+   .toEqual([240,0,240,232]);
+  expect(e.find(v=>v.name==='translate')?.args).toEqual([0,0]);
+  // Other directions still use the measured technical gait until their
+  // own independent art exists; never apply E's source to S.
+  expect(s.filter(v=>v.name==='drawImage')).toHaveLength(3);
+  const body=s.find(v=>v.name==='translate');
+  expect((body?.args[1] as number)).toBeLessThan(0);
+ });
  it('adds only visual motion derived from native action booleans',()=>{
   class LoadedImage{
    complete=true;naturalWidth=192;naturalHeight=336;decoding='';
