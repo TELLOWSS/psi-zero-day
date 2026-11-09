@@ -98,6 +98,8 @@ export function resolveHomeNextChallenge(status:EndgameHomeStatus,guardAvailable
 export function ReignitionTitle(props:ReignitionTitleProps){
  const silverPreviewRequested=typeof window!=='undefined'&&omegaSilverPreviewEnabled(window.location.search);
  const [silverPortrait,setSilverPortrait]=useState<string|null>(null);
+ const [silverMalePortrait,setSilverMalePortrait]=useState<string|null>(null);
+ const [silverPreviewCharacter,setSilverPreviewCharacter]=useState<'AIRA'|'M01'>('AIRA');
  useEffect(()=>{
   if(!silverPreviewRequested)return;
   let mounted=true;
@@ -106,7 +108,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    if(!mounted){loaded.revoke();return;}
    lease=loaded;
    setSilverPortrait(loaded.urls.get('S')??null);
-  }).catch(()=>{if(mounted)setSilverPortrait(null);});
+   setSilverMalePortrait(loaded.maleUrl??null);
+  }).catch(()=>{if(mounted){setSilverPortrait(null);setSilverMalePortrait(null);}});
   return ()=>{mounted=false;lease?.revoke();};
  },[silverPreviewRequested]);
  const [theme,setTheme]=useState<HomeTheme>(()=>{
@@ -169,9 +172,27 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
       <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
-     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2" src={silverPortrait??"/assets/omega/aira-v2/hero-splash.webp"} alt="AIRA V2 캐릭터 원화" loading="eager" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}/>}
+     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2"
+      src={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
+        silverMalePortrait:(silverPortrait??"/assets/omega/aira-v2/hero-splash.webp")}
+      alt={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
+       '신규 남성 요원 M01 원화 후보':'은백색 AIRA V2 캐릭터 원화'}
+      loading="eager" decoding="async"
+      onError={event=>{event.currentTarget.onerror=null;
+       if(silverPreviewRequested){event.currentTarget.style.visibility='hidden';return;}
+       event.currentTarget.src='/assets/reignition/veteran-return.webp';
+      }}
+      onLoad={event=>{event.currentTarget.style.visibility='';}}/>}
      {silverPreviewRequested&&<aside className="rg-silver-review-banner" role="status">
-      {silverPortrait?'은백색 AIRA 원화 미리보기 · SHA-256 확인 · 정식 적용 전':'은백색 AIRA 검수용 원화 연결 필요'}
+      <span>{silverPortrait?'은백색 AIRA 원화 · SHA-256 검증 · 정식 적용 전':'은백색 AIRA 검수용 원화 연결 필요'}</span>
+      {silverPortrait&&<span className="rg-silver-character-selector" role="group" aria-label="캐릭터 원화 비교">
+       <button type="button" aria-pressed={silverPreviewCharacter==='AIRA'}
+        onClick={()=>setSilverPreviewCharacter('AIRA')}>AIRA V2</button>
+       <button type="button" aria-pressed={silverPreviewCharacter==='M01'}
+        disabled={!silverMalePortrait} onClick={()=>setSilverPreviewCharacter('M01')}>
+        M01 · 남성 후보
+       </button>
+      </span>}
       <a href="/omega-canonical-art-review/index.html">원화 검수</a>
      </aside>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
