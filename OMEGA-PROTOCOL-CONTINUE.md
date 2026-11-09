@@ -80,3 +80,11 @@
 3. PR 설명/상단 댓글에 이 파일 링크 기록.
 4. 정식 원화·모바일 실기기·완전한 게임화면 완료 주장은 실제 빌드/시각 증거가 있을 때만 함.
 5. GitHub 최신 HEAD보다 오래된 이 파일의 시점표기는 스냅샷이며 HEAD를 우선.
+
+## 7. 마지막 관측한 GitHub 릴리스/검증 장벽
+
+- **관측 시점:** 2026-11-09 KST, 핸드오프 최초 생성 HEAD `92f286386ed18448c31107c873de7041b0b8629f`.
+- 해당 HEAD의 GitHub Actions workflow runs **0건**, check-runs **0건**. 즉 최신 변경에 대한 typecheck/Vitest/브라우저 QA 실제 통과 **근거 없음**.
+- 해당 HEAD의 Vercel commit status **failure**, 링크에서 `upgradeToPro=build-rate-limit` 확인. **유료 전환하지 않음**. 이는 JS 실행/성능 테스트 증거가 아님.
+- `main` 최신 조회 커밋 `28dc1e1bfad5f67f9c77970521706ee2a37e4dc1`; PR 메타의 오래된 merge base `dae18d1...`과 달라져 **main 진도가 앞섬**. PR 응답상 `mergeable=false`. **자동 merge / main 갱신 금지**, 필요 시 충돌/베이스 차이 별도 검토.
+- **실행 지시:** 다음 채팅에서 Actions / check-runs 및 `main` SHA를 새로 조회하고, `npm run typecheck`, OMEGA 관련 Vitest, `scripts/qa-omega-protocol-browser.mjs`를 **실제로 실행해 PASS 증거가 확인될 때까지** M01/M02 테스트 완료 판정 금지.
