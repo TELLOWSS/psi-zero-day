@@ -1,4 +1,5 @@
-import {useState,type ReactNode} from 'react';
+import {useEffect,useState,type ReactNode} from 'react';
+import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {useDialogFocus} from './useDialogFocus';
 import type {EndgameHomeStatus} from '../app/endgame-home';
 import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
@@ -95,6 +96,19 @@ export function resolveHomeNextChallenge(status:EndgameHomeStatus,guardAvailable
 }
 
 export function ReignitionTitle(props:ReignitionTitleProps){
+ const silverPreviewRequested=typeof window!=='undefined'&&omegaSilverPreviewEnabled(window.location.search);
+ const [silverPortrait,setSilverPortrait]=useState<string|null>(null);
+ useEffect(()=>{
+  if(!silverPreviewRequested)return;
+  let mounted=true;
+  let lease:OmegaSilverPreviewSession|null=null;
+  omegaLoadSilverPreview().then(loaded=>{
+   if(!mounted){loaded.revoke();return;}
+   lease=loaded;
+   setSilverPortrait(loaded.urls.get('S')??null);
+  }).catch(()=>{if(mounted)setSilverPortrait(null);});
+  return ()=>{mounted=false;lease?.revoke();};
+ },[silverPreviewRequested]);
  const [theme,setTheme]=useState<HomeTheme>(()=>{
   try{return resolveHomeTheme(typeof window==='undefined'?'':window.location.search,typeof window==='undefined'?null:window.localStorage.getItem(HOME_THEME_STORAGE_KEY));}
   catch{return 'cinematic';}
@@ -154,7 +168,11 @@ export function ReignitionTitle(props:ReignitionTitleProps){
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
       <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
-     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2" src="/assets/omega/aira-v2/hero-splash.webp" alt="AIRA V2 캐릭터 원화" loading="eager" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}/>}
+     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2" src={silverPortrait??"/assets/omega/aira-v2/hero-splash.webp"} alt="AIRA V2 캐릭터 원화" loading="eager" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}/>}
+     {silverPreviewRequested&&<aside className="rg-silver-review-banner" role="status">
+      {silverPortrait?'은백색 AIRA 원화 미리보기 · SHA-256 확인 · 정식 적용 전':'은백색 AIRA 검수용 원화 연결 필요'}
+      <a href="/omega-canonical-art-review/index.html">원화 검수</a>
+     </aside>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
      <div className="rg-hero-shade" aria-hidden="true"/>
      <div className="rg-cinematic-rings" aria-hidden="true"><span/><span/></div>
