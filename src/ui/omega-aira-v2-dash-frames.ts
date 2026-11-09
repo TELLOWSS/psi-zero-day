@@ -31,6 +31,22 @@ export function omegaAiraDashKeyframeAt(age:number):OmegaDashKeyframe{
  if(age<.15)return 1;  // aerial translation
  return 2;              // crouched recovery
 }
+/** The immutable cropping/boot-pivot contract is independently testable
+ * even while the art binary is not available on the runtime branch.
+ */
+export function omegaAiraDashSourceRect(frame:OmegaDashKeyframe,height:number):
+ Readonly<{sx:number;sy:number;sw:number;sh:number;dx:number;dy:number;dw:number;dh:number}> {
+ if(!Number.isFinite(height)||height<=0)throw new RangeError('Invalid E dash art height');
+ const w=height*OMEGA_AIRA_E_DASH_STUDY.cellWidth/
+  OMEGA_AIRA_E_DASH_STUDY.cellHeight;
+ return {
+  sx:frame*OMEGA_AIRA_E_DASH_STUDY.cellWidth,sy:0,
+  sw:OMEGA_AIRA_E_DASH_STUDY.cellWidth,sh:OMEGA_AIRA_E_DASH_STUDY.cellHeight,
+  dx:-w/2,dy:-height*OMEGA_AIRA_E_DASH_STUDY.bootLine/
+   OMEGA_AIRA_E_DASH_STUDY.cellHeight,
+  dw:w,dh:height,
+ };
+}
 export class OmegaAiraV2DashFrames{
  private source:HTMLImageElement|null=null;
  private state:'locked'|'loading'|'ready'|'invalid'='locked';
@@ -58,14 +74,8 @@ export class OmegaAiraV2DashFrames{
   const frame=omegaAiraDashKeyframeAt(age);
   // The source art is 280×220. Width is larger during a fast dash;
   // the boot line is y=210, so the physical Watch foot pivot remains 0.
-  const w=height*OMEGA_AIRA_E_DASH_STUDY.cellWidth/
-    OMEGA_AIRA_E_DASH_STUDY.cellHeight;
-  const top=-height*OMEGA_AIRA_E_DASH_STUDY.bootLine/
-    OMEGA_AIRA_E_DASH_STUDY.cellHeight;
-  ctx.drawImage(this.source,
-   frame*OMEGA_AIRA_E_DASH_STUDY.cellWidth,0,
-   OMEGA_AIRA_E_DASH_STUDY.cellWidth,OMEGA_AIRA_E_DASH_STUDY.cellHeight,
-   -w/2,top,w,height);
+  const r=omegaAiraDashSourceRect(frame,height);
+  ctx.drawImage(this.source,r.sx,r.sy,r.sw,r.sh,r.dx,r.dy,r.dw,r.dh);
   return true;
  }
 }
