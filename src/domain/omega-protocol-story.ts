@@ -18,7 +18,7 @@ export interface OmegaStoryNode {
  readonly atmosphere:string;
  readonly boss:'none'|'titan_hook'|'black_signal_core';
 }
-export const OMEGA_STORY_NODES:readonly OmegaStoryNode[]=Object.freeze([
+export const OMEGA_STORY_NODES:readonly OmegaStoryNode[]=Object.freeze<OmegaStoryNode[]>([
  {route:1,act:1,district:'침묵한 게이트',title:'03:17, 멈춘 경보',
   reveal:'극한 50번의 마지막 경보 직후, 현장 통신망에 존재하지 않는 폐쇄구역이 열린다.',
   airaRadio:'AIRA: 여기서는 보고서가 아니라 움직임이 생존을 결정해.',
