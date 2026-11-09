@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#0b0b1d"/>
+<title>AIRA V2 · OMEGA 원화 검수실</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;background:#090d1c;color:#f2f0ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 44% 20%,#322048 0,#141528 35%,#080c18 90%)}
+header{padding:20px clamp(18px,4vw,60px);border-bottom:1px solid #78648d55;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;background:#090b1ec9}
+.eyebrow{font-size:11px;letter-spacing:.25em;color:#ce8fff}h1{margin:4px 0;font-size:clamp(23px,3vw,38px);letter-spacing:-.035em}h1 span{color:#bb87ff}
+.games{display:flex;gap:7px;flex-wrap:wrap}.games span{border:1px solid #9158c95c;padding:8px 12px;border-radius:50px;font-size:12px;color:#e7d1fc;background:#34224855}
+main{max-width:1380px;margin:0 auto;padding:26px 20px 50px}.notice{border:1px solid #9c649961;border-radius:14px;padding:13px 16px;background:#3c214a60;color:#f3d7f2;line-height:1.55;font-size:13px}
+.layout{display:grid;grid-template-columns:minmax(270px,1.05fr) minmax(310px,.95fr);gap:22px;margin-top:22px}
+.viewer{background:linear-gradient(165deg,#201e3d,#0e1428);border:1px solid #ab87eb44;border-radius:22px;overflow:hidden;box-shadow:0 25px 70px #03031080}
+.stage{position:relative;min-height:520px;display:grid;place-items:center;overflow:hidden;
+ background-color:#25253b;background-image:linear-gradient(45deg,#ffffff0c 25%,transparent 25%,transparent 75%,#ffffff0c 75%),linear-gradient(45deg,#ffffff0c 25%,transparent 25%,transparent 75%,#ffffff0c 75%);background-size:34px 34px;background-position:0 0,17px 17px}
+.stage:after{content:'';position:absolute;bottom:8.5%;left:8%;width:84%;height:1px;background:#cc9dff80;pointer-events:none}
+.stage img{width:auto;height:min(65vh,515px);max-width:96%;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 20px 18px #0506109c)}
+.empty{padding:25px;text-align:center;color:#bcb5d3;font-size:14px;line-height:1.8;max-width:340px}
+.empty strong{color:#e6d2ff;font-size:19px}.stage-note{position:absolute;top:14px;left:15px;z-index:2;font-size:11px;letter-spacing:.13em;color:#d8b9ff;background:#101024cf;border:1px solid #ae8ddb88;padding:7px 10px;border-radius:50px}
+.viewer-bottom{padding:18px 20px 22px;display:flex;gap:15px;align-items:center;justify-content:space-between}
+h2{font-size:20px;margin:0 0 8px}.sub{font-size:12px;color:#c0bbcf;line-height:1.5}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,.button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid #b186ed65;background:#29203e;color:#f8edff;padding:10px 13px;font-size:12px}
+button:hover,.button:hover{background:#554076}button:focus-visible,.button:focus-visible{outline:3px solid #c689f1;outline-offset:2px}
+.panel{background:#141628bb;border:1px solid #a180e649;border-radius:20px;padding:22px;min-width:0}
+.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.panel-title small{color:#d6aefa;font-size:10px;letter-spacing:.18em}
+.slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:19px}
+.slot{padding:12px 6px;text-align:center;min-height:65px;display:grid;gap:5px;align-content:center}
+.slot b{font-size:17px}.slot small{font-size:10px;color:#b6b1c3}.slot[aria-pressed="true"]{border-color:#d399ff;background:#6949a788;box-shadow:inset 0 0 22px #8a63d329}
+.male{border-color:#6ad3e475}.male[aria-pressed="true"]{background:#2b6689}
+.info{border-top:1px solid #ad96d835;padding-top:18px;display:grid;gap:12px}
+.info p{margin:0;font-size:13px;line-height:1.65;color:#d6d0e5}
+.status{padding:10px 12px;border-radius:10px;background:#201d33;border:1px solid #8d6acb53;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.checklist{display:grid;gap:7px;margin:12px 0}.checklist div{display:flex;justify-content:space-between;gap:10px;font-size:12px;border-bottom:1px solid #ffffff15;padding:7px 0}
+.checklist b{font-weight:600;text-align:right;color:#e7c3fa}
+.source-uploader{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px;border:1px dashed #b496d47c;border-radius:12px;background:#2a204344}
+.source-uploader input{font-size:11px;max-width:240px}
+.source-uploader small{color:#bfb2d2;line-height:1.4}
+footer{color:#aeabbd;font-size:11px;text-align:center;padding:15px 24px 35px;line-height:1.6}
+@media(max-width:860px){.layout{grid-template-columns:1fr}.stage{min-height:400px}.stage img{height:min(58vh,500px)}}
+@media(max-width:430px){header{padding:15px}.layout{gap:12px;margin-top:15px}main{padding:14px 12px}.panel{padding:14px}.stage{min-height:320px}.stage img{height:min(55vh,440px)}.viewer-bottom{padding:15px;align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="eyebrow">PSI : ZERO DAY · OMEGA PROTOCOL</div><h1>AIRA V2 <span>원화 검수실</span></h1></div>
+ <div class="games"><span>SIGNAL GUARD · 시그널 가드</span><span>SIGNAL WATCH · 시그널 워치</span></div>
+</header>
+<main>
+ <div class="notice">현재 검수실은 <strong>원화 확인 전용</strong>입니다. 이 화면에서 이미지를 선택해도 실제 게임 캐릭터, 계정 기록, 운영 배포는 변경되지 않습니다. 여성 AIRA는 은백색·연보라 포니테일이며, 남성은 신규 디자인 후보입니다.</div>
+ <div class="layout">
+  <div class="viewer" aria-label="실제 원화 이미지 검수">
+   <div class="stage" id="stage"><span class="stage-note" id="stageTag">REVIEW · NOT RELEASED</span><div class="empty" id="empty"><strong>원화 파일이 아직 연결되지 않았습니다</strong><div>아래에서 원화 폴더를 선택하거나 검수용 파일을 개발 브랜치에 반영하면 이곳에 표시됩니다.</div></div><img id="art" alt="" hidden/></div>
+   <div class="viewer-bottom">
+    <div><h2 id="heading">AIRA V2 · E</h2><div class="sub" id="subtitle">선택 방향 원화</div></div>
+    <div class="actions"><button id="prev" type="button">← 이전</button><button id="next" type="button">다음 →</button></div>
+   </div>
+  </div>
+  <section class="panel" aria-label="원화 방향 및 검증">
+   <div class="panel-title"><h2>방향별 원화</h2><small>8 FEMALE + 1 MALE</small></div>
+   <div class="slots" id="slots"></div>
+   <div class="source-uploader"><input id="folder" type="file" multiple webkitdirectory accept=".webp,image/webp" aria-label="압축 해제한 원화 폴더 불러오기"/><small>ZIP을 압축 해제한 뒤 원화 폴더를 선택하세요. 파일은 서버로 전송되지 않으며 이 브라우저에서만 미리 봅니다.</small></div>
+   <div class="info">
+    <h2>품질 판정</h2>
+    <p id="detail"></p>
+    <div class="checklist">
+     <div><span>정해진 AIRA 외형</span><b>은백색 머리 · 보라색 눈 · Ω 전술복</b></div>
+     <div><span>원화 투명도 / 384×512</span><b id="assetDimensions">파일 선택 후 검사</b></div>
+     <div><span>정확한 8방향 승인</span><b>미승인 · 대각선 재검토 필요</b></div>
+     <div><span>독립 160프레임 애니메이션</span><b>미완성</b></div>
+     <div><span>운영 게임 반영</span><b>차단 · 검증 전 미배포</b></div>
+    </div>
+    <div class="status" id="status" aria-live="polite">원화 파일 연결 상태를 검사하고 있습니다.</div>
+   </div>
+  </section>
+ </div>
+</main>
+<footer>OMEGA ORIGINAL ART QA · 모든 스프라이트는 개별 방향 검수가 필요합니다 · 원화 검수 승인 ≠ 게임 배포 승인</footer>
+<script>
+(()=>{
+'use strict';
+const modes=[
+ {id:'E',ko:'우',label:'AIRA / 우측',status:'3/4 원근 · 재검토',note:'원본은 우측을 바라보지만 완전한 옆모습이 아니므로 회전 각도 검수가 필요합니다.'},
+ {id:'SE',ko:'우하',label:'AIRA / 우하',status:'대각 재검토',note:'앞쪽 오른쪽 45° 원근·포니테일 방향·총구 위치가 다른 각도와 일치하는지 확인하세요.'},
+ {id:'S',ko:'하',label:'AIRA / 정면',status:'정면 후보',note:'은백색 머리, 보라색 눈, 흰색 Ω 코트, 검정 갑주를 기준 외형으로 사용합니다.'},
+ {id:'SW',ko:'좌하',label:'AIRA / 좌하',status:'대각 재검토',note:'우하 시점과 일관된 복장·장비를 유지해야 하며 단순 좌우 미러링은 금지합니다.'},
+ {id:'W',ko:'좌',label:'AIRA / 좌측',status:'측면 후보',note:'완전 측면 여부, 한쪽 부츠의 접지, 머리카락 풍향을 확인하세요.'},
+ {id:'NW',ko:'좌상',label:'AIRA / 후면 좌측',status:'재제작 필요',note:'현재 원화는 실제 NW 회전각이 부정확하므로 독립적인 후면 좌측 원화를 재제작해야 합니다.'},
+ {id:'N',ko:'상',label:'AIRA / 후면',status:'후면 후보',note:'후드와 포니테일이 후면 Ω 외투를 가리는 순서가 올바른지 확인합니다.'},
+ {id:'NE',ko:'우상',label:'AIRA / 후면 우측',status:'대각 재검토',note:'총·어깨 장비가 후면 시점에서 앞쪽으로 잘못 올라오지 않는지 확인합니다.'},
+ {id:'M01',ko:'남성',label:'신규 남성 Ω 요원',status:'신규 디자인 후보',note:'남성 캐릭터는 기존 AIRA를 대체하지 않으며 시그널 가드·워치에 자동으로 추가되지 않습니다.'},
+];
+const byId=id=>modes.find(m=>m.id===id);
+const $=id=>document.getElementById(id);
+const btnHost=$('slots'),art=$('art'),empty=$('empty'),status=$('status');
+let active=0,loadedURL='',objects=new Map();
+const known=m=>m.id==='M01'?'/assets/omega/canonical-review/male/m01.webp':
+ '/assets/omega/canonical-review/aira-v2/'+m.id.toLowerCase()+'.webp';
+function select(i){
+ active=(i+modes.length)%modes.length;
+ const mode=modes[active];
+ for(const [n,b] of [...btnHost.children].entries())b.setAttribute('aria-pressed',String(n===active));
+ $('heading').textContent=mode.label;
+ $('subtitle').textContent=mode.status;
+ $('detail').textContent=mode.note;
+ $('stageTag').textContent='REVIEW · '+mode.id;
+ $('assetDimensions').textContent='이미지 확인 중';
+ const src=objects.get(mode.id)||known(mode);
+ const wasLocal=objects.has(mode.id);
+ loadedURL=src;
+ art.hidden=true;empty.hidden=false;
+ status.textContent=(wasLocal?'로컬 파일':'개발 브랜치 파일')+' 로드 중 · '+mode.id;
+ art.onload=()=>{
+  if(loadedURL!==src)return;
+  const expected=art.naturalWidth===384&&art.naturalHeight===512;
+  art.hidden=false;empty.hidden=true;
+  $('assetDimensions').textContent=art.naturalWidth+'×'+art.naturalHeight+(expected?' · 규격 일치':' · 규격 불일치');
+  status.textContent=(wasLocal?'로컬':'개발 브랜치')+' 원화 표시 완료 · 개별 시점/외형 승인은 별도';
+ };
+ art.onerror=()=>{
+  if(loadedURL!==src)return;
+  art.hidden=true;empty.hidden=false;
+  $('assetDimensions').textContent='파일 없음 / 확인 불가';
+  status.textContent='미등록 또는 이미지 로딩 실패: '+mode.id+' — 실제 게임은 변경되지 않았습니다';
+ };
+ art.src=src;
+}
+modes.forEach((mode,i)=>{
+ const b=document.createElement('button');b.type='button';
+ b.className='slot'+(mode.id==='M01'?' male':'');
+ b.innerHTML='<b>'+mode.id+'</b><small>'+mode.ko+'</small>';
+ b.setAttribute('aria-label',mode.label+' · '+mode.status);
+ b.onclick=()=>select(i);
+ btnHost.append(b);
+});
+$('prev').onclick=()=>select(active-1);
+$('next').onclick=()=>select(active+1);
+document.addEventListener('keydown',e=>{
+ if(e.target instanceof HTMLInputElement)return;
+ if(e.key==='ArrowLeft')select(active-1);
+ if(e.key==='ArrowRight')select(active+1);
+});
+$('folder').addEventListener('change',async e=>{
+ const files=[...(e.target.files||[])].filter(f=>/\.webp$/i.test(f.name));
+ const prior=[...objects.values()];
+ objects.clear();
+ for(const url of prior)URL.revokeObjectURL(url);
+ for(const file of files){
+  const match=file.name.toLowerCase().match(/^(e|se|s|sw|w|nw|n|ne|m01)-silver-review\.webp$/);
+  if(!match)continue;
+  const id=match[1].toUpperCase();
+  objects.set(id,URL.createObjectURL(file));
+ }
+ if(!objects.size)status.textContent='파일을 찾지 못했습니다. 원화 ZIP을 압축 해제한 game_sprites_384x512 폴더를 선택하세요.';
+ else select(active);
+});
+window.addEventListener('pagehide',()=>{for(const u of objects.values())URL.revokeObjectURL(u);});
+select(0);
+})();
+</script>
+</body>
+</html>
