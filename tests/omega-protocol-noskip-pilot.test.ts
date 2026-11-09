@@ -147,4 +147,26 @@ describe('M04-D real OMEGA expedition without DEV preclear or direct HP mutation
   expect(s.run.offers).toHaveLength(3);
   console.log('QA_M04D_REAL_TWO_NODES',JSON.stringify({first,second}));
  },160000);
+ it('third sector: carry actual post-battle HP and real offered upgrade into the next native fight',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,
+  });
+  const evidence:NodeEvidence[]=[];
+  evidence.push(completeRealNode(s));
+  for(let i=0;i<25;i++)s.update(DT,idle);
+  evidence.push(completeRealNode(s));
+  expect(s.run).toMatchObject({phase:'reward',wave:3,victories:2});
+  const ranked=['recovery_protocol','shield_matrix','radio_overdrive','blade_edge','rapid_step'];
+  const chosen=s.run.offers.find(id=>ranked.includes(id))??s.run.offers[0]!;
+  const offerProof=[...s.run.offers];
+  s.selectUpgrade(chosen);
+  for(let i=0;i<25;i++)s.update(DT,idle);
+  expect(s.run.phase).toBe('battle');
+  expect(s.run.wave).toBe(3);
+  evidence.push(completeRealNode(s));
+  expect(s.run).toMatchObject({wave:4,phase:'battle',victories:3});
+  console.log('QA_M04D_REAL_THREE_NODES',JSON.stringify({
+   offers:offerProof,chosen,evidence,latestHp:s.engine.state.player.hp,
+  }));
+ },200000);
 });
