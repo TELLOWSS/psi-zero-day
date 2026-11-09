@@ -642,3 +642,35 @@
  .omega-silver-review-bar{padding:3px 9px;font-size:9px;gap:4px 8px}
  .omega-silver-review-bar strong{font-size:10px}
 }
+
+
+/* DEV-only OMEGA gun + blade controls. Two-column thumb cluster prevents
+   cramped 390px portrait and low-height landscape button overlap. */
+.omega-protocol-action-pad button.omega-protocol-blade{
+ border-color:#d8a2ff!important;
+ background:linear-gradient(145deg,#6d3c9c,#2a286d)!important;
+ box-shadow:0 0 0 1px #d8a2ff55,inset 0 0 18px #b56aff2a;
+}
+.omega-protocol-blade small{font-size:9px;color:#ebd0ff}
+@media(max-width:760px){
+ .omega-protocol-action-pad{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  width:156px;gap:5px;justify-items:center;align-items:center;
+ }
+ .omega-protocol-action-pad button.omega-protocol-blade{
+  width:65px;height:65px;
+ }
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-action-pad{width:134px;gap:4px;right:7px;bottom:38px}
+ .omega-protocol-action-pad button.omega-protocol-blade{width:58px;height:58px}
+ .omega-protocol-action-pad button.omega-protocol-ultimate{width:65px!important;height:65px!important}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-action-pad{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  width:118px;gap:4px;right:14px;bottom:11px
+ }
+ .omega-protocol-action-pad button.omega-protocol-blade{width:47px;height:47px}
+ .omega-protocol-action-pad button.omega-protocol-ultimate{width:56px!important;height:56px!important}
+}
