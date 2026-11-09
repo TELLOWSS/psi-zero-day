@@ -66,7 +66,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.save();ctx.translate(h.x,h.y);
   ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
-   {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15});
+   {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15,
+    zombie:session.zombieBrain(h.id)??undefined});
   ctx.restore();
  };
  const renderHero=()=>{
@@ -206,6 +207,26 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   return session;
  }
  const qa=new URLSearchParams(window.location.search).get('omegaQaState');
+ if(qa==='zombieAI'){
+  // Strictly DEV-only: four native zombies, no synthetic hit feedback, no
+  // extra enemy or mock sprite; observe actual brain movement and attacks.
+  const state=session.engine.state;
+  const four=session.zombieTelemetry.slice(0,4);
+  if(four.length!==4||new Set(four.map(z=>z.kind)).size!==4)
+   throw new Error('M03 fixture requires all four native infected AI actors');
+  state.hazards=state.hazards.filter(h=>four.some(z=>z.id===h.id));
+  const starts=[{x:510,y:450},{x:910,y:450},{x:655,y:610},{x:820,y:265}];
+  state.player.x=700;state.player.y=450;
+  state.player.maxHp=800;state.player.hp=800;
+  state.player.invincibleTime=0;
+  state.activePerks.radio_boost=0;
+  four.forEach((z,i)=>{
+   const h=state.hazards.find(item=>item.id===z.id)!;
+   h.x=starts[i]!.x;h.y=starts[i]!.y;
+   h.hp=25000;h.maxHp=25000;h.isStunned=0;
+  });
+  return session;
+ }
  if(!['reward','boss','finalBoss','objective','exit'].includes(qa||''))return session;
  const idle={moveX:0,moveY:0,triggerAction:false};
  const clearAndOperate=(finishExit:boolean)=>{
@@ -245,6 +266,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  });
  const [seedValue,setSeedValue]=useState('20261108');
  const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
+ const zombieAiQa=import.meta.env.DEV&&typeof window!=='undefined'&&
+  new URLSearchParams(window.location.search).get('omegaQaState')==='zombieAI';
  const combatProbe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
@@ -374,6 +397,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const length=Math.hypot(mx,my)||1;
    if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
+   if(zombieAiQa&&arenaRef.current){
+    // Genuine live positions, brain state, attack warnings and native player
+    // damage. No game-state changes or outcome fabrication in telemetry.
+    arenaRef.current.dataset.omegaZombieTelemetry=JSON.stringify(session.zombieTelemetry);
+    arenaRef.current.dataset.omegaZombiePlayerHp=String(session.engine.state.player.hp);
+    arenaRef.current.dataset.omegaZombieClock=session.engine.state.gameTime.toFixed(3);
+   }
    // QA read-only evidence of native projectile events and actual target HP.
    // No damage is synthesized, injected or applied from telemetry.
    if(fixture&&arenaRef.current){
@@ -509,7 +539,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-silver-preview={silverPreviewStatus}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
-  data-omega-session-unlock-source="dev-qa-fixture">
+  data-omega-session-unlock-source="dev-qa-fixture"
+  data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}>
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
