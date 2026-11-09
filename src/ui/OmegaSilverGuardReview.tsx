@@ -1,5 +1,10 @@
 import {useEffect,useState} from 'react';
-import {omegaLoadSilverRepoReview,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
+import {omegaLoadSilverRepoReview,omegaSilverRepoPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
+
+/** A released build must never load cosmetic review sources, even with a query string. */
+export function omegaGuardSourcePreviewAllowed(guard:boolean,search:string):boolean {
+ return guard&&import.meta.env.DEV&&omegaSilverRepoPreviewEnabled(search);
+}
 
 /**
  * DEV REVIEW ONLY: SIGNAL GUARD is a tower-defense game; it has no
