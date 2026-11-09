@@ -5,15 +5,15 @@ import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
 describe('OMEGA on-screen live threat staging',()=>{
  it('opens the playable first scene with at least two native enemies in visible combat range',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   const player=s.engine.state.player,hazards=s.engine.state.hazards;
   expect(hazards.length).toBeGreaterThanOrEqual(3);
   const close=hazards.filter(h=>Math.hypot(h.x-player.x,h.y-player.y)<=340);
   expect(close.length).toBeGreaterThanOrEqual(2);
   expect(hazards.every(h=>h.hp>0&&h.maxHp>0)).toBe(true);
   expect(s.run.wave).toBe(1);
-  const normal=new OmegaProtocolCombatSession(20261108,10);
-  const untouched=new OmegaProtocolCombatSession(20261108,10);
+  const normal=new OmegaProtocolCombatSession(20261108,50);
+  const untouched=new OmegaProtocolCombatSession(20261108,50);
   // Existing non-field mode retains the old seeded encounter coordinates.
   expect(normal.engine.state.hazards.map(h=>[h.x,h.y])).toEqual(
    untouched.engine.state.hazards.map(h=>[h.x,h.y]));
