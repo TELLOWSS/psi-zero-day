@@ -84,3 +84,16 @@ test('rejects tampered image, missing alpha, illegal paths and missing views',as
  await writeFile(join(d.dir,'manifest.json'),JSON.stringify(d.manifest));
  await assert.rejects(verifyCanonicalArtFolder(d.dir),/incorrect game labels/);
 });
+
+test('web preview trust list matches exactly the checked-in SILVER source pins',async()=>{
+ const main=JSON.parse(await readFile(new URL(
+  '../content/art/omega-canonical-silver-roster.json',import.meta.url),'utf8'));
+ const view=JSON.parse(await readFile(new URL(
+  '../public/omega-canonical-art-review/roster.json',import.meta.url),'utf8'));
+ const source=new Map([...main.female,main.male].map(x=>[x.slot,x.sha256]));
+ assert.equal(view.stage,'review_only');
+ assert.equal(view.production_approved,false);
+ assert.deepEqual(view.main_games,['SIGNAL GUARD','SIGNAL WATCH']);
+ assert.deepEqual(Object.keys(view.sha256_by_slot).sort(),[...source.keys()].sort());
+ for(const [slot,hash] of source)assert.equal(view.sha256_by_slot[slot],hash);
+});
