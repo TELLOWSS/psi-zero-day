@@ -111,6 +111,12 @@ export function drawOmegaAiraV2Candidate(
  if(view.hurt)ctx.globalAlpha=.80+.20*Math.sin(t*18)**2;
  // Natural-source aspect ratio 192:336. No horizontal flip.
  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width)),w=h*192/336;
+ // Back-facing original sprites (N, NW, NE) must cover the near shoulder /
+ // pistol grip. This is a genuine world-space draw-order correction, never
+ // a horizontally mirrored image or an invented projectile.
+ const authoredEFire=heading==='E'&&cache.fireFrames.ready&&
+  view.shooting&&!view.dashing&&!view.hurt&&!view.ultimate&&!view.finished;
+ if(!authoredEFire)drawOmegaAiraV2ShotVfx(ctx,view,heading,h,'rear');
  const paintedSpecial=cache.specialFrames.draw(ctx,heading,view,
   h*(view.finished?1.28:1.67));
  const paintedHit=!paintedSpecial&&cache.hitFrames.draw(ctx,heading,view,h*1.20);
@@ -132,7 +138,7 @@ export function drawOmegaAiraV2Candidate(
  }
  // Source-dependent actual Watch shot bearing; not a fake static gun flash.
  if(!paintedSpecial&&!paintedHit&&!paintedFire&&!paintedDash)
-  drawOmegaAiraV2ShotVfx(ctx,view,heading,h);
+  drawOmegaAiraV2ShotVfx(ctx,view,heading,h,'front');
  ctx.restore();
  return true;
 }
