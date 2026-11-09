@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D4 동일 시드·실제 보급 카드 4빌드 비교 PR #247 Core 50파일/223테스트 PASS, OMEGA 개발 브랜치만 병합. 15구역 승리/실기기/정식 아트/운영 미완
+**관리일:** 2026-11-10 (KST) · M04-D5 실전 위험 경고/회피 가시성 개선 PR #248 Core 51파일/227테스트 및 PC·모바일 Chromium QA PASS. QA 브랜치 검증 완료; main/Production 미배포, 15구역 완주/정식 아트/Android 미완
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리): M04-D5 — '극한이지만 공정한' 총·검/대시 반격 설계 및 실제 전투 가시성 검증.** PR #247 동일 시드 실전 카드 비교에서 기존 혼합은 12구역 통과 후 13에서 질주형 감염체16+RUNAWAY_CART 순HP손실17로 사망, 생존 빌드 11·기동 10 구역 통과, 화력 빌드는 8구역 RUNAWAY_CART 엄폐 추적 실패로 자동조작 중단(사망 아님). 빌드만 바꾸는 전략으로는 현재 고정 시드 자동 플레이 15/15 성공 증명 불가. 다음에는 **실제 플레이어가 위험을 인지하고 카운터할 수 있는지**를 확인한다: 폭주 운반장비의 돌진 방향·충돌 예고 UI, 질주형 안전모 좀비의 공격 예고, 유효 사거리·가림 LOS·장애물 회피, 대시 쿨다운/완충 시간, 보스9/15 단계 전환의 경고 품질. **AI/피해량을 무단 완화하거나 시험용 HP/적 직접 편집 금지**. 가장 먼저 전투 렌더링·플레이어 카메라·실제 이벤트와 QA를 조사하고 고유 시각 경고 개선 후보를 QA Draft로 구현·실기기 전 단계 브라우저 검증. 실제 전체 15구역 무스킵 게임·AIRA 독립 원화·Android 실기기 미완. `main`·Production·유료 전환 금지.
+**다음 실행 작업(하나씩 처리): M04-D6 — 화면 위험 경고와 실제 HP 피해 판정의 정합성 및 회피 경로 공정성.** PR #248에서 실제 native RUNAWAY_CART warning/charge 방향, OMEGA 감염체 4종 고정 공격 방향·경고 타이머, 대시 cooldown의 Canvas/HUD 안내를 개발하고 Core 51파일/227테스트, Chrome PC 1440×900·모바일 세로 390×844 QA 통과를 확보. 단, 운반장비가 경고 단계에서 접촉 HP 피해를 줄 가능성이 코드에 남아 있으며 모바일 가로·엄폐 LOS·보스9/15 HUD·완전 15/15 무스킵 플레이는 미검증. 다음은 src/engine/patrol-hazard-motion.ts의 isHazardContactActive 와 native checkCollisions를 실제 테스트해 warning 중 피격 여부를 재현하고 OMEGA 격리 변경이 필요한지 판별. 전투 난도·HP·쿨다운 임의 완화는 금지. 모바일 가로 실제 Chromium, 보스 경고와 방향/LOS 품질 후속 QA. 승인 독립 AIRA 160 프레임·마스크 320, Android 물리 기기, 완전 심리스 및 운영은 여전히 BLOCKED. main/Production/유료 전환 금지.
 
 ## 4. 코드별 찾아가기
 
@@ -284,3 +284,16 @@
 **관찰:** 최초 진입 체력 자체만큼 중요한 것은 13구역 적 총HP 5,293에 대한 실제 화력/가림, 질주형 감염체 피해 16와 폭주 운반장비 원 타격22의 연속 피격, 위험을 예고하는 게임 화면의 판독성과 순간 무적 대시 피드백이다. **한 번의 고정 시드/자동 입력 실험으로 최적 빌드의 일반 순위를 단정하지 말 것.**
 
 **NEXT M04-D5:** `src/ui/OmegaProtocolPlaytest.tsx`의 Canvas 렌더러·기존 감염체/운반장비 예고 표시를 조사하고, 실제 위험 위치·진행 방향·대시 가능 여부가 PC/모바일에서 이해되는 **플레이어 관점의 반격 가능 경고·강조·맞춤 레이아웃**을 QA 독립 브랜치로 구현/검증. 가시성 자체를 실제 게임의 공격 사거리·LOS/장애물과 일치시키고, 원래 극한 난도·적 공격을 낮추거나 판정시간을 조작하지 않는다. PR #243 15구역 승리 미완, AIRA 정식 8방향 개별 아트/Android 물리 실기기/진정한 심리스 스트리밍 미완. `main`/Production/유료 전환 최종 승인 전 금지.
+
+## 19. M04-D5 실제 안전모 감염체/운반장비 경고 시인성 — 자동 QA PASS (2026-11-10)
+
+**QA 브랜치/PR:** [#248](https://github.com/TELLOWSS/psi-zero-day/pull/248), qa/omega-m04d5-counterplay-visibility-20261110 → OMEGA 개발 브랜치만 대상. 기준 SHA 4817c042478626ccdd690d42483f0df81e92adf4. 운영 main/Production 금지.
+
+- [Core Actions #42722254548](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42722254548) **SUCCESS:** TypeScript typecheck, Vitest **51파일/227개 전체 PASS**. 기존 고정시드 4빌드의 사망/엄폐 교착 결과를 성공으로 둔갑시키지 않음.
+- [Browser Actions #42722254211](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42722254211) **SUCCESS:** 실제 Vite/React/Canvas OMEGA의 좀비 4종 경고/공격/HP 피해와 새로운 live warning 표시, 실제 native 대시 쿨다운 DOM 검증을 PC 1440×900 및 모바일 세로 390×844 Chrome 에뮬레이션에서 통과. 이미지 m04d5-live-infected-counterplay-{desktop,mobile-portrait}.png는 Actions 화면 캡처 산출물. 기존 M02/M04/Watch/AIRA/Guard 브라우저 회귀도 통과. 물리 Android 미검증.
+- **코드:** src/ui/omega-protocol-counterplay.ts 신규 (native RUNAWAY_CART motion direction, OMEGA ZombieBrain warning/charge, player dashCooldown 읽기 전용); tests/omega-protocol-counterplay.test.ts 신규 4개; OmegaProtocolPlaytest.tsx 실제 Canvas 경고 화살표, 반응형 경고 HUD, 대시 버튼; CSS, Chromium QA 스크립트, core workflow. 레이저형 방향선은 고정된 공격 **방향 안내**이지 엄폐물을 관통하는 확정 피격 구역이 아님.
+- **비변경:** 공격/적HP/체력/AI/회피 시간/충돌 판정/일반 WATCH 저장·해금·지갑·보상·과금·정식 미술. 일반 인간 구조대상은 공격 대상이 아니며 OMEGA 감염 좀비·가상 무인 기계만 경고 대상.
+
+**판정:** M04-D5 CODED + TESTED (Core 227 & Chromium PC/모바일 세로). 전체 15/15 무스킵 승리, Android 실기기, 모바일 가로 가림/경고 타이밍, 보스 9/15 경고, 독립 AIRA 160프레임/320 마스크 승인, 완전 스트리밍 지도는 미완.
+
+**NEXT M04-D6:** RUNAWAY_CART warning 단계에서도 native 접촉 피해가 들어가는지 실제 엔진 테스트, 감염체/카트/보스 경고와 충돌 판정 타이밍 일치 여부, LOS 및 지형/회피 경로, 모바일 가로 844×390 QA. 원래 난도 무단 하향/HP 손대기 금지. main/Production/유료 업그레이드 금지.
