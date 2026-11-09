@@ -4,7 +4,7 @@
   "commercial_sprite_pack_approved": false,
   "independently_handpainted_160_frames": false,
   "source_character_sheet": "AIRA design image produced in prior ChatGPT turn, 2026-11-09",
-  "source_art": "AIRA rain operation illustration selected by user",
+  "source_art": "Canonical silver-lavender AIRA V2 user screenshot, confirmed 2026-11-09; older candidate assets require re-audit against this reference",
   "native_game_direction_mapping": "S is front, N is back (reverse of printed illustration turntable labels)",
   "original_asset_qa": "Eight separate non-mirrored, isolated, background-transparent neutral standing views. Not 8x20 animation.",
   "assets": {
@@ -58,5 +58,19 @@
       "bytes": 17088,
       "sha256": "db12c3b62cc9ed574ff60552b248184ad07346a4c951bbdc50d4015ecaef38a3"
     }
+  },
+  "canonical_identity_reference": {
+    "status": "USER_EXPLICITLY_RECONFIRMED_2026-11-09",
+    "source": "User-uploaded screenshot of silver-lavender AIRA V2 portrait with white Ω coat and violet eyes",
+    "hair": "SILVER_WHITE_LAVENDER_LONG_HIGH_PONYTAIL",
+    "eyes": "VIOLET",
+    "wardrobe": "WHITE_OMEGA_MARKED_COAT_OVER_BLACK_PURPLE_TACTICAL_ARMOR",
+    "accents": "VIOLET_EMISSIVE_OMEGA_BRANDING",
+    "no_substitution": "NO_BLACK_HAIR_OR_PINK_STREAK_CHARACTER",
+    "appearance_audit": "PENDING_CORRECTED_BINARY_ASSETS_AND_BROWSER_REVIEW",
+    "title_art_audit": "PENDING_CORRECTED_CANONICAL_PORTRAIT",
+    "direction_art_audit": "PENDING_EIGHT_CORRECTED_INDEPENDENT_ANGLES",
+    "action_art_audit": "PREVIOUS_BLACK_HAIR_ACTION_STUDIES_NOT_APPROVED_FOR_SILVER_AIRA",
+    "production_approved": false
   }
 }
