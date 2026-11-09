@@ -1,5 +1,6 @@
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
+import {OmegaAiraV2WalkFrames} from './omega-aira-v2-walk-frames';
 import {drawOmegaAiraV2DirectionalAction} from './omega-aira-v2-directional-action-rig';
 import {drawOmegaAiraV2ShotVfx} from './omega-aira-v2-weapon-vfx';
 import {OmegaAiraV2FireFrames} from './omega-aira-v2-fire-frames';
@@ -43,6 +44,7 @@ export class OmegaAiraV2CandidateImages {
  readonly dashFrames=new OmegaAiraV2DashFrames();
  readonly hitFrames=new OmegaAiraV2HitFrames();
  readonly specialFrames=new OmegaAiraV2SpecialFrames();
+ readonly walkFrames=new OmegaAiraV2WalkFrames();
  prepare():void {
   if(typeof Image==='undefined')return;
   for(const heading of OMEGA_AIRA_V2_HEADINGS)this.load(heading);
@@ -50,6 +52,7 @@ export class OmegaAiraV2CandidateImages {
   this.dashFrames.prepare();
   this.hitFrames.prepare();
   this.specialFrames.prepare();
+  this.walkFrames.prepare();
  }
  private load(heading:OmegaHeading):CandidateImageRecord|null {
   if(typeof Image==='undefined'||!allowed.has(heading))return null;
@@ -122,8 +125,10 @@ export function drawOmegaAiraV2Candidate(
  const paintedHit=!paintedSpecial&&cache.hitFrames.draw(ctx,heading,view,h*1.20);
  const paintedDash=!paintedSpecial&&!paintedHit&&cache.dashFrames.draw(ctx,heading,view,h*1.43);
  const paintedFire=!paintedSpecial&&!paintedHit&&!paintedDash&&cache.fireFrames.draw(ctx,heading,view,h*1.14);
- if(paintedSpecial||paintedHit||paintedDash||paintedFire){
-  // Independent artist-illustrated E keyframes take precedence when ready.
+ const paintedWalk=!paintedSpecial&&!paintedHit&&!paintedDash&&!paintedFire&&
+  cache.walkFrames.draw(ctx,heading,view,h*1.22);
+ if(paintedSpecial||paintedHit||paintedDash||paintedFire||paintedWalk){
+  // Original E paintings (including 4 real walk poses) take priority.
  }else if(drawOmegaAiraV2DirectionalAction(ctx,image,heading,view,h)){
   // On all eight ORIGINAL angle images, native fire/dash/hit/ultimate/finish
   // now have dedicated anatomical motion. This is an INTERIM technical rig,
