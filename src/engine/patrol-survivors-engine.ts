@@ -723,6 +723,25 @@ export class SurvivorsEngine {
     }
   }
 
+  /** Real native HP/damage flow for OMEGA's opt-in mechanical blade.
+   * Never callable by normal SIGNAL WATCH; no human/worker melee targets.
+   * Boss damage uses the existing Protocol boss cap and no wallet effects.
+   */
+  damageProtocolConstruct(id:string,amount:number):number{
+    if(!this.protocolExternalEncounter||this.state.phase!=='playing'||
+       !Number.isFinite(amount)||amount<=0)return 0;
+    const h=this.state.hazards.find(target=>target.id===id&&target.hp>0);
+    if(!h||!['RUNAWAY_CART','FALLING_DEBRIS','CRANE_BOSS'].includes(h.type))return 0;
+    const before=h.hp;
+    this.damageHazard(h,amount);
+    const dealt=Math.max(0,before-h.hp);
+    if(dealt>0){
+      this.emitAudio('impact',h.x,h.y,{actorKind:h.type});
+      h.isStunned=Math.max(h.isStunned??0,h.isStageBoss?0:0.12);
+    }
+    return dealt;
+  }
+
   private cooldowns: Cooldowns = {
     radio: 0,
     extinguisher: 0,
