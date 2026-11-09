@@ -56,6 +56,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
    cooldown:s.engine.state.player.dashMaxCooldown,
    damage:s.engine.state.player.damageMultiplier,
    pickup:s.engine.state.player.pickupRadius,
+   sword:{edge:s.run.owned.blade_edge??0,reach:s.run.owned.blade_reach??0},
   };
   expect(()=>s.selectUpgrade('invalid' as never)).toThrow();
   const after=s.selectUpgrade(card);
@@ -66,9 +67,11 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect([s.engine.state.activePerks,s.engine.state.player.speed,
    s.engine.state.player.maxHp,s.engine.state.player.dashMaxCooldown,
    s.engine.state.player.damageMultiplier,s.engine.state.player.hp,
-   s.engine.state.player.pickupRadius]).not.toEqual([
+   s.engine.state.player.pickupRadius,
+   {edge:s.run.owned.blade_edge??0,reach:s.run.owned.blade_reach??0}
+  ]).not.toEqual([
      before.perks,before.speed,before.maxHp,before.cooldown,
-     before.damage,before.hp,before.pickup
+     before.damage,before.hp,before.pickup,before.sword
    ]);
  });
  it('simulates fifteen real encounter creations with two stage-independent bosses and 7 rewards',()=>{
