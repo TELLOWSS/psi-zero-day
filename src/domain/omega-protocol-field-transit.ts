@@ -1,4 +1,4 @@
-import type {OmegaFieldPlan} from './omega-protocol-field';
+import type {OmegaFieldPlan,OmegaFieldPoint} from './omega-protocol-field';
 
 /**
  * M04 quarantine-compound gate transfer — a physical exit is the ONLY way
@@ -18,6 +18,10 @@ export interface OmegaFieldTransitLink{
  readonly toName:string;
  readonly kind:OmegaFieldTransitKind;
  readonly passageLabel:string;
+ /** World-space dock anchors correspond to painted, interactable portal entrances. */
+ readonly departure:OmegaFieldPoint;
+ readonly arrival:OmegaFieldPoint;
+ readonly linkId:string;
 }
 export interface OmegaFieldTransit{
  readonly phase:OmegaFieldTransitPhase;
@@ -38,6 +42,8 @@ export function omegaGateTransitLink(from:OmegaFieldPlan,to:OmegaFieldPlan):Omeg
   :'cargo_door';
  return {fromWave:from.wave,toWave:to.wave,fromSector:from.sector,toSector:to.sector,
   fromName:from.sectorName,toName:to.sectorName,kind,
+  departure:{...from.exit},arrival:{...to.entry},
+  linkId:'OMEGA-LINK-'+String(from.wave).padStart(2,'0')+'-'+String(to.wave).padStart(2,'0'),
   passageLabel:{
    cargo_door:'격리 화물 게이트',scaffold_lift:'비계 구역 수직 리프트',
    crane_elevator:'크레인 관리 승강기',service_tunnel:'지하 설비 연결터널',
@@ -65,4 +71,45 @@ export function omegaGateTransitStep(
 }
 export function omegaGateTransitIsLocked(state:OmegaFieldTransit|null):boolean{
  return state!==null;
+}
+
+/**
+ * Matching, real world-foot lift docks at both ends of the act seam.
+ * This is a bounded two-map portal connection; not a seamless streamer.
+ * The user must physically reach departure and the next live map loads
+ * at precisely the documented arrival foothold. 3→4 is first scaffold lift.
+ */
+export interface OmegaActBoundaryDock{
+ readonly linkId:string;
+ readonly kind:Exclude<OmegaFieldTransitKind,'cargo_door'>;
+ readonly role:'departure'|'arrival';
+ readonly point:OmegaFieldPoint;
+ readonly fromWave:number;
+ readonly toWave:number;
+ readonly verticalMeters:number;
+ readonly label:string;
+}
+export function omegaActBoundaryDock(plan:OmegaFieldPlan):OmegaActBoundaryDock|null{
+ const departure=plan.wave%3===0&&plan.wave<15;
+ const arrival=plan.wave%3===1&&plan.wave>1;
+ if(!departure&&!arrival)return null;
+ const fromWave=departure?plan.wave:plan.wave-1;
+ const toWave=fromWave+1;
+ const index=(fromWave/3)-1;
+ const kinds=[
+  'scaffold_lift','crane_elevator','service_tunnel','control_airlock',
+ ] as const;
+ const kind=kinds[index];
+ if(!kind)return null;
+ return {
+  linkId:'OMEGA-LINK-'+String(fromWave).padStart(2,'0')+'-'+String(toWave).padStart(2,'0'),
+  kind,role:departure?'departure':'arrival',
+  point:departure?plan.exit:plan.entry,fromWave,toWave,
+  verticalMeters:kind==='scaffold_lift'?18:kind==='crane_elevator'?24:
+   kind==='service_tunnel'?-12:6,
+  label:{
+   scaffold_lift:'비계 리프트 연결',crane_elevator:'크레인 승강기 연결',
+   service_tunnel:'지하 설비 통로',control_airlock:'통제 구역 밀폐문',
+  }[kind],
+ };
 }
