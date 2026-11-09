@@ -193,7 +193,7 @@ function loadCandidateFiles(files){
  objects.clear();sourceFiles.clear();
  for(const url of prior)URL.revokeObjectURL(url);
  for(const file of files){
-  const match=file.name.toLowerCase().match(/^(e|se|s|sw|w|nw|n|ne|m01)-silver-review\\.webp$/);
+  const match=file.name.toLowerCase().match(/^(e|se|s|sw|w|nw|n|ne|m01)-silver-review\.webp$/);
   if(!match)continue;
   const id=match[1].toUpperCase();
   objects.set(id,URL.createObjectURL(file));
@@ -204,7 +204,7 @@ function loadCandidateFiles(files){
  else select(active);
 }
 $('folder').addEventListener('change',e=>{
- loadCandidateFiles([...(e.target.files||[])].filter(f=>/\\.webp$/i.test(f.name)));
+ loadCandidateFiles([...(e.target.files||[])].filter(f=>/\.webp$/i.test(f.name)));
 });
 $('zip').addEventListener('change',async e=>{
  const zip=e.target.files?.[0];
