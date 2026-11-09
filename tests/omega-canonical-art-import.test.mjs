@@ -4,7 +4,7 @@ import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
-import {verifyCanonicalArtFolder,stageCanonicalArt} from '../scripts/stage-omega-canonical-art.mjs';
+import {verifyCanonicalArtFolder,inspectCanonicalArtFolder,stageCanonicalArt} from '../scripts/stage-omega-canonical-art.mjs';
 const slots=['E','SE','S','SW','W','NW','N','NE','M01'];
 async function fixture(){
  const dir=await mkdtemp(join(tmpdir(),'omega-silver-fixture-'));
@@ -33,23 +33,38 @@ async function fixture(){
 }
 test('verifies unique 384x512 alpha WebPs but does not approve incomplete 8-angle artwork',async t=>{
  const {dir}=await fixture();t.after(()=>rm(dir,{force:true,recursive:true}));
- const {audit}=await verifyCanonicalArtFolder(dir);
+ const {audit}=await inspectCanonicalArtFolder(dir);
  assert.equal(audit.checked,9);assert.equal(audit.transparentWebP,true);
  assert.deepEqual(audit.mainGames,['SIGNAL GUARD','SIGNAL WATCH']);
  assert.equal(audit.deployAllowed,false);
  assert.equal(audit.fullEightAngleTurntableApproved,false);
 });
-test('stages review art in isolated path without changing Guard or Watch live assets',async t=>{
+test('rejects substituted artwork even if it passes its OWN manifest hashes',async t=>{
  const {dir}=await fixture();t.after(()=>rm(dir,{force:true,recursive:true}));
  const dest=await mkdtemp(join(tmpdir(),'omega-art-stage-'));
  t.after(()=>rm(dest,{force:true,recursive:true}));
- const staged=await stageCanonicalArt(dir,dest);
- assert.equal(staged.assets.length,9);
- const record=JSON.parse(await readFile(staged.metaPath,'utf8'));
- assert.equal(record.productionApproved,false);
- assert.equal(record.gameIntegrationActivated,false);
- assert.equal(record.assets[0].path,'/assets/omega/canonical-review/aira-v2/e.webp');
- assert.equal(record.assets.at(-1).path,'/assets/omega/canonical-review/male/m01.webp');
+ // The fixture is a valid-looking WebP with valid self-reported SHA-256.
+ // It must never pass our fixed identity list or write unapproved art.
+ await assert.rejects(verifyCanonicalArtFolder(dir),/canonical SILVER source SHA-256 mismatch/);
+ await assert.rejects(stageCanonicalArt(dir,dest),/canonical SILVER source SHA-256 mismatch/);
+ await assert.rejects(
+  readFile(join(dest,'content/art/omega-canonical-review-staging.json'),'utf8'),
+  /ENOENT/);
+});
+test('pins all nine exact sources, NW redraw and two live game names',async()=>{
+ const roster=JSON.parse(await readFile(new URL(
+  '../content/art/omega-canonical-silver-roster.json',import.meta.url),'utf8'));
+ assert.equal(roster.game_integration_enabled,false);
+ assert.equal(roster.main_menu_image_approved,false);
+ assert.equal(roster.full_eight_direction_turnaround_approved,false);
+ assert.deepEqual(roster.live_games,['SIGNAL GUARD','SIGNAL WATCH']);
+ const all=[...roster.female,roster.male];
+ assert.equal(all.length,9);
+ assert.equal(new Set(all.map(x=>x.slot)).size,9);
+ assert.equal(new Set(all.map(x=>x.sha256)).size,9);
+ assert.equal(all.every(x=>/^[a-f0-9]{64}$/.test(x.sha256)),true);
+ assert.match(roster.female.find(x=>x.slot==='NW').quality,/REDRAW_REQUIRED/);
+ assert.match(roster.canonical_reference,/silver-white/);
 });
 test('rejects tampered image, missing alpha, illegal paths and missing views',async t=>{
  const a=await fixture();t.after(()=>rm(a.dir,{force:true,recursive:true}));
