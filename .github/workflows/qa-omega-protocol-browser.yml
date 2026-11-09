@@ -50,6 +50,7 @@ on:
       - 'src/domain/omega-protocol-field-transit.ts'
       - 'src/ui/omega-protocol-act-lift.ts'
       - 'scripts/qa-omega-connected-gates-browser.mjs'
+      - 'scripts/qa-omega-three-act-boundaries-browser.mjs'
       - 'src/domain/omega-protocol-run.ts'
       - 'src/domain/omega-protocol-blade.ts'
       - 'src/domain/omega-protocol-story.ts'
@@ -140,6 +141,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-connected-gates-browser.mjs
+      - name: M04-C three distinct ACT boundary 6→7 9→10 12→13 real Chrome PC and touch
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-three-act-boundaries-browser.mjs
       - name: Render actual AIRA eight-heading source and action contact sheet
         if: always()
         env:

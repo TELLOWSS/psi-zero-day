@@ -229,10 +229,9 @@ export class OmegaProtocolCombatSession {
    this.bossPattern=null;
    this.fieldStatus={phase:'exit',eventComplete:true,exitUnlocked:true,
     completedSteps:this.currentField.event.steps.length};
-   if(this.currentField.wave===4){
-    // M04-B boundary proof: after actual 3→4 lift, preserve the genuine
-    // wave-4 entry point. All earlier DEV gates still start 190 units
-    // outside the exit for real keyboard/touch distance validation.
+   if([4,7,10,13].includes(this.currentField.wave)){
+    // M04-B/C boundary proof: preserve native entry after real ACT transfer.
+    // In-sector DEV gate starts remain 190 units outside the actual exit.
     this.engine.state.player.x=this.currentField.entry.x;
     this.engine.state.player.y=this.currentField.entry.y;
    }else{

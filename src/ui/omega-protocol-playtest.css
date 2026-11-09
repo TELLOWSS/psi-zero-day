@@ -790,3 +790,124 @@
  }
  .omega-protocol-lift-cross-section>small{bottom:4%;font-size:8px}
 }
+
+/* M04-C: three world-matched ACT transitions, not a recoloured shutter.
+   State/positions are driven by OmegaCombatSession gateTransit elapsed. */
+.omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"]{
+ background:linear-gradient(120deg,#0b2637,#244351 53%,#0e202d);
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"]{
+ background:radial-gradient(ellipse at 48% 52%,#1c4a54,#091622 78%);
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"]{
+ background:linear-gradient(115deg,#2b1c38,#111a30 55%,#34233c);
+}
+.omega-protocol-crane-cross-section,
+.omega-protocol-tunnel-cross-section,
+.omega-protocol-airlock-cross-section{
+ position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.86;
+}
+.omega-protocol-crane-cross-section{
+ background:repeating-linear-gradient(90deg,transparent 0 39px,#a9d3db23 41px 43px);
+}
+.omega-protocol-crane-shaft{
+ position:absolute;left:29%;top:-12%;bottom:-12%;width:26%;
+ border-inline:10px solid #80a5ad;
+ background:repeating-linear-gradient(0deg,#173544 0 21px,#47788a 23px 27px,#203849 28px 54px);
+ box-shadow:inset 0 0 34px #091522cc,0 0 25px #84c6d63a;
+}
+.omega-protocol-crane-boom{
+ position:absolute;left:-3%;top:9%;width:78%;height:15px;
+ background:repeating-linear-gradient(90deg,#c5a474 0 25px,#675d50 27px 46px);
+ transform:rotate(-8deg);box-shadow:0 13px 0 #142b3a;
+}
+.omega-protocol-crane-counterweight{
+ position:absolute;left:62%;top:23%;width:14%;height:22%;
+ background:repeating-linear-gradient(0deg,#5f6e78 0 9px,#15212c 12px 19px);
+ border:7px solid #c5a57b;box-shadow:0 14px 0 #1d3642;
+}
+.omega-protocol-crane-car{
+ position:absolute;left:42%;transform:translate(-50%,-50%);
+ width:min(250px,36vw);height:min(125px,28vh);
+ background:linear-gradient(115deg,#7d9aab,#243c4e 58%,#16283a);
+ border:9px solid #b7d2de;border-top:13px solid #efbd79;
+ display:flex;align-items:center;flex-direction:column;justify-content:center;
+ box-shadow:inset 0 0 45px #0009,0 0 42px #86d4e450;
+ font-size:13px;color:#fff3d6;letter-spacing:.07em;
+}
+.omega-protocol-crane-car small{font-size:10px;color:#a3fff0}
+.omega-protocol-tunnel-cross-section{
+ background:repeating-radial-gradient(ellipse at 50% 50%,
+ #263f4e 0 16px,#598a9a 17px 20px,#132938 22px 45px);
+}
+.omega-protocol-tunnel-arch{
+ position:absolute;left:7%;right:7%;top:4%;height:87%;
+ border:19px solid #659bac;border-bottom:0;border-radius:49% 49% 0 0;
+ box-shadow:inset 0 0 42px #06131d,0 0 39px #5db5c83c;
+}
+.omega-protocol-tunnel-pipes{
+ position:absolute;top:8%;left:9%;right:9%;height:35px;
+ border-block:10px solid #bd986d;
+ background:repeating-linear-gradient(90deg,#375b67 0 26px,#82c9d6 29px 35px);
+}
+.omega-protocol-tunnel-bore{
+ position:absolute;left:49%;top:54%;height:26vh;min-height:80px;
+ width:min(46vw,370px);border-radius:48%;
+ background:radial-gradient(ellipse,#040c15,#102f3e 61%,#90cdd2 79%,#183240 82%);
+ display:grid;place-items:center;border:6px solid #80b2ba;
+ color:#d9f7f4;letter-spacing:.12em;font-size:12px;
+ box-shadow:0 0 58px #7bd3d862;
+}
+.omega-protocol-airlock-cross-section{
+ background:repeating-linear-gradient(0deg,#20283a 0 20px,#383449 22px 27px);
+}
+.omega-protocol-airlock-gauge{
+ position:absolute;top:12%;left:25%;width:50%;
+ text-align:center;color:#f6d1e2;font-size:12px;letter-spacing:.17em;
+ display:flex;justify-content:space-around;align-items:center;
+ background:#0d1b2c;border:3px solid #bda1c4;padding:8px 14px;
+}
+.omega-protocol-airlock-gauge b{
+ border:4px solid #e1a4c1;border-radius:50%;padding:12px;color:#fff0f6;
+}
+.omega-protocol-airlock-bulkheads{
+ position:absolute;left:10%;right:10%;top:28%;bottom:17%;
+ display:flex;border:11px solid #ad9baf;overflow:hidden;
+ box-shadow:inset 0 0 42px #0009,0 0 32px #ffaad538;
+}
+.omega-protocol-airlock-bulkheads i{
+ width:50%;height:100%;
+ background:repeating-linear-gradient(90deg,#4e526a 0 17px,#79718a 19px 33px,#292f45 35px 39px);
+ border:5px solid #bea7bd;box-shadow:inset 0 0 20px #0a1024;
+}
+.omega-protocol-airlock-seal{
+ position:absolute;bottom:10%;left:50%;transform:translateX(-50%);
+ border:2px solid #e7aaca;background:#16152aca;padding:7px 19px;
+ color:#ffe3ed;font-size:11px;letter-spacing:.1em;white-space:nowrap;
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+.omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+.omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+ margin-left:min(47vw,430px);max-width:min(48vw,380px);
+}
+@media(max-width:600px) and (orientation:portrait){
+ .omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+  margin:0 12px 6vh;align-self:end;max-width:calc(100% - 24px);
+  padding:8px 12px;gap:4px;
+ }
+ .omega-protocol-crane-car{width:185px;height:92px}
+ .omega-protocol-tunnel-bore{width:160px;height:105px;font-size:9px}
+ .omega-protocol-airlock-seal{font-size:8px;bottom:35%}
+ .omega-protocol-airlock-gauge{left:8%;width:84%}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+  margin-left:min(49vw,440px);max-width:46vw;padding:8px;gap:3px;
+ }
+ .omega-protocol-crane-car{height:80px;font-size:10px}
+ .omega-protocol-tunnel-bore{height:90px}
+}
