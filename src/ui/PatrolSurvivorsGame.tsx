@@ -3361,6 +3361,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
            silverNativeViewsRef.current.size===8;
           if(silverOriginalActive&&drawOmegaSilverWatchNativeActor(
            ctx,silverNativeViewsRef.current,playerPose.direction,74)){
+            // Browser QA proof is set ONLY by the actual native draw branch,
+            // not by image preload or React's loading indicator.
+            ctx.canvas.dataset.omegaSilverWatchPainted='true';
             // Native Watch player physics/HP/projectiles/VFX unchanged.
             // Old character's skin/equipment overlays must not cover AIRA.
           }else if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
