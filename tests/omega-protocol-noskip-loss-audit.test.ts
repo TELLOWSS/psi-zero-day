@@ -151,6 +151,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    // A fighter can use the actual charged Watch dash during the final
    // telegraphed window. Dash grants only native .28s invulnerability and
    // enforces its real cooldown, without manipulating hazard HP.
+   const beforeDamageEvents=s.damageEvents.length;
    const warned=s.snapshot.bossTelegraph;
    if(warned?.phase==='warning'&&warned.timer<.24&&
       omegaBossInStrikeZone(warned,player)&&
@@ -158,6 +159,24 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
     s.update(DT,movement);
     s.dash();
    }else s.update(DT,movement);
+   // Observe the fatal WATCH engine hit in the SAME native update frame.
+   // "reportedSource" is the engine's own lastDamage label, while nearest
+   // hazards are context-only and NEVER promoted to causal certainty.
+   if(wave>=13){
+    const actual=s.damageEvents.slice(beforeDamageEvents)
+     .filter(e=>e.source==='WATCH_NATIVE_NET');
+    if(actual.length){
+     const hit=s.engine.state.lastDamage;
+     const nearest=s.engine.state.hazards.filter(h=>h.hp>0)
+      .map(h=>({kind:h.type,dist:Math.round(dist(player,h)),hp:Math.round(h.hp)}))
+      .sort((a,b)=>a.dist-b.dist).slice(0,5);
+     console.log('M04_D3_NATIVE_HIT_CONTEXT',JSON.stringify({
+      wave,events:actual,reportedSource:hit?.source??null,
+      reportedAmount:hit?.amount??null,nearestHazards:nearest,
+      caveat:'Engine-reported source/hazard proximity; classified audit is still WATCH_NATIVE_NET',
+     }));
+    }
+   }
    const strike=s.blade();
    nativeBladeDamage+=strike?.totalDamage??0;
    const feedback=s.engine.drainProjectileFeedback();
