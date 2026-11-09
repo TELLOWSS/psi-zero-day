@@ -1,6 +1,7 @@
 import {resolveCharacterBrandingUri} from '../app/character-branding';
 import {omegaLoadSilverRepoReview,omegaSilverRepoPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {OMEGA_SILVER_NATIVE_WATCH_HEADINGS,drawOmegaSilverWatchNativeActor} from './omega-silver-watch-native';
+import {OmegaSilverWatchNativeActionTracker} from './omega-silver-watch-native-actions';
 import type {OmegaHeading} from './omega-protocol-actor-render';
 import {recordEncounterIntel,openEncounterIntel,encounterIntelTitle} from '../app/signal-encounter-intel';
 import {SurvivorsUltimateBrief,SurvivorsUltimateCoach,SurvivorsUltimateControl} from './SurvivorsUltimateControl';
@@ -1549,6 +1550,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if (!ctx) return;
 
     let motions = new SpriteMotionTracker();
+    const silverActionTracker = new OmegaSilverWatchNativeActionTracker();
     let direction = new CombatDirection();
     let bossDirection=new BossEncounterDirection();
     let lastHudTime = -Infinity;
@@ -1584,6 +1586,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         playerVoiceDirectionsRef.current.set(engine, playerVoice);
         directorWasObscured=false;
         motions = new SpriteMotionTracker();
+        silverActionTracker.reset();
         direction = new CombatDirection();
         bossDirection=new BossEncounterDirection();
         prevNeutralized = engine.state.hazardsNeutralized;
@@ -2066,6 +2069,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ||engine.state.directorCutinPhase!=='none'||engine.state.interactiveHazards.some(h=>(h.state==='active'||h.state==='warning')&&Math.hypot(h.x-player.x,h.y-player.y)<420);
       const equipmentCheck=equipmentCheckRef.current.sample({clock:engine.state.gameTime,phase:engine.state.phase,moving:trackedPose.moving,action:trackedPose.action,reaction:trackedPose.reaction,danger:checkDanger,reduced:reducedMotionRef.current,player:engine.state.characterId==='player'});
       const playerPose = {...trackedPose,equipmentCheck,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0,reaction:0,equipmentCheck:0}: {})};
+      // Expose native combat action provenance for review. The silver character
+      // still uses its original neutral WebP until independent frames exist.
+      const silverNativeAction=silverNativePreviewRequested?silverActionTracker.sample({
+       time:engine.state.playerMotionTime??engine.state.gameTime,
+       phase:engine.state.phase,
+       pose:playerPose,dashing:player.isDashing,
+       playerX:player.x,playerY:player.y,projectiles:projectileEvents,
+      }):null;
       radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));
       projectileFeedbackRef.current.ingest(projectileEvents.map(event=>radioProjectionRef.current.feedback(event)),
         projectiles.length>90,engine.state.premiumGear?.equipped??[]);
@@ -3299,6 +3310,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if(silverNativePreviewRequested){
             ctx.canvas.dataset.omegaSilverWatchPainted='false';
             delete ctx.canvas.dataset.omegaSilverWatchHeading;
+            delete ctx.canvas.dataset.omegaSilverWatchAction;
+            delete ctx.canvas.dataset.omegaSilverWatchActionArt;
           }
           // 7. RENDER PLAYER (2.5D Standing Billboard + Realistic Ground Shadow + Equipment)
           ctx.save();
@@ -3371,6 +3384,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // not by image preload or React's loading indicator.
             ctx.canvas.dataset.omegaSilverWatchPainted='true';
             ctx.canvas.dataset.omegaSilverWatchHeading=OMEGA_SILVER_NATIVE_WATCH_HEADINGS[playerPose.direction??-1]??'';
+            ctx.canvas.dataset.omegaSilverWatchAction=silverNativeAction?.action??'idle';
+            ctx.canvas.dataset.omegaSilverWatchActionArt=silverNativeAction?.art??'neutral-original-only';
             // Native Watch player physics/HP/projectiles/VFX unchanged.
             // Old character's skin/equipment overlays must not cover AIRA.
           }else if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
