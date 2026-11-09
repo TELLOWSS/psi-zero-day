@@ -57,16 +57,19 @@ try{
   return {name:file.name,size:blob.size};
  });
  await page.locator('#slots button').filter({hasText:'E'}).first().click();
- await page.waitForFunction(()=>!document.querySelector('#art')?.hidden,{timeout:10000});
+ await page.waitForFunction(()=>!document.querySelector('#art')?.hidden &&
+  document.querySelector('#stageTag')?.textContent?.includes('UNVERIFIED ART'),
+  {timeout:10000});
  const loaded=await page.evaluate(()=>({
   width:document.querySelector('#art')?.naturalWidth,
   height:document.querySelector('#art')?.naturalHeight,
   status:document.querySelector('#status')?.textContent,
   src:document.querySelector('#art')?.getAttribute('src')?.slice(0,5),
   approved:document.querySelector('.checklist')?.textContent?.includes('미승인'),
+  sourceMismatch:document.querySelector('#status')?.textContent?.includes('지문 불일치'),
  }));
  if(loaded.width!==384||loaded.height!==512||!loaded.status.includes('표시 완료')||
-  loaded.src!=='blob:'||!loaded.approved)
+  loaded.src!=='blob:'||!loaded.approved||!loaded.sourceMismatch)
   throw new Error('Synthetic local-file selection or approval gate failed');
  await page.screenshot({path:resolve(out,'canonical-art-review-synthetic-fixture-not-art.png'),fullPage:true});
  await page.setViewportSize({width:390,height:844});
