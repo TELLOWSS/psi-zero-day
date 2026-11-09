@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-09 (KST) · M01/M01-QA 및 M02 실제 전투 브라우저 QA 기술검증 완료  
+**관리일:** 2026-11-09 (KST) · M01/M01-QA·M02·M03 브라우저 기술검증 완료  
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -33,7 +33,7 @@
 | M01 | 극한 50개 실제 클리어 기록을 읽어 엄격 해금; 보존 | `omegaProtocolAccessFromRecords`, `readOmegaProtocolAccess`, 실제 `persistStoreWallet`를 통한 1→50 순차 저장 통합 테스트 | **TESTED: PR #237 핵심 CI PASS, 44파일/186테스트, `tsc --noEmit` + 엔진 타입체크. 공개 CTA는 출시 승인 전까지 미연동** |
 | M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거; Vite·Chromium 9개 체크포인트 브라우저 검사 | **TESTED: PR #237 브라우저 전체 workflow PASS, 실제 React/Canvas 및 `data-omega-real-extreme-clears` QA 검사 통과. 실기기 Android/운영 CTA 아님** |
 | M02 | OMEGA 원거리 무기 + 검 3타, HP 감소, 방향·엄폐·보스 피해 상한, PC/모바일 입력 | OMEGA 전용 시작 원거리 총기 `radio_boost=1`, 검 3연격, 실제 native 투사체/HP·거리·장애물·F키/모바일 터치 검격, 2개 검 강화 | **TESTED 기술검증: PR #238 CI 45파일/193테스트 + DEV 실제 React/Canvas 브라우저 E2E 4/4 통과. 고품질 독립 총/검 원화, 실기기 Android, 상업 출시 품질은 미완** |
-| M03 | 안전모 좀비 기본/질주/방호/정예 + 감염 군집/실제 AI 차이 | `UNHELMETED`를 OMEGA에서 `HELMET_ZOMBIE`로 별도 표시, 색 3변형 기술용 임시 그림, 매 전투 첫 적 강제 좀비 | **고품질 독립 적 아트·차별화 AI 미구현. 총·검 테스트 추가만 함** |
+| M03 | 안전모 좀비 기본·질주·장갑·정예 4종의 차별화 추격·예고·실제 HP 피해 | 기존 Watch 네이티브 감염체 위에 OMEGA 전용 4개 독립 AI, 각 1종 필수 배치+산업 장비형 적 1종, HP·속도·돌진·측면기동·공격 예고·충돌 처리·임시 차별 실루엣 | **TESTED 기술검증: PR #239 Core 46파일/203테스트 + Vite/Chromium 데스크톱·모바일 AI 4종 모두 예고 후 실제 HP 피해. 정식 8방향 고품질 좀비 원화·군집 전술·Android 실기기 미완** |
 | M04 | 5막 15지점 이벤트, 물리적 길 찾기, 연속 연결 카메라 | 기본 FieldTraversal/3종 이벤트/출구, 오염 스토리 15개 라디오 표시 | **심리스 전환·환경 미술·연출 미완** |
 | M05 | 중간 보스 TITAN HOOK/최종 BLACK SIGNAL CORE의 차별화 3페이즈 | 기존 실제 보스/예고/HP 스케치 | **최종 기믹·완성 아트 미완** |
 | M06 | 은백색 AIRA 8방향 정지 원화 기준 및 **정확한 NW 후면 좌측** | GitHub 은백색 8방향 연구본, NW 후보는 대화에서만 생성 | **원화 최종 승인/리포지토리 정식 적용 미완** |
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리):** **M03 안전모 감염 좀비 실제 행동 다양화**. 안전모 필수 4종(기본·질주·장갑·정예)을 *색상만 다른 스킨*이 아닌 고유 추격/회피/돌진/엄폐 AI 및 충돌/HP/속도/공격 윈도우로 구분. `src/domain/omega-protocol-run.ts`, `src/engine/omega-protocol-combat.ts`, `src/ui/omega-protocol-enemy-render.ts`, `tests/omega-protocol-infected-zombie.test.ts`를 먼저 점검. DEV 전용 실제 AI 테스트와 Chromium 접촉·공격 패턴 E2E를 작성하고, PR #235의 `main` 충돌을 우회할 **검증용 Draft PR을 OMEGA 개발 브랜치로** 연 뒤 CI 통과 후에만 개발 브랜치 병합. 승인된 독립 고해상도 좀비 원화와 실기기 확인은 별도 미완으로 유지.
+**다음 실행 작업(하나씩 처리):** **M04 공간적으로 연결된 5막·15개 내부 탐험 지점**. 현재 출구 조작 시 새 지도/입구 좌표로 즉시 교체하는 코드를 점검한다. 플레이어가 실제 출구에 접근→E/터치 조작→문/리프트/계단의 카메라·전환 연출→연결된 다음 구역 등장까지 게임 흐름이 끊기지 않도록 개선. 전투만 끝났다고 자동 이동하거나 15개를 선택하는 UI는 절대 금지. 첫 테스트는 기존 `src/engine/omega-protocol-combat.ts`의 `interact()/settleWave()/beginWave()`와 `src/domain/omega-protocol-field.ts`, `src/domain/omega-protocol-navigation.ts`, `src/ui/OmegaProtocolPlaytest.tsx`를 확인하고 **실제 브라우저 사용자 입력으로 두 개 이상의 연속 구역을 건너는 회귀 테스트**. 다음 M05는 2개 보스 특화 패턴. `main`/Production 병합 금지, QA PR을 개발 브랜치 대상으로 먼저 개설.
 
 ## 4. 코드별 찾아가기
 
@@ -105,9 +105,9 @@
 
 **CI가 없었던 근본 이유:** PR #235는 `main`과 충돌(`mergeable=false / dirty`)이어서 `pull_request` Actions 트리거가 실행되지 않았다. 정식 출시 전까지 별도 QA PR을 **개발 브랜치만 대상으로** 개설하여 테스트하고 그곳으로 병합하는 방식을 유지한다. PR #235와 `main`의 충돌 해결은 최종 품질게이트 이후 별도 검토, 운영 배포 금지.
 
-**여전히 미완:** 실제 유저 해금 CTA, 원본 AIRA 액션 160프레임, 좀비 정식 8방향 아트/차별화 AI, 연결맵 시네마틱, Android 실제 기기 검증. **M02 실제 native 총·검 전투의 기술검증은 2026-11-09 PR #238에서 추가 완료.** 최종 미술/음향/실기기 및 정식 출시 승인은 미완.
+**여전히 미완:** 실제 유저 해금 CTA, 승인된 AIRA 독립 160프레임(현재 0/160), 12종 이상의 정식 8방향 좀비/적 원화·군집 전술, 심리스 5막 지도 연결·시네마틱, Android/태블릿 실기기 실측. **M02 총·검 기술검증 PR #238 및 M03 4종 좀비 AI 기술검증 PR #239는 PASS**. 운영 및 최종 미술/음향 품질 검수 미완.
 
-**다음 시작 커밋:** 개발 PR #235 **최신 HEAD를 조회한 뒤** 위 M03 관련 파일과 인계 9절을 확인한다. M02 실제 브라우저 E2E는 PASS 기록 완료. 다음은 안전모 좀비 4종의 진짜 AI 구별 및 가상 오염 산업단지에서의 패턴 테스트다.
+**다음 시작 커밋:** PR #235 **최신 HEAD를 다시 조회하고 인계 10절의 M03 근거를 확인한 뒤 M04 심리스 공간 연결/실제 출구 이동 검증**부터 시작한다. M01~M03 기술검증 PASS를 재작성하는 데 시간을 낭비하지 말고, 새 브라우저 E2E로 M04를 단계별 인증한다.
 
 ## 9. M02 총·검 실전투 기술검증 — 2026-11-09 최신 결과
 
@@ -128,3 +128,25 @@
 **판정 범위:** `M02 — CODED + TESTED (자동/실제 브라우저 기술 검증)`. 정식 원거리 총기 모델·검 타격 모션·8방향 AIRA 승인 원화 0/160·원작 WATCH 검격 분리의 실기기 검증·사운드/품질 고도화는 **BLOCKED**이며 출시 통과 아님. 세로 390×844 테스트는 **Chromium 모바일 에뮬레이션**, 실제 Android 또는 태블릿 실측이 아니다.
 
 **다음 실제 작업 M03:** 안전모 감염 좀비 **4개 행동형 AI**를 기존 WATCH의 일반 작업자 적과 격리하여 설계/구현. 추격 속도만 다른 재도색 4종은 불합격. HP·접근 거리·장애물 회피·공격 타이밍과 telegraph를 서로 다르게 구현하고, `main`이 아닌 OMEGA 개발 브랜치 대상 별도 QA PR에서 TypeScript/Vitest/Chromium 실플레이로 검증. 12종 적과 8방향 최종 원화는 이후 별도 게이트.
+
+## 10. M03 좀비 4종 실제 AI · 공격 예고 · 실피해 TECHNICAL PASS (2026-11-09)
+
+**검증 출처:** [QA PR #239](https://github.com/TELLOWSS/psi-zero-day/pull/239) HEAD `8529383f0557246e9072141216fbda3d294648d8`; 검증 후 **OMEGA 개발 브랜치에만 squash 병합** `4b6cc96c960f120a7c88cc20183ad9f79f6ba0df`. PR #235 Draft/미병합·Vercel Production 미반영, 무료 빌드 제한 우회 유료 전환 없음.
+
+- [Core Actions #42581069302](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42581069302) **PASS**: TypeScript, 원본 AIRA 해시/불승인 차단, Vitest **46파일·203테스트 전체 통과**. 4개 이동형별 HP·속도·공격 예고·돌진·측면 회피·콘테이너 충돌·실제 Watch 플레이어 HP·일반 WATCH 분리 확인.
+- [Browser Actions #42581069371](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42581069371) **PASS 전체 33/33 GitHub workflow 단계**, 실제 Vite/Chromium React/Canvas 전장, 데스크톱 1440×900 및 모바일 크기 390×844(브라우저 에뮬레이션).
+- **강화된 검증:** 4개 감염체 **각각** 최소 1회 전투 동작·attack telegraph·native Watch 플레이어 HP 피해가 있어야 통과. 스킨만 4색이거나 공격 경고만 있고 HP 감소가 없는 구현은 거부함.
+
+| 실제 Chromium 4종 좀비 개별 공격 | 전투 로그 · 데스크톱 | 전투 로그 · 세로 모바일 에뮬레이션 |
+|---|---|---|
+| 기본 추격형 `drifter` | 경고 2회/공격 2회/명중 1회, **11 HP 피해** | 경고·공격·명중 성공, **11 HP 피해** |
+| 질주형 `sprinter` | 경고 2회/공격 2회/명중 1회, **16 HP 피해** | 경고·공격·명중 성공, **16 HP 피해** |
+| 장갑형 `armored` | 경고 1회/공격 1회/명중 1회, **24 HP 피해** | 경고·공격·명중 성공, **24 HP 피해** |
+| 정예 잠복형 `stalker` | 경고 2회/공격 2회/명중 1회, **19 HP 피해** | 경고·공격·명중 성공, **19 HP 피해** |
+| 실제 플레이어 HP | **800→730** | **800→730** |
+
+**코드 파일:** `src/domain/omega-protocol-zombie-ai.ts` (4타입 독립 컨트롤러·유효한 경고 타이머·장애물 경로), `src/engine/omega-protocol-combat.ts` (첫 4개 원본 WATCH 감염 Hazard로 개별 AI 생성, 추가 산업장비 1종 보장, 실제 예고 후 피해만 OMEGA에서 허용), `src/engine/patrol-survivors-engine.ts` (OMEGA 격리 조건으로 일반 작업자 구조 애니메이션 및 '0피해 무예고 접촉 무적' 제거, 정상 WATCH 무변경), `src/ui/omega-protocol-enemy-render.ts` (안전모 필수·4가지 임시 실루엣·경고 링), `src/ui/OmegaProtocolPlaytest.tsx` (실제 AI 렌더 연결·DEV only 입장 초기 위치·읽기 전용 QA 지표), `tests/omega-protocol-zombie-ai.test.ts`, `scripts/qa-omega-zombie-ai-browser.mjs`, 두 워크플로.
+
+**정확한 완료 판정:** `M03 = CODED + TESTED(자동/실제 Chromium 게임 브라우저 기술검증)`. 이 결과는 실물 Android 폰, 게임 상용 출시 또는 승인된 고해상도 좀비 원화·12종 적/보스·오디오 품질을 인증하지 않는다. 일부 장면에서는 AI 시야/군집 전술을 이후 M08로 보강해야 한다.
+
+**NEXT = M04:** 5막·15 내부 이벤트 지점을 별도 스테이지 클리어창 없는 **끊김 없는 공간 이동**으로 체감시키는 실제 플레이 개선. 출구 탐색·상호작용·리프트/계단 이동·지역 전환의 이음새를 먼저 구현하고, 2곳 이상 연결의 실제 브라우저 조작 증빙을 얻은 뒤 인계표를 갱신한다. M05 보스 다단계와 M06/M07 AIRA 은백색 원화 최종 제작은 이후 순서로 관리한다.
