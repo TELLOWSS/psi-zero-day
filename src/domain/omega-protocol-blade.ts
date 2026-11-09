@@ -1,10 +1,11 @@
 import type {Hazard,PlayerStats} from './patrol-survivors';
 
 /**
- * OMEGA PROTOCOL ONLY — original sci-fi blade against simulated non-human
- * industrial constructs. Never armed in normal Watch safety gameplay.
- * Uses genuine player/hazard world coordinates and real hit points.
- * No invented projectile, no damaging human-like worker archetypes.
+ * OMEGA PROTOCOL ONLY — fictional infected hard-hat zombies and hostile
+ * industrial machines in the isolated quarantine simulation. Never armed
+ * in normal Watch safety gameplay. Real player/hazard world coordinates,
+ * engine hit points and cooldowns; unaffected ordinary survivors are NOT
+ * combat targets in this mode.
  */
 export const OMEGA_BLADE_COOLDOWN=.52;
 export const OMEGA_BLADE_COMBO_WINDOW=.9;
@@ -13,7 +14,9 @@ export const OMEGA_BLADE_ARC_DOT=.48;
 export type OmegaBladeComboStep=1|2|3;
 export type OmegaBladeTarget=Pick<Hazard,'id'|'x'|'y'|'hp'|'maxHp'|'radius'|'type'|'isStageBoss'>;
 export type OmegaBladePlayer=Pick<PlayerStats,'x'|'y'>;
-const bladeTargets=new Set<Hazard['type']>(['RUNAWAY_CART','FALLING_DEBRIS','CRANE_BOSS']);
+// UNHELMETED is an engine compatibility ID only. Within OMEGA it means
+// HELMET_ZOMBIE (fictional infected NPC), NOT the normal Watch worker model.
+const bladeTargets=new Set<Hazard['type']>(['UNHELMETED','RUNAWAY_CART','FALLING_DEBRIS','CRANE_BOSS']);
 export function omegaBladeEligible(target:OmegaBladeTarget):boolean{
  return target.hp>0&&bladeTargets.has(target.type);
 }
