@@ -32,7 +32,7 @@ describe('AIRA V2 artist-identity-preserving native tactical sidearm overlay',()
  });
  it('renders neither a false muzzle flash nor a painted gun from expired or non-firing events',()=>{
   const samples=[
-   make({shooting:false}),make({hurt:true}),make({dashing:true}),
+   make({shooting:false}),make({hurt:true}),make({dashing:true}),make({ultimate:true}),
    make({finished:true}),make({weaponFacingX:0,weaponFacingY:0,
     facingX:0,facingY:0}),
    make({actionAge:.16}),make({actionAge:Infinity}),make({time:2,shooting:false}),
