@@ -19,8 +19,14 @@ export interface OmegaSilverPreviewSession{
  readonly urls:ReadonlyMap<OmegaHeading,string>;
  revoke():void;
 }
+/** repo mode is usable only in the development OMEGA lab, never production. */
+export function omegaSilverRepoPreviewEnabled(search:string):boolean {
+ return new URLSearchParams(search).get(OMEGA_SILVER_REVIEW_MODE)==='repo'&&
+  (import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+}
 export function omegaSilverPreviewEnabled(search:string):boolean {
- return new URLSearchParams(search).get(OMEGA_SILVER_REVIEW_MODE)==='1';
+ return new URLSearchParams(search).get(OMEGA_SILVER_REVIEW_MODE)==='1'||
+  omegaSilverRepoPreviewEnabled(search);
 }
 export function omegaSilverReviewUrl():string{
  return '/?omegaLab=1&omegaSilverPreview=1';
@@ -75,11 +81,49 @@ async function rosterHashes():Promise<Record<OmegaHeading|'M01',string>>{
   throw Error('Canonical roster unsafe: live approval or incorrect game labels');
  return json.sha256_by_slot;
 }
-/** Read review-only WebPs uploaded via the local art review page.
- * Re-check each original file's SHA-256 before creating any object URL.
- * Fail closed on missing, damaged or mismatched material. No network uploads.
+/** The canonical nine source WebP images are now real GitHub binary blobs.
+ * Direct DEV-only source mode: avoid asking the user to re-upload art already
+ * pinned by SHA-256 in the repo. This is not a production-game asset toggle.
+ */
+export async function omegaLoadSilverRepoReview():Promise<OmegaSilverPreviewSession>{
+ if(!import.meta.env.DEV&&import.meta.env.VITE_OMEGA_PROTOCOL_LAB!=='1')
+  throw Error('Repository silver art review requires the development OMEGA lab');
+ const hashes=await rosterHashes();
+ const urls=new Map<OmegaHeading,string>();
+ try{
+  for(const heading of OMEGA_SILVER_HEADINGS){
+   const asset='/assets/omega/canonical-review/aira-v2/'+heading.toLowerCase()+'.webp';
+   const resp=await fetch(asset,{cache:'no-store'});
+   if(!resp.ok)throw Error('GitHub silver review asset missing: '+heading);
+   const bytes=await resp.arrayBuffer();
+   if(await omegaSilverHash(bytes)!==hashes[heading])
+    throw Error('GitHub silver source hash mismatch: '+heading);
+   const url=URL.createObjectURL(new Blob([bytes],{type:'image/webp'}));
+   urls.set(heading,url);
+   // SHA-256 validation alone is insufficient; verify the real browser
+   // decoder and the source image's authoring canvas dimensions.
+   const image=new Image();
+   image.src=url;
+   await image.decode();
+   if(image.naturalWidth!==384||image.naturalHeight!==512)
+    throw Error('GitHub silver image dimension mismatch: '+heading);
+  }
+  return {loaded:[...OMEGA_SILVER_HEADINGS],urls,
+   revoke(){for(const url of urls.values())URL.revokeObjectURL(url);}};
+ }catch(error){
+  for(const url of urls.values())URL.revokeObjectURL(url);
+  throw error;
+ }
+}
+
+/** Read review-only WebPs uploaded via the local art review page or, in the
+ * development lab only, the exact nine GitHub-pinned source binaries.
+ * Re-check SHA-256 before creating any object URL. No user file uploads.
  */
 export async function omegaLoadSilverPreview():Promise<OmegaSilverPreviewSession>{
+ if(typeof window!=='undefined'&&
+    omegaSilverRepoPreviewEnabled(window.location.search))
+  return omegaLoadSilverRepoReview();
  const hashes=await rosterHashes();
  const db=await openDb();
  const urls=new Map<OmegaHeading,string>();
