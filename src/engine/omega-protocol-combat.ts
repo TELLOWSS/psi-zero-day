@@ -3,6 +3,11 @@ import {
  type GameInput,PERK_CATALOG,
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
+import {
+ omegaCreateDamageEvent,omegaDamageSourceForZombie,omegaSummarizeDamage,
+ OMEGA_MAX_DAMAGE_LOG,
+ type OmegaDamageEvent,type OmegaDamageSource,type OmegaDamageSummary,
+} from '../domain/omega-protocol-damage-audit';
 import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_COOLDOWN,OMEGA_BLADE_RANGE,type OmegaBladeComboStep} from '../domain/omega-protocol-blade';
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
@@ -81,6 +86,7 @@ export class OmegaProtocolCombatSession {
  private bladeStep:OmegaBladeComboStep=1;
  private bladeResult:OmegaBladeStrike|null=null;
  private readonly zombieBrains=new Map<string,OmegaZombieBrain>();
+ private readonly damageLog:OmegaDamageEvent[]=[];
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean}>={},
@@ -120,6 +126,18 @@ export class OmegaProtocolCombatSession {
  get facing():Readonly<{x:number;y:number}>{return {...this.lastFacing};}
  get moving():boolean{return this.playerMoving;}
  get lastBladeStrike():OmegaBladeStrike|null{return this.bladeResult;}
+ /** Immutable read-only combat diagnostics; NEVER used to modify AI/HP. */
+ get damageEvents():readonly OmegaDamageEvent[]{return [...this.damageLog];}
+ damageSummary(wave=this.latestPlan.wave):OmegaDamageSummary{
+  return omegaSummarizeDamage(this.damageLog,wave);
+ }
+ private recordDamage(source:OmegaDamageSource,amount:number):void{
+  if(amount<=0)return;
+  this.damageLog.push(omegaCreateDamageEvent(
+   this.latestPlan.wave,this.engine.state.gameTime,source,
+   amount,this.engine.state.player.hp));
+  if(this.damageLog.length>OMEGA_MAX_DAMAGE_LOG)this.damageLog.shift();
+ }
  zombieBrain(id:string):OmegaZombieBrain|null{return this.zombieBrains.get(id)??null;}
  get zombieTelemetry():readonly Readonly<{id:string;kind:OmegaZombieKind;phase:string;
   x:number;y:number;hp:number;warnings:number;attacks:number;hits:number;damageDone:number}>[]{
@@ -284,8 +302,14 @@ export class OmegaProtocolCombatSession {
    ? {...input,moveX:move.x*.78,moveY:move.y*.78}
    :{...input,moveX:move.x,moveY:move.y};
   const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
+  const hpBeforeNative=this.engine.state.player.hp;
   this.engine.update(dt,adjusted);
   const state=this.engine.state;
+  // Native Watch's own collision/projectile code may deal damage AND
+  // regenerate HP in the same frame. Positive observed net loss is
+  // therefore a lower bound, not an invented exact source identity.
+  if(hpBeforeNative>state.player.hp)
+   this.recordDamage('WATCH_NATIVE_NET',hpBeforeNative-state.player.hp);
   if(this.currentField&&state.phase==='playing'){
    const corrected=omegaFieldResolveCollision(prior,state.player,this.currentField.obstacles,21);
    state.player.x=corrected.x;state.player.y=corrected.y;
@@ -310,6 +334,7 @@ export class OmegaProtocolCombatSession {
      state.hitStopTimer=Math.max(state.hitStopTimer??0,.035);
      brain.hits++;
      brain.damageDone+=amount;
+     this.recordDamage(omegaDamageSourceForZombie(brain.kind),amount);
     }
    }
   }
@@ -333,6 +358,9 @@ export class OmegaProtocolCombatSession {
      state.lastDamage={source:'CRANE_BOSS',amount:inflicted,remaining:2};
      if(state.terrainRecord)state.terrainRecord.damageTaken+=inflicted;
      state.hitStopTimer=Math.max(state.hitStopTimer??0,.04);
+     this.recordDamage(
+      result.next.attack==='crane_drop'?'TITAN_HOOK':'BLACK_SIGNAL_CORE',
+      inflicted);
     }
    }
   }
