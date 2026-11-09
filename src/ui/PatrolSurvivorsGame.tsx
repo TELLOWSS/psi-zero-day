@@ -2074,7 +2074,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const silverNativeAction=silverNativePreviewRequested?silverActionTracker.sample({
        time:engine.state.playerMotionTime??engine.state.gameTime,
        phase:engine.state.phase,
-       pose:playerPose,dashing:player.isDashing,
+       pose:playerPose,dashing:Boolean(player.isDashing),
        playerX:player.x,playerY:player.y,projectiles:projectileEvents,
       }):null;
       radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));
