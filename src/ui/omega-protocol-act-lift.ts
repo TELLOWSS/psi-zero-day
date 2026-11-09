@@ -1,5 +1,5 @@
 import type {OmegaFieldPlan} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
+import {omegaActBoundaryDock,type OmegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 
 /**
  * Original in-world 2.5D lift/airlock study, painted at the actual native
@@ -13,6 +13,10 @@ export function drawOmegaActBoundaryDock(
 ):void{
  const dock=omegaActBoundaryDock(plan);
  if(!dock||!Number.isFinite(seconds))return;
+ if(dock.kind!=='scaffold_lift'){
+  drawOmegaSpecialActDock(ctx,dock,seconds);
+  return;
+ }
  const first=dock.kind==='scaffold_lift';
  const orange=dock.role==='departure'?'#ffca7a':'#8af4e1';
  const dark=first?'#163648':'#263b49';
@@ -77,5 +81,97 @@ export function drawOmegaActBoundaryDock(
  const pulse=.6+.4*Math.sin(seconds*3.1);
  ctx.globalAlpha=.2+.35*pulse;ctx.strokeStyle=orange;ctx.lineWidth=4;
  ctx.beginPath();ctx.ellipse(0,9,84+6*pulse,23+3*pulse,0,0,Math.PI*2);ctx.stroke();
+ ctx.restore();
+}
+
+/** M04-C: three deliberately non-interchangeable industrial portal silhouettes,
+ * each painted at the real exit/entry foothold in native world coordinates. */
+function drawOmegaSpecialActDock(
+ ctx:CanvasRenderingContext2D,dock:OmegaActBoundaryDock,seconds:number,
+):void{
+ const color=dock.kind==='crane_elevator'?'#f8bb75':
+  dock.kind==='service_tunnel'?'#81cce2':'#f5a8ce';
+ const entering=dock.role==='arrival';
+ ctx.save();ctx.translate(dock.point.x,dock.point.y);
+ ctx.fillStyle='#09151ec9';
+ ctx.beginPath();ctx.ellipse(0,10,91,27,0,0,Math.PI*2);ctx.fill();
+ if(dock.kind==='crane_elevator'){
+  // Counterweighted crane shaft, machine outriggers and structural X braces.
+  ctx.fillStyle='#2d4654';ctx.fillRect(-58,-221,116,215);
+  ctx.fillStyle='#172e3a';ctx.fillRect(-44,-198,88,191);
+  ctx.strokeStyle='#95bbc9';ctx.lineWidth=5;ctx.strokeRect(-58,-221,116,215);
+  for(let y=-191;y<-14;y+=37){
+   ctx.strokeStyle='#6a91a2';ctx.lineWidth=3;ctx.beginPath();
+   ctx.moveTo(-55,y);ctx.lineTo(55,y+35);
+   ctx.moveTo(55,y);ctx.lineTo(-55,y+35);ctx.stroke();
+  }
+  ctx.strokeStyle='#e1c49e';ctx.lineWidth=4;ctx.beginPath();
+  ctx.moveTo(-25,-244);ctx.lineTo(-25,-105);
+  ctx.moveTo(25,-244);ctx.lineTo(25,-105);ctx.stroke();
+  ctx.fillStyle='#d59a52';ctx.fillRect(-75,-244,150,17);
+  ctx.fillStyle='#e9bd79';ctx.fillRect(68,-238,36,26);
+  ctx.fillStyle='#708d9b';ctx.fillRect(-47,-91,94,84);
+  ctx.fillStyle='#18323d';ctx.fillRect(-39,-82,78,67);
+  ctx.strokeStyle='#e8ceac';ctx.lineWidth=3;ctx.strokeRect(-47,-91,94,84);
+  ctx.fillStyle='#101c2a';ctx.fillRect(-55,-160,110,26);
+  ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';
+  ctx.fillText(entering?'CRANE ↑ 24M':'CRANE ↑ 24M',0,-142,108);
+ }else if(dock.kind==='service_tunnel'){
+  // Underground bore instead of a lift: perspective nested rib arches,
+  // overhead conduit piping and contamination drainage channels.
+  for(let i=0;i<5;i++){
+   const scale=1-i*.11;
+   ctx.save();ctx.scale(scale,scale);
+   ctx.strokeStyle=i%2?'#4b7e91':'#85b9c8';ctx.lineWidth=13-i;
+   ctx.beginPath();ctx.moveTo(-96,-1);ctx.lineTo(-96,-105);
+   ctx.quadraticCurveTo(-96,-195,0,-195);
+   ctx.quadraticCurveTo(96,-195,96,-105);
+   ctx.lineTo(96,-1);ctx.stroke();
+   ctx.restore();
+  }
+  ctx.fillStyle='#1a3545';ctx.fillRect(-83,-84,166,76);
+  ctx.strokeStyle='#83d3dd';ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(-80,-2);ctx.lineTo(-28,-72);
+  ctx.moveTo(80,-2);ctx.lineTo(28,-72);ctx.stroke();
+  ctx.strokeStyle='#d1a35d';ctx.lineWidth=6;
+  ctx.beginPath();ctx.moveTo(-78,-127);ctx.lineTo(-5,-127);
+  ctx.moveTo(5,-127);ctx.lineTo(76,-127);ctx.stroke();
+  ctx.strokeStyle='#55c9d3';ctx.lineWidth=5;ctx.beginPath();
+  ctx.moveTo(-85,14);ctx.lineTo(-32,-35);ctx.moveTo(85,14);ctx.lineTo(32,-35);
+  ctx.stroke();
+  ctx.fillStyle='#071c29';ctx.fillRect(-65,-160,130,28);
+  ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';
+  ctx.fillText(entering?'LOWER TUNNEL':'TUNNEL ↓ 12M',0,-141,125);
+ }else{
+  // A hermetically locked double bulkhead with pressure gauges, warning
+  // lamps, and an isolated red contamination boundary; not a cargo shutter.
+  ctx.fillStyle='#4b465b';ctx.fillRect(-96,-202,192,198);
+  ctx.fillStyle='#171c30';ctx.fillRect(-81,-191,162,173);
+  ctx.strokeStyle='#b09eb6';ctx.lineWidth=11;ctx.strokeRect(-96,-202,192,198);
+  for(const side of [-1,1]){
+   ctx.fillStyle='#645a73';ctx.fillRect(side===-1?-76:2,-175,74,150);
+   ctx.strokeStyle='#ceb6d2';ctx.lineWidth=3;
+   ctx.strokeRect(side===-1?-76:2,-175,74,150);
+  }
+  ctx.fillStyle='#f0a3cd';ctx.fillRect(-7,-177,14,151);
+  ctx.strokeStyle='#ffe4db';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(-48,-115,19,0,Math.PI*2);
+  ctx.arc(49,-115,19,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-48,-115);ctx.lineTo(-38,-126);
+  ctx.moveTo(49,-115);ctx.lineTo(60,-106);ctx.stroke();
+  ctx.fillStyle='#1c2034';ctx.fillRect(-67,-190,133,27);
+  ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';
+  ctx.fillText(entering?'PRESSURE OK':'AIRLOCK SEALED',0,-174,128);
+  ctx.fillStyle='#f5a8c5';ctx.fillRect(-94,-11,188,8);
+ }
+ // The moving state/activation is bound to the game clock, never a CSS fake.
+ const pulse=.58+.42*Math.sin(seconds*3.7);
+ ctx.globalAlpha=.35+.33*pulse;ctx.lineWidth=4;ctx.strokeStyle=color;
+ ctx.beginPath();ctx.ellipse(0,9,78+7*pulse,22+4*pulse,0,0,Math.PI*2);ctx.stroke();
+ ctx.globalAlpha=1;ctx.fillStyle='#0b1e2d';
+ ctx.fillRect(-65,21,130,24);ctx.strokeStyle=color;ctx.lineWidth=2;
+ ctx.strokeRect(-65,21,130,24);ctx.textAlign='center';
+ ctx.font='bold 10px system-ui';ctx.fillStyle=color;
+ ctx.fillText(entering?'ARRIVAL '+dock.toWave:'SECTOR '+dock.fromWave+' EXIT',0,37,118);
  ctx.restore();
 }
