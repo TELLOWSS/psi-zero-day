@@ -26,7 +26,7 @@ export function omegaAiraV2ShotFrame(
  const bearing=Math.hypot(aimX,aimY);
  const ageIsValid=view.actionAge===undefined||Number.isFinite(view.actionAge);
  const age=ageIsValid?Math.max(0,view.actionAge??0):0;
- const draw=Boolean(view.shooting)&&!view.hurt&&!view.finished&&!view.dashing&&
+ const draw=Boolean(view.shooting)&&!view.hurt&&!view.finished&&!view.dashing&&!view.ultimate&&
   bearing>1e-5&&ageIsValid&&Number.isFinite(visualHeight)&&visualHeight>0&&
   age<=ALLOWED_SHOT_AGE;
  const left=heading==='W'||heading==='NW'||heading==='SW';
