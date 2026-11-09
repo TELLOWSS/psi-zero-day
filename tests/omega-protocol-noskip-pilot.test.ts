@@ -28,10 +28,20 @@ const idle={moveX:0,moveY:0,triggerAction:false};
  * read/write game internals beyond readonly hazard positions and native
  * movement commands. */
 function tacticalStep(
- s:OmegaProtocolCombatSession,enemy:{x:number;y:number;id:string},
+ s:OmegaProtocolCombatSession,enemy:{x:number;y:number;id:string},forceClose=false,
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
+ if(forceClose){
+  // If native weapon projectiles are blocked by real industrial cover,
+  // walk around it to regain line of sight / sword range. Never inject
+  // damage or teleport. The normal game collision+pathfinder stays active.
+  if(gap>104){
+   const path=omegaFieldNextRoute(actor,enemy,field.obstacles);
+   return path?steer(actor,path.next):idle;
+  }
+  return steer(actor,enemy,.12);
+ }
  if(gap>350){
   const path=omegaFieldNextRoute(actor,enemy,field.obstacles);
   return path?steer(actor,path.next):idle;
@@ -109,7 +119,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    // Actual held-stick input, normal auto-fire and hit-cone sword only;
    // dodge/chase remains an external test-player decision, not an engine
    // cheat, HP reset or modification of enemy AI/difficulty.
-   const movement=tacticalStep(s,target);
+   const movement=tacticalStep(s,target,stallTicks>105);
    s.update(DT,movement);
    const strike=s.blade();
    nativeBladeDamage+=strike?.totalDamage??0;
