@@ -38,10 +38,12 @@ describe('OMEGA blade is an actual native special-edition hit, not a fake animat
  it('changes only real run-scoped Watch hazards, never normal campaign or paused state',()=>{
   const session=new OmegaProtocolCombatSession(181,50);
   session.engine.state.player.invincibleTime=999;
-  const target=session.engine.state.hazards[0]!;
+  const original=session.engine.state.hazards[0]!;
+  const target={...original,type:'UNHELMETED' as const};
+  session.engine.state.hazards[0]=target;
   session.update(1/60,input);
   const hero=session.engine.state.player;
-  target.type='UNHELMETED';target.x=hero.x+65;target.y=hero.y;
+  target.x=hero.x+65;target.y=hero.y;
   target.radius=18;target.hp=200;target.maxHp=200;target.speed=0;
   const originalHp=target.hp;
   const swing=session.blade();
