@@ -23,6 +23,50 @@ function steer(source:OmegaFieldPoint,target:OmegaFieldPoint,scale=1){
  return {moveX:sx/len*scale,moveY:sy/len*scale,triggerAction:false};
 }
 const idle={moveX:0,moveY:0,triggerAction:false};
+/** A tactical *test player*, not a game-side buff. Picks a route around
+ * existing solid field props and kites warned infected charges. Does not
+ * read/write game internals beyond readonly hazard positions and native
+ * movement commands. */
+function tacticalStep(
+ s:OmegaProtocolCombatSession,enemy:{x:number;y:number;id:string},
+):Readonly<{moveX:number;moveY:number;triggerAction:false}>{
+ const actor=s.engine.state.player,field=s.field!.plan;
+ const gap=dist(actor,enemy);
+ if(gap>350){
+  const path=omegaFieldNextRoute(actor,enemy,field.obstacles);
+  return path?steer(actor,path.next):idle;
+ }
+ const bladeReady=s.snapshot.bladeCooldownRemaining<=DT;
+ if(gap<116&&gap>48&&bladeReady){
+  // A one-frame aim/strike: the actual sword engine applies its own
+  // forward-cone, cooldown, terrain and enemy-HP checks.
+  return steer(actor,enemy,.08);
+ }
+ if(gap>245)return idle; // A native auto-aim radio can finish from here.
+ // Evaluate survivable screen-visible dodge lanes rather than running
+ // directly through scaffold/container obstacles or map boundaries.
+ const hazards=s.engine.state.hazards.filter(h=>h.hp>0);
+ let best:{score:number;point:OmegaFieldPoint}|null=null;
+ for(let k=0;k<16;k++){
+  const angle=(Math.PI*2*k)/16;
+  const desired={x:Math.max(53,Math.min(1347,actor.x+Math.cos(angle)*125)),
+   y:Math.max(53,Math.min(847,actor.y+Math.sin(angle)*125))};
+  const path=omegaFieldNextRoute(actor,desired,field.obstacles);
+  if(!path||dist(actor,path.next)<3)continue;
+  const projected=path.next;
+  const danger=Math.min(...hazards.map(h=>dist(projected,h)));
+  const nearestNow=Math.min(...hazards.map(h=>dist(actor,h)));
+  const targetGap=dist(projected,enemy);
+  const antiCorner=Math.min(projected.x-45,1355-projected.x,projected.y-45,855-projected.y);
+  // Avoid a hopeless loop around the same narrow corner: reward projected
+  // clearance and distance from ALL native threats, not only target.
+  const score=Math.min(danger,310)*2.1
+   -Math.abs(targetGap-225)*.28+Math.min(antiCorner,120)*.14
+   +(danger>nearestNow?32:0)-(path.detour?12:0);
+  if(!best||score>best.score)best={score,point:projected};
+ }
+ return best?steer(actor,best.point):idle;
+}
 function navigate(
  s:OmegaProtocolCombatSession,target:OmegaFieldPoint,
 ):Readonly<{distance:number;target:OmegaFieldPoint}>{
@@ -63,16 +107,10 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    const sorted=[...enemies].sort((a,b)=>dist(player,a)-dist(player,b));
    const target=sorted[0]!;
    const range=dist(player,target);
-   let movement=idle;
-   // Chase only real native hazards.  Short melee bursts are ordinary combat
-   // commands; the radio gun remains the original Watch automatic projectile.
-   if(range>89){
-    const route=navigate(s,{x:target.x,y:target.y});
-    movement=steer(player,route.target);
-   }else{
-    const delta={x:target.x-player.x,y:target.y-player.y};
-    movement=steer(player,{x:player.x+delta.x,y:player.y+delta.y},range>42?.45:.1);
-   }
+   // Actual held-stick input, normal auto-fire and hit-cone sword only;
+   // dodge/chase remains an external test-player decision, not an engine
+   // cheat, HP reset or modification of enemy AI/difficulty.
+   const movement=tacticalStep(s,target);
    s.update(DT,movement);
    const strike=s.blade();
    nativeBladeDamage+=strike?.totalDamage??0;
@@ -101,6 +139,10 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
   simSeconds+=DT;
   if(s.run.wave!==wave)break;
  }
+ if(s.run.phase==='defeat')throw Error('NO-SKIP ACTUAL PLAYER DEFEAT wave '+wave+
+  ' at '+simSeconds.toFixed(1)+'s; no HP replenishment or encounter skipping: '+
+  JSON.stringify({playerHp:s.engine.state.player.hp,
+   remaining:s.snapshot.enemiesAlive,steps,nativeGunHits,nativeBladeDamage,logs:logs.slice(-8)}));
  if(s.run.wave===wave&&s.run.phase==='battle')
   throw Error('NO-SKIP M04-D node '+wave+' did NOT finish under simulation budget: '+JSON.stringify({
    phase:s.field?.progress.phase,playerHp:s.engine.state.player.hp,
@@ -159,6 +201,9 @@ describe('M04-D real OMEGA expedition without DEV preclear or direct HP mutation
   const ranked=['recovery_protocol','shield_matrix','radio_overdrive','blade_edge','rapid_step'];
   const chosen=s.run.offers.find(id=>ranked.includes(id))??s.run.offers[0]!;
   const offerProof=[...s.run.offers];
+  console.log('QA_M04D_WAVE3_LOADOUT',JSON.stringify({
+   offers:offerProof,chosen,playerHp:s.engine.state.player.hp,
+  }));
   s.selectUpgrade(chosen);
   for(let i=0;i<25;i++)s.update(DT,idle);
   expect(s.run.phase).toBe('battle');
