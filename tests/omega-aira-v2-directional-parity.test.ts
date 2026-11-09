@@ -28,13 +28,13 @@ const counter=()=>{
  return {ctx,call};
 };
 describe('AIRA V2 eight-heading visual parity — no false complete-art claims',()=>{
- it('reports all 8 original standing views but only E 14 painted action frames of 160',()=>{
+ it('reports all 8 original standing views but E 18 painted action frames (incl. 4 walk) of 160',()=>{
   const audit=omegaAiraV2ArtParity();
   expect(audit.directionCount).toBe(8);
   expect(audit.originalNeutralDirections).toBe(8);
-  expect(audit.independentlyPaintedFrames).toBe(14);
+  expect(audit.independentlyPaintedFrames).toBe(18);
   expect(audit.targetActionFrames).toBe(160);
-  expect(audit.missingActionFrames).toBe(146);
+  expect(audit.missingActionFrames).toBe(142);
   expect(audit.fullProductionApproved).toBe(false);
   expect(audit.original320MasksApproved).toBe(false);
   expect(Object.values(OMEGA_AIRA_V2_AUTHORED_TARGET)
@@ -52,6 +52,7 @@ describe('AIRA V2 eight-heading visual parity — no false complete-art claims',
    }
   }
   expect(OMEGA_AIRA_V2_AUTHORED_ACTION_COUNTS.N.fire).toBe(0);
+  expect(OMEGA_AIRA_V2_AUTHORED_ACTION_COUNTS.E.walk).toBe(4);
  });
  it('treats each of the eight original headings with five native action poses',()=>{
   for(const heading of OMEGA_AIRA_V2_ALL_HEADINGS){
