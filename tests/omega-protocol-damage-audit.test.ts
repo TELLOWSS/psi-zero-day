@@ -78,10 +78,20 @@ describe('M04-D2 factual late-game hit source attribution, no combat changes',()
   const hpBefore=p.hp;
   p.invincibleTime=0;
   p.regenRate=0;
-  h.x=p.x+20;h.y=p.y;
-  h.speed=0;h.damage=0;h.hp=100000;h.maxHp=100000;
+  h.x=p.x+45;h.y=p.y;
+  h.speed=0;h.damage=0;h.hp=100000;h.maxHp=100000;h.isStunned=0;
+  // Prevent the real starter radio from stunning this single controlled
+  // zombie BEFORE the warned OMEGA contact frame.  This is a unit fixture
+  // for damage-accounting only, not normal gameplay or no-skip evidence.
+  s.engine.state.activePerks.radio_boost=0;
+  s.engine.state.projectiles=[];
   brain.phase='warning';brain.timer=.01;
   s.update(1/30,idle);
+  console.log('M04_D2_DRIFTER_TRACE',JSON.stringify({
+   zombiePhase:brain.phase,isStunned:h.isStunned,hp:p.hp,
+   invincibleTime:p.invincibleTime,enginePhase:s.snapshot.enginePhase,
+   events:s.damageEvents,
+  }));
   const hits=s.damageEvents.filter(x=>x.source==='INFECTED_DRIFTER');
   expect(hits).toHaveLength(1);
   expect(hits[0]!.amount).toBe(11);
