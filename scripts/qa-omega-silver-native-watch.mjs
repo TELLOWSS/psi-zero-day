@@ -64,7 +64,9 @@ try{
     const canvas=document.querySelector('.survivors-canvas');
     return canvas instanceof HTMLCanvasElement&&
      canvas.dataset.omegaSilverWatchPainted==='true'&&
-     canvas.dataset.omegaSilverWatchHeading===expected;
+     canvas.dataset.omegaSilverWatchHeading===expected&&
+     canvas.dataset.omegaSilverWatchAction==='walk'&&
+     canvas.dataset.omegaSilverWatchActionArt==='neutral-original-only';
    },heading,{timeout:5000});
    const actual=await page.locator('.survivors-canvas')
     .getAttribute('data-omega-silver-watch-heading');
@@ -74,6 +76,13 @@ try{
   }
  }
  if(directionSamples.length!==8)throw Error('Not all 8 real Watch sprite headings passed');
+ await page.waitForFunction(()=>{
+  const canvas=document.querySelector('.survivors-canvas');
+  return canvas instanceof HTMLCanvasElement&&
+   canvas.dataset.omegaSilverWatchAction==='idle'&&
+   canvas.dataset.omegaSilverWatchActionArt==='neutral-original-only';
+ },undefined,{timeout:5000});
+ const idleCueVerified=true;
  const sizes=[['desktop',1440,900],['phone-portrait',390,844],['phone-landscape',844,390]];
  for(const [name,width,height] of sizes){
   await page.setViewportSize({width,height});
@@ -94,7 +103,9 @@ try{
   originalNeutralPosesOnly:true,independentActionAnimationApproved:false,
   liveProductionChanged:false,actualAndroidHardwareTested:false,
   screenshotsAreSynthetic:false,viewportChecks:screens.length,screens,
-  realKeyboardEightHeadingChecks:directionSamples.length,directionSamples,errors};
+  realKeyboardEightHeadingChecks:directionSamples.length,
+  realNativeWalkAndIdleCueVerified:idleCueVerified,
+  originalActionFramesImplemented:false,directionSamples,errors};
  if(errors.length)process.exitCode=1;
  console.log(report.pass?'QA_PASS':'QA_FAIL','REAL native Watch silver AIRA verified source draw',JSON.stringify({
   painted:true,directions:directionSamples.length,viewports:screens.length,production:false,errors}));
