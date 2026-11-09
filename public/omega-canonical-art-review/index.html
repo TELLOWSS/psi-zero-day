@@ -94,6 +94,24 @@ const modes=[
  {id:'M01',ko:'남성',label:'신규 남성 Ω 요원',status:'신규 디자인 후보',note:'남성 캐릭터는 기존 AIRA를 대체하지 않으며 시그널 가드·워치에 자동으로 추가되지 않습니다.'},
 ];
 const byId=id=>modes.find(m=>m.id===id);
+const officialHashes=fetch('./roster.json',{cache:'no-store'}).then(async response=>{
+ if(!response.ok)throw Error('Original identity reference roster missing');
+ const doc=await response.json();
+ if(doc.production_approved!==false||doc.stage!=='review_only'||
+    doc.main_games.join('|')!=='SIGNAL GUARD|SIGNAL WATCH'||
+    Object.keys(doc.sha256_by_slot||{}).length!==9)
+   throw Error('Canonical review reference manifest is not safe');
+ return doc.sha256_by_slot;
+});
+async function sourceMatch(src,id){
+ if(!crypto?.subtle)throw Error('SHA-256 browser service unavailable');
+ const roster=await officialHashes;
+ const r=await fetch(src,{cache:'no-store'});
+ if(!r.ok)throw Error('Selected source image unavailable for checksum');
+ const hash=await crypto.subtle.digest('SHA-256',await r.arrayBuffer());
+ const value=Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
+ return value===roster[id];
+}
 const $=id=>document.getElementById(id);
 const btnHost=$('slots'),art=$('art'),empty=$('empty'),status=$('status');
 let active=0,loadedURL='',objects=new Map();
@@ -113,12 +131,23 @@ function select(i){
  loadedURL=src;
  art.hidden=true;empty.hidden=false;
  status.textContent=(wasLocal?'로컬 파일':'개발 브랜치 파일')+' 로드 중 · '+mode.id;
- art.onload=()=>{
+ art.onload=async()=>{
   if(loadedURL!==src)return;
   const expected=art.naturalWidth===384&&art.naturalHeight===512;
   art.hidden=false;empty.hidden=true;
   $('assetDimensions').textContent=art.naturalWidth+'×'+art.naturalHeight+(expected?' · 규격 일치':' · 규격 불일치');
-  status.textContent=(wasLocal?'로컬':'개발 브랜치')+' 원화 표시 완료 · 개별 시점/외형 승인은 별도';
+  try{
+   const match=await sourceMatch(src,mode.id);
+   if(loadedURL!==src)return;
+   $('stageTag').textContent=match?'SOURCE MATCH · ART NOT APPROVED':'UNVERIFIED ART · NOT APPROVED';
+   status.textContent=match?
+    '원화 표시 완료 · 지정된 은백색 후보 파일 SHA-256 일치 · 시점/애니메이션 승인은 별도':
+    '원화 표시 완료 · 주의: 지정된 은백색 AIRA 파일 지문 불일치 · 다른 외형/변형 가능 · 승인 불가';
+  }catch(error){
+   if(loadedURL!==src)return;
+   $('stageTag').textContent='SOURCE NOT VERIFIED';
+   status.textContent='원화 표시 완료 · 파일 무결성 검사를 완료하지 못했습니다 · 승인 불가: '+String(error);
+  }
  };
  art.onerror=()=>{
   if(loadedURL!==src)return;
