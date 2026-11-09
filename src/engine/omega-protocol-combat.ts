@@ -50,13 +50,13 @@ export class OmegaProtocolCombatSession {
  private lastFacing={x:0,y:1};
  private playerMoving=false;
  constructor(
-  seed:number,watchClears:number,masterCosmeticEligible=false,
+  seed:number,extremeStageClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean}>={},
  ){
   this.fieldTraversal=options.fieldTraversal===true;
-  const access=omegaProtocolAccess(watchClears,masterCosmeticEligible);
+  const access=omegaProtocolAccess(extremeStageClears,masterCosmeticEligible);
   const run=omegaStartRun(seed,access);
-  if(!run)throw new Error('Complete 10 Watch stages before entering OMEGA PROTOCOL');
+  if(!run)throw new Error('Complete all 50 Watch Extreme stages before entering OMEGA PROTOCOL');
   this.active=run;
   // Isolated zero-upgrade base character with no premium or operation handoff.
   const state=createInitialSurvivorsState('player',{...DEFAULT_PERMANENT_UPGRADES},
