@@ -15,6 +15,7 @@ on:
       - 'src/ui/omega-canonical-local-preview.ts'
       - 'src/ui/omega-silver-watch-native.ts'
       - 'src/ui/omega-silver-watch-native-actions.ts'
+      - 'src/ui/omega-silver-action-parity.ts'
       - 'src/ui/PatrolSurvivorsGame.tsx'
       - 'src/ui/omega-aira-v2-directional-action-rig.ts'
       - 'src/ui/omega-aira-v2-directional-parity.ts'
