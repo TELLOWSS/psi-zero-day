@@ -350,6 +350,8 @@ export class OmegaProtocolCombatSession {
     case 'phase_boots':p.dashMaxCooldown=Math.max(1,(p.dashMaxCooldown??3.2)-.2);p.speed+=4;break;
     case 'recovery_protocol':p.hp=Math.min(p.maxHp,p.hp+12);break;
     case 'shield_matrix':p.maxHp+=12;p.hp+=12;break;
+    // These cards are applied by blade() from run.owned, never via Watch saves.
+    case 'blade_edge':case 'blade_reach':break;
    }
   }
   this.active={...after,hp:Math.min(p.maxHp,p.hp),maxHp:p.maxHp};
