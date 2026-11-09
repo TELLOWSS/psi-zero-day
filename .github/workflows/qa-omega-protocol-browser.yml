@@ -34,6 +34,9 @@ on:
       - 'src/ui/omega-protocol-directional-identity.ts'
       - 'src/ui/omega-protocol-grounded-gait.ts'
       - 'src/ui/omega-protocol-enemy-render.ts'
+      - 'src/domain/omega-protocol-zombie-ai.ts'
+      - 'scripts/qa-omega-zombie-ai-browser.mjs'
+      - 'tests/omega-protocol-zombie-ai.test.ts'
       - 'tests/omega-protocol-infected-zombie.test.ts'
       - 'src/ui/omega-protocol-actor-cues.ts'
       - 'src/ui/omega-protocol-action-facing.ts'
@@ -126,6 +129,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-gun-blade-browser.mjs
+      - name: M03 four distinct zombie AI real Canvas combat and warned HP browser QA
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-zombie-ai-browser.mjs
       - name: Render actual AIRA eight-heading source and action contact sheet
         if: always()
         env:
