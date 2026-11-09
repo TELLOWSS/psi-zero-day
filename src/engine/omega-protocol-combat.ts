@@ -78,6 +78,14 @@ export class OmegaProtocolCombatSession {
   // Isolated zero-upgrade base character with no premium or operation handoff.
   const state=createInitialSurvivorsState('player',{...DEFAULT_PERMANENT_UPGRADES},
    'stage_01','standard',{owned:[],equipped:[]},[]);
+  // AIRA's OMEGA-only initial weapon is the genuine native Watch radio
+  // projectile (future SIGMA RAIL art). The standard Watch 'player' profile
+  // starts with a different tool, which previously left the advertised gun
+  // UNEQUIPPED and masked the bug in sword-only gameplay. Give this isolated
+  // run precisely one free starter gun; no Watch character/profile, wallet
+  // credits, perks or permanent unlocks are changed.
+  for(const key of Object.keys(state.activePerks) as PerkId[])state.activePerks[key]=0;
+  state.activePerks.radio_boost=1;
   this.engine=new SurvivorsEngine(state,run.seed);
   this.engine.enableProtocolEncounter();
   this.engine.start();

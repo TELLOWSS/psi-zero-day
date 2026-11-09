@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-combat-browser-probe.ts'
+      - 'scripts/qa-omega-gun-blade-browser.mjs'
       - 'src/ui/omega-protocol-field-render.ts'
       - 'src/ui/omega-protocol-sector-one-scene.ts'
       - 'src/ui/omega-protocol-depth-scene.ts'
@@ -120,6 +122,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-protocol-browser.mjs
+      - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-gun-blade-browser.mjs
       - name: Render actual AIRA eight-heading source and action contact sheet
         if: always()
         env:
