@@ -97,7 +97,14 @@ export function drawOmegaAiraV2Candidate(
  const t=Number.isFinite(view.time)?view.time:0;
  const walk=view.gait?.active??view.moving;
  const phase=view.gait?.phase??(t*1.7%1);
- const bob=walk?Math.abs(Math.sin(phase*Math.PI*2))*2.2:Math.sin(t*2.1)*.65;
+ // The source-painted E walk already contains anatomical up/down motion.
+ // Do NOT add the old cutout's extra 2.2px bob: it would lift the opaque
+ // boots away from the native Watch ground foot contact on each step.
+ const ePaintedWalk=heading==='E'&&cache.walkFrames.ready&&
+  Boolean(view.gait?.active)&&!view.dashing&&!view.hurt&&
+  !view.ultimate&&!view.finished&&!view.shooting;
+ const bob=ePaintedWalk?0:walk?
+  Math.abs(Math.sin(phase*Math.PI*2))*2.2:Math.sin(t*2.1)*.65;
  const actionAge=Math.max(0,Number.isFinite(view.actionAge)?view.actionAge??0:0);
  let lean=0,offsetX=0,offsetY=-bob;
  if(view.dashing){lean=.17;offsetX=-6;offsetY+=6;}
