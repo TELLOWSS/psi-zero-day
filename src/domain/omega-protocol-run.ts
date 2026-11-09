@@ -18,6 +18,8 @@ export type OmegaEnemyKind=typeof OMEGA_ENEMY_ARCHETYPES[number];
 export const OMEGA_UPGRADES=[
  {id:'arc_pulse',role:'offense',tag:'energy',maxStacks:3,label:'아크 펄스',description:'전기 계열 무기 연계'},
  {id:'radio_overdrive',role:'offense',tag:'signal',maxStacks:3,label:'무전 증폭',description:'발사 계열 강화'},
+ {id:'blade_edge',role:'offense',tag:'energy',maxStacks:3,label:'공진 검격',description:'검 피해 15%씩 증가 · 3단 연계 강화'},
+ {id:'blade_reach',role:'control',tag:'agility',maxStacks:2,label:'월광 보폭',description:'검 사거리 단계당 18 증가 · 공간 제어'},
  {id:'precision_beacon',role:'offense',tag:'signal',maxStacks:2,label:'정밀 표식',description:'표식 연계 강화'},
  {id:'shockwave',role:'offense',tag:'energy',maxStacks:2,label:'충격파',description:'범위 제압 연계'},
  {id:'dash_reflex',role:'mobility',tag:'agility',maxStacks:3,label:'잔상 회피',description:'회피 반응 강화'},
