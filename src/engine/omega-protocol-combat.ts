@@ -87,9 +87,13 @@ export class OmegaProtocolCombatSession {
  ){
   this.fieldTraversal=options.fieldTraversal===true;
   this.gateTransition=this.fieldTraversal&&options.gateTransition===true;
-  if(options.qaGateTravel&&!import.meta.env.DEV)
-   throw new Error('Gate-walk scenario is prohibited outside Vite DEV');
-  this.qaGateTravel=this.gateTransition&&import.meta.env.DEV&&options.qaGateTravel===true;
+  // This low-level engine has no Vite ImportMetaEnv typings. The *only*
+  // production caller (OmegaProtocolPlaytest) gates this scenario behind
+  // import.meta.env.DEV and a literal query. Keep the engine test option
+  // impossible without opting in to physical gate transitions as well.
+  if(options.qaGateTravel&&!this.gateTransition)
+   throw new Error('Test-only gate-walk requires real field gate transitions');
+  this.qaGateTravel=this.gateTransition&&options.qaGateTravel===true;
   const access=omegaProtocolAccess(extremeStageClears,masterCosmeticEligible);
   const run=omegaStartRun(seed,access);
   if(!run)throw new Error('Complete all 50 Watch Extreme stages before entering OMEGA PROTOCOL');
