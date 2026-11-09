@@ -47,6 +47,8 @@ on:
       - 'content/art/omega-approved-v1.json'
       - 'public/assets/omega/approved/**'
       - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-field-transit.ts'
+      - 'scripts/qa-omega-connected-gates-browser.mjs'
       - 'src/domain/omega-protocol-run.ts'
       - 'src/domain/omega-protocol-blade.ts'
       - 'src/domain/omega-protocol-story.ts'
@@ -133,6 +135,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-zombie-ai-browser.mjs
+      - name: M04 walk through two real quarantine gates via PC keys and mobile touch
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-connected-gates-browser.mjs
       - name: Render actual AIRA eight-heading source and action contact sheet
         if: always()
         env:

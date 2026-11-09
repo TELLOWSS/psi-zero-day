@@ -199,7 +199,16 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.restore();
 }
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
- const session=new OmegaProtocolCombatSession(seed,50,false,{fieldTraversal:true});
+ const qaMode=import.meta.env.DEV&&typeof window!=='undefined'
+  ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
+ const gateWalk=qaMode==='gateTravel';
+ // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
+ // preserve them ONLY in those explicit DEV modes. Ordinary M04 play and
+ // gateTravel use the actual timed physical airlock transfer.
+ const legacyStageSnapshot=['reward','boss','finalBoss','objective','exit'].includes(qaMode??'');
+ const session=new OmegaProtocolCombatSession(seed,50,false,{
+  fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
+ });
  if(!import.meta.env.DEV)return session;
  const combatMode=omegaCombatProbeMode(window.location.search);
  if(combatMode){
@@ -339,7 +348,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(e.key.toLowerCase()==='e'&&!e.repeat){
     e.preventDefault();
     const outcome=session.interact();
-    setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+    setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'격리 통로 진입 · 구역 이동 중':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
     setSnapshot(session.snapshot);
    }
   };
@@ -512,7 +521,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  };
  const handleInteract=()=>{
   const outcome=session.interact();
-  setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'다음 구역 진입':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
+  setInteractionMessage(outcome.success?(outcome.reason==='EXIT_OPENED'?'격리 통로 진입 · 구역 이동 중':outcome.reason==='STEP_COMPLETE'?'임무 단계 완료':'현장 이벤트 해결 완료'):(outcome.reason==='OUT_OF_RANGE'?'대상 지점에 더 가까이 이동하세요':'주변 위협을 먼저 제거하세요'));
   setSnapshot(session.snapshot);
  };
  const choose=(id:OmegaUpgradeId)=>{
@@ -540,7 +549,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
-  data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}>
+  data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}
+  data-omega-gate-walk-qa={import.meta.env.DEV&&typeof window!=='undefined'&&
+   new URLSearchParams(window.location.search).get('omegaQaState')==='gateTravel'?'precleared-dev-only':'off'}>
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
@@ -577,6 +588,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-qa-start-hp={combatProbe?.initialHp}
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
      data-omega-field-phase={snapshot.field?.progress.phase??'none'}
+     data-omega-world-wave={snapshot.field?.plan.wave??0}
+     data-omega-transit-phase={snapshot.gateTransit?.phase??'none'}
+     data-omega-transit-to={snapshot.gateTransit?.link.toWave??0}
+     data-omega-transit-opacity={snapshot.gateTransit?.opacity.toFixed(3)??'0'}
      data-omega-blade-combo={snapshot.blade?.combo??0}
      data-omega-blade-hits={snapshot.blade?.hits??0}
      data-omega-player-x={snapshot.playerX.toFixed(1)}
@@ -696,6 +711,19 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      </div>
     </div>
     <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    {snapshot.gateTransit&&<div className="omega-protocol-gate-transit"
+      role="status" aria-live="polite"
+      aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
+      data-omega-passage-kind={snapshot.gateTransit.link.kind}
+      style={{opacity:snapshot.gateTransit.opacity}}>
+      <div className="omega-protocol-gate-doors" aria-hidden="true"><i/><i/></div>
+      <div className="omega-protocol-gate-sign">
+       <span>OMEGA · QUARANTINE LINK</span>
+       <strong>{snapshot.gateTransit.link.passageLabel}</strong>
+       <p>{snapshot.gateTransit.link.fromName} → {snapshot.gateTransit.link.toName}</p>
+       <small>{snapshot.gateTransit.phase==='depart'?'격리문 폐쇄 · 다음 구역 연결':'격리문 개방 · 현장 탐험 계속'}</small>
+      </div>
+     </div>}
     {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
     {snapshot.run.phase==='reward'&&<div className="omega-protocol-overlay omega-protocol-reward-overlay" role="presentation">
       <section className="omega-protocol-rewards" role="dialog" aria-modal="true" aria-label="전술 강화 선택">

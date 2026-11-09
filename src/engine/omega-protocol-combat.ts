@@ -6,6 +6,11 @@ import type {PerkId,HazardType} from '../domain/patrol-survivors';
 import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_COOLDOWN,OMEGA_BLADE_RANGE,type OmegaBladeComboStep} from '../domain/omega-protocol-blade';
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
+ omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
+ omegaGateTransitStep,omegaGateTransitIsLocked,
+ type OmegaFieldTransit,type OmegaFieldTransitLink,
+} from '../domain/omega-protocol-field-transit';
+import {
  omegaZombieKindForSlot,omegaCreateZombieBrain,omegaAdvanceZombieBrain,
  type OmegaZombieBrain,type OmegaZombieKind,
 } from '../domain/omega-protocol-zombie-ai';
@@ -45,6 +50,7 @@ export interface OmegaCombatSnapshot {
  readonly playerY:number;
  readonly armed:boolean;
  readonly field:Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null;
+ readonly gateTransit:OmegaFieldTransit|null;
  readonly bossTelegraph:OmegaBossTelegraph|null;
  readonly blade:OmegaBladeStrike|null;
  readonly bladeCooldownRemaining:number;
@@ -62,6 +68,10 @@ export class OmegaProtocolCombatSession {
  private latestPlan:OmegaWavePlan;
  private armed=false;
  private readonly fieldTraversal:boolean;
+ private readonly gateTransition:boolean;
+ private readonly qaGateTravel:boolean;
+ private transit:OmegaFieldTransit|null=null;
+ private pendingArrival:OmegaFieldTransitLink|null=null;
  private currentField:OmegaFieldPlan|null=null;
  private fieldStatus:OmegaFieldProgress|null=null;
  private bossPattern:OmegaBossTelegraph|null=null;
@@ -73,9 +83,17 @@ export class OmegaProtocolCombatSession {
  private readonly zombieBrains=new Map<string,OmegaZombieBrain>();
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
-  options:Readonly<{fieldTraversal?:boolean}>={},
+  options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean}>={},
  ){
   this.fieldTraversal=options.fieldTraversal===true;
+  this.gateTransition=this.fieldTraversal&&options.gateTransition===true;
+  // This low-level engine has no Vite ImportMetaEnv typings. The *only*
+  // production caller (OmegaProtocolPlaytest) gates this scenario behind
+  // import.meta.env.DEV and a literal query. Keep the engine test option
+  // impossible without opting in to physical gate transitions as well.
+  if(options.qaGateTravel&&!this.gateTransition)
+   throw new Error('Test-only gate-walk requires real field gate transitions');
+  this.qaGateTravel=this.gateTransition&&options.qaGateTravel===true;
   const access=omegaProtocolAccess(extremeStageClears,masterCosmeticEligible);
   const run=omegaStartRun(seed,access);
   if(!run)throw new Error('Complete all 50 Watch Extreme stages before entering OMEGA PROTOCOL');
@@ -129,6 +147,7 @@ export class OmegaProtocolCombatSession {
    playerY:this.engine.state.player.y,
    armed:this.armed,
    field:this.field,
+   gateTransit:this.transit,
    bossTelegraph:this.bossPattern,
    blade:this.bladeResult,
    bladeCooldownRemaining:Math.max(0,OMEGA_BLADE_COOLDOWN-(this.engine.state.gameTime-this.bladeLastTime)), 
@@ -201,12 +220,47 @@ export class OmegaProtocolCombatSession {
   }
   if(plan.modifier==='crosswind')
    for(const hazard of this.engine.state.hazards)if(!hazard.isStageBoss)hazard.behavior='crosswind';
+  if(this.qaGateTravel&&this.currentField){
+   // Setup only, never updated while walking: in DEV, tasks/hostiles are
+   // already resolved so E + physical movement test the *real* gate.
+   // Not a normal mode, no account save, no runtime teleport commands.
+   this.engine.state.hazards=[];
+   this.zombieBrains.clear();
+   this.bossPattern=null;
+   this.fieldStatus={phase:'exit',eventComplete:true,exitUnlocked:true,
+    completedSteps:this.currentField.event.steps.length};
+   this.engine.state.player.x=this.currentField.exit.x-190;
+   this.engine.state.player.y=this.currentField.exit.y;
+   this.engine.state.player.invincibleTime=999;
+  }
   this.armed=true;
  }
  /** A fixed-step Watch-engine update; rewards require actual hazards cleared. */
  update(dt:number,input:GameInput):OmegaCombatSnapshot {
   if(!Number.isFinite(dt)||dt<0)throw new RangeError('Invalid frame time');
   if(!this.armed||this.active.phase!=='battle')return this.snapshot;
+  if(omegaGateTransitIsLocked(this.transit)){
+   if(this.engine.state.phase==='paused')return this.snapshot;
+   const phase=this.transit!.phase;
+   const progressed=omegaGateTransitStep(this.transit!,dt);
+   this.transit=progressed.next;
+   if(progressed.complete){
+    if(phase==='depart'){
+     this.settleWave();
+     if(this.active.phase==='battle'&&this.pendingArrival){
+      this.transit=omegaGateTransitArrive(this.pendingArrival);
+      this.pendingArrival=null;
+     }else{
+      // Reward cards appear inside the safe portal pause; arrival opens
+      // after the player chooses a card and enters the next physical map.
+      this.transit=null;
+     }
+    }else{
+     this.transit=null;
+    }
+   }
+   return this.snapshot;
+  }
   // Unstable-ground temporarily limits input magnitude without changing the
   // player's permanent/current speed or touching the normal Watch engine.
   // Player controls remain screen-relative even though the construction
@@ -332,7 +386,12 @@ export class OmegaProtocolCombatSession {
   if(this.fieldStatus.phase==='exit'){
    if(!omegaFieldCanInteract(this.engine.state.player,this.currentField.exit,this.currentField.obstacles))
     return {success:false,reason:'OUT_OF_RANGE'};
-   this.settleWave();
+   if(this.gateTransition&&this.currentField.wave<15){
+    if(this.transit)return {success:false,reason:'NOT_READY'};
+    const destination=omegaFieldPlan(this.active.seed,this.currentField.wave+1);
+    this.pendingArrival=omegaGateTransitLink(this.currentField,destination);
+    this.transit=omegaGateTransitStart(this.pendingArrival);
+   }else this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
   }
   return {success:false,reason:'NOT_READY'};
@@ -343,7 +402,7 @@ export class OmegaProtocolCombatSession {
   */
  blade():OmegaBladeStrike|null{
   const state=this.engine.state;
-  if(!this.armed||this.active.phase!=='battle'||state.phase!=='playing')return null;
+  if(!this.armed||this.active.phase!=='battle'||state.phase!=='playing'||this.transit)return null;
   const time=state.gameTime;
   if(!Number.isFinite(time)||time-this.bladeLastTime<OMEGA_BLADE_COOLDOWN)return null;
   const player=state.player;
@@ -415,6 +474,10 @@ export class OmegaProtocolCombatSession {
   this.active={...after,hp:Math.min(p.maxHp,p.hp),maxHp:p.maxHp};
   if(this.engine.state.phase==='paused')this.engine.setPaused(false);
   this.beginWave();
+  if(this.pendingArrival){
+   this.transit=omegaGateTransitArrive(this.pendingArrival);
+   this.pendingArrival=null;
+  }
   return this.snapshot;
  }
  pause():void{
