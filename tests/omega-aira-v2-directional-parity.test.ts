@@ -68,6 +68,28 @@ describe('AIRA V2 eight-heading visual parity — no false complete-art claims',
    }
   }
  });
+ it('eases each eight-heading native action continuously, without a stepwise torso jump',()=>{
+  const durations={fire:.165,dash:.22,hit:.18,ultimate:2,finish:1} as const;
+  for(const heading of OMEGA_AIRA_V2_ALL_HEADINGS){
+   for(const action of Object.keys(durations) as Array<keyof typeof durations>){
+    const count=action==='finish'?2:3;
+    const boundary=durations[action]/count;
+    const before=omegaAiraDirectionActionPose(heading,action,boundary-.0001);
+    const after=omegaAiraDirectionActionPose(heading,action,boundary+.0001);
+    for(const field of ['lean','rise','backX','leftLift','rightLift',
+       'leftStride','rightStride','hairLag'] as const){
+     expect(Math.abs(before[field]-after[field])).toBeLessThan(.09);
+    }
+    const atStart=omegaAiraDirectionActionPose(heading,action,0);
+    const atMid=omegaAiraDirectionActionPose(heading,action,boundary*.5);
+    const atBoundary=omegaAiraDirectionActionPose(heading,action,boundary);
+    expect(atMid.lean).toBeGreaterThanOrEqual(
+     Math.min(atStart.lean,atBoundary.lean)-1e-9);
+    expect(atMid.lean).toBeLessThanOrEqual(
+     Math.max(atStart.lean,atBoundary.lean)+1e-9);
+   }
+  }
+ });
  it('prioritizes genuine completed/ultimate/hit/dash/fire cues, never fabricates idle combat',()=>{
   expect(omegaAiraV2ActionForView(base)).toBe(null);
   expect(omegaAiraV2ActionForView({...base,shooting:true})).toBe('fire');
