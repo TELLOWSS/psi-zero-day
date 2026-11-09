@@ -83,6 +83,7 @@ on:
       - 'tests/omega-aira-v2-special-frames.test.ts'
       - 'scripts/check-omega-aira-v2-assets.mjs'
       - 'scripts/stage-omega-canonical-art.mjs'
+      - 'scripts/check-omega-canonical-github-binaries.mjs'
       - 'tests/omega-canonical-art-import.test.mjs'
       - 'content/art/omega-canonical-silver-roster.json'
       - 'public/assets/omega/canonical-review/**'
@@ -119,6 +120,8 @@ jobs:
         run: npm run typecheck
       - name: Verify user-selected AIRA V2 binary assets and SHA-256
         run: node scripts/check-omega-aira-v2-assets.mjs
+      - name: Verify actual committed silver AIRA eight angles and M01 male source WebPs
+        run: node scripts/check-omega-canonical-github-binaries.mjs
       - name: Verify committed E-shot illustrated atlas WebP and SVG SHA-256
         run: node scripts/check-omega-aira-e-fire-atlas.mjs
       - name: Verify original E-dash three-frame atlas WebP and SVG SHA-256
