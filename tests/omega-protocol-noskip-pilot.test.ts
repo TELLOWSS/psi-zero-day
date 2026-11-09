@@ -131,4 +131,20 @@ describe('M04-D real OMEGA expedition without DEV preclear or direct HP mutation
   expect(['depart','arrive']).toContain(s.snapshot.gateTransit?.phase);
   console.log('QA_M04D_REAL_FIRST_NODE',JSON.stringify(first));
  },120000);
+ it('first two maps require genuine kills and both independent station puzzles, never DEV preclear',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,
+  });
+  const first=completeRealNode(s);
+  expect(first.nativeKills).toBeGreaterThanOrEqual(5);
+  for(let i=0;i<25;i++)s.update(DT,idle);
+  expect(s.run.wave).toBe(2);
+  expect(s.run.phase).toBe('battle');
+  const second=completeRealNode(s);
+  expect(second.nativeKills).toBeGreaterThanOrEqual(5);
+  expect(second.steps).toBeGreaterThanOrEqual(2);
+  expect(s.run).toMatchObject({phase:'reward',wave:3,victories:2});
+  expect(s.run.offers).toHaveLength(3);
+  console.log('QA_M04D_REAL_TWO_NODES',JSON.stringify({first,second}));
+ },160000);
 });
