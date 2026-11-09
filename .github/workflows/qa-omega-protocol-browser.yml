@@ -48,6 +48,7 @@ on:
       - 'public/assets/omega/approved/**'
       - 'src/domain/omega-protocol-field.ts'
       - 'src/domain/omega-protocol-field-transit.ts'
+      - 'src/ui/omega-protocol-act-lift.ts'
       - 'scripts/qa-omega-connected-gates-browser.mjs'
       - 'src/domain/omega-protocol-run.ts'
       - 'src/domain/omega-protocol-blade.ts'
