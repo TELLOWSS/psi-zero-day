@@ -171,3 +171,12 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - **출처별:** 일반 WATCH(native) 양의 순 HP 감소; 안전모 감염체 4종의 실타격 피해; TITAN HOOK 9구역과 BLACK SIGNAL CORE 15구역의 정확한 실제 타격. 각 구역·시각·원인·피해·잔여 HP와 구역별 합계를 수집. 실제 엔진 시뮬레이션에서 감염체 11, 두 보스 각각 12의 피해 유형을 독립 검증. WATCH 프레임별 순감소는 동시 회복 시 전체 피해의 하한이라는 점을 명시함.
 - **절대 오인 금지:** 계측 코드가 검증된 것이지 고정시드 15구역 **무스킵 완주 성공이 아니다**. 이전 [실전 PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243)은 1~12구역 통과·9구역 중간 보스 격파 후 13구역 실제 생존 실패, Draft/미병합 유지. 완성 원화 160독립 프레임·실제 Android·심리스 스트리밍은 미완.
 - **NEXT M04-D3:** 계측된 `damageEvents`/`damageSummary(wave)`로 같은 고정시드 실제 13구역 패배를 다시 실행, 안전모 좀비 각 종·일반 장비(native 순손실)·보스 피해의 비중, 회피 타이밍, 받은 카드·성장·DPS를 사실 근거로 분석. 검증 후에만 균형 개선. [단일 인계 문서 16절](../OMEGA-PROTOCOL-CONTINUE.md) 우선. `main`/Production/유료 전환은 최종 승인까지 금지.
+
+### 2026-11-10 M04-D3 — 실제 13구역 사망 원인 분리 및 다음 전술 비교
+
+- [QA PR #246](https://github.com/TELLOWSS/psi-zero-day/pull/246) **OMEGA 개발 브랜치에만 병합**. [Core #42705626571](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42705626571) TypeScript + **49개 파일·222개 전체 Vitest PASS**. 테스트/CI 파일만 추가, OMEGA 실제 전투 수치·감염체·보스·일반 Watch/Guard·고객 계정·운영 코드 변경 없음.
+- 무스킵 `seed=20261109`: 실제 총/검·물리 이동·현장 E 이벤트·실제 제안된 강화만으로 **1→12 필드 완주 및 9구역 TITAN HOOK 격파** 후 **13구역 실패 재현**. 초기 HP 33, 적 9(초기 합계 HP 5293). 약39.6초 시점 HP 0, 남은 적 7(합계 HP 4357). 완주 최종 보스는 아직 아님.
+- 피격 **2회**: `INFECTED_SPRINTER` 실제 16 피해(HP 33→17), `WATCH_NATIVE_NET` 실제 순손실 17(HP 17→0). 후자의 **동일 프레임 Watch 엔진 자체 `lastDamage.source=RUNAWAY_CART`**, 원래 계산된 타격 수치 22로 기록되며 잔여 HP는 17만 소진. 범인 근접도를 근거로 임의 확정하지 않았고, 원래 Watch 손실 원인 분류는 순 HP 감소로 유지.
+- 보급 선택: 2 `rapid_step`, 4/6 `shield_matrix` 2회, 8/12 `recovery_protocol` 2회, 10 `blade_edge`. 12구역 HP21에서 보급으로 +12 회복 후 13 진입 HP33. 이 선택 경로 외 다른 시드·카드 전략에서 실제 15구역 생존 가능한지는 검증되지 않음.
+- **판정:** `M04-D3 실제 패배 인과 로그 PASS`, `M04 15/15 victory FAIL`. [엄격 승리 QA PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) 미병합 Draft. 실제 심리스 15구역 스트리밍, 완성 AIRA 160 독립 프레임, Android 실기기 QA 불변/미완.
+- **NEXT M04-D4:** 적 수치를 임의 조정하지 않고, 같은 시드에서 실제 제안된 카드 중 다른 빌드 + 정당한 대시 타이밍·총격 LOS·검격 진입을 비교. 질주형 감염체 16과 폭주 운반장비 22의 연속 피해 노출을 줄일 수 있는 합법적 전략 확인. 단위 QA·브라우저 QA 성공 후에만 개발 브랜치 병합. 진척 원본 [인계 17절](../OMEGA-PROTOCOL-CONTINUE.md)에서 재개.
