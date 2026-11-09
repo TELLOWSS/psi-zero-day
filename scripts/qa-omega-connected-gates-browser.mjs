@@ -155,6 +155,20 @@ for(const s of scenarios){
   // actual world exit; not a stage-selection screen or automatic clear.
   await page.locator('.omega-protocol-reward-cards button')
    .first().waitFor({state:'visible',timeout:8000});
+  const safeRoom=page.locator('[data-omega-reward-context="in-world-safe-room"]');
+  await safeRoom.waitFor({state:'visible',timeout:2000});
+  const supplyPanel=await page.locator('.omega-protocol-safe-room .omega-protocol-rewards').boundingBox();
+  const fullArena=await arena.boundingBox();
+  if(!supplyPanel||!fullArena||
+     supplyPanel.width>=fullArena.width*.98||
+     supplyPanel.height>=fullArena.height*.98)
+   throw Error('Run-only supply still blots out almost the entire actual world viewport '+
+    JSON.stringify({supplyPanel,fullArena}));
+  const destinationText=await safeRoom.innerText();
+  if(!destinationText.includes('다음 목적지')||!destinationText.includes('전술 보급 지점'))
+   throw Error('Safe-room supply lacks destination / player context');
+  await page.screenshot({path:output+'/m04d-field-supply-'+s.name+'.png',
+   fullPage:false,animations:'disabled'});
   const reward=await read();
   if(reward.phase!=='reward'||reward.wave!==2)
    throw Error('Safe-room reward did not retain prior sector for choice');
