@@ -2,7 +2,7 @@ import {afterEach,describe,expect,it,vi} from 'vitest';
 import type {OmegaActorView} from '../src/ui/omega-protocol-actor-render';
 import {
  OMEGA_AIRA_E_DASH_STUDY,OMEGA_AIRA_E_DASH_DURATION,
- OmegaAiraV2DashFrames,omegaAiraDashKeyframeAt,
+ OmegaAiraV2DashFrames,omegaAiraDashKeyframeAt,omegaAiraDashSourceRect,
 } from '../src/ui/omega-aira-v2-dash-frames';
 
 afterEach(()=>vi.unstubAllGlobals());
@@ -22,6 +22,17 @@ describe('AIRA V2 E 3-illustration dash ingest gate',()=>{
    OMEGA_AIRA_E_DASH_STUDY.columns*OMEGA_AIRA_E_DASH_STUDY.cellWidth);
   expect(OMEGA_AIRA_E_DASH_STUDY.webpSha256).toMatch(/^[a-f0-9]{64}$/);
   expect(OMEGA_AIRA_E_DASH_STUDY.svgSha256).toMatch(/^[a-f0-9]{64}$/);
+ });
+ it('holds exactly one real ground-pivot per original illustrated dash pose',()=>{
+  const frames=[0,1,2] as const;
+  const rects=frames.map(frame=>omegaAiraDashSourceRect(frame,136*1.43));
+  expect(rects.map(x=>x.sx)).toEqual([0,280,560]);
+  expect(rects.every(x=>x.sy===0&&x.sw===280&&x.sh===220)).toBe(true);
+  // With 210/220 boot line, ground aligns to the native Watch XY (0,0).
+  expect(rects.every(x=>Math.abs(x.dy+x.dh*(210/220))<1e-9)).toBe(true);
+  expect(rects.every(x=>x.dx===-x.dw/2)).toBe(true);
+  expect(()=>omegaAiraDashSourceRect(0,0)).toThrow(RangeError);
+  expect(()=>omegaAiraDashSourceRect(2,NaN)).toThrow(RangeError);
  });
  it('never fetches draft source artwork that is not yet committed',()=>{
   let created=0;
