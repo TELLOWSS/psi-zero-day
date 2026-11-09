@@ -39,7 +39,7 @@ const safeFile=(dir,relative)=>{
  if(!full.startsWith(resolve(dir)+'/'))throw Error('Sprite escapes asset root');
  return full;
 };
-export async function verifyCanonicalArtFolder(dir){
+export async function inspectCanonicalArtFolder(dir){
  const manifest=JSON.parse(await readFile(join(dir,'manifest.json'),'utf8'));
  if(!isRecord(manifest)||!Array.isArray(manifest.items)||
     manifest.production_game_ready!==false||
@@ -75,6 +75,31 @@ export async function verifyCanonicalArtFolder(dir){
    fullEightAngleTurntableApproved:false,
    animationFramesApproved:false,
    deployAllowed:false}};
+}
+/** Fixed hashes from the user's actual SILVER/white AIRA references.
+ * Self-reported manifest SHA-256 is not enough: replacing an image AND
+ * updating its manifest would otherwise let a wrong-haired avatar pass.
+ */
+export async function verifyCanonicalArtFolder(dir){
+ const result=await inspectCanonicalArtFolder(dir);
+ const roster=JSON.parse(await readFile(join(repoRoot,
+  'content/art/omega-canonical-silver-roster.json'),'utf8'));
+ if(roster.source_stage!=='review_only'||roster.release_allowed!==false||
+    roster.game_integration_enabled!==false||
+    roster.main_menu_image_approved!==false||
+    roster.canonical_reference?.includes('silver-white')!==true)
+   throw Error('Silver AIRA roster approval gate was tampered with');
+ const pinned=new Map([...roster.female,roster.male].map(o=>[o.slot,o.sha256]));
+ if(pinned.size!==slots.length||slots.some(slot=>
+    !/^[a-f0-9]{64}$/.test(pinned.get(slot)||'')))
+   throw Error('Canonical original image roster is incomplete');
+ for(const slot of slots){
+  const entry=result.entries.get(slot);
+  if(entry.webp_sha256!==pinned.get(slot))
+   throw Error('Unexpected artwork binary for '+slot+
+    ': canonical SILVER source SHA-256 mismatch');
+ }
+ return result;
 }
 export async function stageCanonicalArt(folder,dest=repoRoot){
  const {entries,binaries,audit}=await verifyCanonicalArtFolder(folder);
