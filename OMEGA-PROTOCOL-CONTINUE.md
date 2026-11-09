@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-09 (KST) · M01/M01-QA 실검증 완료  
+**관리일:** 2026-11-09 (KST) · M01/M01-QA 및 M02 실제 전투 브라우저 QA 기술검증 완료  
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -32,7 +32,7 @@
 | M00 | 기획 정합: 극한 50/50 해금, 연결 탐험, 오염 좀비 총·검 | 문서·15사건 스토리 작성 | **기획 기록 완료, 최종 시네마틱 미제작** |
 | M01 | 극한 50개 실제 클리어 기록을 읽어 엄격 해금; 보존 | `omegaProtocolAccessFromRecords`, `readOmegaProtocolAccess`, 실제 `persistStoreWallet`를 통한 1→50 순차 저장 통합 테스트 | **TESTED: PR #237 핵심 CI PASS, 44파일/186테스트, `tsc --noEmit` + 엔진 타입체크. 공개 CTA는 출시 승인 전까지 미연동** |
 | M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거; Vite·Chromium 9개 체크포인트 브라우저 검사 | **TESTED: PR #237 브라우저 전체 workflow PASS, 실제 React/Canvas 및 `data-omega-real-extreme-clears` QA 검사 통과. 실기기 Android/운영 CTA 아님** |
-| M02 | 실제 원거리 총 + 검 3타 명중, HP 감소, 거리/장애물/보스 상한, PC/모바일 조작 | 기존 Watch 투사체+OMEGA 검격 3연격, F키·검 버튼·검 강화 2종 | **기본 코드 작성, 자동+실플레이 테스트 미통과** |
+| M02 | OMEGA 원거리 무기 + 검 3타, HP 감소, 방향·엄폐·보스 피해 상한, PC/모바일 입력 | OMEGA 전용 시작 원거리 총기 `radio_boost=1`, 검 3연격, 실제 native 투사체/HP·거리·장애물·F키/모바일 터치 검격, 2개 검 강화 | **TESTED 기술검증: PR #238 CI 45파일/193테스트 + DEV 실제 React/Canvas 브라우저 E2E 4/4 통과. 고품질 독립 총/검 원화, 실기기 Android, 상업 출시 품질은 미완** |
 | M03 | 안전모 좀비 기본/질주/방호/정예 + 감염 군집/실제 AI 차이 | `UNHELMETED`를 OMEGA에서 `HELMET_ZOMBIE`로 별도 표시, 색 3변형 기술용 임시 그림, 매 전투 첫 적 강제 좀비 | **고품질 독립 적 아트·차별화 AI 미구현. 총·검 테스트 추가만 함** |
 | M04 | 5막 15지점 이벤트, 물리적 길 찾기, 연속 연결 카메라 | 기본 FieldTraversal/3종 이벤트/출구, 오염 스토리 15개 라디오 표시 | **심리스 전환·환경 미술·연출 미완** |
 | M05 | 중간 보스 TITAN HOOK/최종 BLACK SIGNAL CORE의 차별화 3페이즈 | 기존 실제 보스/예고/HP 스케치 | **최종 기믹·완성 아트 미완** |
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리):** **M02 실제 총·검 전투 통합 증거 확보**: 실제 OMEGA 개발 브라우저에서 좀비 총격·3연격의 적 HP 변화, 조준 방향과 검 충돌 및 장애물 차단, 보스 피해 상한, 키보드/터치 입력 타이밍을 검증. 먼저 `src/engine/omega-protocol-combat.ts`, `src/ui/OmegaProtocolPlaytest.tsx`, `scripts/qa-omega-protocol-browser.mjs`, `tests/omega-protocol-blade.test.ts`, `tests/omega-protocol-infected-zombie.test.ts` 확인. 현재 M02는 코드/단위계약 일부 확인 단계이며 실제 연속 플레이와 하드웨어 검증이 없어 **전체 TESTED/완료로 올리지 않는다**. 후속 M03에서는 안전모 좀비 4개 독립 행동/AI와 고품질 원화를 다룬다.
+**다음 실행 작업(하나씩 처리):** **M03 안전모 감염 좀비 실제 행동 다양화**. 안전모 필수 4종(기본·질주·장갑·정예)을 *색상만 다른 스킨*이 아닌 고유 추격/회피/돌진/엄폐 AI 및 충돌/HP/속도/공격 윈도우로 구분. `src/domain/omega-protocol-run.ts`, `src/engine/omega-protocol-combat.ts`, `src/ui/omega-protocol-enemy-render.ts`, `tests/omega-protocol-infected-zombie.test.ts`를 먼저 점검. DEV 전용 실제 AI 테스트와 Chromium 접촉·공격 패턴 E2E를 작성하고, PR #235의 `main` 충돌을 우회할 **검증용 Draft PR을 OMEGA 개발 브랜치로** 연 뒤 CI 통과 후에만 개발 브랜치 병합. 승인된 독립 고해상도 좀비 원화와 실기기 확인은 별도 미완으로 유지.
 
 ## 4. 코드별 찾아가기
 
@@ -105,6 +105,26 @@
 
 **CI가 없었던 근본 이유:** PR #235는 `main`과 충돌(`mergeable=false / dirty`)이어서 `pull_request` Actions 트리거가 실행되지 않았다. 정식 출시 전까지 별도 QA PR을 **개발 브랜치만 대상으로** 개설하여 테스트하고 그곳으로 병합하는 방식을 유지한다. PR #235와 `main`의 충돌 해결은 최종 품질게이트 이후 별도 검토, 운영 배포 금지.
 
-**여전히 미완:** 실제 유저 해금 CTA, 원본 AIRA 액션 160프레임, 좀비 정식 8방향 아트/차별화 AI, 연결맵 시네마틱, Android 실제 기기 검증. M02는 테스트 통과에 일부 포함되었더라도 **완성 아님**.
+**여전히 미완:** 실제 유저 해금 CTA, 원본 AIRA 액션 160프레임, 좀비 정식 8방향 아트/차별화 AI, 연결맵 시네마틱, Android 실제 기기 검증. **M02 실제 native 총·검 전투의 기술검증은 2026-11-09 PR #238에서 추가 완료.** 최종 미술/음향/실기기 및 정식 출시 승인은 미완.
 
-**다음 시작 커밋:** 개발 PR #235 **최신 HEAD를 조회한 뒤** 위 M02 관련 5개 파일을 확인하고 *기존 자동 공격/검 3타가 실제 좀비를 적중시키는 브라우저 E2E*를 먼저 구현·검증한다. 테스트 완료 후에만 M02 체크리스트를 갱신한다.
+**다음 시작 커밋:** 개발 PR #235 **최신 HEAD를 조회한 뒤** 위 M03 관련 파일과 인계 9절을 확인한다. M02 실제 브라우저 E2E는 PASS 기록 완료. 다음은 안전모 좀비 4종의 진짜 AI 구별 및 가상 오염 산업단지에서의 패턴 테스트다.
+
+## 9. M02 총·검 실전투 기술검증 — 2026-11-09 최신 결과
+
+**검증 및 반영:** 별도 검증용 [PR #238](https://github.com/TELLOWSS/psi-zero-day/pull/238)의 HEAD `f0ebf0731b919e2b3481d339c94eee825c8b5302`를 검사한 뒤 OMEGA 개발 브랜치에만 squash 병합 `44150e209b00395dfc18e24859ce03370bb58ed0`. **PR #235는 Draft·`main` 미병합; Vercel Production 미배포.**
+
+- [Core Actions #42578259819](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42578259819) **PASS**: `npm run typecheck`, SHA-256 원본 파일 무결성·미승인 원화 차단, Vitest **45개 파일 / 193개 테스트 전체 통과**.
+- [Browser Actions #42578259603](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42578259603) **PASS**: 전체 **32/32 workflow steps**. Playwright는 Vite DEV에서 *실제 OMEGA React/Canvas 화면과 Watch 원본 전투 엔진*을 구동; 원거리 무기 발사 및 근접 공격 키/터치를 브라우저 입력으로 실행했다.
+
+| M02 실제 기기 아닌 Chromium 플레이 증거 | 실제 native 전투 로그 | 판정 |
+| --- | --- | --- |
+| `combatGun` 원거리 기본 총기 | 안전모 감염 좀비 HP **800→770**, 실제 `radio` 충돌 피드백 **1회**, 피해량 **30** | **PASS** |
+| `combatBlade` 세로 모바일 터치 검 3연격 | 좀비 HP **800→703**, 실제 검격 1·2·3 연계, 3타 피해량 **42**, 원거리 투사체 0(독립 검증용) | **PASS** |
+| `combatRear` 방향 뒤집기 | 초기 반대 방향 검격 **빗나감**, 오른쪽 방향 전환 후 근접 HP **800→770**, 피해 **30** | **PASS** |
+| `combatCover` 산업현장 장애물 | 실제 지형 뒤 좀비 HP **800→800**, 원거리 명중 0·검격 명중 0, 물리적 우회 경로 존재 | **PASS** |
+
+**실제 코드 변경 7개:** `src/engine/omega-protocol-combat.ts`에서 OMEGA 시작 원거리 장비를 원본 Watch radio 투사체 1종으로 명시적 지정(일반 Watch는 변경 없음); `src/ui/omega-combat-browser-probe.ts`에 개발환경 전용 초기 배치 4종; `src/ui/OmegaProtocolPlaytest.tsx`에 읽기 전용 실제 HP·공격·방향·게임 시간 증거; `scripts/qa-omega-gun-blade-browser.mjs`에 블랙박스 자동 조작/검증, `tests/omega-combat-browser-probe.test.ts` 및 두 Actions 워크플로. 검증용 사건 배치는 **DEV에서만**, 실제 공격·엔진 판정·적 HP는 실제 소스 사용. 전용 시험이 아닌 일반 OMEGA 전투에서 원거리 기본 무기가 장착되도록 수정한 것은 실제 게임 기능 개선.
+
+**판정 범위:** `M02 — CODED + TESTED (자동/실제 브라우저 기술 검증)`. 정식 원거리 총기 모델·검 타격 모션·8방향 AIRA 승인 원화 0/160·원작 WATCH 검격 분리의 실기기 검증·사운드/품질 고도화는 **BLOCKED**이며 출시 통과 아님. 세로 390×844 테스트는 **Chromium 모바일 에뮬레이션**, 실제 Android 또는 태블릿 실측이 아니다.
+
+**다음 실제 작업 M03:** 안전모 감염 좀비 **4개 행동형 AI**를 기존 WATCH의 일반 작업자 적과 격리하여 설계/구현. 추격 속도만 다른 재도색 4종은 불합격. HP·접근 거리·장애물 회피·공격 타이밍과 telegraph를 서로 다르게 구현하고, `main`이 아닌 OMEGA 개발 브랜치 대상 별도 QA PR에서 TypeScript/Vitest/Chromium 실플레이로 검증. 12종 적과 8방향 최종 원화는 이후 별도 게이트.
