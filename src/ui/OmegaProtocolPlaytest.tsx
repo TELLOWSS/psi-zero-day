@@ -125,6 +125,20 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fill();
  }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
+ const slash=session.lastBladeStrike;
+ if(slash && state.gameTime-slash.time>=0 && state.gameTime-slash.time<.22){
+  // World-space hit confirmation on real blade timing. It is a technical
+  // combat FX, NOT approved sword character animation artwork.
+  const fade=1-(state.gameTime-slash.time)/.22;
+  const angle=Math.atan2(slash.facingY,slash.facingX);
+  ctx.save();ctx.translate(slash.x,slash.y);ctx.rotate(angle);
+  ctx.strokeStyle=slash.hits>0?'rgba(255,222,255,.96)':'rgba(151,205,255,.65)';
+  ctx.lineWidth=2+4*fade;ctx.shadowColor='#b86bff';
+  ctx.shadowBlur=slash.hits>0?18:6;
+  ctx.beginPath();ctx.arc(0,0,95,-.95,.95);ctx.stroke();
+  ctx.strokeStyle='rgba(121,94,234,.68)';ctx.lineWidth=9*fade;
+  ctx.beginPath();ctx.arc(0,0,81,-.92,.92);ctx.stroke();ctx.restore();
+ }
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
@@ -279,6 +293,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
+   if(e.key.toLowerCase()==='f'&&!e.repeat){e.preventDefault();session.blade();setSnapshot(session.snapshot);}
    if(e.key.toLowerCase()==='e'&&!e.repeat){
     e.preventDefault();
     const outcome=session.interact();
@@ -458,7 +473,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <div className="omega-protocol-heading">
     <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION</span>
     <h1>OMEGA <em>PROTOCOL</em></h1>
-    <p>실제 SIGNAL WATCH 전투 엔진 · 승인 전 임시 그래픽</p>
+    <p>극한 50/50 이후 해금 · 지도 탐험형 총·검 로그라이트 · 승인 전 QA</p>
    </div>
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
@@ -475,6 +490,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <div className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-boss-active={snapshot.bossHp!==null&&snapshot.run.phase==='battle'}
      data-omega-field-phase={snapshot.field?.progress.phase??'none'}
+     data-omega-blade-combo={snapshot.blade?.combo??0}
+     data-omega-blade-hits={snapshot.blade?.hits??0}
      data-omega-player-x={snapshot.playerX.toFixed(1)}
      data-omega-player-y={snapshot.playerY.toFixed(1)}
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
@@ -484,7 +501,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <div className="omega-protocol-stats" aria-label="전투 상태">
      <div className="omega-protocol-wave">
       <small>SECTOR {snapshot.plan.sector.toString().padStart(2,'0')} / 05</small>
-      <strong>WAVE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
+      <strong>ROUTE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
      </div>
      <div className="omega-protocol-hp">
       <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.run.maxHp}</span>
@@ -565,6 +582,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
      <div className="omega-protocol-action-pad">
+      <button type="button" className="omega-protocol-action omega-protocol-blade"
+       onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
+       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
+       aria-label="공진 검격 · F 키 · 기계형 위협에 3단 연속 공격">
+       <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
+       <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s': 'READY'}</small>
+      </button>
       <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
        disabled={snapshot.run.phase!=='battle'||paused||snapshot.enemiesAlive>0}
        aria-label="현장 상호작용 E">
@@ -583,7 +607,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
     {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
     {snapshot.run.phase==='reward'&&<div className="omega-protocol-overlay omega-protocol-reward-overlay" role="presentation">
       <section className="omega-protocol-rewards" role="dialog" aria-modal="true" aria-label="전술 강화 선택">
