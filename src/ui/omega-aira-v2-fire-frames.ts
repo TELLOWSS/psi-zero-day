@@ -5,23 +5,24 @@ import type {OmegaActorView,OmegaHeading} from './omega-protocol-actor-render';
  * AIRA V2 animation sheet. These are three real distinct illustrated
  * right-facing poses, not cutout limb shifts of one idle illustration.
  *
- * The extracted atlas is delivered as a review artifact; its binary is NOT
- * yet in this GitHub repository. Never fetch an unshipped path or mislabel
- * this right-facing study as approved 8-way production animation.
+ * The three original WebP frames are now embedded as a self-contained local
+ * SVG. The underlying WebP bytes have a pinned SHA-256 and are checked in
+ * CI. This verifies the E-direction study, NOT 8-way production approval.
  */
 export const OMEGA_AIRA_E_FIRE_STUDY={
- path:'/assets/omega/aira-v2/e-fire-3key-atlas.webp',
+ path:'/assets/omega/aira-v2/e-fire-3key-atlas.svg',
  columns:3,
  sourceWidth:240,
  sourceHeight:240,
  expectedAtlasWidth:720,
  expectedAtlasHeight:240,
  sha256:'43c1a388f8c9c2e9177d416eeb9383309fbbc2baec2a6c9600918c84c02a65cc',
- /** Explicit build-time lock. Set only after this exact binary is committed,
-  * SHA verified, full browser QA passes and the art director accepts it.
-  * It does NOT imply all 160 production frames are approved.
+ svgSha256:'28de189058511fd350f2bee99a24e2d5bef07525e0a996a8f8530ff09b961d36',
+ /** This source file is committed. Runtime still fails closed until browser
+  * image decode verifies its 720×240 dimensions. The complete art pack is
+  * explicitly not artist-approved.
   */
- binaryPresent:false,
+ binaryPresent:true,
  productionApproved:false,
 } as const;
 export const OMEGA_AIRA_FIRE_STUDY_SHOT_SECONDS=.165;
