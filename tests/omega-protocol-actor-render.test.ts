@@ -39,7 +39,7 @@ describe('OMEGA PROCEDURAL actor QA (not approved AIRA art)',()=>{
   expect(firstScale).toBeGreaterThan(sole);
  });
  it('uses actual player input for cosmetic facing without affecting saved combat upgrades',()=>{
-  const s=new OmegaProtocolCombatSession(1001,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(1001,50,false,{fieldTraversal:true});
   expect(s.facing).toEqual({x:0,y:1});
   s.update(1/60,{moveX:1,moveY:-1,triggerAction:false});
   expect(omegaFieldHeading(s.facing.x,s.facing.y)).toBe('NE');

@@ -161,7 +161,7 @@ describe('OMEGA combat character moves feet from actual post-collision Watch pos
   expect(track.advance({x:150,y:450},.1,2).active).toBe(false);
  });
  it('uses the real field/Watch collision correction so pushing against cargo cannot animate running',()=>{
-  const session=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const session=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   const plan=session.field?.plan;
   expect(plan).toBeDefined();
   const cargo=plan!.obstacles.find(o=>o.kind==='container')!;

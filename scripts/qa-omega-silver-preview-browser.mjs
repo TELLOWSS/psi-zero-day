@@ -100,7 +100,7 @@ try{
  if(await apply.isDisabled())throw Error('Complete 8-view art folder not recognized');
  await apply.click();
  await page.waitForFunction(()=>document.querySelector('#status')?.textContent?.includes('안전 차단'),
-  {timeout:15000});
+  undefined,{timeout:15000});
  const rejected=await page.locator('#status').textContent();
  if(!rejected?.includes('SE'))throw Error('Mismatched source hash was not rejected');
  if(!page.url().includes('omega-canonical-art-review'))throw Error('Hash mismatch escaped review');
@@ -111,7 +111,19 @@ try{
  // Success path uses the actual direct ZIP UI with DEFLATE level-8 sources;
  // nobody must unzip or individually select eight files by hand.
  await page.locator('#zip').setInputFiles(zipPath);
- if(await apply.isDisabled())throw Error('Verified ZIP art pack was not selectable');
+ // ZIP import is async (DEFLATE + browser File/Blob creation). Playwright
+ // setInputFiles resolves before the browser change handler's awaited work.
+ // Wait for a definitive success/failure state, not a race against the UI.
+ await page.waitForFunction(()=>{
+  const button=document.querySelector('#applyPreview');
+  const status=document.querySelector('#status')?.textContent??'';
+  return Boolean(button&&!button.disabled)||
+   status.includes('ZIP 불러오기 실패');
+ },undefined,{timeout:18000});
+ if(await apply.isDisabled()){
+  const status=await page.locator('#status').textContent();
+  throw Error('Verified ZIP art pack was not selectable: '+status);
+ }
  await apply.click();
  await page.waitForURL(/omegaLab=1.*omegaSilverPreview=1/,{timeout:20000});
  await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:18000});
@@ -137,7 +149,7 @@ try{
  await page.goto(base+'/omega-canonical-art-review/index.html',{waitUntil:'domcontentloaded'});
  await page.locator('#clearPreview').click();
  await page.waitForFunction(()=>document.querySelector('#status')?.textContent?.includes('삭제했습니다'),
-  {timeout:12000});
+  undefined,{timeout:12000});
  await page.goto(base+'/?omegaLab=1&omegaSilverPreview=1',{waitUntil:'domcontentloaded'});
  await page.locator('[data-omega-silver-preview="failed"]').waitFor({timeout:16000});
  report={
