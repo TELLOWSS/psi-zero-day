@@ -9,17 +9,17 @@ This is not an entitlement to use the unfinished OMEGA master-character skin.
 - Module: \`src/domain/omega-protocol-run.ts\`.
 - Deterministic 32-bit-seeded encounter director, no \`Math.random\`; 5 sectors × 3 waves = 15 waves and mid/final boss encounters at wave 9 and 15.
 - Encounter variety: existing Watch-type threats (no invented server inventory) plus changing environmental modifier: crosswind, reduced visibility, unstable footing or standard.
-- Ten normal Watch stage clears are the proposed **mode entry gate**; OMEGA master character cosmetic retains the much stricter 50/50 normal stage clears plus 3-star Master medals for all 50 stages and a separate approved-art release gate.
+- **Superseded 2026-11-09:** OMEGA unlock requires **all 50 SIGNAL WATCH Extreme difficulty stages** with valid per-stage clear records; 10 normal clears and Mastery badges alone never unlock. AIRA cosmetic approval is a separate release/art gate, not a second Mastery medal prerequisite.
 - A run starts at 100 HP; after every two successful waves, the player chooses from up to 3 distinct temporary upgrades. The director offers variety by role (offense/mobility/control/survival) and rewards build synergies while respecting stack caps.
 - Lose or reach 0 HP: that run ends; beginning a new run resets all temporary upgrades. Completing wave 15 ends that run in victory.
-- No real permanent currency, no upgrade purchase, no localStorage reads/writes, no stage progression grant, no UI. This preserves every existing player's save and combat-balance code.
+- No permanent currency, purchase, or stage progression granted by an OMEGA run. The unlock reader accesses existing Watch Extreme records **without writing**. No public OMEGA menu CTA exists. This preserves every existing player's save and combat-balance code.
 - Unit contract \`tests/omega-protocol-run.test.ts\` tests reproducible seeded runs, variation across seeds, exact boss boundaries, 7 reward windows, no repeated card choices, allowed/blocked entry, no duplicate settlement, and loss reset.
 
 ## Planned action implementation (not shipped)
 1. Finish and sign off PR #234 OMEGA master character: **true** 160 separate authored and approved actor frames plus equipment/PPE occlusion, binary SHA and real-device QA. Currently only derivative candidate sprites and closed release gate exist.
 2. Dedicated in-run combat adapter: retain existing Watch projectile/weapon systems but sandbox all temporary modifiers from wallet and persistent items. Make route pacing independent of old 50-stage progress.
-3. In-run choices, dodge/aim/vulnerability and hit feedback; time-slowing 3-card drafts; build synergy visual and audio cues; industrial hazard identity without glorifying safety violations.
-4. Route screen + bosses with telegraphed attacks and distinct phases; both auto-aim and optional manual target for mobile landscape; portrait UI only where readable.
+3. Original gun-and-blade combat: actual Watch ranged fire plus 3-hit sword arc against nonhuman industrial constructs only. Damage, combo cooldown and two sword upgrades wired in DEV; source art, sounds, final balance and paid item design remain separate.
+4. Connected map expedition (5 acts, 15 internal event locations), not individually selected/cleared stages. Telegraph bosses at nodes 9/15. Automatic Watch ranged fire is live in DEV; manual aiming, seamlessly streamed maps and full act transitions require further work.
 5. Separate \`psi:omega-protocol:run:v1\` storage **after explicit persistence design**; never reuse Watch's saves or premium/wallet keys. Include migration, interrupted-run continuation and tamper limitations; no false account-based anti-cheat claims.
 6. Full keyboard/touch Android and tablet verification, profiling budgets at 390×844 and 844×390, gamepad accessibility, pause/restart flow, 15–25 minute target *measured not assumed*, all seeds replayable.
 
@@ -45,3 +45,8 @@ The current prototype lives on its own draft PR based on \`main\`, isolated from
 2. Device: at least two distinct Android performance tiers, long-run worst-wave FPS/frame-time and memory/thermal budgets, portrait/landscape UI, touch/auto-aim, real pause/resume; collect measured evidence rather than assumptions.
 3. Complete playable mode: actual player run from wave 1→15 with boss telegraphs, viable upgrade combinations, death/retry, audio feedback, accessibility and save continuity.
 4. Release: audit both PRs separately, retain draft status until required QA passes, then opt in to preview/staging before an explicit main/Production release decision.
+
+
+## 2026-11-09 director's superseding decision
+
+The final five-act setting, strict Extreme-50 unlock, sword/gun mechanics, exploration UX and QA/release gates are recorded in [OMEGA-PROTOCOL-EXTREME-50-GUN-BLADE-MASTERPLAN-20261109.md](OMEGA-PROTOCOL-EXTREME-50-GUN-BLADE-MASTERPLAN-20261109.md). All former 10-stage-unlock and 50×Mastery-star conditions are withdrawn. The fifteen encounter indices are internal route locations rather than WATCH-style selectable stages. Live map continuity and cinematic transitions are not yet finished.
