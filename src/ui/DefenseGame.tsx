@@ -70,6 +70,8 @@ import './reignition-modes.css';
 import {guardTacticalCue} from './combat-ux-cues';
 import {useGuardBoardFit} from './use-guard-board-fit';
 import {GuardMobileInfo} from './GuardMobileInfo';
+import {OmegaSilverGuardReview} from './OmegaSilverGuardReview';
+import {omegaSilverRepoPreviewEnabled} from './omega-canonical-local-preview';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -421,6 +423,10 @@ export function DefenseGame({
       ? defenseContentForScenario(selectedScenarioId)
       : zeroBreachContent;
   const guard=isGuardMap(content.map.id);
+  // Developer opt-in ONLY: Guard has no walking player avatar. AIRA is an
+  // in-world, non-interactive operator visual with no gameplay/save effects.
+  const silverGuardPreview=guard&&typeof window!=='undefined'&&
+    omegaSilverRepoPreviewEnabled(window.location.search);
   useEffect(()=>{
    if(content.scenario.id!=='guard-gd-06-v1'||!state)return;
    if(state.waveId>=5&&state.status!=='READY')recordEncounterIntel('guard','GD-06','observed');
@@ -1035,6 +1041,7 @@ export function DefenseGame({
           {(content.map.id==='ramp-01'||guard)?<DefenseCombatFX shots={combatShots} content={content} rotated={!!mapFrame.rotateClockwise}/>:null}
           {guard?<GuardSensorPressureOverlay content={content} state={state} rotated={!!mapFrame.rotateClockwise}/>:null}
           {guard?<GuardEvolutionFX content={content} state={state} rotated={!!mapFrame.rotateClockwise}/>:null}
+          <OmegaSilverGuardReview enabled={silverGuardPreview}/>
           </g>
         </svg>
         {content.map.id === G8A_MAP_ID ? <div className="zb-board-grade" aria-hidden="true" data-world-grade="COMMERCIAL_GFX_V1" /> : null}
