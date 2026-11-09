@@ -1,6 +1,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
+import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
@@ -500,7 +501,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     <div className="omega-protocol-stats" aria-label="전투 상태">
      <div className="omega-protocol-wave">
-      <small>SECTOR {snapshot.plan.sector.toString().padStart(2,'0')} / 05</small>
+      <small>{OMEGA_STORY_ACTS[snapshot.plan.sector-1]?.title??'OMEGA'} · MAP {snapshot.plan.sector.toString().padStart(2,'0')} / 05</small>
       <strong>ROUTE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
      </div>
      <div className="omega-protocol-hp">
@@ -513,7 +514,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <div className="omega-protocol-modifier"><small>ENVIRONMENT</small><strong>{({standard:'표준',crosswind:'횡풍',low_visibility:'시야 제한',unstable_ground:'불안정 지반'} as const)[snapshot.plan.modifier]}</strong></div>
     </div>
     {snapshot.field&&<div className="omega-protocol-mission" role="status">
-      <small>{snapshot.field.plan.sectorName} · NODE {String(snapshot.field.plan.wave).padStart(2,'0')}</small>
+      <small>{snapshot.field.plan.sectorName} · {omegaStoryNode(snapshot.field.plan.wave).title}</small>
       <strong>{snapshot.field.progress.phase==='combat'?'주변 위협 제압':snapshot.field.progress.phase==='objective'?
        snapshot.field.plan.event.steps[snapshot.field.progress.completedSteps]?.label+' 조작':'다음 구역 출구 개방'}</strong>
       <span>{snapshot.field.progress.phase==='combat'?'적을 처치하면 현장 장치가 활성화됩니다.':
@@ -526,6 +527,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        <span>{guide.label}</span>
        <strong>{guide.ready?'조작 가능':guide.distance+' 거리'}</strong>
       </div>}
+      <span className="omega-protocol-story-radio" title={omegaStoryNode(snapshot.field.plan.wave).reveal}>{omegaStoryNode(snapshot.field.plan.wave).airaRadio}</span>
       {interactionMessage&&<em>{interactionMessage}</em>}
     </div>}
     {snapshot.plan.isBoss&&snapshot.run.phase==='battle'&&<div className="omega-protocol-boss-alert">
@@ -625,7 +627,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <section className="omega-protocol-end" role="status">
        <span className="omega-protocol-modal-kicker">{snapshot.run.phase==='victory'?'MISSION COMPLETED':'OPERATION TERMINATED'}</span>
        <h2>{snapshot.run.phase==='victory'?'작전 완료':'작전 실패'}</h2>
-       <p>성공한 웨이브 {snapshot.run.victories}/15 · 임시 강화는 재도전 시 초기화됩니다.</p>
+       <p>통과한 작전 구역 {snapshot.run.victories}/15 · 임시 강화는 재도전 시 초기화됩니다.</p>
        <button type="button" onClick={restart}>다시 출격</button>
       </section>
     </div>}
