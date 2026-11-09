@@ -48,6 +48,7 @@ on:
       - 'scripts/qa-omega-aira-v2-source.mjs'
       - 'scripts/qa-omega-canonical-review.mjs'
       - 'scripts/qa-omega-silver-preview-browser.mjs'
+      - 'scripts/qa-omega-silver-github-binaries-browser.mjs'
       - 'public/omega-canonical-art-review/**'
       - 'public/assets/omega/canonical-review/**'
       - 'scripts/qa-omega-aira-v2-directional-parity.mjs'
@@ -174,6 +175,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-silver-preview-browser.mjs
+      - name: Validate REAL silver AIRA GitHub WebPs in Watch and two-game home at four responsive sizes
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-github-binaries-browser.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
