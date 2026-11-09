@@ -52,6 +52,13 @@ for(const item of cases){
   combo:Number(el.getAttribute('data-omega-blade-combo')),
   hits:Number(el.getAttribute('data-omega-blade-hits')),
   gameTime:Number(el.getAttribute('data-omega-qa-game-time')),
+  playerX:Number(el.getAttribute('data-omega-qa-player-x')),
+  playerY:Number(el.getAttribute('data-omega-qa-player-y')),
+  zombieX:Number(el.getAttribute('data-omega-qa-zombie-x')),
+  zombieY:Number(el.getAttribute('data-omega-qa-zombie-y')),
+  facing:el.getAttribute('data-omega-qa-facing'),
+  bladeDamage:Number(el.getAttribute('data-omega-qa-blade-damage')),
+  bladeTime:Number(el.getAttribute('data-omega-qa-blade-time')),
   phase:el.getAttribute('data-omega-phase'),
  }));
  try{
@@ -84,8 +91,18 @@ for(const item of cases){
    await page.keyboard.down('ArrowRight');
    await sleep(120);await page.keyboard.up('ArrowRight');
    await sleep(140);
+   const oriented=await read();
+   if(JSON.parse(oriented.facing??'{}').x<.8)
+    throw Error('Real right-facing input not applied '+JSON.stringify(oriented));
    for(let combo=1;combo<=3;combo++){
-    if(combo>1)await sleep(680); // native .52s cooldown, .9s combo window
+    if(combo>1){
+     const prior=states.at(-1).bladeTime;
+     // Native .52s cooldown and .90s combo window are GAME-time rules.
+     await page.waitForFunction(previous=>{
+      const a=document.querySelector('.omega-protocol-arena');
+      return Number(a?.getAttribute('data-omega-qa-game-time'))>=previous+.62;
+     },prior,{timeout:6500});
+    }
     if(item.mobile)await page.locator('.omega-protocol-blade').tap();
     else await page.keyboard.press('f');
     await page.waitForFunction(expected=>{
@@ -108,7 +125,13 @@ for(const item of cases){
    const miss=await read();states.push({step:'facing-away',...miss});
    if(miss.hp!==800||miss.hits!==0)throw Error('Reverse facing struck zombie '+JSON.stringify(miss));
    await page.keyboard.down('ArrowRight');await sleep(120);await page.keyboard.up('ArrowRight');
-   await sleep(660);
+   const oriented=await read();
+   if(JSON.parse(oriented.facing??'{}').x<.8)
+    throw Error('Real ArrowRight facing not applied '+JSON.stringify(oriented));
+   await page.waitForFunction(previous=>{
+    const a=document.querySelector('.omega-protocol-arena');
+    return Number(a?.getAttribute('data-omega-qa-game-time'))>=previous+.62;
+   },miss.bladeTime,{timeout:6500});
    await page.keyboard.press('f');
    await page.waitForFunction(()=>Number(document.querySelector('.omega-protocol-arena')
     ?.getAttribute('data-omega-blade-combo'))===2,undefined,{timeout:5000});
@@ -140,8 +163,14 @@ for(const item of cases){
    userOwnedArtworkApproved:false,androidHardwareTested:false});
   console.log('QA_PASS M02',item.mode,JSON.stringify(states.at(-1)));
  }catch(error){
-  failed++;report.push({pass:false,mode:item.mode,error:String(error),errors});
-  console.error('QA_FAIL M02',item.mode,String(error));
+  let current=null;
+  try{current=await read();}catch{/* renderer may not have mounted */}
+  try{
+   await page.screenshot({path:out+'/m02-'+item.mode+'-FAILED.png',
+    fullPage:false,animations:'disabled'});
+  }catch{/* browser may have closed before failure */}
+  failed++;report.push({pass:false,mode:item.mode,error:String(error),current,errors});
+  console.error('QA_FAIL M02',item.mode,String(error),JSON.stringify({current,errors}));
  }
  await context.close();
 }
