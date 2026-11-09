@@ -17,6 +17,8 @@ export interface OmegaSilverPreviewRecord{
 export interface OmegaSilverPreviewSession{
  readonly loaded:readonly OmegaHeading[];
  readonly urls:ReadonlyMap<OmegaHeading,string>;
+ /** Optional M01 original neutral portrait for review only; never 8-angle playable. */
+ readonly maleUrl?:string|null;
  revoke():void;
 }
 /** repo mode is usable only in the development OMEGA lab, never production. */
@@ -90,6 +92,7 @@ export async function omegaLoadSilverRepoReview():Promise<OmegaSilverPreviewSess
   throw Error('Repository silver art review requires the development OMEGA lab');
  const hashes=await rosterHashes();
  const urls=new Map<OmegaHeading,string>();
+ let maleUrl:string|null=null;
  try{
   for(const heading of OMEGA_SILVER_HEADINGS){
    const asset='/assets/omega/canonical-review/aira-v2/'+heading.toLowerCase()+'.webp';
@@ -108,10 +111,23 @@ export async function omegaLoadSilverRepoReview():Promise<OmegaSilverPreviewSess
    if(image.naturalWidth!==384||image.naturalHeight!==512)
     throw Error('GitHub silver image dimension mismatch: '+heading);
   }
-  return {loaded:[...OMEGA_SILVER_HEADINGS],urls,
-   revoke(){for(const url of urls.values())URL.revokeObjectURL(url);}};
+  const maleResp=await fetch('/assets/omega/canonical-review/male/m01.webp',
+   {cache:'no-store'});
+  if(!maleResp.ok)throw Error('GitHub M01 original review portrait missing');
+  const maleBytes=await maleResp.arrayBuffer();
+  if(await omegaSilverHash(maleBytes)!==hashes.M01)
+   throw Error('GitHub M01 source hash mismatch');
+  maleUrl=URL.createObjectURL(new Blob([maleBytes],{type:'image/webp'}));
+  const maleImage=new Image();maleImage.src=maleUrl;
+  await maleImage.decode();
+  if(maleImage.naturalWidth!==384||maleImage.naturalHeight!==512)
+   throw Error('GitHub M01 original review dimension mismatch');
+  return {loaded:[...OMEGA_SILVER_HEADINGS],urls,maleUrl,
+   revoke(){for(const url of urls.values())URL.revokeObjectURL(url);
+    if(maleUrl)URL.revokeObjectURL(maleUrl);}};
  }catch(error){
   for(const url of urls.values())URL.revokeObjectURL(url);
+  if(maleUrl)URL.revokeObjectURL(maleUrl);
   throw error;
  }
 }
