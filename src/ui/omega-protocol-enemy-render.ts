@@ -1,4 +1,5 @@
 import type {Hazard} from '../domain/patrol-survivors';
+import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
 
 /**
  * Wave-15-only original POWER WARDEN silhouette. This is authored technical
@@ -49,14 +50,20 @@ export function drawOmegaPowerWarden(ctx:CanvasRenderingContext2D,time:number,ph
 export const OMEGA_INFECTED_VISUAL_ID='HELMET_ZOMBIE' as const;
 export function drawOmegaHelmetZombie(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
+ brain?:OmegaZombieBrain,
 ):void {
  const variant=Array.from(h.id??'zombie').reduce((v,ch)=>v+ch.charCodeAt(0),0)%3;
  const vest=['#b56c31','#b8a43a','#638969'][variant]!;
- const helmet=['#ffcb3e','#f6da68','#ff9d40'][variant]!;
+ const helmet=brain?{
+  drifter:'#ffd34b',sprinter:'#a3fb76',armored:'#ffc36a',stalker:'#ce9cff',
+ }[brain.kind]:['#ffcb3e','#f6da68','#ff9d40'][variant]!;
  const sway=Math.sin(time*5+variant*2+h.x*.02)*2.5;
  const bob=Math.sin(time*7+variant)*1.4;
  ctx.save();
  ctx.translate(0,bob);
+ // Animation hints are tied to the actual AI state, not a colour-only swap.
+ if(brain?.kind==='sprinter')ctx.rotate(-.12);
+ else if(brain?.kind==='stalker')ctx.rotate(.08*Math.sin(time*2));
  // Work trousers, mismatched steps and torn-looking but bloodless coveralls.
  ctx.fillStyle='#26343b';
  ctx.fillRect(-11,-15,9,20);ctx.fillRect(4,-13+sway*.25,9,19);
@@ -76,6 +83,27 @@ export function drawOmegaHelmetZombie(
  ctx.fillStyle='#789c87';ctx.beginPath();ctx.ellipse(0,-48,12,13,0,0,Math.PI*2);ctx.fill();
  ctx.fillStyle='#ecff86';ctx.fillRect(-8,-51,5,2.8);ctx.fillRect(4,-51,5,2.8);
  ctx.fillStyle='#1a2b2c';ctx.fillRect(-4,-42,8,2);
+ // Four DISTINCT structural silhouettes: forearm runner fins, an armored
+ // riot shield + bulky shoulders, or asymmetric stalker comms rig. The
+ // mandatory helmet and reflective stripe are NEVER removed.
+ if(brain?.kind==='sprinter'){
+  ctx.fillStyle='#6bdd83';ctx.fillRect(-22,-36,8,17);ctx.fillRect(14,-36,8,17);
+  ctx.strokeStyle='#adff9b';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(-19,-10);ctx.lineTo(-27,-2);
+  ctx.moveTo(18,-10);ctx.lineTo(26,-2);ctx.stroke();
+ }else if(brain?.kind==='armored'){
+  ctx.fillStyle='#718191';ctx.fillRect(-25,-44,14,24);ctx.fillRect(11,-44,14,24);
+  ctx.fillStyle='#2e5165';ctx.fillRect(-31,-40,12,36);
+  ctx.strokeStyle='#c9e4f1';ctx.lineWidth=3;ctx.strokeRect(-31,-40,12,36);
+  ctx.fillStyle='#febd6d';ctx.fillRect(-27,-43,11,4);
+ }else if(brain?.kind==='stalker'){
+  ctx.fillStyle='#4e466f';ctx.fillRect(-22,-42,9,23);
+  ctx.fillRect(14,-44,12,19);
+  ctx.strokeStyle='#d49bff';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(20,-43);ctx.lineTo(25,-69);
+  ctx.lineTo(34,-70);ctx.stroke();
+  ctx.fillStyle='#ff9df2';ctx.fillRect(31,-74,6,6);
+ }
  // Safety helmet — full dome, protruding brim, light reflective patch,
  // chin strap. Always retained for every zombie appearance variant.
  ctx.fillStyle=helmet;ctx.beginPath();ctx.arc(0,-55,14,Math.PI,Math.PI*2);ctx.fill();
@@ -96,7 +124,7 @@ export function drawOmegaHelmetZombie(
  */
 export function drawOmegaProtocolEnemy(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
- options:Readonly<{finalBoss?:boolean}>={},
+ options:Readonly<{finalBoss?:boolean;zombie?:OmegaZombieBrain}>={} ,
 ):void {
  if(h.hp<=0)return;
  const boss=Boolean(h.isStageBoss);
@@ -108,7 +136,25 @@ export function drawOmegaProtocolEnemy(
  ctx.fillStyle='rgba(1,7,14,.55)';
  ctx.beginPath();ctx.ellipse(0,4,boss?46:23,boss?11:6,0,0,Math.PI*2);ctx.fill();
  if(h.type==='UNHELMETED'){
-  drawOmegaHelmetZombie(ctx,h,time);
+  if(options.zombie){
+   const brain=options.zombie;
+   if(brain.phase==='warning'){
+    const progress=Math.max(0,Math.min(1,brain.timer/brain.warningDuration));
+    ctx.strokeStyle=brain.kind==='armored'?'#ffa05b':'#ff6ecf';
+    ctx.globalAlpha=.5+.4*Math.sin(time*13);
+    ctx.lineWidth=4+3*(1-progress);
+    ctx.beginPath();ctx.arc(0,-17,brain.attackRadius*.62,0,Math.PI*2);ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='#fff2e1';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,-16);
+    ctx.lineTo(brain.lockedX*28,-16+brain.lockedY*22);ctx.stroke();
+   }else if(brain.phase==='charge'){
+    ctx.strokeStyle='#ceffb3';ctx.lineWidth=6;
+    ctx.beginPath();ctx.moveTo(-brain.lockedX*34,-18-brain.lockedY*27);
+    ctx.lineTo(0,-18);ctx.stroke();
+   }
+  }
+  drawOmegaHelmetZombie(ctx,h,time,options.zombie);
  }else if(h.type==='RUNAWAY_CART'){
   ctx.fillStyle='#39485a';ctx.fillRect(-28,-25,58,24);
   ctx.strokeStyle='#ffce73';ctx.lineWidth=4;ctx.strokeRect(-27,-25,54,24);
