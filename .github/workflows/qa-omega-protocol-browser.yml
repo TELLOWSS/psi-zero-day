@@ -1,0 +1,184 @@
+name: Capture OMEGA PROTOCOL browser QA
+
+on:
+  pull_request:
+    paths:
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-protocol-field-render.ts'
+      - 'src/ui/omega-protocol-sector-one-scene.ts'
+      - 'src/ui/omega-protocol-depth-scene.ts'
+      - 'src/ui/omega-protocol-mission-visuals.ts'
+      - 'src/ui/omega-protocol-authored-scene.ts'
+      - 'public/assets/omega/sector01/**'
+      - 'src/ui/omega-protocol-actor-render.ts'
+      - 'src/ui/omega-aira-v2-candidate.ts'
+      - 'src/ui/omega-canonical-local-preview.ts'
+      - 'src/ui/omega-aira-v2-directional-action-rig.ts'
+      - 'src/ui/omega-aira-v2-directional-parity.ts'
+      - 'src/ui/omega-aira-v2-walk-rig.ts'
+      - 'src/ui/omega-aira-v2-walk-frames.ts'
+      - 'src/ui/omega-aira-v2-weapon-vfx.ts'
+      - 'src/ui/omega-aira-v2-fire-frames.ts'
+      - 'src/ui/omega-aira-v2-dash-frames.ts'
+      - 'src/ui/omega-aira-v2-hit-frames.ts'
+      - 'src/ui/omega-aira-v2-special-frames.ts'
+      - 'public/assets/omega/aira-v2/**'
+      - 'content/art/omega-aira-v2-user-approved.json'
+      - 'src/ui/omega-protocol-aira-kinetics.ts'
+      - 'src/ui/omega-protocol-directional-identity.ts'
+      - 'src/ui/omega-protocol-grounded-gait.ts'
+      - 'src/ui/omega-protocol-enemy-render.ts'
+      - 'src/ui/omega-protocol-actor-cues.ts'
+      - 'src/ui/omega-protocol-action-facing.ts'
+      - 'src/ui/omega-protocol-art-motion.ts'
+      - 'src/ui/omega-protocol-impact-vfx.ts'
+      - 'src/ui/omega-protocol-dash-visuals.ts'
+      - 'src/ui/omega-protocol-art-slot.ts'
+      - 'content/art/omega-approved-v1.json'
+      - 'public/assets/omega/approved/**'
+      - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-encounter-stage.ts'
+      - 'src/domain/omega-protocol-navigation.ts'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'src/engine/omega-protocol-combat.ts'
+      - 'scripts/qa-omega-protocol-browser.mjs'
+      - 'scripts/qa-omega-actor-source-sheet.mjs'
+      - 'scripts/qa-omega-mission-source-sheet.mjs'
+      - 'scripts/qa-omega-aira-action-motion-sheet.mjs'
+      - 'scripts/qa-omega-aira-v2-source.mjs'
+      - 'scripts/qa-omega-canonical-review.mjs'
+      - 'scripts/qa-omega-silver-preview-browser.mjs'
+      - 'public/omega-canonical-art-review/**'
+      - 'public/assets/omega/canonical-review/**'
+      - 'scripts/qa-omega-aira-v2-directional-parity.mjs'
+      - 'scripts/qa-omega-aira-v2-walk-source.mjs'
+      - 'scripts/qa-omega-aira-e-walk-atlas.mjs'
+      - 'scripts/qa-omega-aira-v2-fire-source.mjs'
+      - 'scripts/qa-omega-aira-e-fire-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-dash-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-hit-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-special-source.mjs'
+      - 'src/ui/ReignitionTitle.tsx'
+      - 'src/ui/reignition-premium.css'
+      - '.github/workflows/qa-omega-protocol-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prepare source art files as Vite normally does
+        run: npm run predev
+      - name: Install test-only browser driver (no browser download)
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Enable Korean typography for visual QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+          fc-match "Noto Sans CJK KR"
+      - name: Start development-only OMEGA cockpit
+        env:
+          VITE_OMEGA_PROTOCOL_LAB: '1'
+        run: |
+          npx vite --host 127.0.0.1 --port 4173 --strictPort > /tmp/omega-vite.log 2>&1 &
+          echo $! > /tmp/omega-vite.pid
+          for attempt in $(seq 1 70); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omega-vite.log
+          exit 1
+      - name: Real React/Canvas screenshots and viewport checks
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-protocol-browser.mjs
+      - name: Render actual AIRA eight-heading source and action contact sheet
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-actor-source-sheet.mjs
+      - name: Render real mission devices across all interaction states
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-mission-source-sheet.mjs
+      - name: Capture 8-way AIRA action anatomy and per-frame pixel deltas
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-action-motion-sheet.mjs
+      - name: Source-render AIRA V2 eight directions and real home viewports
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-source.mjs
+      - name: Verify actual user-selected AIRA V2 8-way articulated walk imagery
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-walk-source.mjs
+      - name: Render AIRA V2 native-shot pose and verify no false flash
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-fire-source.mjs
+      - name: Verify actual committed E fire atlas pixel changes and source frame gating
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-fire-atlas.mjs
+      - name: Verify committed E dash illustrated source and original Watch pose integration
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-dash-atlas.mjs
+      - name: Real E-direction AIRA hit keyframe pixel and native-cue QA
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-hit-atlas.mjs
+      - name: Source-render original E ultimate and finisher art with native Watch cues
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-special-source.mjs
+      - name: Verify eight actual AIRA V2 original views across five action phases
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-directional-parity.mjs
+      - name: Verify original E four walk paintings in actual source renderer
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-walk-atlas.mjs
+      - name: Check canonical silver AIRA and male review UI (no game deployment)
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-canonical-review.mjs
+      - name: Simulate verified eight-angle local silver import into native Watch battlefield
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-preview-browser.mjs
+      - name: Upload source-run screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-protocol-source-browser-screenshots
+          path: qa-omega-protocol-captures/
+          retention-days: 14
+          if-no-files-found: warn

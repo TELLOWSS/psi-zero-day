@@ -1,0 +1,137 @@
+name: Verify OMEGA PROTOCOL roguelite core
+
+on:
+  pull_request:
+    paths:
+      - 'src/domain/omega-protocol-run.ts'
+      - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-encounter-stage.ts'
+      - 'src/domain/omega-protocol-navigation.ts'
+      - 'tests/omega-protocol-navigation.test.ts'
+      - 'tests/omega-protocol-live-traversal.test.ts'
+      - 'src/ui/omega-protocol-field-render.ts'
+      - 'src/ui/omega-protocol-sector-one-scene.ts'
+      - 'src/ui/omega-protocol-depth-scene.ts'
+      - 'src/ui/omega-protocol-mission-visuals.ts'
+      - 'src/ui/omega-protocol-authored-scene.ts'
+      - 'public/assets/omega/sector01/**'
+      - 'src/ui/omega-protocol-camera.ts'
+      - 'tests/omega-protocol-camera.test.ts'
+      - 'tests/omega-protocol-field.test.ts'
+      - 'tests/omega-protocol-encounter-stage.test.ts'
+      - 'tests/omega-protocol-sector-one-scene.test.ts'
+      - 'tests/omega-protocol-depth-scene.test.ts'
+      - 'tests/omega-protocol-mission-visuals.test.ts'
+      - 'tests/omega-protocol-authored-scene.test.ts'
+      - 'src/engine/omega-protocol-combat.ts'
+      - 'src/engine/omega-protocol-boss-pattern.ts'
+      - 'tests/omega-protocol-boss-pattern.test.ts'
+      - 'src/ui/omega-protocol-enemy-render.ts'
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'src/ui/omega-protocol-actor-render.ts'
+      - 'src/ui/omega-aira-v2-candidate.ts'
+      - 'src/ui/omega-canonical-local-preview.ts'
+      - 'src/ui/omega-aira-v2-directional-action-rig.ts'
+      - 'src/ui/omega-aira-v2-directional-parity.ts'
+      - 'src/ui/omega-aira-v2-walk-rig.ts'
+      - 'src/ui/omega-aira-v2-walk-frames.ts'
+      - 'src/ui/omega-aira-v2-weapon-vfx.ts'
+      - 'src/ui/omega-aira-v2-fire-frames.ts'
+      - 'src/ui/omega-aira-v2-dash-frames.ts'
+      - 'src/ui/omega-aira-v2-hit-frames.ts'
+      - 'src/ui/omega-aira-v2-special-frames.ts'
+      - 'public/assets/omega/aira-v2/**'
+      - 'content/art/omega-aira-v2-user-approved.json'
+      - 'src/ui/omega-protocol-aira-kinetics.ts'
+      - 'src/ui/omega-protocol-directional-identity.ts'
+      - 'tests/omega-protocol-directional-identity.test.ts'
+      - 'src/ui/omega-protocol-grounded-gait.ts'
+      - 'tests/omega-protocol-grounded-gait.test.ts'
+      - 'src/ui/omega-protocol-actor-cues.ts'
+      - 'src/ui/omega-protocol-action-facing.ts'
+      - 'src/ui/omega-protocol-art-motion.ts'
+      - 'tests/omega-protocol-art-motion.test.ts'
+      - 'tests/omega-protocol-action-facing.test.ts'
+      - 'src/ui/omega-protocol-impact-vfx.ts'
+      - 'src/ui/omega-protocol-dash-visuals.ts'
+      - 'src/ui/omega-protocol-art-slot.ts'
+      - 'scripts/check-omega-approved-art.mjs'
+      - 'scripts/test-omega-approved-art-fixtures.mjs'
+      - 'content/art/omega-approved-v1.json'
+      - 'public/assets/omega/approved/**'
+      - 'src/ui/omega-protocol-motion-qa-gate.ts'
+      - 'tests/omega-protocol-motion-qa-gate.test.ts'
+      - 'tests/omega-protocol-art-slot.test.ts'
+      - 'content/art/omega-aira-production-candidate.json'
+      - 'tests/omega-aira-production-candidate.test.ts'
+      - 'tests/omega-protocol-impact-vfx.test.ts'
+      - 'tests/omega-protocol-dash-visuals.test.ts'
+      - 'tests/omega-protocol-actor-cues.test.ts'
+      - 'tests/omega-protocol-boss-visuals.test.ts'
+      - 'tests/omega-protocol-actor-render.test.ts'
+      - 'tests/omega-aira-v2-candidate.test.ts'
+      - 'tests/omega-canonical-local-preview.test.ts'
+      - 'tests/omega-aira-v2-directional-parity.test.ts'
+      - 'tests/omega-aira-v2-walk-rig.test.ts'
+      - 'tests/omega-aira-v2-walk-frames.test.ts'
+      - 'scripts/check-omega-aira-e-walk-atlas.mjs'
+      - 'tests/omega-aira-v2-weapon-vfx.test.ts'
+      - 'tests/omega-aira-v2-fire-frames.test.ts'
+      - 'tests/omega-aira-v2-dash-frames.test.ts'
+      - 'tests/omega-aira-v2-hit-frames.test.ts'
+      - 'tests/omega-aira-v2-special-frames.test.ts'
+      - 'scripts/check-omega-aira-v2-assets.mjs'
+      - 'scripts/stage-omega-canonical-art.mjs'
+      - 'tests/omega-canonical-art-import.test.mjs'
+      - 'content/art/omega-canonical-silver-roster.json'
+      - 'public/assets/omega/canonical-review/**'
+      - 'scripts/check-omega-aira-e-fire-atlas.mjs'
+      - 'scripts/check-omega-aira-e-dash-atlas.mjs'
+      - 'scripts/check-omega-aira-e-hit-atlas.mjs'
+      - 'scripts/check-omega-aira-e-special-atlas.mjs'
+      - 'tests/omega-protocol-aira-kinetics.test.ts'
+      - 'src/engine/patrol-survivors-engine.ts'
+      - 'tests/omega-protocol-combat.test.ts'
+      - 'tests/omega-protocol-performance.test.ts'
+      - 'tests/omega-protocol-run.test.ts'
+      - '.github/workflows/verify-omega-protocol.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  protocol-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Ensure new silver AIRA and male art never bypass approval or change Guard/Watch
+        run: node --test tests/omega-canonical-art-import.test.mjs
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Verify user-selected AIRA V2 binary assets and SHA-256
+        run: node scripts/check-omega-aira-v2-assets.mjs
+      - name: Verify committed E-shot illustrated atlas WebP and SVG SHA-256
+        run: node scripts/check-omega-aira-e-fire-atlas.mjs
+      - name: Verify original E-dash three-frame atlas WebP and SVG SHA-256
+        run: node scripts/check-omega-aira-e-dash-atlas.mjs
+      - name: Verify AIRA E-hit original source atlas digests
+        run: node scripts/check-omega-aira-e-hit-atlas.mjs
+      - name: Verify real four-frame E walking art source SHA-256
+        run: node scripts/check-omega-aira-e-walk-atlas.mjs
+      - name: Verify original E-only ultimate and finisher source digests
+        run: node scripts/check-omega-aira-e-special-atlas.mjs
+      - name: Source-art structural audit (missing final art remains BLOCKED, not deployed)
+        run: npm run omega:art-status
+      - name: Reject corrupt, duplicate, ungrounded and unapproved sprite fixtures
+        run: npm run omega:art-test
+      - name: Run deterministic roguelite contract
+        run: npx vitest run tests/omega-canonical-local-preview.test.ts tests/omega-aira-v2-walk-frames.test.ts tests/omega-aira-v2-directional-parity.test.ts tests/omega-aira-v2-special-frames.test.ts tests/omega-aira-v2-hit-frames.test.ts tests/omega-aira-v2-dash-frames.test.ts tests/omega-aira-v2-fire-frames.test.ts tests/omega-aira-v2-weapon-vfx.test.ts tests/omega-aira-v2-walk-rig.test.ts tests/omega-aira-v2-candidate.test.ts tests/omega-protocol-aira-kinetics.test.ts tests/omega-protocol-mission-visuals.test.ts tests/omega-protocol-depth-scene.test.ts tests/omega-protocol-dash-visuals.test.ts tests/omega-protocol-encounter-stage.test.ts tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
