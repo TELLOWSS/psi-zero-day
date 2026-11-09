@@ -42,6 +42,38 @@ try{
    scene.dataset.omegaSilverWatchPainted==='true'&&
    root?.getAttribute('data-omega-silver-native-watch')==='ready';
  },undefined,{timeout:30000});
+ // A single successful render is insufficient: send real keyboard commands
+ // through the native Watch controller and require each painted 8-way source.
+ // This tests idle source selection during authentic engine motion, NOT
+ // independently painted walk/fire/dash/hit animations.
+ const directions=[
+  ['E',['ArrowRight']],
+  ['SE',['ArrowRight','ArrowDown']],
+  ['S',['ArrowDown']],
+  ['SW',['ArrowLeft','ArrowDown']],
+  ['W',['ArrowLeft']],
+  ['NW',['ArrowLeft','ArrowUp']],
+  ['N',['ArrowUp']],
+  ['NE',['ArrowRight','ArrowUp']],
+ ];
+ const directionSamples=[];
+ for(const [heading,keys] of directions){
+  try{
+   for(const key of keys)await page.keyboard.down(key);
+   await page.waitForFunction(expected=>{
+    const canvas=document.querySelector('.survivors-canvas');
+    return canvas instanceof HTMLCanvasElement&&
+     canvas.dataset.omegaSilverWatchPainted==='true'&&
+     canvas.dataset.omegaSilverWatchHeading===expected;
+   },heading,{timeout:5000});
+   const actual=await page.locator('.survivors-canvas')
+    .getAttribute('data-omega-silver-watch-heading');
+   directionSamples.push({heading,actual,realWatchKeyboardMovement:true});
+  }finally{
+   for(const key of keys)await page.keyboard.up(key);
+  }
+ }
+ if(directionSamples.length!==8)throw Error('Not all 8 real Watch sprite headings passed');
  const sizes=[['desktop',1440,900],['phone-portrait',390,844],['phone-landscape',844,390]];
  for(const [name,width,height] of sizes){
   await page.setViewportSize({width,height});
@@ -61,10 +93,11 @@ try{
   realSignalWatchPlayerCanvas:true,all8SourceViewsVerifiedByLoader:true,
   originalNeutralPosesOnly:true,independentActionAnimationApproved:false,
   liveProductionChanged:false,actualAndroidHardwareTested:false,
-  screenshotsAreSynthetic:false,viewportChecks:screens.length,screens,errors};
+  screenshotsAreSynthetic:false,viewportChecks:screens.length,screens,
+  realKeyboardEightHeadingChecks:directionSamples.length,directionSamples,errors};
  if(errors.length)process.exitCode=1;
  console.log(report.pass?'QA_PASS':'QA_FAIL','REAL native Watch silver AIRA verified source draw',JSON.stringify({
-  painted:true,viewports:screens.length,production:false,errors}));
+  painted:true,directions:directionSamples.length,viewports:screens.length,production:false,errors}));
 }catch(e){report={pass:false,error:String(e),errors,screens};process.exitCode=1;
  console.error('QA_EXCEPTION','Real native Watch original silver art',String(e));
 }finally{
