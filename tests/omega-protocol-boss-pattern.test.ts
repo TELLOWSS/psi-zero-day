@@ -94,7 +94,7 @@ describe('OMEGA PROTOCOL boss warning/strike combat acceptance',()=>{
   expect(p.warningDuration).toBeGreaterThanOrEqual(1.15);
  });
  it('has no silent boss contact damage and applies one real warned hit only once',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   toWave(s,9);
   const boss=s.engine.state.hazards.find(h=>h.isStageBoss);
   expect(boss).toBeDefined();
@@ -129,7 +129,7 @@ describe('OMEGA PROTOCOL boss warning/strike combat acceptance',()=>{
   expect(hero.hp).toBe(afterStrike);
  });
  it('the real wave-nine session creates a timed boss warning, then clears it on defeat',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   toWave(s,9);
   const first=s.snapshot;
   expect(first.run.wave).toBe(9);
