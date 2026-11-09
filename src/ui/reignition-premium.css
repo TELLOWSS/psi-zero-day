@@ -620,3 +620,24 @@
 @media (prefers-reduced-motion:reduce){
  .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{animation:none;transform:none}
 }
+
+/* Review-only canonical AIRA slot: transparent 384×512 user artwork replaces
+ * the previously mismatched black-haired splash in opt-in preview mode.
+ * Game scenes, normal user home, saves and cinematic production art unchanged.
+ */
+.rg-home[data-omega-silver-preview="ready"] .rg-hero-art{
+ filter:blur(36px) saturate(.42) brightness(.23)!important;
+ opacity:.13!important;
+}
+.rg-home[data-omega-silver-preview="ready"][data-reignition-concept="cinematic"] .rg-aira-v2{
+ object-fit:contain!important;object-position:center bottom!important;
+ width:min(37vw,520px);height:101%;right:5%;bottom:-1%;top:auto;left:auto;
+ opacity:1!important;transform:none!important;
+ -webkit-mask-image:none!important;mask-image:none!important;
+ filter:drop-shadow(-19px 14px 42px rgba(9,8,32,.78))!important;
+}
+@media(max-width:800px){
+ .rg-home[data-omega-silver-preview="ready"][data-reignition-concept="cinematic"] .rg-aira-v2{
+  width:82%;height:70%;top:1%;right:-8%;bottom:auto;
+ }
+}
