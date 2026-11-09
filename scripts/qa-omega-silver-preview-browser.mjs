@@ -75,6 +75,16 @@ try{
   .getAttribute('data-omega-aira-v2-ready');
  if(artReady!=='true')throw Error('Eight real source image instances not ready in Watch Canvas');
  await page.screenshot({path:join(out,'silver-preview-SYNTHETIC-QA-ONLY-844x390.png')});
+ // The same approved-shape local files must preview on the actual
+ // two-game main screen without changing its Guard/Watch launch buttons.
+ await page.goto(base+'/?omegaSilverPreview=1',{waitUntil:'domcontentloaded'});
+ await page.locator('.rg-home[data-omega-silver-preview="ready"]').waitFor({timeout:17000});
+ const hero=await page.locator('.rg-aira-v2').getAttribute('src');
+ if(!hero?.startsWith('blob:'))throw Error('Main screen did not use local silver AIRA');
+ const home=await page.locator('body').innerText();
+ if(!home.includes('시그널 가드')||!home.includes('시그널 워치'))
+  throw Error('Main screen lost either of the two original games');
+ await page.screenshot({path:join(out,'silver-home-SYNTHETIC-QA-ONLY-844x390.png')});
  await page.goto(base+'/omega-canonical-art-review/index.html',{waitUntil:'domcontentloaded'});
  await page.locator('#clearPreview').click();
  await page.waitForFunction(()=>document.querySelector('#status')?.textContent?.includes('삭제했습니다'),
@@ -83,7 +93,8 @@ try{
  await page.locator('[data-omega-silver-preview="failed"]').waitFor({timeout:16000});
  report={
   pass:errors.length===0,filesSimulated:8,hashMismatchDenied:true,
-  realWatchNativeGamePreview:true,clearingLocalFilesDeniedPreview:true,
+  realWatchNativeGamePreview:true,twoGameHomePreview:true,
+  clearingLocalFilesDeniedPreview:true,
   originalUserArtworkTested:false,
   originalEightAngleArtApproved:false,
   screenshotsAreSynthetic:true,
