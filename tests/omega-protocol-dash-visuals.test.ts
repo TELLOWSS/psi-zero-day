@@ -39,7 +39,7 @@ describe('OMEGA native-trajectory dash and grounded response',()=>{
   expect(ops.filter(s=>s==='ellipse').length).toBeGreaterThan(2);
  });
  it('takes dash truth from live Watch engine rather than manual rendered flags',()=>{
-  const session=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const session=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   const before={x:session.engine.state.player.x,y:session.engine.state.player.y};
   expect(session.dash()).toBe(true);
   let echoes:ReturnType<typeof omegaAdvanceDashEchoes>=[];
