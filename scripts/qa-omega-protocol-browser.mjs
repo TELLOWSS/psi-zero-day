@@ -21,6 +21,9 @@ const targets=[
  ['final-boss',844,390,'finalBoss'],
 ];
 const report=[];
+async function arenaAttribute(page,attr){
+ return page.locator('.omega-protocol-arena').getAttribute(attr);
+}
 let failures=0;
 for(const [name,width,height,checkpoint] of targets){
  const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1});
@@ -52,6 +55,7 @@ for(const [name,width,height,checkpoint] of targets){
   // during keyboard/stick probes; that must not invalidate opening staging.
   const openingNearThreatCount=Number(await page.locator('.omega-protocol-arena')
    .getAttribute('data-omega-near-threats')??'0');
+  let swordTest=null;
   if(name==='combat-action'){
    // A genuine player-input movement/dash capture. No debug teleport,
    // forced enemy deaths, fake character sprite or composited marketing art.
@@ -65,11 +69,31 @@ for(const [name,width,height,checkpoint] of targets){
    await page.waitForTimeout(90);
    await page.screenshot({path:root+'/combat-live-844x390.png',
     animations:'disabled',fullPage:false});
+   // Dashing blocks sword activation until native dash recovery ends.
+   await page.waitForTimeout(420);
+   await page.keyboard.press('f');
+   await page.waitForFunction(()=>{
+    const element=document.querySelector('.omega-protocol-arena');
+    return Number(element?.getAttribute('data-omega-blade-combo'))>=1;
+   },undefined,{timeout:4500});
+   swordTest={source:'real keyboard F',combo:Number(
+    await arenaAttribute(page,'data-omega-blade-combo')
+   ),pass:true};
   }
   // Actual browser input must move the real Watch-engine player, not only
   // paint a HUD screenshot. Only the landscape source QA uses this probe.
   let walkTest=null,stickTest=null,padModeTest=null;
   if(name==='portrait'){
+   const sword=page.locator('.omega-protocol-blade');
+   await sword.waitFor({state:'visible'});
+   await sword.click();
+   await page.waitForFunction(()=>{
+    const arena=document.querySelector('.omega-protocol-arena');
+    return Number(arena?.getAttribute('data-omega-blade-combo'))>=1;
+   },undefined,{timeout:4500});
+   swordTest={source:'real touch button click',combo:Number(
+    await arenaAttribute(page,'data-omega-blade-combo')
+   ),pass:true};
    const pad=page.locator('.omega-protocol-pad');
    const defaultMode=await pad.getAttribute('data-omega-pad-mode');
    const arrows=pad.locator('button:not(.omega-protocol-stick)');
@@ -223,11 +247,11 @@ for(const [name,width,height,checkpoint] of targets){
    ? openingNearThreatCount>=2 : true;
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
+    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,swordTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
     authoredArt,openingNearThreatCount,openingHasCombat,actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
   if(scrollH||scrollV||outside||stretchedCanvas||undersizedTouchTarget||!correctModal||
-    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!missionClearCombatCorridor.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
+    walkTest?.pass===false||stickTest?.pass===false||padModeTest?.pass===false||swordTest?.pass===false||!hangul.pass||!heroIdentity.pass||!compactLandscapeHeader.pass||!missionClearCombatCorridor.pass||!openingHasCombat||authoredArt.some(item=>!item.loaded)||errors.length){failures++;console.error('QA_FAIL',name,JSON.stringify(record));}
   else console.log('QA_PASS',name,width+'x'+height);
  }catch(error){
   failures++;report.push({name,error:String(error)});
