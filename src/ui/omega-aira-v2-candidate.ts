@@ -45,6 +45,22 @@ const allowed=new Set<string>(OMEGA_AIRA_V2_HEADINGS);
 interface CandidateImageRecord { image:HTMLImageElement; status:'loading'|'ready'|'failed' }
 export class OmegaAiraV2CandidateImages {
  private readonly cache=new Map<OmegaHeading,CandidateImageRecord>();
+ private readonly reviewSources=new Map<OmegaHeading,string>();
+ get silverReviewActive():boolean{return this.reviewSources.size===8;}
+ /** Explicit QA-only per-session overrides; never replace the shipped original
+  * and never attribute old BLACK/ROSE E animation to silver AIRA.
+  */
+ setSilverReviewSources(sources:ReadonlyMap<OmegaHeading,string>|null):void{
+  this.cache.clear();this.reviewSources.clear();
+  if(sources){
+   for(const heading of OMEGA_AIRA_V2_HEADINGS){
+    const source=sources.get(heading);
+    if(!source||!source.startsWith('blob:'))throw Error('Invalid silver preview source '+heading);
+    this.reviewSources.set(heading,source);
+   }
+  }
+  this.prepare();
+ }
  readonly fireFrames=new OmegaAiraV2FireFrames();
  readonly dashFrames=new OmegaAiraV2DashFrames();
  readonly hitFrames=new OmegaAiraV2HitFrames();
@@ -71,7 +87,7 @@ export class OmegaAiraV2CandidateImages {
    record.status=image.naturalWidth>=64&&image.naturalHeight>=110?'ready':'failed';
   };
   image.onerror=()=>{record.status='failed';};
-  image.src=omegaAiraV2Path(heading);
+  image.src=this.reviewSources.get(heading)??omegaAiraV2Path(heading);
   if(image.complete&&image.naturalWidth>=64&&image.naturalHeight>=110)
    record.status='ready';
   return record;
@@ -99,6 +115,15 @@ export function drawOmegaAiraV2Candidate(
  const heading=omegaFieldHeading(view.facingX,view.facingY);
  const image=cache.image(heading);
  if(!image)return false;
+ if(cache.silverReviewActive){
+  // The silver AIRA user-original 384×512 neutral images are *not* the
+  // older 192×336 BLACK/ROSE study. No invalid cutouts and never paint
+  // mismatched E fire/dash/walk/hit atlases over the canonical character.
+  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width));
+  const w=h*384/512;
+  ctx.drawImage(image,-w/2,-h,w,h);
+  return true;
+ }
  const t=Number.isFinite(view.time)?view.time:0;
  const walk=view.gait?.active??view.moving;
  const phase=view.gait?.phase??(t*1.7%1);
