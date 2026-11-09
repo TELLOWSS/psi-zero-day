@@ -156,7 +156,7 @@ export class OmegaProtocolCombatSession {
    this.engine.state.player.x=this.currentField.entry.x;
    this.engine.state.player.y=this.currentField.entry.y;
   }
-  const enemyCount=Math.max(4,Math.min(OMEGA_MAX_LIVE_THREATS-(plan.isBoss?1:0),
+  const enemyCount=Math.max(5,Math.min(OMEGA_MAX_LIVE_THREATS-(plan.isBoss?1:0),
    Math.floor(plan.budget/9)));
   const specs:Array<{type:HazardType;boss?:boolean;hpScale:number;speedScale:number}>=[];
   for(let i=0;i<enemyCount;i++){
