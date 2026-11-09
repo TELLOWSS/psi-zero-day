@@ -9,9 +9,9 @@ function clearWave(session:OmegaProtocolCombatSession){
  session.update(1/60,idle);
 }
 describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounter director',()=>{
- it('locks mode before ten Watch clears and does not install master-only cosmetic',()=>{
-  expect(()=>new OmegaProtocolCombatSession(7,9)).toThrow('10 Watch stages');
-  const s=new OmegaProtocolCombatSession(7,10);
+ it('locks mode before 50 Watch Extreme clears and does not install master-only cosmetic',()=>{
+  expect(()=>new OmegaProtocolCombatSession(7,49)).toThrow('50 Watch Extreme stages');
+  const s=new OmegaProtocolCombatSession(7,50);
   expect(s.engine).toBeInstanceOf(SurvivorsEngine);
   expect(s.run).toMatchObject({wave:1,phase:'battle',owned:{}});
   expect(s.engine.state.premiumGear?.equipped).toEqual([]);
@@ -22,8 +22,8 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(s.snapshot.enemiesAlive).toBeLessThanOrEqual(15);
  });
  it('keeps seeded real engine spawn positions and enemy mixes reproducible, not stage-native wave rules',()=>{
-  const a=new OmegaProtocolCombatSession(777,10);
-  const b=new OmegaProtocolCombatSession(777,10);
+  const a=new OmegaProtocolCombatSession(777,50);
+  const b=new OmegaProtocolCombatSession(777,50);
   expect(a.plan).toEqual(omegaWavePlan(777,1));
   expect(a.engine.state.hazards.map(h=>[h.type,h.x,h.y,h.hp]))
    .toEqual(b.engine.state.hazards.map(h=>[h.type,h.x,h.y,h.hp]));
@@ -40,7 +40,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(original.state.player.x).toBe(700);
  });
  it('clears waves, pauses for true three-choice rewards, applies real perk/stats, then resumes',()=>{
-  const s=new OmegaProtocolCombatSession(7001,10);
+  const s=new OmegaProtocolCombatSession(7001,50);
   clearWave(s);
   expect(s.run).toMatchObject({wave:2,phase:'battle',victories:1});
   clearWave(s);
@@ -72,7 +72,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
    ]);
  });
  it('simulates fifteen real encounter creations with two stage-independent bosses and 7 rewards',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10);
+  const s=new OmegaProtocolCombatSession(20261108,50);
   let selections=0,bosses=0;
   for(let wave=1;wave<=15;wave++){
    expect(s.run.wave).toBe(wave);
@@ -92,14 +92,14 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(s.run).toMatchObject({phase:'victory',wave:16,victories:15});
   expect(s.engine.state.phase).toBe('paused');
   expect(s.run.owned).not.toEqual({});
-  const fresh=new OmegaProtocolCombatSession(20261108,10);
+  const fresh=new OmegaProtocolCombatSession(20261108,50);
   expect(fresh.run.owned).toEqual({});
   expect(fresh.run.hp).toBe(100);
   expect(fresh.engine.state.activePerks).not.toEqual(s.engine.state.activePerks);
  });
 
  it('exposes the genuine Watch cooldown dash instead of a cosmetic animation',()=>{
-  const s=new OmegaProtocolCombatSession(1701,10);
+  const s=new OmegaProtocolCombatSession(1701,50);
   s.update(1/60,{moveX:1,moveY:0,triggerAction:true});
   const before={x:s.engine.state.player.x,cooldown:s.engine.state.player.dashCooldown};
   expect(s.dash()).toBe(true);
@@ -117,7 +117,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   const slowSeed=Array.from({length:120},(_,i)=>i+1).find(seed=>omegaWavePlan(seed,1).modifier==='unstable_ground');
   const normalSeed=Array.from({length:120},(_,i)=>i+1).find(seed=>omegaWavePlan(seed,1).modifier==='standard');
   expect(slowSeed).toBeDefined();expect(normalSeed).toBeDefined();
-  const slow=new OmegaProtocolCombatSession(slowSeed!,10),normal=new OmegaProtocolCombatSession(normalSeed!,10);
+  const slow=new OmegaProtocolCombatSession(slowSeed!,50),normal=new OmegaProtocolCombatSession(normalSeed!,50);
   const initialSpeed=slow.engine.state.player.speed;
   slow.update(1/30,input);normal.update(1/30,input);
   expect(slow.engine.state.player.speed).toBe(initialSpeed);
@@ -127,7 +127,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(slowTravel).toBeLessThan(normalTravel);
  });
  it('prevents one repeatedly contacting ultimate projectile from deleting the actual protocol boss',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10);
+  const s=new OmegaProtocolCombatSession(20261108,50);
   for(let w=1;w<9;w++){
    clearWave(s);
    if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
@@ -151,7 +151,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   expect(s.run.phase).toBe('battle');
  });
  it('settles actual damage/defeat and supports non-paying leave and pause',()=>{
-  const s=new OmegaProtocolCombatSession(19,10);
+  const s=new OmegaProtocolCombatSession(19,50);
   s.pause();
   expect(s.engine.state.phase).toBe('paused');
   const pausedAt=s.engine.state.gameTime;
@@ -162,7 +162,7 @@ describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounte
   s.update(1/60,idle);
   expect(s.run).toMatchObject({phase:'defeat',hp:0});
   expect(()=>s.selectUpgrade('radio_overdrive')).toThrow();
-  const next=new OmegaProtocolCombatSession(20,10);
+  const next=new OmegaProtocolCombatSession(20,50);
   next.abandon();
   expect(next.run.phase).toBe('defeat');
   expect(next.run.offers).toEqual([]);
