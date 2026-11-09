@@ -245,13 +245,24 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   let mounted=true;
   let lease:OmegaSilverPreviewSession|null=null;
-  omegaLoadSilverPreview().then(session=>{
+  omegaLoadSilverPreview().then(async session=>{
    if(!mounted){session.revoke();return;}
    lease=session;
    userApprovedAiraV2.setSilverReviewSources(session.urls);
-   setSilverPreviewStatus('ready');
+   // All 8 real WebPs must decode before the game reports the imported
+   // original art as visible, not just that IndexedDB returned eight hashes.
+   for(let attempt=0;attempt<90&&mounted;attempt++){
+    if(userApprovedAiraV2.hasAllDirections()){
+     setSilverPreviewStatus('ready');
+     return;
+    }
+    await new Promise<void>(resolve=>window.setTimeout(resolve,50));
+   }
+   if(mounted)throw Error('Silver AIRA original image decode incomplete');
   }).catch(error=>{
    if(mounted){
+    userApprovedAiraV2.setSilverReviewSources(null);
+    lease?.revoke();lease=null;
     setSilverPreviewStatus('failed');
     console.warn('Silver AIRA review unavailable; original gameplay unchanged',error);
    }
