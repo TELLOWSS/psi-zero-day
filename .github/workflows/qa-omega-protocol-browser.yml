@@ -12,6 +12,7 @@ on:
       - 'public/assets/omega/sector01/**'
       - 'src/ui/omega-protocol-actor-render.ts'
       - 'src/ui/omega-aira-v2-candidate.ts'
+      - 'src/ui/omega-canonical-local-preview.ts'
       - 'src/ui/omega-aira-v2-directional-action-rig.ts'
       - 'src/ui/omega-aira-v2-directional-parity.ts'
       - 'src/ui/omega-aira-v2-walk-rig.ts'
@@ -46,6 +47,7 @@ on:
       - 'scripts/qa-omega-aira-action-motion-sheet.mjs'
       - 'scripts/qa-omega-aira-v2-source.mjs'
       - 'scripts/qa-omega-canonical-review.mjs'
+      - 'scripts/qa-omega-silver-preview-browser.mjs'
       - 'public/omega-canonical-art-review/**'
       - 'public/assets/omega/canonical-review/**'
       - 'scripts/qa-omega-aira-v2-directional-parity.mjs'
@@ -167,6 +169,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-canonical-review.mjs
+      - name: Simulate verified eight-angle local silver import into native Watch battlefield
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-preview-browser.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
