@@ -38,8 +38,12 @@ function tacticalStep(
  // marked charge lane, not straight backward along its hit path.
  const warned=s.engine.state.hazards.flatMap(h=>{
   const brain=s.zombieBrain(h.id);
-  return h.hp>0&&brain&&['warning','charge'].includes(brain.phase)&&
-   dist(actor,h)<235?[{h,brain,gap:dist(actor,h)}]:[];
+  // Avoid panic-kiting well outside the locked attack radius: that caused
+  // a regression against a single protected RUNAWAY_CART in route 3.
+  const risk=brain?.kind==='armored'?118:brain?.kind==='drifter'?105:145;
+  const imminent=brain?.phase==='charge'||(brain?.phase==='warning'&&brain.timer<.32);
+  return h.hp>0&&brain&&imminent&&dist(actor,h)<risk
+   ?[{h,brain,gap:dist(actor,h)}]:[];
  }).sort((a,b)=>a.gap-b.gap)[0];
  if(warned){
   const {h,brain}=warned;
