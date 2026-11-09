@@ -14,6 +14,8 @@ export interface OmegaV2ShotFrame{
  readonly intensity:number;
  readonly gripX:number;
  readonly gripY:number;
+ /** True 8-direction layering: back-facing shots stay behind the actor. */
+ readonly layer:'rear'|'front';
  readonly drawn:boolean;
 }
 export function omegaAiraV2ShotFrame(
@@ -36,6 +38,7 @@ export function omegaAiraV2ShotFrame(
   intensity:draw?clamp(1-age/ALLOWED_SHOT_AGE,.18,1):0,
   gripX:width*(left?-.25:rear?.08:.25),
   gripY:-visualHeight*(rear?.55:.52),
+  layer:rear?'rear':'front',
   drawn:draw,
  };
 }
@@ -52,9 +55,10 @@ function line(ctx:CanvasRenderingContext2D,points:readonly (readonly [number,num
 export function drawOmegaAiraV2ShotVfx(
  ctx:CanvasRenderingContext2D,view:OmegaActorView,
  heading:OmegaHeading,height:number,
+ layer:'rear'|'front'='front',
 ):void{
  const pose=omegaAiraV2ShotFrame(view,heading,height);
- if(!pose.drawn)return;
+ if(!pose.drawn||pose.layer!==layer)return;
  ctx.save();
  ctx.translate(pose.gripX,pose.gripY);
  ctx.rotate(pose.directionRadians);
