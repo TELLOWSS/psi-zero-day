@@ -18,7 +18,7 @@ This is not an entitlement to use the unfinished OMEGA master-character skin.
 ## Planned action implementation (not shipped)
 1. Finish and sign off PR #234 OMEGA master character: **true** 160 separate authored and approved actor frames plus equipment/PPE occlusion, binary SHA and real-device QA. Currently only derivative candidate sprites and closed release gate exist.
 2. Dedicated in-run combat adapter: retain existing Watch projectile/weapon systems but sandbox all temporary modifiers from wallet and persistent items. Make route pacing independent of old 50-stage progress.
-3. Original gun-and-blade combat: actual Watch ranged fire plus 3-hit sword arc against nonhuman industrial constructs only. Damage, combo cooldown and two sword upgrades wired in DEV; source art, sounds, final balance and paid item design remain separate.
+3. Original gun-and-blade combat in the fictional contaminated construction-zone special edition: actual Watch ranged fire plus 3-hit sword arc against **hard-hat infected zombies and hostile industrial constructs**; unaffected survivors are rescue targets. Ordinary Watch never enables the sword. Damage, combo cooldown and two sword upgrades wired in DEV; source art, sounds, final balance and paid item design remain separate.
 4. Connected map expedition (5 acts, 15 internal event locations), not individually selected/cleared stages. Telegraph bosses at nodes 9/15. Automatic Watch ranged fire is live in DEV; manual aiming, seamlessly streamed maps and full act transitions require further work.
 5. Separate \`psi:omega-protocol:run:v1\` storage **after explicit persistence design**; never reuse Watch's saves or premium/wallet keys. Include migration, interrupted-run continuation and tamper limitations; no false account-based anti-cheat claims.
 6. Full keyboard/touch Android and tablet verification, profiling budgets at 390×844 and 844×390, gamepad accessibility, pause/restart flow, 15–25 minute target *measured not assumed*, all seeds replayable.
@@ -50,3 +50,8 @@ The current prototype lives on its own draft PR based on \`main\`, isolated from
 ## 2026-11-09 director's superseding decision
 
 The final five-act setting, strict Extreme-50 unlock, sword/gun mechanics, exploration UX and QA/release gates are recorded in [OMEGA-PROTOCOL-EXTREME-50-GUN-BLADE-MASTERPLAN-20261109.md](OMEGA-PROTOCOL-EXTREME-50-GUN-BLADE-MASTERPLAN-20261109.md). All former 10-stage-unlock and 50×Mastery-star conditions are withdrawn. The fifteen encounter indices are internal route locations rather than WATCH-style selectable stages. Live map continuity and cinematic transitions are not yet finished.
+
+
+### 2026-11-09 later director revision: hard-hat infected zombies
+
+This supersedes the prior restriction limiting opponents to mechanical constructs. The quarantined **OMEGA-only** game explicitly allows AIRA's sci-fi gun and sword to damage **fictional infected worker zombies**, always rendered with safety helmets and reflective vests. Normal workers/noninfected survivors are not enemies. Existing Signal Watch education/PPE character art remains unchanged. The first infection enemy always spawns in every quarantine encounter. Current zombie art is a 3-variant technical Canvas placeholder, NOT approved high-resolution enemy animation. See the masterplan for the revised NEXUS 5-act story and missing release gates.
