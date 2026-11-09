@@ -39,7 +39,7 @@ function walkAndOperate(s:OmegaProtocolCombatSession,target:OmegaFieldPoint):num
 
 describe('OMEGA actual Watch-engine input-driven mission traversal',()=>{
  it('walks through all 15 nodes/55 event checkpoints without player teleports',()=>{
-  const s=new OmegaProtocolCombatSession(20261108,10,false,{fieldTraversal:true});
+  const s=new OmegaProtocolCombatSession(20261108,50,false,{fieldTraversal:true});
   let interactions=0,frames=0,bosses=0,rewards=0;
   for(let wave=1;wave<=15;wave++){
    expect(s.run.wave).toBe(wave);
