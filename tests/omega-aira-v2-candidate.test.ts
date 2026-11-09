@@ -123,7 +123,10 @@ describe('AIRA V2 user-selected eight-direction identity in live Watch Canvas',(
   expect(e.filter(v=>v.name==='drawImage')).toHaveLength(1);
   expect(e.find(v=>v.name==='drawImage')?.args.slice(1,5))
    .toEqual([240,0,240,232]);
-  expect(e.find(v=>v.name==='translate')?.args).toEqual([0,0]);
+  const placed=e.find(v=>v.name==='translate')?.args;
+  expect(placed).toHaveLength(2);
+  expect(Math.abs(placed![0] as number)).toBe(0);
+  expect(Math.abs(placed![1] as number)).toBe(0);
   // Other directions still use the measured technical gait until their
   // own independent art exists; never apply E's source to S.
   expect(s.filter(v=>v.name==='drawImage')).toHaveLength(3);
