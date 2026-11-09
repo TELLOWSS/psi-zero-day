@@ -11,8 +11,12 @@ export const OMEGA_PROTOCOL_VERSION=1 as const;
 export const OMEGA_PROTOCOL_TOTAL_WAVES=15 as const;
 export const OMEGA_PROTOCOL_ENTRY_CLEARS=50 as const;
 export const OMEGA_PROTOCOL_SAVE_NAMESPACE='psi:omega-protocol:run:v1' as const;
+// The legacy Watch engine ID UNHELMETED is presented in this isolated
+// quarantine special edition as a FICTIONAL HELMET_ZOMBIE, always wearing
+// a work-site hard hat; it is never changed in normal Watch campaigns.
+export const OMEGA_INFECTED_ENGINE_KIND='UNHELMETED' as const;
 export const OMEGA_ENEMY_ARCHETYPES=[
- 'UNHELMETED','RUNAWAY_CART','GAS_LEAK','FALLING_DEBRIS',
+ OMEGA_INFECTED_ENGINE_KIND,'RUNAWAY_CART','GAS_LEAK','FALLING_DEBRIS',
 ] as const satisfies readonly HazardType[];
 export type OmegaEnemyKind=typeof OMEGA_ENEMY_ARCHETYPES[number];
 export const OMEGA_UPGRADES=[
@@ -93,7 +97,13 @@ export function omegaWavePlan(seed:number,wave:number):OmegaWavePlan {
  const intensity=1+Math.floor((wave-1)/3);
  return {
   wave,sector,isBoss,intensity,
-  threatKinds:Object.freeze(candidates.slice(0,isBoss?3:2)),
+  // Every contaminated sector visibly contains infected helmet zombies;
+  // randomized secondary threats provide variety, without making a
+  // protocol-only Watch NPC model change or altering any saved campaign.
+  threatKinds:Object.freeze([
+   OMEGA_INFECTED_ENGINE_KIND,
+   ...candidates.filter(kind=>kind!==OMEGA_INFECTED_ENGINE_KIND).slice(0,isBoss?2:1),
+  ]),
   modifier,
   budget:Math.round((12+wave*4+intensity*5)*(isBoss?1.75:1)),
  };
