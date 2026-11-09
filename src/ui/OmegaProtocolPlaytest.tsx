@@ -1,4 +1,5 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
+import {readOmegaProtocolAccess} from '../app/omega-protocol-access';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
@@ -227,6 +228,12 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  return session;
 }
 export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
+ // The running game uses an explicit QA 50/50 FIXTURE, NOT the user's real
+ // saved progress. Keep both facts visible and distinguishable for acceptance.
+ const [realUnlockStatus]=useState(()=>{
+  try{return readOmegaProtocolAccess(typeof window==='undefined'?undefined:window.localStorage);}
+  catch{return readOmegaProtocolAccess(undefined);}
+ });
  const [seedValue,setSeedValue]=useState('20261108');
  const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
@@ -460,7 +467,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-protocol-internal="true"
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
-  data-omega-silver-preview={silverPreviewStatus}>
+  data-omega-silver-preview={silverPreviewStatus}
+  data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
+  data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
+  data-omega-session-unlock-source="dev-qa-fixture">
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
@@ -472,7 +482,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <span aria-hidden="true">Ω</span>
     </div>
     <div className="omega-protocol-heading">
-    <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION</span>
+    <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION · 실제 극한 {realUnlockStatus.extremeStagesCleared}/50</span>
     <h1>OMEGA <em>PROTOCOL</em></h1>
     <p>극한 50/50 이후 해금 · 오염 산업단지 좀비 총·검 로그라이트 · 승인 전 QA</p>
    </div>
@@ -648,7 +658,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <button type="button" onClick={restart}>새 도전</button>
     <button type="button" onClick={()=>{session.abandon();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase==='defeat'||snapshot.run.phase==='victory'}>도전 포기</button>
    </div>
-   <p className="omega-protocol-warning">미출시 내부 시험 · 원화·장비 마스크 미승인 · 기존 저장기록과 분리</p>
+   <p className="omega-protocol-warning">미출시 내부 시험 · 시험용 50/50 진입 · 실제 해금 {realUnlockStatus.canEnter?'달성':'미달성'} ({realUnlockStatus.extremeStagesCleared}/50) · 원화 미승인</p>
   </footer>
  </main>;
 }
