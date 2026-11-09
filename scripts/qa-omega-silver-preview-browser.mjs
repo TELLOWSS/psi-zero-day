@@ -125,6 +125,11 @@ try{
  await page.locator('.rg-home[data-omega-silver-preview="ready"]').waitFor({timeout:17000});
  const hero=await page.locator('.rg-aira-v2').getAttribute('src');
  if(!hero?.startsWith('blob:'))throw Error('Main screen did not use local silver AIRA');
+ await page.waitForFunction(()=>{
+  const img=document.querySelector('.rg-aira-v2');
+  return img instanceof HTMLImageElement&&img.complete&&
+   img.naturalWidth===384&&img.naturalHeight===512;
+ },undefined,{timeout:15000});
  const home=await page.locator('body').innerText();
  if(!home.includes('시그널 가드')||!home.includes('시그널 워치'))
   throw Error('Main screen lost either of the two original games');
