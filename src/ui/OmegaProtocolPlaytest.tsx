@@ -178,7 +178,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.restore();
 }
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
- const session=new OmegaProtocolCombatSession(seed,10,false,{fieldTraversal:true});
+ const session=new OmegaProtocolCombatSession(seed,50,false,{fieldTraversal:true});
  if(!import.meta.env.DEV)return session;
  const qa=new URLSearchParams(window.location.search).get('omegaQaState');
  if(!['reward','boss','finalBoss','objective','exit'].includes(qa||''))return session;
@@ -233,7 +233,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const lastHudAt=useRef(0);
  const restart=useCallback(()=>{
   const n=Number(seedValue);
-  const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,10,false,{fieldTraversal:true});
+  const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
