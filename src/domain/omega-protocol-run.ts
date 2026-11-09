@@ -1,4 +1,6 @@
 import type {HazardType} from './patrol-survivors';
+import {PATROL_STAGE_IDS} from './patrol-survivors';
+import {sanitizeDifficultyClearRecords} from './survivors-difficulty-records';
 
 /**
  * OMEGA PROTOCOL — isolated, deterministic roguelite rules prototype.
@@ -7,7 +9,7 @@ import type {HazardType} from './patrol-survivors';
  */
 export const OMEGA_PROTOCOL_VERSION=1 as const;
 export const OMEGA_PROTOCOL_TOTAL_WAVES=15 as const;
-export const OMEGA_PROTOCOL_ENTRY_CLEARS=10 as const;
+export const OMEGA_PROTOCOL_ENTRY_CLEARS=50 as const;
 export const OMEGA_PROTOCOL_SAVE_NAMESPACE='psi:omega-protocol:run:v1' as const;
 export const OMEGA_ENEMY_ARCHETYPES=[
  'UNHELMETED','RUNAWAY_CART','GAS_LEAK','FALLING_DEBRIS',
@@ -34,13 +36,27 @@ export type OmegaRunPhase='battle'|'reward'|'victory'|'defeat';
 export interface OmegaProtocolAccess {
  readonly canEnter:boolean;
  readonly masterCosmeticEligible:boolean;
- readonly reason:'UNLOCKED'|'COMPLETE_10_WATCH_STAGES';
+ readonly reason:'UNLOCKED'|'COMPLETE_50_EXTREME_STAGES';
+ readonly extremeStagesCleared:number;
+ readonly requiredExtremeStages:50;
 }
-export function omegaProtocolAccess(clearedWatchStages:number,masterCosmeticEligible:boolean):OmegaProtocolAccess{
- const clears=Number.isFinite(clearedWatchStages)?Math.max(0,Math.floor(clearedWatchStages)):0;
- const canEnter=clears>=OMEGA_PROTOCOL_ENTRY_CLEARS;
+/** This numeric argument is a verified EXTREME difficulty clear count only.
+ * Never pass normal-stage totals; the public gate reads sanitised per-stage
+ * extreme medals with omegaProtocolAccessFromRecords() below.
+ */
+export function omegaProtocolAccess(extremeStageClears:number,masterCosmeticEligible:boolean):OmegaProtocolAccess{
+ const clears=Number.isFinite(extremeStageClears)?Math.max(0,Math.floor(extremeStageClears)):0;
+ const verified=Math.min(OMEGA_PROTOCOL_ENTRY_CLEARS,clears);
+ const canEnter=verified===OMEGA_PROTOCOL_ENTRY_CLEARS;
  return {canEnter,masterCosmeticEligible:canEnter&&masterCosmeticEligible,
-   reason:canEnter?'UNLOCKED':'COMPLETE_10_WATCH_STAGES'};
+  reason:canEnter?'UNLOCKED':'COMPLETE_50_EXTREME_STAGES',
+  extremeStagesCleared:verified,requiredExtremeStages:50};
+}
+/** Exact Watch Extreme 1..50 clear contract; Mastery stars are NOT required. */
+export function omegaProtocolAccessFromRecords(raw:unknown,artApproved=false):OmegaProtocolAccess{
+ const records=sanitizeDifficultyClearRecords(raw);
+ const count=PATROL_STAGE_IDS.filter(id=>(records[id]?.extreme??0)>=1).length;
+ return omegaProtocolAccess(count,artApproved);
 }
 /** Pure salted uint32 hash; never Math.random so a run can be replayed. */
 export function omegaSeedHash(seed:number,salt:number):number {
