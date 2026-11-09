@@ -52,6 +52,9 @@ on:
       - 'scripts/qa-omega-silver-preview-browser.mjs'
       - 'scripts/qa-omega-silver-github-binaries-browser.mjs'
       - 'scripts/qa-omega-silver-native-watch.mjs'
+      - 'scripts/qa-omega-silver-native-guard.mjs'
+      - 'src/ui/OmegaSilverGuardReview.tsx'
+      - 'src/ui/DefenseGame.tsx'
       - 'scripts/qa-omega-silver-real-motion-lab.mjs'
       - 'public/omega-canonical-art-review/**'
       - 'public/assets/omega/canonical-review/**'
@@ -195,6 +198,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-silver-native-watch.mjs
+      - name: Verify original AIRA draws in the actual SIGNAL GUARD SVG battlefield on PC/mobile
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-native-guard.mjs
       - name: Upload source-run screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
