@@ -33,6 +33,34 @@ function tacticalStep(
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
+ // React to the real zombie WARNING/CHARGE state rendered by the field.
+ // Ordinary sprinters and stalkers lock a vector; move *across* their
+ // marked charge lane, not straight backward along its hit path.
+ const warned=s.engine.state.hazards.flatMap(h=>{
+  const brain=s.zombieBrain(h.id);
+  return h.hp>0&&brain&&['warning','charge'].includes(brain.phase)&&
+   dist(actor,h)<235?[{h,brain,gap:dist(actor,h)}]:[];
+ }).sort((a,b)=>a.gap-b.gap)[0];
+ if(warned){
+  const {h,brain}=warned;
+  let direction:OmegaFieldPoint;
+  if(brain.kind==='sprinter'||brain.kind==='stalker'){
+   const sideA={x:-brain.lockedY,y:brain.lockedX};
+   const a={x:actor.x+sideA.x*175,y:actor.y+sideA.y*175};
+   const b={x:actor.x-sideA.x*175,y:actor.y-sideA.y*175};
+   const routeA=omegaFieldNextRoute(actor,a,field.obstacles);
+   const routeB=omegaFieldNextRoute(actor,b,field.obstacles);
+   const score=(route:ReturnType<typeof omegaFieldNextRoute>)=>
+    route?dist(route.next,h)-route.length*.05:-Infinity;
+   direction=score(routeA)>=score(routeB)?(routeA?.next??a):(routeB?.next??b);
+  }else{
+   const dx=actor.x-h.x,dy=actor.y-h.y,len=Math.hypot(dx,dy)||1;
+   const retreat={x:Math.max(45,Math.min(1355,actor.x+dx/len*180)),
+    y:Math.max(45,Math.min(855,actor.y+dy/len*180))};
+   direction=omegaFieldNextRoute(actor,retreat,field.obstacles)?.next??retreat;
+  }
+  return steer(actor,direction);
+ }
  // Unlike simple zombie kiting, each boss telegraph has a locked ACTUAL
  // impact center / lane. Move outside its live warning zone instead of
  // burning a dash after the attack hits. This is a legitimate player tactic,
@@ -152,8 +180,14 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    // telegraphed window. Dash grants only native .28s invulnerability and
    // enforces its real cooldown, without manipulating hazard HP.
    const warned=s.snapshot.bossTelegraph;
-   if(warned?.phase==='warning'&&warned.timer<.24&&
-      omegaBossInStrikeZone(warned,player)&&
+   const nearZombieCharge=s.engine.state.hazards.some(h=>{
+    if(h.hp<=0||dist(h,player)>150)return false;
+    const brain=s.zombieBrain(h.id);
+    return brain?.phase==='charge'||(brain?.phase==='warning'&&
+      brain.timer<.29);
+   });
+   if((warned?.phase==='warning'&&warned.timer<.24&&
+       omegaBossInStrikeZone(warned,player)||nearZombieCharge)&&
       (player.dashCooldown??0)<=0){
     s.update(DT,movement);
     s.dash();
