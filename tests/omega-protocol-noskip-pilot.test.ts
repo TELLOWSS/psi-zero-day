@@ -5,6 +5,7 @@ import {
  type OmegaFieldPoint,
 } from '../src/domain/omega-protocol-field';
 import {omegaFieldNextRoute} from '../src/domain/omega-protocol-navigation';
+import {omegaBossInStrikeZone} from '../src/engine/omega-protocol-boss-pattern';
 
 /**
  * M04-D AUTHENTIC fixed-step pilot. Never edits HP, hazards, player position,
@@ -32,6 +33,33 @@ function tacticalStep(
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
+ // Unlike simple zombie kiting, each boss telegraph has a locked ACTUAL
+ // impact center / lane. Move outside its live warning zone instead of
+ // burning a dash after the attack hits. This is a legitimate player tactic,
+ // not a changed boss timer/damage radius or an injected evasion state.
+ const warning=s.snapshot.bossTelegraph;
+ if(warning?.phase==='warning'&&omegaBossInStrikeZone(warning,actor)){
+  let best:{point:OmegaFieldPoint;score:number}|null=null;
+  for(let k=0;k<24;k++){
+   const theta=k*Math.PI/12;
+   const aim={x:Math.max(50,Math.min(1350,actor.x+Math.cos(theta)*175)),
+    y:Math.max(50,Math.min(850,actor.y+Math.sin(theta)*175))};
+   const route=omegaFieldNextRoute(actor,aim,field.obstacles);
+   if(!route||dist(actor,route.next)<2)continue;
+   const projected=route.next;
+   const hazardDist=Math.min(...s.engine.state.hazards
+    .filter(h=>h.hp>0).map(h=>dist(projected,h)));
+   const away=warning.attack==='crane_drop'
+    ?dist(projected,warning.center)-warning.radius
+    :warning.lane==='horizontal'
+     ?Math.abs(projected.y-warning.center.y)-warning.laneHalfWidth
+     :Math.abs(projected.x-warning.center.x)-warning.laneHalfWidth;
+   const score=away*2.4+Math.min(hazardDist,200)*.55-
+    (route.detour?20:0)-Math.max(0,dist(actor,projected)-175)*.05;
+   if(!best||score>best.score)best={point:route.next,score};
+  }
+  if(best)return steer(actor,best.point);
+ }
  if(forceClose){
   // If native weapon projectiles are blocked by real industrial cover,
   // walk around it to regain line of sight / sword range. Never inject
@@ -120,7 +148,16 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    // dodge/chase remains an external test-player decision, not an engine
    // cheat, HP reset or modification of enemy AI/difficulty.
    const movement=tacticalStep(s,target,stallTicks>105);
-   s.update(DT,movement);
+   // A fighter can use the actual charged Watch dash during the final
+   // telegraphed window. Dash grants only native .28s invulnerability and
+   // enforces its real cooldown, without manipulating hazard HP.
+   const warned=s.snapshot.bossTelegraph;
+   if(warned?.phase==='warning'&&warned.timer<.24&&
+      omegaBossInStrikeZone(warned,player)&&
+      (player.dashCooldown??0)<=0){
+    s.update(DT,movement);
+    s.dash();
+   }else s.update(DT,movement);
    const strike=s.blade();
    nativeBladeDamage+=strike?.totalDamage??0;
    const feedback=s.engine.drainProjectileFeedback();
@@ -246,7 +283,7 @@ describe('M04-D real OMEGA expedition without DEV preclear or direct HP mutation
    if(s.run.phase==='reward'){
     const offered=[...s.run.offers];
     expect(offered).toHaveLength(3);
-    const chosen=offered.find(id=>pref.includes(id))??offered[0]!;
+    const chosen=pref.find(id=>offered.includes(id as typeof offered[number]))??offered[0]!;
     s.selectUpgrade(chosen as Parameters<typeof s.selectUpgrade>[0]);
     picks.push({afterWave:wave,offered,chosen});
    }
