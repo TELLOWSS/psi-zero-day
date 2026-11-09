@@ -126,4 +126,30 @@ describe('M04-D2 factual late-game hit source attribution, no combat changes',()
   expect(s.damageSummary(8).bossDamage).toBe(0);
   expect(s.damageEvents.length).toBeGreaterThanOrEqual(1);
  });
+ it('attributes the real wave-15 BLACK SIGNAL power sweep, distinct from TITAN HOOK',()=>{
+  const s=newSession();
+  toWave(s,15);
+  expect(s.run.wave).toBe(15);
+  expect(s.snapshot.bossTelegraph?.attack).toBe('power_sweep');
+  const boss=s.engine.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+  expect(boss).toBeDefined();
+  if(!boss)throw Error('Missing native final control-core boss');
+  s.engine.state.hazards=[boss];
+  const p=s.engine.state.player;
+  const center=s.snapshot.bossTelegraph?.center;
+  if(!center)throw Error('Missing final power-lane telegraph');
+  p.x=center.x;p.y=center.y;p.regenRate=0;p.invincibleTime=0;
+  boss.x=1300;boss.y=850;boss.speed=0;boss.hp=100000;boss.maxHp=100000;
+  const before=p.hp;
+  for(let i=0;i<110;i++)s.update(1/60,idle);
+  const hits=s.damageEvents.filter(e=>e.source==='BLACK_SIGNAL_CORE');
+  expect(hits).toHaveLength(1);
+  expect(hits[0]!).toMatchObject({wave:15,amount:12});
+  expect(p.hp).toBe(before-12);
+  expect(s.damageSummary(15)).toMatchObject({
+   bossDamage:12,infectedDamage:0,hitEvents:1,
+  });
+  expect(s.damageEvents.some(e=>e.source==='TITAN_HOOK')).toBe(false);
+ });
+
 });
