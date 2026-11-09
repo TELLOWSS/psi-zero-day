@@ -15,6 +15,7 @@ on:
       - 'src/ui/omega-aira-v2-walk-rig.ts'
       - 'src/ui/omega-aira-v2-weapon-vfx.ts'
       - 'src/ui/omega-aira-v2-fire-frames.ts'
+      - 'src/ui/omega-aira-v2-dash-frames.ts'
       - 'public/assets/omega/aira-v2/**'
       - 'content/art/omega-aira-v2-user-approved.json'
       - 'src/ui/omega-protocol-aira-kinetics.ts'
