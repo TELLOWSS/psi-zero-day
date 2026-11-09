@@ -3,6 +3,8 @@ import {
  type GameInput,PERK_CATALOG,
 } from './patrol-survivors-engine';
 import type {PerkId,HazardType} from '../domain/patrol-survivors';
+import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_COOLDOWN,OMEGA_BLADE_RANGE,type OmegaBladeComboStep} from '../domain/omega-protocol-blade';
+import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {omegaStageEncounterPositions} from '../domain/omega-protocol-encounter-stage';
 import {
  omegaCreateBossTelegraph,omegaAdvanceBossTelegraph,
@@ -17,6 +19,16 @@ import {
  type OmegaProtocolRun,type OmegaUpgradeId,type OmegaWavePlan,
 } from '../domain/omega-protocol-run';
 
+export interface OmegaBladeStrike {
+ readonly time:number;
+ readonly combo:OmegaBladeComboStep;
+ readonly hits:number;
+ readonly totalDamage:number;
+ readonly x:number;
+ readonly y:number;
+ readonly facingX:number;
+ readonly facingY:number;
+}
 export interface OmegaCombatSnapshot {
  readonly run:OmegaProtocolRun;
  readonly plan:OmegaWavePlan;
@@ -30,6 +42,8 @@ export interface OmegaCombatSnapshot {
  readonly armed:boolean;
  readonly field:Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null;
  readonly bossTelegraph:OmegaBossTelegraph|null;
+ readonly blade:OmegaBladeStrike|null;
+ readonly bladeCooldownRemaining:number;
 }
 export const OMEGA_MAX_LIVE_THREATS=15;
 
@@ -49,6 +63,9 @@ export class OmegaProtocolCombatSession {
  private bossPattern:OmegaBossTelegraph|null=null;
  private lastFacing={x:0,y:1};
  private playerMoving=false;
+ private bladeLastTime=-Infinity;
+ private bladeStep:OmegaBladeComboStep=1;
+ private bladeResult:OmegaBladeStrike|null=null;
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
   options:Readonly<{fieldTraversal?:boolean}>={},
@@ -71,6 +88,7 @@ export class OmegaProtocolCombatSession {
  get plan():OmegaWavePlan{return this.latestPlan;}
  get facing():Readonly<{x:number;y:number}>{return {...this.lastFacing};}
  get moving():boolean{return this.playerMoving;}
+ get lastBladeStrike():OmegaBladeStrike|null{return this.bladeResult;}
  get field():Readonly<{plan:OmegaFieldPlan;progress:OmegaFieldProgress}>|null{
   return this.currentField&&this.fieldStatus
    ?{plan:this.currentField,progress:this.fieldStatus}
@@ -90,12 +108,17 @@ export class OmegaProtocolCombatSession {
    armed:this.armed,
    field:this.field,
    bossTelegraph:this.bossPattern,
+   blade:this.bladeResult,
+   bladeCooldownRemaining:Math.max(0,OMEGA_BLADE_COOLDOWN-(this.engine.state.gameTime-this.bladeLastTime)), 
   };
  }
  private beginWave(){
   if(this.active.phase!=='battle')throw new Error('Cannot spawn during reward/terminal phase');
   this.latestPlan=omegaWavePlan(this.active.seed,this.active.wave);
   const plan=this.latestPlan;
+  this.bladeLastTime=-Infinity;
+  this.bladeStep=1;
+  this.bladeResult=null;
   if(this.fieldTraversal){
    this.currentField=omegaFieldPlan(this.active.seed,plan.wave);
    this.fieldStatus=omegaFieldInitialProgress();
@@ -255,6 +278,43 @@ export class OmegaProtocolCombatSession {
    return {success:true,reason:'EXIT_OPENED'};
   }
   return {success:false,reason:'NOT_READY'};
+ }
+ /** An original close-range sword attack, using real in-run Watch HP only.
+  * Every physical target is tested against the forward arc and solid cover.
+  * The basic ranged weapon continues to use the native Watch firing loop.
+  */
+ blade():OmegaBladeStrike|null{
+  const state=this.engine.state;
+  if(!this.armed||this.active.phase!=='battle'||state.phase!=='playing')return null;
+  const time=state.gameTime;
+  if(!Number.isFinite(time)||time-this.bladeLastTime<OMEGA_BLADE_COOLDOWN)return null;
+  const player=state.player;
+  if(player.hp<=0||player.isDashing)return null;
+  const combo=omegaBladeNextCombo(this.bladeStep,time-this.bladeLastTime);
+  const direction=this.fieldTraversal
+   ?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y)
+   :this.lastFacing;
+  const bladeEdge=this.active.owned.blade_edge??0;
+  const range=OMEGA_BLADE_RANGE+(this.active.owned.blade_reach??0)*18;
+  let hits=0,totalDamage=0;
+  for(const h of state.hazards){
+   if(!omegaBladeTargetInArc(player,h,direction,range))continue;
+   if(this.currentField){
+    const route=omegaFieldNextRoute(player,h,this.currentField.obstacles);
+    const direct=Math.hypot(h.x-player.x,h.y-player.y);
+    if(!route||route.length>direct+24)continue; // Cannot cut through solid cover.
+   }
+   const damage=omegaBladeDamage(combo,h,player.damageMultiplier,bladeEdge);
+   const dealt=this.engine.damageProtocolConstruct(h.id,damage);
+   if(dealt<=0)continue;
+   hits++;totalDamage+=dealt;
+  }
+  this.bladeLastTime=time;
+  this.bladeStep=combo;
+  this.bladeResult={time,combo,hits,totalDamage,x:player.x,y:player.y,
+   facingX:direction.x,facingY:direction.y};
+  if(hits>0)state.hitStopTimer=Math.max(state.hitStopTimer??0,.025);
+  return this.bladeResult;
  }
  /**
   * Real engine dash. Not a visual fake: uses Watch cooldown, direction and
