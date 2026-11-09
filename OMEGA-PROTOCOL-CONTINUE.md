@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-09 (KST)  
+**관리일:** 2026-11-09 (KST) · M01/M01-QA 실검증 완료  
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -30,8 +30,8 @@
 | ID | 필수 범위 / 합격 기준 | 개발 코드 상태 | 검증 / 출시 판정 |
 |---|---|---|---|
 | M00 | 기획 정합: 극한 50/50 해금, 연결 탐험, 오염 좀비 총·검 | 문서·15사건 스토리 작성 | **기획 기록 완료, 최종 시네마틱 미제작** |
-| M01 | 극한 50개 실제 클리어 기록을 읽어 엄격 해금; 보존 | `omegaProtocolAccessFromRecords`, `readOmegaProtocolAccess` 구현 | **테스트 작성, 최신 실행 PASS 미확인. 공개 CTA 미연동** |
-| M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거, 브라우저 QA 검증 코드 추가 | **브라우저 실행 PASS 미확인** |
+| M01 | 극한 50개 실제 클리어 기록을 읽어 엄격 해금; 보존 | `omegaProtocolAccessFromRecords`, `readOmegaProtocolAccess`, 실제 `persistStoreWallet`를 통한 1→50 순차 저장 통합 테스트 | **TESTED: PR #237 핵심 CI PASS, 44파일/186테스트, `tsc --noEmit` + 엔진 타입체크. 공개 CTA는 출시 승인 전까지 미연동** |
+| M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거; Vite·Chromium 9개 체크포인트 브라우저 검사 | **TESTED: PR #237 브라우저 전체 workflow PASS, 실제 React/Canvas 및 `data-omega-real-extreme-clears` QA 검사 통과. 실기기 Android/운영 CTA 아님** |
 | M02 | 실제 원거리 총 + 검 3타 명중, HP 감소, 거리/장애물/보스 상한, PC/모바일 조작 | 기존 Watch 투사체+OMEGA 검격 3연격, F키·검 버튼·검 강화 2종 | **기본 코드 작성, 자동+실플레이 테스트 미통과** |
 | M03 | 안전모 좀비 기본/질주/방호/정예 + 감염 군집/실제 AI 차이 | `UNHELMETED`를 OMEGA에서 `HELMET_ZOMBIE`로 별도 표시, 색 3변형 기술용 임시 그림, 매 전투 첫 적 강제 좀비 | **고품질 독립 적 아트·차별화 AI 미구현. 총·검 테스트 추가만 함** |
 | M04 | 5막 15지점 이벤트, 물리적 길 찾기, 연속 연결 카메라 | 기본 FieldTraversal/3종 이벤트/출구, 오염 스토리 15개 라디오 표시 | **심리스 전환·환경 미술·연출 미완** |
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리):** M01 및 M01-QA의 **실제 최신 HEAD typecheck, Vitest, Chrome 브라우저 PASS 증거 확보/실패 원인 수정**부터. Actions가 안 뜨면 워크플로 설정·PR 트리거·GitHub status를 확인한다. 자동검증을 직접 실행할 수 없는 환경이라면 테스트가 '작성'된 것과 '실행 성공'을 절대 혼동하지 않는다. 이 단계가 해결되면 M02, M03으로 순서대로 진행하되 하나의 커밋/검증 묶음 단위로 보고.
+**다음 실행 작업(하나씩 처리):** **M02 실제 총·검 전투 통합 증거 확보**: 실제 OMEGA 개발 브라우저에서 좀비 총격·3연격의 적 HP 변화, 조준 방향과 검 충돌 및 장애물 차단, 보스 피해 상한, 키보드/터치 입력 타이밍을 검증. 먼저 `src/engine/omega-protocol-combat.ts`, `src/ui/OmegaProtocolPlaytest.tsx`, `scripts/qa-omega-protocol-browser.mjs`, `tests/omega-protocol-blade.test.ts`, `tests/omega-protocol-infected-zombie.test.ts` 확인. 현재 M02는 코드/단위계약 일부 확인 단계이며 실제 연속 플레이와 하드웨어 검증이 없어 **전체 TESTED/완료로 올리지 않는다**. 후속 M03에서는 안전모 좀비 4개 독립 행동/AI와 고품질 원화를 다룬다.
 
 ## 4. 코드별 찾아가기
 
@@ -65,7 +65,7 @@
 - `public/assets/omega/canonical-review/aira-v2/`: 은백색 8방향 정지 검수
 - `src/ui/omega-silver-action-parity.ts`: **0/160** 승인 액션 원화
 - `src/ui/OmegaSilverGuardReview.tsx`: GUARD SVG 관찰자 시각 검수, 전투 캐릭터 아님
-- `tests/omega-protocol-extreme-unlock.test.ts`, `tests/omega-protocol-infected-zombie.test.ts`, `tests/omega-protocol-blade.test.ts`, `tests/omega-protocol-story.test.ts`: 유닛 회귀
+- `tests/omega-protocol-extreme-unlock.test.ts` (기존 WATCH `persistStoreWallet` 통합 1~50 검증), `tests/omega-protocol-infected-zombie.test.ts`, `tests/omega-protocol-blade.test.ts`, `tests/omega-protocol-story.test.ts`: 유닛 회귀
 - `scripts/qa-omega-protocol-browser.mjs`: 실제 화면 PC/세로/가로, F/모바일 검격과 실진도/QA fixture 구분 검증
 - `.github/workflows/verify-omega-protocol.yml`, `.github/workflows/qa-omega-protocol-browser.yml`: 검증 워크플로
 
@@ -87,4 +87,24 @@
 - 해당 HEAD의 GitHub Actions workflow runs **0건**, check-runs **0건**. 즉 최신 변경에 대한 typecheck/Vitest/브라우저 QA 실제 통과 **근거 없음**.
 - 해당 HEAD의 Vercel commit status **failure**, 링크에서 `upgradeToPro=build-rate-limit` 확인. **유료 전환하지 않음**. 이는 JS 실행/성능 테스트 증거가 아님.
 - `main` 최신 조회 커밋 `28dc1e1bfad5f67f9c77970521706ee2a37e4dc1`; PR 메타의 오래된 merge base `dae18d1...`과 달라져 **main 진도가 앞섬**. PR 응답상 `mergeable=false`. **자동 merge / main 갱신 금지**, 필요 시 충돌/베이스 차이 별도 검토.
-- **실행 지시:** 다음 채팅에서 Actions / check-runs 및 `main` SHA를 새로 조회하고, `npm run typecheck`, OMEGA 관련 Vitest, `scripts/qa-omega-protocol-browser.mjs`를 **실제로 실행해 PASS 증거가 확인될 때까지** M01/M02 테스트 완료 판정 금지.
+- **2026-11-09 후속 갱신:** 위의 초기 CI 미실행 문제는 PR #235의 `main`과 충돌 때문에 발생했음. 별도 검증 PR #237 → OMEGA 개발 브랜치 방향에서 전체 테스트가 실행되어 **M01/M01-QA PASS 확인**. 본문의 과거 0건 관측은 아카이브이며 **최신 결과는 아래 8절**을 우선한다. 앞으로 M02의 실제 전투 타격증거는 별도로 확보해야 한다.
+
+## 8. 2026-11-09 실제 테스트 완료 및 다음 인계 (최신 기록)
+
+**검증 출처 및 SHA:** 별도 검증 PR [#237](https://github.com/TELLOWSS/psi-zero-day/pull/237)의 head `7ae30d0e6393a40ed77ec26a744769c506ad6a38` — 실검증 이후 OMEGA 개발 브랜치에 **squash 병합** commit `4866d824bddd04dacbb218705005a9d665bbe7a2`. `main`은 불변.
+
+| 검증 | 실제 GitHub Actions run | 판정 |
+| --- | --- | --- |
+| OMEGA Core TypeScript + SHA-256 binary + 안전한 아트 승인 차단 | [42575436435](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42575436435) | **PASS** — Typecheck + 원화 검사 |
+| Vitest OMEGA/Watch/Guard 회귀 | [Core CI](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42575436435) | **PASS 44 files / 186 tests** |
+| Vite + Chromium 반응형 전장/원화/입력/극한 해금 진도 분리 | [42575436509](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42575436509) | **PASS 전체 31/31 workflow steps**. 일부 단계는 소스아트 QA 스크린샷이며 실기기 아님 |
+| 검증용 버전의 QA 코드 정리 | [#237](https://github.com/TELLOWSS/psi-zero-day/pull/237) | **QA 브랜치에서 검증 후 개발 브랜치로 병합** |
+| 사용자 공개 해금/정식 8방향 은백색 액션/Android 실기기 | 개발 PR #235 | **BLOCKED / 미출시** |
+
+**이번 세션에서 실제 수정·반영된 파일 9개:** `tests/omega-protocol-extreme-unlock.test.ts` 실제 지갑 저장 연동, `src/ui/PatrolSurvivorsGame.tsx` optional dash bool 정규화, `tests/omega-protocol-blade.test.ts`, `tests/omega-protocol-infected-zombie.test.ts` readonly Hazard 타입 준수, `tests/omega-silver-watch-native.test.ts` 8방향 typed map, `tests/omega-protocol-actor-render.test.ts`, `tests/omega-protocol-dash-visuals.test.ts`, `tests/omega-protocol-grounded-gait.test.ts` 이전 10/50 시험 fixture 업데이트, `scripts/qa-omega-silver-preview-browser.mjs` ZIP 비동기 불러오기 대기.
+
+**CI가 없었던 근본 이유:** PR #235는 `main`과 충돌(`mergeable=false / dirty`)이어서 `pull_request` Actions 트리거가 실행되지 않았다. 정식 출시 전까지 별도 QA PR을 **개발 브랜치만 대상으로** 개설하여 테스트하고 그곳으로 병합하는 방식을 유지한다. PR #235와 `main`의 충돌 해결은 최종 품질게이트 이후 별도 검토, 운영 배포 금지.
+
+**여전히 미완:** 실제 유저 해금 CTA, 원본 AIRA 액션 160프레임, 좀비 정식 8방향 아트/차별화 AI, 연결맵 시네마틱, Android 실제 기기 검증. M02는 테스트 통과에 일부 포함되었더라도 **완성 아님**.
+
+**다음 시작 커밋:** 개발 PR #235 **최신 HEAD를 조회한 뒤** 위 M02 관련 5개 파일을 확인하고 *기존 자동 공격/검 3타가 실제 좀비를 적중시키는 브라우저 E2E*를 먼저 구현·검증한다. 테스트 완료 후에만 M02 체크리스트를 갱신한다.
