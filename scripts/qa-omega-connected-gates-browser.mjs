@@ -46,12 +46,29 @@ for(const s of scenarios){
  };
  const holdRight=async(ms,direction='right')=>{
   if(s.touch){
-   const btn=page.locator('.omega-protocol-pad button').nth(direction==='right'?3:1);
+   // Ordinary OMEGA mobile starts in genuine ANALOG-STICK mode.
+   // Its four cardinal buttons are intentionally display:none. Holding
+   // invisible arrow buttons would prove nothing about real touch control.
+   const pad=page.locator('.omega-protocol-pad');
+   const mode=await pad.getAttribute('data-omega-pad-mode');
+   const btn=mode==='analog'
+    ?page.locator('.omega-protocol-stick')
+    :pad.locator('button').nth(direction==='right'?3:1);
    const box=await btn.boundingBox();
-   if(!box)throw Error('Touch navigation pad is offscreen');
+   if(!box)throw Error('Actual visible '+mode+' touch navigation control missing');
    const cdp=await context.newCDPSession(page);
-   const point={x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)};
-   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...point,id:7}]});
+   const center={x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)};
+   const offset=direction==='right'?45:-45;
+   const target=mode==='analog'?{x:center.x+offset,y:center.y}:center;
+   await cdp.send('Input.dispatchTouchEvent',{
+    type:'touchStart',touchPoints:[{...center,id:7}],
+   });
+   if(mode==='analog'){
+    await sleep(50);
+    await cdp.send('Input.dispatchTouchEvent',{
+     type:'touchMove',touchPoints:[{...target,id:7}],
+    });
+   }
    await sleep(ms);
    await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
    await cdp.detach();
