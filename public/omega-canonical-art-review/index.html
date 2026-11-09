@@ -76,6 +76,7 @@ footer{color:#aeabbd;font-size:11px;text-align:center;padding:15px 24px 35px;lin
     </div>
    <div class="preview-controls" role="group" aria-label="게임 원화 로컬 시연">
      <button id="applyPreview" type="button" disabled>원화 8개 확인 후 전투 시험하기</button>
+     <button id="previewHome" type="button" disabled>메인 화면에서 AIRA 확인</button>
      <button id="clearPreview" type="button">로컬 시험 원화 지우기</button>
      <small>파일은 서버로 업로드되지 않으며 이 브라우저에만 보관됩니다. OMEGA 내부 시험 화면에서만 사용합니다. 시그널 가드·워치 운영 저장기록은 변경되지 않습니다.</small>
     </div>
@@ -199,7 +200,9 @@ function loadCandidateFiles(files){
   objects.set(id,URL.createObjectURL(file));
   sourceFiles.set(id,file);
  }
- $('applyPreview').disabled=!['E','SE','S','SW','W','NW','N','NE'].every(slot=>sourceFiles.has(slot));
+ const artComplete=['E','SE','S','SW','W','NW','N','NE'].every(slot=>sourceFiles.has(slot));
+ $('applyPreview').disabled=!artComplete;
+ $('previewHome').disabled=!artComplete;
  if(!objects.size)status.textContent='원화 WebP가 없습니다. 원화 ZIP이나 game_sprites_384x512 폴더를 선택하세요.';
  else select(active);
 }
@@ -231,8 +234,9 @@ function openSilverDb(){
   req.onerror=()=>reject(req.error||Error('브라우저 원화 저장 실패'));
  });
 }
-$('applyPreview').onclick=async()=>{
- const button=$('applyPreview');button.disabled=true;
+async function beginCanonicalPreview(target){
+ const button=$('applyPreview'),home=$('previewHome');
+ button.disabled=true;home.disabled=true;
  const needed=['E','SE','S','SW','W','NW','N','NE'];
  status.textContent='원화 8개 파일의 SHA-256 및 실제 크기 검증 중...';
  let db;
@@ -263,13 +267,16 @@ $('applyPreview').onclick=async()=>{
    tx.onerror=()=>reject(tx.error||Error('로컬 이미지 쓰기 실패'));
    tx.onabort=()=>reject(tx.error||Error('로컬 이미지 저장 중단'));
   });
-  status.textContent='AIRA 원화 8개 검증 성공. OMEGA 내부 전투 시험을 실행합니다.';
+  status.textContent='AIRA 원화 8개 검증 완료. 선택한 시험 화면으로 이동합니다.';
   db.close();db=null;
-  location.assign('/?omegaLab=1&omegaSilverPreview=1');
+  location.assign(target);
  }catch(error){
   status.textContent='안전 차단: '+String(error)+' · 실제 게임은 변경되지 않았습니다.';
- }finally{db?.close();button.disabled=false;}
-};
+ }finally{db?.close();button.disabled=false;home.disabled=false;}
+}
+$('applyPreview').onclick=()=>beginCanonicalPreview('/?omegaLab=1&omegaSilverPreview=1');
+$('previewHome').onclick=()=>beginCanonicalPreview('/?omegaSilverPreview=1');
+
 $('clearPreview').onclick=async()=>{
  try{
   const db=await openSilverDb();
