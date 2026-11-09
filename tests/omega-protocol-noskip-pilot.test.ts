@@ -152,14 +152,9 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125):NodeEvide
    // telegraphed window. Dash grants only native .28s invulnerability and
    // enforces its real cooldown, without manipulating hazard HP.
    const warned=s.snapshot.bossTelegraph;
-   const nearZombieCharge=s.engine.state.hazards.some(h=>{
-    const brain=s.zombieBrain(h.id);
-    return h.hp>0&&brain&&dist(h,player)<140&&
-     (brain.phase==='charge'||(brain.phase==='warning'&&brain.timer<.24));
-   });
-   if((warned?.phase==='warning'&&warned.timer<.24&&
-        omegaBossInStrikeZone(warned,player)||nearZombieCharge)&&
-       (player.dashCooldown??0)<=0){
+   if(warned?.phase==='warning'&&warned.timer<.24&&
+      omegaBossInStrikeZone(warned,player)&&
+      (player.dashCooldown??0)<=0){
     s.update(DT,movement);
     s.dash();
    }else s.update(DT,movement);
