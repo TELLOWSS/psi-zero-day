@@ -5,8 +5,8 @@ import {
 } from '../src/ui/omega-silver-watch-native';
 import type {OmegaHeading} from '../src/ui/omega-protocol-actor-render';
 
-const order=['E','SE','S','SW','W','NW','N','NE'];
-const map=():ReadonlyMap<OmegaHeading,HTMLImageElement>=>new Map(
+const order:readonly OmegaHeading[]=['E','SE','S','SW','W','NW','N','NE'];
+const map=():ReadonlyMap<OmegaHeading,HTMLImageElement>=>new Map<OmegaHeading,HTMLImageElement>(
  order.map((heading,i)=>[heading,{
   complete:true,naturalWidth:384,naturalHeight:512,
   src:'blob:original-'+i,
