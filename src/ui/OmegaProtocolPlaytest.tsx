@@ -204,7 +204,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const qaMode=import.meta.env.DEV&&typeof window!=='undefined'
   ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
- const gateWalk=qaMode==='gateTravel';
+ const actBoundary=(qaMode==='actBoundary6'?6:qaMode==='actBoundary9'?9:
+  qaMode==='actBoundary12'?12:null);
+ const gateWalk=qaMode==='gateTravel'||actBoundary!==null;
  // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
  // preserve them ONLY in those explicit DEV modes. Ordinary M04 play and
  // gateTravel use the actual timed physical airlock transfer.
@@ -213,6 +215,27 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
  });
  if(!import.meta.env.DEV)return session;
+ if(actBoundary!==null){
+  // M04-C: DEV-only preroll BEFORE the interactive browser opens.
+  // This deliberately pre-resolves all earlier combat/objective requirements.
+  // The ACT-boundary exit itself is subsequently completed only by real
+  // browser movement and E/touch; never by this initial test fixture.
+  const idle={moveX:0,moveY:0,triggerAction:false};
+  for(let wave=1;wave<actBoundary;wave++){
+   if(session.run.wave!==wave||session.field?.progress.phase!=='exit')
+    throw new Error('M04-C initial QA expedition is not ready for preroll');
+   const exit=session.field.plan.exit;
+   session.engine.state.player.x=exit.x-45;
+   session.engine.state.player.y=exit.y;
+   if(!session.interact().success)throw new Error('M04-C QA setup cannot reach exit');
+   for(let i=0;i<15;i++)session.update(.05,idle);
+   if(session.run.phase==='reward')session.selectUpgrade(session.run.offers[0]!);
+   for(let i=0;i<14;i++)session.update(.05,idle);
+  }
+  if(session.run.wave!==actBoundary||session.field?.progress.phase!=='exit')
+   throw new Error('M04-C initial QA world did not reach target ACT seam');
+  return session;
+ }
  const combatMode=omegaCombatProbeMode(window.location.search);
  if(combatMode){
   omegaCombatBrowserFixtures.set(session,omegaSetupCombatProbe(session,combatMode));
@@ -554,7 +577,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-session-unlock-source="dev-qa-fixture"
   data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}
   data-omega-gate-walk-qa={import.meta.env.DEV&&typeof window!=='undefined'&&
-   new URLSearchParams(window.location.search).get('omegaQaState')==='gateTravel'?'precleared-dev-only':'off'}>
+   ['gateTravel','actBoundary6','actBoundary9','actBoundary12'].includes(
+    new URLSearchParams(window.location.search).get('omegaQaState')??''
+   )?'precleared-dev-only':'off'}>
   <header className="omega-protocol-topbar">
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
@@ -738,6 +763,45 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
          </div>
          <small>LEVEL 01 <b>→</b> LEVEL 02</small>
         </div>
+       :snapshot.gateTransit.link.kind==='crane_elevator'
+       ?<div className="omega-protocol-crane-cross-section" aria-hidden="true">
+         <div className="omega-protocol-crane-boom"/>
+         <div className="omega-protocol-crane-shaft"/>
+         <div className="omega-protocol-crane-counterweight"/>
+         <div className="omega-protocol-crane-car"
+           style={{top:(snapshot.gateTransit.phase==='depart'
+            ?75-55*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration
+            :20+55*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration)+'%'}}>
+            <b>CRANE CORE</b><small>24M ELEVATOR</small>
+         </div>
+        </div>
+       :snapshot.gateTransit.link.kind==='service_tunnel'
+       ?<div className="omega-protocol-tunnel-cross-section" aria-hidden="true">
+          <div className="omega-protocol-tunnel-arch"/>
+          <div className="omega-protocol-tunnel-pipes"/>
+          <div className="omega-protocol-tunnel-bore"
+            style={{transform:'translate(-50%,-50%) scale('+
+             (snapshot.gateTransit.phase==='depart'
+             ?1+.8*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration
+             :1.8-.8*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration)+')'}}>
+             <b>UNDERGROUND -12M</b>
+          </div>
+        </div>
+       :snapshot.gateTransit.link.kind==='control_airlock'
+       ?<div className="omega-protocol-airlock-cross-section" aria-hidden="true">
+          <div className="omega-protocol-airlock-gauge"><b>O₂</b><span>PRESSURE NORMALIZING</span></div>
+          <div className="omega-protocol-airlock-bulkheads">
+            <i style={{transform:'translateX('+
+             (snapshot.gateTransit.phase==='depart'
+             ?-38+38*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration
+             :0-38*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration)+'%)'}}/>
+            <i style={{transform:'translateX('+
+             (snapshot.gateTransit.phase==='depart'
+             ?38-38*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration
+             :0+38*snapshot.gateTransit.elapsed/snapshot.gateTransit.duration)+'%)'}}/>
+          </div>
+          <span className="omega-protocol-airlock-seal">CONTAINMENT LOCK · 06M</span>
+        </div>
        :<div className="omega-protocol-gate-doors" aria-hidden="true"><i/><i/></div>}
       <div className="omega-protocol-gate-sign">
        <span>OMEGA · QUARANTINE LINK</span>
@@ -745,6 +809,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        <p>{snapshot.gateTransit.link.fromName} → {snapshot.gateTransit.link.toName}</p>
        {snapshot.gateTransit.link.kind==='scaffold_lift'&&
         <p className="omega-protocol-lift-depth">비계 연결데크 · 18m 수직 이동 · 다음 구역 현장 진입</p>}
+       {snapshot.gateTransit.link.kind==='crane_elevator'&&
+        <p className="omega-protocol-lift-depth">크레인 유지보수 승강로 · 24m 상행 · 제어실 진입</p>}
+       {snapshot.gateTransit.link.kind==='service_tunnel'&&
+        <p className="omega-protocol-lift-depth">지하 배관 지대 · 12m 하강 · 오염 차단 밸브</p>}
+       {snapshot.gateTransit.link.kind==='control_airlock'&&
+        <p className="omega-protocol-lift-depth">압력 평형 · 6m 연결 구간 · 통제 핵심시설</p>}
        <small>{snapshot.gateTransit.phase==='depart'?'격리문 폐쇄 · 다음 구역 연결':'격리문 개방 · 현장 탐험 계속'}</small>
       </div>
      </div>}
