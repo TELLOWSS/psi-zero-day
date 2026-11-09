@@ -246,7 +246,21 @@ for(const [name,width,height,checkpoint] of targets){
   const scrollV=metrics.docHeight>height+2;
   const scrollH=metrics.docWidth>width+2;
   const outside=Object.values(metrics.boxes).some(r=>!r||r.x<0||r.y<0||r.right>width+2||r.bottom>height+2);
-  const correctModal=name==='reward' ? metrics.modalTitle==='전술 강화 선택'
+  const supplyEvidence=name==='reward'?await page.evaluate(()=>{
+   const overlay=document.querySelector('.omega-protocol-safe-room[data-omega-reward-context="in-world-safe-room"]');
+   const panel=overlay?.querySelector('.omega-protocol-rewards');
+   const arena=document.querySelector('.omega-protocol-arena');
+   const parent=arena?.getBoundingClientRect(),rect=panel?.getBoundingClientRect();
+   const cards=overlay?.querySelectorAll('.omega-protocol-reward-cards button')??[];
+   const wording=panel?.textContent??'';
+   return {pass:Boolean(overlay&&panel&&rect&&parent&&cards.length===3&&
+    wording.includes('다음 목적지')&&wording.includes('전투 일시 중지')&&
+    rect.height<parent.height*.98),cards:cards.length,
+    dialogHeight:rect?.height,arenaHeight:parent?.height,
+    hasDestination:wording.includes('다음 목적지'),
+   };
+  }):null;
+  const correctModal=name==='reward' ? metrics.modalTitle==='전술 보급 지점'&&supplyEvidence?.pass===true
    : name==='boss' ? metrics.threatCount!=='00'&&Boolean(metrics.bossBanner?.includes('BOSS 01'))&&metrics.bossMeter!==null
    : name==='final-boss' ? metrics.threatCount!=='00'&&Boolean(metrics.bossBanner?.includes('FINAL BOSS'))&&metrics.bossMeter!==null
    : name==='objective' ? (metrics.missionTitle||'').includes('조작')
@@ -259,7 +273,7 @@ for(const [name,width,height,checkpoint] of targets){
    ? openingNearThreatCount>=2 : true;
   await page.screenshot({path:root+'/'+name+'-'+width+'x'+height+'.png',animations:'disabled',fullPage:false});
   const record={name,width,height,...metrics,horizontalOverflow:scrollH,verticalOverflow:scrollV,controlOutOfViewport:outside,
-    correctModal,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,swordTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
+    correctModal,supplyEvidence,stretchedCanvas,undersizedTouchTarget,walkTest,stickTest,padModeTest,swordTest,hangul,heroIdentity,compactLandscapeHeader,missionClearCombatCorridor,errors,
     authoredArt,openingNearThreatCount,openingHasCombat,realGate,honestQaGate,
     actualRepoBrowser:true,originalAiraArtApproved:false};
   report.push(record);
