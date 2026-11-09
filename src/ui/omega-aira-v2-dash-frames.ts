@@ -3,9 +3,9 @@ import type {OmegaActorView,OmegaHeading} from './omega-protocol-actor-render';
 /**
  * AIRA V2 independent E-facing DASH study: three illustrated poses taken
  * from the established original production sheet, not a mirrored idle pose.
- * The source SVG atlas is a separate review ZIP until its exact bytes are
- * imported and verified in the repository. Never request a missing asset
- * from production, and never mislabel it as the 160-frame approved art pack.
+ * The source SVG atlas is now committed and SHA-256-pinned in CI.
+ * This permits this limited E-direction study to run, but does not imply
+ * a complete eight-direction, 160-frame approved production art pack.
  */
 export const OMEGA_AIRA_E_DASH_STUDY={
  path:'/assets/omega/aira-v2/e-dash-3key-atlas.svg',
@@ -17,10 +17,10 @@ export const OMEGA_AIRA_E_DASH_STUDY={
  bootLine:210,
  webpSha256:'50dacee2a0b89af9c3ba232df0cae71940beae7a67671b2041d7bbdc82006e50',
  svgSha256:'49efe48fea53e7b376ce003e577ad59ea97ea7518f5636a77527c9dd6919eac3',
- /** Flip only once the exact file and Chromium evidence are committed.
-  * This lock is intentionally independent from the full 8x20 art gate.
+ /** The three-key source binary is committed; full art approval
+  * still requires independent 160 action frames, 320 masks and devices.
   */
- binaryPresent:false,
+ binaryPresent:true,
  productionApproved:false,
 } as const;
 export const OMEGA_AIRA_E_DASH_DURATION=.22;
