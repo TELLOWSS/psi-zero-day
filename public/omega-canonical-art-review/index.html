@@ -68,7 +68,12 @@ footer{color:#aeabbd;font-size:11px;text-align:center;padding:15px 24px 35px;lin
   <section class="panel" aria-label="원화 방향 및 검증">
    <div class="panel-title"><h2>방향별 원화</h2><small>8 FEMALE + 1 MALE</small></div>
    <div class="slots" id="slots"></div>
-   <div class="source-uploader"><input id="folder" type="file" multiple webkitdirectory accept=".webp,image/webp" aria-label="압축 해제한 원화 폴더 불러오기"/><small>ZIP을 압축 해제한 뒤 원화 폴더를 선택하세요. 파일은 서버로 전송되지 않으며 이 브라우저에서만 미리 봅니다.</small></div>
+   <div class="source-uploader">
+     <label>원화 ZIP 바로 열기 <input id="zip" type="file" accept=".zip,application/zip" aria-label="AIRA 원화 ZIP 직접 선택"/></label>
+     <small>다운로드한 원화 ZIP을 그대로 선택하세요. 압축을 풀 필요가 없습니다.</small>
+     <label>또는 원화 폴더 선택 <input id="folder" type="file" multiple webkitdirectory accept=".webp,image/webp" aria-label="압축 해제한 원화 폴더 불러오기"/></label>
+     <small>파일은 서버로 전송되지 않습니다. 현재 브라우저 안에서만 검사·표시합니다.</small>
+    </div>
    <div class="preview-controls" role="group" aria-label="게임 원화 로컬 시연">
      <button id="applyPreview" type="button" disabled>원화 8개 확인 후 전투 시험하기</button>
      <button id="clearPreview" type="button">로컬 시험 원화 지우기</button>
@@ -183,21 +188,34 @@ document.addEventListener('keydown',e=>{
  if(e.key==='ArrowLeft')select(active-1);
  if(e.key==='ArrowRight')select(active+1);
 });
-$('folder').addEventListener('change',async e=>{
- const files=[...(e.target.files||[])].filter(f=>/\.webp$/i.test(f.name));
+function loadCandidateFiles(files){
  const prior=[...objects.values()];
  objects.clear();sourceFiles.clear();
  for(const url of prior)URL.revokeObjectURL(url);
  for(const file of files){
-  const match=file.name.toLowerCase().match(/^(e|se|s|sw|w|nw|n|ne|m01)-silver-review\.webp$/);
+  const match=file.name.toLowerCase().match(/^(e|se|s|sw|w|nw|n|ne|m01)-silver-review\\.webp$/);
   if(!match)continue;
   const id=match[1].toUpperCase();
   objects.set(id,URL.createObjectURL(file));
   sourceFiles.set(id,file);
  }
  $('applyPreview').disabled=!['E','SE','S','SW','W','NW','N','NE'].every(slot=>sourceFiles.has(slot));
- if(!objects.size)status.textContent='파일을 찾지 못했습니다. 원화 ZIP을 압축 해제한 game_sprites_384x512 폴더를 선택하세요.';
+ if(!objects.size)status.textContent='원화 WebP가 없습니다. 원화 ZIP이나 game_sprites_384x512 폴더를 선택하세요.';
  else select(active);
+}
+$('folder').addEventListener('change',e=>{
+ loadCandidateFiles([...(e.target.files||[])].filter(f=>/\\.webp$/i.test(f.name)));
+});
+$('zip').addEventListener('change',async e=>{
+ const zip=e.target.files?.[0];
+ if(!zip)return;
+ status.textContent='로컬 ZIP 압축 해제 및 원화 파일 규격 확인 중...';
+ try{
+  const {omegaUnzipReviewWebps}=await import('./local-zip.js');
+  const found=await omegaUnzipReviewWebps(zip);
+  loadCandidateFiles([...found.values()]);
+  status.textContent='ZIP 원화 '+found.size+'개 로드 완료 · 실제 전투 시험 전 SHA-256을 재검사합니다.';
+ }catch(error){status.textContent='ZIP 불러오기 실패: '+String(error);}
 });
 const SILVER_DB='psi-omega-canonical-review-v1';
 const SILVER_STORE='sprites';
