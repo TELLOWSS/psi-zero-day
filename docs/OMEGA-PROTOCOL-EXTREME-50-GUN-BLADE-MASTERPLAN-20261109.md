@@ -164,3 +164,10 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - **진짜 무스킵 실전:** [Draft PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) 시험 플레이어가 native Watch 총·검, 실제 적 HP, 장애물 길찾기, 현장 E, 물리적 출구, 제공된 강화 카드만 사용. DEV 사전 완료/HP 직접 편집/적 강제 처치 없이 고정시드 1~12구역을 통과하고 9구역 중간 보스를 격파한 로그: [Core #42696026289](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42696026289), **219/220 (15구역 완주 테스트는 실패)**. 13구역에서 HP33 진입→약 39.6초 후 패배, 적 7개 잔류.
 - **정확한 품질 판정:** `M04-D1 UI VERIFIED + MERGED; FULL 15-SECTOR NO-SKIP INCOMPLETE`. 과도한 시험용 좀비 회피 로직은 일반 엄폐물 추적을 망가뜨려 폐기/복원. 다음 단계는 안전모 감염 좀비 4종의 전투 예고·후반 밸런스, 13~15구역 실전 생존성과 보상 성장곡선, 최종 보스 15 완주 확인. 기계식 장면 전환은 여전히 진정한 심리스 월드가 아니고, 승인된 AIRA 160 독립 프레임과 실제 Android 기기 시험도 미완.
 - **최신 단일 진척 인계:** [OMEGA-PROTOCOL-CONTINUE.md 15절](../OMEGA-PROTOCOL-CONTINUE.md). `main`/Vercel Production은 최종 승인 전까지 미변경·미배포. 유료 전환 금지.
+
+### 2026-11-10 M04-D2 후반부 피해 원인 분리 계측
+
+- **[PR #245](https://github.com/TELLOWSS/psi-zero-day/pull/245) 검증 후 OMEGA 개발 브랜치에만 병합**: `src/domain/omega-protocol-damage-audit.ts`, `src/engine/omega-protocol-combat.ts`에 OMEGA 한정·런타임 API 비용 없는 읽기전용 피해 감사 도입. [Core #42703206974](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42703206974) TypeScript/Vitest **221/221**, [Browser #42703206789](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42703206789) **35/35 PASS**.
+- **출처별:** 일반 WATCH(native) 양의 순 HP 감소; 안전모 감염체 4종의 실타격 피해; TITAN HOOK 9구역과 BLACK SIGNAL CORE 15구역의 정확한 실제 타격. 각 구역·시각·원인·피해·잔여 HP와 구역별 합계를 수집. 실제 엔진 시뮬레이션에서 감염체 11, 두 보스 각각 12의 피해 유형을 독립 검증. WATCH 프레임별 순감소는 동시 회복 시 전체 피해의 하한이라는 점을 명시함.
+- **절대 오인 금지:** 계측 코드가 검증된 것이지 고정시드 15구역 **무스킵 완주 성공이 아니다**. 이전 [실전 PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243)은 1~12구역 통과·9구역 중간 보스 격파 후 13구역 실제 생존 실패, Draft/미병합 유지. 완성 원화 160독립 프레임·실제 Android·심리스 스트리밍은 미완.
+- **NEXT M04-D3:** 계측된 `damageEvents`/`damageSummary(wave)`로 같은 고정시드 실제 13구역 패배를 다시 실행, 안전모 좀비 각 종·일반 장비(native 순손실)·보스 피해의 비중, 회피 타이밍, 받은 카드·성장·DPS를 사실 근거로 분석. 검증 후에만 균형 개선. [단일 인계 문서 16절](../OMEGA-PROTOCOL-CONTINUE.md) 우선. `main`/Production/유료 전환은 최종 승인까지 금지.
