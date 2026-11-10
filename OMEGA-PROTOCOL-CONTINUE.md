@@ -438,3 +438,11 @@
 - 출시와 품질 구분: M12-G2는 **차세대 게임 배경의 원본 구조 렌더링 기술 단계**이지 최종 판매용 고해상도 배경 일러스트가 아니다. 은백색 AIRA 정식 160 독립 프레임/320 마스크, AIRA 외형 일치·정식 적 12종+ 아트/애니메이션, 심리스 세계, Android/태블릿 실제 FPS·발열/조작, 독립 strict PR #243/실계정 50 Extreme/상업 출시 승인 **모두 미완**.
 
 **NEXT M12-G3:** 갱폼·비계·호이스트/붕괴된 시설의 고해상도 원본 정밀 아트와 카메라 움직임에 의한 전경/중경/후경의 진짜 깊이 변화 및 모바일 프레임타임 측정. 15구역 전체 전장과 은백색 AIRA 정식 원화는 분리 추적. `main` / Production / Vercel 유료 전환 금지.
+
+
+### M12-G2 개발 검증 및 실제 캡처 재검수 메모 (2026-11-10)
+- 첫 시도 [Core #42806512440](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806512440) TypeScript 실패는 테스트 spy 문법 `(name:string)=()=>` 오타 1개로 확인하고 `(name:string)=>()=>`으로 수정. 엔진 원인 아님. 수정 후 [Core #42806630973](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806630973): TypeScript/57파일/245테스트 전부 PASS.
+- 초기 원경/갱폼/호이스트는 [Chrome #42806511714](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806511714) 전체 워크플로 SUCCESS. **M12-G2 4사이즈 브라우저 보고서 실제 픽셀**: 데스크톱/태블릿/모바일 세로·가로 모두 5개 산업구조 영역 별도 렌더링 PASS, 실제 조이스틱 아닌 키보드 방향 입력 X 이동 PASS. 다만 실제 화면 캡처를 육안 확인하니 **시작 카메라가 입체 구조물 대다수를 화면 밖에 둬 체감 품질 개선 미흡**.
+- 위 육안 결과를 반영해 `drawOmegaG2EntrySurface()` 신규: 첫 플레이어 시점(월드 150,450)에서 보이는 기존 통로 지면에 낮은 강철 판넬 마감·오버헤드 구조 그림자·표면 반사·원본 가이드 도색을 추가. 이는 **시각적 아스팔트 표면 질감**이며 충돌체/새로운 플랫폼·장비물체 아님. 실제 게임 drawLab 바닥 패스에 연결, 별도 Vitest 후속 구역 무영향·브라우저 독립 `entry` 픽셀 필수 추가.
+- **최종 변경 본** [Core #42807583775](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583775) TypeScript + 57개 파일/245개 테스트 **전부 PASS**. 최종 브라우저 QA [#42807583400](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583400) 종료 확인 및 최종 4장 스크린샷 육안 확인 **아직 완료하지 않았다**. 이전 전체 Chrome PASS는 초기 G2 소스에 대한 것으로 최종 바닥 보강을 승인하는 증거로 사용 금지.
+- 따라서 현시점 전체 M12-G2 = **CODED + CORE TESTED + 이전 Chrome 범위 PASS; 최종 Chrome/캡처 검수 필요**. PR #254는 Draft/미병합, 개발 브랜치 외부 확산/Production 금지. 최종 검증 성공 뒤에만 개발 브랜치에 squash 병합하고 검증 SHA·병합 SHA를 반드시 이 문서에 기입한다.
