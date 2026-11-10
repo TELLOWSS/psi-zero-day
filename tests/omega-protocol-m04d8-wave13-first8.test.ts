@@ -138,6 +138,16 @@ function tacticalStep(
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
  if(pilot==='bounded'&&s.run.wave>=13){
+  // Last surviving native cart may remain at range ~250 behind solid cover.
+  // With no simultaneous threats, approaching via the normal legal route
+  // restores genuine radio LOS and real blade contact, without changing HP.
+  if(s.engine.state.hazards.filter(h=>h.hp>0).length===1&&gap>105){
+   const route=omegaFieldNextRoute(actor,enemy,field.obstacles);
+   if(route&&dist(actor,route.next)>3){
+    if(telemetry)telemetry.lineOfSightDetourTicks++;
+    return steer(actor,route.next);
+   }
+  }
   // Native shot/projectile LOS can remain blocked even while safe kiting
   // succeeds. After 3.5 real seconds with NO enemy HP decrease, move toward
   // the existing cover-aware route instead of drifting forever to safety.
@@ -459,7 +469,9 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
   const startTime=s.engine.state.gameTime;
   let complete:NodeEvidence|null=null;
   try{
-   complete=completeRealNode(s,wave===9||wave===15?300:180,pilot,telemetry);
+   complete=completeRealNode(s,
+    pilot==='bounded'&&wave>=13?360:wave===9||wave===15?300:180,
+    pilot,telemetry);
   }catch(error){
    failureReason=String(error);
    if(s.run.phase==='defeat'&&failureReason.includes('NO-SKIP ACTUAL PLAYER DEFEAT')){
