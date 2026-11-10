@@ -36,6 +36,8 @@ on:
       - 'src/ui/omega-protocol-enemy-render.ts'
       - 'src/domain/omega-protocol-zombie-ai.ts'
       - 'scripts/qa-omega-zombie-ai-browser.mjs'
+      - 'scripts/qa-omega-m04d6-counterplay-browser.mjs'
+      - 'src/ui/omega-protocol-counterplay.ts'
       - 'tests/omega-protocol-zombie-ai.test.ts'
       - 'tests/omega-protocol-infected-zombie.test.ts'
       - 'src/ui/omega-protocol-actor-cues.ts'
@@ -137,6 +139,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-zombie-ai-browser.mjs
+      - name: M04-D6 actual native cart warning / charge and mobile-landscape boss HUD
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m04d6-counterplay-browser.mjs
       - name: M04 walk through two real quarantine gates via PC keys and mobile touch
         env:
           CHROME_BIN: /usr/bin/google-chrome
