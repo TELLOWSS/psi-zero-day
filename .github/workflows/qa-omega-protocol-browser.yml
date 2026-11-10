@@ -14,6 +14,8 @@ on:
       - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
       - 'src/ui/omega-protocol-m12-g5-art.ts'
       - 'src/ui/omega-protocol-m12g5b-art-gate.ts'
+      - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'scripts/qa-omega-m12g5c-local-source-browser.mjs'
       - 'src/ui/omega-protocol-playtest.css'
       - 'scripts/qa-omega-m12g5b-portrait-art-browser.mjs'
       - 'public/assets/omega/g5/**'
@@ -169,6 +171,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g5b-portrait-art-browser.mjs
+      - name: M12-G5c actual silver AIRA original and four transient WebP source QA four viewports
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5c-local-source-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome

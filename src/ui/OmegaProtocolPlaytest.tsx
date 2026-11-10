@@ -25,6 +25,7 @@ import {omegaG3Budget,drawOmegaG3ParallaxArchitecture,drawOmegaG3NativeMesh} fro
 import {omegaG4Budget,omegaG4SilverLabRequested,drawOmegaG4CenterStageMaterial,drawOmegaG4ActorGrounding} from './omega-protocol-m12-combat-fidelity';
 import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {omegaG5bLabRequested,OMEGA_G5B_ART_APPROVAL} from './omega-protocol-m12g5b-art-gate';
+import {omegaG5cLabRequested,omegaG5cReview,OMEGA_G5C_ART_POLICY} from './omega-protocol-m12g5c-local-art-review';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -376,8 +377,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const g5bPainterlyReview=typeof window!=='undefined'&&omegaG5bLabRequested(
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const g5cArtReview=typeof window!=='undefined'&&omegaG5cLabRequested(
+  window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const [g5cStatus,setG5cStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
+ const [g5cFeedback,setG5cFeedback]=useState('원본 4장 파일을 선택하면 해당 세션에서만 검수합니다.');
+ const [g5cPreviewOn,setG5cPreviewOn]=useState(false);
  const silverPreviewRequested=typeof window!=='undefined'&&
-  (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview);
+  (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
@@ -403,7 +409,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   let mounted=true;
   let lease:OmegaSilverPreviewSession|null=null;
-  ((g4SilverLab||g5ArtLab||g5bPainterlyReview)?omegaLoadSilverRepoReview():omegaLoadSilverPreview()).then(async session=>{
+  ((g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview)?omegaLoadSilverRepoReview():omegaLoadSilverPreview()).then(async session=>{
    if(!mounted){session.revoke();return;}
    lease=session;
    userApprovedAiraV2.setSilverReviewSources(session.urls);
@@ -431,7 +437,21 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    userApprovedAiraV2.setSilverReviewSources(null);
    lease?.revoke();
   };
- },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview]);
+ },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview]);
+ useEffect(()=>()=>{omegaG5cReview.dispose();},[]);
+ const importG5cFiles=useCallback(async (files:FileList|null)=>{
+  if(!g5cArtReview||!files)return;
+  setG5cPreviewOn(false);setG5cStatus('loading');
+  setG5cFeedback('독립 원화 4장 SHA-256·투명도·발 접촉을 검증 중입니다.');
+  try{
+   const result=await omegaG5cReview.import(Array.from(files));
+   setG5cStatus('ready');
+   setG5cFeedback(`서로 다른 WebP 4장 확인 · 변화율 ${result.changedPixelFraction.map(x=>(x*100).toFixed(1)+'%').join(' / ')} · 최종 작화 승인 전 비교만 가능`);
+  }catch(error){
+   omegaG5cReview.dispose();setG5cStatus('failed');
+   setG5cFeedback(error instanceof Error?error.message:'원화 파일 검증 실패');
+  }
+ },[g5cArtReview]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
@@ -657,6 +677,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-m12g5-lab={g5ArtLab?'source-verified-silver-originals':'off'}
   data-omega-m12g5-vector-study={g5VectorStudy?'isolated-unapproved':'off'}
   data-omega-m12g5b-art={g5bPainterlyReview?OMEGA_G5B_ART_APPROVAL.status:'off'}
+  data-omega-m12g5c-art={g5cArtReview?OMEGA_G5C_ART_POLICY.status:'off'}
+  data-omega-m12g5c-source-status={g5cArtReview?g5cStatus:'off'}
+  data-omega-m12g5c-preview={g5cArtReview&&g5cPreviewOn?'session-only-not-approved':'off'}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
@@ -685,12 +708,23 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
-    <strong>{g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
+    <strong>{g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?(g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
+     ?(g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
+    {g5cArtReview&&<div className="omega-g5c-art-controls" data-omega-g5c-controls="true">
+     <label htmlFor="omega-g5c-files">E 걷기 원화 4장 선택</label>
+     <input id="omega-g5c-files" type="file" accept="image/webp,.webp" multiple
+      aria-label="동쪽 걷기 원화 WebP 4장 불러오기"
+      onChange={e=>{void importG5cFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+     <button type="button" data-omega-g5c-toggle="true"
+      disabled={g5cStatus!=='ready'||silverPreviewStatus!=='ready'}
+      onClick={()=>{const enabled=omegaG5cReview.activate(!g5cPreviewOn);setG5cPreviewOn(enabled);}}
+     >{g5cPreviewOn?'기존 원본 복귀':'실전 걷기 비교'}</button>
+     <span data-omega-g5c-feedback={g5cStatus} title={g5cFeedback}>{g5cFeedback}</span>
+    </div>}
    </aside>}
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div ref={arenaRef} className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}

@@ -277,3 +277,14 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 
 
 **M12-G5b 검증·개발 브랜치 병합 확정:** [QA PR #258](https://github.com/TELLOWSS/psi-zero-day/pull/258), OMEGA 개발 브랜치 squash `b8f913dc3b8173a2879e9ac3a17d6e36732f0689`. [Core #42883095422](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42883095422) TypeScript/61파일·263테스트 PASS, [집중 4해상도 #42883095270](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42883095270) 실제 AIRA 원본8장/4행·3행 viewport/직접 player 이동 전부 PASS, [전체 게임 브라우저 #42883095387](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42883095387) Guard/Watch/AIRA/미션/보스 SUCCESS. 검증 이후 변경은 로드맵 Markdown 1개임을 GitHub compare로 확인. **새로운 E 페인터리 4 프레임은 생성·승인되지 않았으며 지금은 STATUS BLOCKED**. 기존 8방향 원본은 변경하지 않음. **NEXT M12-G5c는 원화 자체 확보와 실게임 4해상도 동일 퀄리티 아트 승인**, `main`/Production/유료 기능 승인 전 보류.
+
+
+### 2026-11-11 M12-G5c — 네이티브 E 4장 원본 검수·임시 재생/원본 복귀 도구 [QA PR #259](https://github.com/TELLOWSS/psi-zero-day/pull/259)
+
+- **실제 독립 E 고화질 4장 원화는 아직 미제작·미승인**. 원화 생성 시도에서 원본을 대체할 수 없는 허위 테스트/병합 대시보드 이미지가 다시 생성되어 폐기했다. 이것을 완료된 게임 캡처/원화/테스트 증빙으로 사용하지 않음. M12-G5 기술용 SVG 6장은 여전히 시각 품질 미달로 별도 격리. 정식 160/320 승인 0.
+- `src/ui/omega-protocol-m12g5c-local-art-review.ts`와 OMEGA 실제 전투 화면에 **DEV `?omegaLab=1&omegaM12G5c=1` 로컬 원화 검수 패널** 구현: 4 파일 선택 (`aira-east-walk-0.webp`..3), SHA-256(원본 E 핀·중복 검사), 실제 384×512 WebP 투명 이미지 디코드, 캐릭터 알파 범위·발밑 접지, 서로 다른 4프레임 렌더 픽셀 차이 검증. 이 검사는 **기술 규격 검사**이지 미적 스타일·실제 독립 페인터리 원화 수동 승인 아님.
+- 통과 후보에 대해서도 자동으로 주인공을 바꾸지 않음. 사용자가 **'실전 걷기 비교' 버튼**을 눌렀을 때만 실제 OMEGA 카메라/Watch 물리의 플레이어가 **동쪽 E 방향으로 이동할 때** 4장 소스가 실제 native gait.phase에 따라 표시; idle/사격/대시/피격/다른 방향/원본 복귀는 기존 SHA-256 고정 AIRA 원화. 원본 8방향·HP/적AI/구역/Extreme/Guard/Watch/정식 art-slot 불변.
+- **통신/과금 없음**: 업로드된 개인 원화는 서버/스토리지/IndexedDB/외부 API로 보내지 않고 브라우저 메모리 Blob URL만, 변경/종료 시 revoke. 사용자는 코드 편집 없이 4장만 선택하면 실제 전투 화면에서 비교할 수 있음. 모바일 세로/가로 원화 안내와 로딩·검증 실패 메시지 표시.
+- `tests/omega-protocol-m12g5c-local-art-review.test.ts` 신규: DEV 모드, SHA 원본과 중복 차단, 파일명·MIME·용량, 알파·발, 진짜 E gait/정지·액션 분기, 세션 메모리 정리. 실게임 Chrome 4해상도 `scripts/qa-omega-m12g5c-local-source-browser.mjs`: 원본 SHA WebP READY → 불완전 파일 거부 → **브라우저 내부에서 만든 테스트용 사각형 WebP 4개**로만 엔진 업로드·이동·4프레임 렌더링·원본 복귀 검사. 테스트용 사각형은 정식 AIRA 원화가 **절대 아님**, screenshot 이름 `SYNTHETIC-QA-NOT-ART`로 구별.
+- 첫 집중 Chrome에서 PC/태블릿/390×844 3/4 통과. 844×390은 업로드 실패 시 안내 span을 CSS가 `display:none` 처리하여 Playwright가 보이는 안내를 찾지 못함. **CSS 가로 상태에서도 오류 안내 한 줄 표시로 수정 후 재시험**; 최종 결과는 후속 확정 기록. TypeScript/62파일·268 Vitest 첫 run 통과. 전체 Watch/Guard/보스 브라우저 결과와 최종 병합 전 반드시 재확인.
+- **NEXT** 실제 고해상도 페인터리 원화 4장을 독립 작화로 생성·출처/저작권·투명도·음영·발 접지·무기/얼굴을 원본과 육안 비교 → 로컬 개발실 검수 후 GitHub 아트 검토용 별도 PR → 정식 160/320 및 strict PR243 **계속 잠금**. 4종 감염체 고퀄 그래픽, 15전장, Android 실기기 FPS/터치 및 실제 50 Extreme은 차후. `main`/Production/유료 전환은 최종 사용자 승인 전 금지.
