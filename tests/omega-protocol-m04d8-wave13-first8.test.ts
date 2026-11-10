@@ -174,26 +174,6 @@ function tacticalStep(
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
- if(pilot==='bounded'&&s.run.wave===15){
-  // Final boss's real WATCH warning is a full X/Y sweep, not a circle.
-  // Move ACROSS its actual lane axis before it strikes. Choose the
-  // nearest reachable clear side, not a generic direction away from boss.
-  // No change to the warning duration, hit radius or player stats.
-  const warning=s.snapshot.bossTelegraph;
-  if(warning?.phase==='warning'&&omegaBossInStrikeZone(warning,actor)){
-   const center=warning.lane==='vertical'?warning.center.x:warning.center.y;
-   const spread=warning.laneHalfWidth+65;
-   const plans=[center-spread,center+spread].map(position=>{
-    const p=warning.lane==='vertical'
-     ?{x:Math.max(50,Math.min(1350,position)),y:actor.y}
-     :{x:actor.x,y:Math.max(50,Math.min(850,position))};
-    const route=omegaFieldNextRoute(actor,p,field.obstacles);
-    return route&&dist(actor,route.next)>3?route:null;
-   }).filter((r):r is NonNullable<typeof r>=>r!==null);
-   plans.sort((a,b)=>a.length-b.length);
-   if(plans.length)return steer(actor,plans[0]!.next);
-  }
- }
  if(pilot==='bounded'&&s.run.wave>=13){
   // Last surviving native cart may remain at range ~250 behind solid cover.
   // With no simultaneous threats, approaching via the normal legal route
