@@ -408,7 +408,9 @@
 
 ### 검증 근거 (TESTED는 해당 범위로만)
 - [Core GitHub Actions #42804240857](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804240857) **SUCCESS**: TypeScript typecheck 및 신규 M12-G1 포함 OMEGA Vitest/자산 정책 게이트.
-- [Browser GitHub Actions #42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592): **실시간 진행 중**. `Real React/Canvas screenshots and viewport checks` PASS, `M12-G1 live industrial-depth four-size screenshots and real movement` PASS 확인. 나머지 기존 WATCH/Guard/AIRA/보스 브라우저 회귀와 artifact 업로드/검수는 아직 미완료. **최종 전체 Browser PASS 판정은 완료 이후로 유예**.
+- [Browser GitHub Actions #42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592): **SUCCESS, 전체 워크플로 모든 단계 PASS**. 실제 OMEGA 게임 실행/기존 WATCH·GUARD·AIRA·보스 및 게이트 회귀, 네 화면(1440×900 / 1024×768 / 390×844 / 844×390) 실제 Canvas 픽셀 내용·방향키 움직임·가로 넘침 없음 확인. 캡처 artifact `omega-protocol-source-browser-screenshots` ID `13757422420` (보고서 `m12g1-industrial-depth-report.json`, M12 4장). 브라우저 결과는 기기 에뮬레이션이며 Android 실제 폰을 뜻하지 않는다.
 - 이번 기록은 모바일 Chromium 에뮬레이션이며 실제 Android/태블릿 발열/FPS QA가 아니다. 실제 상업용 퀄리티, 160개의 최종 승인 AIRA 프레임/320 오클루전 마스크, 진정한 심리스, 실유저 50×Extreme 계정 검증 및 PR #243은 **BLOCKED 별도**.
 
-**NEXT M12-G1 검증 마무리:** Browser 전체 종료/4해상도 캡처 실제 점검→이상 유무 판정→QA PR #253 검증 성공 시 OMEGA 개발 브랜치에만 병합→이 인계문서에 최종 실행 SHA·PASS/FAIL·캡처 증거 갱신. **NEXT M12-G2:** 플레이할 때 보이는 첫 전장 고품질 본작업(비계 높이·갱폼·호이스트 실질 레이어, 건물 실루엣과 전경 분할, 시야 가림 경계, 적 종류별 깊이·타격 피드백, PC/모바일 FPS 비용)을 이어가되 제작한 시안과 실제 게임 렌더링을 구분. 인물 확정 원화는 승인받기 전까지 편집/출시 완료로 표시 금지. `main`/Production 병합 및 유료 전환 금지.
+**실제 화면 육안검수 결론:** 4크기의 PNG가 동일한 native 게임 캔버스와 패널을 표시하고, 1구역 지면·컨테이너/비계 구조물 바닥 음영 및 인물 깊이 관계가 존재함. 그러나 현재 전장에는 **대형 비계 프레임·갱폼·호이스트 상부 독립 아트와 배경의 압도적 입체 구조가 여전히 부족**하며, 사용자가 요구한 상품급 액션 RPG 그래픽으로 승인 불가. 진짜 3D/고해상도 최종 배경·AIRA 원화 및 모바일 물리 성능도 미검수. 테스트의 녹색 성공은 **기술 슬라이스**까지만 의미한다.
+
+**NEXT M12-G1 검증 마무리:** 두 Actions 전체 PASS 및 4해상도 파일 실재 확인. 이제 QA PR #253을 OMEGA 개발 브랜치에만 검증 병합하고 최종 SHA를 인계한다. **NEXT M12-G2:** 플레이할 때 보이는 첫 전장 고품질 본작업(비계 높이·갱폼·호이스트 실질 레이어, 건물 실루엣과 전경 분할, 시야 가림 경계, 적 종류별 깊이·타격 피드백, PC/모바일 FPS 비용)을 이어가되 제작한 시안과 실제 게임 렌더링을 구분. 인물 확정 원화는 승인받기 전까지 편집/출시 완료로 표시 금지. `main`/Production 병합 및 유료 전환 금지.
