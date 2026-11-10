@@ -70,7 +70,16 @@ for(const [name,w,h,mobile] of sizes){
   const beforeX=Number(await arena.getAttribute('data-omega-player-x'));
   await page.keyboard.down('ArrowRight');
   // This screenshot is taken MID-MOVEMENT, not after key release (idle).
-  await page.waitForTimeout(690);
+  // Slow shared CI can render only 3 Canvas frames in a fixed 690ms slice;
+  // these may all land on one genuine gait pose despite >170 world-unit
+  // travel. Wait for TWO independently selected real gait frames rather
+  // than treating low CI frame throughput as an animation regression.
+  await page.waitForTimeout(350);
+  await page.waitForFunction(async()=>{
+   const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
+   const proof=omegaG5Art.evidence();
+   return proof.heroDraws>=2&&proof.heroFramesSeen.length>=2;
+  },null,{timeout:3000,polling:100});
   const artwork=await page.evaluate(async()=>{
    const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
    return {status:omegaG5Art.status(),evidence:omegaG5Art.evidence()};
