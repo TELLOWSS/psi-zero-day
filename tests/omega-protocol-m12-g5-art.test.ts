@@ -38,7 +38,7 @@ describe('M12-G5 first SIX unique E walk and drifter source-vector key poses',()
   for(const txt of contents){
    expect(txt).toMatch(/viewBox="0 0 384 512"/);
    expect(txt).toMatch(/width="384" height="512"/);
-   expect(txt).not.toMatch(/<image|<use|href=|scale\\(-1/);
+   expect(txt).not.toMatch(/<image|<use|href=|scale\(-1/);
    expect((txt.match(/<path/g)??[]).length).toBeGreaterThan(18);
   }
   // These are independently composed key poses, not repeated sources.
