@@ -1045,3 +1045,46 @@
  .omega-protocol-counterplay-hud span{font-size:9px}
  .omega-protocol-dash small{font-size:8px}
 }
+
+/* M12-G5b: the review bar is an ACTUAL fourth direct grid child.
+ * Without this explicit row, CSS grid assigns the gameplay arena to a
+ * content-sized implicit fourth row, leaving ~500px of blank purple on a
+ * 390×844 mobile screen. Preserve full-height Canvas and thumb controls. */
+.omega-protocol-lab[data-omega-review-layout="true"]{
+ grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+.omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+ min-height:0;max-height:80px;overflow:hidden;
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:2px 8px;padding:4px 8px;max-height:78px;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar strong{
+  grid-column:1;font-size:10px;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar span{
+  grid-column:1;min-width:0;max-width:100%;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;font-size:9px;line-height:1.25;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar a{
+  grid-column:2;grid-row:1 / span 2;font-size:9px;align-self:center;
+  white-space:nowrap;
+ }
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+  padding:2px 7px;max-height:34px;min-height:0;
+  flex-wrap:nowrap;white-space:nowrap;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar strong{
+  font-size:9px;overflow:hidden;text-overflow:ellipsis;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar span{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;
+ }
+}
+/* Non-review OMEGA, Guard and Watch keep their existing three-row shell. */
