@@ -226,3 +226,10 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - 시각 표현은 기존 native field 좌표·실제 solid terrain/LOS/충돌과 동기화한다. 시각용 두께/높이가 허위 발판이나 가짜 안전지대로 보이지 않도록 실제 세계 경로 및 전투 hitbox와 일치, 이펙트가 보스 경고를 가리지 않도록 관리.
 - 합격 기준: 실제 1개 전장에서 이동/총/검/적 경고/보스 공격이 일관된 카메라 안에서 작동, 가림 앞뒤가 실제 높이·발 위치로 바르게 바뀜, PC+모바일 가로/세로 4개 해상도 브라우저 시각 QA/기존 전투 TypeScript와 회귀 통과. Android 물리 기기 프레임타임·발열은 별도 검증; AIRA 액션 독립원화160/마스크320 승인 역시 별도.
 - **NEXT 실제 구현:** 개발 브랜치 기준 OMEGA 렌더러 `OmegaProtocolPlaytest` 및 지형 시각 레이어 확인 → 대표 industrial zone에 depth-sorted 구조물·occlusion/lighting 순차 구현 → PC/모바일 실제 브라우저 스크린샷/조작 검증 → 회귀 통과 시 개발 브랜치 병합. 정식 `main`/Production/유료 API 금지. [인계 §23](../OMEGA-PROTOCOL-CONTINUE.md) 기준.
+
+### 2026-11-10 M12-G1 implementation verified (OMEGA development only)
+
+- [QA PR #253](https://github.com/TELLOWSS/psi-zero-day/pull/253) → **OMEGA 개발 브랜치만 병합** `93c65d1747bf874143f4b77a88a17a54b7b550c6`; 본 게임 실제 Canvas에 1구역 지형 기반 외곽 철골/컨테이너 입체 측면, 장애물·인물 지면 그림자, 깊이 앞뒤 페인터 정렬·가림 위치 인식, 저성능 비용 예산 단계·거리 안개를 적용. 캐릭터/적 피해·보급·충돌·LOS·Extreme 해금·일반 WATCH/Guard 변경 없음.
+- [Core #42804240857](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804240857): TypeScript + **56파일/240개 테스트 PASS**. [Browser #42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592): 기존 QA 전체 SUCCESS, 실제 4해상도(PC1440×900/태블릿1024×768/모바일390×844/가로844×390) 반응형 React/Canvas·입력 움직임·스크린샷 검증 성공. artifact `omega-protocol-source-browser-screenshots` / 13757422420에 M12 4장 및 JSON 보고서.
+- **시각 정직성:** 실제 4종 PNG 육안 확인시 입체면/그림자 기술 효과는 있지만, 전체 전장 배경과 적 애니메이션은 **상품급 고품질 2.5D 최종 완성에 크게 못 미침**. M12-G1은 동작하는 기술 수직 슬라이스이지 최종 그래픽/상업출시 아님. 은백색 AIRA 정식 독립원화160/마스크320 승인·최종 비계/갱폼/호이스트 고해상도 층 레이어·Android 실제 기기 FPS/발열·진짜 심리스·strict PR #243 계속 미완.
+- **NEXT M12-G2:** 위 실제 스크린샷을 기준으로 상부 산업 구조물/광원과 전경·중경·원경 오리지널 아트를 작업, 캐릭터 부분 가림과 보스 타격 위험 UI의 대비 조율, 모바일 2종과 태블릿 실제 프레임 비용 재검증. 가짜 장애물/유료 API/원화 무단 승인 없음. PR #235 Draft 유지, `main`·Vercel Production/유료 업그레이드 최종 승인 전 보류.
