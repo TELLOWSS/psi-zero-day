@@ -478,3 +478,22 @@
 **M12-G3 전체 검증 및 OMEGA 개발 병합 최종 확정:** [QA PR #255](https://github.com/TELLOWSS/psi-zero-day/pull/255) **OMEGA 개발 브랜치에만 squash 병합** `ea0fe66708b6402dfea3d1e56bec5a5eaf5ee54e`. 실제 실행 소스 SHA `248f4c3f48761ad821c88d9913dee48d5f3e40f4` 검증: [Core #42810077573](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077573) **58파일/249 Vitest·TypeScript PASS**; [전체 브라우저 #42810077661](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077661) **AIRA/Watch/Guard/미션/실전 이동 포함 워크플로 전체 SUCCESS**; [4화면 G3 집중 QA #42810077739](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077739) **실제 화면 + far/mid/near 시차 픽셀·native 망 전부 PASS**. PR 최종 QA HEAD `c12eaab8c1d9465573b55db23b4b2180629e9bd0`은 위 검증 실행 SHA 이후 **오직 인계문서·마스터계획서 2파일**만 변경했음을 GitHub compare로 확인. 실제 4장 스크린샷 검수: 경사 프레임·투명 철골은 생겼으나 캐릭터·적의 질감과 인물 중심 구도가 게임 상품급 요구에 크게 미달. 따라서 **M12-G3 CODED/CI+CHROME TESTED, COMMERCIAL ART NOT APPROVED**. 160개 승인 AIRA 프레임/320마스크, 실제 Android FPS·발열, 전체 15개 고품질 월드·strict #243/실사용 50 Extreme은 계속 BLOCKED. 주 [PR #235](https://github.com/TELLOWSS/psi-zero-day/pull/235)는 Draft·main 미병합; Vercel Production·유료 전환 0.
 
 **NEXT M12-G4(중요):** 새 스틸 트러스만 계속 더하기보다, **실제 게임 중앙에 보이는 AIRA와 적 스프라이트 정합성** + 2.5D 산업현장 원본 고해상도 대형 구조물/소재를 함께 맞추는 완성도 중심 작업. 정상 PC/모바일(가로390 높이 포함)에서 캐릭터 정체성·크기 비례·적 탄막/낙하·보스 경고와 실 시야를 실영상/실제 픽셀로 검수. 다음 QA 브랜치 생성→소스 적용→Core+4-size Chrome→개발병합만; `main`/Production 최종 사용자 승인 전 금지.
+
+
+## 27. M12-G4 실제 은백색 AIRA 원본 8방향 + 전투 중심 질감·접지 레이어 (2026-11-10)
+
+**QA** [PR #256](https://github.com/TELLOWSS/psi-zero-day/pull/256), `qa/omega-m12g4-silver-combat-fidelity-20261110` → **OMEGA 개발 브랜치만**. 이전 개발 HEAD `02513e4a44ba7e218485582fab8b4916501c251c`, §26 M12-G3 기술 수직 슬라이스 검증 다음. 최종 승인 전 `main` 병합·Vercel Production 배포·유료 전환 금지.
+
+### CODED: 실제 원본 게임 주인공 표현의 불일치를 해결하는 검수 모드
+- `src/ui/omega-protocol-m12-combat-fidelity.ts` 신규: 1구역 중앙 원본 실제 필드 2.5D 광원·강판 도장·소재 패널·가이드 선·리벳(실제 통로 바닥 페인트, 새 플랫폼/통행 가능 고지대 아님). 기존 Watch 플레이어·적 `x/y` 위치에만 은백색 AIRA/4종 헬멧 감염체/보스별 일관된 반사 조명·발 접촉 표시. 실제 위험 경고·적·무기 렌더링 **이전 배경 패스**에서 처리하여 위험 경고를 가리지 않음. 390×844/844×390/1024×768/1440×900에 차등 드로콜 예산.
+- 기존 `src/ui/OmegaProtocolPlaytest.tsx` 수정: 기존 월드 카메라/비계·갱폼·호이스트·AIRA/적 페인터 및 정식 엄격 아트 게이트를 보존하고 실제 기본 전장에 재질·캐릭터 접지 팔레트를 연결. 물리적 4개 원본 장애물의 충돌/LOS/경로, 모든 감염체 AI/HP/보스 경고·사격·대시·모든 구역 해금·실계정 접근은 변경하지 않음.
+- 현장에 기존 저장소가 보유한 **은백색 AIRA 원본 8방향 GitHub WebP(384×512)**를 다시 재업로드하게 하지 않고 **`/?omegaLab=1&omegaM12G4=1` 개발전용 검수 주소에서만** 실제 OMEGA 게임 캐릭터로 사용. 원본 `omegaLoadSilverRepoReview()` 필수 SHA-256 검증·전체 방향 8장 이미지 디코드·로스터 `production_approved:false`·실제 WebP 크기를 그대로 보존한다. 검사 실패하면 기존 기술 대역 캐릭터가 나타나도록 실패 폐쇄, 웹상 일반 WATCH/Guard나 `main`과 일반 운영 화면/기본 OMEGA 화면 변경 금지. `omegaM12G4`/ `omegaSilverPreview` 쿼리 충돌 시 소스 우선 순위 강제 없음.
+- **본 기술 검수에서 나타나는 은백색 원본 8장은 정적 중립 방향 일러스트이지, 8×20=160개 정식 독립 전투 애니메이션이 아님**. 이 8장 시험 렌더링을 정식 160 장 완료, 320 마스크 승인, 상업출시 승인으로 표기하면 안 됨.
+
+### 검증 및 릴리스 제한
+- `tests/omega-protocol-m12-combat-fidelity.test.ts` 신규: 개발실 소스 모드의 opt-in과 타 모드 차단, 세 종류 지면색 구별/PC·모바일 예산, 충돌 원본 무변경 및 후속 구역 0 영향.
+- `scripts/qa-omega-m12g4-silver-identity-browser.mjs` 신규: **실제 React/Canvas 4 해상도**에서 `?omegaLab=1&omegaM12G4=1` 로딩 → 원본 8개 SHA/디코드 READY 확인, 엄격 160/320 아트 승인 플래그 여전히 false, 실제 World Canvas 재질색·원본 XY 근처 반사 픽셀, 실제 방향키 이동/가로 스크롤 없음과 4장의 실제 게임 스크린샷. 테스트가 원본 캐릭터 이미지를 가짜로 그리거나 상태/HP를 수정하지 않음.
+- Core CI 전수 TypeScript/Vitest, 기존 Watch·Guard·AIRA/보스·미션 회귀 Chrome, M12-G4 focus 4해상도, 실화면 육안 검토 통과한 뒤에만 **개발 브랜치 전용 병합**. CI 정확한 결과·스크린샷 파일 위치·병합 SHA는 아래 후속 기록.
+- 실제 Android/태블릿 발열/FPS/실터치, 정식 160개 AIRA 미러링 없는 스프라이트와 320 마스크, 감염체 상업급 개별 고해상도 원화, 5막 15전장 다층 배경, PR #243 strict 검수, 실제 계정 50 Extreme/엔딩 영상·상업출시는 여전히 **BLOCKED**.
+
+**NEXT M12-G5:** 원본 은백색 AIRA 8장과 동일 실루엣으로 **진짜 독립 8방향 walk·fire·dash·hit 각 프레임 원화 제작·마스크 검증(총160/320 최종 체계)** 및 감염체별 고품질 원본 스프라이트로 단계적으로 교체. 그래픽 양보다 실제 게임 캐릭터 퀄리티·발/무기 위치·가림·실기기 프레임 안정성을 우선. 승인 전 `main`/Production/유료 기능 금지.
