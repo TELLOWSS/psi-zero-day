@@ -649,6 +649,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
   data-omega-silver-preview={silverPreviewStatus}
+  data-omega-review-layout={silverPreviewRequested?'true':'false'}
   data-omega-m12g4-silver-review={g4SilverLab?'source-sha256-dev-only':'off'}
   data-omega-m12g5-lab={g5ArtLab?'source-verified-silver-originals':'off'}
   data-omega-m12g5-vector-study={g5VectorStudy?'isolated-unapproved':'off'}
