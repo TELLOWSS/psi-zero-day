@@ -51,6 +51,7 @@ for(const [name,w,h,mobile] of sizes){
     return {painted,colors:distinct.size};
    };
    const region=(draw,rect)=>{ctx.clearRect(0,0,1400,900);draw();return countInk(rect);};
+   const entry=region(()=>m.drawOmegaG2EntrySurface(ctx,plan,1.4,quality),[60,290,570,370]);
    const rear=region(()=>m.drawOmegaG2RearEnvironment(ctx,plan,1.4,quality),[0,0,1400,160]);
    const get=id=>plan.obstacles.find(o=>o.id===id);
    const cargo=region(()=>m.drawOmegaG2NativeFacade(ctx,plan,get('cargo'),1.4,quality),[240,108,170,206]);
@@ -58,7 +59,7 @@ for(const [name,w,h,mobile] of sizes){
    const hoist=region(()=>m.drawOmegaG2NativeFacade(ctx,plan,get('machine'),1.4,quality),[795,390,155,200]);
    const near=region(()=>m.drawOmegaG2BoundaryRail(ctx,plan,quality),[0,885,1400,15]);
    const parts=m.omegaG2SceneManifest(plan);
-   const all={rear,cargo,gangform,hoist,near};
+   const all={entry,rear,cargo,gangform,hoist,near};
    const identity=parts.some(p=>p.layer==='native-gangform'&&p.sourceId==='scaffold')&&
     parts.some(p=>p.layer==='native-hoist'&&p.sourceId==='machine');
    const artwork=Object.values(all).every(s=>s.painted>=25&&s.colors>=2);
