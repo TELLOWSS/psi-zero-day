@@ -451,3 +451,25 @@
 **M12-G2 개발 브랜치 병합 최종 확인:** [QA PR #254](https://github.com/TELLOWSS/psi-zero-day/pull/254) 병합 **ONLY OMEGA 개발 브랜치** squash SHA `ebeaec2bac6cb3f6b8baedd48396abeb0e123bea`. 실제 최종 소스/테스트 HEAD `4184d067e1f813eaec3722470cbd6f6bf9b0b732`의 [Core #42807583775](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583775) **TypeScript·57파일/245 Vitest PASS**와 [전체 Chrome #42807583400](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583400) **모든 브라우저/Watch·Guard·AIRA 회귀 단계 SUCCESS**. 마지막 QA HEAD `42499323d22687baa9d9c7e50e58ebdf217fd09b`과 실행 소스 HEAD의 diff는 **이 인계문서 및 포커스 Chrome workflow 추가 2파일뿐**임을 GitHub compare로 검증. 별도 [집중 4해상도 실제 Canvas #42808138608](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42808138608) **SUCCESS**, m12g2-authored-industrial-report.json 실패 0, PC1440×900 / 태블릿1024×768 / 모바일 세로390×844 / 가로844×390 모두 native 입력 이동과 **입구 지면+원경+갱폼+호이스트+컨테이너+경계** 픽셀 검증 PASS. 집중 스크린샷 GitHub artifact `omega-m12g2-focused-chrome` ID `13761535536`. 실제 캡처 육안검수: 출발 시점 바닥판·기계 그림자/질감이 보강됐으나 **대형 배경 구조물을 첫 화면 카메라가 충분히 드러내지 못하고 전장 전체는 평면적으로 보인다**. 따라서 `M12-G2 TECHNICAL CODED+TESTED`이지 **상품급 그래픽 승인 절대 아님**. `main`, Vercel Production, 유료 기능/한도 전환, 원본 Watch/Guard는 변경하지 않음.
 
 **확정된 NEXT M12-G3:** (1) 실제 플레이 구도에서 크게 보이는 높이 있는 다층 고해상도 원화/전경·중경·원경, (2) 카메라 이동·줌에 따른 시차와 진짜 가림 경계(시야/피격 표시 우선), (3) AIRA V2 최종 은백색 외형을 실제 주인공에 일치시키는 독립 8방향 액션·마스크 생산/검수, (4) 가로390높이+세로844 모바일 FPS·프레임타임/터치·발열, (5) strict PR #243/실계정 Extreme50/심리스·시네마틱 출시 게이트 독립 처리. **실제 Android 기기·상업용 최종 원화/마스크 아직 미검수**. PR #235 계속 Draft/미병합; `main`/Production 최종 승인 전 금지.
+
+
+## 26. M12-G3 실제 전장 카메라 3중 시차·원본 철망 오클루전 (2026-11-10)
+
+**QA:** [PR #255](https://github.com/TELLOWSS/psi-zero-day/pull/255) `qa/omega-m12g3-parallax-occlusion-20261110` → **OMEGA 개발 브랜치만**. 시작 PR #235 개발 HEAD `7dcdbe446493bcc791a385becb810b0fc4223ed5` (M12-G2 §25 완료). 사용자 승인 전 `main`/Vercel Production/유료 업그레이드 금지.
+
+### CODED (실제 게임 Canvas)
+- `src/ui/omega-protocol-m12-parallax.ts` 신규: 원본 네이티브 쿼터뷰 `omegaQuarterViewCamera`의 실제 player-following offset을 읽어 **원경(0.16)/중경(0.48)/근경(0.78) 3장 원본 산업 철골 시차**를 독립적으로 계산. 카메라 장거리 이동에서도 비율이 같은 값으로 포화되지 않도록 원본 공통 카메라 이동부터 clamp 후 레이어별 scale한다. `setTransform`/Canvas `save/restore`로 조작/히트박스 변형 없이 시각 패스만 적용.
+- 경기장 바닥 이후/캐릭터·감염체·위험경고보다 아래에 3장 반투명 레이어를 배치한다. 멀리 있는 크레인·공장 구조물 원경, 중간 강철 통로 빔과 조명 색대, 화면 양쪽 근접 기둥/철재 그림자. 과도한 시야 차폐를 방지하려 상부 27~29% 및 좌우 12.5% 영역에 clip, 중앙 살아있는 인물 전투공간 차단 금지. 새 fake 엄폐/충돌/등반/플랫폼 생성 없음.
+- 실물 collision과 같은 원본 `scaffold`·`machine` **객체 동일 참조**를 가진 경우에만 비계 안전망·호이스트 격자형 철망 가림 패스를 그린다. 기존 `omegaFieldDepthOrder`와 같은 사물·인물 painter Y sort를 유지. 작업구역 2~5 영향없음.
+- 390×844·844×390 모바일은 원경 트러스 5개/망 간격26, 1024×768 중간은 9/18, 1440×900 상세는 14/12·미세 발광. 외부 모델·CDN·유료 API/계정 저장·해금/카트·적 AI·피격/공격력 변경 없음.
+
+### 검증 · 범위
+- `tests/omega-protocol-m12-parallax.test.ts` **4개 신규**: 실제 원본 카메라 전후 far/mid/near 서로 다른 이동량·첫 진입 이동량0, 원본 물리 지형 완전 무변경, native 동일 객체 외 가림 금지, sector2~5 무영향, 모바일 detail budget.
+- `scripts/qa-omega-m12g3-parallax-browser.mjs` 실제 React/Canvas 4해상도 스크린샷·키보드 player 이동 및 동일 Vite 서비스의 **실제 G3 소스 모듈**을 열어 카메라 이동 전후 화면 픽셀 차이·3개 시차 수치·비계 망 그려진 픽셀과 소프트웨어 Chrome CPU 시간 계측. 프로그램/폰 실기기 FPS 또는 GPU 부하는 전혀 아님.
+- [Core #42810077573](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077573) **SUCCESS: TypeScript + Vitest 58파일/249개 PASS**. [집중 Chromium #42810077739](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077739) **SUCCESS: 4해상도 실제 플레이+시차 픽셀·움직임**. 별도 [기존 G2 집중 회귀 #42810077579](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077579) SUCCESS. 전체 Guard/Watch/AIRA·미션·보스 브라우저 [#42810077661](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077661)은 종료 성공 여부를 확인 후 후속 기록한다.
+- 집중 브라우저 실제 기록: 데스크톱/태블릿/모바일 세로/가로 모두 **파랄랙스 변동 픽셀 63,920 / 42,064 / 17,605 / 20,322**, 실제 native X 이동 110 / 110 / 106.3 / 102.7; 3장 이동거리 **22.64 / 67.92 / 110.38** (브라우저 계산 화면픽셀 기준) 서로 명확히 달라짐. 전용 CI 기록 `m12g3-parallax-browser-report.json` 실패0. 소프트웨어 Chrome medianMs 측정값은 타이머 분해능 한계 때문에 `0`으로 표기됨. **실제 Android/실폰 FPS 측정값 아님**; 수치로 최적화 완료 주장 금지.
+- 첫 1440×900 실제 게임 화면 육안: 상단 트러스와 화면 양측의 큰 구조선이 이전보다 표시되지만 지면·캐릭터 그래픽은 여전히 평면적이며 QA 전투 영웅 대역이 색상/비례 측면에서 최종 은백색 AIRA와 차이가 매우 큼. 160 정식 AIRA 프레임/320 오클루전 마스크 제작/승인 완료로 취급 금지.
+
+**계속 BLOCKED:** 실제 Android/태블릿 성능·터치·발열, 최종 원본 인물 움직임, 장면 5막/15구역 전체 원본 고해상도 건축 그래픽, 완전한 심리스, real 50×Extreme 계정, PR #243 strict, 유저 실제 15/15 완주·상업 승인. M12-G3는 전경·중경·원경 카메라 시차의 **기술 수직 슬라이스**이며 상품급 일러스트 완성이 아님.
+
+**NEXT M12-G4:** 보이는 중심 전장을 평면풍 기술그림에서 벗어나도록 원본 고해상도 세트와 입체 소재를 직접 1구역에 제작/적용, 캐릭터 실제 은백색 외형과 대응하는 8방향 원화/실전 검증을 최우선. 카메라 안정성/화면가림·상단 UI 겹침/모바일 가로·세로부터 측정. 검증 통과 후에만 OMEGA 개발 브랜치 병합 가능, `main`/Production 승인 전 금지.

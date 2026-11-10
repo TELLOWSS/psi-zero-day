@@ -233,3 +233,12 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - [Core #42804240857](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804240857): TypeScript + **56파일/240개 테스트 PASS**. [Browser #42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592): 기존 QA 전체 SUCCESS, 실제 4해상도(PC1440×900/태블릿1024×768/모바일390×844/가로844×390) 반응형 React/Canvas·입력 움직임·스크린샷 검증 성공. artifact `omega-protocol-source-browser-screenshots` / 13757422420에 M12 4장 및 JSON 보고서.
 - **시각 정직성:** 실제 4종 PNG 육안 확인시 입체면/그림자 기술 효과는 있지만, 전체 전장 배경과 적 애니메이션은 **상품급 고품질 2.5D 최종 완성에 크게 못 미침**. M12-G1은 동작하는 기술 수직 슬라이스이지 최종 그래픽/상업출시 아님. 은백색 AIRA 정식 독립원화160/마스크320 승인·최종 비계/갱폼/호이스트 고해상도 층 레이어·Android 실제 기기 FPS/발열·진짜 심리스·strict PR #243 계속 미완.
 - **NEXT M12-G2:** 위 실제 스크린샷을 기준으로 상부 산업 구조물/광원과 전경·중경·원경 오리지널 아트를 작업, 캐릭터 부분 가림과 보스 타격 위험 UI의 대비 조율, 모바일 2종과 태블릿 실제 프레임 비용 재검증. 가짜 장애물/유료 API/원화 무단 승인 없음. PR #235 Draft 유지, `main`·Vercel Production/유료 업그레이드 최종 승인 전 보류.
+
+
+### 2026-11-10 M12-G2 / G3 실제 게임 배경 아트 수직 슬라이스
+
+- **M12-G2 VERIFIED / DEV-MERGED:** [PR #254](https://github.com/TELLOWSS/psi-zero-day/pull/254)→OMEGA 개발 브랜치 squash `ebeaec2bac6cb3f6b8baedd48396abeb0e123bea`. 원본 Canvas에 cargo·scaffold·machine 네이티브 충돌체에만 정렬된 갱폼·호이스트·컨테이너 외장, 타워크레인/원경, 첫 진입 지면 기계그림자/소재를 제작. Core TypeScript·57파일/245테스트 및 전체 Chrome과 4해상도 focused PASS. 실제 스크린샷에서 플레이 초기 대형 구조물이 많이 화면 밖이고 상업급 입체감 부족: **그래픽 승인 보류**.
+- **M12-G3 CURRENT [PR #255](https://github.com/TELLOWSS/psi-zero-day/pull/255), OMEGA DEV-ONLY QA:** 실제 native camera offset 기반 3장 상/근경 패럴랙스 비율 0.16/0.48/0.78. 중경 철골 보·원경 공장 격자·좌우 철재 기둥은 전장 상부/가장자리만 사용, 중앙 플레이와 보스 경고는 가리지 않음. 실제 scaffold·machine 동일 객체만 연동한 반투명 철망 가림. 기존 물리·사격LOS·적/보스·계정/무료 플랜 무변경.
+- 검증: [Core #42810077573](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077573) **TypeScript·58파일/249테스트 PASS**. [집중 Chrome #42810077739](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077739) **PC/태블릿/모바일 2방향·플레이어 실제 이동·원경/중경/근경 픽셀 변화/철망 망 픽셀 4/4 PASS**. 실제 Chrome software microbenchmark는 실제 Android FPS 측정이 아니며 모바일 발열·조작 미검수. 전체 Chrome workflow #42810077661 결과 확인 후 병합 여부 결정.
+- **최종 아트 미달:** 실제 스크린샷에서 주요 플레이 카메라의 낮은 공간 입체감, 비주얼이 통일되지 않은 AIRA/좀비 스프라이트, 낮은 고해상도 질감이 여전. 8×20=160 정식 AIRA 독립 원화·320 마스크 및 상업용 원경 원화 미완. 15구역 플레이어 실제 완주·실계정 50×Extreme·Android 물리 QA·PR243/진정한 심리스 모두 별도 BLOCKED.
+- **NEXT M12-G4:** 테스트 픽셀이 아니라 실제 유저가 보는 중심 화면에서 대형 산업구조의 원근·입체 볼륨 + 정식 AIRA 원화/애니메이션 시각 정합성을 최우선. 임시 삽화·형상화 시안/실제 게임 구현·검증·상업적 승인 상태는 항상 구분. `main`/Vercel Production/유료 전환 금지.
