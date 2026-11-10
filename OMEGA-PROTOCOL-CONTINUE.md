@@ -419,3 +419,30 @@
 **M12-G1 최종 개발 병합 확인:** [QA PR #253](https://github.com/TELLOWSS/psi-zero-day/pull/253) 전체 검증 후 **OMEGA 개발 브랜치에만** squash 병합 `93c65d1747bf874143f4b77a88a17a54b7b550c6`. 실제 실행 코드의 GitHub Core [#42804240857](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804240857) **56파일/240테스트 및 TypeScript PASS**, Browser [#42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592) **전체 워크플로 SUCCESS**와 M12 4크기 브라우저 캡처 확인. 검증 코드 SHA `673e7d0d12da69279a70e1bc898fdfdb3a281f9a` 이후 QA에 추가된 커밋은 인계문서 내용만 변경했으며 코드 동등성 유지. 메인 PR #235 계속 Draft, `main` 병합/운영 Vercel 배포/유료 전환하지 않았다. 육안검수 결과 추가 산업 구조물 원화, 긴 전경/후경 레이어와 최종 AIRA·적 캐릭터 원화가 충분하지 않으므로 **상품급 그래픽 합격 판정 금지**.
 
 **다음 실제 구현 M12-G2:** 첫 전장에서 '비계/갱폼/호이스트 높이 + 타워크레인 원근 실루엣 + 고해상도 독립 전경/중경/후경 + 실재 구조물과 가려지는 인물 + 모바일 낙하/충돌 프레임 가독성'을 기존 브라우저 캡처를 기준선으로 개선. 원본 지형과의 충돌/LOS 싱크, 세로/가로 UI, Vercel 무료 한도 유지. 새 QA 브랜치와 별도 Core+Browser 검증 전 개발완료 주장 금지.
+
+
+## 25. M12-G2 첫 전장 원본 산업구조물 2.5D 레이어 (2026-11-10)
+
+**QA [PR #254](https://github.com/TELLOWSS/psi-zero-day/pull/254)** — `qa/omega-m12g2-authored-industrial-layers-20261110` → **OMEGA 개발 브랜치만**. 출발 PR #235 HEAD `3197659e1ac00a6c4a333e0a0e5b02ba48954622` 및 M12-G1 §24 기준. **`main` 병합 및 Vercel Production 배포·유료 업그레이드 절대 금지**.
+
+### CODED: 단순 시안 이미지가 아닌 실제 엔진 Canvas
+- `src/ui/omega-protocol-m12-authored-industrial.ts` **신규**: 현장 1구역에 산업시설 원경 파사드/타워크레인 독립 실루엣, **기존 지형 `cargo` / `scaffold` / `machine` 객체에만** 짙은 컨테이너 외장, 3층 갱폼/비계 프레임, 승강기 레일/카/케이블, 네이티브 경계에만 낮은 프레임 레일을 시각적으로 묘사. 오리지널 자체 Canvas 벡터이며 제3자 저작권 이미지·AI 네트워크 호출/비용·CDN 없음.
+- `src/ui/OmegaProtocolPlaytest.tsx` 실제 원본 React/Canvas `drawLab`에 **후경 패스 → 원본 고정 장애물/캐릭터 Y 순서 내 갱폼/호이스트/컨테이너 소재 패스 → 경계 전경 패스**를 실제 연결. 기존 쿼터뷰 카메라를 그대로 쓴다.
+- 무형체/허위 방어 불가: 기능물은 기존 원본 `omegaFieldPlan` 객체와 **동일 참조**일 때만 렌더되며 Watch 무전탄 LOS·몸체 충돌·거리/미션·카트/보스 경고·실제 HP/방어력·적 AI·시드/카드 선택·원본 저장/해금을 변경하지 않았다. 후경 공장/타워크레인과 지도 경계는 비충돌 장식이고 새로운 이동 가능한 발판으로 간주하지 않는다.
+- 성능 예산: 390×844·844×390 모바일은 적은 창문/트러스·광원 제거; 1024×768 태블릿 중간; 1440×900 PC 상세. 반복 무작위 생성, 유료 API/3D 엔진 도입 없음.
+
+### 검증 증거 및 합격 게이트
+- `tests/omega-protocol-m12-authored-industrial.test.ts` 신규(도메인 지형 무변경·세 구조물 진짜 기하 앵커·후속 구역 영향 없음·경량 프레임 예산·잘못된 입력 무시).
+- `scripts/qa-omega-m12g2-industrial-browser.mjs` 신규. Vite 개발전용 **실제 React/Canvas 화면 4크기** 캡처 및 실제 키보드 이동 검증 + 같은 Vite 원본 G2 모듈로 아웃오브밴드 Canvas를 따로 생성하여 **원경·갱폼·호이스트·컨테이너·경계 5구역 실제 픽셀을 개별 검사**. 이는 단순 화면 색상변화 감상이 아닌 실 아트 패스 존재 검증. 별도 `.github/workflows/verify-omega-protocol.yml`, `qa-omega-protocol-browser.yml` 검증 등록.
+- **엄격한 합격**: 본 QA PR의 최신 실행 코드 TypeScript/전체 Vitest SUCCESS + 실제 Chrome 4크기 및 기존 WATCH/GUARD/AIRA/Boss 회귀 SUCCESS + 최종 사진 육안 검토 통과한 뒤에만 개발 브랜치 squash 병합한다. 현재 검증 결과는 Actions에서 확인 후 아래에 갱신할 것.
+- 출시와 품질 구분: M12-G2는 **차세대 게임 배경의 원본 구조 렌더링 기술 단계**이지 최종 판매용 고해상도 배경 일러스트가 아니다. 은백색 AIRA 정식 160 독립 프레임/320 마스크, AIRA 외형 일치·정식 적 12종+ 아트/애니메이션, 심리스 세계, Android/태블릿 실제 FPS·발열/조작, 독립 strict PR #243/실계정 50 Extreme/상업 출시 승인 **모두 미완**.
+
+**NEXT M12-G3:** 갱폼·비계·호이스트/붕괴된 시설의 고해상도 원본 정밀 아트와 카메라 움직임에 의한 전경/중경/후경의 진짜 깊이 변화 및 모바일 프레임타임 측정. 15구역 전체 전장과 은백색 AIRA 정식 원화는 분리 추적. `main` / Production / Vercel 유료 전환 금지.
+
+
+### M12-G2 개발 검증 및 실제 캡처 재검수 메모 (2026-11-10)
+- 첫 시도 [Core #42806512440](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806512440) TypeScript 실패는 테스트 spy 문법 `(name:string)=()=>` 오타 1개로 확인하고 `(name:string)=>()=>`으로 수정. 엔진 원인 아님. 수정 후 [Core #42806630973](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806630973): TypeScript/57파일/245테스트 전부 PASS.
+- 초기 원경/갱폼/호이스트는 [Chrome #42806511714](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42806511714) 전체 워크플로 SUCCESS. **M12-G2 4사이즈 브라우저 보고서 실제 픽셀**: 데스크톱/태블릿/모바일 세로·가로 모두 5개 산업구조 영역 별도 렌더링 PASS, 실제 조이스틱 아닌 키보드 방향 입력 X 이동 PASS. 다만 실제 화면 캡처를 육안 확인하니 **시작 카메라가 입체 구조물 대다수를 화면 밖에 둬 체감 품질 개선 미흡**.
+- 위 육안 결과를 반영해 `drawOmegaG2EntrySurface()` 신규: 첫 플레이어 시점(월드 150,450)에서 보이는 기존 통로 지면에 낮은 강철 판넬 마감·오버헤드 구조 그림자·표면 반사·원본 가이드 도색을 추가. 이는 **시각적 아스팔트 표면 질감**이며 충돌체/새로운 플랫폼·장비물체 아님. 실제 게임 drawLab 바닥 패스에 연결, 별도 Vitest 후속 구역 무영향·브라우저 독립 `entry` 픽셀 필수 추가.
+- **최종 변경 본** [Core #42807583775](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583775) TypeScript + 57개 파일/245개 테스트 **전부 PASS**. 최종 브라우저 QA [#42807583400](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42807583400) 종료 확인 및 최종 4장 스크린샷 육안 확인 **아직 완료하지 않았다**. 이전 전체 Chrome PASS는 초기 G2 소스에 대한 것으로 최종 바닥 보강을 승인하는 증거로 사용 금지.
+- 따라서 현시점 전체 M12-G2 = **CODED + CORE TESTED + 이전 Chrome 범위 PASS; 최종 Chrome/캡처 검수 필요**. PR #254는 Draft/미병합, 개발 브랜치 외부 확산/Production 금지. 최종 검증 성공 뒤에만 개발 브랜치에 squash 병합하고 검증 SHA·병합 SHA를 반드시 이 문서에 기입한다.
