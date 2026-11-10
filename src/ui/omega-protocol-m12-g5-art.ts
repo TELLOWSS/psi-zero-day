@@ -32,6 +32,14 @@ export function omegaG5DevRequested(search:string,enabled:boolean):boolean {
   !p.has('omegaSilverPreview')&&!p.has('omegaM12G4');
 }
 export const OMEGA_G5_REVIEW_URL='/?omegaLab=1&omegaM12G5=1' as const;
+/** Explicit independent ART STUDY gate. Default G5 stays on the genuine
+ * SHA-pinned painterly silver sources; no lower-fidelity vector takeover. */
+export function omegaG5VectorStudyRequested(search:string,enabled:boolean):boolean{
+ return omegaG5DevRequested(search,enabled)&&
+  new URLSearchParams(search).get('omegaG5VectorStudy')==='1';
+}
+export const OMEGA_G5_VECTOR_STUDY_URL=
+ '/?omegaLab=1&omegaM12G5=1&omegaG5VectorStudy=1' as const;
 export function omegaG5EFrameIndex(phase:number):0|1|2|3 {
  if(!Number.isFinite(phase))return 0;
  return Math.min(3,Math.floor(((phase%1+1)%1)*4)) as 0|1|2|3;
