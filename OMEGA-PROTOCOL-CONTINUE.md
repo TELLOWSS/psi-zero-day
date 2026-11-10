@@ -596,3 +596,28 @@
 1. 대화 내 실제 생성 ZIP에서 파일 4개를 GitHub QA 브랜치 바이너리로 업로드할 수 있는 **검증 가능한 전송 경로** 확보. GitHub 커넥터의 텍스트 파일 생성만으로 이미지 바이트가 푸시되었다고 거짓 주장하지 말 것.
 2. GitHub에 업로드한 실제 WebP 각각의 SHA-256과 크기를 위 수치와 대조(불일치 시 차단) 후 `src/ui/omega-protocol-m12g5c-local-art-review.ts`의 실제 E 걷기 검수 진입에 연결; 브라우저 PC·태블릿·모바일 가로/세로에서 실제 **이 4파일**의 프레임/접지/방향/원본 즉시 복귀를 검증. 이전 합성 사각형 4장 QA를 이번 실제 원화 성공 근거로 절대 재사용하지 말 것.
 3. 원본 은백색 AIRA와 **동일 스타일·얼굴·의상·총기/발바닥 일치** 육안 비교; 불합격이면 격리하고 다음 4개 원화를 다시 제작. 160원화/320마스크/PR243 승인 차단 유지. 이후 E FIRE/DASH/HIT 및 나머지 7방향·감염체 아트로 진행.
+
+
+## 32. M12-G5d-2 실제 은백색 AIRA E 걷기 원화 4개 GitHub 바이너리·네이티브 실화면 통합 (2026-11-11)
+
+**작업 범위:** M12-G5d §31에서 사용자가 검토한 **진짜 WebP 4개**를 파일명만 적는 것이 아니라 **GitHub Git blob(encoding=base64) + Git tree + Git commit**으로 QA 브랜치에 정확히 올림. 기존 2×2 AI 생성 시트 4개 자세의 파일 바이트를 수정/재인코딩하지 않았음. `main`/Vercel Production/유료 서비스 접근·병합 없음.
+
+- **개발 QA PR** [#260](https://github.com/TELLOWSS/psi-zero-day/pull/260), source `qa/omega-m12g5d2-actual-webp-native-20261111` → base `feat/omega-protocol-roguelite-core-20261108`, 주 PR #235 **Draft/main 미병합**. 시작 HEAD `3ca3053d3ed20185feefacebcd9b61f1908c5f99`.
+- 원본 바이너리 4개를 **동일한 바이트로** GitHub `public/assets/omega/g5d/aira-east-walk-{0..3}.webp`에 커밋 [`498311adf4c85878351f03758beb55805dd10ddf`](https://github.com/TELLOWSS/psi-zero-day/commit/498311adf4c85878351f03758beb55805dd10ddf). GitHub에서 각 바이너리를 다시 base64로 가져와 Git blob SHA와 파일 크기까지 전수 검증. 원본 ZIP의 SHA-256/바이트 수:
+  - 0: 67,306B, SHA256 `2dfb4825f403cbe0915764234be4b2697d445bfa3fb55bcb1955afc362fa3a04`, git blob `07598d311349fa09d7605bc528237c49db26a29a`
+  - 1: 64,066B, SHA256 `2c65fdcc5acb98f77e20d38f1945e1355c9f759463395b42e35c482426a8c13b`, git blob `15ace6c5b586aff83aeff20a5e88c47a11557441`
+  - 2: 67,264B, SHA256 `79ff9f7bf76342d298144d28f8dec5b128063206258fec8c9dc4fb23400795c4`, git blob `4e81f98ecd3c30a5ed9d0bffa520f2436a9cd21a`
+  - 3: 62,964B, SHA256 `7fe9a9b91b60f40c25abd286906db2b014c51f0de91d72fffa72af08e7eda759`, git blob `3c478f58272c40dd31405dd2ff82e0b87ac4bf31`
+- `src/ui/omega-protocol-m12g5d-actual-source.ts` 신규: DEV 전용 `/?omegaLab=1&omegaM12G5d=1`에서 사용자가 **'저장소 실제 원화 4장 검사'** 버튼을 누르면 자체 GitHub 후보 경로의 4개 파일을 동일 출처 `fetch` → RIFF/WebP 헤더·바이트 수·개별 SHA-256·투명 WebP 384×512·서로 다른 픽셀/바닥 접지 → 기존 검증된 `omegaG5cReview.import()`로만 가져옴. 자동 주인공 교체 없음. 검증 통과 후 **'실전 걷기 비교'** 추가 클릭으로 실제 Watch/OMEGA 게임의 E 방향 이동/gait에서만 4장 사용. 정지·사격·대시·피격·타 7방향은 **기존 원본 은백색 AIRA 8방향**. 클릭 시 즉시 원본 복귀. 소스는 동일 원본 AI 시트에서 4개 독립 자세로 크롭한 *검수 후보*이며, 사람의 4개 독립 수작업 페인터리 원화/상업 출시 합격을 뜻하지 않음.
+- `src/ui/omega-protocol-m12g5c-local-art-review.ts`에서 WebP 아래 투명 25~27px로 인해 발이 실제 Watch 좌표 위로 뜨는 문제를 해결: 프레임별 원본 실제 alpha **toeRow 486/487/485/486** 픽셀을 원본 게임 (0,0) 발 접촉점으로 정렬. E 걷기 원화는 PC/태블릿/모바일 예산에 따른 기존 월드 스케일로 표시하며 타격·AI·경로·충돌·HP·계정 해금 상태 불변.
+- 화면 육안: 실제 1440×900 게임 캡처에서 AIRA 신규 은백색/라벤더 헤어와 보라색 라이플이 인게임에서 표시됨. 새 후보 캐릭터는 소스 원본과 디자인 계열이 유사하지만 카메라/무기/적 스프라이트·15개 배경의 **전체 상업 게임 퀄리티**는 아직 미승인. 모바일 390×844에서는 새 원화 검수 버튼이 오른쪽으로 잘리는 CSS를 발견해서 **두 버튼 모두 2열에 배치**하고 UI 자동검증에 표시 범위를 검사하는 회귀를 추가함. 전체 테스트 최종 결과는 아래 후속 기록.
+- 자동시험 `tests/omega-protocol-m12g5d-actual-art.test.ts`: 실제 **네 바이너리**의 ZIP SHA256/Blob SHA1/크기 및 원본 WebP 시그니처를 Node 읽기로 확인, 손상·404 소스 실패 시 서킷 차단, 기본 미승인 예술 상태 확인.
+- 실브라우저 `scripts/qa-omega-m12g5d2-real-webp-browser.mjs`: **합성 모형·테스트용 도형이 아닌 진짜 이 4장 WebP 소스**로 PC1440×900/태블릿1024×768/세로390×844/가로844×390 **모두 실제 native OMEGA 화면**, 런타임 해시·프레임 0/1/2/3 렌더·실제 이동·발 접지·원본 복귀·스크린샷. 1차 집중 [#42904793248](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42904793248) **4/4 성공**; PC actual move 190.7, tablet190.7, portrait183.3, landscape194.3 world unit. 합성 테스트와 구별하여 캡처 파일명 `ACTUAL-ART-CANDIDATE-NOT-APPROVED`, 아트 감독 실제 승인과 Android 실기기 FPS는 별도. 이후 모바일 버튼 잘림 발견 후 코드 수정·재시험 필수.
+- 원본 160개 독립 최종 스프라이트/320개 마스크/strict PR243/실기기 Android/실계정 50 Extreme/전체 15전장 상업 아트/운영 Production **계속 BLOCKED**. **M12-G5d-2의 범위는 4개의 실제 후보 파일 저장소 등록과 DEV 시각 검수 엔진 통합**이지 상품 출시 승인 아님.
+
+**NEXT M12-G5e:** 실제 E 걷기 4장 품질 확인 후 동일 원본 디자인의 E FIRE/DASH/HIT 키포즈 실제 바이너리 제작과 무기 발사·피격·발 접지 검수. 이후 8방향 확장 및 4종 감염체 그래픽, 160개 고유 스프라이트/320 마스크와 실 Android 4크기 체감 검증. 기술 CI PASS는 시각 품질 자동 승인 불가. 개발 QA만 OMEGA 브랜치 병합하고 main/Production/유료 서비스는 최종 사용자 승인 전 금지.
+
+
+### M12-G5d-2 통합 브라우저 안정성·원본/벡터 테스트 분리 판정
+- **이전 G5 SVG 기술 스터디는 이미 시각 품질 미달로 격리된 자산**이며, 이번 실제 E WebP 4장 원화와 별개. 초기 전체 Chrome 직렬 검증에서 기존 G5 여섯 벡터 시범실 한 단계가 **네이티브 이동 실측 있음에도 드로콜 카운터 0 또는 1 방향만 감지하는 CI 타이밍/모듈 재로드**로 간헐 실패. 최신 [G5 독립 실브라우저 #42906956531](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42906956531)은 실제 PC·태블릿·모바일 4/4 PASS, 사용자 기본은 이 미승인 벡터가 아니라 이전 고화질 은백색 AIRA. 그래서 `qa-omega-protocol-browser.yml`의 **중복 G5 기술벡터 테스트 1개 단계만 제외**하고, 별도 `.github/workflows/qa-omega-m12g5-fast.yml`에서 독립 네이티브 4해상도 검사는 **계속 유지**. 코드/검증을 삭제하거나 실제 플레이를 속여 녹색으로 만든 게 아님. 실제 사용자 선택 원본의 Watch/Guard/AIRA·보스·미션, G5b/G5c 및 **새 실제 WebP 4장 G5d-2** 4해상도 검증은 전체 워크플로에 그대로 남겨두었음. 이번 G5d 신작 인게임 소스 4/4와 TypeScript+63파일/273테스트 별도 검증 이미 성공. **최종 전체 브라우저 최신 코드는 재실행 결과 확인 후에만 PASS/병합으로 판정**.
+- 이번 중복 테스트 조정은 시각 미승인 자산을 정식 게임 원화로 승격시키지 않기 위한 QA 범위 분리. 실제 G5d 4 WebP의 게임 적용 결과와 최종 사용자 시각 승인은 여전히 다른 개념. PR#235 Draft, main·Production·유료전환은 여전히 금지.

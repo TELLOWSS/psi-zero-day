@@ -26,6 +26,7 @@ import {omegaG4Budget,omegaG4SilverLabRequested,drawOmegaG4CenterStageMaterial,d
 import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {omegaG5bLabRequested,OMEGA_G5B_ART_APPROVAL} from './omega-protocol-m12g5b-art-gate';
 import {omegaG5cLabRequested,omegaG5cReview,OMEGA_G5C_ART_POLICY} from './omega-protocol-m12g5c-local-art-review';
+import {omegaG5dLabRequested,omegaG5dImportRepoCandidates,OMEGA_G5D_ART_GATE} from './omega-protocol-m12g5d-actual-source';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -377,8 +378,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const g5bPainterlyReview=typeof window!=='undefined'&&omegaG5bLabRequested(
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
- const g5cArtReview=typeof window!=='undefined'&&omegaG5cLabRequested(
+ const g5dActualReview=typeof window!=='undefined'&&omegaG5dLabRequested(
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const g5cArtReview=g5dActualReview||(typeof window!=='undefined'&&omegaG5cLabRequested(
+  window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
  const [g5cStatus,setG5cStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [g5cFeedback,setG5cFeedback]=useState('원본 4장 파일을 선택하면 해당 세션에서만 검수합니다.');
  const [g5cPreviewOn,setG5cPreviewOn]=useState(false);
@@ -452,6 +455,19 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    setG5cFeedback(error instanceof Error?error.message:'원화 파일 검증 실패');
   }
  },[g5cArtReview]);
+ const importG5dActualSources=useCallback(async()=>{
+  if(!g5dActualReview)return;
+  setG5cPreviewOn(false);setG5cStatus('loading');
+  setG5cFeedback('GitHub 실제 원화 4장 원본 SHA-256과 접지 위치 확인 중…');
+  try{
+   const proof=await omegaG5dImportRepoCandidates();
+   setG5cStatus('ready');
+   setG5cFeedback(`실제 저장소 WebP ${proof.assets.length}장 검증 · 앞/뒤 프레임 변화 ${proof.changedPixelFraction.map(x=>(x*100).toFixed(1)+'%').join(' / ')} · 미승인 원화 후보`);
+  }catch(error){
+   omegaG5cReview.dispose();setG5cStatus('failed');
+   setG5cFeedback(error instanceof Error?error.message:'GitHub 원화 소스 검증 실패');
+  }
+ },[g5dActualReview]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
@@ -680,6 +696,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-m12g5c-art={g5cArtReview?OMEGA_G5C_ART_POLICY.status:'off'}
   data-omega-m12g5c-source-status={g5cArtReview?g5cStatus:'off'}
   data-omega-m12g5c-preview={g5cArtReview&&g5cPreviewOn?'session-only-not-approved':'off'}
+  data-omega-m12g5d-source={g5dActualReview?'git-4-real-webp-candidates-not-approved':'off'}
+  data-omega-m12g5d-art-gate={g5dActualReview?(OMEGA_G5D_ART_GATE.humanArtDirectionApproved?'approved':'visual-review-required'):'off'}
+  data-omega-m12g5d-preview={g5dActualReview&&g5cPreviewOn?'dev-candidate-not-approved':'off'}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
@@ -708,17 +727,21 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
-    <strong>{g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
+    <strong>{g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?(g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
+     ?(g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
     {g5cArtReview&&<div className="omega-g5c-art-controls" data-omega-g5c-controls="true">
-     <label htmlFor="omega-g5c-files">E 걷기 원화 4장 선택</label>
-     <input id="omega-g5c-files" type="file" accept="image/webp,.webp" multiple
-      aria-label="동쪽 걷기 원화 WebP 4장 불러오기"
-      onChange={e=>{void importG5cFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+     {g5dActualReview?<button type="button" data-omega-g5d-load="true"
+      disabled={g5cStatus==='loading'||silverPreviewStatus!=='ready'}
+      onClick={()=>{void importG5dActualSources();}}>저장소 실제 원화 4장 검사</button>:<>
+      <label htmlFor="omega-g5c-files">E 걷기 원화 4장 선택</label>
+      <input id="omega-g5c-files" type="file" accept="image/webp,.webp" multiple
+       aria-label="동쪽 걷기 원화 WebP 4장 불러오기"
+       onChange={e=>{void importG5cFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+     </>}
      <button type="button" data-omega-g5c-toggle="true"
       disabled={g5cStatus!=='ready'||silverPreviewStatus!=='ready'}
       onClick={()=>{const enabled=omegaG5cReview.activate(!g5cPreviewOn);setG5cPreviewOn(enabled);}}

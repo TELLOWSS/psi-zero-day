@@ -164,7 +164,12 @@ export class OmegaG5cLocalPainterlyReview{
   const frame=omegaG5EFrameIndex(view.gait.phase),src=this.images[frame];
   if(!src)return false;
   const w=height*384/512;
-  ctx.drawImage(src.image,-w/2,-height,w,height);
+  // Actual artist source cropped from a transparent 2x2 sheet has its last
+  // opaque boot at y≈485–487 of 512. Anchor those TRUE toe pixels at native
+  // Watch (0,0) instead of allowing the transparent bottom padding to make
+  // AIRA hover several world pixels above the hazard floor.
+  const toeRow=this.proof?.assets[frame]?.toeRow??511;
+  ctx.drawImage(src.image,-w/2,-height*toeRow/512,w,height);
   this.evidenceDraws++;this.framesSeen.add(frame);
   return true;
  }

@@ -1147,3 +1147,30 @@
  }
  .omega-g5c-art-controls input[type=file]{max-width:170px}
 }
+
+/* M12-G5d-2: real candidate buttons are TWO commands, not file input+button.
+ * The older 390px template forced both into grid-column:2, hiding the
+ * actual-source import control beyond the right edge. Never conceal a
+ * required action from mobile novice users. */
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  width:100%;min-width:0;gap:4px 6px;box-sizing:border-box;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls button[data-omega-g5d-load="true"]{
+  grid-column:1;grid-row:1;min-width:0;max-width:100%;
+  white-space:normal;line-height:1.1;font-size:9px!important;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls button[data-omega-g5c-toggle="true"]{
+  grid-column:2;grid-row:1;min-width:0;max-width:100%;
+  white-space:normal;line-height:1.1;font-size:9px!important;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls span[data-omega-g5c-feedback]{
+  grid-column:1/-1;grid-row:2;min-width:0;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
+}

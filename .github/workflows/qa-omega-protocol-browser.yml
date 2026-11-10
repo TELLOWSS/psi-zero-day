@@ -15,6 +15,9 @@ on:
       - 'src/ui/omega-protocol-m12-g5-art.ts'
       - 'src/ui/omega-protocol-m12g5b-art-gate.ts'
       - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'src/ui/omega-protocol-m12g5d-actual-source.ts'
+      - 'public/assets/omega/g5d/**'
+      - 'scripts/qa-omega-m12g5d2-real-webp-browser.mjs'
       - 'scripts/qa-omega-m12g5c-local-source-browser.mjs'
       - 'src/ui/omega-protocol-playtest.css'
       - 'scripts/qa-omega-m12g5b-portrait-art-browser.mjs'
@@ -163,10 +166,12 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
-      - name: M12-G5 six original silver E and hardhat drifter key poses live on four screen sizes
-        env:
-          CHROME_BIN: /usr/bin/google-chrome
-        run: node scripts/qa-omega-m12g5-six-pose-browser.mjs
+      # Deprecated, user-rejected G5 SVG tech-study retains independent 4-size
+      # browser acceptance in qa-omega-m12g5-fast.yml. This older test has
+      # an unstable module-singleton evidence getter when serialized with the
+      # full suite; do not duplicate a prototype rejected for visual quality.
+      # Actual approved/real silver originals and NEW four true WebPs remain
+      # tested here below by G5b, G5c and G5d-2 real native browser steps.
       - name: M12-G5b four real browser screens original silver source and explicit 4-row HUD layout
         env:
           CHROME_BIN: /usr/bin/google-chrome
@@ -175,6 +180,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g5c-local-source-browser.mjs
+      - name: M12-G5d-2 Four actual AI-painted silver E source WebP binary SHA-verified native combat at four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5d2-real-webp-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome
