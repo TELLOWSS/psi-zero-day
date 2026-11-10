@@ -706,6 +706,23 @@ describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit
   expect(results[0]!.telemetry.bossFrames.filter(f=>f.t<=12))
    .toEqual(results[1]!.telemetry.bossFrames.filter(f=>f.t<=12));
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
+  // M04-D9 explicit strict acceptance: real 15 encounters + real E + physical
+  // gate in sequence, final native boss defeated and true VICTORY phase. A
+  // passing forensic/diagnostic test alone must never be misread as a win.
+  const cleared=results[1]!;
+  expect(cleared.pilot).toBe('bossSafe');
+  expect(cleared.firstFailure).toBeNull();
+  expect(cleared.botBlockedAt).toBeNull();
+  expect(cleared.cleared).toBe(15);
+  expect(cleared.segments.map(s=>s.wave)).toEqual(
+   Array.from({length:15},(_,i)=>i+1));
+  expect(cleared.segments.every(s=>s.realCombatAndEFinished)).toBe(true);
+  expect(cleared.segments[14]?.enemiesAlive).toBe(0);
+  expect(cleared.segments[14]?.defeated).toBe(false);
+  expect(cleared.segments[14]?.gunHits).toBeGreaterThan(0);
+  expect(cleared.segments[14]?.swordDamage).toBeGreaterThan(0);
+  expect(cleared.runPhase).toBe('victory');
+  expect(cleared.endHp).toBeGreaterThan(0);
   for(const r of results){
    console.log('M04_D9_BOSS15_FRAMES',JSON.stringify({pilot:r.pilot,frames:r.telemetry.bossFrames,
     nativeDamage:r.telemetry.damageContexts.filter(e=>e.wave===15),bossHitDetails:r.telemetry.bossHitDetails}));
