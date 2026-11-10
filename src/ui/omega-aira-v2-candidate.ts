@@ -134,7 +134,7 @@ export function drawOmegaAiraV2Candidate(
   const w=h*384/512;
   if(g4Review){
    const gaitSwing=view.gait?.active?Math.sin(view.gait.phase*Math.PI*2)*.012:0;
-   const lean=view.dashing?.06:view.hurt?-.04:view.shooting?-.025:gaitSwing;
+   const lean=view.dashing ? .06 : view.hurt ? -.04 : view.shooting ? -.025 : gaitSwing;
    ctx.save();ctx.rotate(lean);ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();
   }else ctx.drawImage(image,-w/2,-h,w,h);
   return true;
