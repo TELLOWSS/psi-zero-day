@@ -392,3 +392,23 @@
 **병합 확인:** [QA PR #252](https://github.com/TELLOWSS/psi-zero-day/pull/252)은 **OMEGA 개발 브랜치에만** squash 병합 `b1f5daec9277a67625055a9a559ef62058874c83`. 실제 최종 TypeScript·55파일/236개 전부 PASS [Core #42801989191](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42801989191) 테스트/CI HEAD `ef135fd019273f983fe502289068a72457856382` 이후는 인계·마스터 문서 변경뿐이며 실행 소스 블롭 동일성 확인 완료. 사용자가 승인하기 전까지 주 PR #235는 Draft·`main` 미병합, Vercel Production/유료 전환 금지.
 
 **NEXT M12-G1:** 디렉터 지정 **배경 입체화 수직 슬라이스** 1개를 원본 OMEGA 실제 플레이 렌더러에 구축. 우선 기존 쿼터뷰 좌표/충돌/실탄 LOS를 변경하지 않고 시각용 z/depth와 layer ordering, 비계·갱폼·호이스트·산업 폐허 구조물, 전경 진입 시 AIRA/감염체 **동적 오클루전(가림)**, 발 접지/블롭 그림자, 조명·안개, 카메라 팬/줌, 모바일 전용 저비용 표현으로 완성. 실제 4개 해상도 브라우저 캡처/조작 및 기능 CI 검증으로 **이미지 단독 시안과 실제 구현을 분리**. 정식 캐릭터 원화 승인(0/160), 심리스/PR243/Android 실물은 독립 BLOCKED 게이트. main/Production/유료 전환 절대 금지.
+
+
+## 24. M12-G1 첫 전장 2.5D 구조 입체화 수직 슬라이스 — 검증 중 (2026-11-10)
+
+**검증 분기:** [QA PR #253](https://github.com/TELLOWSS/psi-zero-day/pull/253), `qa/omega-m12g1-industrial-depth-20261110` → OMEGA **개발 브랜치에만** 병합 가능. 주 PR #235 Draft, `main`/Vercel Production/일반 Watch·Guard/유료 서비스 변경 없음.
+
+### 실제 구현 범위 (CODED)
+- 기존 React/Canvas `src/ui/OmegaProtocolPlaytest.tsx`의 첫 구역 native Watch 실플레이 렌더러에 `src/ui/omega-protocol-m12-depth.ts` 신규 연결. 별도 시안 이미지가 아닌 게임 루프에서 직접 그려지는 광학 레이어.
+- 기존 월드 충돌 사각형 네 개에서만 생성하는 지면 그림자, 비계·컨테이너·기계·안전시설용 수직 면/철골 프레임, 이동하는 인물·좀비의 접지 그림자, 배경 거리 안개, **실제 앞뒤 깊이 정렬로 가려진 AIRA를 안내하는 바닥 표시**.
+- 기존 `omegaFieldDepthOrder`의 실제 발 위치(world Y) 정렬은 유지하며, 비시각 게임 좌표/Watch 총알 LOS/엄폐/충돌/플레이어 HP/좀비 HP/공격 및 난이도/카드/유저 계정·해금 상태를 변경하지 않음. 시각 장식에서 거짓 통로/엄폐 물체를 추가하지 않음.
+- 화면 면적 기준 저비용 시각 예산: 390×844·844×390 = 그림자 광택 최소/안개 1띠; 1024×768 = 중간; 1440×900 = 최대. 전체 원화 또는 실루엣 분할 애니메이션을 승인 완료로 표시하지 않음.
+- `tests/omega-protocol-m12-depth.test.ts` 실제 지형/가림 판단·저사양 예산·후속 구역 영향 없음·실제 입력 객체 무변경 검사 신규.
+- `scripts/qa-omega-m12g1-industrial-depth-browser.mjs`는 Vite 개발전용 실제 React+Canvas 4해상도를 열어 **실제 방향키로 플레이어 X 이동** 및 렌더된 canvas 픽셀 분포/화면 넘침을 점검하고 각 크기별 스크린샷과 JSON 결과를 Actions artifact에 저장함. 자동 유닛 통과와 육안 그래픽 승인은 별도.
+
+### 검증 근거 (TESTED는 해당 범위로만)
+- [Core GitHub Actions #42804240857](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804240857) **SUCCESS**: TypeScript typecheck 및 신규 M12-G1 포함 OMEGA Vitest/자산 정책 게이트.
+- [Browser GitHub Actions #42804245592](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42804245592): **실시간 진행 중**. `Real React/Canvas screenshots and viewport checks` PASS, `M12-G1 live industrial-depth four-size screenshots and real movement` PASS 확인. 나머지 기존 WATCH/Guard/AIRA/보스 브라우저 회귀와 artifact 업로드/검수는 아직 미완료. **최종 전체 Browser PASS 판정은 완료 이후로 유예**.
+- 이번 기록은 모바일 Chromium 에뮬레이션이며 실제 Android/태블릿 발열/FPS QA가 아니다. 실제 상업용 퀄리티, 160개의 최종 승인 AIRA 프레임/320 오클루전 마스크, 진정한 심리스, 실유저 50×Extreme 계정 검증 및 PR #243은 **BLOCKED 별도**.
+
+**NEXT M12-G1 검증 마무리:** Browser 전체 종료/4해상도 캡처 실제 점검→이상 유무 판정→QA PR #253 검증 성공 시 OMEGA 개발 브랜치에만 병합→이 인계문서에 최종 실행 SHA·PASS/FAIL·캡처 증거 갱신. **NEXT M12-G2:** 플레이할 때 보이는 첫 전장 고품질 본작업(비계 높이·갱폼·호이스트 실질 레이어, 건물 실루엣과 전경 분할, 시야 가림 경계, 적 종류별 깊이·타격 피드백, PC/모바일 FPS 비용)을 이어가되 제작한 시안과 실제 게임 렌더링을 구분. 인물 확정 원화는 승인받기 전까지 편집/출시 완료로 표시 금지. `main`/Production 병합 및 유료 전환 금지.
