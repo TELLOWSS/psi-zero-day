@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D7 실제 무스킵 고정시드 재검증: Core 53파일/234개 PASS, 동일 1~12구역 후 기존/13구역 반응 전술 둘 다 13구역 HP0 실제 패배. PR #250 개발 브랜치 대상만; 원래 난도·전투·계정·main/운영 변경 없음, 15/15 승리/Android/원화 미완
+**관리일:** 2026-11-10 (KST) · M04-D7 실제 무스킵 고정시드 재검증: Core 53파일/234개 PASS, 동일 1~12구역 후 기존/13구역 반응 전술 둘 다 13구역 HP0 실제 패배. PR #250 OMEGA 개발 브랜치만 squash 병합 `b5c431dfa88bdd2cc5bcd9e91b05169a4a69226e`; 원래 난도·전투·계정·main/운영 변경 없음, 15/15 승리/Android/원화 미완
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -337,5 +337,7 @@
 - **가드레일:** 게임 자체 수정은 없으므로 이번의 브라우저/실기기 새 검증 주장을 하지 않는다. 직전 M04-D6 [Chrome #42749422588](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422588)의 위험 경고 PC/모바일 가로·세로 QA는 별개. 본 D7은 실제 엔진+자동 조작/보급/미션 검증. AIRA 독립 원화160/마스크320, Android 물리 QA, 완전 심리스, 15/15 완주 **미완**.
 
 **정확한 상태:** M04-D7 forensic replay **CODED+TESTED**, 13·14·15구역 무스킵 엔딩 **FAIL/INCOMPLETE**. 사용자 승인 전 PR #235 Draft/미병합·운영/과금 금지.
+
+**병합 확인:** [QA PR #250](https://github.com/TELLOWSS/psi-zero-day/pull/250)은 검증 후 **OMEGA 개발 브랜치에만** squash 병합 `b5c431dfa88bdd2cc5bcd9e91b05169a4a69226e`. 작업 PR #235는 계속 **Draft·미병합**. Core [#42765707078](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42765707078) 53파일/234 PASS 증거는 게임/QA 코드 HEAD `624778b2ea2fc018908248d4f2e10c55dd0cba17`에 해당하며 그 뒤 GitHub 변경은 이 인계·마스터 기획서 문서 갱신뿐이다. `main`, Vercel Production 또는 유료 변경 없음.
 
 **NEXT M04-D8:** 실제 13구역 초기 4~8초 적 위치/경고/대시 재현 데이터를 사용해 즉시 회피가 *어떤 방향에서* 불리해지는지와 적 중첩 위험/LOS를 분석, 입력 정책 또는 예고 인지성의 검증된 개선만 별도 QA PR로 시도. 고정시드 결과가 승리 조건을 충족하지 못할 시 실패로 계속 표시한다. main/Production 금지.
