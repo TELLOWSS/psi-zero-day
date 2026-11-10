@@ -1,6 +1,6 @@
 import type {Hazard} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
-import {omegaG5DevRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
+import {omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 
 /**
  * Wave-15-only original POWER WARDEN silhouette. This is authored technical
@@ -155,7 +155,7 @@ export function drawOmegaProtocolEnemy(
     ctx.lineTo(0,-18);ctx.stroke();
    }
   }
-  const g5=typeof window!=='undefined'&&omegaG5DevRequested(window.location.search,
+  const g5=typeof window!=='undefined'&&omegaG5VectorStudyRequested(window.location.search,
    import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   // Dev-only two independently posed original drifter sources; preserve the
   // native telegraph above, all real health bars, and original other species.
