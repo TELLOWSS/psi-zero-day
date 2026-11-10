@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="384" height="512" role="img" aria-label="Original fictional drifter hardhat infected worker combat pose step-extended">
+<defs><linearGradient id="vest" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5b04b"/><stop offset=".35" stop-color="#b66a39"/><stop offset=".7" stop-color="#42383b"/><stop offset="1" stop-color="#ef8f34"/></linearGradient><linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#90a9ad"/><stop offset=".4" stop-color="#273b47"/><stop offset="1" stop-color="#0d1725"/></linearGradient><linearGradient id="hardhat" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5b4"/><stop offset=".4" stop-color="#edc449"/><stop offset="1" stop-color="#90602b"/></linearGradient><radialGradient id="skin"><stop stop-color="#b2d8b0"/><stop offset=".7" stop-color="#587a70"/><stop offset="1" stop-color="#243f44"/></radialGradient></defs>
+<g stroke-linecap="round" stroke-linejoin="round">
+<!-- two genuinely different authored walking stances (no mirror/duplication) -->
+<path d="M153 327 L143 392 L124 456 Q121 467 146 471 L173 457 L181 381 L181 333Z" fill="url(#steel)" stroke="#78909b" stroke-width="5"/>
+<path d="M211 328 L228 379 L259 448 Q266 459 250 470 L221 466 L195 404 L181 342Z" fill="url(#steel)" stroke="#7f8f97" stroke-width="5"/>
+<path d="M128 444 L117 471 L167 474 L178 452Z" fill="#111b25" stroke="#b0a2a0" stroke-width="5"/>
+<path d="M219 444 L224 474 L274 467 L252 443Z" fill="#0f1b22" stroke="#b3ad9c" stroke-width="5"/>
+<path d="M143 379 L171 392 M227 384 L254 390" stroke="#d6ae60" stroke-width="6" opacity=".8"/>
+<!-- layered torn work jacket, 3D twisted torso -->
+<path d="M145 200 Q110 238 121 292 L153 353 L230 353 L252 273 Q254 229 219 207Z" fill="url(#vest)" stroke="#d4a976" stroke-width="5"/>
+<path d="M141 240 L155 347 L174 346 L172 252Z" fill="#464953" opacity=".85"/>
+<path d="M185 229 L184 337 L199 337 L205 226Z" fill="#e1d9ba" stroke="#799493" stroke-width="2"/>
+<path d="M138 288 L254 296 L245 312 L147 308Z" fill="#e5d2a4" stroke="#e4f0de" stroke-width="3"/>
+<path d="M152 304 L224 306 M155 318 L238 321" stroke="#93c9c0" stroke-width="4" fill="none"/>
+<path d="M142 233 L167 233 M224 235 L242 241" stroke="#e8bf70" stroke-width="8" fill="none"/>
+<path d="M190 334 L203 340 L214 349 M161 337 L167 343" stroke="#151e30" stroke-width="6" fill="none"/>
+<!-- articulated reaching forearms with cut resistant gloves -->
+<path d="M141 235 Q112 239 107 281 L87 333 L109 338 L140 295Z" fill="url(#steel)" stroke="#859a91" stroke-width="5"/>
+<path d="M231 233 Q266 222 281 258 L309 290 L298 305 L245 284Z" fill="url(#steel)" stroke="#a3a29a" stroke-width="5"/>
+<path d="M87 322 L80 348 L105 353 L116 331Z" fill="url(#skin)" stroke="#b3bd95" stroke-width="4"/>
+<path d="M309 291 L331 317 L319 333 L294 316Z" fill="url(#skin)" stroke="#b3bd95" stroke-width="4"/>
+<!-- scarred synthetic face, no graphic injury or gore -->
+<path d="M151 112 Q179 89 219 116 L244 153 Q252 202 206 221 Q167 220 145 184Z" fill="url(#skin)" stroke="#b7c6ab" stroke-width="6"/>
+<path d="M165 167 Q180 153 195 170 M214 169 Q233 156 239 178" fill="none" stroke="#213b3a" stroke-width="9"/>
+<path d="M169 170 L188 173 M215 175 L232 178" stroke="#c9ff90" stroke-width="6"/>
+<path d="M190 193 Q218 204 230 195" fill="none" stroke="#344a45" stroke-width="6"/>
+<path d="M161 144 L153 203 M235 147 L240 194" fill="none" stroke="#6f9483" stroke-width="3"/>
+<!-- unmistakable orange worksite helmet with white reflector, hard brim -->
+<path d="M147 130 Q145 68 193 72 Q251 66 250 135Z" fill="url(#hardhat)" stroke="#fff2c8" stroke-width="6"/>
+<path d="M137 128 L261 134 L260 150 L136 146Z" fill="#b36b28" stroke="#fbe2ac" stroke-width="4"/>
+<path d="M179 84 L197 80 L199 129 L180 129Z" fill="#ffffff" opacity=".74"/>
+<path d="M147 153 L154 189 L177 208 M246 153 L240 188 L222 205" fill="none" stroke="#f6e1a3" stroke-width="4"/>
+<!-- headlamp housing, reflective leg slits and bioelectric accents -->
+<rect x="180" y="105" width="31" height="15" rx="4" fill="#273c45" stroke="#f7da7d" stroke-width="3"/>
+<path d="M189 111 L203 112" stroke="#bdffdf" stroke-width="4"/>
+<path d="M147 368 L161 371 M232 363 L245 367" stroke="#f3d47f" stroke-width="4"/>
+<path d="M166 269 L181 268 M212 267 L232 265" stroke="#eea56c" stroke-width="3"/>
+</g></svg>

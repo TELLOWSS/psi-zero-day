@@ -8,6 +8,7 @@ import {OmegaAiraV2DashFrames} from './omega-aira-v2-dash-frames';
 import {OmegaAiraV2HitFrames} from './omega-aira-v2-hit-frames';
 import {OmegaAiraV2SpecialFrames} from './omega-aira-v2-special-frames';
 import {omegaG4SilverLabRequested,OMEGA_G4_SILVER_SCALE} from './omega-protocol-m12-combat-fidelity';
+import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -130,9 +131,20 @@ export function drawOmegaAiraV2Candidate(
   // Compare real silver originals at the same world-foot plane as infected
   // bodies. The unchanged 8 angles are neutral STILL paintings; small native
   // posture transforms are NOT independent authored animation frames.
-  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*(g4Review?OMEGA_G4_SILVER_SCALE:1);
+  const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*
+   ((g4Review||g5Review)?OMEGA_G4_SILVER_SCALE:1);
+  // Only this genuine E walk source row changes on real collision-corrected
+  // gait; other seven SHA-pinned user originals and all non-walk actions
+  // stay untouched. This draft is NOT the production approved 160+320 pack.
+  const g5VectorStudy=typeof window!=='undefined'&&omegaG5VectorStudyRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  // Human screenshot review rejected this vector prototype as insufficient
+  // fidelity: only the explicit second study flag may paint it in-game.
+  if(g5Review&&g5VectorStudy&&omegaG5Art.drawSilverE(ctx,view,h))return true;
   const w=h*384/512;
-  if(g4Review){
+  if(g4Review||g5Review){
    const gaitSwing=view.gait?.active?Math.sin(view.gait.phase*Math.PI*2)*.012:0;
    const lean=view.dashing ? .06 : view.hurt ? -.04 : view.shooting ? -.025 : gaitSwing;
    ctx.save();ctx.rotate(lean);ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();
