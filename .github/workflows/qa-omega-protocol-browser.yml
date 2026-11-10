@@ -11,6 +11,8 @@ on:
       - 'src/ui/omega-protocol-depth-scene.ts'
       - 'src/ui/omega-protocol-m12-depth.ts'
       - 'src/ui/omega-protocol-m12-parallax.ts'
+      - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
+      - 'scripts/qa-omega-m12g4-silver-identity-browser.mjs'
       - 'scripts/qa-omega-m12g3-parallax-browser.mjs'
       - 'src/ui/omega-protocol-m12-authored-industrial.ts'
       - 'scripts/qa-omega-m12g2-industrial-browser.mjs'
@@ -149,6 +151,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g3-parallax-browser.mjs
+      - name: M12-G4 SHA-pinned silver eight-source real Canvas and material QA at four viewports
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome
