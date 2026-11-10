@@ -576,3 +576,23 @@
 **M12-G5c 최종 자동검증 및 개발 브랜치 병합 확정:** [QA PR #259](https://github.com/TELLOWSS/psi-zero-day/pull/259)를 **OMEGA 개발 브랜치에만 squash 병합** SHA `bd6ec0712ae6bf0472de287c4fc4ea80deb473dd`. 테스트한 CODE SHA `656a73bf33929661470a746813dc8764596cb425`, 검증 후 QA 최종 HEAD `2c9a98d3d806c46bbb8855d37287752821efb798`의 GitHub compare에서 추가 변경은 **마스터계획서 Markdown 1개만**. [Core #42889122038](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889122038) **TypeScript + 62파일/268 Vitest PASS**, [4해상도 실게임 집중 #42889121858](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889121858) **PC1440×900·태블릿1024×768·세로390×844·가로844×390 모두 SUCCESS**, [기존 Watch/Guard/AIRA/보스·미션 전체 브라우저 #42889121825](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889121825) **SUCCESS**. E 실제 네이티브 주인공 이동량 PC146.7/Tablet132/Portrait124.7/Landscape146.7 world-unit. 브라우저 실게임 프레임 기록에 **0·1·2·3 테스트용 원화 소스 모두 native 실제 gait에 따라 호출**되어 움직이고 버튼으로 기존 AIRA로 복원함. 모든 해상도 4/4 통과. 초점 검증 Artifact `omega-m12g5c-focused-chrome` ID `13796694422`, report `m12g5c-session-only-four-source-qa-report.json` failures 0. 노트: 1차 QA에서는 844×390 UI가 실패 메시지 span을 숨겨 실패, 모바일 가로에서도 사용자에게 오류 원인을 표시하도록 CSS 수정 후 최종 4/4 통과. **테스트용 자료는 브라우저가 생성한 인공 사각형 WebP일 뿐, 실제 AIRA 원화 4장이라고 절대 주장하지 말 것**. 사용자 원본 8방향은 SHA-256 검증 완료인 기존 원본 그대로 유지. 신규 4개 페인터리 그림 실제 파일 **미제작 / 최종 예술 승인 0**, 글로벌 **160개 원화·320개 마스크 승인 0**, Android 실기기 검증/실계정 극한50/상업출시 BLOCKED. 잘못 생성된 가상 대시보드 이미지는 모든 증빙에서 **제외**. **CODED + FULL QA PASS + DEV-MERGED, NEW PAINTERLY ART STILL NOT DELIVERED**. PR #235 **Draft · main 미병합 · Vercel Production 미배포 · 유료전환 없음**.
 
 **NEXT M12-G5d(변경금지 우선순위):** 캐릭터 외형의 정합성이 실제로 높은 384×512 페인터리 투명 원화 `aira-east-walk-0.webp`~`3.webp` 독립 손그림 4개를 완성하고 E 중립원본과 같은 조명·얼굴·의상·장발 포니테일·보라색 총기·부츠 바닥 좌표의 품질 비교를 실시. 로컬 UI에서 4개 불러와 원화 스타일 자체를 사람 검수 → 미달이면 대체 금지. 최종 승인 전 160/320 개수 완성으로 보고하지 않음. 상용 AIRA 액션별 프레임, 4종 감염체, Android 물리 실기기 FPS, 전장 15개 고화질, actual Extreme50, PR243 승인 계속 BLOCKED. 모든 QA PR은 개발 브랜치만, main/Production/유료 전환 사용자 최종 승인 후.
+
+
+## 31. M12-G5d — 실제 은백색 AIRA E 걷기 4자세 신규 이미지 제작·분리 (2026-11-11)
+
+**배경과 수정:** 이전 이미지 생성 호출이 AIRA 원화 대신 테스트 완료/PR 병합을 지어낸 장식적 대시보드를 생성한 것은 **전량 거부**했다. 이번에는 배경/문구/대시보드 없이 원본 은백색·라벤더색 포니테일, 보라색 총기, 흰색 비대칭 전투 코트·검정 보라 갑옷/부츠를 고정한 **투명 2×2 4자세 원화 시트**로 실제 생성 완료. 개별 자세는 접지(Contact)·무릎 들기(Lift)·앞다리 보폭(Stride)·복귀(Recovery), 모두 오른쪽(E)을 봄.
+
+### 실제 생성 파일 (사용자 대화 첨부 산출물; GitHub 바이너리는 아직 미등록)
+- 생성 원본 시트 파일 `SOURCE_2X2_ORIGINAL.png` (실제 생성본 1448×1086 RGBA), 별도 크롭 4장 `aira-east-walk-0.webp`부터 `3.webp`까지 각각 **384×512 투명 WebP**로 생성, `QA_EVIDENCE.json`과 움직임 `E_WALK_PREVIEW.gif`도 실제 생성해 한 ZIP `aira_m12g5d_four_independent_webp.zip`으로 전달. 서로 다른 자세를 하나의 생성 시트에서 분리한 **AI 원화 후보**이며, "각 그림을 사람이 독립적으로 도색 완료"라는 뜻이 아님.
+- 생성물 수치검사 (컨테이너 Python Pillow, ZIP 내 SHA-256 원본 바이트 대조 4/4, 프레임 RGBA 384×512, 프레임별 alpha >=64 픽셀 비율 및 발밑 y):
+  - `aira-east-walk-0.webp`: SHA256 `2dfb4825f403cbe0915764234be4b2697d445bfa3fb55bcb1955afc362fa3a04`, 67,306B, alpha 30.23%, 발밑 y486
+  - `aira-east-walk-1.webp`: SHA256 `2c65fdcc5acb98f77e20d38f1945e1355c9f759463395b42e35c482426a8c13b`, 64,066B, alpha 28.69%, 발밑 y487
+  - `aira-east-walk-2.webp`: SHA256 `79ff9f7bf76342d298144d28f8dec5b128063206258fec8c9dc4fb23400795c4`, 67,264B, alpha 30.42%, 발밑 y485
+  - `aira-east-walk-3.webp`: SHA256 `7fe9a9b91b60f40c25abd286906db2b014c51f0de91d72fffa72af08e7eda759`, 62,964B, alpha 30.00%, 발밑 y486
+- 기술 프레임 차이 검증: 렌더링 RGBA 4연결 프레임 픽셀 변화 비율 약 43.82% / 44.4% / 35.32% / 41.16% (> G5c 검수 최소 1.8%). ZIP `QA_EVIDENCE.json`의 4 SHA가 실제 ZIP 수록 WebP와 모두 일치, 미리보기 GIF 6프레임(loop: 0,1,2,3,2,1). 원본 아트 시트와 개별 WebP/GIF는 실제 출력물이지만 **GitHub 저장소로 바이너리 푸시·기존 엔진 내 이 신규 파일 4개 실기동 검증·원본 AIRA 디자인 육안 승인·Android FPS 검수는 아직 하지 않았다**. 기존 PR #259에서 4개 WebP를 선택할 수 있는 `/?omegaLab=1&omegaM12G5c=1` 개발 전용 미리보기는 이미 구현됨; 신규 4개 파일을 해당 UI에 불러와 비교·승인할 다음 검증이 필요하다.
+- 안전 판정: **산출물 4/4 생성 완료(후보), 기술 파일 검사 PASS, 실제 게임 아트 승인 0/4, 정식 160 독립 생산 승인 0/160, 320 mask 승인 0/320, 개발 브랜치 게임 적용 미완료**. 저장소 `main`/Vercel Production/유료 API 호출 및 PR235 Draft 상태 변경 **금지**.
+
+### NEXT M12-G5d-2 (동일 작업의 완료 조건)
+1. 대화 내 실제 생성 ZIP에서 파일 4개를 GitHub QA 브랜치 바이너리로 업로드할 수 있는 **검증 가능한 전송 경로** 확보. GitHub 커넥터의 텍스트 파일 생성만으로 이미지 바이트가 푸시되었다고 거짓 주장하지 말 것.
+2. GitHub에 업로드한 실제 WebP 각각의 SHA-256과 크기를 위 수치와 대조(불일치 시 차단) 후 `src/ui/omega-protocol-m12g5c-local-art-review.ts`의 실제 E 걷기 검수 진입에 연결; 브라우저 PC·태블릿·모바일 가로/세로에서 실제 **이 4파일**의 프레임/접지/방향/원본 즉시 복귀를 검증. 이전 합성 사각형 4장 QA를 이번 실제 원화 성공 근거로 절대 재사용하지 말 것.
+3. 원본 은백색 AIRA와 **동일 스타일·얼굴·의상·총기/발바닥 일치** 육안 비교; 불합격이면 격리하고 다음 4개 원화를 다시 제작. 160원화/320마스크/PR243 승인 차단 유지. 이후 E FIRE/DASH/HIT 및 나머지 7방향·감염체 아트로 진행.
