@@ -63,7 +63,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
- drawOmegaCounterplayCues(ctx,omegaCounterplayCues(state.hazards,id=>session.zombieBrain(id)),state.gameTime);
+ drawOmegaCounterplayCues(ctx,omegaCounterplayCues(state.hazards,id=>session.zombieBrain(id)),state.gameTime,field?.plan.obstacles??[]);
  // Genuine dash trail remains under all live Watch enemies and hero.
  drawOmegaDashEnergy(ctx,echoes,state.gameTime);
  const p=state.player;
@@ -265,6 +265,19 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   });
   return session;
  }
+ if(qa==='cartWarning'){
+  // DEV-only fixture positions actual native Watch actors before play.
+  // The engine still creates its own warning/charge and HP damage.
+  const state=session.engine.state;
+  const cart=state.hazards.find(h=>h.type==='RUNAWAY_CART'&&h.hp>0);
+  if(!cart||!cart.motion)throw new Error('M04-D6 native cart setup missing');
+  state.hazards=[cart];state.projectiles=[];state.drops=[];
+  state.player.x=700;state.player.y=450;
+  state.player.maxHp=800;state.player.hp=800;state.player.invincibleTime=0;
+  state.activePerks.radio_boost=0;
+  cart.x=900;cart.y=400;
+  return session;
+ }
  if(!['reward','boss','finalBoss','objective','exit'].includes(qa||''))return session;
  const idle={moveX:0,moveY:0,triggerAction:false};
  const clearAndOperate=(finishExit:boolean)=>{
@@ -306,6 +319,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
  const zombieAiQa=import.meta.env.DEV&&typeof window!=='undefined'&&
   new URLSearchParams(window.location.search).get('omegaQaState')==='zombieAI';
+ const cartWarningQa=import.meta.env.DEV&&typeof window!=='undefined'&&
+  new URLSearchParams(window.location.search).get('omegaQaState')==='cartWarning';
  const combatProbe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
@@ -435,6 +450,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const length=Math.hypot(mx,my)||1;
    if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
+   if(cartWarningQa&&arenaRef.current){
+    // Real engine state, observed once per animation frame; not injected.
+    const realCart=session.engine.state.hazards.find(h=>h.type==='RUNAWAY_CART'&&h.hp>0);
+    arenaRef.current.dataset.omegaCartPhase=realCart?.motion?.phase??'none';
+    arenaRef.current.dataset.omegaCartHp=String(session.engine.state.player.hp);
+    arenaRef.current.dataset.omegaCartTimer=String(realCart?.motion?.timer??-1);
+    arenaRef.current.dataset.omegaCartClock=String(session.engine.state.gameTime);
+   }
    if(zombieAiQa&&arenaRef.current){
     // Genuine live positions, brain state, attack warnings and native player
     // damage. No game-state changes or outcome fabrication in telemetry.
@@ -583,6 +606,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
   data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}
+  data-omega-cart-qa={cartWarningQa?'real-native-watch-cart-dev-fixture':'off'}
   data-omega-gate-walk-qa={import.meta.env.DEV&&typeof window!=='undefined'&&
    ['gateTravel','actBoundary6','actBoundary9','actBoundary12'].includes(
     new URLSearchParams(window.location.search).get('omegaQaState')??''

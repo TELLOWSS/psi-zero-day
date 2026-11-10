@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import type {Hazard} from '../src/domain/patrol-survivors';
 import {omegaCreateZombieBrain} from '../src/domain/omega-protocol-zombie-ai';
 import {
- omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,
+ omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,omegaCounterplayVisibleLength,
 } from '../src/ui/omega-protocol-counterplay';
 
 const hazard=(id:string,type:Hazard['type']):Hazard=>({
@@ -48,6 +48,19 @@ describe('OMEGA M04-D5 presentation-only counterplay',()=>{
   const drifter=omegaCreateZombieBrain(zombie,'drifter',0);
   drifter.phase='warning';drifter.lockedX=1;drifter.lockedY=0;
   expect(omegaCounterplayCues([zombie],()=>drifter)[0]?.directionLength).toBe(0);
+ });
+ it('clips actual direction guidance at physical cover instead of drawing through obstacles',()=>{
+  const h=hazard('cart-cover','RUNAWAY_CART');
+  h.x=100;h.y=100;
+  h.motion={phase:'warning',timer:.5,directionX:1,directionY:0};
+  const cue=omegaCounterplayCues([h],()=>null)[0]!;
+  const cover=[{id:'container',x:200,y:80,width:40,height:60,kind:'container' as const}];
+  const clipped=omegaCounterplayVisibleLength(cue,cover);
+  expect(clipped).toBeGreaterThan(70);
+  expect(clipped).toBeLessThan(80);
+  expect(omegaCounterplayVisibleLength(cue,[])).toBe(175);
+  expect(omegaCounterplayVisibleLength(cue,[{...cover[0]!,x:200,y:300}])).toBe(175);
+  expect(omegaCounterplayVisibleLength(cue,[{...cover[0]!,x:95}])).toBe(0);
  });
  it('ranks active charge before far warnings and uses native dash cooldown',()=>{
   const near=hazard('near','RUNAWAY_CART'),far=hazard('far','RUNAWAY_CART');

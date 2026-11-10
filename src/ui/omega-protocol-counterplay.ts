@@ -1,5 +1,6 @@
 import type {Hazard,PlayerStats} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
+import type {OmegaFieldObstacle} from '../domain/omega-protocol-field';
 
 /**
  * M04-D5: presentation-only counterplay cues sourced from live Watch hazard
@@ -16,6 +17,7 @@ export interface OmegaCounterplayCue {
  readonly x:number; readonly y:number;
  readonly directionX:number; readonly directionY:number;
  readonly radius:number;
+ readonly bodyRadius:number;
  readonly directionLength:number;
 }
 
@@ -41,7 +43,7 @@ export function omegaCounterplayCues(
     id:h.id,kind:'cart',label:'폭주 운반장비 돌진',
     phase:motion.phase,seconds:motion.phase==='warning'?Math.max(0,motion.timer):0,
     x:h.x,y:h.y,directionX:motion.directionX/magnitude,directionY:motion.directionY/magnitude,
-    radius:h.radius,directionLength:175,
+    radius:h.radius,bodyRadius:h.radius,directionLength:175,
    });
    continue;
   }
@@ -54,7 +56,7 @@ export function omegaCounterplayCues(
    id:h.id,kind:'zombie',label:zombieLabel[brain.kind],
    phase:brain.phase,seconds:brain.phase==='warning'?Math.max(0,brain.timer):0,
    x:h.x,y:h.y,directionX:brain.lockedX/magnitude,directionY:brain.lockedY/magnitude,
-   radius:brain.attackRadius,
+   radius:brain.attackRadius,bodyRadius:h.radius,
    // Direction preview only for the two truly travelling charge archetypes.
    directionLength:brain.kind==='sprinter'?150:brain.kind==='stalker'?100:0,
   });
@@ -90,8 +92,41 @@ export function omegaDashAvailability(
  * World-space symbols use the same live locked heading as HP collision logic.
  * No forecast is drawn through cover as an allegedly guaranteed hit lane.
  */
+/** Ray/AABB clipping against the SAME OMEGA solid cover shapes as native
+ * projectile/collision terrain. Guidance cannot visibly cut THROUGH cover.
+ * The ray is a facing preview, not an exact future impact forecast.
+ */
+export function omegaCounterplayVisibleLength(
+ cue:OmegaCounterplayCue,obstacles:readonly OmegaFieldObstacle[],
+):number{
+ let visible=cue.directionLength;
+ if(visible<=0)return 0;
+ for(const o of obstacles){
+  const r=Math.max(0,cue.bodyRadius);
+  const bounds=[
+   {p:cue.x,v:cue.directionX,min:o.x-r,max:o.x+o.width+r},
+   {p:cue.y,v:cue.directionY,min:o.y-r,max:o.y+o.height+r},
+  ];
+  let enter=0,exit=visible;
+  let intersects=true;
+  for(const b of bounds){
+   if(Math.abs(b.v)<1e-9){
+    if(b.p<b.min||b.p>b.max){intersects=false;break;}
+    continue;
+   }
+   const t0=(b.min-b.p)/b.v,t1=(b.max-b.p)/b.v;
+   enter=Math.max(enter,Math.min(t0,t1));
+   exit=Math.min(exit,Math.max(t0,t1));
+   if(exit<enter){intersects=false;break;}
+  }
+  if(intersects&&enter<=exit)visible=Math.min(visible,Math.max(0,enter-4));
+ }
+ return visible;
+}
+
 export function drawOmegaCounterplayCues(
  ctx:CanvasRenderingContext2D,cues:readonly OmegaCounterplayCue[],gameTime:number,
+ obstacles:readonly OmegaFieldObstacle[]=[],
 ):void{
  const pulse=.65+.18*Math.sin(gameTime*12);
  for(const cue of cues){
@@ -103,10 +138,11 @@ export function drawOmegaCounterplayCues(
   ctx.setLineDash(active?[]:[12,9]);
   ctx.beginPath();ctx.arc(cue.x,cue.y,Math.max(cue.kind==='cart'?32:25,cue.radius),0,Math.PI*2);ctx.stroke();
   ctx.setLineDash([]);
-  if(cue.directionLength>0){
-   // One short arrow forecasts orientation, not a mathematically exact endpoint.
-   const ex=cue.x+cue.directionX*cue.directionLength;
-   const ey=cue.y+cue.directionY*cue.directionLength;
+  const visibleLength=omegaCounterplayVisibleLength(cue,obstacles);
+  if(visibleLength>=20){
+   // Solid cover ends the cue before the actual physical collision boundary.
+   const ex=cue.x+cue.directionX*visibleLength;
+   const ey=cue.y+cue.directionY*visibleLength;
    ctx.lineWidth=active?7:4;ctx.setLineDash(active?[]:[12,8]);
    ctx.beginPath();ctx.moveTo(cue.x,cue.y);ctx.lineTo(ex,ey);ctx.stroke();
    ctx.setLineDash([]);

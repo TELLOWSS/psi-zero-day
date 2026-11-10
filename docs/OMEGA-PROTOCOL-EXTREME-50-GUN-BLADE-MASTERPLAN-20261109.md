@@ -187,3 +187,11 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - 전략별: **혼합형 12개 구역 완료→13구역 사망**, **생존형 11개 완료→12 사망**, **기동형 10개 완료→11 사망**, **화력형 7개 완료→8구역 엄폐물 RUNAWAY_CART 경로추적 교착**(플레이어 HP78, 사망 아님; 이 이후 빌드 비교는 불가). 엄격한 15/15 전투 클리어와 모바일 실제 기기 품질은 미검증.
 - 실제 보급 카드만 선택했으므로 `offered` 목록과 `chosen` ID를 독립 로그로 기록했다. 비슷한 생존 카드 이름이더라도 무작위 제안 내용이 전술에 따라 달라진다. **고정 입력 자동 시험의 우열을 사람에게 보편적 최적 빌드로 제시하지 않는다.**
 - **NEXT M04-D5:** 원래 극한 난도를 무단 완화하지 않고 안전모 질주 좀비/폭주 운반장비 돌진의 위험 방향 및 타격 예고, 실제 반격 가능 거리·지형 가림, 대시 쿨다운의 사용성을 실제 게임 화면에서 고도화한 후 PC/모바일 브라우저 검증. [인계 18절](../OMEGA-PROTOCOL-CONTINUE.md) 우선. AIRA 정식 160 독립 원화, 15노드 완전 스트리밍, 15/15 실제 무스킵 엔딩 및 Android 실제 기기는 별도 미완.
+
+### 2026-11-10 M04-D5·D6: 공격 예고와 실제 HP 피해 판정 일치 기술검증
+
+- **M04-D5 [PR #248](https://github.com/TELLOWSS/psi-zero-day/pull/248):** native Watch RUNAWAY_CART 경고 방향, 감염 좀비 4종 독립 경고, 대시 쿨다운의 실제 Canvas/HUD 안내. [Core #42722254548](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42722254548) **51파일/227테스트**, [Chrome #42722254211](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42722254211) PC·모바일 세로 통과. OMEGA 개발 브랜치에만 병합.
+- **M04-D6 [QA PR #249](https://github.com/TELLOWSS/psi-zero-day/pull/249):** 신규 실제 Watch 충돌 회귀에서 OMEGA 폭주 운반장비가 `warning` 중인데도 **HP100→78(22)**, `approach/cooldown`도 선피격됨을 FAIL로 실증. OMEGA 전용 `protocolExternalEncounter` 카트 접촉을 `charge` 단계로 격리. 기존 WATCH 피해 정책, 공격22·적 HP·AI·예고 시간·대시 무적 등 수치/사운드 변경 없음.
+- [M04-D6 Core #42749422806](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422806) **52파일/233테스트 전체 PASS**; [Browser #42749422588](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422588) **전체 PASS**. 실제 Vite+Chromium PC1440×900/모바일 세로390×844/가로844×390의 native 카트 HP **경고 중 800→800, 실제 돌진 후 800→778**; 경고 HUD와 조작패드 겹침 0. 9·15구역 보스 공격 경고 각각 실제 화면 PASS. 고정 방향선의 장애물 관통 시각 오류를 지형 Ray/AABB로 차단. 시험은 DEV 전용 초기위치 구성; 모든 후속 행동·경고·HP는 진짜 Watch 엔진.
+- **상태:** `M04-D5/D6 CODED+TESTED` = 전투 위험 경고·충돌 판정 정합성 기술검증. 단, 15/15 무스킵 실제 승리·후반 최종 보스 격파, 고해상도 은백색 AIRA 독립 원화 160+마스크320, 12+ 종 정식 좀비, 실물 Android/태블릿 FPS·발열, 좌표 연속형 심리스 맵, 정식 런치 CTA는 **BLOCKED**.
+- **NEXT M04-D7:** `seed=20261109`에서 현재 공정한 경고/돌진 수정 후 **적·장치·출구 사전 완료 없이** 실제 1→15 총·검·대시·지형/LOS·제시된 보급 카드만으로 후반 전투를 재검증. 13/15 생존 실패·LOS 교착·자동조작 한계/인간 플레이 구분, 원래 극한 난도/HP/무기 무단 조정 금지. [인계 문서 §20](../OMEGA-PROTOCOL-CONTINUE.md) 우선. `main`/Vercel Production/유료 전환은 최종 승인 전 금지.
