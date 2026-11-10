@@ -2,7 +2,8 @@ import {describe,it,expect,vi,afterEach} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {
- OMEGA_G5_SOURCE_ART,OMEGA_G5_REVIEW_URL,omegaG5DevRequested,
+ OMEGA_G5_SOURCE_ART,OMEGA_G5_REVIEW_URL,OMEGA_G5_VECTOR_STUDY_URL,
+ omegaG5VectorStudyRequested,omegaG5DevRequested,
  omegaG5EFrameIndex,omegaG5DrifterPoseAt,OmegaG5DraftImageCache,
 } from '../src/ui/omega-protocol-m12-g5-art';
 import type {OmegaActorView} from '../src/ui/omega-protocol-actor-render';
@@ -29,6 +30,11 @@ describe('M12-G5 first SIX unique E walk and drifter source-vector key poses',()
    ['?omegaLab=1&omegaM12G5=1&omegaM12G4=1',true],
   ] as const)expect(omegaG5DevRequested(query,lab)).toBe(false);
   expect(OMEGA_G5_REVIEW_URL).toContain('omegaM12G5=1');
+  expect(omegaG5VectorStudyRequested('?omegaLab=1&omegaM12G5=1',true)).toBe(false);
+  expect(omegaG5VectorStudyRequested('?omegaLab=1&omegaM12G5=1&omegaG5VectorStudy=1',true)).toBe(true);
+  expect(omegaG5VectorStudyRequested('?omegaLab=1&omegaM12G5=1&omegaG5VectorStudy=1',false)).toBe(false);
+  expect(omegaG5VectorStudyRequested('?omegaM12G5=1&omegaG5VectorStudy=1',true)).toBe(false);
+  expect(OMEGA_G5_VECTOR_STUDY_URL).toContain('omegaG5VectorStudy=1');
  });
  it('has SIX physically distinct local original 384x512 SVG binaries, no mirror, embedded remote image or duplicate',()=>{
   const sources=[...OMEGA_G5_SOURCE_ART.silverEast,...OMEGA_G5_SOURCE_ART.infectedDrifter];
