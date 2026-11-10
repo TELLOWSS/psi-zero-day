@@ -19,6 +19,7 @@ import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
 import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
+import {omegaM12Budget,drawOmegaM12TerrainShadows,drawOmegaM12ActorFootShadow,drawOmegaM12StructureFacets,drawOmegaM12DistanceHaze,drawOmegaM12OcclusionBeacon} from './omega-protocol-m12-depth';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -48,8 +49,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height,cameraZoom);
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
+ const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
+  drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
+  drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
  }
@@ -69,6 +73,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const p=state.player;
  const renderHazard=(h:(typeof state.hazards)[number])=>{
   if(h.hp<=0)return;
+  if(field)drawOmegaM12ActorFootShadow(ctx,h,Math.min(45,Math.max(19,h.radius??24)));
   ctx.save();ctx.translate(h.x,h.y);
   ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
@@ -78,6 +83,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  };
  const renderHero=()=>{
  // Independent eight-heading tactical actor placeholder, not an AIRA skin.
+ if(field)drawOmegaM12ActorFootShadow(ctx,p,27);
  ctx.save();ctx.translate(p.x,p.y);
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
  // Torso turns with bounded speed while genuine launch feedback aims the
@@ -121,7 +127,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   // Stable painter's order: the player, enemies, and original collision
   // objects share one actual world-foot depth. No translucent fake cover.
   for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress)){
-   if(item.kind==='prop')drawOmegaFieldProp(ctx,field.plan,field.plan.obstacles[item.index]!);
+   if(item.kind==='prop'){
+    const obstacle=field.plan.obstacles[item.index]!;
+    drawOmegaFieldProp(ctx,field.plan,obstacle);
+    drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
+   }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
@@ -131,6 +141,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(const h of state.hazards)renderHazard(h);
   renderHero();
  }
+ // The native prop's depth can hide the hero: show only a subtle floor beacon.
+ if(field)drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
  // Native projectiles and impacts always render above solid geometry.
  for(const projectile of state.projectiles){
   ctx.fillStyle='#7df3fa';ctx.beginPath();
