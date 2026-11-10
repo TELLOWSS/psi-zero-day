@@ -31,9 +31,16 @@ type DamageContext={
  readonly nativeReported:string|null;readonly cartPhase:string|null;
  readonly playerHp:number;readonly nearestDist:number|null;
 };
+interface EarlyFrame {
+ t:number;player:{x:number;y:number;hp:number;dashCooldown:number};
+ movement:{moveX:number;moveY:number};target:string;
+ threats:Array<{type:string;d:number;x:number;y:number;phase:string;timer:number;lockX:number;lockY:number}>;
+ cues:Array<{kind:string;phase:string;d:number;seconds:number}>;
+}
 interface PilotTelemetry {
  warningsObserved:number;sidesteps:number;dashAccepted:number;
  lineOfSightDetourTicks:number;damageContexts:DamageContext[];
+ firstEight:EarlyFrame[];safetyMoves:number;rejectedMoves:number;
 }
 /** M04-D8 late-game controlled difference: first 12 nodes run IDENTICALLY.
  * The reaction pilot sees only the same native-locked warning and terrain
@@ -205,6 +212,23 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
    // dodge/chase remains an external test-player decision, not an engine
    // cheat, HP reset or modification of enemy AI/difficulty.
    const movement=tacticalStep(s,target,stallTicks>105,pilot,telemetry);
+   if(telemetry&&wave===13&&simSeconds<=8&&tick%15===0){
+    const actor=s.engine.state.player;
+    const threats=s.engine.state.hazards.filter(h=>h.hp>0).map(h=>{
+     const brain=s.zombieBrain(h.id);
+     return {type:h.type,d:+dist(actor,h).toFixed(1),x:+h.x.toFixed(1),y:+h.y.toFixed(1),
+      phase:brain?.phase??h.motion?.phase??'none',timer:+(brain?.timer??h.motion?.timer??0).toFixed(2),
+      lockX:+(brain?.lockedX??h.motion?.directionX??0).toFixed(2),
+      lockY:+(brain?.lockedY??h.motion?.directionY??0).toFixed(2)};
+    }).sort((a,b)=>a.d-b.d).slice(0,9);
+    const cues=omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id));
+    telemetry.firstEight.push({t:+simSeconds.toFixed(2),player:{
+     x:+actor.x.toFixed(1),y:+actor.y.toFixed(1),hp:actor.hp,
+     dashCooldown:+(actor.dashCooldown??0).toFixed(2)},
+     movement:{moveX:+movement.moveX.toFixed(2),moveY:+movement.moveY.toFixed(2)},
+     target:target.id,threats,cues:cues.map(c=>({kind:c.kind,phase:c.phase,
+      d:+dist(actor,c).toFixed(1),seconds:+c.seconds.toFixed(2)}))});
+   }
    if(telemetry){
     const cues=omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id));
     if(cues.some(c=>c.phase==='warning'))telemetry.warningsObserved++;
@@ -353,7 +377,7 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
  const segments:SegmentAudit[]=[];
  const rewardChoices:BuildResult['rewardChoices']=[];
  const telemetry:PilotTelemetry={warningsObserved:0,sidesteps:0,dashAccepted:0,
-  lineOfSightDetourTicks:0,damageContexts:[]};
+  lineOfSightDetourTicks:0,damageContexts:[],firstEight:[],safetyMoves:0,rejectedMoves:0};
  let failureReason:string|null=null,firstFailure:number|null=null;
  let cleared=0,botBlockedAt:number|null=null;
  const list:readonly string[]=priorities[policy];
@@ -435,7 +459,7 @@ describe('M04-D8 first-eight-seconds true native counterplay risk audit',()=>{
     expect(r.runPhase).toBe('victory');
     expect(r.cleared).toBe(15);
    }
-   console.log('M04_D8_FULL_UNSKIPPED_RUN',JSON.stringify(r));
+   console.log('M04_D8_FULL_UNSKIPPED_RUN',JSON.stringify({...r,telemetry:{...r.telemetry,firstEight:undefined}}));
   }
   // The control uses the baseline's exact seed, card preference, real
   // game difficulty, field props, boss; only input handling differs.
@@ -446,6 +470,12 @@ describe('M04-D8 first-eight-seconds true native counterplay risk audit',()=>{
   expect(results[0]!.rewardChoices.filter(c=>c.afterWave<=12))
    .toEqual(results[1]!.rewardChoices.filter(c=>c.afterWave<=12));
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
+  for(const r of results){
+   console.log('M04_D8_FIRST_EIGHT_SECONDS',JSON.stringify({pilot:r.pilot,
+    frames:r.telemetry.firstEight,hits:r.telemetry.damageContexts.filter(e=>e.wave===13)}));
+   expect(r.telemetry.firstEight.length).toBeGreaterThan(0);
+   expect(r.telemetry.firstEight[0]!.threats.length).toBeGreaterThanOrEqual(4);
+  }
   const verdict=results.map(r=>({pilot:r.pilot,cleared:r.cleared,
    failedAt:r.firstFailure,botBlockedAt:r.botBlockedAt,
    hp:r.endHp,boss15Cleared:r.cleared===15,
