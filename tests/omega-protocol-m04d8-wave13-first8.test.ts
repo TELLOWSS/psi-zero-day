@@ -138,6 +138,17 @@ function tacticalStep(
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
  if(pilot==='bounded'&&s.run.wave>=13){
+  // Native shot/projectile LOS can remain blocked even while safe kiting
+  // succeeds. After 3.5 real seconds with NO enemy HP decrease, move toward
+  // the existing cover-aware route instead of drifting forever to safety.
+  // This is test-player navigation, never spawned damage or a teleport.
+  if(forceClose&&gap>110){
+   const towards=omegaFieldNextRoute(actor,enemy,field.obstacles);
+   if(towards&&dist(actor,towards.next)>3){
+    if(telemetry)telemetry.lineOfSightDetourTicks++;
+    return steer(actor,towards.next);
+   }
+  }
   const bounded=boundedWarningMove(s,telemetry!);
   if(bounded)return bounded;
  }
@@ -382,7 +393,10 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
  if(s.run.wave===wave&&s.run.phase==='battle')
   throw Error('NO-SKIP M04-D node '+wave+' did NOT finish under simulation budget: '+JSON.stringify({
    phase:s.field?.progress.phase,playerHp:s.engine.state.player.hp,
-   remaining:s.snapshot.enemiesAlive,steps,simSeconds,logs:logs.slice(-8),
+   playerX:+s.engine.state.player.x.toFixed(1),playerY:+s.engine.state.player.y.toFixed(1),
+   remaining:s.snapshot.enemiesAlive,enemies:s.engine.state.hazards.filter(h=>h.hp>0).map(h=>({
+    type:h.type,hp:+h.hp.toFixed(1),x:+h.x.toFixed(1),y:+h.y.toFixed(1)})),
+   steps,simSeconds,logs:logs.slice(-8),
   }));
  if(steps!==field.event.steps.length)throw Error('Missing actual station interactions wave '+wave+
   ': '+steps+'/'+field.event.steps.length);
