@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D6 실전 RUNAWAY_CART 경고 중 선피격 수정·엄폐 충돌 방향선·PC/모바일 가로/세로 Chromium QA: Core 52파일/233테스트 PASS, Browser 전체 PASS. 검증 PR #249 개발 브랜치 대상; 15구역 무스킵 승리·Android·정식 원화·main/운영 미완
+**관리일:** 2026-11-10 (KST) · M04-D6 실전 RUNAWAY_CART 경고 중 선피격 수정·엄폐 충돌 방향선·PC/모바일 가로/세로 Chromium QA: Core 52파일/233테스트 PASS, Browser 전체 PASS. 검증 PR #249 개발 브랜치에만 squash 병합 `65658b67b6778f384a5dbf1bab7ef781c257d673`; 15구역 무스킵 승리·Android·정식 원화·main/운영 미완
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -318,5 +318,7 @@
 - 신규 브라우저 시험 `scripts/qa-omega-m04d6-counterplay-browser.mjs` 및 CI 등록, 반응형 경고 HUD 세로 배치 보완. 출력 사진 `m04d6-cart-warning-{desktop,mobile-portrait,mobile-landscape}.png` 등은 GitHub Actions artifact 안에 있음. **Chrome 모바일 에뮬레이션이지 실물 Android/태블릿이 아님**.
 
 **정확한 완료:** `M04-D6 = CODED + TESTED (Core+Chromium PC/모바일 세로·가로)`. 사람의 15/15 무스킵 클리어, 후반 보스 실제 전투·엔딩, 60분 장시간 테스트, 물리 Android FPS/발열, 진정한 심리스 맵, 은백색 AIRA 승인 독립 160액션/320마스크 및 정식 적 원화는 **미완**.
+
+**실제 병합 확인:** [PR #249](https://github.com/TELLOWSS/psi-zero-day/pull/249)는 검증 성공 후 OMEGA 개발 브랜치에만 squash 병합 `65658b67b6778f384a5dbf1bab7ef781c257d673`. PR #235는 여전히 Draft/미병합, `main`/Vercel Production 변경 작업 없음. 테스트 증거 [Core #42749422806](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422806) 및 [Browser #42749422588](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422588)은 검증 코드 HEAD `840c5ce0db4a6a3e38d9840ca34ef5885ab3741d` 대상; 이후 두 QA 커밋은 문서만 수정했고, squash 뒤 인계 수정은 실행 코드 검증을 대체하지 않음.
 
 **NEXT M04-D7:** 최신 규칙에서 고정시드 1→15 무스킵 실제 전투/장치/문/보급을 재실행하고 13~15 피해·LOS·자동조작 교착을 분리; 이후 실제 사용자 조작 시 위험 인지/반격 가능한지 검증한다. 난도·HP/적HP·카드 임의 변경 금지. OMEGA QA 독립 PR로 완전 통과 증거 후에만 개발 브랜치 반영. main/Production·유료 전환 금지.
