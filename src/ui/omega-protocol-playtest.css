@@ -1088,3 +1088,59 @@
  }
 }
 /* Non-review OMEGA, Guard and Watch keep their existing three-row shell. */
+
+/* M12-G5c: explicit four-original-WebP session-only review has TWO rows of
+ * controls, never an implicit fifth gameplay-grid child. The fighting canvas
+ * still owns the minmax(0,1fr) row. No device file leaves the browser. */
+.omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+ .omega-silver-review-bar{
+ max-height:116px;min-height:0;
+}
+.omega-g5c-art-controls{
+ flex:1 1 100%;min-width:0;display:flex;gap:6px;align-items:center;
+ justify-content:flex-start;font-size:10px;color:#e1d6f8;
+}
+.omega-g5c-art-controls label{font-size:10px;white-space:nowrap}
+.omega-g5c-art-controls input[type=file]{
+ flex:0 1 216px;min-width:0;max-width:216px;font-size:9px;
+ color:#f9eafa;background:transparent;border:0;
+}
+.omega-g5c-art-controls input[type=file]::file-selector-button{
+ background:#3a3059;color:#fff;padding:4px 6px;
+ border:1px solid #ae86d6;border-radius:6px;font-size:9px;
+}
+.omega-g5c-art-controls button{
+ background:#543977!important;border:1px solid #b8a4ff!important;
+ padding:5px 8px!important;font-size:10px!important;
+ border-radius:6px!important;min-height:28px;white-space:nowrap;
+}
+.omega-g5c-art-controls button:disabled{opacity:.42}
+.omega-g5c-art-controls span{
+ flex:1 1 190px;min-width:0;color:#b7cce3;font-size:9px;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+  .omega-silver-review-bar{
+  max-height:130px;grid-template-columns:minmax(0,1fr) auto;
+  gap:3px 5px;padding:5px 7px;
+ }
+ .omega-g5c-art-controls{
+  grid-column:1/-1;display:grid;
+  grid-template-columns:minmax(0,1fr) 92px;gap:3px 6px;
+ }
+ .omega-g5c-art-controls label{display:none}
+ .omega-g5c-art-controls input[type=file]{max-width:100%;grid-column:1}
+ .omega-g5c-art-controls button{grid-column:2;min-width:0}
+ .omega-g5c-art-controls span{grid-column:1/-1;max-width:100%;font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+  .omega-silver-review-bar{
+  max-height:64px;flex-wrap:wrap;
+ }
+ .omega-g5c-art-controls{gap:3px;max-height:30px}
+ .omega-g5c-art-controls label{display:none}
+ .omega-g5c-art-controls span{display:none}
+ .omega-g5c-art-controls input[type=file]{max-width:170px}
+}
