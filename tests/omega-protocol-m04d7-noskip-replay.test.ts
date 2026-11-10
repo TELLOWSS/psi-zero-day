@@ -35,7 +35,8 @@ interface PilotTelemetry {
  warningsObserved:number;sidesteps:number;dashAccepted:number;
  lineOfSightDetourTicks:number;damageContexts:DamageContext[];
 }
-/** The reaction pilot sees only the same native-locked warning and terrain
+/** M04-D7 late-game controlled difference: first 12 nodes run IDENTICALLY.
+ * The reaction pilot sees only the same native-locked warning and terrain
  * topology that the actual M04-D5/D6 game can render. It never modifies
  * hazard/HP/wave, never peeks at the RNG or fast-forwards an encounter.
  * Moving perpendicular to a cart/sprinter direction is normal user input.
@@ -78,7 +79,7 @@ function tacticalStep(
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
- if(pilot==='reaction'){
+ if(pilot==='reaction'&&s.run.wave>=13){
   const warningMove=reactiveWarningMove(s);
   if(warningMove){if(telemetry)telemetry.sidesteps++;return warningMove;}
   // Dynamic cover-aware line of sight response: the route graph uses the
@@ -213,7 +214,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
    // enforces its real cooldown, without manipulating hazard HP.
    const beforeDamageEvents=s.damageEvents.length;
    const warned=s.snapshot.bossTelegraph;
-   const danger=pilot==='reaction'
+   const danger=pilot==='reaction'&&wave>=13
     ?omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id)).some(c=>{
       const delta=dist(player,c);
       if(c.phase==='warning'&&c.seconds>.16)return false;
@@ -438,6 +439,12 @@ describe('M04-D7 latest real 1-to-15 no-skip fairness re-audit',()=>{
   }
   // The control uses the baseline's exact seed, card preference, real
   // game difficulty, field props, boss; only input handling differs.
+  // Verify the alternate test controller does not diverge BEFORE wave 13:
+  // same native player position trajectory/engine/actual upgrade offers.
+  expect(results[0]!.segments.filter(s=>s.wave<=12))
+   .toEqual(results[1]!.segments.filter(s=>s.wave<=12));
+  expect(results[0]!.rewardChoices.filter(c=>c.afterWave<=12))
+   .toEqual(results[1]!.rewardChoices.filter(c=>c.afterWave<=12));
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
   const verdict=results.map(r=>({pilot:r.pilot,cleared:r.cleared,
    failedAt:r.firstFailure,botBlockedAt:r.botBlockedAt,
