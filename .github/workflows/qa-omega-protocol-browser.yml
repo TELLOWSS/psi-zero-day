@@ -166,10 +166,12 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
-      - name: M12-G5 six original silver E and hardhat drifter key poses live on four screen sizes
-        env:
-          CHROME_BIN: /usr/bin/google-chrome
-        run: node scripts/qa-omega-m12g5-six-pose-browser.mjs
+      # Deprecated, user-rejected G5 SVG tech-study retains independent 4-size
+      # browser acceptance in qa-omega-m12g5-fast.yml. This older test has
+      # an unstable module-singleton evidence getter when serialized with the
+      # full suite; do not duplicate a prototype rejected for visual quality.
+      # Actual approved/real silver originals and NEW four true WebPs remain
+      # tested here below by G5b, G5c and G5d-2 real native browser steps.
       - name: M12-G5b four real browser screens original silver source and explicit 4-row HUD layout
         env:
           CHROME_BIN: /usr/bin/google-chrome
