@@ -1141,6 +1141,9 @@
  }
  .omega-g5c-art-controls{gap:3px;max-height:30px}
  .omega-g5c-art-controls label{display:none}
- .omega-g5c-art-controls span{display:none}
+ .omega-g5c-art-controls span{
+  display:block;flex:0 1 200px;max-width:200px;
+  min-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
  .omega-g5c-art-controls input[type=file]{max-width:170px}
 }
