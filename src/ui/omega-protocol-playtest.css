@@ -1035,7 +1035,7 @@
 .omega-protocol-counterplay-hud span{font-size:10px;color:#ffe0ad}
 .omega-protocol-dash small{font-size:9px;color:#c1ebff;line-height:1}
 @media(max-width:480px) and (orientation:portrait){
- .omega-protocol-counterplay-hud{bottom:168px;width:min(255px,calc(100% - 28px));padding:6px 9px}
+ .omega-protocol-counterplay-hud{bottom:224px;width:min(255px,calc(100% - 28px));padding:6px 9px}
  .omega-protocol-counterplay-hud strong{font-size:10px}
  .omega-protocol-counterplay-hud span{font-size:9px}
 }
