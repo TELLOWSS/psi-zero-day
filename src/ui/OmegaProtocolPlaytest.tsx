@@ -697,6 +697,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-m12g5c-source-status={g5cArtReview?g5cStatus:'off'}
   data-omega-m12g5c-preview={g5cArtReview&&g5cPreviewOn?'session-only-not-approved':'off'}
   data-omega-m12g5d-source={g5dActualReview?'git-4-real-webp-candidates-not-approved':'off'}
+  data-omega-m12g5d-art-gate={g5dActualReview?(OMEGA_G5D_ART_GATE.humanArtDirectionApproved?'approved':'visual-review-required'):'off'}
   data-omega-m12g5d-preview={g5dActualReview&&g5cPreviewOn?'dev-candidate-not-approved':'off'}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
