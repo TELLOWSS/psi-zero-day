@@ -21,6 +21,7 @@ import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreview
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {omegaM12Budget,drawOmegaM12TerrainShadows,drawOmegaM12ActorFootShadow,drawOmegaM12StructureFacets,drawOmegaM12DistanceHaze,drawOmegaM12OcclusionBeacon} from './omega-protocol-m12-depth';
 import {omegaG2Quality,drawOmegaG2EntrySurface,drawOmegaG2RearEnvironment,drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail} from './omega-protocol-m12-authored-industrial';
+import {omegaG3Budget,drawOmegaG3ParallaxArchitecture,drawOmegaG3NativeMesh} from './omega-protocol-m12-parallax';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -52,10 +53,15 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const field=session.field;
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
+ const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
+  // Three independent screen-space atmospheric planes sample the REAL
+  // hero-following quarter-view camera; restore leaves native physics intact.
+  drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
+   ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
   drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
@@ -136,6 +142,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     drawOmegaFieldProp(ctx,field.plan,obstacle);
     drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
     drawOmegaG2NativeFacade(ctx,field.plan,obstacle,state.gameTime,m12G2Quality);
+    drawOmegaG3NativeMesh(ctx,field.plan,obstacle,m12G3Budget);
    }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
