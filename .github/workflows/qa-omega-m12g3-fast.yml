@@ -3,7 +3,7 @@ name: M12-G3 quick live Canvas parallax acceptance
 on:
   pull_request:
     paths:
-      - 'src/ui/omega-protocol-m12-authored-parallax.ts'
+      - 'src/ui/omega-protocol-m12-parallax.ts'
       - 'src/ui/OmegaProtocolPlaytest.tsx'
       - 'scripts/qa-omega-m12g3-parallax-browser.mjs'
       - '.github/workflows/qa-omega-m12g3-fast.yml'
