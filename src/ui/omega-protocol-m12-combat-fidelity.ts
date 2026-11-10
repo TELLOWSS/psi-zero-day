@@ -31,6 +31,11 @@ export function omegaG4SilverLabRequested(search:string,lab:boolean):boolean{
   p.get('omegaSilverPreview')===null;
 }
 export const OMEGA_G4_REVIEW_URL='/?omegaLab=1&omegaM12G4=1' as const;
+/** The neutral 384x512 review painting is larger than native Watch enemies.
+ * Compress its visual height only in the gated in-engine comparison; final
+ * artist-authored sprite proportions are still a separately reviewed gate.
+ */
+export const OMEGA_G4_SILVER_SCALE=.78 as const;
 
 const eligible=(plan:OmegaFieldPlan)=>plan.sector===1;
 const ink=(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number,color:string)=>{
