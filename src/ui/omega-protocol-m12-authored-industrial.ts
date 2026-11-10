@@ -55,6 +55,57 @@ function beam(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number,s
  ctx.strokeStyle='rgba(176,215,231,.30)';ctx.lineWidth=1;
  ctx.strokeRect(x+.5,y+.5,w-1,h-1);
 }
+/**
+ * Entry viewport composition: painted pavement grading, not a new platform.
+ * Kept below danger telegraphs, enemies, objectives and movement controls.
+ * The entry actor (150,450) will see this immediately on every camera size.
+ */
+export function drawOmegaG2EntrySurface(
+ ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,time:number,quality:OmegaG2Quality,
+):void{
+ if(!isFirst(plan)||!Number.isFinite(time))return;
+ ctx.save();
+ const blocks:readonly (readonly [number,number,number,number])[]=[
+  [65,304,220,115],[305,310,250,110],[88,515,260,108],
+  [382,527,225,107],[630,350,230,105],
+ ];
+ for(const [x,y,w,h] of blocks){
+  const g=ctx.createLinearGradient(x,y,x+w,y+h);
+  g.addColorStop(0,'rgba(102,150,164,.13)');
+  g.addColorStop(.55,'rgba(14,33,50,.18)');
+  g.addColorStop(1,'rgba(132,157,162,.08)');
+  ctx.fillStyle=g;
+  polygon(ctx,[x+21,y,x+w,y+11,x+w-22,y+h,x+3,y+h-17]);
+  ctx.strokeStyle='rgba(155,205,213,.22)';ctx.lineWidth=1.7;
+  segment(ctx,x+24,y+7,x+w-19,y+17);
+  segment(ctx,x+12,y+h-20,x+w-24,y+h-7);
+  if(quality.tier!=='low'){
+   ctx.strokeStyle='rgba(242,181,101,.24)';ctx.lineWidth=2;
+   segment(ctx,x+25,y+34,x+63,y+38);
+   segment(ctx,x+w-59,y+h-32,x+w-20,y+h-29);
+  }
+ }
+ // A worn industrial yellow service marking, flush with existing floor.
+ ctx.fillStyle='rgba(252,181,84,.29)';
+ for(let n=0;n<6;n++){
+  const x=136+n*70,y=444+Math.sin(n*.7)*8;
+  polygon(ctx,[x,y,x+21,y-4,x+32,y+2,x+10,y+6]);
+ }
+ // Angular cast shadow of overhead plant, not a new physical beam/solid.
+ ctx.fillStyle='rgba(2,13,25,.19)';
+ polygon(ctx,[86,301,133,301,571,634,514,634]);
+ // Cool ground bounce with a restrained warm response and glassy puddle.
+ const glow=ctx.createRadialGradient(180,425,15,180,425,210);
+ glow.addColorStop(0,'rgba(94,202,221,.16)');
+ glow.addColorStop(1,'rgba(94,202,221,0)');
+ ctx.fillStyle=glow;ctx.fillRect(0,215,410,420);
+ ctx.fillStyle='rgba(86,164,177,.15)';
+ ctx.beginPath();ctx.ellipse(226,533,100,14,-.1,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='rgba(195,234,227,.20)';ctx.lineWidth=1.5;
+ segment(ctx,170,533,271,530);
+ ctx.restore();
+}
+
 /** Independent near/far illustration; no collision is registered. */
 export function drawOmegaG2RearEnvironment(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,time:number,quality:OmegaG2Quality,
