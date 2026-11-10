@@ -2473,6 +2473,12 @@ export class SurvivorsEngine {
         // warning timer. Zero-damage generic Watch collision would otherwise
         // grant false .6s immunity and 30px knockback without telegraph.
         if(this.protocolExternalEncounter&&h.type==='UNHELMETED'&&h.damage===0)continue;
+        // OMEGA-only contract: a RUNAWAY_CART's locked warning is a REAL
+        // counterplay window. Native WATCH otherwise causes 22 HP contact
+        // damage in approach/warning/cooldown BEFORE the rendered charge.
+        // Its existing charge damage, speed, HP, timers and dash grace remain.
+        // Ordinary SIGNAL WATCH retains its established collision policy.
+        if(this.protocolExternalEncounter&&h.type==='RUNAWAY_CART'&&h.motion?.phase!=='charge')continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
           if(h.signatureEventId)this.signatureEventsFailed.add(h.signatureEventId);
