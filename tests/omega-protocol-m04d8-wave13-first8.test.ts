@@ -82,7 +82,7 @@ function coverBlocksSegment(a:OmegaFieldPoint,b:OmegaFieldPoint,field:OmegaProto
  return field.plan.obstacles.some(o=>{
   let enter=0,exit=1;
   const axes:readonly (readonly [number,number,number,number])[]=[
-   [a.x,b.x-a.x,o.x,o.x+o.width],[a.y,b.y-a.y,o.y,o.y+o.height],
+   [a.x,b.x-a.x,o.x-8,o.x+o.width+8],[a.y,b.y-a.y,o.y-8,o.y+o.height+8],
   ];
   for(const [start,slope,min,max] of axes){
    if(Math.abs(slope)<1e-7){if(start<min||start>max)return false;continue;}
