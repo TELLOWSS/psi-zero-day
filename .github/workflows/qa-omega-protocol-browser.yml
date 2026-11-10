@@ -13,6 +13,9 @@ on:
       - 'src/ui/omega-protocol-m12-parallax.ts'
       - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
       - 'src/ui/omega-protocol-m12-g5-art.ts'
+      - 'src/ui/omega-protocol-m12g5b-art-gate.ts'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'scripts/qa-omega-m12g5b-portrait-art-browser.mjs'
       - 'public/assets/omega/g5/**'
       - 'scripts/qa-omega-m12g5-six-pose-browser.mjs'
       - 'scripts/qa-omega-m12g4-silver-identity-browser.mjs'
@@ -162,6 +165,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g5-six-pose-browser.mjs
+      - name: M12-G5b four real browser screens original silver source and explicit 4-row HUD layout
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5b-portrait-art-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome

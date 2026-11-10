@@ -530,3 +530,21 @@
 **M12-G5 최종 기술 검증·안전격리 개발 브랜치 병합:** [QA PR #257](https://github.com/TELLOWSS/psi-zero-day/pull/257)을 **OMEGA 개발 브랜치에만 squash 병합** `c11313cfdcfdd39abaa981dfd933542b8c176cf5`. 커밋 `8beab318fe6f451de9da5089af3dfb7343ae706f`의 [Core #42816204639](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42816204639): **TypeScript + 60파일/258개 Vitest PASS**, [전체 Chrome #42816204570](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42816204570): **Guard/Watch/AIRA/보스·실플레이/터치 전체 SUCCESS**, [M12-G5 집중 4크기 #42816204667](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42816204667): PC1440×900/태블릿1024×768/세로390×844/가로844×390 **기존 고퀄 은백색 AIRA 기본 화면 4장 + 시각 미승인 별도 SVG 원화 비교 화면 4장 8/8 PASS**. 화면마다 진짜 키보드 이동(약140–160 world-unit), 동쪽 AIRA 독립 0·1·2·3 모두 native-render 사용, drifter 렌더 실제 호출, 6개 소스 이미지 서로 다른 픽셀 확인, **기본 모드 SVG 호출 0**을 검증. PR QA 최종 HEAD `996d690ba5fba77c6385cfeb8f25be7070a7a30d`과 검증 소스 HEAD diff는 **인계/마스터계획서 2 Markdown만**임을 GitHub compare로 확인. **결론: CODED + AUTOMATED VALIDATION PASS + ISOLATED DEV-STUDY MERGED; ART QUALITY FAIL / PRODUCTION NOT APPROVED**. SVG 초안을 상품급 독립 160장 중 6장 완료로 세지 말 것. 일반 실게임·Watch/Guard·원본 은백색 AIRA 8방향 이미지는 변경하지 않음. 실제 모바일 세로의 과도한 상부 빈 공간 및 전투 캔버스 과소 노출은 다음 UI 수정 필요. `main`/Vercel Production·유료 업그레이드 0, PR #235 **Draft/미병합**.
 
 **NEXT — M12-G5b:** 단순 벡터 도안 더 만들지 말고 사용자가 선택한 **원본 은백색 페인터리 질감의 진짜 개별 원화**를 먼저 1개 방향 4 WALK 키포즈로 다시 제작. 머리·얼굴·라벤더 웨이브 포니테일/얼굴각·의상·실총의 원본 합치 여부를 동일 줌 비교로 확인하고 **실제 game Canvas 육안 QA 승인 후에만** 다음 FIRE·DASH·HIT에 확대. 원화 마스크/페인터 정합과 4종 감염체·세로 모바일 경기장 배치 문제까지 별도 체크. 160개 독립원화/320 마스크·Android 실폰·strict PR243·실계정 Extreme50·15막상용/상업출시는 여전히 미완. 후속 QA 개발 브랜치에서만 진행하고 `main`/Production 최종 사용자 승인 전 금지.
+
+
+## 29. M12-G5b 페인터리 원화 품질 잠금·모바일 세로 실전 화면 복구 (2026-11-11)
+
+**QA** [PR #258](https://github.com/TELLOWSS/psi-zero-day/pull/258), `qa/omega-m12g5b-portrait-and-painterly-gate-20261111` → **OMEGA 개발 브랜치 전용 후보**, 시작 HEAD `9d9e4347881e6a4e4d266f788c1ac4d65760000c`. 주 PR #235 Draft·`main` 미병합, Vercel Production/유료 전환 금지.
+
+### 코드에 반영한 실제 확인사항
+- **사용자 실제 캡처 기반 버그**: 390×844 모바일 세로 G5b 원본 복원 시험에서 상단 보라색 빈 영역이 대략 500px를 차지하고, 게임 Canvas가 하단 약 1/3에만 보임. 원인은 `omega-protocol-lab`의 원래 3행 `grid-template-rows:auto minmax(0,1fr) auto`에 원화 안내바가 추가되어, 직접 자식이 **헤더·검수 안내·스테이지·툴바의 4개**가 된 것. 안내가 중앙의 1fr 행을 점유하고 스테이지가 자동/암묵적 행으로 밀림.
+- `src/ui/OmegaProtocolPlaytest.tsx`: `data-omega-review-layout`을 실제 검수 안내 여부에 연결. `src/ui/omega-protocol-playtest.css`: 안내가 있을 때에만 `auto auto minmax(0,1fr) auto` 4행 명시, 기존 비검수 OMEGA 3행 유지. 모바일 세로/낮은 가로에서 검수 문구는 1~2행만 표시하면서 원화 검수실 링크가 접근 가능하도록 그리드/ellipsis. 게임 컨트롤·실제 Watch player 좌표·적/보스/사격·보행·실사용 계정 상태에 변경 없음.
+- **M12-G5 기술 성공 ≠ 최종 작화 합격**: 사용자 채택 384×512 **은백색 AIRA 기존 8방향 SHA-256 원본을 그대로 표시**. 고품질 페인터리 **독립 E 걷기 원화 4장과 rear/front 마스크는 아직 없다**. 원본과 비슷하지 않은 비승인 G5 SVG를 억지로 교체하거나, 사진을 단순 변형해 새 독립원화로 계산하지 않는다.
+- `src/ui/omega-protocol-m12g5b-art-gate.ts` 신규: 미래의 **서로 다른 4개 384×512 .webp 페인터리 원화**를 리뷰할 때만 유효한 DEV 후보 계약. 로컬 path 4개, 원본 고정 SHA 및 서로 중복되지 않는 4개 SHA, 방향 E·발 접지·수동 작화 사인오프·4해상도 시각 QA 모두 충족해야 **'REVIEWABLE_NOT_APPROVED'**. 실제 후보는 `null`이고 현재 상태 **`BLOCKED_NO_PAINTERLY_SOURCES`**, 정식 160/320 아트 승인 잠금 유지. 이 기술 계약만으로 진짜 작화가 완료된 것은 아님.
+- 개발 전용 `/?omegaLab=1&omegaM12G5b=1`는 **기존 SHA 고정 원본 8장만** 게임에 표시하며 신규 미승인 원화는 절대 표시하지 않음. 드래프트 자체는 `main`·일반 Watch·Guard·Production에 노출하지 않음.
+- `tests/omega-protocol-m12g5b-art-and-layout.test.ts`: 승인 0·경로/원본 중복/미러/해시·독립 원화 미존재, QA 모드 상호 배제, CSS 행 명시 검증. `scripts/qa-omega-m12g5b-portrait-art-browser.mjs`: PC1440×900 / tablet1024×768 / mobile390×844 / landscape844×390 실제 React+Canvas, 검수바 4행·일반게임3행·화면 비율/겹침·원본 READY·실제 키보드 player 이동, 캡처 4장. 작화/Android FPS 검증이라고 하지 않음.
+- **자동 CI와 4화면 실물 캡처는 실행·검토 후 정확한 결과를 아래 추가**; 미실행 상태에서 PASS/병합 사실을 쓰지 말 것.
+
+### NEXT M12-G5c — 고품질 원화 자체 제작·실전 수용
+- 원본 은백색 캐릭터(얼굴·눈·헤어·장비·전신 비례)와 **동일한 수작업 페인터리 스타일**의 E walk 4개 독립 레이어·원본 WebP 생성 필요. 디테일·실루엣·발 접촉·총구 위치·원본과의 유사도를 **실제 gameplay 동일 줌**에서 육안 판정하고 미달이면 거부. 먼저 E방향 승인 후 다른 7방향/나머지 동작으로 확대, 정식 160개 원화/320 오클루전 마스크 생산 승인 이전에는 마스터 아트 게이트를 풀지 말 것.
+- 다른 3종 감염체의 그래픽·보행, 5막/15전장 원본 고품질 배경, 실폰 Android FPS/터치·발열, PR#243 strict, 실유저 50 Extreme 및 인간 15/15 엔딩, Vercel 운영/유료전환은 모두 **BLOCKED**.
