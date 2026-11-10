@@ -17,11 +17,12 @@ import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,dr
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
-import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
+import {omegaLoadSilverPreview,omegaLoadSilverRepoReview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {omegaM12Budget,drawOmegaM12TerrainShadows,drawOmegaM12ActorFootShadow,drawOmegaM12StructureFacets,drawOmegaM12DistanceHaze,drawOmegaM12OcclusionBeacon} from './omega-protocol-m12-depth';
 import {omegaG2Quality,drawOmegaG2EntrySurface,drawOmegaG2RearEnvironment,drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail} from './omega-protocol-m12-authored-industrial';
 import {omegaG3Budget,drawOmegaG3ParallaxArchitecture,drawOmegaG3NativeMesh} from './omega-protocol-m12-parallax';
+import {omegaG4Budget,omegaG4SilverLabRequested,drawOmegaG4CenterStageMaterial,drawOmegaG4ActorGrounding} from './omega-protocol-m12-combat-fidelity';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -54,9 +55,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
+ const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
+  drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
   // Three independent screen-space atmospheric planes sample the REAL
   // hero-following quarter-view camera; restore leaves native physics intact.
@@ -66,6 +69,13 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
+  // All original actor contact reflections sit on the floor BEFORE real
+  // boss warnings, enemy AI indicators, walls, players and weapons.
+  drawOmegaG4ActorGrounding(ctx,field.plan,state.player,'silver-aira',m12G4Budget);
+  for(const enemy of state.hazards)if(enemy.hp>0){
+   drawOmegaG4ActorGrounding(ctx,field.plan,enemy,enemy.isStageBoss?'boss':'infected',
+    m12G4Budget,Math.max(18,Math.min(38,enemy.radius??24)));
+  }
  }
  else{
   ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
@@ -352,8 +362,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [classicPad,setClassicPad]=useState(false);
  const [fps,setFps]=useState(0);
  const [interactionMessage,setInteractionMessage]=useState('');
+ // M12-G4 explicit lab-only selection of SHA-pinned SILVER originals:
+ // never changes the artist-approved 160-frame gate or public game mode.
+ const g4SilverLab=typeof window!=='undefined'&&
+  omegaG4SilverLabRequested(window.location.search,
+   import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const silverPreviewRequested=typeof window!=='undefined'&&
-  omegaSilverPreviewEnabled(window.location.search);
+  (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
@@ -379,7 +394,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   let mounted=true;
   let lease:OmegaSilverPreviewSession|null=null;
-  omegaLoadSilverPreview().then(async session=>{
+  (g4SilverLab?omegaLoadSilverRepoReview():omegaLoadSilverPreview()).then(async session=>{
    if(!mounted){session.revoke();return;}
    lease=session;
    userApprovedAiraV2.setSilverReviewSources(session.urls);
@@ -406,7 +421,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    userApprovedAiraV2.setSilverReviewSources(null);
    lease?.revoke();
   };
- },[silverPreviewRequested]);
+ },[silverPreviewRequested,g4SilverLab]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
@@ -627,6 +642,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
   data-omega-silver-preview={silverPreviewStatus}
+  data-omega-m12g4-silver-review={g4SilverLab?'source-sha256-dev-only':'off'}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
@@ -655,9 +671,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
-    <strong>은백색 AIRA · 로컬 원화 시험</strong>
+    <strong>{g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 방향 원화 미승인'
+     ?'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완'
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>

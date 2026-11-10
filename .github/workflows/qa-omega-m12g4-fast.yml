@@ -1,0 +1,54 @@
+name: M12-G4 quick live Canvas silver-identity acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'scripts/qa-omega-m12g4-silver-identity-browser.mjs'
+      - '.github/workflows/qa-omega-m12g4-fast.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  silver-identity-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prepare Vite development assets
+        run: npm run predev
+      - name: Install test-only driver without browser download
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Launch dev-only game scene
+        env:
+          VITE_OMEGA_PROTOCOL_LAB: '1'
+        run: |
+          npx vite --host 127.0.0.1 --port 4173 --strictPort >/tmp/omega-m12g4-vite.log 2>&1 &
+          for attempt in $(seq 1 65); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omega-m12g4-vite.log
+          exit 1
+      - name: Four real browser sizes native silver-identity render pixel probes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
+      - name: Upload four-size native scene proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-m12g4-focused-chrome
+          path: |
+            qa-omega-protocol-captures/m12g4-*
+          retention-days: 14
+          if-no-files-found: warn

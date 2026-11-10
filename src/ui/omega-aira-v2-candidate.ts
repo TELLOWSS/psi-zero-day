@@ -7,6 +7,7 @@ import {OmegaAiraV2FireFrames} from './omega-aira-v2-fire-frames';
 import {OmegaAiraV2DashFrames} from './omega-aira-v2-dash-frames';
 import {OmegaAiraV2HitFrames} from './omega-aira-v2-hit-frames';
 import {OmegaAiraV2SpecialFrames} from './omega-aira-v2-special-frames';
+import {omegaG4SilverLabRequested,OMEGA_G4_SILVER_SCALE} from './omega-protocol-m12-combat-fidelity';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -124,9 +125,18 @@ export function drawOmegaAiraV2Candidate(
   // The silver AIRA user-original 384×512 neutral images are *not* the
   // older 192×336 BLACK/ROSE study. No invalid cutouts and never paint
   // mismatched E fire/dash/walk/hit atlases over the canonical character.
-  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width));
+  const g4Review=typeof window!=='undefined'&&omegaG4SilverLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  // Compare real silver originals at the same world-foot plane as infected
+  // bodies. The unchanged 8 angles are neutral STILL paintings; small native
+  // posture transforms are NOT independent authored animation frames.
+  const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*(g4Review?OMEGA_G4_SILVER_SCALE:1);
   const w=h*384/512;
-  ctx.drawImage(image,-w/2,-h,w,h);
+  if(g4Review){
+   const gaitSwing=view.gait?.active?Math.sin(view.gait.phase*Math.PI*2)*.012:0;
+   const lean=view.dashing ? .06 : view.hurt ? -.04 : view.shooting ? -.025 : gaitSwing;
+   ctx.save();ctx.rotate(lean);ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();
+  }else ctx.drawImage(image,-w/2,-h,w,h);
   return true;
  }
  const t=Number.isFinite(view.time)?view.time:0;
