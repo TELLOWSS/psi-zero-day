@@ -203,3 +203,12 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - 첫 전술은 카트 경고 중 피격이 아니라 충돌 판정 수정 후 실제 **charge** 피격인 점을 엔진 표식으로 확인했다. 대시 반응을 늘린 다른 조작은 오히려 잠복 감염체에 더 빨리 붙어 **실패**, 사람의 반응성을 자동 시험으로 증명했다고 주장 금지. 기준 보급 선택 2 `rapid_step`, 4/6 `shield_matrix`, 8/12 `recovery_protocol`, 10 `blade_edge`.
 - **M04-D7 = 실제 실패 원인 감사 CODED+TESTED; 15/15 실제 승리·15 보스 및 엔딩 여전히 FAIL/미완.** Strict [PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) Draft 미병합. 신규 브라우저/Android 실기기 시험은 없으며 지난 D6 Chrome 검증과 혼동 금지.
 - **NEXT M04-D8:** 13구역 첫 4~8초 질주·잠복·기계 경고 동시노출, 가림/실 대시 방향·타이밍을 재구성해 더 안전한 실제 입력/시인성 피드백을 검증하고 그 후 1→15 재시험. 게임 난도 임의 하향, 원화 승인 없이 납품 주장, `main`/Vercel Production/유료 전환 금지. [인계문서 §21](../OMEGA-PROTOCOL-CONTINUE.md) 최우선.
+
+### 2026-11-10 M04-D8 — 13구역 최초 8초 조작/다중적 위험/8px 투사체 LOS 검증
+
+- [QA PR #251](https://github.com/TELLOWSS/psi-zero-day/pull/251) 실제 고정시드20261109 **1→15 무스킵 엔진** 시험 전용 코드. 13구역 0~8초 0.5초 간격 native 좀비4종 경고/잠금 방향, 운반장비 motion, 실제 맵 장애물·플레이어 위치·HP·대시·입력 수집. D7 무분별 반응은 x≈21 맵 구석에서 약4.1초 HP0(질주+잠복). 경계·모든 적·24방향 후보·잠금선/장애물 피하기를 함께 고려하는 제한형 실제 joystick 입력으로 수정. 게임 엔진 HP/공격/AI/조우/보급/지형 변경 0.
+- 13구역 마지막 폭주운반장비는 기본 플레이어 조작에서 적 중심 직접 길찾기가 불가능하거나 **Watch 타겟 감지 radius2**와 실제 **radio 탄환 충돌 radius8**의 LOS가 다를 수 있음을 원인별 검증. 실제 반경8 엄폐물 충돌을 통과하는 사격 위치를 **기존 내비게이션으로 물리 이동**하게 해 정체 해결. 외부 전술 시험에만 적용(실 게임 파츠/유료 API 없음).
+- [Core #42790676121](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42790676121) / [최종 롤백 코드 Core #42791361534](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42791361534): TypeScript + **54파일/235개 전체 PASS**. 기준/단순반응 두 전술은 12개 완료 뒤 13구역 HP0, 새 제한형은 **1~14구역의 실제 적처치+현장 E+실제 문 통과** 및 9구역 보스를 포함해 14개 완수, 13·14구역 피격 0/입장HP33 유지. 14구역 실제 제안 카드 radio_overdrive 선택 후 **15구역 최종 BLACK SIGNAL CORE** 실전에서 약181초에 누적 피격/HP0 패배, 보스 살아 있음. 따라서 게임 15/15 승리 아님.
+- 15구역 공격 lane만 우선 대피하는 미승인 조작 후보는 [Core #42791077265](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42791077265)에서 **약9초 내 복합피격 패배**로 악화. 해당 시험 코드는 검증 후 14구역까지 성공한 제한형으로 **완전 롤백**; 실패 결과도 반드시 남긴다. 모든 전술이 1~12구역과 실제 보급 선택을 동일하게 통제.
+- **정확한 판정:** M04-D8 **14/15 실제 무스킵 완료 및 보스15 실전 패배 원인 확인**. D8의 PASS는 시험 보고의 무결성이며 Android 실기기/상업용 원화160+마스크320/진정한 심리스/정식 빌드 출시가 아니다. Strict [PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) 계속 Draft.
+- **NEXT M04-D9:** 최종 보스15(power sweep)와 native cart/감염체 복합경고를 동시에 회피 가능한 실제 이동/대시 경로, 15 보스 HP 감소·실제 검/총 DPS·원래 보급 카드 분석. `main`/Production/유료 전환 금지. [인계 문서 §22](../OMEGA-PROTOCOL-CONTINUE.md) 기준.
