@@ -19,7 +19,7 @@ for(const [name,w,h,mobile] of sizes){
  page.on('pageerror',e=>errors.push(String(e)));
  page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  try{
-  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5=1',
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5=1&omegaG5VectorStudy=1',
    {waitUntil:'domcontentloaded',timeout:45000});
   const root=page.locator('main[data-omega-protocol-internal="true"]');
   await root.waitFor({timeout:25000});
@@ -83,14 +83,34 @@ for(const [name,w,h,mobile] of sizes){
    width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
    arenaHeight:document.querySelector('.omega-protocol-arena canvas')?.getBoundingClientRect().height??0,
    mode:document.querySelector('main')?.getAttribute('data-omega-m12g5-lab'),
+   vectorStudy:document.querySelector('main')?.getAttribute('data-omega-m12g5-vector-study'),
    gate:document.querySelector('main')?.getAttribute('data-omega-real-unlock-eligible'),
   }));
-  const pass=source.pass&&artwork.evidence.heroDraws>1&&
+  // The canonical G5 game entry MUST remain the original SHA-verified,
+  // painterly 8-direction AIRA; the six new vector poses were visually
+  // rejected and are deliberately a second opt-in diagnostic study only.
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5=1',
+   {waitUntil:'domcontentloaded',timeout:45000});
+  await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:25000});
+  await page.waitForTimeout(240);
+  const protectedOriginal=await page.evaluate(async()=>{
+   const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
+   const root=document.querySelector('main');
+   const evidence=omegaG5Art.evidence();
+   return {pass:root?.getAttribute('data-omega-m12g5-vector-study')==='off'&&
+    root.getAttribute('data-omega-aira-v2-ready')==='true'&&
+    evidence.heroDraws===0&&evidence.drifterDraws===0,
+    evidence,mode:root?.getAttribute('data-omega-m12g5-lab')};
+  });
+  await page.screenshot({path:dir+'/m12g5-preserved-original-'+name+'-'+w+'x'+h+'.png',
+   fullPage:false,animations:'disabled'});
+  const pass=protectedOriginal.pass&&source.pass&&artwork.evidence.heroDraws>1&&
    artwork.evidence.heroFramesSeen.length>=2&&
    artwork.evidence.drifterDraws>0&&afterX>beforeX+4&&
    layout.scrollWidth<=layout.width+3&&layout.arenaHeight>140&&
-   layout.mode==='six-independent-vector-drafts'&&errors.length===0;
-  const record={name,w,h,pass,source,artwork,layout,movedX:afterX-beforeX,
+   layout.mode==='source-verified-silver-originals'&&
+   layout.vectorStudy==='isolated-unapproved'&&errors.length===0;
+  const record={name,w,h,pass,source,artwork,protectedOriginal,layout,movedX:afterX-beforeX,
    errors,physicalAndroidFPS:false,productionArtQA:false};
   records.push(record);
   if(!pass)throw Error('M12G5 actual dynamic actor evidence failure '+JSON.stringify(record));
