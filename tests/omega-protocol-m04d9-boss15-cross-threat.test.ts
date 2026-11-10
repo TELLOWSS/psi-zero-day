@@ -184,6 +184,9 @@ function combinedBossWarningMove(s:OmegaProtocolCombatSession,tel:PilotTelemetry
  const actor=s.engine.state.player,field=s.field?.plan,w=s.snapshot.bossTelegraph;
  if(!field||w?.phase!=='warning'||!omegaBossInStrikeZone(w,actor)||w.timer>.92)return null;
  const live=s.engine.state.hazards.filter(h=>h.hp>0);
+ // M04-D9 gate: preserve entire original first dense wave15 fight while
+ // infected and multiple carts remain. Prior global lane override was fatal.
+ if(live.length>2)return null;
  const cues=omegaCounterplayCues(live,id=>s.zombieBrain(id));
  const laneDistance=(p:OmegaFieldPoint)=>w.lane==='horizontal'
   ?Math.abs(p.y-w.center.y):Math.abs(p.x-w.center.x);
@@ -675,6 +678,8 @@ describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit
    .toEqual(results[1]!.segments.filter(s=>s.wave<=14));
   expect(results[0]!.rewardChoices.filter(c=>c.afterWave<=14))
    .toEqual(results[1]!.rewardChoices.filter(c=>c.afterWave<=14));
+  expect(results[0]!.telemetry.bossFrames.filter(f=>f.t<=12))
+   .toEqual(results[1]!.telemetry.bossFrames.filter(f=>f.t<=12));
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
   for(const r of results){
    console.log('M04_D9_BOSS15_FRAMES',JSON.stringify({pilot:r.pilot,frames:r.telemetry.bossFrames,
