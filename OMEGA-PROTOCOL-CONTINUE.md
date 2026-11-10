@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D8 실제 13구역 초기 8초 추적/회피+native radio cover 경로 검증: Core 54파일/235테스트 PASS, 동일 1~12 보급/실전 뒤 제한형 13·14구역 실제 완료→15구역 실전 보스 피해 사망. QA PR #251 OMEGA 개발 브랜치 대상, main/Production·정식 원화·Android·15/15 미완.
+**관리일:** 2026-11-10 (KST) · M04-D8 실제 13구역 초기 8초 추적/회피+native radio cover 경로 검증: Core 54파일/235테스트 PASS, 동일 1~12 보급/실전 뒤 제한형 13·14구역 실제 완료→15구역 실전 보스 피해 사망. QA PR #251 검증 후 **OMEGA 개발 브랜치에만 squash 병합 `3171d8099469c62fa0e084ff9ba7bcce09be7958`**, main/Production·정식 원화·Android·15/15 미완.
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -362,5 +362,7 @@
 - **검증한 것:** TypeScript + 실제 native Watch/Omega 엔진 고정시드, 실제 E/필드 게이트/선택 카드/총검·장애물/피해 감사. **이번 단계에서 새 실제 PC·모바일 Chrome 플레이나 Android 물리 FPS QA를 수행한 것은 아님**. 직전 D6 브라우저 시험은 별도.
 
 **상태:** M04-D8 **TESTED 부분 성공: 1~14구역 무스킵 실제 클리어, 15구역 실제 보스전 패배**. 15/15 완주, 진정한 연속 지도 스트리밍, 최종 AIRA 독립 아트160/마스크320, 실제 Android/태블릿 성능, 프로덕션 출시 **미완/금지**.
+
+**병합 검증:** [QA PR #251](https://github.com/TELLOWSS/psi-zero-day/pull/251)은 테스트 검증 후 OMEGA 개발 브랜치에만 squash 병합 **`3171d8099469c62fa0e084ff9ba7bcce09be7958`**. 게임/시험 검증 재현 [Core #42791361534](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42791361534): TypeScript·54파일/235개 전체 PASS; PR #251의 최종 실행 코드는 이전 14/15 성공 증거 [Core #42790676121](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42790676121)과 **파일 SHA 동일**. 그 뒤 소스 변경은 인계·마스터 기획서 문서뿐이며 runtime QA를 가장하지 않음. 주 PR #235는 Draft·미병합, `main`/Vercel Production/유료 전환 없음.
 
 **NEXT M04-D9:** 15구역 power_sweep/운반장비 복합 경고 실제 프레임 분석 후 다중 위험을 동시에 피하는 마지막 보스 전술; 1~14 검증 경로와 같은 실제 제공 카드 유지. 단계별 HP·적HP·native lastDamage, 대시 쿨다운/충돌 물리와 15 boss HP를 기록하고 **진짜 15/15 실전 엔딩을 검증**하되, 실패하면 실패 표시. `main`/Production·유료 전환 금지.
