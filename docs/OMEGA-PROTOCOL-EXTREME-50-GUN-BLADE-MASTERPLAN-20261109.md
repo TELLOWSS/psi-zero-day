@@ -195,3 +195,11 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - [M04-D6 Core #42749422806](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422806) **52파일/233테스트 전체 PASS**; [Browser #42749422588](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422588) **전체 PASS**. 실제 Vite+Chromium PC1440×900/모바일 세로390×844/가로844×390의 native 카트 HP **경고 중 800→800, 실제 돌진 후 800→778**; 경고 HUD와 조작패드 겹침 0. 9·15구역 보스 공격 경고 각각 실제 화면 PASS. 고정 방향선의 장애물 관통 시각 오류를 지형 Ray/AABB로 차단. 시험은 DEV 전용 초기위치 구성; 모든 후속 행동·경고·HP는 진짜 Watch 엔진.
 - **상태:** `M04-D5/D6 CODED+TESTED` = 전투 위험 경고·충돌 판정 정합성 기술검증. 단, 15/15 무스킵 실제 승리·후반 최종 보스 격파, 고해상도 은백색 AIRA 독립 원화 160+마스크320, 12+ 종 정식 좀비, 실물 Android/태블릿 FPS·발열, 좌표 연속형 심리스 맵, 정식 런치 CTA는 **BLOCKED**.
 - **NEXT M04-D7:** `seed=20261109`에서 현재 공정한 경고/돌진 수정 후 **적·장치·출구 사전 완료 없이** 실제 1→15 총·검·대시·지형/LOS·제시된 보급 카드만으로 후반 전투를 재검증. 13/15 생존 실패·LOS 교착·자동조작 한계/인간 플레이 구분, 원래 극한 난도/HP/무기 무단 조정 금지. [인계 문서 §20](../OMEGA-PROTOCOL-CONTINUE.md) 우선. `main`/Vercel Production/유료 전환은 최종 승인 전 금지.
+
+### 2026-11-10 M04-D7 — 실제 native 고정시드 13구역 패배 두 전술 비교
+
+- [QA PR #250](https://github.com/TELLOWSS/psi-zero-day/pull/250)의 실제 `seed=20261109` 1→15 목표 무스킵 replay, [Core #42765707078](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42765707078) TypeScript + **53파일/234테스트 전체 PASS**. 시험만 추가, 플레이어/적HP·AI·대시·탄도·지형·보급·실제 해금·일반 WATCH·운영 소스 변경 없음.
+- 동일 1~12구역 본전투/현장 E/실제 문/제안 카드 선택 결과 동일함을 컴퓨터 검사하여 두 전술의 13구역 입력 차이만 대조. 기존 전술 **12개 완료→13구역 약39.6초에 HP0**, 질주 감염체16 + 진짜 카트 `charge` 단계의 WATCH 순 HP 손실17. **경고 반응 전술** 역시 12개 완료→13구역 약4.1초에 HP0, 질주 감염체16 + 잠복 감염체로 잔여HP17 소진. 13구역 사전 완료/가짜 보상 없음.
+- 첫 전술은 카트 경고 중 피격이 아니라 충돌 판정 수정 후 실제 **charge** 피격인 점을 엔진 표식으로 확인했다. 대시 반응을 늘린 다른 조작은 오히려 잠복 감염체에 더 빨리 붙어 **실패**, 사람의 반응성을 자동 시험으로 증명했다고 주장 금지. 기준 보급 선택 2 `rapid_step`, 4/6 `shield_matrix`, 8/12 `recovery_protocol`, 10 `blade_edge`.
+- **M04-D7 = 실제 실패 원인 감사 CODED+TESTED; 15/15 실제 승리·15 보스 및 엔딩 여전히 FAIL/미완.** Strict [PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) Draft 미병합. 신규 브라우저/Android 실기기 시험은 없으며 지난 D6 Chrome 검증과 혼동 금지.
+- **NEXT M04-D8:** 13구역 첫 4~8초 질주·잠복·기계 경고 동시노출, 가림/실 대시 방향·타이밍을 재구성해 더 안전한 실제 입력/시인성 피드백을 검증하고 그 후 1→15 재시험. 게임 난도 임의 하향, 원화 승인 없이 납품 주장, `main`/Vercel Production/유료 전환 금지. [인계문서 §21](../OMEGA-PROTOCOL-CONTINUE.md) 최우선.
