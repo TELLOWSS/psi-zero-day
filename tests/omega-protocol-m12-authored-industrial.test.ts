@@ -7,7 +7,7 @@ import {
 
 function ctxProbe(){
  const ops:string[]=[];
- const hit=(name:string)=()=>{ops.push(name);};
+ const hit=(name:string)=>()=>{ops.push(name);};
  const gradient={addColorStop:(_at:number,_color:string)=>{ops.push('stop');}};
  const ctx={
   save:hit('save'),restore:hit('restore'),beginPath:hit('begin'),
