@@ -12,6 +12,9 @@ on:
       - 'src/ui/omega-protocol-m12-depth.ts'
       - 'src/ui/omega-protocol-m12-parallax.ts'
       - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
+      - 'src/ui/omega-protocol-m12-g5-art.ts'
+      - 'public/assets/omega/g5/**'
+      - 'scripts/qa-omega-m12g5-six-pose-browser.mjs'
       - 'scripts/qa-omega-m12g4-silver-identity-browser.mjs'
       - 'scripts/qa-omega-m12g3-parallax-browser.mjs'
       - 'src/ui/omega-protocol-m12-authored-industrial.ts'
@@ -155,6 +158,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
+      - name: M12-G5 six original silver E and hardhat drifter key poses live on four screen sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5-six-pose-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome
