@@ -73,8 +73,10 @@ describe('M12-G5d-2 FOUR real binary E-WALK WebP assets and native approval lock
  });
  it('rejects even one wrong byte or missing URL and fails closed with review disposed',async()=>{
   let disposed=0,accepted=0;
-  const review=({dispose:()=>{disposed++;},import:async()=>{accepted++;throw Error('should not execute');}}
-   as unknown as OmegaG5cLocalPainterlyReview);
+  const review={
+   dispose:()=>{disposed++;},
+   import:async()=>{accepted++;throw new Error('should not execute');},
+  } as unknown as OmegaG5cLocalPainterlyReview;
   const wrong=async (input:string|URL|Request)=>{
    const path=String(input),entry=OMEGA_G5D_ACTUAL_E_WALK.find(x=>x.path===path)!;
    const b=Buffer.from(readFileSync('public'+entry.path));
