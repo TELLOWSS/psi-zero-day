@@ -76,6 +76,41 @@ function reactiveWarningMove(s:OmegaProtocolCombatSession):ReturnType<typeof ste
  }
  return null;
 }
+/** Exact static prop rectangles, not an invented line-of-sight rule. */
+function coverBlocksSegment(a:OmegaFieldPoint,b:OmegaFieldPoint,field:OmegaProtocolCombatSession['field']):boolean{
+ if(!field)return true;
+ return field.plan.obstacles.some(o=>{
+  let enter=0,exit=1;
+  const axes=[[a.x,b.x-a.x,o.x,o.x+o.width],[a.y,b.y-a.y,o.y,o.y+o.height]];
+  for(const [start,slope,min,max] of axes){
+   if(Math.abs(slope)<1e-7){if(start<min||start>max)return false;continue;}
+   const u=(min-start)/slope,v=(max-start)/slope;
+   enter=Math.max(enter,Math.min(u,v));exit=Math.min(exit,Math.max(u,v));
+   if(enter>exit)return false;
+  }
+  return exit>enter+1e-7&&exit>0&&enter<1;
+ });
+}
+/** A cart's real position may be on the edge of an expanded cover hitbox;
+ * direct navigation to its CENTER then returns null. Pick a legal shooting
+ * position with true cover-free line of sight, use original pathfinder and
+ * move through actual terrain: no enemy/world/shot manipulation. */
+function reachableFiringVantage(s:OmegaProtocolCombatSession,enemy:OmegaFieldPoint):OmegaFieldPoint|null{
+ const actor=s.engine.state.player,field=s.field;
+ if(!field)return null;
+ let best:{score:number;next:OmegaFieldPoint}|null=null;
+ for(const radius of [125,165,205])for(let k=0;k<24;k++){
+  const theta=k*Math.PI/12;
+  const candidate={x:enemy.x+Math.cos(theta)*radius,y:enemy.y+Math.sin(theta)*radius};
+  if(candidate.x<65||candidate.x>1335||candidate.y<65||candidate.y>835)continue;
+  if(coverBlocksSegment(candidate,enemy,field))continue;
+  const route=omegaFieldNextRoute(actor,candidate,field.plan.obstacles);
+  if(!route||dist(actor,route.next)<2)continue;
+  const score=route.length+radius*.09;
+  if(!best||score<best.score)best={score,next:route.next};
+ }
+ return best?.next??null;
+}
 /** Bounded user input: reject directions into map edges or enemy clusters.
  * Unlike naive perpendicular reaction this samples only OBSERVABLE danger
  * and legal routes. All HP, wave, enemy AI and pickups remain untouched.
@@ -142,10 +177,11 @@ function tacticalStep(
   // With no simultaneous threats, approaching via the normal legal route
   // restores genuine radio LOS and real blade contact, without changing HP.
   if(s.engine.state.hazards.filter(h=>h.hp>0).length===1&&gap>105){
-   const route=omegaFieldNextRoute(actor,enemy,field.obstacles);
-   if(route&&dist(actor,route.next)>3){
+   const direct=omegaFieldNextRoute(actor,enemy,field.obstacles);
+   const route=direct?.next??reachableFiringVantage(s,enemy);
+   if(route&&dist(actor,route)>3){
     if(telemetry)telemetry.lineOfSightDetourTicks++;
-    return steer(actor,route.next);
+    return steer(actor,route);
    }
   }
   // Native shot/projectile LOS can remain blocked even while safe kiting
