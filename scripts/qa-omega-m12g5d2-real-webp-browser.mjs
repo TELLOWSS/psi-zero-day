@@ -93,9 +93,12 @@ for(const [name,w,h,mobile] of sizes){
   const disabled=await attr('data-omega-m12g5d-preview');
   const after=await page.evaluate(()=>{
    const canvas=document.querySelector('.omega-protocol-arena canvas')?.getBoundingClientRect();
+   const rect=k=>{const r=document.querySelector(k)?.getBoundingClientRect();
+    return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width}:null;};
    return {viewport:innerWidth,doc:document.documentElement.scrollWidth,
     canvasHeight:canvas?.height??0,availableHeight:innerHeight,
-    sourcePanel:document.querySelector('[data-omega-g5c-controls]')?.getBoundingClientRect().height??0};
+    sourcePanel:document.querySelector('[data-omega-g5c-controls]')?.getBoundingClientRect().height??0,
+    importButton:rect('[data-omega-g5d-load]'),returnButton:rect('[data-omega-g5c-toggle]')};
   });
   await page.screenshot({path:dir+'/m12g5d2-RESTORED-ORIGINAL-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
@@ -107,7 +110,12 @@ for(const [name,w,h,mobile] of sizes){
    inspect.pass&&enabled==='dev-candidate-not-approved'&&
    evidence.draws>2&&evidence.frames.length===4&&
    afterX>beforeX+15&&disabled==='off'&&
-   after.doc<=after.viewport+3&&after.canvasHeight>h*.53&&errors.length===0;
+   after.doc<=after.viewport+3&&after.canvasHeight>h*.53&&
+   after.importButton&&after.returnButton&&
+   after.importButton.left>=0&&after.importButton.right<=after.viewport+2&&
+   after.returnButton.left>=0&&after.returnButton.right<=after.viewport+2&&
+   (after.importButton.right<=after.returnButton.left+2||
+    after.returnButton.right<=after.importButton.left+2)&&errors.length===0;
   const item={name,w,h,pass,statusBefore,inspect,
    nativePlayerMoved:afterX-beforeX,evidence,enabled,disabled,after,errors,
    actualFourGeneratedWebPsNotSynthetic:true,
