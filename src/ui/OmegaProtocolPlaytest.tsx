@@ -23,7 +23,7 @@ import {omegaM12Budget,drawOmegaM12TerrainShadows,drawOmegaM12ActorFootShadow,dr
 import {omegaG2Quality,drawOmegaG2EntrySurface,drawOmegaG2RearEnvironment,drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail} from './omega-protocol-m12-authored-industrial';
 import {omegaG3Budget,drawOmegaG3ParallaxArchitecture,drawOmegaG3NativeMesh} from './omega-protocol-m12-parallax';
 import {omegaG4Budget,omegaG4SilverLabRequested,drawOmegaG4CenterStageMaterial,drawOmegaG4ActorGrounding} from './omega-protocol-m12-combat-fidelity';
-import {omegaG5DevRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
+import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -371,6 +371,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const g5ArtLab=typeof window!=='undefined'&&
   omegaG5DevRequested(window.location.search,
    import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const g5VectorStudy=typeof window!=='undefined'&&omegaG5VectorStudyRequested(
+  window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
@@ -402,7 +404,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(!mounted){session.revoke();return;}
    lease=session;
    userApprovedAiraV2.setSilverReviewSources(session.urls);
-   if(g5ArtLab)omegaG5Art.prepare();
+   if(g5VectorStudy)omegaG5Art.prepare();
    // All 8 real WebPs must decode before the game reports the imported
    // original art as visible, not just that IndexedDB returned eight hashes.
    for(let attempt=0;attempt<90&&mounted;attempt++){
@@ -426,7 +428,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    userApprovedAiraV2.setSilverReviewSources(null);
    lease?.revoke();
   };
- },[silverPreviewRequested,g4SilverLab,g5ArtLab]);
+ },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
@@ -648,7 +650,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
   data-omega-silver-preview={silverPreviewStatus}
   data-omega-m12g4-silver-review={g4SilverLab?'source-sha256-dev-only':'off'}
-  data-omega-m12g5-lab={g5ArtLab?'six-independent-vector-drafts':'off'}
+  data-omega-m12g5-lab={g5ArtLab?'source-verified-silver-originals':'off'}
+  data-omega-m12g5-vector-study={g5VectorStudy?'isolated-unapproved':'off'}
   data-omega-real-extreme-clears={realUnlockStatus.extremeStagesCleared}
   data-omega-real-unlock-eligible={realUnlockStatus.canEnter?'yes':'no'}
   data-omega-session-unlock-source="dev-qa-fixture"
@@ -677,9 +680,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
-    <strong>{g5ArtLab?'AIRA/E 4장·감염체 2장 · 독립 원화 시범검수':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
+    <strong>{g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?(g5ArtLab?'원본 8방향 검증 · 동쪽 걸음 4장·감염체 2장 실전 검수 · 전체160/320 미완':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
+     ?(g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
