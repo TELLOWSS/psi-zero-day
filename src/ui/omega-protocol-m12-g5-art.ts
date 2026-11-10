@@ -45,6 +45,14 @@ export function omegaG5DrifterPoseAt(h:Pick<Hazard,'x'|'y'>):0|1 {
 type Cached={image:HTMLImageElement;state:'loading'|'ready'|'failed'};
 export class OmegaG5DraftImageCache{
  private readonly images=new Map<string,Cached>();
+ private heroDraws=0;
+ private drifterDraws=0;
+ private readonly heroFramesSeen=new Set<number>();
+ private readonly drifterFramesSeen=new Set<number>();
+ evidence():Readonly<{heroDraws:number;drifterDraws:number;heroFramesSeen:number[];drifterFramesSeen:number[]}>{
+  return {heroDraws:this.heroDraws,drifterDraws:this.drifterDraws,
+   heroFramesSeen:[...this.heroFramesSeen].sort(),drifterFramesSeen:[...this.drifterFramesSeen].sort()};
+ }
  prepare():void{
   if(typeof Image==='undefined')return;
   for(const path of [...OMEGA_G5_SOURCE_ART.silverEast,...OMEGA_G5_SOURCE_ART.infectedDrifter])
@@ -80,6 +88,7 @@ export class OmegaG5DraftImageCache{
   if(cached?.state!=='ready')return false;
   const w=height*384/512;
   ctx.drawImage(cached.image,-w/2,-height*470/512,w,height);
+  this.heroDraws++;this.heroFramesSeen.add(index);
   return true;
  }
  drawDrifter(ctx:CanvasRenderingContext2D,h:Hazard,brain:OmegaZombieBrain|undefined):boolean{
@@ -90,6 +99,7 @@ export class OmegaG5DraftImageCache{
   const height=91,width=height*384/512;
   // Source authoring boots at 470 of 512: same physical Watch origin.
   ctx.drawImage(cached.image,-width/2,-height*470/512,width,height);
+  this.drifterDraws++;this.drifterFramesSeen.add(index);
   return true;
  }
 }
