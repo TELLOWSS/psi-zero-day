@@ -63,7 +63,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
- drawOmegaCounterplayCues(ctx,omegaCounterplayCues(state.hazards,id=>session.zombieBrain(id)),state.gameTime);
+ drawOmegaCounterplayCues(ctx,omegaCounterplayCues(state.hazards,id=>session.zombieBrain(id)),state.gameTime,field?.plan.obstacles??[]);
  // Genuine dash trail remains under all live Watch enemies and hero.
  drawOmegaDashEnergy(ctx,echoes,state.gameTime);
  const p=state.player;
