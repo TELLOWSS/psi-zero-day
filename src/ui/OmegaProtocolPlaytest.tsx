@@ -20,7 +20,7 @@ import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-
 import {omegaLoadSilverPreview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
 import {omegaM12Budget,drawOmegaM12TerrainShadows,drawOmegaM12ActorFootShadow,drawOmegaM12StructureFacets,drawOmegaM12DistanceHaze,drawOmegaM12OcclusionBeacon} from './omega-protocol-m12-depth';
-import {omegaG2Quality,drawOmegaG2RearEnvironment,drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail} from './omega-protocol-m12-authored-industrial';
+import {omegaG2Quality,drawOmegaG2EntrySurface,drawOmegaG2RearEnvironment,drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail} from './omega-protocol-m12-authored-industrial';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -54,6 +54,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
+  drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
   drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
