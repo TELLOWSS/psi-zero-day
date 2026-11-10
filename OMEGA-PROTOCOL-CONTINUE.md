@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D5 실전 위험 경고/회피 가시성 개선 PR #248 Core 51파일/227테스트 및 PC·모바일 Chromium QA PASS. 검증 PR #248 개발 브랜치에만 squash 병합 f66d08a94fe241159bd9f34879961b1f21f1730f; main/Production 미배포, 15구역 완주/정식 아트/Android 미완
+**관리일:** 2026-11-10 (KST) · M04-D6 실전 RUNAWAY_CART 경고 중 선피격 수정·엄폐 충돌 방향선·PC/모바일 가로/세로 Chromium QA: Core 52파일/233테스트 PASS, Browser 전체 PASS. 검증 PR #249 개발 브랜치 대상; 15구역 무스킵 승리·Android·정식 원화·main/운영 미완
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -34,7 +34,7 @@
 | M01-QA | 개발 시험용 50/50과 이용자 실제 저장 기록 분리 표시 | `OmegaProtocolPlaytest`에 실제 진도 표시 및 DOM 증거; Vite·Chromium 9개 체크포인트 브라우저 검사 | **TESTED: PR #237 브라우저 전체 workflow PASS, 실제 React/Canvas 및 `data-omega-real-extreme-clears` QA 검사 통과. 실기기 Android/운영 CTA 아님** |
 | M02 | OMEGA 원거리 무기 + 검 3타, HP 감소, 방향·엄폐·보스 피해 상한, PC/모바일 입력 | OMEGA 전용 시작 원거리 총기 `radio_boost=1`, 검 3연격, 실제 native 투사체/HP·거리·장애물·F키/모바일 터치 검격, 2개 검 강화 | **TESTED 기술검증: PR #238 CI 45파일/193테스트 + DEV 실제 React/Canvas 브라우저 E2E 4/4 통과. 고품질 독립 총/검 원화, 실기기 Android, 상업 출시 품질은 미완** |
 | M03 | 안전모 좀비 기본·질주·장갑·정예 4종의 차별화 추격·예고·실제 HP 피해 | 기존 Watch 네이티브 감염체 위에 OMEGA 전용 4개 독립 AI, 각 1종 필수 배치+산업 장비형 적 1종, HP·속도·돌진·측면기동·공격 예고·충돌 처리·임시 차별 실루엣 | **TESTED 기술검증: PR #239 Core 46파일/203테스트 + Vite/Chromium 데스크톱·모바일 AI 4종 모두 예고 후 실제 HP 피해. 정식 8방향 고품질 좀비 원화·군집 전술·Android 실기기 미완** |
-| M04 | 5막/15지점 이동 탐험, 전투·장치·실제 보급·후반 생존성 | **M04-A~C** 4종 ACT 경계, **D1** 전장 연속형 보급 UI, **D2** 4종 감염체·보스 피해분류, **D3** 13구역 질주형 감염체+운반장비 패배 진단, **D4** 실제 제공 카드 4종 우선순위 동일 시드 A/B/C/D 시험 | **부분 TESTED:** PR #247 50파일/223 테스트 PASS: 기존 혼합 12구역 통과·13구역 사망, 생존 11·12 사망, 기동 10·11 사망, 화력 7·8 자동조작 LOS 교착(패배가 아님). **15구역 무스킵 승리/실제 심리스 월드/정식 AIRA/Android 미완** |
+| M04 | 5막/15지점 이동 탐험, 전투·장치·실제 보급·후반 생존성 | M04-A~C 4 ACT 경계, D1 보급 UI, D2/3 실제 피해 계측, D4 4빌드, D5 경고 HUD, **D6 native 장비 warning 선피격 OMEGA 전용 수정·엄폐 경고 방향 클리핑** | **부분 TESTED: PR #249 Core 52파일/233테스트 PASS + Chromium PC/모바일 세로·가로/보스9·15 경고 PASS.** 실제 15구역 무스킵 승리, Android 실기기, 완전 심리스/정식 아트 **미완** |
 | M05 | 중간 보스 TITAN HOOK/최종 BLACK SIGNAL CORE의 차별화 3페이즈 | 기존 실제 보스/예고/HP 스케치 | **최종 기믹·완성 아트 미완** |
 | M06 | 은백색 AIRA 8방향 정지 원화 기준 및 **정확한 NW 후면 좌측** | GitHub 은백색 8방향 연구본, NW 후보는 대화에서만 생성 | **원화 최종 승인/리포지토리 정식 적용 미완** |
 | M07 | 은백색 AIRA **독립 160액션 프레임 + 마스크 320**, 장비 정렬, 발 접지 | Watch 8방향 원화 선택/실제 idle/walk/fire/dash/hit 상태 판별, GUARD 원화 관찰용 연결 | **은백색 승인 독립 프레임 0/160, 마스크 미완** |
@@ -43,7 +43,7 @@
 | M10 | PC/태블릿/안드로이드 실기기, 가로/세로 UI/발열/FPS/터치 | 반응형 CSS·브라우저 캡처 스크립트 작성 | **실기기 실행 미검증** |
 | M11 | 릴리스 게이트, 저장 호환, 위험성 없음, 사용자 승인 | PR #235 Draft | **main/Production 병합 및 공개 금지** |
 
-**다음 실행 작업(하나씩 처리): M04-D6 — 화면 위험 경고와 실제 HP 피해 판정의 정합성 및 회피 경로 공정성.** PR #248에서 실제 native RUNAWAY_CART warning/charge 방향, OMEGA 감염체 4종 고정 공격 방향·경고 타이머, 대시 cooldown의 Canvas/HUD 안내를 개발하고 Core 51파일/227테스트, Chrome PC 1440×900·모바일 세로 390×844 QA 통과를 확보. 단, 운반장비가 경고 단계에서 접촉 HP 피해를 줄 가능성이 코드에 남아 있으며 모바일 가로·엄폐 LOS·보스9/15 HUD·완전 15/15 무스킵 플레이는 미검증. 다음은 src/engine/patrol-hazard-motion.ts의 isHazardContactActive 와 native checkCollisions를 실제 테스트해 warning 중 피격 여부를 재현하고 OMEGA 격리 변경이 필요한지 판별. 전투 난도·HP·쿨다운 임의 완화는 금지. 모바일 가로 실제 Chromium, 보스 경고와 방향/LOS 품질 후속 QA. 승인 독립 AIRA 160 프레임·마스크 320, Android 물리 기기, 완전 심리스 및 운영은 여전히 BLOCKED. main/Production/유료 전환 금지.
+**다음 실행 작업(하나씩 처리): M04-D7 — 공정한 공격예고 수정 후 13→15구역 무스킵 생존 가능성·실제 후반 전투 루트 재검증.** M04-D6에서 원래 native RUNAWAY_CART는 warning·approach·cooldown 단계에 22 HP 선피격이 가능함을 실제 Vitest 2개 FAIL로 재현하고, OMEGA 전용 protocolExternalEncounter 경계에서 **charge 단계의 정상 충돌만 유지**하도록 수정했다. Core 52파일/233테스트 PASS; PC 1440×900·모바일 세로390×844·가로844×390 실제 Chromium에서는 warning HP800 유지→charge 후 778, 경고와 버튼 겹침0, 보스9/15 경고 화면 PASS. 고정시드 20261109 기존 4빌드 기록은 혼합형 12→13 실제 사망, 생존 11→12, 기동 10→11, 화력 7→8 LOS 추적 교착으로 남아 15/15 통과 증거가 아니다. 다음은 **새 엔진 변경을 임의 더하지 않고** 실제 1→15 적 처치/E장치/실게이트/카드 제안만 사용하는 자동 조작을 최신 규칙에서 무스킵 재시험하고, 13구역 장비/감염체 연속 피해·지형 LOS·대시 타이밍과 자동조작의 교착을 원인별 분리한다. 보스 15 실제 격파·엔딩 증거 없는 완료 선언 금지. Android 실기기/정식 은백색 AIRA 160프레임·320마스크·진정한 심리스 스트리밍 및 main/Production/유료 전환은 BLOCKED.
 
 ## 4. 코드별 찾아가기
 
@@ -299,3 +299,24 @@
 **개발 브랜치 반영 확인:** [PR #248](https://github.com/TELLOWSS/psi-zero-day/pull/248) 성공적으로 OMEGA 개발 브랜치에만 squash 병합되었음. 해당 병합 SHA `f66d08a94fe241159bd9f34879961b1f21f1730f`; 작업용 PR #235는 계속 Draft 및 미병합이며 `main`과 Production에는 반영하지 않음. 실제 Actions 증거는 병합 이전 코드 동일한 검증 PR SHA `56e2812f8f0db07c3376fb3db363fd4b0881e243` 기준이며, 후속 인계 문서 단독 편집은 실행 코드 테스트를 대체하지 않음.
 
 **NEXT M04-D6:** RUNAWAY_CART warning 단계에서도 native 접촉 피해가 들어가는지 실제 엔진 테스트, 감염체/카트/보스 경고와 충돌 판정 타이밍 일치 여부, LOS 및 지형/회피 경로, 모바일 가로 844×390 QA. 원래 난도 무단 하향/HP 손대기 금지. main/Production/유료 업그레이드 금지.
+
+## 20. M04-D6 RUNAWAY_CART 예고 중 선피격 및 장애물/모바일 전투 경고 검증 (2026-11-10)
+
+**검증 PR:** [#249](https://github.com/TELLOWSS/psi-zero-day/pull/249), QA 브랜치 `qa/omega-m04d6-native-cart-warning-fairness-20261110` → **OMEGA 개발 브랜치 대상만**. 출발 OMEGA HEAD `242f9b4c9eda067fa57f22c3fa836bd2e44afb28`. 개발 브랜치 병합/최종 SHA는 병합 후 아래에 별도 갱신한다.
+
+### 실제 결함 재현 (의도적으로 실패한 첫 실행)
+
+- [첫 Core #42748658589](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42748658589)에서 신규 native Watch 실제 엔진 테스트 **2 FAIL / 230 PASS**, TypeScript 통과. OMEGA `RUNAWAY_CART.motion.phase=warning`이고 운반장비·플레이어가 겹쳤을 때 **HP 100→78(실제 22 손실)**. `approach`/`cooldown`도 실제 22 손실 재현. 경고 UI와 실제 접촉 판정이 어긋나는 것이 확인되어 단순 추정이 아님.
+- 원인: native `checkCollisions()`는 기본 `isHazardContactActive(RUNAWAY_CART)` 결과를 그대로 받아 OMEGA 격리 운반장비의 `warning`·`approach`·`cooldown` 중에도 접촉 피해와 0.6초 무적을 발생시켰다. 감염 좀비는 이미 별도 무예고 충돌 차단, 보스는 자체 패턴과 별도 판정을 사용한다.
+
+### 격리 수정 및 실제 검증 PASS
+
+- `src/engine/patrol-survivors-engine.ts`의 **`this.protocolExternalEncounter && h.type === 'RUNAWAY_CART'`에서 `motion.phase==='charge'`일 때만 기존 접촉 판정을 허용**. 기존 카트 속도/적 HP/22 공격력/예고 타이머/대시 0.28초 무적/기존 일반 Watch 정책은 그대로. 일반 WATCH가 경고 중 접촉을 일으킬 수 있다는 이전 정책은 명시적으로 회귀 검사로 보존했다.
+- `tests/omega-protocol-cart-counterplay-fairness.test.ts` 신규: 실제 OMEGA/Watch 엔진에서 warning·approach·cooldown 무선피격, charge 22 정피격, native dash 회피, 기존 Watch 원상 보존 5개 확인. `src/ui/omega-protocol-counterplay.ts`는 실제 현장 장애물을 h.radius 만큼 반영한 Ray/AABB로 고정 방향선의 장애물 관통 표현을 제거하고 테스트 1개 추가. 공격 판정과 물체 충돌 로직은 바꾸지 않음.
+- [최종 Core #42749422806](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422806) **SUCCESS: TypeScript + Vitest 52파일/233개 전부 PASS.** 기존 동일 시드 4전술 시험은 혼합형12→13 HP0, 생존11→12, 기동10→11, 화력7→8 LOS 교착으로 여전히 15/15 무스킵 승리 아님.
+- [전체 Browser #42749422588](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42749422588) **SUCCESS**. DEV-only `cartWarning` 시작 위치를 배치하지만 실제 warning/charge 타이머·실 HP 손실·브라우저 입력은 Watch 엔진 그대로. PC1440×900, 모바일 세로390×844, 모바일 가로844×390 모두 **warning 동안 HP800 유지 → 실제 돌진 후 HP778**, 조작 버튼 겹침 **0px²**. 9구역 크레인/15구역 제어코어 경고도 가로844×390에서 각기 **공격예고1.6초**와 실제 보스 구역 식별 PASS. M02/03, 구역 경계 1→4·6→7·9→10·12→13, WATCH/GUARD/AIRA 기존 브라우저 회귀 PASS.
+- 신규 브라우저 시험 `scripts/qa-omega-m04d6-counterplay-browser.mjs` 및 CI 등록, 반응형 경고 HUD 세로 배치 보완. 출력 사진 `m04d6-cart-warning-{desktop,mobile-portrait,mobile-landscape}.png` 등은 GitHub Actions artifact 안에 있음. **Chrome 모바일 에뮬레이션이지 실물 Android/태블릿이 아님**.
+
+**정확한 완료:** `M04-D6 = CODED + TESTED (Core+Chromium PC/모바일 세로·가로)`. 사람의 15/15 무스킵 클리어, 후반 보스 실제 전투·엔딩, 60분 장시간 테스트, 물리 Android FPS/발열, 진정한 심리스 맵, 은백색 AIRA 승인 독립 160액션/320마스크 및 정식 적 원화는 **미완**.
+
+**NEXT M04-D7:** 최신 규칙에서 고정시드 1→15 무스킵 실제 전투/장치/문/보급을 재실행하고 13~15 피해·LOS·자동조작 교착을 분리; 이후 실제 사용자 조작 시 위험 인지/반격 가능한지 검증한다. 난도·HP/적HP·카드 임의 변경 금지. OMEGA QA 독립 PR로 완전 통과 증거 후에만 개발 브랜치 반영. main/Production·유료 전환 금지.
