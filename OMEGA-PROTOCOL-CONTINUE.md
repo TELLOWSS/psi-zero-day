@@ -1,5 +1,5 @@
 # OMEGA PROTOCOL — 새 채팅 / 새 개발 세션 인계 문서
-**관리일:** 2026-11-10 (KST) · M04-D9 BLACK SIGNAL CORE 15구역 **진짜 무스킵 자동조작 15/15 엔진 victory 최초 증명**, TypeScript·55파일/236테스트 PASS. 실제 1→15 적HP 전량 제거/E 장치/실출구, HP33 완주·최종보스 격파. QA PR #252는 OMEGA 개발 브랜치 대상; 정식 캐릭터 원화/배경 입체화·Android/실유저 해금/독립 PR243/Production 미완.
+**관리일:** 2026-11-10 (KST) · M04-D9 BLACK SIGNAL CORE 15구역 **진짜 무스킵 자동조작 15/15 엔진 victory 최초 증명**, TypeScript·55파일/236테스트 PASS. 실제 1→15 적HP 전량 제거/E 장치/실출구, HP33 완주·최종보스 격파. QA PR #252 검증 후 **OMEGA 개발 브랜치에만 squash 병합 `b1f5daec9277a67625055a9a559ef62058874c83`**; 정식 캐릭터 원화/배경 입체화·Android/실유저 해금/독립 PR243/Production 미완.
 **저장소:** [TELLOWSS/psi-zero-day](https://github.com/TELLOWSS/psi-zero-day)  
 **작업 PR:** [#235 — Draft: Extreme-50 Quarantine Zombie Gun×Blade Expedition](https://github.com/TELLOWSS/psi-zero-day/pull/235)  
 **작업 브랜치:** `feat/omega-protocol-roguelite-core-20261108`  
@@ -388,5 +388,7 @@
 
 - **이것은 실 게임으로 동작 가능한 네이티브 메커니즘을 자동 조이스틱으로 검증한 성공**이지, 테스트 전술을 운영 플레이어 자동 조작으로 통합했다는 뜻이나 실제 유저가 실기기에서 완주했다는 증거가 아니다. 비디오/브라우저 15→엔딩 시네마틱, Android 실제 단말 FPS·발열·제어, 실 50개 Extreme 해금·권한, 독립 strict [PR #243](https://github.com/TELLOWSS/psi-zero-day/pull/243) 품질 게이트는 추가 검증 필요.
 - 실제 15구역 공간은 2.5D 입체 배경·높이감·가림 관계·빛·그림자·카메라 연출과 정식 AIRA 160원화/320마스크가 아직 미완. 이미 구현된 기술적 전투 승리를 **상품성/영상 품질 승인**으로 둔갑시키지 않는다.
+
+**병합 확인:** [QA PR #252](https://github.com/TELLOWSS/psi-zero-day/pull/252)은 **OMEGA 개발 브랜치에만** squash 병합 `b1f5daec9277a67625055a9a559ef62058874c83`. 실제 최종 TypeScript·55파일/236개 전부 PASS [Core #42801989191](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42801989191) 테스트/CI HEAD `ef135fd019273f983fe502289068a72457856382` 이후는 인계·마스터 문서 변경뿐이며 실행 소스 블롭 동일성 확인 완료. 사용자가 승인하기 전까지 주 PR #235는 Draft·`main` 미병합, Vercel Production/유료 전환 금지.
 
 **NEXT M12-G1:** 디렉터 지정 **배경 입체화 수직 슬라이스** 1개를 원본 OMEGA 실제 플레이 렌더러에 구축. 우선 기존 쿼터뷰 좌표/충돌/실탄 LOS를 변경하지 않고 시각용 z/depth와 layer ordering, 비계·갱폼·호이스트·산업 폐허 구조물, 전경 진입 시 AIRA/감염체 **동적 오클루전(가림)**, 발 접지/블롭 그림자, 조명·안개, 카메라 팬/줌, 모바일 전용 저비용 표현으로 완성. 실제 4개 해상도 브라우저 캡처/조작 및 기능 CI 검증으로 **이미지 단독 시안과 실제 구현을 분리**. 정식 캐릭터 원화 승인(0/160), 심리스/PR243/Android 실물은 독립 BLOCKED 게이트. main/Production/유료 전환 절대 금지.
