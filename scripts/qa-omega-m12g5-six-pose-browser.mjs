@@ -75,15 +75,18 @@ for(const [name,w,h,mobile] of sizes){
   // travel. Wait for TWO independently selected real gait frames rather
   // than treating low CI frame throughput as an animation regression.
   await page.waitForTimeout(350);
-  await page.waitForFunction(async()=>{
+  // Capture immutable genuine draw evidence AT the instant the condition
+  // becomes true. On shared Vite CI a dev-server HMR refresh can replace the
+  // module singleton between waitForFunction and a subsequent evaluate(),
+  // resetting counters to zero while the live sprite remains visible.
+  const proofHandle=await page.waitForFunction(async()=>{
    const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
    const proof=omegaG5Art.evidence();
-   return proof.heroDraws>=2&&proof.heroFramesSeen.length>=2;
+   return proof.heroDraws>=2&&proof.heroFramesSeen.length>=2
+    ?{status:omegaG5Art.status(),evidence:proof}:false;
   },null,{timeout:3000,polling:100});
-  const artwork=await page.evaluate(async()=>{
-   const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
-   return {status:omegaG5Art.status(),evidence:omegaG5Art.evidence()};
-  });
+  const artwork=await proofHandle.jsonValue();
+  await proofHandle.dispose();
   const afterX=Number(await arena.getAttribute('data-omega-player-x'));
   await page.screenshot({path:dir+'/m12g5-live-moving-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
