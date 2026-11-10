@@ -48,6 +48,9 @@ interface PilotTelemetry {
  lineOfSightDetourTicks:number;damageContexts:DamageContext[];
  firstEight:EarlyFrame[];safetyMoves:number;rejectedMoves:number;
  bossFrames:BossFrame[];bossSafeInputs:number;bossSafeRejected:number;
+ bossHitDetails:Array<{at:number;before:{x:number;y:number;hp:number;cooldown:number};
+  after:{x:number;y:number;hp:number};move:{x:number;y:number};
+  lane:string;phase:string;timer:number;axisDelta:number;halfWidth:number;nativeCartDistance:number|null}>;
 }
 /** M04-D8 late-game controlled difference: first 12 nodes run IDENTICALLY.
  * The reaction pilot sees only the same native-locked warning and terrain
@@ -182,7 +185,11 @@ function boundedWarningMove(s:OmegaProtocolCombatSession,telemetry:PilotTelemetr
  */
 function combinedBossWarningMove(s:OmegaProtocolCombatSession,tel:PilotTelemetry):ReturnType<typeof steer>|null{
  const actor=s.engine.state.player,field=s.field?.plan,w=s.snapshot.bossTelegraph;
- if(!field||w?.phase!=='warning'||!omegaBossInStrikeZone(w,actor)||w.timer>.92)return null;
+ if(!field||w?.phase!=='warning'||w.timer>1.24)return null;
+ const axis=Math.abs(w.lane==='horizontal'?actor.y-w.center.y:actor.x-w.center.x);
+ // Keep a safety margin for the ENTIRE native warning; exiting the actual
+ // hit lane then immediately wandering back into it was a common defeat.
+ if(axis>w.laneHalfWidth+75)return null;
  const live=s.engine.state.hazards.filter(h=>h.hp>0);
  // M04-D9 gate: preserve entire original first dense wave15 fight while
  // infected and multiple carts remain. Prior global lane override was fatal.
@@ -201,7 +208,7 @@ function combinedBossWarningMove(s:OmegaProtocolCombatSession,tel:PilotTelemetry
   const travel=dist(actor,route.next);
   const predicted={x:actor.x+(route.next.x-actor.x)/travel*Math.min(travel,145),
    y:actor.y+(route.next.y-actor.y)/travel*Math.min(travel,145)};
-  let cost=Math.max(0,w.laneHalfWidth+23-laneDistance(predicted))*6;
+  let cost=Math.max(0,w.laneHalfWidth+55-laneDistance(predicted))*10;
   for(const h of live){
    if(h.isStageBoss)continue;
    const d=dist(predicted,h),desired=h.radius+75;
@@ -227,7 +234,7 @@ function combinedBossWarningMove(s:OmegaProtocolCombatSession,tel:PilotTelemetry
  }
  if(!best){tel.bossSafeRejected++;return null;}
  // A retreat is worthwhile only if it can actually reduce locked-lane risk.
- const currentCost=Math.max(0,w.laneHalfWidth+23-laneDistance(actor))*6;
+ const currentCost=Math.max(0,w.laneHalfWidth+55-laneDistance(actor))*10;
  if(best.score>=currentCost+65){tel.bossSafeRejected++;return null;}
  tel.bossSafeInputs++;
  return steer(actor,best.point);
@@ -440,6 +447,8 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
    // telegraphed window. Dash grants only native .28s invulnerability and
    // enforces its real cooldown, without manipulating hazard HP.
    const beforeDamageEvents=s.damageEvents.length;
+   const preBossPlayer={x:player.x,y:player.y,hp:player.hp,
+    cooldown:player.dashCooldown??0};
    const warned=s.snapshot.bossTelegraph;
    const danger=(pilot==='reaction'||pilot==='bounded'||pilot==='bossSafe')&&wave>=13
     ?omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id)).some(c=>{
@@ -460,6 +469,22 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
     s.update(DT,movement);
     if(s.dash()&&telemetry)telemetry.dashAccepted++;
    }else s.update(DT,movement);
+   if(wave===15&&telemetry&&warned){
+    const hits=s.damageEvents.slice(beforeDamageEvents).filter(e=>e.source==='BLACK_SIGNAL_CORE');
+    for(const event of hits){
+     const carts=s.engine.state.hazards.filter(h=>h.hp>0&&h.type==='RUNAWAY_CART')
+      .map(h=>dist(player,h));
+     telemetry.bossHitDetails.push({at:+s.engine.state.gameTime.toFixed(2),before:{
+      x:+preBossPlayer.x.toFixed(1),y:+preBossPlayer.y.toFixed(1),
+      hp:preBossPlayer.hp,cooldown:+preBossPlayer.cooldown.toFixed(2)},
+      after:{x:+player.x.toFixed(1),y:+player.y.toFixed(1),hp:player.hp},
+      move:{x:+movement.moveX.toFixed(2),y:+movement.moveY.toFixed(2)},
+      lane:warned.lane,phase:warned.phase,timer:+warned.timer.toFixed(2),
+      axisDelta:+Math.abs(warned.lane==='horizontal'?player.y-warned.center.y:
+       player.x-warned.center.x).toFixed(1),halfWidth:warned.laneHalfWidth,
+      nativeCartDistance:carts.length?Math.round(Math.min(...carts)):null});
+    }
+   }
    // Observe the fatal WATCH engine hit in the SAME native update frame.
    // "reportedSource" is the engine's own lastDamage label, while nearest
    // hazards are context-only and NEVER promoted to causal certainty.
@@ -584,7 +609,7 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
  const rewardChoices:BuildResult['rewardChoices']=[];
  const telemetry:PilotTelemetry={warningsObserved:0,sidesteps:0,dashAccepted:0,
   lineOfSightDetourTicks:0,damageContexts:[],firstEight:[],safetyMoves:0,rejectedMoves:0,
-  bossFrames:[],bossSafeInputs:0,bossSafeRejected:0};
+  bossFrames:[],bossSafeInputs:0,bossSafeRejected:0,bossHitDetails:[]};
  let failureReason:string|null=null,firstFailure:number|null=null;
  let cleared=0,botBlockedAt:number|null=null;
  const list:readonly string[]=priorities[policy];
@@ -683,7 +708,7 @@ describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
   for(const r of results){
    console.log('M04_D9_BOSS15_FRAMES',JSON.stringify({pilot:r.pilot,frames:r.telemetry.bossFrames,
-    nativeDamage:r.telemetry.damageContexts.filter(e=>e.wave===15)}));
+    nativeDamage:r.telemetry.damageContexts.filter(e=>e.wave===15),bossHitDetails:r.telemetry.bossHitDetails}));
    expect(r.telemetry.bossFrames.length).toBeGreaterThan(15);
    console.log('M04_D9_FIRST_EIGHT_SECONDS',JSON.stringify({pilot:r.pilot,
     frames:r.telemetry.firstEight,hits:r.telemetry.damageContexts.filter(e=>e.wave===13)}));
@@ -698,6 +723,7 @@ describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit
    damageContexts:r.telemetry.damageContexts.slice(-12),
    safetyMoves:r.telemetry.safetyMoves,rejectedMoves:r.telemetry.rejectedMoves,
    bossSafeInputs:r.telemetry.bossSafeInputs,bossSafeRejected:r.telemetry.bossSafeRejected,
+   bossHitDetails:r.telemetry.bossHitDetails,
    lateNodes:r.segments.filter(s=>s.wave>=11),
    cards:r.rewardChoices}));
   console.log('M04_D9_VERDICT',JSON.stringify({seed:20261109,verdict,
