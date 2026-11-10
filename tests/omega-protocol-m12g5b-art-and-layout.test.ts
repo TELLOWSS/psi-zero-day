@@ -42,17 +42,17 @@ describe('M12-G5b painterly native source review and portrait viewport safety',(
   expect(omegaG5bReviewability(sample(),sourceHash)).toBe('REVIEWABLE_NOT_APPROVED');
   expect(omegaG5bReviewability(sample(),'not-a-hash')).toBe('MISSING');
   expect(omegaG5bReviewability({...sample(),artistSignoff:' '},sourceHash)).toBe('MISSING');
-  expect(omegaG5bReviewability({...sample(),visualReview:'PENDING'} as OmegaG5bPainterlyCandidate,sourceHash)).toBe('MISSING');
+  expect(omegaG5bReviewability({...sample(),visualReview:'PENDING'} as unknown as OmegaG5bPainterlyCandidate,sourceHash)).toBe('MISSING');
   expect(omegaG5bReviewability({...sample(),sourceAnchorSha256:'b'.repeat(64)},sourceHash)).toBe('MISSING');
   expect(omegaG5bReviewability({...sample(),productionApproved:true} as unknown as OmegaG5bPainterlyCandidate,sourceHash)).toBe('MISSING');
  });
  it('rejects reused still source, SVG vector study and duplicate frames / invalid dimensions',()=>{
   const base=sample();
-  expect(omegaG5bReviewability({...base,paths:[base.paths[0],base.paths[0],...base.paths.slice(2)]},sourceHash)).toBe('MISSING');
+  expect(omegaG5bReviewability({...base,paths:[base.paths[0]!,base.paths[0]!,...base.paths.slice(2)]},sourceHash)).toBe('MISSING');
   expect(omegaG5bReviewability({...base,paths:[...base.paths.slice(0,3),'/assets/omega/g5/silver-east-walk-3.svg']},sourceHash)).toBe('MISSING');
-  expect(omegaG5bReviewability({...base,sourceSha256:[base.sourceSha256[0],base.sourceSha256[0],...base.sourceSha256.slice(2)]},sourceHash)).toBe('MISSING');
+  expect(omegaG5bReviewability({...base,sourceSha256:[base.sourceSha256[0]!,base.sourceSha256[0]!,...base.sourceSha256.slice(2)]},sourceHash)).toBe('MISSING');
   expect(omegaG5bReviewability({...base,sourceSha256:[sourceHash,...base.sourceSha256.slice(1)]},sourceHash)).toBe('MISSING');
-  expect(omegaG5bReviewability({...base,widths:[384,192,384,384]},sourceHash)).toBe('MISSING');
+  expect(omegaG5bReviewability({...base,widths:[384,192,384,384] as unknown as OmegaG5bPainterlyCandidate['widths']},sourceHash)).toBe('MISSING');
  });
  it('the CSS uses a REAL 4-row review shell without changing non-review 3-row layout',()=>{
   const css=readFileSync('src/ui/omega-protocol-playtest.css','utf8');
