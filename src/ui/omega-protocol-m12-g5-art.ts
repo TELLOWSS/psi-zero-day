@@ -79,7 +79,7 @@ export class OmegaG5DraftImageCache{
   const cached=this.get(OMEGA_G5_SOURCE_ART.silverEast[index]);
   if(cached?.state!=='ready')return false;
   const w=height*384/512;
-  ctx.drawImage(cached.image,-w/2,-height,height*384/512,height);
+  ctx.drawImage(cached.image,-w/2,-height*470/512,w,height);
   return true;
  }
  drawDrifter(ctx:CanvasRenderingContext2D,h:Hazard,brain:OmegaZombieBrain|undefined):boolean{
