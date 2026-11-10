@@ -242,3 +242,13 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 - 검증: [Core #42810077573](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077573) **TypeScript·58파일/249테스트 PASS**. [집중 Chrome #42810077739](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42810077739) **PC/태블릿/모바일 2방향·플레이어 실제 이동·원경/중경/근경 픽셀 변화/철망 망 픽셀 4/4 PASS**. 실제 Chrome software microbenchmark는 실제 Android FPS 측정이 아니며 모바일 발열·조작 미검수. 전체 Chrome workflow #42810077661 결과 확인 후 병합 여부 결정.
 - **최종 아트 미달:** 실제 스크린샷에서 주요 플레이 카메라의 낮은 공간 입체감, 비주얼이 통일되지 않은 AIRA/좀비 스프라이트, 낮은 고해상도 질감이 여전. 8×20=160 정식 AIRA 독립 원화·320 마스크 및 상업용 원경 원화 미완. 15구역 플레이어 실제 완주·실계정 50×Extreme·Android 물리 QA·PR243/진정한 심리스 모두 별도 BLOCKED.
 - **NEXT M12-G4:** 테스트 픽셀이 아니라 실제 유저가 보는 중심 화면에서 대형 산업구조의 원근·입체 볼륨 + 정식 AIRA 원화/애니메이션 시각 정합성을 최우선. 임시 삽화·형상화 시안/실제 게임 구현·검증·상업적 승인 상태는 항상 구분. `main`/Vercel Production/유료 전환 금지.
+
+
+### 2026-11-10 M12-G4 실제 AIRA 원본 게임 검수와 전장 질감 [QA PR #256](https://github.com/TELLOWSS/psi-zero-day/pull/256)
+
+- 기존 저장소의 SHA-256 고정 은백색 AIRA `384×512` 실원화 8방향은 이미 GitHub에 존재한다. 일반 게임 화면이나 승인 완료로 잘못 사용하지 말고, 개발실 전용 `/?omegaLab=1&omegaM12G4=1`에서만 **실제 OMEGA React/Canvas의 player sprite로 표시**한다. 전 방향 해시+디코드 확인, 누락/무결성 오류 시 원본 fallback. 현재 `OMEGA_PROTOCOL_APPROVED_ART=null`, `BINARY_AUDIT_PASSED=false` 유지.
+- 첫 실제 4화면 캡처 검수에서 원본 AIRA가 8방향 완성으로 정상 로딩됐지만 기존 감염체 대비 크기가 과도했다. 이번 단계에서 **G4 개발전용 원본 표시 배율 0.78**을 적용하여 세계 축척을 맞추고 실제 네 해상도 재캡처 완료. 구현 코드는 `src/ui/omega-protocol-m12-combat-fidelity.ts`, `src/ui/omega-aira-v2-candidate.ts`, `src/ui/OmegaProtocolPlaytest.tsx`. 원본 감염체/기계 피해·맵/LOS/움직임 등 Watch 물리는 변경되지 않는다.
+- 1구역 중앙 철판 격자/리벳/중간 레인 반사·은백색 AIRA/4종 헬멧 감염체/보스 발 접촉 조명을 추가, 전투·경고/장치 전경 아래에만 배치. 모바일 저비용 예산 적용. 상업급 최종 배경/인물 미완.
+- [Core #42812536124](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42812536124) **TypeScript + 59파일/253 Vitest PASS**. [M12-G4 4크기 실제 원본 Chrome #42812535977](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42812535977) **전부 PASS**, 실원본 8장 SHA-256·실제 방향키 이동·지면/반사 픽셀·원본 지형 그대로·승인패킹 잠금 검증, 4개 PNG와 `m12g4-silver-identity-and-material-report.json` 보고서 실패 0. 전체 일반 Watch/Guard/AIRA 보스·미션 Chrome #42812535831는 종료 결과 별도로 확인한다.
+- 육안 결과: 은백색 AIRA 실제 얼굴/헤어/총기 콘셉트는 게임 안에서 명확히 표시되었으나, **원본 8장이 여전히 동작 없는 중립 스틸**이다. 좀비는 낮은 화질의 개발용 벡터 실루엣으로 외형 정합성이 부족하다. 현재 160개 독립원화/320마스크·5막 15개 고품질 지구·실기기 Android FPS/발열·전체 50 Extreme 실계정·PR #243 strict·상업/운영 승인은 BLOCKED. **NEXT M12-G5는 원본 정식 8방향 개별 액션 프레임 제작과 감염체 스프라이트 품질 검증**이며 단순 색·상단 구조물 추가로 해결했다고 하지 않는다.
+- PR #235 Draft 및 `main`·Vercel 운영 미병합, 유료 전환 금지. 회귀 전체 green 및 인계 업데이트 후에만 QA PR #256을 개발 브랜치에 병합.
