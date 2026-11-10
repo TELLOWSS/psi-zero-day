@@ -76,6 +76,57 @@ function reactiveWarningMove(s:OmegaProtocolCombatSession):ReturnType<typeof ste
  }
  return null;
 }
+/** Bounded user input: reject directions into map edges or enemy clusters.
+ * Unlike naive perpendicular reaction this samples only OBSERVABLE danger
+ * and legal routes. All HP, wave, enemy AI and pickups remain untouched.
+ */
+function boundedWarningMove(s:OmegaProtocolCombatSession,telemetry:PilotTelemetry):ReturnType<typeof steer>|null{
+ const actor=s.engine.state.player,field=s.field?.plan;
+ if(!field)return null;
+ const live=s.engine.state.hazards.filter(h=>h.hp>0);
+ const cues=omegaCounterplayCues(live,id=>s.zombieBrain(id));
+ const closest=Math.min(...live.map(h=>dist(h,actor)));
+ const urgent=cues.some(c=>dist(c,actor)<225&&
+  (c.phase==='charge'||c.seconds<=.35));
+ if(!urgent&&closest>90)return null;
+ const cost=(p:OmegaFieldPoint)=>{
+  let risk=0;
+  for(const h of live){
+   const gap=dist(p,h),safety=h.radius+60;
+   if(gap<safety)risk+=(safety-gap)*3.2;
+   else if(gap<safety+80)risk+=(safety+80-gap)*.32;
+  }
+  for(const cue of cues){
+   if(cue.directionLength<1)continue;
+   const delta={x:p.x-cue.x,y:p.y-cue.y};
+   const longitudinal=delta.x*cue.directionX+delta.y*cue.directionY;
+   const lateral=Math.abs(delta.x*-cue.directionY+delta.y*cue.directionX);
+   if(longitudinal>-22&&longitudinal<165&&lateral<cue.radius+40)
+    risk+=(cue.radius+40-lateral)*1.8;
+  }
+  // Hard corners are poor escape routes, especially at x≈21 in the failed D7 pilot.
+  const margin=Math.min(p.x-50,1350-p.x,p.y-50,850-p.y);
+  if(margin<42)risk+=(42-margin)*2.5;
+  return risk;
+ };
+ const original=cost(actor);
+ let best:{score:number;waypoint:OmegaFieldPoint}|null=null;
+ for(let k=0;k<24;k++){
+  const theta=k*Math.PI/12;
+  const end={x:Math.max(58,Math.min(1342,actor.x+Math.cos(theta)*155)),
+   y:Math.max(58,Math.min(842,actor.y+Math.sin(theta)*155))};
+  const route=omegaFieldNextRoute(actor,end,field.obstacles);
+  if(!route||dist(actor,route.next)<8)continue;
+  const l=dist(actor,route.next);
+  const predicted={x:actor.x+(route.next.x-actor.x)/l*Math.min(l,78),
+   y:actor.y+(route.next.y-actor.y)/l*Math.min(l,78)};
+  const score=cost(predicted)+(route.detour?3:0);
+  if(best===null||score<best.score)best={score,waypoint:route.next};
+ }
+ if(!best||best.score>=original-12){telemetry.rejectedMoves++;return null;}
+ telemetry.safetyMoves++;telemetry.sidesteps++;
+ return steer(actor,best.waypoint);
+}
 /** A tactical *test player*, not a game-side buff. Picks a route around
  * existing solid field props and kites warned infected charges. Does not
  * read/write game internals beyond readonly hazard positions and native
@@ -86,6 +137,10 @@ function tacticalStep(
 ):Readonly<{moveX:number;moveY:number;triggerAction:boolean}>{
  const actor=s.engine.state.player,field=s.field!.plan;
  const gap=dist(actor,enemy);
+ if(pilot==='bounded'&&s.run.wave>=13){
+  const bounded=boundedWarningMove(s,telemetry!);
+  if(bounded)return bounded;
+ }
  if(pilot==='reaction'&&s.run.wave>=13){
   const warningMove=reactiveWarningMove(s);
   if(warningMove){if(telemetry)telemetry.sidesteps++;return warningMove;}
@@ -238,7 +293,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
    // enforces its real cooldown, without manipulating hazard HP.
    const beforeDamageEvents=s.damageEvents.length;
    const warned=s.snapshot.bossTelegraph;
-   const danger=pilot==='reaction'&&wave>=13
+   const danger=(pilot==='reaction'||pilot==='bounded')&&wave>=13
     ?omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id)).some(c=>{
       const delta=dist(player,c);
       if(c.phase==='warning'&&c.seconds>.16)return false;
@@ -439,7 +494,7 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
 }
 describe('M04-D8 first-eight-seconds true native counterplay risk audit',()=>{
  it('compares unchanged native baseline vs actual warned user inputs and reports all losses as losses',()=>{
-  const results=[runActualBuild('original','baseline'),runActualBuild('original','reaction')];
+  const results=[runActualBuild('original','baseline'),runActualBuild('original','reaction'),runActualBuild('original','bounded')];
   for(const r of results){
    expect(r.segments[0]?.wave).toBe(1);
    expect(r.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
@@ -467,8 +522,12 @@ describe('M04-D8 first-eight-seconds true native counterplay risk audit',()=>{
   // same native player position trajectory/engine/actual upgrade offers.
   expect(results[0]!.segments.filter(s=>s.wave<=12))
    .toEqual(results[1]!.segments.filter(s=>s.wave<=12));
+  expect(results[0]!.segments.filter(s=>s.wave<=12))
+   .toEqual(results[2]!.segments.filter(s=>s.wave<=12));
   expect(results[0]!.rewardChoices.filter(c=>c.afterWave<=12))
    .toEqual(results[1]!.rewardChoices.filter(c=>c.afterWave<=12));
+  expect(results[0]!.rewardChoices.filter(c=>c.afterWave<=12))
+   .toEqual(results[2]!.rewardChoices.filter(c=>c.afterWave<=12));
   expect(results[0]!.rewardChoices.every(c=>c.offered.includes(c.chosen))).toBe(true);
   for(const r of results){
    console.log('M04_D8_FIRST_EIGHT_SECONDS',JSON.stringify({pilot:r.pilot,
@@ -482,6 +541,7 @@ describe('M04-D8 first-eight-seconds true native counterplay risk audit',()=>{
    warnings:r.telemetry.warningsObserved,sidesteps:r.telemetry.sidesteps,
    genuineDashes:r.telemetry.dashAccepted,losDetourTicks:r.telemetry.lineOfSightDetourTicks,
    damageContexts:r.telemetry.damageContexts.slice(-12),
+   safetyMoves:r.telemetry.safetyMoves,rejectedMoves:r.telemetry.rejectedMoves,
    lateNodes:r.segments.filter(s=>s.wave>=11),
    cards:r.rewardChoices}));
   console.log('M04_D8_VERDICT',JSON.stringify({seed:20261109,verdict,
