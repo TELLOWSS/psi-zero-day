@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {omegaFieldNativeTerrain,omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
- omegaG4Budget,omegaG4SilverLabRequested,OMEGA_G4_REVIEW_URL,
+ omegaG4Budget,omegaG4SilverLabRequested,OMEGA_G4_REVIEW_URL,OMEGA_G4_SILVER_SCALE,
  OMEGA_G4_ACTOR_PALETTE,drawOmegaG4CenterStageMaterial,drawOmegaG4ActorGrounding,
 } from '../src/ui/omega-protocol-m12-combat-fidelity';
 
@@ -28,6 +28,8 @@ describe('M12-G4 original in-game silver combat fidelity - strictly preview only
   expect(omegaG4SilverLabRequested('?omegaLab=1&omegaM12G4=1&omegaSilverPreview=1',true)).toBe(false);
   expect(omegaG4SilverLabRequested('?omegaLab=1&omegaM12G4=1&omegaSilverPreview=0',true)).toBe(false);
   expect(OMEGA_G4_REVIEW_URL).toContain('omegaM12G4=1');
+  expect(OMEGA_G4_SILVER_SCALE).toBeGreaterThan(.7);
+  expect(OMEGA_G4_SILVER_SCALE).toBeLessThan(.9);
  });
  it('uses stable low-cost palette and distinct silver/infected/boss grounding',()=>{
   expect(omegaG4Budget(390,844)).toEqual({tier:'mobile',rivetRows:2,streaks:3,rimLight:false});
