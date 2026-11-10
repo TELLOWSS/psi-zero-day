@@ -291,3 +291,10 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
 
 
 **M12-G5c 최종 QA 개발 병합 기록:** [QA PR #259](https://github.com/TELLOWSS/psi-zero-day/pull/259)을 OMEGA 개발 브랜치에만 squash `bd6ec0712ae6bf0472de287c4fc4ea80deb473dd` 병합. [Core #42889122038](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889122038) **TS+62파일/268 Vitest PASS**, [집중 PC/태블릿/모바일 4해상도 #42889121858](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889121858) **SUCCESS**, [기존 전체 Watch·Guard·AIRA·미션·보스 Chrome #42889121825](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42889121825) **SUCCESS**. 자동 승인 그림 없음: CI에서 테스트용으로 생성한 단색 도형 4개는 실제 독립 페인터리 AIRA 원화가 아닌 검수 도구 점검자료이고, 허위 대시보드 이미지도 정식 게임 아트/스크린샷/검증 증빙에서 모두 제외. 실제 원화 새로 완성한 수량 **0**, 정식 원화 160·마스크 320 승인 수량 **0**. 다음 M12-G5d 원화 실제 제작·동일 줌 인게임 검수 후 다음 동작 확장. `main`/Production/유료 요금 전환 금지, PR235 Draft.
+
+
+### 2026-11-11 M12-G5d 독립 E 걷기 AI 원화 4자세 실생성 (개발 바이너리 미업로드)
+
+- **이제 진짜 캐릭터 아트 산출물 4개가 존재**: 투명한 2×2 생성 원본에서 AIRA E 걷기 Contact/Lift/Stride/Recovery 4개 개별 384×512 RGBA WebP를 분리해 `aira_m12g5d_four_independent_webp.zip`로 사용자 대화에 전달. 각 프레임의 SHA-256 및 알파·발 접촉 측정치와 원본 시트·루프 GIF를 패키지에 포함. 사용자에게 잘못 출력됐던 작업완료 대시보드는 다시 생성하지 않았고 아트로 사용하지 않음. 해시 0 `2dfb4825f403cbe0915764234be4b2697d445bfa3fb55bcb1955afc362fa3a04`; 1 `2c65fdcc5acb98f77e20d38f1945e1355c9f759463395b42e35c482426a8c13b`; 2 `79ff9f7bf76342d298144d28f8dec5b128063206258fec8c9dc4fb23400795c4`; 3 `7fe9a9b91b60f40c25abd286906db2b014c51f0de91d72fffa72af08e7eda759`.
+- **단계 구분**: 4개 별도 AI-그림 후보 파일 생성/메모리 파일 감사 **완료**. 원본 AIRA 사용자 디렉터 승인·실제 게임 엔진에 이 4파일로 구동 테스트·GitHub 바이너리 업로드 및 CI 인게임 캡처는 **미완료**. 기존 M12-G5c에서 독립 WebP 4장 세션 임포트 기능은 이미 개발됨; 이번 4개 실제 후보로 다시 테스트해야 함. GitHub 문서 SHA 기록은 바이너리 푸시의 증거가 아님. 상품급 160 독립 작화·320 마스크 승인 0 유지, PR235 Draft/main/운영 배포·유료 전환 금지.
+- **NEXT M12-G5d-2**: 이번 실제 4개 WebP 파일을 GitHub 별도 QA 브랜치에 바이너리로 업로드하고 해시를 검증, 실제 React/Canvas 네이티브 E gait/모바일 4화면으로 확인 후 원본 대비 외모·음영·발 접지 육안 검수. 적합하지 않으면 원본 8방향 유지. 다음엔 E fire/dash/hit·4종 감염체·타 7방향 원본 생산을 이어간다.
