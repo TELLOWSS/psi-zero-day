@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {omegaFieldNativeTerrain,omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
- omegaG2Quality,omegaG2SceneManifest,drawOmegaG2RearEnvironment,
+ omegaG2Quality,omegaG2SceneManifest,drawOmegaG2EntrySurface,drawOmegaG2RearEnvironment,
  drawOmegaG2NativeFacade,drawOmegaG2BoundaryRail,
 } from '../src/ui/omega-protocol-m12-authored-industrial';
 
@@ -13,7 +13,7 @@ function ctxProbe(){
   save:hit('save'),restore:hit('restore'),beginPath:hit('begin'),
   closePath:hit('close'),moveTo:hit('move'),lineTo:hit('line'),
   fill:hit('fill'),stroke:hit('stroke'),fillRect:hit('rect'),
-  strokeRect:hit('strokeRect'),arc:hit('arc'),
+  strokeRect:hit('strokeRect'),arc:hit('arc'),ellipse:hit('ellipse'),
   createLinearGradient:()=>{ops.push('gradient');return gradient;},
   createRadialGradient:()=>{ops.push('radial');return gradient;},
  } as unknown as CanvasRenderingContext2D;
@@ -46,6 +46,7 @@ describe('M12-G2 original industrial authored runtime setpieces',()=>{
   const terrain=JSON.stringify(omegaFieldNativeTerrain(plan));
   const quality=omegaG2Quality(1440,900);
   const {ctx,ops}=ctxProbe();
+  drawOmegaG2EntrySurface(ctx,plan,12.2,quality);
   drawOmegaG2RearEnvironment(ctx,plan,12.2,quality);
   const beforeFacades=ops.length;
   expect(beforeFacades).toBeGreaterThan(20);
@@ -59,6 +60,7 @@ describe('M12-G2 original industrial authored runtime setpieces',()=>{
  it('ignores other sectors and fabricated pseudo-obstacles instead of adding fake cover',()=>{
   const plan=omegaFieldPlan(20261108,7),quality=omegaG2Quality(390,844);
   const {ctx,ops}=ctxProbe();
+  drawOmegaG2EntrySurface(ctx,plan,2,quality);
   drawOmegaG2RearEnvironment(ctx,plan,2,quality);
   drawOmegaG2BoundaryRail(ctx,plan,quality);
   for(const o of plan.obstacles)drawOmegaG2NativeFacade(ctx,plan,o,2,quality);
@@ -71,6 +73,7 @@ describe('M12-G2 original industrial authored runtime setpieces',()=>{
  it('fails closed on bad scene time without Canvas side effects',()=>{
   const plan=omegaFieldPlan(20261108,1),quality=omegaG2Quality(390,844);
   const {ctx,ops}=ctxProbe();
+  drawOmegaG2EntrySurface(ctx,plan,NaN,quality);
   drawOmegaG2RearEnvironment(ctx,plan,Infinity,quality);
   drawOmegaG2NativeFacade(ctx,plan,plan.obstacles[0]!,NaN,quality);
   expect(ops).toEqual([]);
