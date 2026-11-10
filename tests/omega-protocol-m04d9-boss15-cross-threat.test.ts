@@ -48,7 +48,7 @@ interface PilotTelemetry {
  lineOfSightDetourTicks:number;damageContexts:DamageContext[];
  firstEight:EarlyFrame[];safetyMoves:number;rejectedMoves:number;
  bossFrames:BossFrame[];bossSafeInputs:number;bossSafeRejected:number;
- bossHitDetails:Array<{at:number;before:{x:number;y:number;hp:number;cooldown:number};
+ bossHitDetails:Array<{at:number;damage:number;before:{x:number;y:number;hp:number;cooldown:number};
   after:{x:number;y:number;hp:number};move:{x:number;y:number};
   lane:string;phase:string;timer:number;axisDelta:number;halfWidth:number;nativeCartDistance:number|null}>;
 }
@@ -474,7 +474,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
     for(const event of hits){
      const carts=s.engine.state.hazards.filter(h=>h.hp>0&&h.type==='RUNAWAY_CART')
       .map(h=>dist(player,h));
-     telemetry.bossHitDetails.push({at:+s.engine.state.gameTime.toFixed(2),before:{
+     telemetry.bossHitDetails.push({at:+s.engine.state.gameTime.toFixed(2),damage:event.amount,before:{
       x:+preBossPlayer.x.toFixed(1),y:+preBossPlayer.y.toFixed(1),
       hp:preBossPlayer.hp,cooldown:+preBossPlayer.cooldown.toFixed(2)},
       after:{x:+player.x.toFixed(1),y:+player.y.toFixed(1),hp:player.hp},
