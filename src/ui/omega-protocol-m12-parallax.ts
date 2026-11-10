@@ -41,8 +41,9 @@ export function omegaG3ParallaxShift(
   if(!Number.isFinite(v))throw new RangeError('Nonfinite parallax camera');
  const k=OMEGA_G3_DEPTH_RATIO[layer];
  return {
-  dx:clamp((camera.projectedOffsetX-entryCamera.projectedOffsetX)*camera.scale*k,100),
-  dy:clamp((camera.projectedOffsetY-entryCamera.projectedOffsetY)*camera.scale*k,55),
+  // Clamp native travel before per-plane scaling: no saturated depth collapse.
+  dx:clamp((camera.projectedOffsetX-entryCamera.projectedOffsetX)*camera.scale,120)*k,
+  dy:clamp((camera.projectedOffsetY-entryCamera.projectedOffsetY)*camera.scale,75)*k,
  };
 }
 function line(ctx:CanvasRenderingContext2D,x1:number,y1:number,x2:number,y2:number):void{
