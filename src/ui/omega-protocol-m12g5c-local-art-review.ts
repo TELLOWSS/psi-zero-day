@@ -96,6 +96,18 @@ export class OmegaG5cLocalPainterlyReview{
  get ready():boolean{return this.images.length===4&&this.proof!==null;}
  get active():boolean{return this.ready&&this.approvedToPreview;}
  get sessionProof():OmegaG5cReviewProof|null{return this.proof;}
+ /** Expose only a VERIFIED and EXPLICITLY ACTIVATED session candidate.
+  * The SHA-256/384x512/alpha contract was checked during import; never
+  * read images when the source reviewer is off, unverified or disposed.
+  * Reusing a WALK painting for FIRE/DASH/HIT is a visual study, NOT a new
+  * independently painted action frame or a commercial art approval.
+  */
+ verifiedFrame(index:number):Readonly<{image:HTMLImageElement;toeRow:number}>|null{
+  if(!this.active||!Number.isInteger(index)||index<0||index>=4)return null;
+  const item=this.images[index],source=this.proof?.assets[index];
+  if(!item||!source||source.sha256.length!==64||source.toeRow<480)return null;
+  return {image:item.image,toeRow:source.toeRow};
+ }
  evidence(){return {draws:this.evidenceDraws,frames:[...this.framesSeen].sort()};}
  activate(enabled:boolean):boolean{
   this.approvedToPreview=enabled&&this.ready;
