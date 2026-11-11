@@ -66,6 +66,46 @@ export function omegaG5gPoseGeometryAudit(
  return {minimum,pairwise:differences,
   poseStudyEligible:minimum>=.10,independentPaintingApproved:false};
 }
+/**
+ * G5h deliberately reuses four authentic G5d source WALK paintings in a
+ * genuine player-damaged WATCH event to close the previous real-HIT QA gap.
+ * No independent FIRE/DASH/HIT artwork is produced/approved by this mode.
+ */
+export const OMEGA_G5H_ART_GATE={
+ actualPlayerHitBrowserEvidenceRequired:true,
+ independentPainterlyActionSourcesApproved:0,
+ independentPainterlyInfectedSourcesApproved:0,
+ final160Approved:0,final320MasksApproved:0,
+ productionApproved:false,autoReplaceUserAira:false,
+} as const;
+/**
+ * The native Watch player hit is signaled by BOTH real zombie brain.hits and
+ * the engine's own lastDamage.remaining (2s countdown). G5g's old art clock
+ * truncated HIT to 0.15s, so the real browser painted only keyframe 0.
+ *
+ * G5h extends DISPLAY time to 0.26s from actual remaining damage clock for
+ * four original body poses; it does not alter native invulnerability, HP,
+ * gameplay animation timings, stun, enemy AI, or state.lastDamage itself.
+ * This function is DEV-ONLY and cannot create a hit when HP was not damaged.
+ */
+export function omegaG5hFourPoseNativeHitHold(
+ nativeRemaining:number,realZombieHits:number,activeBattle:boolean,
+):Readonly<{hurt:true;dashing:false;shooting:false;actionAge:number}>|null{
+ if(!activeBattle||!Number.isFinite(realZombieHits)||realZombieHits<=0||
+    !Number.isFinite(nativeRemaining)||nativeRemaining>2||
+    nativeRemaining<=1.74)return null;
+ const age=Math.max(0,Math.min(.2599,2-nativeRemaining));
+ return {hurt:true,dashing:false,shooting:false,actionAge:age};
+}
+export function omegaG5hRealHitLabRequested(search:string,development:boolean):boolean {
+ if(!development)return false;
+ const p=new URLSearchParams(search);
+ return p.get('omegaLab')==='1'&&p.get('omegaM12G5h')==='1'&&
+  p.get('omegaQaState')==='combatHit'&&
+  !['omegaSilverPreview','omegaM12G4','omegaM12G5','omegaM12G5b',
+   'omegaM12G5c','omegaM12G5d','omegaM12G5e','omegaM12G5g',
+   'omegaG5VectorStudy'].some(k=>p.has(k));
+}
 export function omegaG5gLabRequested(search:string,enabled:boolean):boolean {
  if(!enabled)return false;
  const p=new URLSearchParams(search);

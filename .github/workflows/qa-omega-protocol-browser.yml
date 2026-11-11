@@ -20,6 +20,8 @@ on:
       - 'src/ui/omega-protocol-m12g5g-native-pose.ts'
       - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
       - 'scripts/qa-omega-m12g5g-native-pose-browser.mjs'
+      - 'scripts/qa-omega-m12g5h-real-player-hit-browser.mjs'
+      - 'src/ui/omega-combat-browser-probe.ts'
       - 'scripts/qa-omega-m12g5e-real-native-action-browser.mjs'
       - 'public/assets/omega/g5d/**'
       - 'scripts/qa-omega-m12g5d2-real-webp-browser.mjs'
@@ -197,6 +199,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g5g-native-pose-browser.mjs
+      - name: M12-G5h true native zombie warned melee causes player HP drop and silver AIRA HIT in four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5h-real-player-hit-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome
