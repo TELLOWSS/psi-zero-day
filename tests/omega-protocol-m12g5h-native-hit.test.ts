@@ -1,12 +1,24 @@
 import {describe,it,expect} from 'vitest';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 import {omegaCombatProbeMode,omegaSetupCombatProbe} from '../src/ui/omega-combat-browser-probe';
-import {omegaG5hRealHitLabRequested,OMEGA_G5H_ART_GATE,
+import {omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,
  omegaG5gNativePoseStudy} from '../src/ui/omega-protocol-m12g5g-native-pose';
 import {OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from '../src/ui/omega-protocol-art-slot';
 import {OMEGA_G5D_ACTUAL_E_WALK} from '../src/ui/omega-protocol-m12g5d-actual-source';
 const session=()=>new OmegaProtocolCombatSession(20261112,50,false,{fieldTraversal:true});
 describe('M12-G5h REAL WATCH damage event -> AIRA E hurt source review; painted art still BLOCKED',()=>{
+ it('four 260ms visible source poses are CLOCKED by real native Watch damage, never by effect-only animation',()=>{
+  for(const remaining of [2,1.935,1.87,1.805]){
+   const hold=omegaG5hFourPoseNativeHitHold(remaining,1,true);
+   expect(hold?.hurt).toBe(true);
+   expect(hold?.actionAge).toBeCloseTo(2-remaining,3);
+  }
+  for(const remaining of [2.05,1.74,1.5,NaN,-1])
+   expect(omegaG5hFourPoseNativeHitHold(remaining,1,true)).toBe(null);
+  expect(omegaG5hFourPoseNativeHitHold(1.92,0,true)).toBe(null);
+  expect(omegaG5hFourPoseNativeHitHold(1.92,1,false)).toBe(null);
+  expect(omegaG5hFourPoseNativeHitHold(1.92,NaN,true)).toBe(null);
+ });
  it('accepts only explicit DEV real-hit lab AND combatHit fixture; non-dev and spoof flags do nothing',()=>{
   expect(omegaG5hRealHitLabRequested('?omegaLab=1&omegaM12G5h=1&omegaQaState=combatHit',true)).toBe(true);
   for(const [q,dev] of [
