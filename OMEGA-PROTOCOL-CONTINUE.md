@@ -663,3 +663,17 @@
 - QA 실게임 실제 캡처: GitHub Actions `omega-m12g5e-focused-chrome` artifact ID `13833595362`; 생성한 로컬 4해상도 시트 `omega_m12g5e_live_4_viewports.png`는 검증 화면 증빙이지만 각 화면의 캐릭터가 작고 상업급 배경/감염체 아트 완성 의미는 아님.
 
 **NEXT M12-G5f: 실제 그래픽 원화의 다음 행동** — 우선 기존 은백색 AIRA 시트와 똑같은 얼굴·총기·코트가 유지되는 **진짜 E 사격·대시·피격 프레임**, 감염체 4종 실제 개별 고품질 원화·적 움직임을 생산·원본 SHA/384×512 발 접지 품질·native 카메라/작은 모바일 화면에서 비교 후 사람 아트 승인. 기능/전투 이펙트만 더 만들어 원화 제작을 대체하지 않는다. 원화 생성 결과가 또 대시보드면 **즉시 거부, 완료 수치 상향 금지**. 실 Android FPS/터치, 15구역 그래픽, 실제 계정 50 Extreme, strict PR243, 160 소스/320 mask 승인 전부 별도 BLOCKED. `main`·Production·유료 전환은 승인 전 보류.
+
+
+## 34. M12-G5f 원본 재사용 전투 키프레임 시안 12개 제작·파일 검수 (2026-11-12)
+
+**소스**: 앞서 GitHub `public/assets/omega/g5d/aira-east-walk-[0..3].webp`와 SHA256/바이트가 일치했던 `aira_m12g5d_four_independent_webp.zip` 안의 **사용자 선택 은백색 페인터리 AIRA 4장**을 사용. 이미지 생성 도구가 되풀이해서 허위 대시보드를 반환한 탓에 `image_gen` 신규 인물 도색 이미지를 개발소스로 사용하지 않았음. 품질 손상·가짜 검증 이미지 배제.
+
+### 이번 대화에서 컨테이너에 실제 생성하여 사용자에게 제공한 산출물
+- **G5f 실험용 12개 PNG 아닌 투명 WebP 384×512 이미지**: `aira-east-fire-[0..3].webp` 사격 4, `aira-east-dash-[0..3].webp` 대시 4, `aira-east-hit-[0..3].webp` 피격 4. 기존 인물 얼굴·보라색 총기·흰색 비대칭 코트·은백색 라벤더 포니테일 원본의 재사용 합성으로 제작. 각 단계에 총구 섬광/반동, 보행 원본·잔상/속도선, 피격 균열/비틀림 합성을 더했음.
+- `/mnt/data/omega_m12g5f_12_source_derived_action_candidates.zip` ZIP (12개 WebP, 세 action별 루프 GIF 3개, 직접 확인용 비교 PNG, 재현용 `build_g5f.py`, `QA_EVIDENCE.json`); `/mnt/data/omega_m12g5f_art/g5f-action-12-derived-preview.png` 비교이미지.
+- **실제 파일 검사**: ZIP 내부 12/12 이미지가 각 384×512 RGBA WebP로 정상 decode, 포함 SHA256 매니페스트와 실제 바이트 12/12 일치, 전부 서로 다른 SHA256 (첫 검사 중 FIRE0과 HIT0가 동일한 오류를 발견하고 HIT0에 최초 충격 링 추가하여 재생성·재검증 성공). 파일별 바이트 수 56–69KB 범위. 실제 독립 source painted 예술성 검사는 기술적 파일검사로 대체할 수 없음.
+- **정확한 인정범위**: 이 12장은 **원본 이미지를 변형한 VFX 합성 후보**, 독립으로 사람이 그린 고급 AIRA FIRE/DASH/HIT 원화가 아님. 특히 FIRE/HIT 베이스 몸체 자세가 대부분 같으므로 '독립 고해상도 12프레임 제작 승인'으로 판단하거나 정식 160/320 완료 개수에 포함해서는 안 됨. GitHub에는 이 대화에서 **새 12개 WebP 바이너리를 등록하지 않았고**, 새로운 12장으로 실제 게임을 실행하거나 PC/모바일 4화면 비교·사용자 시각 승인을 수행하지 않았음. **기본 게임 캐릭터 교체 절대 없음**.
+- **현재 개발 반영**: M12-G5e 실제 엔진 이벤트 기반 사격/대시/피격 FX만 [QA PR #261](https://github.com/TELLOWSS/psi-zero-day/pull/261)로 OMEGA 개발 브랜치에 병합 완료. 그 외 후보 12장 별도 개발검수 대기. PR235 Draft, `main` 미병합/Production 미배포/유료 변경 없음.
+
+**NEXT M12-G5g**: 12개 '원본 재사용 합성' 시안과 **실제 독립 페인터리 E FIRE/DASH/HIT 원화**의 차이를 시각 QA에서 비교하여 불충분 시 거부. 원본과 일치하는 얼굴/머리·옷/총기를 각기 다른 실물 포즈로 원화 **재작화**해야 진정한 동작 아트 기준을 통과한다. 최종 실제 원화가 확보된 경우에만 DEV QA 브랜치 바이너리 등록·SHA/투명도/실게임 PC·모바일 4해상도·대시/피격 실트리거 체크 후 인간 아트 승인. 4종 감염체의 high-quality 소스/8방향 전개/160 독립 원화/320 마스크/Android 실기기 FPS/50 Extreme 실제 사용/strict PR243 계속 **BLOCKED**. 운영/main/유료 승인 전 보류.
