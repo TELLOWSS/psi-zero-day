@@ -692,3 +692,13 @@
 - QA PR #262의 테스트가 모두 그린일 경우 **OMEGA 개발 브랜치로만** 병합 가능. main/운영/유료 불허, 사용자 시각 승인은 미완.
 
 **NEXT M12-G5h**: 진짜 독립 고품질 페인터리 E FIRE/DASH/HIT 원화와 감염체 4종을 개발하고 실제 네이티브 4화면에서 캐릭터 외모 일치·총구 위치·부츠·오클루전 QA 후 별도 승인. Android 실물 FPS/발열·터치, 160프레임/320마스크, 15전장, 실 50 Extreme, strict #243 모두 여전히 BLOCKED.
+
+
+**M12-G5g 최종 11개 워크플로 SUCCESS · OMEGA 개발 브랜치에만 병합 (2026-11-12):**
+- [QA PR #262](https://github.com/TELLOWSS/psi-zero-day/pull/262) OMEGA 개발 브랜치 ONLY squash SHA `628fa74bebe40c00dcb41641fb6ebb69afa3e611`. 검증된 완성 QA HEAD `3db36730ba748089e858004d141be8f16730b347`와 실제 병합 전 HEAD 일치, 당시 PR #235 base main/draft true/merged false 확인.
+- [Core TypeScript + 65파일/284 Vitest 전체 통과 #43100227979](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43100227979). [M12-G5g 실제 4해상도 PC/태블릿/모바일 #43100227725](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43100227725) 4/4 SUCCESS, artifact `omega-m12g5g-focused-chrome` ID `13891980404`; report `m12g5g-real-native-4-source-body-pose-report.json` failures=0. [WATCH/GUARD/AIRA 보스·임무 전체 45단계 Chrome #43100227883](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43100227883) SUCCESS. HEAD `3db3673`의 GitHub Actions **11개 워크플로 전체 SUCCESS**, 기존 G5/G5b/G5c/G5d/G5e 및 G2/G3/G4 브라우저 독립 검증도 전부 통과.
+- 실제 AIRA G5d 소스 4개 SHA 시작 `2dfb4825f403`, `2c65fdcc5acb`, `79ff9f7bf763`, `7fe9a9b91b60` 모두 원본과 일치하며 사용자 명시적 로드/활성화 후에만 캐릭터 E FIRE·DASH 네이티브 상태의 다양한 몸체 자세를 실시간 렌더. PC real FIRE2/DASH5/실제 적 총알 명중7/실제 player 이동348.3, 태블릿 FIRE1/DASH4/명중6/이동348.3, 모바일 세로 FIRE1/DASH13/명중4/이동289.7, 모바일 가로 FIRE3/DASH12/명중3/이동278.7 world-unit; **브라우저의 HIT 포즈 실제 피격 검증은 하지 않았음**(fixture 적 피해 0)이며 Vitest 상태 플래그로만 검증.
+- 최초 브라우저의 PC/태블릿 실패는 원화 해시나 FPS 문제로 확정되지 않았으며, **적·전투 페이즈의 상황 변화 전 실제 Shift 대시를 먼저 입력**하도록 검수 시퀀스를 바꾸고 결과를 증명함. 실패 삭제·조작 없이 원본 Watch 실제 Shift/총알/피격 판정 그대로. 집중 4/4 + 전체 11 worklows PASS 확인.
+- 실제 게임 캡처: `/mnt/data/omega_m12g5g_live_4_viewports.png`; 실제 4사이즈 Chromium PNG 12개 및 원본 복귀 JSON이 CI ZIP `omega-m12g5g-native-pose-final-4sizes.zip`에 존재. 육안 검수: 은백색 AIRA 원본은 보존되나 **인물 전장 내 점유 크기·감염체 벡터 단순함·전장 디자인은 최종 상업급 미달**, 아트디렉터 시각승인으로 주장 금지.
+- **정확한 결론:** CODED + 65파일/284테스트 + 4기기크기 실제 Chrome/11 workflows PASS + DEV-ONLY 병합. 별도 대화 ZIP G5g 12장 개선은 아직 **독립 페인터리 원화나 GitHub에 등록된 새 12개 바이너리가 아닌 원본 WALK 4장 파생 시안**. 정식 160개 AIRA 원화·320개 마스크 승인 0, 실제 Android FPS/발열·터치 미검증, 감염체 고해상도 소스·15개 전체 고화질 구역·PR243·실계정 Extreme50 미완.
+- **NEXT M12-G5h — 새로운 독립 작화와 실제 움직임:** ① 은백색 AIRA 원본과 동일한 얼굴/헤어/전투복/라이플을 유지한 **독립 FIRE/DASH/HIT 원본 작화** ② 4종 감염체 고품질 스프라이트 및 자연스러운 모션 ③ 8방향 원본 동작 확장 ④ 상용 아트 품질/원본 SHA/알파/발 접지/마스크/Android 실기기 검증. **단순 원본 재구성/무늬/빛 효과와 다른 독립 도색인지 따로 판정**. PR #235은 Draft·main 미병합, Vercel Production·유료 서비스 변경 없음.
