@@ -17,6 +17,9 @@ on:
       - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
       - 'src/ui/omega-protocol-m12g5d-actual-source.ts'
       - 'src/ui/omega-protocol-m12g5e-silver-action-fx.ts'
+      - 'src/ui/omega-protocol-m12g5g-native-pose.ts'
+      - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'scripts/qa-omega-m12g5g-native-pose-browser.mjs'
       - 'scripts/qa-omega-m12g5e-real-native-action-browser.mjs'
       - 'public/assets/omega/g5d/**'
       - 'scripts/qa-omega-m12g5d2-real-webp-browser.mjs'
@@ -190,6 +193,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-m12g5e-real-native-action-browser.mjs
+      - name: M12-G5g real 4-pose original painterly actor source in live native E fire dash game four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5g-native-pose-browser.mjs
       - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
         env:
           CHROME_BIN: /usr/bin/google-chrome
