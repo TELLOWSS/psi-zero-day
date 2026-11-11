@@ -78,6 +78,25 @@ export const OMEGA_G5H_ART_GATE={
  final160Approved:0,final320MasksApproved:0,
  productionApproved:false,autoReplaceUserAira:false,
 } as const;
+/**
+ * The native Watch player hit is signaled by BOTH real zombie brain.hits and
+ * the engine's own lastDamage.remaining (2s countdown). G5g's old art clock
+ * truncated HIT to 0.15s, so the real browser painted only keyframe 0.
+ *
+ * G5h extends DISPLAY time to 0.26s from actual remaining damage clock for
+ * four original body poses; it does not alter native invulnerability, HP,
+ * gameplay animation timings, stun, enemy AI, or state.lastDamage itself.
+ * This function is DEV-ONLY and cannot create a hit when HP was not damaged.
+ */
+export function omegaG5hFourPoseNativeHitHold(
+ nativeRemaining:number,realZombieHits:number,activeBattle:boolean,
+):Readonly<{hurt:true;dashing:false;shooting:false;actionAge:number}>|null{
+ if(!activeBattle||!Number.isFinite(realZombieHits)||realZombieHits<=0||
+    !Number.isFinite(nativeRemaining)||nativeRemaining>2||
+    nativeRemaining<=1.74)return null;
+ const age=Math.max(0,Math.min(.2599,2-nativeRemaining));
+ return {hurt:true,dashing:false,shooting:false,actionAge:age};
+}
 export function omegaG5hRealHitLabRequested(search:string,development:boolean):boolean {
  if(!development)return false;
  const p=new URLSearchParams(search);
