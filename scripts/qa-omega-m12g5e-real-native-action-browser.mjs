@@ -69,6 +69,12 @@ for(const [name,w,h,mobile] of sizes){
   await page.screenshot({path:dir+'/m12g5e-AUTHENTIC-SILVER-ORIGINAL-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
   // Genuine auto-fire events from running Watch engine: no mocked view.shooting.
+  // The native facing-controller starts from its true previous heading.
+  // Establish EAST with a real user ArrowRight step first, while keeping
+  // the original combatGun zombie to the east (do not inject facing flags).
+  await page.keyboard.down('ArrowRight');
+  await page.waitForTimeout(235);
+  await page.keyboard.up('ArrowRight');
   // Actual WATCH combatGun fixture places one persistent original zombie
   // east of the player. It does NOT fake projectiles/damage after spawn.
   // Capture evidence at the exact real event: muzzle feedback lasts 90ms.
