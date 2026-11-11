@@ -28,7 +28,7 @@ import {omegaG5bLabRequested,OMEGA_G5B_ART_APPROVAL} from './omega-protocol-m12g
 import {omegaG5cLabRequested,omegaG5cReview,OMEGA_G5C_ART_POLICY} from './omega-protocol-m12g5c-local-art-review';
 import {omegaG5dLabRequested,omegaG5dImportRepoCandidates,OMEGA_G5D_ART_GATE} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5eLabRequested,OMEGA_G5E_ART_STATUS,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
-import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
+import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -48,7 +48,7 @@ const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'�
 // In-memory only, development QA provenance. Never available to production
 // users, never writes a profile/save and never bypasses a real unlock CTA.
 const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[]){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -132,9 +132,18 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
   terminalElapsed,
  });
- const artView={...actorView,...action,
+ // Native HP damage + actual infected brain strike is the ONLY G5h source.
+ // This extends the optical HIT pose through four original source frames
+ // without changing the real Watch damage clock, physics or invincibility.
+ const nativeBrainHit=g5hTrueHitReview&&
+  session.zombieTelemetry.some(z=>z.kind==='drifter'&&z.hits>0);
+ const hitHold=g5hTrueHitReview?omegaG5hFourPoseNativeHitHold(
+  state.lastDamage?.remaining??0,nativeBrainHit?1:0,
+  session.run.phase==='battle'&&state.phase==='playing'):null;
+ const renderAction=hitHold?{...action,...hitHold}:action;
+ const artView={...actorView,...renderAction,
   // A muzzle flash is valid only while genuine Watch fire feedback remains.
-  shooting:Boolean(action.shooting&&pose.shooting)};
+  shooting:Boolean(renderAction.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
  if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
@@ -628,7 +637,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     const easing=dt>0?1-Math.exp(-Math.min(dt,.05)*3.8):0;
     cinematicZoom+=(target-cinematicZoom)*easing;
     drawLab(ctx,session,fireCue,impacts,gait,pose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
    }
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
