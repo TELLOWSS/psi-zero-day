@@ -27,6 +27,45 @@ export const OMEGA_G5G_NATIVE_POSE_MAP={
  hit:[0,3,2,1],
 } as const satisfies Record<OmegaG5eNativeAction,readonly number[]>;
 export type OmegaG5gAction=keyof typeof OMEGA_G5G_NATIVE_POSE_MAP;
+/** Real body-shape comparison ignoring animated pixels/FX and changing file
+ * hashes. It considers ONLY the transparent human body core, excluding
+ * most rifle muzzle and background/light streaks. 384×512 RGBA input.
+ * Pass is a request for HUMAN ART REVIEW, never evidence of independent
+ * painterly artwork and never unblocks production.
+ */
+export const OMEGA_G5G_GEOMETRY_CROP={
+ left:95,right:260,top:150,bottom:480,alphaMin:100,
+} as const;
+export function omegaG5gCoreSilhouetteDifference(
+ a:Uint8ClampedArray,b:Uint8ClampedArray,
+):number{
+ if(a.length!==384*512*4||b.length!==a.length)return 0;
+ const c=OMEGA_G5G_GEOMETRY_CROP;
+ let union=0,intersection=0;
+ for(let y=c.top;y<c.bottom;y++){
+  for(let x=c.left;x<c.right;x++){
+   const offset=(y*384+x)*4+3;
+   const inkA=a[offset]!>=c.alphaMin,inkB=b[offset]!>=c.alphaMin;
+   if(inkA||inkB)union++;
+   if(inkA&&inkB)intersection++;
+  }
+ }
+ return union>0?1-intersection/union:0;
+}
+export function omegaG5gPoseGeometryAudit(
+ poses:readonly Uint8ClampedArray[],
+):Readonly<{minimum:number;pairwise:readonly number[];
+ poseStudyEligible:boolean;independentPaintingApproved:false}>{
+ if(poses.length!==4||poses.some(x=>x.length!==384*512*4))
+  return {minimum:0,pairwise:[],poseStudyEligible:false,
+   independentPaintingApproved:false};
+ const differences:number[]=[];
+ for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)
+  differences.push(omegaG5gCoreSilhouetteDifference(poses[i]!,poses[j]!));
+ const minimum=Math.min(...differences);
+ return {minimum,pairwise:differences,
+  poseStudyEligible:minimum>=.10,independentPaintingApproved:false};
+}
 export function omegaG5gLabRequested(search:string,enabled:boolean):boolean {
  if(!enabled)return false;
  const p=new URLSearchParams(search);
