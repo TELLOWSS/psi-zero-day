@@ -70,23 +70,28 @@ for(const [name,w,h,mobile] of [
   await page.locator('[data-omega-g5c-feedback="ready"]').waitFor({timeout:30000});
   await page.locator('[data-omega-g5c-toggle="true"]').click();
   const active=await read();
-  // Real movement sets actual body direction E, no artificial player facing.
+  // Drive ACTUAL user DASH first, before the test target's live health can
+  // fall to zero and a phase/reward prompt legitimately disables combat
+  // inputs. The previous QA waited for several hits first and PC/tablet
+  // sometimes reached a terminal encounter phase before Shift.
   await page.keyboard.down('ArrowRight');
-  await page.waitForTimeout(245);
+  await page.waitForTimeout(155);
+  await page.keyboard.press('Shift');
+  const dash=await (await page.waitForFunction(()=>{
+   const e=window.__omegaG5gNativePoseQa.evidence();
+   return e.counts.dash>0?{counts:e.counts,poseFrames:e.sourceFrames}:false;
+  },null,{timeout:13000,polling:'raf'})).jsonValue();
   await page.keyboard.up('ArrowRight');
+  // Real engine automatic gun fire and actual enemy HP loss; neither firing
+  // nor enemy HP is synthesized from instrumentation.
   const fire=await (await page.waitForFunction(()=>{
    const e=window.__omegaG5gNativePoseQa.evidence();
    const hits=Number(document.querySelector('.omega-protocol-arena')
      ?.getAttribute('data-omega-qa-gun-hits')??0);
    return e.counts.fire>0&&hits>0?{counts:e.counts,poseFrames:e.sourceFrames,realNativeHits:hits}:false;
-  },null,{timeout:20000,polling:'raf'})).jsonValue();
+  },null,{timeout:18000,polling:'raf'})).jsonValue();
   await page.keyboard.down('ArrowRight');
-  await page.keyboard.press('Shift');
-  const dash=await (await page.waitForFunction(()=>{
-   const e=window.__omegaG5gNativePoseQa.evidence();
-   return e.counts.dash>0?{counts:e.counts,poseFrames:e.sourceFrames}:false;
-  },null,{timeout:16000,polling:'raf'})).jsonValue();
-  await page.waitForTimeout(540);
+  await page.waitForTimeout(550);
   const activeMoving=await read();
   await page.screenshot({path:folder+'/m12g5g-REAL-NATIVE-ACTION-POSE-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
