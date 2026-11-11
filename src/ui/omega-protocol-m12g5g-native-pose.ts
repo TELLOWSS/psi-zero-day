@@ -66,6 +66,27 @@ export function omegaG5gPoseGeometryAudit(
  return {minimum,pairwise:differences,
   poseStudyEligible:minimum>=.10,independentPaintingApproved:false};
 }
+/**
+ * G5h deliberately reuses four authentic G5d source WALK paintings in a
+ * genuine player-damaged WATCH event to close the previous real-HIT QA gap.
+ * No independent FIRE/DASH/HIT artwork is produced/approved by this mode.
+ */
+export const OMEGA_G5H_ART_GATE={
+ actualPlayerHitBrowserEvidenceRequired:true,
+ independentPainterlyActionSourcesApproved:0,
+ independentPainterlyInfectedSourcesApproved:0,
+ final160Approved:0,final320MasksApproved:0,
+ productionApproved:false,autoReplaceUserAira:false,
+} as const;
+export function omegaG5hRealHitLabRequested(search:string,development:boolean):boolean {
+ if(!development)return false;
+ const p=new URLSearchParams(search);
+ return p.get('omegaLab')==='1'&&p.get('omegaM12G5h')==='1'&&
+  p.get('omegaQaState')==='combatHit'&&
+  !['omegaSilverPreview','omegaM12G4','omegaM12G5','omegaM12G5b',
+   'omegaM12G5c','omegaM12G5d','omegaM12G5e','omegaM12G5g',
+   'omegaG5VectorStudy'].some(k=>p.has(k));
+}
 export function omegaG5gLabRequested(search:string,enabled:boolean):boolean {
  if(!enabled)return false;
  const p=new URLSearchParams(search);
