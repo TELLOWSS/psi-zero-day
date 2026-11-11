@@ -39,6 +39,8 @@ for(const [name,w,h,mobile] of sizes){
   };
   return {
    source:root?.getAttribute('data-omega-m12g5e-source'),
+   nativeProbe:arena?.getAttribute('data-omega-qa-mode'),
+   realGunHits:Number(arena?.getAttribute('data-omega-qa-gun-hits')??0),
    production:root?.getAttribute('data-omega-m12g5e-production'),
    realOriginal:root?.getAttribute('data-omega-aira-v2-ready'),
    action:omegaG5eFx.evidence(),
@@ -52,7 +54,7 @@ for(const [name,w,h,mobile] of sizes){
   };
  });
  try{
-  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5e=1',
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5e=1&omegaQaState=combatGun',
    {waitUntil:'domcontentloaded',timeout:45000});
   await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
   await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:30000});
@@ -60,18 +62,24 @@ for(const [name,w,h,mobile] of sizes){
   await page.screenshot({path:dir+'/m12g5e-AUTHENTIC-SILVER-ORIGINAL-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
   // Genuine auto-fire events from running Watch engine: no mocked view.shooting.
-  await page.keyboard.down('ArrowRight');
-  await page.waitForFunction(async()=>{
+  // Actual WATCH combatGun fixture places one persistent original zombie
+  // east of the player. It does NOT fake projectiles/damage after spawn.
+  // Capture evidence at the exact real event: muzzle feedback lasts 90ms.
+  const fireObserved=await (await page.waitForFunction(async()=>{
    const {omegaG5eFx}=await import('/src/ui/omega-protocol-m12g5e-silver-action-fx.ts');
-   return omegaG5eFx.evidence().counts.fire>0;
-  },null,{timeout:16000});
+   const e=omegaG5eFx.evidence();
+   const hits=Number(document.querySelector('.omega-protocol-arena')?.getAttribute('data-omega-qa-gun-hits')??0);
+   return e.counts.fire>0&&hits>0?{counts:e.counts,frames:e.frames,realNativeHits:hits}:false;
+  },null,{timeout:18000,polling:'raf'})).jsonValue();
   const afterFire=await read();
+  await page.keyboard.down('ArrowRight');
   // A real SHIFT key instructs native OMEGA CombatSession.dash(); no state hack.
   await page.keyboard.press('Shift');
-  await page.waitForFunction(async()=>{
+  const dashObserved=await (await page.waitForFunction(async()=>{
    const {omegaG5eFx}=await import('/src/ui/omega-protocol-m12g5e-silver-action-fx.ts');
-   return omegaG5eFx.evidence().counts.dash>0;
-  },null,{timeout:13000});
+   const e=omegaG5eFx.evidence();
+   return e.counts.dash>0?{counts:e.counts,frames:e.frames}:false;
+  },null,{timeout:13000,polling:'raf'})).jsonValue();
   const afterDash=await read();
   await page.screenshot({path:dir+'/m12g5e-NATIVE-FIRE-DASH-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
@@ -98,24 +106,25 @@ for(const [name,w,h,mobile] of sizes){
   const reverted=await read();
   const pass=original.source==='ORIGINAL_SILVER_SOURCE_WITH_NATIVE_EVENT_FX_DEV_ONLY'&&
    original.production==='unapproved-visual-study'&&original.realOriginal==='true'&&
-   original.action.counts.fire===0&&original.action.counts.dash===0&&
+   original.nativeProbe==='combatGun'&&original.action.counts.dash===0&&
    original.strictGateLocked&&original.artStatus.final160Approved===0&&
    original.artStatus.final320MasksApproved===0&&original.artStatus.productionApproved===false&&
    !original.overflow&&original.canvas?.h>h*.5&&
-   afterFire.action.counts.fire>0&&
-   afterDash.action.counts.dash>0&&afterDash.playerX>original.playerX+6&&
+   fireObserved?.counts?.fire>0&&fireObserved.realNativeHits>0&&
+   dashObserved?.counts?.dash>0&&afterDash.playerX>original.playerX+6&&
    actualWalk.ready&&actualWalk.active&&actualWalk.evidence.draws>0&&
    actualWalk.proofs.length===4&&
    actualWalk.proofs.every(x=>x.sha256.length===64&&x.toeRow>=480)&&
    reverted.preview==='off'&&reverted.strictGateLocked&&errors.length===0;
-  const record={name,w,h,pass,original,afterFire,afterDash,actualWalk,
+  const record={name,w,h,pass,original,afterFire,fireObserved,afterDash,dashObserved,actualWalk,
    reverted:{preview:reverted.preview,source:reverted.source,strictGateLocked:reverted.strictGateLocked},
    errors,independentPaintedFireDashHitFramesCreated:0,
    actualAndroidPhysicalFPSMeasured:false};
   rows.push(record);
   if(!pass)throw Error('G5e actual event-only source-Cohesion test failed '+JSON.stringify(record));
   console.log('QA_PASS M12_G5E',name,JSON.stringify({
-   nativeFire:afterFire.action.counts.fire,nativeDash:afterDash.action.counts.dash,
+   nativeFire:fireObserved.counts.fire,nativeHits:fireObserved.realNativeHits,
+   nativeDash:dashObserved.counts.dash,
    moved:afterDash.playerX-original.playerX,
    sourceWalk:actualWalk.evidence,
    artistApprovedNewFrames:0}));
