@@ -83,7 +83,10 @@ for(const [name,w,h,mobile] of sizes){
    const warnings=Number(a?.getAttribute('data-omega-g5h-zombie-warnings'));
    const damage=Number(a?.getAttribute('data-omega-g5h-zombie-damage'));
    const initial=Number(window.__omegaG5hInitialHp);
-   return actor.counts.hit>0&&hits>0&&warnings>0&&damage>0&&h<initial
+   // A genuine native Watch damage must have progressed through all 4
+   // original AIRA body poses; a single-frame hit is NOT sufficient.
+   return actor.counts.hit>0&&actor.sourceFrames.hit.length===4&&
+    hits>0&&warnings>0&&damage>0&&h<initial
     ?{currentHp:h,initialHp:initial,hitCount:hits,warnings,damage,
       bodyFrames:actor.sourceFrames.hit,renderCount:actor.counts.hit}:false;
   },null,{timeout:24000,polling:'raf'})).jsonValue();
@@ -102,7 +105,7 @@ for(const [name,w,h,mobile] of sizes){
    afterLoad.realGunHits===0&&
    hit.renderCount>0&&hit.hitCount>0&&hit.warnings>0&&hit.damage>0&&
    hit.currentHp<hit.initialHp&&hit.currentHp>0&&
-   hit.bodyFrames.length>0&&observed.poses.sourceFrames.hit.length>0&&
+   hit.bodyFrames.length===4&&observed.poses.sourceFrames.hit.length===4&&
    observed.artApproval.independentPainterlyActionSourcesApproved===0&&
    observed.artApproval.independentPainterlyInfectedSourcesApproved===0&&
    observed.artApproval.final160Approved===0&&
