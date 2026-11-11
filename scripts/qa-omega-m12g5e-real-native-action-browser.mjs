@@ -58,6 +58,13 @@ for(const [name,w,h,mobile] of sizes){
    {waitUntil:'domcontentloaded',timeout:45000});
   await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
   await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:30000});
+  await page.evaluate(async()=>{
+   // Pin a single module instance for SYNCHRONOUS event-driven Playwright
+   // polling. An async waitForFunction() can return a truthy Promise handle
+   // before a false action predicate resolves, hiding genuine failure.
+   const {omegaG5eFx}=await import('/src/ui/omega-protocol-m12g5e-silver-action-fx.ts');
+   window.__omegaG5eFxQA=omegaG5eFx;
+  });
   const original=await read();
   await page.screenshot({path:dir+'/m12g5e-AUTHENTIC-SILVER-ORIGINAL-'+name+'-'+w+'x'+h+'.png',
    fullPage:false,animations:'disabled'});
@@ -65,9 +72,8 @@ for(const [name,w,h,mobile] of sizes){
   // Actual WATCH combatGun fixture places one persistent original zombie
   // east of the player. It does NOT fake projectiles/damage after spawn.
   // Capture evidence at the exact real event: muzzle feedback lasts 90ms.
-  const fireObserved=await (await page.waitForFunction(async()=>{
-   const {omegaG5eFx}=await import('/src/ui/omega-protocol-m12g5e-silver-action-fx.ts');
-   const e=omegaG5eFx.evidence();
+  const fireObserved=await (await page.waitForFunction(()=>{
+   const e=window.__omegaG5eFxQA.evidence();
    const hits=Number(document.querySelector('.omega-protocol-arena')?.getAttribute('data-omega-qa-gun-hits')??0);
    return e.counts.fire>0&&hits>0?{counts:e.counts,frames:e.frames,realNativeHits:hits}:false;
   },null,{timeout:18000,polling:'raf'})).jsonValue();
@@ -75,9 +81,8 @@ for(const [name,w,h,mobile] of sizes){
   await page.keyboard.down('ArrowRight');
   // A real SHIFT key instructs native OMEGA CombatSession.dash(); no state hack.
   await page.keyboard.press('Shift');
-  const dashObserved=await (await page.waitForFunction(async()=>{
-   const {omegaG5eFx}=await import('/src/ui/omega-protocol-m12g5e-silver-action-fx.ts');
-   const e=omegaG5eFx.evidence();
+  const dashObserved=await (await page.waitForFunction(()=>{
+   const e=window.__omegaG5eFxQA.evidence();
    return e.counts.dash>0?{counts:e.counts,frames:e.frames}:false;
   },null,{timeout:13000,polling:'raf'})).jsonValue();
   const afterDash=await read();
