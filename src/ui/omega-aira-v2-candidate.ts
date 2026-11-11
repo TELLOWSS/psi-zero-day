@@ -12,6 +12,7 @@ import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omeg
 import {omegaG5cLabRequested,omegaG5cReview} from './omega-protocol-m12g5c-local-art-review';
 import {omegaG5dLabRequested} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5eLabRequested,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
+import {omegaG5gLabRequested,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -136,8 +137,10 @@ export function drawOmegaAiraV2Candidate(
   // posture transforms are NOT independent authored animation frames.
   const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
-  const g5eReview=typeof window!=='undefined'&&omegaG5eLabRequested(
+  const g5gPoseStudy=typeof window!=='undefined'&&omegaG5gLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const g5eReview=g5gPoseStudy||(typeof window!=='undefined'&&omegaG5eLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   const g5dReview=typeof window!=='undefined'&&omegaG5dLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*
@@ -156,6 +159,10 @@ export function drawOmegaAiraV2Candidate(
   // E WALK WebP frames in the live native player gait. This never sets the
   // approved commercial 160-source / 320-mask policy.
   if(g5cReview&&omegaG5cReview.draw(ctx,view,h))return true;
+  // Only after exact G5d source SHA validation + user opt-in; transform real
+  // event cues with DIFFERENT 4 source WALK body silhouettes. These remain
+  // derived pose studies and NEVER count as original combat paintings.
+  if(g5gPoseStudy&&omegaG5gNativePoseStudy.draw(ctx,view,h))return true;
   // Presentation FX is computed ONLY from real Watch-originated action
   // flags and time; no fake independent 160-frame art or damage changes.
   if(g5eReview&&omegaG5eFx.draw(ctx,image,view,h))return true;
