@@ -702,3 +702,27 @@
 - 실제 게임 캡처: `/mnt/data/omega_m12g5g_live_4_viewports.png`; 실제 4사이즈 Chromium PNG 12개 및 원본 복귀 JSON이 CI ZIP `omega-m12g5g-native-pose-final-4sizes.zip`에 존재. 육안 검수: 은백색 AIRA 원본은 보존되나 **인물 전장 내 점유 크기·감염체 벡터 단순함·전장 디자인은 최종 상업급 미달**, 아트디렉터 시각승인으로 주장 금지.
 - **정확한 결론:** CODED + 65파일/284테스트 + 4기기크기 실제 Chrome/11 workflows PASS + DEV-ONLY 병합. 별도 대화 ZIP G5g 12장 개선은 아직 **독립 페인터리 원화나 GitHub에 등록된 새 12개 바이너리가 아닌 원본 WALK 4장 파생 시안**. 정식 160개 AIRA 원화·320개 마스크 승인 0, 실제 Android FPS/발열·터치 미검증, 감염체 고해상도 소스·15개 전체 고화질 구역·PR243·실계정 Extreme50 미완.
 - **NEXT M12-G5h — 새로운 독립 작화와 실제 움직임:** ① 은백색 AIRA 원본과 동일한 얼굴/헤어/전투복/라이플을 유지한 **독립 FIRE/DASH/HIT 원본 작화** ② 4종 감염체 고품질 스프라이트 및 자연스러운 모션 ③ 8방향 원본 동작 확장 ④ 상용 아트 품질/원본 SHA/알파/발 접지/마스크/Android 실기기 검증. **단순 원본 재구성/무늬/빛 효과와 다른 독립 도색인지 따로 판정**. PR #235은 Draft·main 미병합, Vercel Production·유료 서비스 변경 없음.
+
+
+## 36. M12-G5h — 실제 감염체 경고·공격·AIRA 피해로 4개 원본 HIT 자세 전부 재생 (2026-11-12)
+
+**실제 QA 코드 검증 완료 / OMEGA 개발 브랜치 전용 병합:** [QA PR #263](https://github.com/TELLOWSS/psi-zero-day/pull/263) SHA **`2ef0e4d574f1c6bde2b662316eb7e8d75d67a019`**. 검증한 원본 QA HEAD **`a88b0730bf779fc5129ecd73ba950383d82e8803`**, 동일 SHA에 GitHub Actions **12개 워크플로 전부 SUCCESS**, 당시 OMEGA feature 브랜치 base HEAD `d030012da498f07c569adb206352d4c6a404e025`/main PR #235 Draft/미병합 확인 후 **OMEGA feature에만 squash merge**. `main`, Vercel Production, 유료 API/요금전환 불변.
+
+### 원본 그림 / 독립 신규 원화의 사실 구분
+- 원화 생성 도구에 사용자가 요구했던 은백색 AIRA의 **진짜 새 FIRE·DASH·HIT 독립 페인터리 포즈**와 감염체 원화를 시도했지만, 이번에도 인물 투명 원화 대신 **허위 완료·테스트 수치가 그려진 대시보드 이미지만 반환**. 출력 **전부 거부**했고 GitHub·게임 에셋·CI 증빙에 등록하지 않았다. 따라서 **신규 FIRE/DASH/HIT 독립 도색 원화 0장, 4종 감염체 고품질 독립 원화 0장, 160/320 정식 승인 0**, 상업 그래픽 승인 미완.
+- 이번에 실제 게임에서 보이는 4자세는 이미 SHA-256 검증된 **기존 G5d 은백색 AIRA E WALK WebP 4장**을 재사용한 source-derived native HIT 시범이다. 독립으로 새로 칠한 피격 원화가 아니다. PC/태블릿/모바일의 원본 AIRA 외모는 SHA 보존되지만 감염체 4종의 단순 Canvas 벡터 그래픽과 산업 전장 전체는 최종 상업급 품질 미달.
+
+### 실제 CODED
+- `src/ui/omega-combat-browser-probe.ts`에 명시적인 **DEV `omegaQaState=combatHit`** fixture 추가. 실제 OMEGA/WATCH **drifter** AI를 1종 배치, 장비 기본 사격만 이 fixture에서 해제, 플레이어 3초 초깃값 보호 후 실제 drifter의 **warning→strike→ native player HP 감소**를 관찰. HP 감소·공격 결과·피격 flag를 테스트에서 직접 주입하지 않는다. 다른 DEV gun/blade/cover fixture와 일반 게임의 적 AI·HP·총알·무적 시간 불변.
+- `src/ui/omega-protocol-m12g5g-native-pose.ts`에 **`omegaG5hRealHitLabRequested`**, 엄격한 원화 승인0 `OMEGA_G5H_ART_GATE`, **`omegaG5hFourPoseNativeHitHold`** 구현. native `drifter.hits>0`와 실제 `state.lastDamage.remaining` countdown 모두 사실일 때만, renderer에서 **0.26초간 4개의 기존 승인 전 걷기 원본 자세 [0,1,2,3]을 HIT 포즈로 단계 재생**. 실 HP·무적·감염체 공격·실제 피해 시계에는 영향 주지 않는 표출 전용 타이머; 허위 이벤트나 프레임 수치 조작 금지. 0.26초 시계 기간 외/실제 적 명중이 없을 때/입력 모드 불일치 시 null.
+- `src/ui/omega-aira-v2-candidate.ts` 및 `OmegaProtocolPlaytest.tsx`에 `/?omegaLab=1&omegaM12G5h=1&omegaQaState=combatHit` 내부 전용 루트 연결. 사용자가 기존 G5d WebP **4개 소스 SHA 검증 불러오기→미리보기 활성화** 버튼을 눌러야만 native damage+original AIRA HIT를 렌더; 원본 복귀 버튼·8방향 기본 source 유지. 읽기전용 DOM evidence `omegaG5hPlayerHp`, `omegaG5hZombieWarnings/Hits/Damage`, `omegaG5hLastDamageRemaining`; 악의적인 runtime API/외부 서버/유료 API 없음.
+- 초기 집중 실제 4해상도 브라우저는 **진짜 HP 감소·HIT 렌더**만 4/4 통과했으나 그때 evidence가 **원화 source frame 0만 관찰**됨을 식별. 이를 완료로 취급하지 않고 시각 재생 시계를 native player damage.remaining 기반으로 **260ms** 연장하여, 4개 원본 포즈 전체가 반드시 호출돼야만 PASS 하도록 QA 강화. 이는 작업량을 늘리는 임의 효과가 아니라 이전 화면 기능 오류의 직접 수정.
+
+### 최종 CI / 원본 게임과 별도 품질게이트
+- [Core #43107248803](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43107248803) **TypeScript + 66파일/289 Vitest 전부 PASS**. `tests/omega-protocol-m12g5h-native-hit.test.ts`는 QA flag 격리, 진짜 Drifter phase·player HP 감소, 실 damage timer 0~0.26s, 허위 source 차단, 160/320 아트 승인 0을 검증.
+- [G5h focused 실제 Chrome #43107248888](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43107248888) **PC1440×900/태블릿1024×768/모바일390×844/가로844×390 총 4/4 SUCCESS**: 네 화면 모두 실제 감염체 warnings·hits·damage, 실제 HP 감소, 정확한 G5d 원본 4개 SHA, 실제 원본 AIRA **HIT source 0→1→2→3 4/4 호출** 및 OFF/원본 복귀·strict 승인0 확인. PC 89→78/경고4·hit2, 태블릿89→78/경고4·hit2, 모바일세로100→89/경고3·hit1, 가로100→89/경고3·hit1. **이는 실제 물리 Android 실기기가 아닌 Chromium 4 viewport**.
+- [WATCH/GUARD/AIRA/보스·미션 전체 Chrome #43107249080](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43107249080) **46단계 전부 SUCCESS**. 해당 코드 SHA의 GitHub Actions **전체 12개 워크플로 성공**(G2/G3/G4/G5/G5b/G5c/G5d/G5e/G5g/G5h/Core/Full). 이전 G5g 정상성·타 7방향 원본·진짜 총알 및 Dash·전장 장애물·Guard/Watch 회귀 불변. 브라우저 4화면 원본/피격/복구 PNG와 JSON evidence는 focused artifact; 수치가 있는 이미지 생성 대시보드는 사용하지 않음.
+
+**G5h 정확한 결론: CODED + 네이티브 HIT 실피해·4 source poses·4화면/전체 12 CI SUCCESS + DEV-ONLY MERGED. 독립 신규 페인터리 원화/감염체 4종·상업급 아트 승인 0.**
+
+**NEXT M12-G5i — 이미지 자체를 끝까지 개선할 단계:** 실제 은백색 원본에 정합한 **독립 E FIRE/DASH/HIT 고품질 프레임**(몸체/팔·총·다리·머리카락/발바닥 선이 매 단계 달라진 새로운 그림)과 **4종 상업급 감염체 원본+자연스러운 움직임** 제작·원본 SHA/투명/발 접지/4해상도 실제 게임/아트 디렉터 판정. 원화 생성이 또 대시보드면 바로 기각하고 완료 개수 증가 금지. 이후 8방향/160원화/320 마스크, Android 실기기 FPS/터치/발열, 실제 계정 Extreme50, 15개 전장의 모든 시각 품질, strict PR243 별도 BLOCKED. PR235 Draft·main/Production/유료전환 사용자 최종 승인 전 보류.
