@@ -677,3 +677,18 @@
 - **현재 개발 반영**: M12-G5e 실제 엔진 이벤트 기반 사격/대시/피격 FX만 [QA PR #261](https://github.com/TELLOWSS/psi-zero-day/pull/261)로 OMEGA 개발 브랜치에 병합 완료. 그 외 후보 12장 별도 개발검수 대기. PR235 Draft, `main` 미병합/Production 미배포/유료 변경 없음.
 
 **NEXT M12-G5g**: 12개 '원본 재사용 합성' 시안과 **실제 독립 페인터리 E FIRE/DASH/HIT 원화**의 차이를 시각 QA에서 비교하여 불충분 시 거부. 원본과 일치하는 얼굴/머리·옷/총기를 각기 다른 실물 포즈로 원화 **재작화**해야 진정한 동작 아트 기준을 통과한다. 최종 실제 원화가 확보된 경우에만 DEV QA 브랜치 바이너리 등록·SHA/투명도/실게임 PC·모바일 4해상도·대시/피격 실트리거 체크 후 인간 아트 승인. 4종 감염체의 high-quality 소스/8방향 전개/160 독립 원화/320 마스크/Android 실기기 FPS/50 Extreme 실제 사용/strict PR243 계속 **BLOCKED**. 운영/main/유료 승인 전 보류.
+
+
+## 35. M12-G5g — AIRA 실제 동작 몸체 원본 재구성 및 실루엣 유사도 검수 (2026-11-12)
+
+**QA 후보**: PR #262 https://github.com/TELLOWSS/psi-zero-day/pull/262 / qa/omega-m12g5g-native-silver-pose-states-20261112 (base: OMEGA 개발 브랜치). PR #235 Draft, main/Production/유료전환 최종 승인 전 금지.
+
+- 이미지 생성 재시도도 캐릭터 투명 스프라이트 대신 **허위 CI/PR 숫자 대시보드**를 출력해 기각. 게임 아트·테스트·완료 기록에 사용하지 않는다.
+- 이전 G5f 12장 원본 재사용 합성 후보의 **최소 인체 중심 실루엣 변화**를 실제 투명 WebP로 측정: FIRE 5.35%, DASH 24.52%, HIT 4.08%. SHA만 달라도 몸체가 같을 수 있으므로 SHA 중복검사만으로 완성 판정 금지.
+- 이 대화에서 실제 생성한 G5g 개선 비교용 12개 투명 WebP 384×512: FIRE는 기존 G5d WALK 원화 0·1·2·3, DASH 0·1·2·3, HIT 0·3·2·1의 서로 다른 원본 걷기 자세에 전투용 반동/기울기/광선 변형을 적용. ZIP /mnt/data/omega_m12g5g_12_distinct_body_pose_prototypes.zip, 원화만 비교하는 이미지 /mnt/data/omega_m12g5g_art/g5g-body-pose-first-12-frame-contact.png, action GIF 3개, 원본 제작 코드 build_g5g.py, 원본 바이트 SHA/실루엣 QA_POSE_PROOF.json. 각 action 전체 6쌍 중심 코어의 최소 실루엣 변화 FIRE 27.951%, DASH 24.196%, HIT 20.61%. **이는 기존 WALK 원화를 재배열·합성한 시안이며 12개 새 독립 도색 원화가 아니다. GitHub 바이너리 업로드 및 실제 12개 파일 엔진 적용을 완료했다고 주장 금지.**
+- GitHub 개발 QA 실제 코드: src/ui/omega-protocol-m12g5g-native-pose.ts 신설, 기존 src/ui/omega-protocol-m12g5c-local-art-review.ts에 원본 SHA-256 검사와 명시적 사용자 활성화 이후에만 반환하는 verifiedFrame 추가. src/ui/omega-aira-v2-candidate.ts 및 OmegaProtocolPlaytest.tsx의 DEV 전용 ?omegaLab=1&omegaM12G5g=1에서 **원래 GitHub에 있는 진짜 G5d E WALK WebP 4개**를 불러와 native Watch FIRE/DASH/HIT actionAge 4단계에 각각 다른 몸체 포즈로 사용. 외모·캐릭터 페인터리 표면은 원본 그대로, 실제 G5e 섬광·대시잔상·피격 이펙트 재활용. 전투 판정·총알·HP·AI·LOS·충돌·Extreme/계정 저장은 불변. 일반 모드와 미리보기 OFF는 기존 원본만.
+- 새로운 omegaG5gCoreSilhouetteDifference 및 omegaG5gPoseGeometryAudit는 RGBA 알파 기반 몸통·다리 코어 영역 (x95..260, y150..480)의 1-IoU를 비교하여 RGB 섬광만 다른 가짜 포즈를 기각. 기술 실루엣 차이는 **독립 그림 또는 상업 원화 승인 증거가 아니므로 160원화/320마스크 최종 승인 0**.
+- tests/omega-protocol-m12g5g-native-pose.test.ts: 실제 G5d 원본 4개 SHA, 자세별 총 12 이벤트 키포즈, 미리보기 안될 때 0렌더, 원본 World 장애물 무변경, 실루엣 검증. scripts/qa-omega-m12g5g-native-pose-browser.mjs는 PC 1440×900/태블릿1024×768/모바일세로390×844/가로844×390에서 **실제 native combatGun 표적 명중/방향키 이동/Shift 대시**와 GitHub 4원화 SHA·토글 복귀·실화면 PNG를 검증. 실제 HIT는 일어나지 않으면 발생했다고 주장 금지. 최종 CI 결과를 확인하여 뒤에 보강.
+- QA PR #262의 테스트가 모두 그린일 경우 **OMEGA 개발 브랜치로만** 병합 가능. main/운영/유료 불허, 사용자 시각 승인은 미완.
+
+**NEXT M12-G5h**: 진짜 독립 고품질 페인터리 E FIRE/DASH/HIT 원화와 감염체 4종을 개발하고 실제 네이티브 4화면에서 캐릭터 외모 일치·총구 위치·부츠·오클루전 QA 후 별도 승인. Android 실물 FPS/발열·터치, 160프레임/320마스크, 15전장, 실 50 Extreme, strict #243 모두 여전히 BLOCKED.
