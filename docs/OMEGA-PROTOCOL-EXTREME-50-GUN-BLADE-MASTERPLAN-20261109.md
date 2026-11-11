@@ -328,3 +328,11 @@ M01은 아직 게임 캐릭터로 해금되거나 플레이하는 인물이 아�
   - Landscape: FIRE1/명중2/DASH2/X이동122.8
 - 전체 Watch/Guard/AIRA·미션/보스 브라우저 [#42970094056](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970094056)은 최종 결과·QA 코드 SHA 비교 후 개발 병합 판단. Focused CI 실제 4게임 캡처와 JSON `m12g5e-real-native-silver-event-action-report.json` (artifact `omega-m12g5e-focused-chrome` id `13833595362`)를 생성. 실제 이미지에서 감염체는 저화질 벡터이고 바닥은 아직 기술적 형태라 **전체 상용 수준은 불합격/미완**.
 - **NEXT**: 눈에 보이는 고품질 **독립 E FIRE/DASH/HIT 실제 384×512 WebP 원화와 4종 감염체**를 생산 → 이전 검수 모듈 SHA/프레임 독립성/사람 육안 QA → Dev에서만 선택 적용 → 8방향 전개/160 소스/320마스크. Vercel 운영 및 main 병합·과금 전환 사용자 승인 전 차단.
+
+
+### 2026-11-12 M12-G5e 실제 E 사격·대시·피격 그래픽 표시 개발 브랜치 QA 병합 확정
+
+- **[QA PR #261](https://github.com/TELLOWSS/psi-zero-day/pull/261) 실제 개발 브랜치 squash** `1a529085e89e35b38b53848608d3d97807a5779b`. [Core #42970943921](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943921) **TypeScript + 64 Vitest 파일/278 테스트 PASS**, [G5e 실제 E native 사격/표적 명중/Shift 대시/G5d 실제 4 WebP PC·태블릿·모바일 4해상도 #42970943829](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943829) **SUCCESS**, [기존 G5 기술 벡터 격리 QA #42970943859](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943859) **SUCCESS**, [WATCH/GUARD/AIRA/보스·미션 전체 브라우저 #42970943841](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943841) **SUCCESS**. 최종 검증 코드 SHA `72973c2122ebcd98a7b768ab267d235146246a6b`에서 QA 병합까지 소스 변경 없음.
+- **기술적으로 구현**: 실제 은백색 AIRA 원화에 실제 엔진 shot timer / E 방향에서만 유효한 총구 섬광+반동, 실제 사용자 Shift dash의 원본 이미지 잔상+속도선, 실제 피해 hit 깜빡임/보호막 균열. 기존 SHA256 고정 E WALK 4 WebP와 다른 7방향 원본/원본복귀·엔진 HP/투사체/물리 및 Guard/Watch 기본 콘텐츠 그대로 보존. 개발용 `?omegaLab=1&omegaM12G5e=1`에서만 새 FX 렌더링.
+- **작화 정확한 판정**: 이미지 생성 두 차례에서 요구한 캐릭터 원화 대신 허위 완료 대시보드가 나와 모두 거부·게임 자산에 미반영. 별도 정교한 독립 도색 E FIRE/DASH/HIT 실제 원화 신규 **0개**, 최종 160프레임/320 오클루전 마스크 아트 승인 **0**. 현재 FX는 실제 원본 이미지를 기반으로 한 **프로그래밍 연출**이지 독립 고해상도 새 작화가 아님. 게임 본화면에서 감염체/배경 그래픽 상용 완성 수준 아직 미달, Android 실제 기기 FPS/발열·조작/50 Extreme 계정·Strict #243 미검증.
+- **NEXT M12-G5f**: 더 많은 허위 이미지나 비승인 벡터 작업으로 시간을 보내지 말고 실제 인물 원본에 일치하는 E FIRE/DASH/HIT 독립 고품질 원화와 4종 감염체 소스 제작·검수, 사람이 동일 줌/PC 모바일 실게임 화면에서 미적 승인. 저품질일 때 자동 기각, 승인되지 않은 작화를 production 아트로 표시·교체 금지. PR #235 Draft·`main` 미병합·Vercel Production/유료전환 사용자 승인 전 금지.
