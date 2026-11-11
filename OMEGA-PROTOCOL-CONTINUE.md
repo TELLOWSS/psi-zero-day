@@ -644,3 +644,22 @@
 
 ### NEXT
 - 시각 출처·저작권과 인물 외형을 유지할 **진짜 독립 E FIRE, DASH, HIT 페인터리 원화**를 먼저 생산하여 기존 G5c source-quality/4해상도 실제 게임 동일 줌에서 검수·독립 SHA 인증 후 Dev에서만 교체 시도. 이번 G5e 단기 FX와 독립 action sprite 생성은 **다른 항목**으로 엄격하게 분리. 이후 감염체 4종 painterly AI·액션, E 외 다른 7방향, 160 독립 원화/320 오클루전 마스크, 실제 Android FPS/발열/터치, 15구역 플레이, Extreme 50 진짜 계정, strict PR243 전부 **BLOCKED**. 품질 통과 전 `main` 병합·Vercel 운영·유료 API 불허.
+
+
+## 33. M12-G5e 최종 인계 — 실제 E 방향 AIRA 사격·대시·피격 연출 (2026-11-12)
+
+**개발 브랜치에만 검증 병합 완료**: [QA PR #261](https://github.com/TELLOWSS/psi-zero-day/pull/261), squash SHA **`1a529085e89e35b38b53848608d3d97807a5779b`**. OMEGA 원본 [PR #235](https://github.com/TELLOWSS/psi-zero-day/pull/235)는 계속 **Draft·base `main`·미병합**. Vercel Production 배포/유료 API·유료 플랜 변경 없음.
+
+### 실제 구현
+- `src/ui/omega-protocol-m12g5e-silver-action-fx.ts`: 사용자 선택 원본 은백색·연보라 AIRA 이미지를 **그대로** 그리고, 네이티브 Watch 상태에서만 E 방향 ① 실제 총기 자동 발사에 맞는 총구 보라색 섬광과 반동 ② 실제 `Shift` 대시 중 고급 원본 잔상/빛 궤적 ③ 실제 피격 상태의 에너지 보호막 균열 효과. 동작 상태 HIT>DASH>FIRE 우선순위, 시간 만료·E 외 7방향·정지/필살기/승리에서 유령 효과 차단. 실제 전투 HP/명중/총알/AI/물리/계정·보상/해금 변경 없음.
+- `src/ui/omega-aira-v2-candidate.ts` 및 `OmegaProtocolPlaytest.tsx`에 **DEV 전용** `/?omegaLab=1&omegaM12G5e=1` 연결. 기존 G5d 실제 원화 WebP 4장 선택·실제 E 걷기·즉시 원본 복귀 정상 유지. 일반 SIGNAL WATCH/GUARD 및 production 상태는 적용하지 않음.
+- **원화 생성 실패 사실 명시**: 독립 E FIRE 4장 생산을 이미지 도구로 재시도했으나 생성 결과가 캐릭터 원화가 아닌 *허위 CI/PR 수치가 있는 진행 대시보드*여서 모두 버리고 GitHub 자산에 넣지 않았다. 따라서 **실제 신규 독립 FIRE/DASH/HIT 도색 원화 0장**, 160개 독립 원화/320 마스크 승인 0. 이번에는 원본 WebP를 이용한 **프로그래매틱 전투 연출**을 완성한 것이지 신규 상용 페인터리 프레임 제작은 아님.
+
+### 검증 및 참고
+- [Core #42970943921](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943921): **TypeScript+64 Vitest files/278 tests 전부 PASS**.
+- [G5e 실제 PC/태블릿/모바일 4해상도 #42970943829](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943829): **4/4 SUCCESS** (실제 Watch 자동 사격 사건/적 명중 횟수·실제 Shift 대시·E 원본 4 WebP의 0·1·2·3 프레임 적용·원본 복귀·실제 game player X 이동). 이전 실게임 집중 run [#42970093960](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970093960)에서도 PC native FIRE1·HIT5·DASH2·이동223.7, Tablet FIRE1/HIT5/DASH2/이동220, Mobile 세로 FIRE1/HIT2/DASH2/이동159.5, 가로 FIRE1/HIT2/DASH2/이동122.8 검증.
+- [기존 G5 격리된 기술 벡터 실게임 #42970943859](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943859) **SUCCESS**. 이전 간헐 실패 원인은 Playwright `waitForFunction(async()=>...)`가 미해결 Promise를 참값처럼 처리하는 테스트 버그; **동기 단일 모듈 관찰로 교정**, 원래 저품질 벡터 원화는 여전히 시각적 미승인·격리.
+- [WATCH/GUARD/AIRA·임무·보스·기존 QA 전체 #42970943841](https://github.com/TELLOWSS/psi-zero-day/actions/runs/42970943841) **SUCCESS**. 실게임/전체 CI 코드 검증 SHA **`72973c2122ebcd98a7b768ab267d235146246a6b`**, 그대로 QA PR #261을 OMEGA 개발 브랜치에만 병합.
+- QA 실게임 실제 캡처: GitHub Actions `omega-m12g5e-focused-chrome` artifact ID `13833595362`; 생성한 로컬 4해상도 시트 `omega_m12g5e_live_4_viewports.png`는 검증 화면 증빙이지만 각 화면의 캐릭터가 작고 상업급 배경/감염체 아트 완성 의미는 아님.
+
+**NEXT M12-G5f: 실제 그래픽 원화의 다음 행동** — 우선 기존 은백색 AIRA 시트와 똑같은 얼굴·총기·코트가 유지되는 **진짜 E 사격·대시·피격 프레임**, 감염체 4종 실제 개별 고품질 원화·적 움직임을 생산·원본 SHA/384×512 발 접지 품질·native 카메라/작은 모바일 화면에서 비교 후 사람 아트 승인. 기능/전투 이펙트만 더 만들어 원화 제작을 대체하지 않는다. 원화 생성 결과가 또 대시보드면 **즉시 거부, 완료 수치 상향 금지**. 실 Android FPS/터치, 15구역 그래픽, 실제 계정 50 Extreme, strict PR243, 160 소스/320 mask 승인 전부 별도 BLOCKED. `main`·Production·유료 전환은 승인 전 보류.
