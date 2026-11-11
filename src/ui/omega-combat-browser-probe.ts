@@ -4,7 +4,7 @@ import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
 
 /**
- * DEV-ONLY, explicit omegaQaState=combatGun|combatBlade|combatCover|combatRear browser
+ * DEV-ONLY, explicit omegaQaState=combatGun|combatBlade|combatCover|combatRear|combatHit browser
  * fixture. The mounted React/Canvas screen still runs the genuine WATCH
  * auto-fire, collision, enemy HP and OMEGA blade actions. This sets initial
  * actors/positions exactly once; no synthetic impact, HP mutation *after*
@@ -12,7 +12,7 @@ import {omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
  *
  * This module must never be invoked from ordinary Watch or published OMEGA.
  */
-export type OmegaCombatProbeMode='combatGun'|'combatBlade'|'combatCover'|'combatRear';
+export type OmegaCombatProbeMode='combatGun'|'combatBlade'|'combatCover'|'combatRear'|'combatHit';
 export interface OmegaCombatProbeFixture{
  readonly mode:OmegaCombatProbeMode;
  readonly zombieId:string;
@@ -22,7 +22,7 @@ export interface OmegaCombatProbeFixture{
 }
 export function omegaCombatProbeMode(query:string):OmegaCombatProbeMode|null{
  const value=new URLSearchParams(query).get('omegaQaState');
- return value==='combatGun'||value==='combatBlade'||value==='combatCover'||value==='combatRear'?value:null;
+ return value==='combatGun'||value==='combatBlade'||value==='combatCover'||value==='combatRear'||value==='combatHit'?value:null;
 }
 export function omegaSetupCombatProbe(
  session:OmegaProtocolCombatSession,
@@ -32,7 +32,10 @@ export function omegaSetupCombatProbe(
  const state=session.engine.state;
  const field=session.field;
  if(!field||session.run.phase!=='battle')throw new Error('Combat probe needs actual OMEGA world');
- const infected=state.hazards.find(h=>h.type==='UNHELMETED'&&h.hp>0);
+ const hitSubject=mode==='combatHit'?session.zombieTelemetry.find(z=>z.kind==='drifter'):null;
+ const infected=mode==='combatHit'
+  ?state.hazards.find(h=>h.id===hitSubject?.id&&h.hp>0)
+  :state.hazards.find(h=>h.type==='UNHELMETED'&&h.hp>0);
  if(!infected)throw new Error('No original infected hard-hat zombie spawned');
  // One real native enemy in each scenario: an ordinary rendered zombie, with
  // large initial HP to survive at least 3 real player-driven sword strikes.
@@ -42,11 +45,15 @@ export function omegaSetupCombatProbe(
  infected.hp=800;
  infected.maxHp=800;
  infected.damage=0;
- state.player.invincibleTime=999;
+ // Unlike gun/blade fixtures, G5h MUST suffer a real warned native
+ // zombie AI attack. Three seconds of initial grace permits SHA-256-verified
+ // WebP import before starting the actual attack observation; subsequent HP
+ // damage and VFX come only from the OMEGA/WATCH combat simulation.
+ state.player.invincibleTime=mode==='combatHit'?3:999;
  state.player.x=mode==='combatCover'?435:150;
  state.player.y=mode==='combatCover'?225:450;
  infected.radius=mode==='combatCover'?40:18;
- infected.x=mode==='combatCover'?530:mode==='combatGun'?360:230;
+ infected.x=mode==='combatCover'?530:mode==='combatGun'?360:mode==='combatHit'?211:230;
  infected.y=mode==='combatCover'?320:450;
  const dist=Math.hypot(infected.x-state.player.x,infected.y-state.player.y);
  const route=omegaFieldNextRoute(state.player,infected,field.plan.obstacles);
@@ -57,7 +64,7 @@ export function omegaSetupCombatProbe(
  }
  // Disable ONLY the fixture's Watch gun when verifying pure sword damage;
  // default gameplay always keeps its actual original auto-fire perk.
- if(mode==='combatBlade'||mode==='combatRear')state.activePerks.radio_boost=0;
+ if(mode==='combatBlade'||mode==='combatRear'||mode==='combatHit')state.activePerks.radio_boost=0;
  return {mode,zombieId:infected.id,initialHp:800,coverDetour,
   gunEnabled:state.activePerks.radio_boost>0};
 }
