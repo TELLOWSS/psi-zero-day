@@ -12,7 +12,7 @@ import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omeg
 import {omegaG5cLabRequested,omegaG5cReview} from './omega-protocol-m12g5c-local-art-review';
 import {omegaG5dLabRequested} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5eLabRequested,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
-import {omegaG5gLabRequested,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
+import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -137,8 +137,10 @@ export function drawOmegaAiraV2Candidate(
   // posture transforms are NOT independent authored animation frames.
   const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
-  const g5gPoseStudy=typeof window!=='undefined'&&omegaG5gLabRequested(
+  const g5hRealHitReview=typeof window!=='undefined'&&omegaG5hRealHitLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const g5gPoseStudy=g5hRealHitReview||(typeof window!=='undefined'&&omegaG5gLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   const g5eReview=g5gPoseStudy||(typeof window!=='undefined'&&omegaG5eLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   const g5dReview=typeof window!=='undefined'&&omegaG5dLabRequested(
