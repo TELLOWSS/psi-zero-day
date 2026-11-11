@@ -11,6 +11,7 @@ import {omegaG4SilverLabRequested,OMEGA_G4_SILVER_SCALE} from './omega-protocol-
 import {omegaG5DevRequested,omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {omegaG5cLabRequested,omegaG5cReview} from './omega-protocol-m12g5c-local-art-review';
 import {omegaG5dLabRequested} from './omega-protocol-m12g5d-actual-source';
+import {omegaG5eLabRequested,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -135,10 +136,12 @@ export function drawOmegaAiraV2Candidate(
   // posture transforms are NOT independent authored animation frames.
   const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const g5eReview=typeof window!=='undefined'&&omegaG5eLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const g5dReview=typeof window!=='undefined'&&omegaG5dLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*
-   ((g4Review||g5Review||g5dReview)?OMEGA_G4_SILVER_SCALE:1);
+   ((g4Review||g5Review||g5dReview||g5eReview)?OMEGA_G4_SILVER_SCALE:1);
   // Only this genuine E walk source row changes on real collision-corrected
   // gait; other seven SHA-pinned user originals and all non-walk actions
   // stay untouched. This draft is NOT the production approved 160+320 pack.
@@ -147,14 +150,17 @@ export function drawOmegaAiraV2Candidate(
   // Human screenshot review rejected this vector prototype as insufficient
   // fidelity: only the explicit second study flag may paint it in-game.
   if(g5Review&&g5VectorStudy&&omegaG5Art.drawSilverE(ctx,view,h))return true;
-  const g5cReview=g5dReview||(typeof window!=='undefined'&&omegaG5cLabRequested(
+  const g5cReview=g5dReview||g5eReview||(typeof window!=='undefined'&&omegaG5cLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   // ONLY after explicit verified-local-source opt-in, draw genuinely distinct
   // E WALK WebP frames in the live native player gait. This never sets the
   // approved commercial 160-source / 320-mask policy.
   if(g5cReview&&omegaG5cReview.draw(ctx,view,h))return true;
+  // Presentation FX is computed ONLY from real Watch-originated action
+  // flags and time; no fake independent 160-frame art or damage changes.
+  if(g5eReview&&omegaG5eFx.draw(ctx,image,view,h))return true;
   const w=h*384/512;
-  if(g4Review||g5Review||g5cReview){
+  if(g4Review||g5Review||g5cReview||g5eReview){
    const gaitSwing=view.gait?.active?Math.sin(view.gait.phase*Math.PI*2)*.012:0;
    const lean=view.dashing ? .06 : view.hurt ? -.04 : view.shooting ? -.025 : gaitSwing;
    ctx.save();ctx.rotate(lean);ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();

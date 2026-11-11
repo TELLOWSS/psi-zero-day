@@ -24,9 +24,15 @@ for(const [name,w,h,mobile] of sizes){
   const root=page.locator('main[data-omega-protocol-internal="true"]');
   await root.waitFor({timeout:25000});
   await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:25000});
-  await page.waitForFunction(async()=>{
-   const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
-   const s=omegaG5Art.status();return s.silverEast===4&&s.infectedDrifter===2;
+  // One-time asynchronous Vite import, followed by SYNCHRONOUS predicate.
+  // An async waitForFunction can treat an unresolved Promise as truthy and
+  // hand back false instead of genuine native frame-count evidence.
+  await page.evaluate(async()=>{
+   window.__omegaG5QaNativeArt=(await import('/src/ui/omega-protocol-m12-g5-art.ts')).omegaG5Art;
+  });
+  await page.waitForFunction(()=>{
+   const s=window.__omegaG5QaNativeArt?.status();
+   return s?.silverEast===4&&s?.infectedDrifter===2;
   },null,{timeout:23000});
   const source=await page.evaluate(async()=>{
    const gfx=await import('/src/ui/omega-protocol-m12-g5-art.ts');
@@ -79,12 +85,12 @@ for(const [name,w,h,mobile] of sizes){
   // becomes true. On shared Vite CI a dev-server HMR refresh can replace the
   // module singleton between waitForFunction and a subsequent evaluate(),
   // resetting counters to zero while the live sprite remains visible.
-  const proofHandle=await page.waitForFunction(async()=>{
-   const {omegaG5Art}=await import('/src/ui/omega-protocol-m12-g5-art.ts');
+  const proofHandle=await page.waitForFunction(()=>{
+   const omegaG5Art=window.__omegaG5QaNativeArt;
    const proof=omegaG5Art.evidence();
    return proof.heroDraws>=2&&proof.heroFramesSeen.length>=2
     ?{status:omegaG5Art.status(),evidence:proof}:false;
-  },null,{timeout:3000,polling:100});
+  },null,{timeout:7000,polling:100});
   const artwork=await proofHandle.jsonValue();
   await proofHandle.dispose();
   const afterX=Number(await arena.getAttribute('data-omega-player-x'));
