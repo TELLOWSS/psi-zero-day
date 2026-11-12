@@ -726,3 +726,28 @@
 **G5h 정확한 결론: CODED + 네이티브 HIT 실피해·4 source poses·4화면/전체 12 CI SUCCESS + DEV-ONLY MERGED. 독립 신규 페인터리 원화/감염체 4종·상업급 아트 승인 0.**
 
 **NEXT M12-G5i — 이미지 자체를 끝까지 개선할 단계:** 실제 은백색 원본에 정합한 **독립 E FIRE/DASH/HIT 고품질 프레임**(몸체/팔·총·다리·머리카락/발바닥 선이 매 단계 달라진 새로운 그림)과 **4종 상업급 감염체 원본+자연스러운 움직임** 제작·원본 SHA/투명/발 접지/4해상도 실제 게임/아트 디렉터 판정. 원화 생성이 또 대시보드면 바로 기각하고 완료 개수 증가 금지. 이후 8방향/160원화/320 마스크, Android 실기기 FPS/터치/발열, 실제 계정 Extreme50, 15개 전장의 모든 시각 품질, strict PR243 별도 BLOCKED. PR235 Draft·main/Production/유료전환 사용자 최종 승인 전 보류.
+
+
+## 37. M12-G5i — 신규 전투 원화 12개 독립 검수 경로 / 아트 미제작 (2026-11-12)
+
+**전제: §36 G5h OMEGA 개발 브랜치 병합 완료. M12-G5i는 별도의 QA 후보로 유지한다.**
+현재 작업 브랜치: qa/omega-m12g5i-independent-art-session-review-20261112 (base feat/omega-protocol-roguelite-core-20261108). **PR #235 Draft · main/Production/유료전환 미변경.**
+
+### 구현 내용 (CODE ONLY, 새 페인터리 원화가 아님)
+- src/ui/omega-protocol-m12g5i-action-art.ts: 개발 조건 omegaLab=1&omegaM12G5i=1에서만 E FIRE/DASH/HIT 각 4장, 총 12개 사용자 제공 실제 WebP를 세션으로 가져오는 검수기. 파일명 aira-east-{fire|dash|hit}-{0..3}.webp, 384×512, SHA-256 중복·기존 G5d WALK SHA 재사용, 투명도·발 접지·인체 중심 실루엣 4개/액션 및 액션 간 차이 검사. 이름이나 SHA가 달라도 신규 도색임을 자동 인정하지 않음.
+- src/ui/omega-aira-v2-candidate.ts: 검증·명시적 미리보기 ON일 때만 기존 Watch 엔진 실제 FIRE/DASH/HIT 시각 이벤트에서 사용자 제공 12 WebP를 사용하도록 DEV 렌더 연결. 실제 원화가 없거나 비활성화면 기존 AIRA 원본 8방향으로 즉시 복귀. 외부 이미지 API·원격 업로드·로컬 저장·전투 HP/피격·계정·해금 변경 없음.
+- src/ui/OmegaProtocolPlaytest.tsx: 새 G5i 12개 로컬 파일 선택, 상태·실루엣 결과 및 실전 전투 원화 비교/원본 8방향 복귀 버튼. 개발 전용 Canvas QA 읽기 전용 실제 액션 소스 증빙.
+- tests/omega-protocol-m12g5i-action-art.test.ts: 12파일 정확성, 4개 G5d SHA 재사용 차단, DEV 격리, 인체 실루엣 차이와 액션 간 동작 구별, 승인 0을 검증하는 신규 회귀 테스트.
+- .github/workflows/verify-omega-protocol.yml: G5i 파일 경로 및 신규 Vitest 검증 포함.
+
+### 원화 도구 출력 실패 / 품질 사실
+2026-11-12 원화 재시도에서도 AIRA 전투 원화 대신 일반 업무 인계 대시보드 이미지가 생성되어 즉시 거부. 해당 이미지를 게임 자산, 원본, QA 증빙, 진행률에 절대 사용하지 않음. **실제 신규 독립 E FIRE/DASH/HIT 화풍 일치 원화 0장, 신규 고품질 감염체 4종 0장, 최종 160/320 승인 0.** G5i 로컬 검수 기능이 동작해도 독립 도색의 상업급 품질과 인물 정합성은 사람 육안 승인이 별도로 필요하다. 현재 GitHub에는 새 12개 WebP 실화상 바이너리를 추가하지 않았다.
+
+### 검증/병합 게이트
+- 신규 브랜치의 typecheck, G5i Vitest, 기존 WATCH/GUARD/AIRA/보스·미션 실제 4해상도 브라우저 회귀가 모두 성공하기 전에는 G5i QA를 OMEGA 개발 브랜치에 병합하지 않는다. GitHub Actions 결과 및 링크를 확인한 뒤 기재할 것.
+- 후보 실제 그림 12개가 준비될 때만 로컬 파일 검수에서 직접 교체·육안 캡처 비교를 실시. 테스트용 페이크 벡터·기존 걷기 이미지로 상용 원화 제작 완료를 선언하지 않는다.
+- 4종 독립 고품질 감염체, 7개 잔여 방향, 160독립 원화·320가림 마스크, 실제 Android FPS/발열/터치, 15개 구역 실제 플레이, 50 Extreme 실제 계정, strict PR #243 모두 별도 BLOCKED.
+- 사용자 최종 승인 전 PR #235 Draft 유지 / **main 병합 금지, Vercel Production 배포 금지, 유료 플랜·API 전환 금지.**
+
+**NEXT M12-G5i-ART:** 새 은백색 AIRA 독립 FIRE/DASH/HIT 총 12장 및 고해상도 감염체 4종을 실제로 생성·원본 비슷함 확인한 뒤 원본 바이너리 SHA와 native 4화면에서 비교하여 아트 승인 요청. 이미지 생성 결과가 다시 인계서/대시보드면 즉시 기각.
+**NEXT M12-G5i-QA:** 새 branch CI FAIL 교정 및 전체 실제 브라우저 회귀 확인; 개발 브랜치 병합도 PASS 뒤 별도 검토.
