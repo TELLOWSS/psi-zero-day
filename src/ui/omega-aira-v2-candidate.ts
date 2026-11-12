@@ -13,6 +13,7 @@ import {omegaG5cLabRequested,omegaG5cReview} from './omega-protocol-m12g5c-local
 import {omegaG5dLabRequested} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5eLabRequested,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
+import {omegaG5iLabRequested,omegaG5iActionPreview} from './omega-protocol-m12g5i-action-art';
 
 /**
  * AIRA V2: SILVER-WHITE / LAVENDER high ponytail, violet eyes,
@@ -137,6 +138,8 @@ export function drawOmegaAiraV2Candidate(
   // posture transforms are NOT independent authored animation frames.
   const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const g5iArtReview=typeof window!=='undefined'&&omegaG5iLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const g5hRealHitReview=typeof window!=='undefined'&&omegaG5hRealHitLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const g5gPoseStudy=g5hRealHitReview||(typeof window!=='undefined'&&omegaG5gLabRequested(
@@ -146,7 +149,7 @@ export function drawOmegaAiraV2Candidate(
   const g5dReview=typeof window!=='undefined'&&omegaG5dLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const h=omegaAiraV2VisualHeight(Number(ctx.canvas?.width))*
-   ((g4Review||g5Review||g5dReview||g5eReview)?OMEGA_G4_SILVER_SCALE:1);
+   ((g4Review||g5Review||g5dReview||g5eReview||g5iArtReview)?OMEGA_G4_SILVER_SCALE:1);
   // Only this genuine E walk source row changes on real collision-corrected
   // gait; other seven SHA-pinned user originals and all non-walk actions
   // stay untouched. This draft is NOT the production approved 160+320 pack.
@@ -164,12 +167,16 @@ export function drawOmegaAiraV2Candidate(
   // Only after exact G5d source SHA validation + user opt-in; transform real
   // event cues with DIFFERENT 4 source WALK body silhouettes. These remain
   // derived pose studies and NEVER count as original combat paintings.
+  // G5i candidate assets must first pass exact 12-file, alpha, SHA and
+  // body-silhouette checks, then be EXPLICITLY enabled for this session.
+  // Actual paintings are NOT created or approved by the technical gate.
+  if(g5iArtReview&&omegaG5iActionPreview.draw(ctx,view,h))return true;
   if(g5gPoseStudy&&omegaG5gNativePoseStudy.draw(ctx,view,h))return true;
   // Presentation FX is computed ONLY from real Watch-originated action
   // flags and time; no fake independent 160-frame art or damage changes.
   if(g5eReview&&omegaG5eFx.draw(ctx,image,view,h))return true;
   const w=h*384/512;
-  if(g4Review||g5Review||g5cReview||g5eReview){
+  if(g4Review||g5Review||g5cReview||g5eReview||g5iArtReview){
    const gaitSwing=view.gait?.active?Math.sin(view.gait.phase*Math.PI*2)*.012:0;
    const lean=view.dashing ? .06 : view.hurt ? -.04 : view.shooting ? -.025 : gaitSwing;
    ctx.save();ctx.rotate(lean);ctx.drawImage(image,-w/2,-h,w,h);ctx.restore();
