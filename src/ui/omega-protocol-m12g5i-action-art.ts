@@ -1,4 +1,4 @@
-import {omegaG5eCue,omegaG5eFx,type OmegaG5eNativeAction} from './omega-protocol-m12g5e-silver-action-fx';
+import {omegaG5eCue,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {OMEGA_G5D_ACTUAL_E_WALK} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5gCoreSilhouetteDifference} from './omega-protocol-m12g5g-native-pose';
 import type {OmegaActorView} from './omega-protocol-actor-render';
