@@ -31,6 +31,7 @@ import {omegaG5dLabRequested,omegaG5dImportRepoCandidates,OMEGA_G5D_ART_GATE} fr
 import {omegaG5eLabRequested,OMEGA_G5E_ART_STATUS,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 import {omegaG5iLabRequested,omegaG5iActionPreview,OMEGA_G5I_ART_GATE} from './omega-protocol-m12g5i-action-art';
+import {OmegaCandidateArtAudit,type OmegaVisualAuditFrame} from './omega-candidate-art-audit';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -417,6 +418,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
+ const [visualAudit,setVisualAudit]=useState<'aira'|'infected'|null>(null);
  const infectedEpoch=useRef(0);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
@@ -476,7 +478,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview,g5iArtLab]);
  useEffect(()=>()=>{g5iImportEpoch.current++;infectedEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();omegaInfectedCandidateReview.dispose();},[]);
  const importInfected=useCallback(async(files:FileList|null)=>{
-  if(!infectedLab||!files)return;const epoch=++infectedEpoch.current;omegaInfectedCandidateReview.dispose();setInfectedOn(false);setInfectedStatus('loading');
+  if(!infectedLab||!files)return;const epoch=++infectedEpoch.current;setVisualAudit(null);omegaInfectedCandidateReview.dispose();setInfectedOn(false);setInfectedStatus('loading');
   try{
    const list=Array.from(files),docs=list.filter(f=>f.name==='infected-anchors.json');
    if(docs.length!==1||list.length!==17||docs[0]!.size>100_000)throw Error('WebP 16개와 infected-anchors.json을 함께 선택하세요');
@@ -490,7 +492,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
   const epoch=++g5iImportEpoch.current;
-  setG5iPreviewOn(false);setG5iStatus('loading');
+  setVisualAudit(null);setG5iPreviewOn(false);setG5iStatus('loading');
   setG5iFeedback('12개 후보 파일 SHA·알파 범위·몸체 포즈 차이 검사 중… 발 접지는 별도 시각 검수');
   try{
    const proof=await omegaG5iActionPreview.import(Array.from(files));
@@ -508,7 +510,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importG5iWide=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
   const epoch=++g5iImportEpoch.current;
-  omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
+  setVisualAudit(null);omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
   try{
    const list=Array.from(files),docs=list.filter(f=>f.name==='g5j-anchors.json');
    if(docs.length!==1||list.length!==13||docs[0]!.size>100_000)throw Error('640×512 WebP 12개와 g5j-anchors.json을 함께 선택하세요');
@@ -770,6 +772,28 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   setPaused(!paused);setSnapshot(session.snapshot);
  };
+ const openVisualAudit=(mode:'aira'|'infected')=>{
+  // The artwork overlay is intentionally a paused-only visual session.
+  // Never resume automatically; the player chooses when to resume.
+  if(session.run.phase==='battle'&&!paused){
+   session.pause();setPaused(true);setSnapshot(session.snapshot);
+  }
+  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+  if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
+  setVisualAudit(mode);
+ };
+ const visualFrames:readonly OmegaVisualAuditFrame[]=visualAudit==='aira'
+  ?omegaG5iActionPreview.reviewCards().map(card=>({
+    file:card.file,imageUrl:card.imageUrl,width:card.width,height:card.height,
+    referenceHeight:512,foot:card.foot??{x:192,y:card.toeRow},
+    ...(card.muzzle?{muzzle:card.muzzle}:{}),
+    ...(card.alphaBounds?{alphaBounds:card.alphaBounds}:{}),
+   }))
+  :visualAudit==='infected'
+  ?omegaInfectedCandidateReview.reviewCards().map(card=>({
+    file:card.file,imageUrl:card.imageUrl,width:card.width,height:card.height,
+    referenceHeight:card.referenceHeight,foot:card.foot,alphaBounds:card.alphaBounds,
+   })):[];
  const dashFeedback=omegaDashAvailability(session.engine.state.player);
  const counterplay=omegaNearestCounterplayCue(
   omegaCounterplayCues(session.engine.state.hazards,id=>session.zombieBrain(id)),
@@ -836,6 +860,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <button type="button" data-omega-infected-toggle="true" disabled={infectedStatus!=='ready'} onClick={()=>setInfectedOn(omegaInfectedCandidateReview.activate(!infectedOn))}>{infectedOn?'기존 적으로 복귀':'실제 AI 후보 비교'}</button>
     <span data-omega-infected-feedback={infectedStatus}>{infectedMessage}</span>
     <small>이동·공격은 실제 AI 상태이며, 이미지·앵커·동작은 승인 전입니다.</small>
+    <button type="button" data-omega-g5k-open="infected" disabled={infectedStatus!=='ready'}
+     onClick={()=>openVisualAudit('infected')}>16장 크기·접지 비교</button>
    </aside>}
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
@@ -859,6 +885,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
       <span data-omega-g5i-feedback={g5iStatus} title={g5iFeedback}>{g5iFeedback}</span>
       <small>원본 파일은 이 브라우저 세션에서만 사용됩니다. 160원화·320마스크·독립 작화 승인 0.</small>
+      <button type="button" data-omega-g5k-open="aira" disabled={g5iStatus!=='ready'}
+       onClick={()=>openVisualAudit('aira')}>12장 원본·앵커 비교</button>
      </div>}
      {g5cArtReview&&<div className="omega-g5c-art-controls" data-omega-g5c-controls="true">
      {g5dActualReview?<button type="button" data-omega-g5d-load="true"
@@ -876,6 +904,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <span data-omega-g5c-feedback={g5cStatus} title={g5cFeedback}>{g5cFeedback}</span>
     </div>}
    </aside>}
+  {visualAudit&&visualFrames.length>0&&<OmegaCandidateArtAudit mode={visualAudit}
+   cards={visualFrames} onClose={()=>setVisualAudit(null)}/>}
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div ref={arenaRef} className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-qa-mode={combatProbe?.mode}
