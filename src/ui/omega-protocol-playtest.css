@@ -1053,6 +1053,14 @@
 .omega-protocol-lab[data-omega-review-layout="true"]{
  grid-template-rows:auto auto minmax(0,1fr) auto;
 }
+.omega-infected-review-bar{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;
+ padding:5px 10px;background:#352848;color:#f2e9ff;font-size:11px;
+ max-height:110px;overflow:auto;min-height:0;
+}
+.omega-infected-review-bar input{max-width:220px;font-size:10px}
+.omega-infected-review-bar button{font-size:11px}
+@media(max-height:430px){.omega-infected-review-bar{max-height:64px;padding:2px 6px;font-size:9px}.omega-infected-review-bar button{font-size:9px}}
 .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
  min-height:0;max-height:80px;overflow:hidden;
 }

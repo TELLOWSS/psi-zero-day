@@ -1,6 +1,7 @@
 import type {Hazard} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
 import {omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
+import {omegaInfectedCandidateReview} from './omega-infected-candidate-review';
 
 /**
  * Wave-15-only original POWER WARDEN silhouette. This is authored technical
@@ -125,7 +126,7 @@ export function drawOmegaHelmetZombie(
  */
 export function drawOmegaProtocolEnemy(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
- options:Readonly<{finalBoss?:boolean;zombie?:OmegaZombieBrain}>={} ,
+ options:Readonly<{finalBoss?:boolean;zombie?:OmegaZombieBrain;infectedReview?:boolean;targetX?:number}>={} ,
 ):void {
  if(h.hp<=0)return;
  const boss=Boolean(h.isStageBoss);
@@ -159,7 +160,7 @@ export function drawOmegaProtocolEnemy(
    import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   // Dev-only two independently posed original drifter sources; preserve the
   // native telegraph above, all real health bars, and original other species.
-  if(!(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)))
+  if(!(options.infectedReview&&options.zombie&&omegaInfectedCandidateReview.draw(ctx,h,options.zombie,time,options.targetX??h.x))&&!(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)))
    drawOmegaHelmetZombie(ctx,h,time,options.zombie);
  }else if(h.type==='RUNAWAY_CART'){
   ctx.fillStyle='#39485a';ctx.fillRect(-28,-25,58,24);

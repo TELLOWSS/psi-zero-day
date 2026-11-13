@@ -13,6 +13,7 @@ import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-m
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
+import {omegaInfectedCandidateReview,omegaInfectedLabRequested} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
@@ -105,7 +106,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
    {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15,
-    zombie:session.zombieBrain(h.id)??undefined});
+    zombie:session.zombieBrain(h.id)??undefined,
+    infectedReview:typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'),targetX:p.x});
   ctx.restore();
  };
  const renderHero=()=>{
@@ -409,6 +411,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iFeedback,setG5iFeedback]=useState('새로 그린 동쪽 사격·대시·피격 원화 WebP 12개를 선택하세요.');
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
  const g5iImportEpoch=useRef(0);
+ const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
+ const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
+ const [infectedOn,setInfectedOn]=useState(false);
+ const infectedEpoch=useRef(0);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
@@ -465,7 +472,17 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    lease?.revoke();
   };
  },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview,g5iArtLab]);
- useEffect(()=>()=>{g5iImportEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();},[]);
+ useEffect(()=>()=>{g5iImportEpoch.current++;infectedEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();omegaInfectedCandidateReview.dispose();},[]);
+ const importInfected=useCallback(async(files:FileList|null)=>{
+  if(!infectedLab||!files)return;const epoch=++infectedEpoch.current;omegaInfectedCandidateReview.dispose();setInfectedOn(false);setInfectedStatus('loading');
+  try{
+   const list=Array.from(files),docs=list.filter(f=>f.name==='infected-anchors.json');
+   if(docs.length!==1||list.length!==17||docs[0]!.size>100_000)throw Error('WebP 16개와 infected-anchors.json을 함께 선택하세요');
+   const manifest=JSON.parse(await docs[0]!.text());if(epoch!==infectedEpoch.current)return;
+   await omegaInfectedCandidateReview.import(list.filter(f=>f!==docs[0]),manifest);if(epoch!==infectedEpoch.current)return;
+   setInfectedStatus('ready');setInfectedMessage('16장 해시·경계·앵커 형식 확인 · 원화·발 위치는 미승인');
+  }catch(e){if(epoch!==infectedEpoch.current)return;omegaInfectedCandidateReview.dispose();setInfectedStatus('failed');setInfectedMessage(e instanceof Error?e.message:'감염체 후보 오류');}
+ },[infectedLab]);
  useEffect(()=>{omegaG5eFx.reset();},[g5eNativeActionLab]);
  useEffect(()=>{omegaG5gNativePoseStudy.reset();},[g5gSourcePoseLab]);
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
@@ -651,6 +668,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      arenaRef.current.dataset.omegaG5iLiveActionFrames=JSON.stringify(e.frames);
      arenaRef.current.dataset.omegaG5iLiveActionCounts=JSON.stringify(e.counts);
     }
+   if(infectedLab&&arenaRef.current)arenaRef.current.dataset.omegaInfectedEvidence=JSON.stringify(omegaInfectedCandidateReview.evidence());
     fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
@@ -762,7 +780,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
   data-omega-silver-preview={silverPreviewStatus}
-  data-omega-review-layout={silverPreviewRequested?'true':'false'}
+  data-omega-review-layout={silverPreviewRequested||infectedLab?'true':'false'}
   data-omega-m12g4-silver-review={g4SilverLab?'source-sha256-dev-only':'off'}
   data-omega-m12g5-lab={g5ArtLab?'source-verified-silver-originals':'off'}
   data-omega-m12g5-vector-study={g5VectorStudy?'isolated-unapproved':'off'}
@@ -808,6 +826,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
+  {infectedLab&&<aside className="omega-infected-review-bar" role="status">
+    <strong>감염체 4종 후보 · 개발 검수 전용</strong>
+    <label htmlFor="omega-infected-files">WebP 16장과 앵커 JSON 선택</label>
+    <input id="omega-infected-files" type="file" accept=".webp,.json" multiple onChange={e=>{void importInfected(e.currentTarget.files);e.currentTarget.value='';}} />
+    <button type="button" data-omega-infected-toggle="true" disabled={infectedStatus!=='ready'} onClick={()=>setInfectedOn(omegaInfectedCandidateReview.activate(!infectedOn))}>{infectedOn?'기존 적으로 복귀':'실제 AI 후보 비교'}</button>
+    <span data-omega-infected-feedback={infectedStatus}>{infectedMessage}</span>
+    <small>이동·공격은 실제 AI 상태이며, 이미지·앵커·동작은 승인 전입니다.</small>
+   </aside>}
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
