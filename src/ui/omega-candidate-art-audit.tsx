@@ -1,4 +1,4 @@
-import type {CSSProperties} from 'react';
+import {useEffect,useRef,useState,type CSSProperties} from 'react';
 
 /** G5k: pixel-accurate review staging, never a gameplay transformation.
  * All sources are the file bytes already validated by the DEV importers.
@@ -35,6 +35,27 @@ export function omegaVisualAuditMarker(
  return {left:layout.left+point.x*layout.scale,top:layout.top+point.y*layout.scale};
 }
 
+export const OMEGA_VISUAL_AIRA_GROUPS=['fire','dash','hit'] as const;
+export const OMEGA_VISUAL_INFECTED_GROUPS=['basic','runner','armored','elite'] as const;
+export type OmegaVisualAuditMode='aira'|'infected';
+/** Exactly four distinct source filenames in native 0→1→2→3 order.
+ * A header or a repeated image is not an additional painted frame. */
+export function omegaVisualAuditGroupFrames(
+ cards:readonly OmegaVisualAuditFrame[],mode:OmegaVisualAuditMode,group:string,
+):readonly OmegaVisualAuditFrame[]{
+ const allowed:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
+ if(!allowed.includes(group))return [];
+ const prefix=mode==='aira'?'aira-east-'+group+'-':group+'-';
+ const filtered=cards.filter(card=>card.file.startsWith(prefix)&&/^[0-3]\.webp$/.test(card.file.slice(prefix.length)));
+ if(filtered.length!==4)return [];
+ const byIndex=new Map(filtered.map(card=>[Number(card.file.slice(prefix.length,prefix.length+1)),card]));
+ if(byIndex.size!==4)return [];
+ return [0,1,2,3].map(i=>byIndex.get(i)!);
+}
+export function omegaVisualAuditNextFrame(current:number,direction:-1|1):0|1|2|3{
+ return (((Math.trunc(current)+direction+4)%4+4)%4) as 0|1|2|3;
+}
+
 const SILVER_REFERENCE:OmegaVisualAuditFrame={
  file:'G5d E-WALK 원본 후보 (기준)',
  imageUrl:'/assets/omega/g5d/aira-east-walk-0.webp',
@@ -48,15 +69,51 @@ export function OmegaCandidateArtAudit({
  readonly cards:readonly OmegaVisualAuditFrame[];
  readonly onClose:()=>void;
 }){
- const displayed=mode==='aira'?[SILVER_REFERENCE,...cards]:cards;
+ const [selectedGroup,setSelectedGroup]=useState<string>(mode==='aira'?'fire':'basic');
+ const [selectedFrame,setSelectedFrame]=useState<0|1|2|3>(0);
+ const closeRef=useRef<HTMLButtonElement>(null);
+ useEffect(()=>{closeRef.current?.focus();},[]);
+ const groups:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
+ const frames=omegaVisualAuditGroupFrames(cards,mode,selectedGroup);
+ const selected=frames[selectedFrame];
+ const displayed=selected?(mode==='aira'?[SILVER_REFERENCE,selected]:[frames[0]!,selected]):[];
+ const chooseGroup=(group:string)=>{setSelectedGroup(group);setSelectedFrame(0);};
+ const advance=(dir:-1|1)=>setSelectedFrame(v=>omegaVisualAuditNextFrame(v,dir));
  return <section className="omega-art-audit-overlay" role="dialog" aria-modal="true"
   aria-label={mode==='aira'?'AIRA 전투 후보 실제 크기 비교':'감염체 4종 16프레임 실제 크기 비교'}
-  data-omega-g5k-audit={mode}>
+  data-omega-g5k-audit={mode}
+  onKeyDown={e=>{
+   if(e.key==='Escape'){e.preventDefault();e.stopPropagation();onClose();}
+   else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+    e.preventDefault();e.stopPropagation();advance(e.key==='ArrowLeft'?-1:1);
+   }
+  }}>
    <header className="omega-art-audit-header">
     <div><strong>{mode==='aira'?'AIRA E · 전투 원화 12장 / 기존 걷기 기준':'감염체 4종 · 동작 후보 16장'}</strong>
      <p>원본을 다시 그리지 않고 현재 로컬 세션에서 검증한 이미지 바이트로 표시합니다. 동일 기준 높이와 입력 앵커로만 정렬하며 미술 승인과 무관합니다.</p></div>
-    <button type="button" onClick={onClose} aria-label="원화 비교 화면 닫기">게임으로 돌아가기 ×</button>
+    <button type="button" ref={closeRef} onClick={onClose} aria-label="원화 비교 화면 닫기">게임으로 돌아가기 ×</button>
    </header>
+   <nav className="omega-art-audit-groups" aria-label="원화 종류 선택">
+    {groups.map(group=><button key={group} type="button" onClick={()=>chooseGroup(group)}
+     aria-pressed={selectedGroup===group} data-omega-g5l-group={group}>
+      {group.toUpperCase()}
+     </button>)}
+   </nav>
+   <div className="omega-art-audit-stepper" data-omega-g5l-frame={selectedFrame}>
+    <button type="button" onClick={()=>advance(-1)} aria-label="이전 원화 프레임">◀ 이전</button>
+    <strong>{selectedGroup.toUpperCase()} · FRAME {selectedFrame} / 3</strong>
+    <button type="button" onClick={()=>advance(1)} aria-label="다음 원화 프레임">다음 ▶</button>
+    <small>버튼 또는 키보드 좌·우로 0~3프레임을 직접 전환합니다. 애니메이션·발접지 자동 승인 아님.</small>
+   </div>
+   <div className="omega-art-audit-strip" aria-label="원본 4프레임 선택">
+    {frames.map((frame,i)=><button key={frame.file} type="button" className="omega-art-audit-strip-item"
+     data-omega-g5l-pose={i} aria-pressed={selectedFrame===i}
+     aria-label={selectedGroup+' 원화 '+i+'번'}
+     onClick={()=>setSelectedFrame(i as 0|1|2|3)}>
+     <img src={frame.imageUrl} alt="" decoding="async" draggable={false}/>
+     <span>{i} · {frame.file}</span>
+    </button>)}
+   </div>
    <div className="omega-art-audit-legend">
     <span>가로 점선 = 가상 지면</span><span>노란 점 = 입력 발 피벗</span>
     <span>청록 점 = 입력 총구</span><span>표시 경계 = 실제 알파≥64 픽셀</span>
@@ -85,6 +142,6 @@ export function OmegaCandidateArtAudit({
      </figure>;
     })}
    </div>
-   <footer>상단 이미지와 피벗은 세션이 닫히면 폐기됩니다. 정식 캐릭터·적 자산과 전투 판정·저장·해금은 변경하지 않습니다. 원화/접지/방향 품질의 사람 검수는 계속 필요합니다.</footer>
+   <footer>왼쪽 기준 이미지와 오른쪽 선택 자세를 같은 지면·축척에서 비교하세요. 질주형 손/부츠 접지와 공중 자세의 가상 지면은 별도 사람 판정이 필요합니다. 상단 이미지와 피벗은 세션이 닫히면 폐기됩니다. 정식 캐릭터·적 자산과 전투 판정·저장·해금은 변경하지 않습니다. 원화/접지/방향 품질의 사람 검수는 계속 필요합니다.</footer>
   </section>;
 }
