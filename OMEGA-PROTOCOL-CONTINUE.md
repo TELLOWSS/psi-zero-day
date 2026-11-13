@@ -875,3 +875,12 @@
 - §52의 runner-0 원본을 참조해 손끝과 양쪽 부츠를 같은 가상 지면에 맞추도록 AI 이미지 편집을 1회 시도했다. `outputs/omega-art/infected-motion-20261114/runner-ground-contact-attempt.png` 1312×1199, SHA-256 `4262ef3dc1661aad0de9b3bcd392f93a5ee74fd275b39d57adc3e4ea6ba1927a`. Chrome Canvas alpha 64 이상 바운딩 박스 x308..1077/y217..1033, 이미지 외곽 alpha64 이상 0. 육안상 손끝과 두 부츠 밑면이 비슷한 높이에 있으나 머리·몸체·장비가 함께 재생성되어 기존 걷기 프레임과 작화/비례 연속성은 검증되지 않았다.
 - 이 PNG는 기존 WebP 크기 및 공통 referenceHeight와 달라 미리보기의 16장에 넣지 않았고 게임 내 동작·발 피벗·4화면/실기기 검증도 수행하지 않았다. 경계 검사만으로 반투명 테두리나 품질을 승인할 수 없다. 원본과 시험 앵커 및 새 시안은 모두 AI 후보이며 기본 자산 또는 최종 승인 원화가 아니다.
 - 다음: 기존 runner 1~3과 인물·장비 크기 및 동작 연결을 확인하고 공통 축척/앵커를 별도 산정한 뒤 개발 전용 실게임에서 비교한다. basic·armored 반대 걸음, AIRA 정합과 Android 실기기/감독 승인 미완. PR #235 Draft, main/Production 보류.
+
+## 54. 질주형 접지 시안 실게임 시험 (2026-11-14)
+
+- PR #265 선행 HEAD `4548b10bed402a3dd79e399fd3f2ecf40d59db00`에서 Actions 11개 및 Vercel Preview 성공, responsive-capture는 실행 중이었다.
+- §53 PNG를 다른 runner 자세와 함께 같은 시각 배율로 비교한 `runner-ground-continuity-review.html/png`를 생성했다. 새 그림은 손끝과 두 부츠 밑이 비슷한 높이이며 기존 동작과 안전모/보라색 탱크/복장 특징이 대체로 이어져 보이지만 인물·장비의 세부 작화와 모션 전환, 피벗의 정답은 사람 검수가 필요하다. 비교의 새 기준점 (630,1033)은 임시 추정값이다.
+- 시험 전용 사본 `runner-ground-contact-live-trial`에서 PNG를 656×600으로 재표본화하고 무손실 WebP로 저장했다(리사이즈를 거쳤으므로 원본 픽셀 무손실 주장은 금지). `runner-0.webp` SHA `cb90e7d6a464138f0079a822fa97a850df044ba7004c45f6361fa67c1133d3e0`, 임시 앵커 (315,517), 기존 1~3 referenceHeight 500 유지. 기존 후보 폴더와 게임 기본 자산은 변경하지 않았다.
+- 실제 16파일을 DEV 미리보기에서 Chrome PC/태블릿/세로·가로 모바일 네 화면에 로드: 4종 실제 AI warning, 각 자세 0~3 호출, 실 피해로 HP 감소, 원본 복귀 및 OFF 후 렌더 수 정지, pageerror 0을 확인했다. 캡처 시 적이 겹쳐 이 결과만으로 접지 품질은 판정할 수 없다. 데스크톱 HP telemetry와 meter는 별도 시점에 수집하므로 첫 화면에서 770과 789가 함께 기록될 수 있으며 동일 순간으로 비교하지 않는다.
+- 단독 sprinter 실제 전투를 일시정지한 같은 상태에서 기존 그림과 새 그림을 교체한 화면도 별도 확보했다. 교체 전후 gameTime 1.200·적 위치/상태·HP 동일, 검수용 CSS로 일시정지 안내만 숨김. `runner-ground-contact-solo/original.png`, `new-candidate.png`, report 참조. 실게임 내 크기가 작아 고화질 접지·움직임 최종 판정은 미완.
+- 원본 PNG, 시험용 16장/JSON, 두 비교 및 4화면 보고서는 `outputs/omega-art/infected-motion-20261114/runner-ground-contact-live-qa.zip`. AI 후보와 추정 앵커는 미승인. 다음: 동작 전환·발 미끄럼/공중 자세 및 방향별 그림, basic·armored 반대 보폭, AIRA 정합과 Android 실기기·감독 검수. PR #235 Draft, main/Production 보류.
