@@ -884,3 +884,11 @@
 - 실제 16파일을 DEV 미리보기에서 Chrome PC/태블릿/세로·가로 모바일 네 화면에 로드: 4종 실제 AI warning, 각 자세 0~3 호출, 실 피해로 HP 감소, 원본 복귀 및 OFF 후 렌더 수 정지, pageerror 0을 확인했다. 캡처 시 적이 겹쳐 이 결과만으로 접지 품질은 판정할 수 없다. 데스크톱 HP telemetry와 meter는 별도 시점에 수집하므로 첫 화면에서 770과 789가 함께 기록될 수 있으며 동일 순간으로 비교하지 않는다.
 - 단독 sprinter 실제 전투를 일시정지한 같은 상태에서 기존 그림과 새 그림을 교체한 화면도 별도 확보했다. 교체 전후 gameTime 1.200·적 위치/상태·HP 동일, 검수용 CSS로 일시정지 안내만 숨김. `runner-ground-contact-solo/original.png`, `new-candidate.png`, report 참조. 실게임 내 크기가 작아 고화질 접지·움직임 최종 판정은 미완.
 - 원본 PNG, 시험용 16장/JSON, 두 비교 및 4화면 보고서는 `outputs/omega-art/infected-motion-20261114/runner-ground-contact-live-qa.zip`. AI 후보와 추정 앵커는 미승인. 다음: 동작 전환·발 미끄럼/공중 자세 및 방향별 그림, basic·armored 반대 보폭, AIRA 정합과 Android 실기기·감독 검수. PR #235 Draft, main/Production 보류.
+
+## 55. 질주형 전환 비교 및 실제 동작 녹화 (2026-11-14)
+
+- PR #265 선행 HEAD `9f1e5de2c59961046896ba46b9c751842a7dcfe6`에서 Actions 11개 및 Vercel Preview 성공, responsive-capture는 실행 중이었다.
+- §54 시험 WebP와 추정 앵커를 로컬에서 대기 0→이동 1/2로 250ms 간격 반복하고 일시정지·수동 전환할 수 있는 `runner-ground-contact-live-trial/runner-transition-review.html`을 만들었다. 같은 크기와 가상 지면에서 시안의 자세 연결을 볼 수 있으나 **엔진 녹화나 실제 속도·이동·발 미끄럼 측정이 아닌 별도 비교 도구**다. Chrome에서 자세 변경 및 이미지 로딩, pageerror 0 확인.
+- alpha64 이상 바운딩 높이는 runner-0 409px, runner-1 499px, runner-2 518px, runner-3 487px이다. 구부린 자세·뻗은 팔과 탱크를 모두 포함하는 값이므로 신체 비례나 스케일 변화의 정량 판정으로 해석하지 않는다. runner-0 바운딩 최하단과 임시 앵커는 같은 y이며 다른 프레임도 최하단과 앵커 차이가 0~1px이다. 최하단이 손·발·잡음 중 무엇인지는 이 수치로 알 수 없고 공중 자세가 지면에 닿았음을 뜻하지 않는다.
+- 데스크톱 Chrome 실제 게임에서 §54 파일 16장과 앵커를 불러오고 단독 sprinter 및 사용자 방향키 이동을 녹화했다. 5.76초 WebM과 `runner-motion-native-video/report.json`: 실제 AI warning1/attack1 및 후보 0~3 호출, pageerror 0. 이는 실제 게임 영상이나 거리가 벌어지면 화면 시야 제한으로 적이 어둡고 작아, 발 미끄럼/공중 높이의 정밀 판정과 모든 자세의 개별 영상 검증은 미완이다. 녹화·HTML 모두 후보나 앵커의 감독 승인이 아니다.
+- 다음: 조명이 확보된 실제 상태에서 동작별 화면과 발 피벗을 추적하고, basic·armored 반대 보폭, AIRA 정합 및 Android 실기기 검증. PR #235 Draft, main/Production 보류.
