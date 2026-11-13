@@ -1053,6 +1053,9 @@
 .omega-protocol-lab[data-omega-review-layout="true"]{
  grid-template-rows:auto auto minmax(0,1fr) auto;
 }
+.omega-protocol-lab[data-omega-infected-layout="true"]{
+ grid-template-rows:auto auto minmax(0,1fr) auto;
+}
 .omega-infected-review-bar{
  display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;
  padding:5px 10px;background:#352848;color:#f2e9ff;font-size:11px;
