@@ -800,3 +800,9 @@
 - 이번 실행 환경에는 이전 작업 PC의 `outputs/omega-art`가 없고, 문서에 기록된 `g5j-wide-preview-and-evidence.zip`, `g5j-evidence-v2.zip`, `g5i-alignment-studies.zip`의 정확한 이름으로 파일 보관함을 검색했으나 찾지 못했다. 로컬 Git 체크아웃도 없었고 저장소 복제는 인증 정보 부재로 실패했다. GitHub 커넥터로 PR과 인계 문서는 읽을 수 있다.
 - 따라서 기존 12개 후보의 실제 픽셀·추정 앵커를 확인하거나 수정하지 못했고, 게임 실행·신규 테스트·원화 승인도 수행하지 않았다. 파일명만으로 후보를 재구성하거나 이전 결과를 이번 검증으로 보고하지 않는다.
 - 다음 세션은 이전 작업 PC의 12개 640×512 WebP와 `g5j-anchors.json` 및 원본 시트·정렬 자료를 복구하고 PR #265의 현재 HEAD 체크아웃을 확보한 뒤 §42의 비례·발·총구 정렬과 4화면 게임 검증을 계속한다. 감염체 모션, 160/320 승인 및 Android 실기기 검증은 미완. PR #235 Draft, main 병합 및 Production 배포 보류.
+
+
+## 44. G5j 브라우저 검증 스크립트 경로 수정 (2026-11-13)
+
+- `scripts/qa-omega-g5j-wide-frames-browser.mjs`의 특정 Windows 사용자 PC 절대 경로 import를 저장소의 다른 브라우저 검증 스크립트와 동일한 `playwright-core` 패키지 import로 변경했다. Node 문법 검사 통과. 실행 환경에 playwright-core와 Chrome을 준비해야 하며, 이 변경은 게임 코드나 원화가 아니다.
+- 이번 세션에도 §43의 12개 후보 WebP와 앵커 파일은 확보되지 않았다. 실제 게임 브라우저 테스트, 캐릭터 정렬 및 원화 승인은 수행하지 못했다. 다음 단계와 main/Production 보류는 §43과 동일하다.
