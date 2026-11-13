@@ -419,6 +419,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
  const [visualAudit,setVisualAudit]=useState<'aira'|'infected'|null>(null);
+ const visualAuditInputBlock=useRef(false);
+ const closeVisualAudit=()=>{visualAuditInputBlock.current=false;setVisualAudit(null);};
  const infectedEpoch=useRef(0);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
@@ -549,6 +551,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  },[g5dActualReview]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
+   if(visualAuditInputBlock.current)return;
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
@@ -562,6 +565,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    }
   };
   const onKeyUp=(e:KeyboardEvent)=>{
+   if(visualAuditInputBlock.current)return;
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
@@ -775,6 +779,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const openVisualAudit=(mode:'aira'|'infected')=>{
   // The artwork overlay is intentionally a paused-only visual session.
   // Never resume automatically; the player chooses when to resume.
+  visualAuditInputBlock.current=true;
   if(session.run.phase==='battle'&&!paused){
    session.pause();setPaused(true);setSnapshot(session.snapshot);
   }
@@ -905,7 +910,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     </div>}
    </aside>}
   {visualAudit&&visualFrames.length>0&&<OmegaCandidateArtAudit mode={visualAudit}
-   cards={visualFrames} onClose={()=>setVisualAudit(null)}/>}
+   cards={visualFrames} onClose={closeVisualAudit}/>}
   <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div ref={arenaRef} className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-qa-mode={combatProbe?.mode}
