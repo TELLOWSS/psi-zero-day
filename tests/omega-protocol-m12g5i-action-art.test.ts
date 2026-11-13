@@ -4,7 +4,7 @@ import {
  omegaG5iLabRequested,omegaG5iFileSelectionValid,
  omegaG5iSourceHashesValid,omegaG5iGeometryAudit,OmegaG5iLocalActionArtPreview,
  omegaG5iInspectPixelAlpha,
- omegaWideManifest,omegaWideAlphaValid,omegaWidePlacement,
+ omegaWideManifest,omegaWideAlphaValid,omegaWidePlacement,omegaWideNativeFrame,
 } from '../src/ui/omega-protocol-m12g5i-action-art';
 import {OMEGA_G5D_ACTUAL_E_WALK} from '../src/ui/omega-protocol-m12g5d-actual-source';
 import {OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from '../src/ui/omega-protocol-art-slot';
@@ -71,6 +71,13 @@ describe('M12-G5i independently supplied E FIRE / DASH / HIT art candidate revie
  it('maps the supplied foot to the world origin and muzzle relative to it',()=>{
   const p=omegaWidePlacement({file:'frame',sha256:'0'.repeat(64),foot:{x:320,y:480},muzzle:{x:460,y:200}},128);
   expect(p).toEqual({left:-80,top:-120,width:160,height:128,muzzleX:35,muzzleY:-70});
+ });
+ it('spans four poses within actual native action windows without extending them',()=>{
+  for(const [action,window] of [['fire',.09],['dash',.22],['hit',.15]] as const){
+   expect([0,.26,.51,.76].map(t=>omegaWideNativeFrame(action,t*window))).toEqual([0,1,2,3]);
+   expect(omegaWideNativeFrame(action,-1)).toBe(0);
+   expect(omegaWideNativeFrame(action,window*2)).toBe(3);
+  }
  });
  it('requires each action 4 different body-core silhouettes AND cross-action body changes',()=>{
   const independentShapes=Array.from({length:12},(_,i)=>imageSilhouette(i*12));

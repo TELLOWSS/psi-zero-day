@@ -141,6 +141,13 @@ export function omegaWidePlacement(frame:OmegaWideFrame,height:number){
  return {left:-frame.foot.x*scale,top:-frame.foot.y*scale,width:640*scale,height,
   muzzleX:(frame.muzzle.x-frame.foot.x)*scale,muzzleY:(frame.muzzle.y-frame.foot.y)*scale};
 }
+/** Presentation only: use the native visible action windows, not G5e's
+ * longer effect windows. No action state or gameplay timer is extended. */
+export function omegaWideNativeFrame(action:OmegaG5iAction,age:number):0|1|2|3{
+ const duration=action==='fire'?.09:action==='dash'?.22:.15;
+ const elapsed=Number.isFinite(age)?Math.max(0,age):0;
+ return Math.min(3,Math.floor(elapsed/duration*4)) as 0|1|2|3;
+}
 interface VerifiedAction{readonly image:HTMLImageElement;readonly url:string;readonly toeRow:number;readonly wide?:OmegaWideFrame}
 export class OmegaG5iLocalActionArtPreview {
  private sources:VerifiedAction[]=[];
@@ -243,7 +250,9 @@ export class OmegaG5iLocalActionArtPreview {
   const cue=omegaG5eCue(view,height);
   if(!cue||!isAction(cue.action))return false;
   const group=OMEGA_G5I_ACTIONS.indexOf(cue.action);
-  const source=this.sources[group*4+cue.frame];
+  const wide=this.sources[group*4]?.wide;
+  const frame=wide?omegaWideNativeFrame(cue.action,view.actionAge??0):cue.frame;
+  const source=this.sources[group*4+frame];
   if(!source)return false;
   if(source.wide){
    const p=omegaWidePlacement(source.wide,height);
@@ -251,7 +260,7 @@ export class OmegaG5iLocalActionArtPreview {
    if(cue.action==='fire'){
     ctx.fillStyle='rgba(230,180,255,.85)';ctx.beginPath();ctx.arc(p.muzzleX,p.muzzleY,Math.max(2,height*.035),0,Math.PI*2);ctx.fill();
    }
-   ctx.restore();this.counts[cue.action]++;this.frames[cue.action].add(cue.frame);return true;
+   ctx.restore();this.counts[cue.action]++;this.frames[cue.action].add(frame);return true;
   }
   // Native Watch actor (0,0) is the sole world-foot pivot. Source transparent
   // bottom margins must not lift painted boots above the collision floor.
