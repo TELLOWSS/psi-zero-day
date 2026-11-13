@@ -153,6 +153,7 @@ export interface OmegaG5iReviewCard {
  readonly imageUrl:string;
  readonly width:384|640;
  readonly height:512;
+ readonly toeRow:number;
  readonly wide:boolean;
  readonly foot?:Readonly<Anchor>;
  readonly muzzle?:Readonly<Anchor>;
@@ -192,7 +193,7 @@ export class OmegaG5iLocalActionArtPreview {
   if(!this.ready)return [];
   return this.sources.map((source,i)=>({
    file:OMEGA_G5I_FILE_NAMES[i]!,imageUrl:source.url,
-   width:source.wide?640:384,height:512,wide:Boolean(source.wide),
+   width:source.wide?640:384,height:512,toeRow:source.toeRow,wide:Boolean(source.wide),
    ...(source.wide?{foot:{...source.wide.foot},muzzle:{...source.wide.muzzle}}:{}),
    ...(source.alphaBounds?{alphaBounds:{...source.alphaBounds}}:{}),
   }));
