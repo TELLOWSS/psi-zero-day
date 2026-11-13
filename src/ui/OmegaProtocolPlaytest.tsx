@@ -29,7 +29,7 @@ import {omegaG5cLabRequested,omegaG5cReview,OMEGA_G5C_ART_POLICY} from './omega-
 import {omegaG5dLabRequested,omegaG5dImportRepoCandidates,OMEGA_G5D_ART_GATE} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5eLabRequested,OMEGA_G5E_ART_STATUS,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
-import {omegaG5iLabRequested,omegaG5iActionPreview,OMEGA_G5I_ART_GATE} from './omega-protocol-m12g5i-action-art';
+import {omegaG5iLabRequested,omegaG5iActionPreview,OMEGA_G5I_ART_GATE,type OmegaG5iReviewCard} from './omega-protocol-m12g5i-action-art';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -408,6 +408,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iStatus,setG5iStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [g5iFeedback,setG5iFeedback]=useState('새로 그린 동쪽 사격·대시·피격 원화 WebP 12개를 선택하세요.');
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
+ const [g5iReviewCards,setG5iReviewCards]=useState<readonly OmegaG5iReviewCard[]>([]);
  const g5iImportEpoch=useRef(0);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
@@ -471,11 +472,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
   const epoch=++g5iImportEpoch.current;
-  setG5iPreviewOn(false);setG5iStatus('loading');
+  setG5iPreviewOn(false);setG5iReviewCards([]);setG5iStatus('loading');
   setG5iFeedback('12개 후보 파일 SHA·알파 범위·몸체 포즈 차이 검사 중… 발 접지는 별도 시각 검수');
   try{
    const proof=await omegaG5iActionPreview.import(Array.from(files));
    if(epoch!==g5iImportEpoch.current)return;
+   setG5iReviewCards(omegaG5iActionPreview.reviewCards());
    setG5iStatus('ready');
    const score=Object.entries(proof.minCoreSilhouetteChange)
     .map(([action,value])=>action.toUpperCase()+' '+(value*100).toFixed(1)+'%').join(' / ');
@@ -489,7 +491,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importG5iWide=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
   const epoch=++g5iImportEpoch.current;
-  omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
+  omegaG5iActionPreview.dispose();setG5iReviewCards([]);setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
   try{
    const list=Array.from(files),docs=list.filter(f=>f.name==='g5j-anchors.json');
    if(docs.length!==1||list.length!==13||docs[0]!.size>100_000)throw Error('640×512 WebP 12개와 g5j-anchors.json을 함께 선택하세요');
@@ -497,6 +499,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(epoch!==g5iImportEpoch.current)return;
    await omegaG5iActionPreview.importWide(list.filter(f=>f!==docs[0]),manifest);
    if(epoch!==g5iImportEpoch.current)return;
+   setG5iReviewCards(omegaG5iActionPreview.reviewCards());
    setG5iStatus('ready');setG5iFeedback('와이드 12장 및 앵커 형식 확인 · 좌표 정확성과 작화는 시각 승인 전');
   }catch(error){if(epoch!==g5iImportEpoch.current)return;omegaG5iActionPreview.dispose();setG5iStatus('failed');setG5iFeedback(error instanceof Error?error.message:'앵커 검사 실패');}
  },[g5iArtLab]);
@@ -830,6 +833,30 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
       <span data-omega-g5i-feedback={g5iStatus} title={g5iFeedback}>{g5iFeedback}</span>
       <small>원본 파일은 이 브라우저 세션에서만 사용됩니다. 160원화·320마스크·독립 작화 승인 0.</small>
+      {g5iReviewCards.length===12&&<details className="omega-g5i-visual-review" data-omega-g5k-contact-sheet="session-only">
+       <summary>실제 후보 12장 펼쳐 보기 · 원본과 크기·부츠·총구 육안 비교</summary>
+       <p>좌표는 후보 JSON의 입력값이고, 외곽 수치는 픽셀 실루엣 측정입니다. 노란 점은 입력한 발 피벗, 청록 점은 총구 피벗이며 실제 발·총구 정합을 증명하지 않습니다.</p>
+       <div className="omega-g5i-review-grid">
+        <figure className="omega-g5i-review-original">
+         <div className="omega-g5i-review-picture"><img src="/assets/omega/g5d/aira-east-walk-0.webp" alt="기존 은백색 AIRA E 걷기 비교 원본" decoding="async"/></div>
+         <figcaption>기존 은백색 E 걷기 기준 원화 · 화풍 비교용</figcaption>
+        </figure>
+        {g5iReviewCards.map(card=><figure key={card.file} data-omega-g5k-file={card.file}>
+         <div className="omega-g5i-review-picture" style={{aspectRatio:card.wide?'640 / 512':'384 / 512'}}>
+          <img src={card.imageUrl} alt={card.file+' 실제 불러온 후보 원화'} decoding="async"/>
+          {card.foot&&<i className="omega-g5i-review-anchor omega-g5i-review-foot"
+           style={{left:(card.foot.x/640*100)+'%',top:(card.foot.y/512*100)+'%'}} title="입력한 발 피벗, 시각 검증 필요"/>}
+          {card.muzzle&&<i className="omega-g5i-review-anchor omega-g5i-review-muzzle"
+           style={{left:(card.muzzle.x/640*100)+'%',top:(card.muzzle.y/512*100)+'%'}} title="입력한 총구 피벗, 시각 검증 필요"/>}
+         </div>
+         <figcaption><strong>{card.file.replace('aira-east-','').replace('.webp','').toUpperCase()}</strong>
+          {card.alphaBounds&&<small>보이는 경계 X {card.alphaBounds.minX}–{card.alphaBounds.maxX} / Y {card.alphaBounds.minY}–{card.alphaBounds.maxY}</small>}
+          <small>{card.wide?'640×512 · 발·총구 위치 수동 검토':'384×512 · 원화 화풍 수동 검토'}</small>
+         </figcaption>
+        </figure>)}
+       </div>
+       <small>후보 검수 전용. 이 비교 화면은 원화 품질, 원본 인물 동일성, 상업 출시를 자동 승인하지 않습니다.</small>
+      </details>}
      </div>}
      {g5cArtReview&&<div className="omega-g5c-art-controls" data-omega-g5c-controls="true">
      {g5dActualReview?<button type="button" data-omega-g5d-load="true"
