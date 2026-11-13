@@ -917,9 +917,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <strong>ROUTE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
      </div>
      <div className="omega-protocol-hp">
-      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.run.maxHp}</span>
-      <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.run.maxHp} aria-valuenow={Math.max(0,Math.ceil(snapshot.playerHp))}>
-       <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.run.maxHp)))*100)+'%'}} />
+      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.playerMaxHp}</span>
+      <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.playerMaxHp} aria-valuenow={Math.max(0,Math.min(snapshot.playerMaxHp,Math.ceil(snapshot.playerHp)))}>
+       <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.playerMaxHp)))*100)+'%'}} />
       </div>
      </div>
      <div className="omega-protocol-threat"><small>THREATS</small><strong>{snapshot.enemiesAlive.toString().padStart(2,'0')}</strong></div>

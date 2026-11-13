@@ -49,6 +49,7 @@ export interface OmegaCombatSnapshot {
  readonly enemiesAlive:number;
  readonly enginePhase:string;
  readonly playerHp:number;
+ readonly playerMaxHp:number;
  readonly bossHp:number|null;
  readonly bossMaxHp:number|null;
  readonly playerX:number;
@@ -159,6 +160,7 @@ export class OmegaProtocolCombatSession {
    enemiesAlive:this.engine.state.hazards.filter(h=>h.hp>0).length,
    enginePhase:this.engine.state.phase,
    playerHp:this.engine.state.player.hp,
+   playerMaxHp:this.engine.state.player.maxHp,
    bossHp:liveBoss?Math.max(0,liveBoss.hp):null,
    bossMaxHp:liveBoss?Math.max(1,liveBoss.maxHp):null,
    playerX:this.engine.state.player.x,
