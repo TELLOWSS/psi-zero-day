@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {OMEGA_VISUAL_STAGE,omegaVisualAuditLayout,omegaVisualAuditMarker} from '../src/ui/omega-candidate-art-audit';
+import {OMEGA_VISUAL_STAGE,omegaVisualAuditLayout,omegaVisualAuditMarker,omegaVisualAuditGroupFrames,omegaVisualAuditNextFrame,OMEGA_VISUAL_AIRA_GROUPS,OMEGA_VISUAL_INFECTED_GROUPS} from '../src/ui/omega-candidate-art-audit';
 import {omegaWideVisibleBounds} from '../src/ui/omega-protocol-m12g5i-action-art';
 import {omegaInfectedVisibleBounds,OmegaInfectedCandidateReview} from '../src/ui/omega-infected-candidate-review';
 import {OmegaG5iLocalActionArtPreview} from '../src/ui/omega-protocol-m12g5i-action-art';
@@ -50,4 +50,28 @@ describe('M12-G5k session-only real-image visual comparison',()=>{
   expect(aira.evidence().humanArtworkSignoff).toBe(false);
   expect(infected.evidence().artApproved).toBe(false);
  });
+ it('shows exactly the authentic named 0-3 frames in numeric order for every action group',()=>{
+  const make=(file:string)=>({file,imageUrl:'blob:qa-metadata-only',width:640,height:512,referenceHeight:512,foot:{x:320,y:480}});
+  const allAira=OMEGA_VISUAL_AIRA_GROUPS.flatMap(group=>[3,1,0,2].map(i=>make('aira-east-'+group+'-'+i+'.webp')));
+  for(const group of OMEGA_VISUAL_AIRA_GROUPS)
+   expect(omegaVisualAuditGroupFrames(allAira,'aira',group).map(x=>x.file))
+    .toEqual([0,1,2,3].map(i=>'aira-east-'+group+'-'+i+'.webp'));
+  expect(omegaVisualAuditGroupFrames(allAira,'aira','walk')).toEqual([]);
+  expect(omegaVisualAuditGroupFrames(allAira.slice(1),'aira','fire')).toEqual([]);
+ });
+ it('rejects renamed or duplicate infected poses rather than inventing missing artwork',()=>{
+  const make=(file:string)=>({file,imageUrl:'blob:qa-metadata-only',width:640,height:512,referenceHeight:512,foot:{x:300,y:480}});
+  const all=OMEGA_VISUAL_INFECTED_GROUPS.flatMap(group=>[3,2,1,0].map(i=>make(group+'-'+i+'.webp')));
+  for(const group of OMEGA_VISUAL_INFECTED_GROUPS)
+   expect(omegaVisualAuditGroupFrames(all,'infected',group).map(x=>x.file))
+    .toEqual([0,1,2,3].map(i=>group+'-'+i+'.webp'));
+  const dup=all.map((row,i)=>i===1?{...row,file:'basic-0.webp'}:row);
+  expect(omegaVisualAuditGroupFrames(dup,'infected','basic')).toEqual([]);
+  expect(omegaVisualAuditGroupFrames(all,'infected','unknown')).toEqual([]);
+ });
+ it('manually moves through four poses without a timer, skipping or automatic approval',()=>{
+  expect([0,1,2,3].map(i=>omegaVisualAuditNextFrame(i,1))).toEqual([1,2,3,0]);
+  expect([0,1,2,3].map(i=>omegaVisualAuditNextFrame(i,-1))).toEqual([3,0,1,2]);
+ });
+
 });
