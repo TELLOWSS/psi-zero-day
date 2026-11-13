@@ -868,3 +868,10 @@
 - DEV 단독 sprinter를 실제 이동·공격 회복 상태에서 일시정지한 뒤 동일 세션에서 기존 후보 16장+기존 앵커, 동일 그림 16장+§49 시험 앵커를 차례로 선택해 Chrome 데스크톱 화면을 각각 촬영했다. 교체 전/후 및 촬영 후 telemetry에서 게임 시간 1.217초, sprinter recovery·좌표·HP 800이 동일하고 pageerror 0이었다. JSON의 후보 렌더 수는 일시정지 중에도 그리기 때문에 누적 증가하므로 동결된 게임 상태와 구분한다.
 - 양쪽 캡처에서는 일시정지 안내가 적을 가리지 않도록 브라우저에 임시 CSS를 주입해 해당 오버레이만 숨겼다. 원래 일시정지 화면도 별도 보존했고 게임 소스·AI·후보 그림은 수정하지 않았다. 파일 `outputs/omega-art/infected-motion-20261114/runner-anchor-same-state/original-anchor.png`, `trial-anchor.png`, `report.json`; 원래 안내가 보이는 별도 실험은 `runner-paused-synchronized/paused-with-overlay.png`. 이 비교는 기존 (344,539)과 시험 (315,520)의 표시 위치 차이를 동일 게임 상태에서 보여주지만, 작은 게임 내 크기와 손·발 높이 차이 때문에 어느 쪽이 최종 접지인지 증명하지 않는다.
 - 이번 검수는 데스크톱 1회이며 물리 Android·4화면·새 아트 승인 증거가 아니다. 다음: 손과 부츠를 동시에 설명하는 원화 수정/발 피벗 및 공중 자세 검수, basic·armored 반대 걸음, AIRA 정합. PR #235 Draft, main/Production 보류.
+
+## 53. 질주형 손·부츠 접지 이미지 재시도 (2026-11-14)
+
+- PR #265 선행 HEAD `ec9b2839729124b610260cbd1c09b949d77145a3` 확인 시 Actions 11개 및 Vercel Preview 성공, responsive-capture는 실행 중이었다.
+- §52의 runner-0 원본을 참조해 손끝과 양쪽 부츠를 같은 가상 지면에 맞추도록 AI 이미지 편집을 1회 시도했다. `outputs/omega-art/infected-motion-20261114/runner-ground-contact-attempt.png` 1312×1199, SHA-256 `4262ef3dc1661aad0de9b3bcd392f93a5ee74fd275b39d57adc3e4ea6ba1927a`. Chrome Canvas alpha 64 이상 바운딩 박스 x308..1077/y217..1033, 이미지 외곽 alpha64 이상 0. 육안상 손끝과 두 부츠 밑면이 비슷한 높이에 있으나 머리·몸체·장비가 함께 재생성되어 기존 걷기 프레임과 작화/비례 연속성은 검증되지 않았다.
+- 이 PNG는 기존 WebP 크기 및 공통 referenceHeight와 달라 미리보기의 16장에 넣지 않았고 게임 내 동작·발 피벗·4화면/실기기 검증도 수행하지 않았다. 경계 검사만으로 반투명 테두리나 품질을 승인할 수 없다. 원본과 시험 앵커 및 새 시안은 모두 AI 후보이며 기본 자산 또는 최종 승인 원화가 아니다.
+- 다음: 기존 runner 1~3과 인물·장비 크기 및 동작 연결을 확인하고 공통 축척/앵커를 별도 산정한 뒤 개발 전용 실게임에서 비교한다. basic·armored 반대 걸음, AIRA 정합과 Android 실기기/감독 승인 미완. PR #235 Draft, main/Production 보류.
