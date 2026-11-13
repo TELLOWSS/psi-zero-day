@@ -1261,3 +1261,31 @@
  .omega-art-audit-overlay{font-size:10px}
  .omega-art-audit-grid{grid-template-columns:repeat(auto-fit,minmax(370px,1fr))}
 }
+
+
+/* G5k: keep all G5i import/audit buttons reachable on four viewport sizes.
+   Scrolling is inside the review bar, not a new game Canvas grid row. */
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-silver-review-bar{max-height:124px;overflow:auto;overscroll-behavior:contain}
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-g5c-art-controls{display:flex;flex-wrap:wrap;gap:4px 8px}
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-g5c-art-controls button[data-omega-g5k-open]{white-space:normal;line-height:1.2}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-silver-review-bar{max-height:148px}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls{grid-column:1/-1;display:flex;flex-wrap:wrap}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls label{display:none}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls input[type=file]{flex:1 1 135px;min-width:0}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls button{flex:1 1 120px;min-width:0}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-silver-review-bar{max-height:74px;overflow:auto;flex-wrap:wrap;white-space:normal}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls{max-height:none}
+}
