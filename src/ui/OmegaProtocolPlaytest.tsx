@@ -408,6 +408,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iStatus,setG5iStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [g5iFeedback,setG5iFeedback]=useState('새로 그린 동쪽 사격·대시·피격 원화 WebP 12개를 선택하세요.');
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
+ const g5iImportEpoch=useRef(0);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
@@ -464,23 +465,40 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    lease?.revoke();
   };
  },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview,g5iArtLab]);
- useEffect(()=>()=>{omegaG5cReview.dispose();omegaG5iActionPreview.dispose();},[]);
+ useEffect(()=>()=>{g5iImportEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();},[]);
  useEffect(()=>{omegaG5eFx.reset();},[g5eNativeActionLab]);
  useEffect(()=>{omegaG5gNativePoseStudy.reset();},[g5gSourcePoseLab]);
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
+  const epoch=++g5iImportEpoch.current;
   setG5iPreviewOn(false);setG5iStatus('loading');
   setG5iFeedback('12개 후보 파일 SHA·알파 범위·몸체 포즈 차이 검사 중… 발 접지는 별도 시각 검수');
   try{
    const proof=await omegaG5iActionPreview.import(Array.from(files));
+   if(epoch!==g5iImportEpoch.current)return;
    setG5iStatus('ready');
    const score=Object.entries(proof.minCoreSilhouetteChange)
     .map(([action,value])=>action.toUpperCase()+' '+(value*100).toFixed(1)+'%').join(' / ');
    setG5iFeedback('12/12 후보 검증 · '+score+' · 독립 작화 여부는 사람 시각 승인 필요');
   }catch(error){
+   if(epoch!==g5iImportEpoch.current)return;
    omegaG5iActionPreview.dispose();setG5iStatus('failed');
    setG5iFeedback(error instanceof Error?error.message:'원화 후보 검증 실패');
   }
+ },[g5iArtLab]);
+ const importG5iWide=useCallback(async(files:FileList|null)=>{
+  if(!g5iArtLab||!files)return;
+  const epoch=++g5iImportEpoch.current;
+  omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
+  try{
+   const list=Array.from(files),docs=list.filter(f=>f.name==='g5j-anchors.json');
+   if(docs.length!==1||list.length!==13||docs[0]!.size>100_000)throw Error('640×512 WebP 12개와 g5j-anchors.json을 함께 선택하세요');
+   const manifest=JSON.parse(await docs[0]!.text());
+   if(epoch!==g5iImportEpoch.current)return;
+   await omegaG5iActionPreview.importWide(list.filter(f=>f!==docs[0]),manifest);
+   if(epoch!==g5iImportEpoch.current)return;
+   setG5iStatus('ready');setG5iFeedback('와이드 12장 및 앵커 형식 확인 · 좌표 정확성과 작화는 시각 승인 전');
+  }catch(error){if(epoch!==g5iImportEpoch.current)return;omegaG5iActionPreview.dispose();setG5iStatus('failed');setG5iFeedback(error instanceof Error?error.message:'앵커 검사 실패');}
  },[g5iArtLab]);
  const importG5cFiles=useCallback(async (files:FileList|null)=>{
   if(!g5cArtReview||!files)return;
@@ -793,7 +811,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?(g5iArtLab?'본인 선택 WebP 12장 무결성·몸체 자세 대조 후 네이티브 동작에 임시 적용 · 신규 독립 도색은 별도 육안 검증':g5hRealHitLab?'실제 감염체가 공격하여 플레이어 HP가 감소할 때만 HIT 표시 · 신규 상업 원화 승인 0':g5gSourcePoseLab?'SHA-256 고정 E 걷기 원본 4장 몸체 자세를 실제 전투 이벤트에 사용 · 신작 독립 원화 0':g5eNativeActionLab?'실제 엔진 이벤트의 원본 AIRA 사격·대시·피격 연출 · 160원화/320마스크 미승인':g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
+     ?(g5iArtLab?'로컬 후보 12장 검수 후 네이티브 동작에 임시 적용 · 와이드 앵커와 작화는 별도 육안 검증':g5hRealHitLab?'실제 감염체가 공격하여 플레이어 HP가 감소할 때만 HIT 표시 · 신규 상업 원화 승인 0':g5gSourcePoseLab?'SHA-256 고정 E 걷기 원본 4장 몸체 자세를 실제 전투 이벤트에 사용 · 신작 독립 원화 0':g5eNativeActionLab?'실제 엔진 이벤트의 원본 AIRA 사격·대시·피격 연출 · 160원화/320마스크 미승인':g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
@@ -802,6 +820,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <input id="omega-g5i-files" type="file" accept="image/webp,.webp" multiple
        aria-label="사격 대시 피격 각각 4장씩 총 12개 투명 원화 WebP 선택"
        onChange={e=>{void importG5iFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+      <label htmlFor="omega-g5i-wide-files">와이드 후보 12장과 앵커 JSON 선택</label>
+      <input id="omega-g5i-wide-files" type="file" accept=".webp,.json" multiple
+       onChange={e=>{void importG5iWide(e.currentTarget.files);e.currentTarget.value='';}} />
       <button type="button" data-omega-g5i-toggle="true"
        disabled={g5iStatus!=='ready'||silverPreviewStatus!=='ready'}
        onClick={()=>{const enabled=omegaG5iActionPreview.activate(!g5iPreviewOn);setG5iPreviewOn(enabled);}}>
