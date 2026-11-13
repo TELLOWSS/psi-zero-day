@@ -39,13 +39,43 @@ export function omegaInfectedPose(phase:OmegaZombieBrain['phase'],moved:boolean,
 export function omegaInfectedFacesLeft(brain:Pick<OmegaZombieBrain,'phase'|'lockedX'>,enemyX:number,targetX:number):boolean{
  return (brain.phase==='warning'||brain.phase==='charge')&&Math.abs(brain.lockedX)>.001?brain.lockedX<0:targetX<enemyX;
 }
-type Source={image:HTMLImageElement;url:string;meta:Frame};
+export interface OmegaInfectedReviewCard {
+ readonly file:string;readonly imageUrl:string;
+ readonly width:number;readonly height:number;readonly referenceHeight:number;
+ readonly foot:Readonly<{x:number;y:number}>;
+ readonly alphaBounds:Readonly<{minX:number;minY:number;maxX:number;maxY:number}>;
+}
+export function omegaInfectedVisibleBounds(pixels:Uint8ClampedArray,width:number,height:number):
+ Readonly<{minX:number;minY:number;maxX:number;maxY:number}>|null{
+ if(!Number.isInteger(width)||!Number.isInteger(height)||width<1||height<1||
+    pixels.length!==width*height*4)return null;
+ let minX=width,minY=height,maxX=-1,maxY=-1;
+ for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+  if(pixels[(y*width+x)*4+3]!<64)continue;
+  minX=Math.min(minX,x);minY=Math.min(minY,y);
+  maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);
+ }
+ return maxX<0?null:{minX,minY,maxX,maxY};
+}
+type Source={image:HTMLImageElement;url:string;meta:Frame;
+ bounds?:Readonly<{minX:number;minY:number;maxX:number;maxY:number}>};
 export class OmegaInfectedCandidateReview{
  private sources=new Map<string,Source>();private generation=0;private selected=false;
  private prior=new Map<string,{x:number;y:number;time:number;movingUntil:number}>();
  private draws:Record<OmegaZombieKind,number>={drifter:0,sprinter:0,armored:0,stalker:0};
  private poses:Record<OmegaZombieKind,Set<number>>={drifter:new Set(),sprinter:new Set(),armored:new Set(),stalker:new Set()};
  get ready(){return this.sources.size===16} get active(){return this.ready&&this.selected}
+ /** The source image URL is session-scoped; nothing uploads to a server.
+  * Foot points are manually supplied guesses, not certified ground contact. */
+ reviewCards():readonly OmegaInfectedReviewCard[]{
+  if(!this.ready)return [];
+  return OMEGA_INFECTED_FILES.map(file=>{
+   const source=this.sources.get(file)!;
+   return {file,imageUrl:source.url,width:source.image.naturalWidth,
+    height:source.image.naturalHeight,referenceHeight:source.meta.referenceHeight,
+    foot:{...source.meta.foot},alphaBounds:{...source.bounds!}};
+  });
+ }
  activate(on:boolean){this.selected=on&&this.ready;return this.selected}
  evidence(){return {draws:{...this.draws},poses:Object.fromEntries(Object.entries(this.poses).map(([k,v])=>[k,[...v].sort()])),artApproved:false};}
  dispose(){this.generation++;this.selected=false;for(const s of this.sources.values())URL.revokeObjectURL(s.url);this.sources.clear();this.prior.clear();this.draws={drifter:0,sprinter:0,armored:0,stalker:0};for(const s of Object.values(this.poses))s.clear();}
@@ -64,6 +94,7 @@ export class OmegaInfectedCandidateReview{
     const a=ctx.getImageData(0,0,w,h).data;let ink=0;
     for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(a[(y*w+x)*4+3]!>=64){if(x===0||y===0||x===w-1||y===h-1)throw Error('경계 잘림: '+meta.file);ink++;}
     if(ink<w*h*.02||ink>w*h*.7)throw Error('투명도 오류: '+meta.file);
+    tmp[tmp.length-1]!.bounds=omegaInfectedVisibleBounds(a,w,h)??undefined;
    }
    if(epoch!==this.generation)throw Error('검수 취소됨');for(const s of tmp)this.sources.set(s.meta.file,s);
   }catch(e){for(const s of tmp)URL.revokeObjectURL(s.url);throw e;}

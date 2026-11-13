@@ -148,7 +148,35 @@ export function omegaWideNativeFrame(action:OmegaG5iAction,age:number):0|1|2|3{
  const elapsed=Number.isFinite(age)?Math.max(0,age):0;
  return Math.min(3,Math.floor(elapsed/duration*4)) as 0|1|2|3;
 }
-interface VerifiedAction{readonly image:HTMLImageElement;readonly url:string;readonly toeRow:number;readonly wide?:OmegaWideFrame}
+export interface OmegaG5iReviewCard {
+ readonly file:string;
+ readonly imageUrl:string;
+ readonly width:384|640;
+ readonly height:512;
+ readonly toeRow:number;
+ readonly wide:boolean;
+ readonly foot?:Readonly<Anchor>;
+ readonly muzzle?:Readonly<Anchor>;
+ readonly alphaBounds?:Readonly<{minX:number;minY:number;maxX:number;maxY:number}>;
+}
+/** Bounding coordinates measure all visible pixels, including cape and hair;
+ * they are NOT proof of the foot or muzzle location. Human review is required. */
+export function omegaWideVisibleBounds(pixels:Uint8ClampedArray):
+ Readonly<{minX:number;minY:number;maxX:number;maxY:number}>|null{
+ if(pixels.length!==640*512*4)return null;
+ let minX=640,minY=512,maxX=-1,maxY=-1;
+ for(let y=0;y<512;y++)for(let x=0;x<640;x++){
+  if(pixels[(y*640+x)*4+3]!<64)continue;
+  minX=Math.min(minX,x);minY=Math.min(minY,y);
+  maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);
+ }
+ return maxX>=0?{minX,minY,maxX,maxY}:null;
+}
+interface VerifiedAction{
+ readonly image:HTMLImageElement;readonly url:string;
+ readonly toeRow:number;readonly wide?:OmegaWideFrame;
+ readonly alphaBounds?:Readonly<{minX:number;minY:number;maxX:number;maxY:number}>;
+}
 export class OmegaG5iLocalActionArtPreview {
  private sources:VerifiedAction[]=[];
  private proof:OmegaG5iArtProof|null=null;
@@ -159,6 +187,17 @@ export class OmegaG5iLocalActionArtPreview {
  get ready():boolean{return this.sources.length===12&&this.proof!==null;}
  get active():boolean{return this.selected&&this.ready;}
  get audit():OmegaG5iArtProof|null{return this.proof;}
+ /** Review-only links to decoded candidate images; valid in this session
+  * until dispose() or a new import. No source leaves the browser. */
+ reviewCards():readonly OmegaG5iReviewCard[]{
+  if(!this.ready)return [];
+  return this.sources.map((source,i)=>({
+   file:OMEGA_G5I_FILE_NAMES[i]!,imageUrl:source.url,
+   width:source.wide?640:384,height:512,toeRow:source.toeRow,wide:Boolean(source.wide),
+   ...(source.wide?{foot:{...source.wide.foot},muzzle:{...source.wide.muzzle}}:{}),
+   ...(source.alphaBounds?{alphaBounds:{...source.alphaBounds}}:{}),
+  }));
+ }
  evidence(){return {counts:{...this.counts},frames:{
   fire:[...this.frames.fire].sort(),dash:[...this.frames.dash].sort(),
   hit:[...this.frames.hit].sort(),
@@ -236,7 +275,11 @@ export class OmegaG5iLocalActionArtPreview {
     if(image.naturalWidth!==640||image.naturalHeight!==512)throw Error('640×512 필요: '+entry.file);
     const c=document.createElement('canvas');c.width=640;c.height=512;const ctx=c.getContext('2d',{willReadFrequently:true});
     if(!ctx)throw Error('Canvas 검사 불가');
-    ctx.drawImage(image,0,0);if(!omegaWideAlphaValid(ctx.getImageData(0,0,640,512).data))throw Error('투명도 또는 가장자리 잘림: '+entry.file);
+    ctx.drawImage(image,0,0);
+    const pixels=ctx.getImageData(0,0,640,512).data;
+    if(!omegaWideAlphaValid(pixels))throw Error('투명도 또는 가장자리 잘림: '+entry.file);
+    temporary[temporary.length-1]={image,url,toeRow:0,wide:entry,
+     alphaBounds:omegaWideVisibleBounds(pixels)??undefined};
    }
    if(!omegaG5iSourceHashesValid(hashes))throw Error('중복 또는 기존 걷기 원화');
    if(epoch!==this.generation)throw Error('검수 취소됨');
