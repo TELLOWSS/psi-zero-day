@@ -1,4 +1,4 @@
-import {chromium} from 'file:///C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs';import {writeFile,mkdir} from 'node:fs/promises';import {resolve} from 'node:path';
+import {chromium} from 'playwright-core';import {writeFile,mkdir} from 'node:fs/promises';import {resolve} from 'node:path';
 const dir=process.env.OMEGA_G5J_ASSET_DIR;if(!dir)throw Error('Set OMEGA_G5J_ASSET_DIR to the local unapproved candidate folder');
 const out=resolve(process.env.OMEGA_G5J_OUTPUT_DIR||'qa-omega-g5j');await mkdir(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',headless:true});const files=['fire','dash','hit'].flatMap(a=>[0,1,2,3].map(i=>`${dir}/aira-east-${a}-${i}.webp`)).concat(`${dir}/g5j-anchors.json`),rows=[];
