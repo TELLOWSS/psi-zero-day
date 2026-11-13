@@ -1,7 +1,15 @@
 import {describe,it,expect} from 'vitest';
-import {OMEGA_INFECTED_FILES,omegaInfectedLabRequested,omegaInfectedManifest,omegaInfectedPose,omegaInfectedFacesLeft,omegaInfectedIsWebP,OmegaInfectedCandidateReview} from '../src/ui/omega-infected-candidate-review';
+import {OMEGA_INFECTED_FILES,omegaInfectedLabRequested,omegaInfectedSoloKind,omegaInfectedManifest,omegaInfectedPose,omegaInfectedFacesLeft,omegaInfectedIsWebP,OmegaInfectedCandidateReview} from '../src/ui/omega-infected-candidate-review';
 
 describe('OMEGA infected candidate audition',()=>{
+ it('permits a solo native actor only in the explicit local art fixture',()=>{
+  const q='?omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI&omegaInfectedSolo=sprinter';
+  expect(omegaInfectedSoloKind(q,true)).toBe('sprinter');
+  expect(omegaInfectedSoloKind(q,false)).toBeNull();
+  expect(omegaInfectedSoloKind(q.replace('zombieAI','other'),true)).toBeNull();
+  expect(omegaInfectedSoloKind(q.replace('sprinter','unknown'),true)).toBeNull();
+  expect(omegaInfectedSoloKind(q.replace('omegaLab=1','omegaLab=0'),true)).toBeNull();
+ });
  it('is isolated behind development and explicit flags',()=>{
   expect(omegaInfectedLabRequested('?omegaLab=1&omegaInfectedArtLab=1',true)).toBe(true);
   expect(omegaInfectedLabRequested('?omegaLab=1&omegaInfectedArtLab=1',false)).toBe(false);

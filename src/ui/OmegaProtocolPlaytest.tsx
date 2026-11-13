@@ -13,7 +13,7 @@ import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-m
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
 import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
-import {omegaInfectedCandidateReview,omegaInfectedLabRequested} from './omega-infected-candidate-review';
+import {omegaInfectedCandidateReview,omegaInfectedLabRequested,omegaInfectedSoloKind} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
@@ -316,6 +316,8 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
    h.x=starts[i]!.x;h.y=starts[i]!.y;
    h.hp=25000;h.maxHp=25000;h.isStunned=0;
   });
+  const solo=omegaInfectedSoloKind(window.location.search,import.meta.env.DEV);
+  if(solo){const id=four.find(z=>z.kind===solo)?.id;state.hazards=state.hazards.filter(h=>h.id===id);}
   return session;
  }
  if(qa==='cartWarning'){

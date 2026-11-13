@@ -12,6 +12,12 @@ export function omegaInfectedLabRequested(query:string,dev:boolean):boolean{
  const q=new URLSearchParams(query);return dev&&q.get('omegaLab')==='1'&&q.get('omegaInfectedArtLab')==='1'&&
   !['omegaSilverPreview','omegaM12G4','omegaM12G5','omegaM12G5b','omegaM12G5c','omegaM12G5d','omegaM12G5e','omegaM12G5g','omegaM12G5h','omegaM12G5i','omegaG5VectorStudy'].some(k=>q.has(k));
 }
+/** A solo actor is available only in the explicit local zombie art fixture. */
+export function omegaInfectedSoloKind(query:string,dev:boolean):OmegaZombieKind|null{
+ const q=new URLSearchParams(query),kind=q.get('omegaInfectedSolo');
+ if(!omegaInfectedLabRequested(query,dev)||q.get('omegaQaState')!=='zombieAI')return null;
+ return kind==='drifter'||kind==='sprinter'||kind==='armored'||kind==='stalker'?kind:null;
+}
 interface Frame {file:string;sha256:string;foot:{x:number;y:number};referenceHeight:number}
 export function omegaInfectedManifest(value:unknown):Frame[]{
  if(!value||typeof value!=='object')throw Error('감염체 앵커 JSON 오류');

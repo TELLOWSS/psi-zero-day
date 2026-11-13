@@ -847,3 +847,10 @@
 - 기존 후보와 JSON을 보존하고 `runner-foot-anchor-trial`에 16개 WebP와 앵커 복사본을 만들었다. runner-0만 기존 손 부근 (344,539)에서 화면상 두 부츠 사이를 기준으로 추정한 (315,520)으로 바꾸었다. WebP SHA는 원본과 동일하다. `runner-anchor-comparison.html`은 두 앵커의 가상 지면 배치를 동일 원본으로 비교한다. 손이 부츠보다 아래에 있어 단일 기준점을 옮겨도 손과 부츠가 동시에 지면에 정확히 닿지는 않는다. 사람의 접지·그림 보정 및 승인 전용 시험이며 기존 후보를 대체하지 않는다. runner-2 공중 포즈 앵커는 변경하지 않았다.
 - 새 JSON과 실제 16장을 DEV 미리보기에서 Chromium PC/태블릿/모바일 세로·가로에 로드했다. 네 화면 모두 4종 실제 AI warning, 각 후보 0~3 호출, 실제 HP 789/800, OFF 후 원본 복귀와 후보 렌더 중지를 확인했고 pageerror 0. 이는 시험 앵커가 로드되고 기존 동작이 유지된 증거이며, 겹친 적들 사이에서 접지의 시각적 개선이나 애니메이션 품질을 입증하지 않는다. 보고서와 화면은 `outputs/omega-art/infected-motion-20261114/runner-foot-anchor-qa-ready/`. 첫 실행은 Vite 준비 전에 접근해 4화면 연결 거부로 실패했으며 `runner-foot-anchor-qa/`에 남겼고, 서버 준비 후 별도 경로에서 재실행해 통과했다.
 - 다음: 겹치지 않는 단독 적 캡처와 사람 기준 발·손 접지/공중 높이 검수, basic·armored 반대 보폭 제작 및 AIRA 정합. Android 실기기와 감독 승인 미완; PR #235 Draft, main/Production 보류.
+
+## 50. DEV 단독 감염체 검수 조건 (2026-11-14)
+
+- §49의 네 적 겹침을 줄이기 위해 `omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI&omegaInfectedSolo=sprinter`와 같이 DEV 세 조건 및 허용 종류 drifter/sprinter/armored/stalker가 모두 맞을 때 해당 native 적 1종만 남기는 fixture 옵션을 추가했다. 일반 게임과 기존 네 적 fixture의 상태는 변경하지 않는다. 단독 여부는 게임 판정이나 원화 승인과 무관하다.
+- 실제 Chrome 데스크톱에서 기존 앵커와 §49 시험 앵커를 각각 로드했다. 양쪽 모두 실제 telemetry에 sprinter 1개만 있었고 다른 감염체 후보 렌더 0, sprinter 후보 0/3 호출 및 실제 경고·공격·플레이어 피해 16을 관찰했다. 캡처 시점에 sprinter가 플레이어와 겹치고 일시정지 오버레이도 가려 발 접지 비교에는 사용할 수 없다. 이는 단독 필터와 실제 AI 실행 확인이지 시각 승인이나 단독 적의 분리된 화면 검증이 아니다. `outputs/omega-art/infected-motion-20261114/runner-solo-qa/`에 원본/시험 캡처 및 telemetry 보존.
+- 개발 모드·명시 옵션·fixture 및 잘못된 종류 차단 국소 Vitest 6/6, typecheck, 전체 2790 통과/1 skipped, build 통과. 실제 후보 그림·앵커는 저장소 자산이 아니며 새 4해상도 검증은 수행하지 않았다.
+- 다음: 실제 사용자 이동 또는 검수 화면 구성으로 단독 적과 플레이어가 겹치지 않도록 캡처하고, 자세별 접지 및 반대 보폭을 판단한다. 기본/장갑형 반대 걸음과 AIRA 정합, Android 실기기 및 감독 승인 미완. PR #235 Draft, main/Production 보류.
