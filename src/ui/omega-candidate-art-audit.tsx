@@ -84,6 +84,12 @@ export function OmegaCandidateArtAudit({
   data-omega-g5k-audit={mode}
   onKeyDown={e=>{
    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();onClose();}
+   else if(e.key==='Tab'){
+    const focusable=Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(e.shiftKey&&document.activeElement===first&&last){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last&&first){e.preventDefault();first.focus();}
+   }
    else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
     e.preventDefault();e.stopPropagation();advance(e.key==='ArrowLeft'?-1:1);
    }
