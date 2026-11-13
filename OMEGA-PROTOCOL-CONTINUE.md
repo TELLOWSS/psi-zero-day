@@ -861,3 +861,10 @@
 - §50 DEV 단독 sprinter fixture에 §49 부츠 기준 시험 JSON 및 기존 16개 WebP를 실제 로드하고 데스크톱 Chrome에서 일시정지 해제와 방향키 이동을 실행했다. 장거리 이동에서는 실제 0~3 후보 호출과 경고/돌진/추적을 기록했으나 시야 제한으로 적이 너무 어두웠다. 이동 시간을 줄여 같은 실제 전투에서 플레이어와 겹치지 않는 대기 후보 `runner-solo-near/frame-2.png`와 공격 예고 `frame-0.png`를 일시정지 가림막 없이 확보했다. pageerror 0; 이 근거리 실행에서 0/3 호출을 관찰했다. 현재 크기가 작아 손·발 접지의 정밀 판정이나 기준점 개선 확증에는 부족하고 기존 앵커와 같은 프레임에서의 정량 비교가 아니다.
 - 각 JSON telemetry는 스크린샷 직후 별도로 읽었기 때문에 움직이는 AI의 정확히 동일한 순간의 상태로 취급하면 안 된다. 4화면·Android 실기기 시험이 아닌 데스크톱 1화면이다. `outputs/omega-art/infected-motion-20261114/runner-solo-live-captures-20261114.zip`에 원본 화면과 기록, 시험 앵커 JSON 보존. 이미지 16장은 이전 로컬 폴더에 있으며 ZIP에 포함하지 않았다.
 - 다음: 검수 촬영에서 캔버스와 telemetry의 시간 정합을 확보하고 실제 게임 크기에서 발/손 및 공중 프레임을 비교한다. basic·armored 반대 보폭, AIRA 정합과 Android 실기기, 감독 승인 미완. PR #235 Draft, main/Production 보류.
+
+## 52. 동일 일시정지 상태 앵커 비교 (2026-11-14)
+
+- PR #265 선행 HEAD `f50e654d09124f5a80f81e5d3281cac45421db01` 확인 시 Actions 11개와 Vercel Preview 성공, responsive-capture는 실행 중이었다.
+- DEV 단독 sprinter를 실제 이동·공격 회복 상태에서 일시정지한 뒤 동일 세션에서 기존 후보 16장+기존 앵커, 동일 그림 16장+§49 시험 앵커를 차례로 선택해 Chrome 데스크톱 화면을 각각 촬영했다. 교체 전/후 및 촬영 후 telemetry에서 게임 시간 1.217초, sprinter recovery·좌표·HP 800이 동일하고 pageerror 0이었다. JSON의 후보 렌더 수는 일시정지 중에도 그리기 때문에 누적 증가하므로 동결된 게임 상태와 구분한다.
+- 양쪽 캡처에서는 일시정지 안내가 적을 가리지 않도록 브라우저에 임시 CSS를 주입해 해당 오버레이만 숨겼다. 원래 일시정지 화면도 별도 보존했고 게임 소스·AI·후보 그림은 수정하지 않았다. 파일 `outputs/omega-art/infected-motion-20261114/runner-anchor-same-state/original-anchor.png`, `trial-anchor.png`, `report.json`; 원래 안내가 보이는 별도 실험은 `runner-paused-synchronized/paused-with-overlay.png`. 이 비교는 기존 (344,539)과 시험 (315,520)의 표시 위치 차이를 동일 게임 상태에서 보여주지만, 작은 게임 내 크기와 손·발 높이 차이 때문에 어느 쪽이 최종 접지인지 증명하지 않는다.
+- 이번 검수는 데스크톱 1회이며 물리 Android·4화면·새 아트 승인 증거가 아니다. 다음: 손과 부츠를 동시에 설명하는 원화 수정/발 피벗 및 공중 자세 검수, basic·armored 반대 걸음, AIRA 정합. PR #235 Draft, main/Production 보류.
