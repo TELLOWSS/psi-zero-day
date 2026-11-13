@@ -892,3 +892,14 @@
 - alpha64 이상 바운딩 높이는 runner-0 409px, runner-1 499px, runner-2 518px, runner-3 487px이다. 구부린 자세·뻗은 팔과 탱크를 모두 포함하는 값이므로 신체 비례나 스케일 변화의 정량 판정으로 해석하지 않는다. runner-0 바운딩 최하단과 임시 앵커는 같은 y이며 다른 프레임도 최하단과 앵커 차이가 0~1px이다. 최하단이 손·발·잡음 중 무엇인지는 이 수치로 알 수 없고 공중 자세가 지면에 닿았음을 뜻하지 않는다.
 - 데스크톱 Chrome 실제 게임에서 §54 파일 16장과 앵커를 불러오고 단독 sprinter 및 사용자 방향키 이동을 녹화했다. 5.76초 WebM과 `runner-motion-native-video/report.json`: 실제 AI warning1/attack1 및 후보 0~3 호출, pageerror 0. 이는 실제 게임 영상이나 거리가 벌어지면 화면 시야 제한으로 적이 어둡고 작아, 발 미끄럼/공중 높이의 정밀 판정과 모든 자세의 개별 영상 검증은 미완이다. 녹화·HTML 모두 후보나 앵커의 감독 승인이 아니다.
 - 다음: 조명이 확보된 실제 상태에서 동작별 화면과 발 피벗을 추적하고, basic·armored 반대 보폭, AIRA 정합 및 Android 실기기 검증. PR #235 Draft, main/Production 보류.
+
+
+## 56. M12-G5k — 로컬 AIRA 12장·감염체 16장 지면 기준 비교 UI (2026-11-14)
+
+- **분기 기준:** PR #265 CODE b3f9d7d6b132e2dd7f764af799547a231ffbd355의 §55 기록을 읽고 QA 브랜치 qa/omega-m12g5k-integrated-visual-audit-20261114에서만 개발. PR #235 및 PR #265 원본 HEAD를 직접 변경하지 않았다. main·Vercel Production·유료 API 변경 없음.
+- **실제 CODED:** src/ui/omega-protocol-m12g5i-action-art.ts에 G5i 검증을 이미 통과한 세션 소스 12개의 Object URL·바운딩 박스·이미지 치수·입력 발/총구 피벗을 읽기 전용으로 제공. src/ui/omega-infected-candidate-review.ts도 동일하게 검증 통과 16개의 원본 후보 크기/알파 바운드/입력 foot/referenceHeight를 노출. 두 경로 모두 검증 전/실패 상태에서는 목록 0개, 파일은 서버나 사용자 계정에 저장하지 않는다.
+- **실제 CODED:** src/ui/omega-candidate-art-audit.tsx는 PC·모바일 공통 개발 전용 오버레이로 입력 발 피벗을 동일 화면 좌표(180,314), 동일 상대 기준높이(240 화면 픽셀)로 표시. 기존 AIRA G5d E WALK는 은백색 원본 계열 비교용 후보로 표시하며 (192,486)은 실제 발 검출이 아닌 근사 기준. 가상 지면/입력 발 피벗/입력 총구 피벗과 alpha≥64 픽셀 경계 수치를 노출. 이 숫자로 실제 부츠 접지·공중자세·캐릭터 비례·수작업 독립 도색을 승인하지 않는다.
+- **실제 CODED:** OmegaProtocolPlaytest.tsx의 DEV 전용 로컬 파일 선택 경로에 12장 원본·앵커 비교 및 16장 크기·접지 비교 버튼 추가. 파일 검증 성공 후에만 활성화. 비교 진입 시 기존 전투를 일시정지하고 이동 입력 초기화. 나올 때 자동 재개하지 않고 사용자 수동 재개. CSS는 fixed 오버레이여서 Canvas grid row를 변경하지 않는다. 기존 HP/피격/사격/해금/AI/저장/일반 WATCH 불변.
+- tests/omega-candidate-art-audit.test.ts: 다른 이미지 치수·피벗을 공통 지면에 매칭, 총구 좌표 변환, 잘못된 좌표 차단, 실제 픽셀 바운딩, 파일 미선택 fail-closed와 아트 승인 false를 테스트하도록 추가. core workflow 경로 포함.
+- **검증 게이트:** 코드·테스트·검수 UI GitHub 커밋은 작성되었으나, 기록 당시 최신 브랜치 CI 및 실 Chromium 네 해상도 결과는 미확인. 앞선 §55의 WebM과 실제 후보 WebP 28장·JSON은 별도의 작업 PC 로컬 자산이며 이 브랜치에 등록되지 않았다. 실제 이미지 품질/발·손 접지/스케일 튐은 이번 CODED만으로 해결되지 않았다.
+- **NEXT:** 현재 브랜치의 Draft PR을 PR #265 QA 개발 브랜치에만 열고 typecheck/Vitest/실제 Watch·Omega Chromium 회귀 확인. 이후 작업 PC의 AIRA WebP12+G5j 앵커, 감염체 WebP16+앵커를 DEV 화면에 넣어 디렉터가 부츠·손·총구·공중 높이/반대 보폭과 인물 크기 정합을 검수. 그 결과에 맞춰 기본·중장갑 반대 보폭을 다시 제작하고 질주형 지면 오류를 수정. 감염체 4종 상업급 모션, AIRA 전체 8방향/160원화/320마스크, Android 실기기 FPS, 실계정 Extreme50 및 감독 최종 시각 승인은 여전히 BLOCKED. PR #235 Draft, main 병합/운영 Production/유료 전환 금지.
