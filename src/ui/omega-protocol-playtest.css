@@ -1185,3 +1185,79 @@
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
  }
 }
+
+
+/* M12-G5k: review ONLY already-imported real WebPs; never create fake
+   animation/art, and never move the gameplay arena into an implicit row. */
+.omega-art-audit-overlay{
+ position:fixed;z-index:1200;inset:0;display:flex;flex-direction:column;
+ gap:10px;overflow:auto;overscroll-behavior:contain;box-sizing:border-box;
+ padding:clamp(9px,2vw,20px);color:#f1edf9;background:#090d1cf7;
+ font:400 12px/1.5 system-ui,sans-serif;
+}
+.omega-art-audit-header{
+ display:flex;justify-content:space-between;gap:12px;align-items:start;
+ position:sticky;top:-1px;background:#11192a;border:1px solid #4e5b72;
+ border-radius:12px;padding:10px 14px;z-index:2;
+}
+.omega-art-audit-header strong{font-size:17px;letter-spacing:.01em}
+.omega-art-audit-header p{margin:3px 0 0;max-width:810px;color:#c2d0e4;font-size:11px}
+.omega-art-audit-header button{
+ flex-shrink:0;border:1px solid #a7a4f0;border-radius:8px;
+ background:#433568;color:white;padding:7px 13px;cursor:pointer;
+}
+.omega-art-audit-legend{display:flex;flex-wrap:wrap;gap:5px 16px;color:#c8d7df}
+.omega-art-audit-grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));
+ gap:12px;align-items:start;
+}
+.omega-art-audit-card{
+ min-width:0;max-width:100%;margin:0;padding:8px;
+ border:1px solid #38465e;background:linear-gradient(155deg,#1d2839,#131a28);
+ border-radius:11px;overflow-x:auto;box-sizing:border-box;
+}
+.omega-art-audit-card figcaption{display:flex;flex-direction:column;gap:0;min-height:36px}
+.omega-art-audit-card figcaption strong{font-size:12px;overflow-wrap:anywhere}
+.omega-art-audit-card figcaption small{color:#b3c3d1;font-size:10px}
+.omega-art-audit-stage{
+ width:360px;min-width:360px;height:350px;position:relative;
+ border:1px solid #3c5166;border-radius:6px;overflow:hidden;
+ background-color:#152134;
+ background-image:linear-gradient(transparent 23px,#ffffff07 24px),
+  linear-gradient(90deg,transparent 23px,#ffffff07 24px);
+ background-size:24px 24px;
+}
+.omega-art-audit-stage img{position:absolute;object-fit:fill;max-width:none;max-height:none}
+.omega-art-audit-floor{
+ position:absolute;left:0;right:0;top:314px;border-top:1px dashed #f6bf65;
+ z-index:1;pointer-events:none;
+}
+.omega-art-audit-axis{
+ position:absolute;left:180px;top:0;bottom:0;border-left:1px dashed #b8d0e644;
+ z-index:1;pointer-events:none;
+}
+.omega-art-audit-foot{
+ position:absolute;left:175px;top:309px;width:10px;height:10px;
+ border:1px solid #351d00;background:#ffd24d;border-radius:50%;
+ z-index:2;pointer-events:none;
+}
+.omega-art-audit-muzzle{
+ position:absolute;width:9px;height:9px;border:1px solid #034547;
+ transform:translate(-50%,-50%);background:#4bfff3;border-radius:50%;
+ z-index:2;pointer-events:none;
+}
+.omega-art-audit-card>p{color:#d6d4ec;font-size:10px;margin:4px 0;min-height:15px}
+.omega-art-audit-overlay>footer{color:#b5c4d6;font-size:11px;padding-bottom:8px}
+@media(max-width:600px){
+ .omega-art-audit-overlay{padding:8px;gap:8px}
+ .omega-art-audit-header{gap:5px;align-items:stretch;flex-direction:column}
+ .omega-art-audit-header strong{font-size:13px}
+ .omega-art-audit-header p{font-size:10px}
+ .omega-art-audit-header button{align-self:flex-end;font-size:11px;padding:5px 9px}
+ .omega-art-audit-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-art-audit-header{flex-direction:row}
+ .omega-art-audit-overlay{font-size:10px}
+ .omega-art-audit-grid{grid-template-columns:repeat(auto-fit,minmax(370px,1fr))}
+}
