@@ -3,6 +3,7 @@ import {
  OMEGA_G5I_ACTIONS,OMEGA_G5I_FILE_NAMES,OMEGA_G5I_ART_GATE,
  omegaG5iLabRequested,omegaG5iFileSelectionValid,
  omegaG5iSourceHashesValid,omegaG5iGeometryAudit,OmegaG5iLocalActionArtPreview,
+ omegaG5iInspectPixelAlpha,
 } from '../src/ui/omega-protocol-m12g5i-action-art';
 import {OMEGA_G5D_ACTUAL_E_WALK} from '../src/ui/omega-protocol-m12g5d-actual-source';
 import {OMEGA_PROTOCOL_APPROVED_ART,OMEGA_PROTOCOL_BINARY_AUDIT_PASSED} from '../src/ui/omega-protocol-art-slot';
@@ -43,6 +44,12 @@ describe('M12-G5i independently supplied E FIRE / DASH / HIT art candidate revie
   expect(omegaG5iSourceHashesValid(hashes.map(()=>hashes[0]!))).toBe(false);
   expect(omegaG5iSourceHashesValid([OMEGA_G5D_ACTUAL_E_WALK[0]!.sha256,...hashes.slice(1)])).toBe(false);
   expect(omegaG5iSourceHashesValid([...hashes.slice(0,11),'NOT_A_HASH'])).toBe(false);
+ });
+ it('reports measured alpha bounds for a low pose without calling them verified feet',()=>{
+  const pixels=new Uint8ClampedArray(384*512*4);
+  for(let y=175;y<495;y++)for(let x=50;x<330;x++)pixels[(y*384+x)*4+3]=255;
+  expect(()=>omegaG5iInspectPixelAlpha(pixels)).toThrow(/상단 175, 하단 494, 높이 320px/);
+  expect(()=>omegaG5iInspectPixelAlpha(new Uint8ClampedArray(4))).toThrow(/384x512/);
  });
  it('requires each action 4 different body-core silhouettes AND cross-action body changes',()=>{
   const independentShapes=Array.from({length:12},(_,i)=>imageSilhouette(i*12));

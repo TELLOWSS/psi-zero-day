@@ -470,7 +470,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
   setG5iPreviewOn(false);setG5iStatus('loading');
-  setG5iFeedback('12개 원본 파일 SHA·투명도·발 접지·몸체 포즈 차이 검사 중…');
+  setG5iFeedback('12개 후보 파일 SHA·알파 범위·몸체 포즈 차이 검사 중… 발 접지는 별도 시각 검수');
   try{
    const proof=await omegaG5iActionPreview.import(Array.from(files));
    setG5iStatus('ready');

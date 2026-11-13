@@ -85,7 +85,7 @@ export function omegaG5iGeometryAudit(pixels:readonly Uint8ClampedArray[]):
   crossAction.every(x=>x>=.10);
  return {minimumPerAction,crossAction,candidateGeometryEligible};
 }
-function inspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:number;toeRow:number}>{
+export function omegaG5iInspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:number;toeRow:number}>{
  if(pixels.length!==384*512*4)throw Error('G5i requires decoded RGBA 384x512');
  let opaque=0,minY=512,maxY=-1;
  for(let p=0;p<384*512;p++){
@@ -95,8 +95,11 @@ function inspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:nu
   minY=Math.min(minY,y);maxY=Math.max(maxY,y);
  }
  const opaqueFraction=opaque/(384*512);
+ const height=maxY-minY+1;
  if(opaqueFraction<.12||opaqueFraction>.70||minY>110||maxY<455||
-    maxY-minY<345)throw Error('G5i alpha silhouette / ground-contact check failed');
+    maxY-minY<345)throw Error(
+     `알파 실루엣 기준 미달 (불투명 ${(opaqueFraction*100).toFixed(1)}%, 상단 ${minY}, 하단 ${maxY}, 높이 ${height}px). 낮은 자세·발 위치는 별도 시각 검수가 필요합니다.`);
+ // This is the last opaque pixel, not proof that it belongs to a boot.
  return {opaqueFraction,toeRow:maxY};
 }
 function rgba(image:HTMLImageElement):Uint8ClampedArray{
@@ -156,7 +159,10 @@ export class OmegaG5iLocalActionArtPreview {
     await image.decode();
     if(image.naturalWidth!==384||image.naturalHeight!==512)
      throw Error('Expected 384×512 transparent authored frame: '+name);
-    const pixels=rgba(image),quality=inspectPixelAlpha(pixels);
+    const pixels=rgba(image);
+    let quality:ReturnType<typeof omegaG5iInspectPixelAlpha>;
+    try{quality=omegaG5iInspectPixelAlpha(pixels);}
+    catch(error){throw Error(name+': '+(error instanceof Error?error.message:'알파 검사 실패'));}
     temporary[temporary.length-1]={image,url,toeRow:quality.toeRow};
     proofs.push({file:name,sha256:hash,width:384,height:512,
      toeRow:quality.toeRow,opaqueFraction:quality.opaqueFraction});
