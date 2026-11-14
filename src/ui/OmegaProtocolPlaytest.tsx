@@ -43,6 +43,15 @@ import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega
 import {omegaAdvanceDashEchoes,drawOmegaDashEnergy,drawOmegaGroundedSplash,type OmegaDashEcho} from './omega-protocol-dash-visuals';
 import './omega-protocol-playtest.css';
 
+/** Preview HUD symbols communicate the real controls; weapon art remains separate. */
+function OmegaActionIcon({kind}:{kind:'blade'|'dash'|'ultimate'|'interact'}){
+ return <svg className="omega-protocol-action-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+  {kind==='blade'&&<><path d="M22.7 3.4 27.8 2l-1.4 5.1-13 13-3.7-3.7 13-13Z"/><path d="m8.1 14.8 9.1 9.1M10.4 20.9 4.1 27.2m-.6-4.1 5.4 5.4"/></>}
+  {kind==='dash'&&<><path d="M4 12h12M2.5 17H13M6 22h8M16 10l9 6-9 6M25 16H10"/></>}
+  {kind==='ultimate'&&<><path d="m16 2 3.2 9.8L29 15l-9.8 3.2L16 28l-3.2-9.8L3 15l9.8-3.2L16 2Z"/><circle cx="16" cy="15" r="2"/></>}
+  {kind==='interact'&&<><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="2.5"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4M6.8 6.8l2.8 2.8m12.8 12.8 2.8 2.8m0-18.4-2.8 2.8M9.6 22.4l-2.8 2.8"/></>}
+ </svg>;
+}
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
 const validKeys=new Set<string>(keys);
 // Explicit fail-closed sprite slot: binaries from PR #234 are not yet approved
@@ -1053,27 +1062,28 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
      <div className="omega-protocol-action-pad">
+      {scenePreview&&<div className="omega-protocol-auto-fire" aria-label="총기 자동 사격"><span aria-hidden="true">●</span> 총기 자동 사격</div>}
       <button type="button" className="omega-protocol-action omega-protocol-blade"
        onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
        aria-label="공진 검격 · F 키 · 안전모 감염 좀비 및 기계형 적 3단 연속 공격">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
+       {scenePreview?<OmegaActionIcon kind="blade"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span>}<span>검격</span>
        <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s': 'READY'}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
        disabled={snapshot.run.phase!=='battle'||paused||snapshot.enemiesAlive>0}
        aria-label="현장 상호작용 E">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">E</span><span>조작</span>
+       {scenePreview?<OmegaActionIcon kind="interact"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">E</span>}<span>조작</span>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
        aria-label="회피 · 스페이스 또는 시프트">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
+       {scenePreview?<OmegaActionIcon kind="dash"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">↗</span>}<span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
        aria-label={'궁극기 · 충전 '+Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))+'퍼센트'}>
-       <span className="omega-protocol-action-glyph" aria-hidden="true">✦</span><span>궁극기</span>
+       {scenePreview?<OmegaActionIcon kind="ultimate"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">✦</span>}<span>궁극기</span>
        <small>{Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))}%</small>
       </button>
      </div>
