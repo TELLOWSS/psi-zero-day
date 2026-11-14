@@ -95,19 +95,44 @@ for(const [name,width,height,mobile] of [
     await page.locator(mode==='aira'
      ?'[data-omega-g5i-toggle="true"]':'[data-omega-infected-toggle="true"]').click();
     await page.getByRole('button',{name:'계속하기'}).click();
-    native=await (await page.waitForFunction(async selectedMode=>{
-     if(selectedMode==='aira'){
-      const {omegaG5iActionPreview}=await import('/src/ui/omega-protocol-m12g5i-action-art.ts');
-      const e=omegaG5iActionPreview.evidence();
-      return omegaG5iActionPreview.active&&e.counts.fire>0
-       ?{mode:selectedMode,active:true,draws:e.counts.fire,frames:e.frames.fire}:false;
-     }
-     const {omegaInfectedCandidateReview}=await import('/src/ui/omega-infected-candidate-review.ts');
-     const e=omegaInfectedCandidateReview.evidence();
-     const count=Object.values(e.draws).reduce((x,y)=>x+y,0);
-     return omegaInfectedCandidateReview.active&&count>0
-      ?{mode:selectedMode,active:true,draws:count,poses:e.poses}:false;
-    },mode,{timeout:20000,polling:100})).jsonValue();
+    // Import the Vite singleton ONCE; a promise-returning waitForFunction
+    // may resolve on its Promise object before the false frame result is
+    // unwrapped, producing a false-positive QA_PASS with native=false.
+    await page.evaluate(async selectedMode=>{
+     window.__omegaG5nActiveSource=selectedMode==='aira'
+      ?(await import('/src/ui/omega-protocol-m12g5i-action-art.ts')).omegaG5iActionPreview
+      :(await import('/src/ui/omega-infected-candidate-review.ts')).omegaInfectedCandidateReview;
+    },mode);
+    if(mode==='aira'){
+     // Drive authentic game controls. Gun targets are not initially in firing
+     // range: actual player movement/dash must precede verified action paint.
+     await page.keyboard.down('ArrowRight');
+     await page.waitForTimeout(180);
+     await page.keyboard.press('Shift');
+     await page.waitForTimeout(500);
+     await page.keyboard.up('ArrowRight');
+    }
+    try{
+     native=await (await page.waitForFunction(selectedMode=>{
+      const source=window.__omegaG5nActiveSource;
+      if(!source?.active)return false;
+      if(selectedMode==='aira'){
+       const e=source.evidence();
+       const count=e.counts.fire+e.counts.dash+e.counts.hit;
+       return count>0?{mode:selectedMode,active:true,draws:count,
+        counts:e.counts,frames:e.frames}:false;
+      }
+      const e=source.evidence();
+      const count=Object.values(e.draws).reduce((x,y)=>x+y,0);
+      return count>0?{mode:selectedMode,active:true,draws:count,poses:e.poses}:false;
+     },mode,{timeout:16000,polling:100})).jsonValue();
+    }catch(error){
+     const evidence=await page.evaluate(()=>window.__omegaG5nActiveSource?.evidence?.());
+     throw Error('Actual native candidate source did not render: '+
+      JSON.stringify({mode,evidence,reason:String(error)}));
+    }
+    if(!native||native.active!==true||native.draws<=0)
+     throw Error('Native original-source evidence must be positive: '+JSON.stringify(native));
     await page.screenshot({path:dir+'/m12g5n-REAL-NATIVE-ACTIVE-'+mode+'-'+name+'.png',
       fullPage:false,animations:'disabled'});
     if(errors.length)throw Error('Native candidate art caused a browser error '+JSON.stringify(errors));
