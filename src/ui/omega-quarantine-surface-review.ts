@@ -36,15 +36,18 @@ export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFi
  ctx.drawImage(cachedHorizon.canvas,-120+shift.dx,0);ctx.restore();return true;
 }
 let texture:HTMLImageElement|undefined;
-export function drawOmegaSurfaceReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan):boolean {
+let detailedTexture:HTMLImageElement|undefined;
+export function drawOmegaSurfaceReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,detailed=false):boolean {
  if(plan.sector!==1||typeof Image==='undefined')return false;
- if(!texture){texture=new Image();texture.decoding='async';texture.src=OMEGA_SURFACE_REVIEW_ASSET;}
- if(!texture.complete||!texture.naturalWidth||!texture.naturalHeight)return false;
- ctx.save();ctx.globalAlpha=.55;
+ if(detailed&&!detailedTexture){detailedTexture=new Image();detailedTexture.decoding='async';detailedTexture.src='/assets/omega/scene-art-preview/concrete-detail-v2.webp';}
+ if(!detailed&&!texture){texture=new Image();texture.decoding='async';texture.src=OMEGA_SURFACE_REVIEW_ASSET;}
+ const selected=detailed?detailedTexture:texture;
+ if(!selected?.complete||!selected.naturalWidth||!selected.naturalHeight)return false;
+ ctx.save();ctx.globalAlpha=detailed ? .82 : .55;
  // Fixed world coordinates make the concrete move with the actual field.
  // It remains below combat warnings, characters and all native solid props.
  ctx.beginPath();ctx.rect(0,0,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);ctx.clip();
  for(let y=0;y<OMEGA_FIELD_HEIGHT;y+=700)for(let x=0;x<OMEGA_FIELD_WIDTH;x+=700)
-  ctx.drawImage(texture,x,y,700,700);
+  ctx.drawImage(selected,x,y,700,700);
  ctx.restore();return true;
 }

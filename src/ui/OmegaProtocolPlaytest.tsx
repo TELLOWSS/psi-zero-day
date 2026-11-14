@@ -9,6 +9,7 @@ import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
+import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -61,14 +62,15 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height,cameraZoom);
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
+ const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
-  if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'))
-   drawOmegaSurfaceReview(ctx,field.plan);
+  if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
+   drawOmegaSurfaceReview(ctx,field.plan,scenePreview);
   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
   drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
@@ -76,7 +78,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   // hero-following quarter-view camera; restore leaves native physics intact.
   drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
-  if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'))
+  if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
    drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom);
   drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
@@ -112,7 +114,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
    {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15,
     zombie:session.zombieBrain(h.id)??undefined,
-    infectedReview:typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'),targetX:p.x});
+    infectedReview:scenePreview||(typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')),targetX:p.x});
   ctx.restore();
  };
  const renderHero=()=>{
@@ -154,7 +156,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting:Boolean(renderAction.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
- if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
+ if(!(scenePreview&&drawOmegaSceneArt(ctx,artView))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)&&
     !drawOmegaAiraV2Candidate(ctx,artView,userApprovedAiraV2)){
   drawOmegaProtocolActor(ctx,{...actorView,
@@ -419,10 +421,29 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
  const g5iImportEpoch=useRef(0);
  const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
  const infectedEpoch=useRef(0);
+ useEffect(()=>{
+  if(!scenePreview)return;
+  let mounted=true;
+  const root='/assets/omega/scene-art-preview/infected/';
+  (async()=>{
+   const response=await fetch(root+'infected-anchors.json');
+   if(!response.ok)throw Error('감염체 앵커를 불러오지 못했습니다');
+   const manifest=await response.json() as {frames:{file:string}[]};
+   const files=await Promise.all(manifest.frames.map(async row=>{
+    const result=await fetch(root+row.file);if(!result.ok)throw Error('감염체 원화 누락: '+row.file);
+    return new File([await result.blob()],row.file,{type:'image/webp'});
+   }));
+   if(!mounted)return;
+   await omegaInfectedCandidateReview.import(files,manifest);
+   if(mounted){omegaInfectedCandidateReview.activate(true);setInfectedStatus('ready');}
+  })().catch(error=>{if(mounted){setInfectedStatus('failed');console.warn('Scene art preview failed',error);}});
+  return ()=>{mounted=false;};
+ },[scenePreview]);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
@@ -675,7 +696,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      arenaRef.current.dataset.omegaG5iLiveActionFrames=JSON.stringify(e.frames);
      arenaRef.current.dataset.omegaG5iLiveActionCounts=JSON.stringify(e.counts);
     }
-   if(infectedLab&&arenaRef.current)arenaRef.current.dataset.omegaInfectedEvidence=JSON.stringify(omegaInfectedCandidateReview.evidence());
+   if((infectedLab||scenePreview)&&arenaRef.current)arenaRef.current.dataset.omegaInfectedEvidence=JSON.stringify(omegaInfectedCandidateReview.evidence());
     fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
@@ -820,8 +841,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
      title="사용자가 채택한 AIRA V2 · 8방향 후보 원화 적용">
-     <img src="/assets/omega/aira-v2/portrait.webp"
-      onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}
+     <img src={scenePreview?'/assets/omega/scene-art-preview/portrait.webp':'/assets/omega/aira-v2/portrait.webp'}
+      onError={event=>{event.currentTarget.onerror=null;if(!scenePreview)event.currentTarget.src='/assets/reignition/veteran-return.webp';}}
       alt="AIRA V2 캐릭터 초상" width={56} height={56}
       decoding="async" draggable={false} />
      <span aria-hidden="true">Ω</span>
@@ -842,6 +863,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <span data-omega-infected-feedback={infectedStatus}>{infectedMessage}</span>
     <small>이동·공격은 실제 AI 상태이며, 이미지·앵커·동작은 승인 전입니다.</small>
    </aside>}
+  {scenePreview&&<aside className="omega-infected-review-bar" role="status">
+   <strong>AIRA·감염체·배경 통합 원화 시안 · 승인 전</strong>
+   <span>{infectedStatus==='ready'?'감염체 원화 16장 로드됨':infectedStatus==='failed'?'감염체 원화 로드 실패':'감염체 원화 로딩 중'}</span>
+   <small>4방향 걷기 및 왼쪽 전투 후보만 연결됨 · 나머지 동작과 발 접지 조정 필요</small>
+  </aside>}
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'

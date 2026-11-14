@@ -996,3 +996,12 @@
 - 로컬에서 실제 Vercel preview 환경값으로 빌드한 후 Chrome 1440×900, 1024×768, 390×844, 844×390에서 두 이미지 HTTP 200, 왼쪽 방향키 이동, 페이지 오류 0을 확인했다. F·Space 입력을 보냈으나 전투 효과·승패 진행 전체를 검증한 것은 아니다. 일반 진입에서는 검수 이미지 요청과 QA 화면이 0이었다. 별도 production 환경값 빌드에서 동일 검수 URL로 진입해도 QA 화면 및 이미지 요청 0을 확인했다. 결과 `outputs/omega-art/quarantine-playable-preview-20261114/report.json`, 스크린샷 같은 폴더. 모바일 크기는 실제 Android 기기가 아니다.
 - 정책 단위 테스트·typecheck·preview 환경 전체 빌드 통과. 화면은 배경 후보와 기존 임시 감염체의 스타일 차이가 크고 어두운 구간의 가독성, 실기기 성능, 15개 전장, 승인 원화 및 실제 플레이 전 과정을 추가 검증해야 한다. 선행 HEAD `ec70e2fc` Actions 12개와 Vercel preview READY, production은 `28dc1e1b` READY였다. 새 HEAD CI 및 Vercel 배포는 push 후 별도 확인. PR #235 Draft, main/Production 변경 없음.
 - 전체 회귀: `npm test` 2792 통과/1 skipped (499개 테스트 파일 중 498 통과/1 skipped).
+
+## 70. Director 지적 대응 — AIRA·감염체·배경 통합 검수 (2026-11-14)
+
+- Director가 §69에서 보여준 화면의 구 주인공, 도형 감염체, 단순 배경, 스티커 같은 움직임을 지적했다. §69의 링크는 배경만 선택하고 원화는 별도 로컬 수동 선택으로 남겨 두어 실제 기대와 달랐다. 이전 결과를 완성된 시각 구현으로 간주하지 않는다.
+- `?omegaLab=1&omegaSceneArt=1`의 브랜치/개발 검수 한정으로 은백색 AIRA 8방향 기준 후보, W/E/S/N 걷기 4프레임씩, W 사격·대시·피격 후보 및 감염체 4종×4 후보를 기존 전투 세션에 연결했다. W/E 이동 시 실제 충돌 보정 gait에 따라 각 4개 다른 이미지가 선택되며, 감염체는 실제 AI phase/movement에 따라 기존 후보를 사용한다. 원본 디렉터리에서 복사한 36개 주인공 WebP와 감염체 16개, 후보 해시·추정 앵커를 `public/assets/omega/scene-art-preview`와 메타데이터로 보존했다. 셀의 alpha64 바운딩 박스 기반 임시 중심/최하단은 발 의미를 보증하지 않는다. 이전 어두운 주인공 초상도 검수 화면에서는 은백색 후보에서 추출한 초상으로 교체했다.
+- 이미지 생성 도구로 더 세밀한 콘크리트 원본 `outputs/omega-art/quarantine-surface-20261114/concrete-detail-source-v2.png`를 만들고 768px WebP로 변환하여 1구역 바닥 시안에 적용했다. 실제 현장 모델이나 원화 최종본이 아니며 타일 경계/소품과의 조화는 추가 검수 필요하다. 원경은 §57 후보를 사용한다.
+- 로컬 dev Chrome 네 화면 크기의 실제 플레이에서 주인공 W/E 걷기 각 0~3이 모두 표시됐고 감염체 후보 4종 draw, 파일 요청 200, pageerror 0을 확인했다. QA fixture가 아닌 일반 검수 세션이며 `scene-integration-20261114/real-play-report.json`, 각 화면 PNG와 `scene-native-movement.webm` 보존. 별도 빌드 preview에서도 이미지 로드와 실제 이동을 확인했다. 영상은 시각 확인용 실게임 녹화다. 프레임 호출은 자연스러운 보행·발 접지·아트 정합 승인이나 Android 실기기 검증을 의미하지 않는다.
+- 특히 대각선 이동은 아직 정지 그림, 동쪽/앞/뒤 전투 포즈는 이번 통합에 미연결, 몸/머리·무기·보폭·피벗 불일치, 감염체 겹침 및 vector 지게차·장애물은 남아 있다. 원화 160/마스크 320 승인 0. 게임 동작과 스타일 정합을 재검수하고 부족한 방향/행동과 실사 구조물을 제작해야 한다. 기존 운영 기본 게임과 승인 게이트는 변경하지 않았다. 선행 497bb53d는 Vercel READY·GitHub Actions 12개 성공; production 28dc1e1b READY, PR #235 Draft.
+- 전체 회귀 2795 통과/1 skipped, typecheck·preview 빌드 및 마지막 변경 후 관련 단위 테스트 통과. 렌더링은 새 프레임이 디코딩되기 전 마지막 은백색 후보를 유지해 예전 캐릭터가 깜박이지 않도록 한다. 새 HEAD의 배포·CI 결과는 push 후 별도 확인.
