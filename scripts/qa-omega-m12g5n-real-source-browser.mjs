@@ -88,8 +88,32 @@ for(const [name,width,height,mobile] of [
    }));
    if(geometry.documentWidth>geometry.viewport+3||geometry.openReviewCount||errors.length)
     throw Error('Layout or client console failed '+JSON.stringify({geometry,errors}));
+   let native=null;
+   if(name==='desktop'){
+    // Actual native Canvas proof after deliberate activation; inspector DOM
+    // alone does not prove that the running battle ever painted candidate art.
+    await page.locator(mode==='aira'
+     ?'[data-omega-g5i-toggle="true"]':'[data-omega-infected-toggle="true"]').click();
+    await page.getByRole('button',{name:'계속하기'}).click();
+    native=await (await page.waitForFunction(async selectedMode=>{
+     if(selectedMode==='aira'){
+      const {omegaG5iActionPreview}=await import('/src/ui/omega-protocol-m12g5i-action-art.ts');
+      const e=omegaG5iActionPreview.evidence();
+      return omegaG5iActionPreview.active&&e.counts.fire>0
+       ?{mode:selectedMode,active:true,draws:e.counts.fire,frames:e.frames.fire}:false;
+     }
+     const {omegaInfectedCandidateReview}=await import('/src/ui/omega-infected-candidate-review.ts');
+     const e=omegaInfectedCandidateReview.evidence();
+     const count=Object.values(e.draws).reduce((x,y)=>x+y,0);
+     return omegaInfectedCandidateReview.active&&count>0
+      ?{mode:selectedMode,active:true,draws:count,poses:e.poses}:false;
+    },mode,{timeout:20000,polling:100})).jsonValue();
+    await page.screenshot({path:dir+'/m12g5n-REAL-NATIVE-ACTIVE-'+mode+'-'+name+'.png',
+      fullPage:false,animations:'disabled'});
+    if(errors.length)throw Error('Native candidate art caused a browser error '+JSON.stringify(errors));
+   }
    records.push({name,mode,width,height,pass:true,count:seen.length,files:seen,
-    proof,stillPaused:frozen,geometry,errors,artApproved:false});
+    proof,stillPaused:frozen,geometry,native,errors,artApproved:false});
    console.log('QA_PASS M12_G5N',mode,name,seen.length,'genuine files');
   }catch(error){
    failures++;records.push({name,mode,width,height,pass:false,error:String(error),errors});
