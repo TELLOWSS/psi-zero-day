@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {omegaSceneArtFrame,omegaSceneArtRequested,
- omegaSceneDiagonalFallback,omegaSceneActionFrameIndex} from '../src/ui/omega-scene-art-preview';
+ omegaSceneDiagonalFallback,omegaSceneActionFrameIndex,omegaSceneNativeFireHoldUntil} from '../src/ui/omega-scene-art-preview';
 import type {OmegaActorView} from '../src/ui/omega-protocol-actor-render';
 
 const view:OmegaActorView={facingX:-1,facingY:0,moving:true,time:1,dashing:false,shooting:false};
@@ -54,6 +54,19 @@ describe('M12-G5o integrated original scene-art preview / NEVER production appro
   expect(omegaSceneArtFrame({...view,facingX:1,gait,shooting:true,sceneAction:'walk'})).toBe('walk-E-0');
   expect(omegaSceneArtFrame({...view,facingX:-1,shooting:true,gait,sceneAction:'walk'})).toBe('walk-W-0');
   expect(omegaSceneArtFrame({...view,sceneAction:'fire',gait,shooting:false,actionAge:.14})).toBe('fire-W-3');
+ });
+ it('recoil follow-through comes from a REAL handheld launch, not fake shot cues',()=>{
+  const at=3;
+  const launched=omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'radio'}],at);
+  expect(launched).toBeCloseTo(3.09);
+  const carried=omegaSceneNativeFireHoldUntil(launched,[],at+.13);
+  expect(carried).toBeCloseTo(launched);
+  expect(omegaSceneActionFrameIndex('fire',at+.13-(carried-.09))).toBe(3);
+  expect(omegaSceneNativeFireHoldUntil(carried,[],at+.25)).toBe(0);
+  expect(omegaSceneNativeFireHoldUntil(0,[{phase:'impact',kind:'radio'}],at)).toBe(0);
+  expect(omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'drone'}],at)).toBe(0);
+  expect(omegaSceneNativeFireHoldUntil(carried,[],0)).toBe(0);
+  expect(omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'radio'}],NaN)).toBe(0);
  });
  it('action frames clamp malformed and out-of-bounds age rather than selecting missing files',()=>{
   for(const action of ['fire','dash','hit'] as const){
