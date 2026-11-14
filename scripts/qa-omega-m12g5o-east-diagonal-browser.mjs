@@ -102,8 +102,8 @@ for(const [name,width,height,mobile] of [
    dash:actionSet.filter(x=>x.startsWith('dash-E-'))};
   const requestedEast=combat.requested.filter(x=>/^(fire|dash)-E-[0-3]$/.test(x));
   const nativeHits=Number(await arena.getAttribute('data-omega-qa-gun-hits')||0);
-  if(observed.dash.length<1||observed.fire.length<1||nativeHits<1)
-   throw Error('Actual Watch E DASH and FIRE frames must render: '+
+  if(observed.dash.length<2||observed.fire.length!==4||nativeHits<1)
+   throw Error('Actual Watch E DASH >=2 and FIRE 0-3 ALL must render: '+
     JSON.stringify({observed,requestedEast,nativeAges:combat.nativeAges,nativeHits,samples:combat.states.slice(-6)}));
   // Source WebP decode is independently verified, not merely file naming.
   const decoded=await page.evaluate(async()=>{
