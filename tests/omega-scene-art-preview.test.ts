@@ -64,7 +64,7 @@ describe('M12-G5o integrated original scene-art preview / NEVER production appro
   expect(omegaSceneActionFrameIndex('fire',at+.13-(carried-.09))).toBe(3);
   expect(omegaSceneNativeFireHoldUntil(carried,[],at+.25)).toBe(0);
   expect(omegaSceneNativeFireHoldUntil(0,[{phase:'impact',kind:'radio'}],at)).toBe(0);
-  expect(omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'drone'}],at)).toBe(0);
+  expect(omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'drone_laser'}],at)).toBe(0);
   expect(omegaSceneNativeFireHoldUntil(carried,[],0)).toBe(0);
   expect(omegaSceneNativeFireHoldUntil(0,[{phase:'launch',kind:'radio'}],NaN)).toBe(0);
  });
