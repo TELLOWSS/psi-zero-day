@@ -42,7 +42,7 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
             sleep 1
           done
-          cat /tmp/omega-m12g5d2-vite.log
+          cat /tmp/omega-m12g5m-vite.log
           exit 1
       - name: Four-size authentic G5d manual walk review, SHA/keyboard/return/viewport QA
         env:
