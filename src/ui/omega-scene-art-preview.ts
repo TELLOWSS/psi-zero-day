@@ -102,8 +102,13 @@ function sceneAction(view:OmegaSceneArtView):'fire'|'dash'|'hit'|null {
 export function omegaSceneArtFrame(view:OmegaSceneArtView):string {
  const heading=omegaFieldHeading(view.facingX,view.facingY);
  const action=sceneAction(view);
- if(action&&(heading==='W'||heading==='E')){
-  return action+'-'+heading+'-'+omegaSceneActionFrameIndex(action,view.actionAge??0);
+ const battleSource=heading==='W'||heading==='E'?heading:diagonalWalk[heading];
+ // Native weapon aim may turn the body E→SE during a 90ms actual gunshot.
+ // Do not let the body turning diagonally replace a genuine FIRE/HIT/DASH
+ // reaction with a WALK sticker. Reuse an EXISTING side-action painting only
+ // while true diagonal action paintings are unapproved.
+ if(action&&battleSource){
+  return action+'-'+battleSource+'-'+omegaSceneActionFrameIndex(action,view.actionAge??0);
  }
  if(view.gait?.active){
   const source=diagonalWalk[heading]??heading;
