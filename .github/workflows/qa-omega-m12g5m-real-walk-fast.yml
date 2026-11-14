@@ -33,6 +33,12 @@ jobs:
         run: npm run predev
       - name: Install test-only driver without browser download
         run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Install Korean typography for the actual UI screenshots
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+          fc-match "Noto Sans CJK KR"
       - name: Launch dev-only game scene
         env:
           VITE_OMEGA_PROTOCOL_LAB: '1'
