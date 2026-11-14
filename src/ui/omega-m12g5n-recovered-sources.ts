@@ -1,5 +1,5 @@
 import {OMEGA_G5I_FILE_NAMES} from './omega-protocol-m12g5i-action-art';
-import {OMEGA_INFECTED_FILE_NAMES} from './omega-infected-candidate-review';
+import {OMEGA_INFECTED_FILES} from './omega-infected-candidate-review';
 
 /**
  * M12-G5n recovered original WebPs from user's Google Drive into this QA branch.
@@ -13,7 +13,7 @@ export const OMEGA_G5N_RECOVERED_ART={
  aira:{dir:'/qa-art/m12g5n/aira',anchor:'g5j-anchors.json',
   names:OMEGA_G5I_FILE_NAMES},
  infected:{dir:'/qa-art/m12g5n/infected',anchor:'infected-anchors.json',
-  names:OMEGA_INFECTED_FILE_NAMES},
+  names:OMEGA_INFECTED_FILES},
 } as const;
 export type OmegaG5nKind=keyof typeof OMEGA_G5N_RECOVERED_ART;
 export const OMEGA_G5N_RECOVERY_GATE={
