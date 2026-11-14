@@ -1,4 +1,6 @@
 import {useEffect,useRef,useState,type CSSProperties} from 'react';
+import {OMEGA_G5D_ACTUAL_E_WALK} from './omega-protocol-m12g5d-actual-source';
+import type {OmegaG5cReviewProof} from './omega-protocol-m12g5c-local-art-review';
 
 /** G5k: pixel-accurate review staging, never a gameplay transformation.
  * All sources are the file bytes already validated by the DEV importers.
@@ -36,16 +38,36 @@ export function omegaVisualAuditMarker(
 }
 
 export const OMEGA_VISUAL_AIRA_GROUPS=['fire','dash','hit'] as const;
+export const OMEGA_VISUAL_SILVER_WALK_GROUPS=['walk'] as const;
+/** Can only display the four actual repository G5d walk binaries after
+ * the existing SHA256/decode/alpha importer has returned authentic proof.
+ * Reference foot rows are ALPHA extents, not artist-approved true pivots. */
+export function omegaVerifiedG5dWalkCards(proof:OmegaG5cReviewProof|null):readonly OmegaVisualAuditFrame[]{
+ if(proof?.status!=='SESSION_PREVIEW_ONLY_NOT_ART_APPROVED'||
+    proof.assets.length!==4||proof.artworkSignoff||proof.independentPaintedArtVerified)return [];
+ for(let i=0;i<4;i++){
+  const a=proof.assets[i],ref=OMEGA_G5D_ACTUAL_E_WALK[i]!;
+  if(!a||a.file!==ref.file||a.sha256!==ref.sha256||
+     a.width!==384||a.height!==512||
+     !Number.isInteger(a.toeRow)||a.toeRow<480||a.toeRow>=512)return [];
+ }
+ return OMEGA_G5D_ACTUAL_E_WALK.map((ref,i)=>({
+  file:ref.file,imageUrl:ref.path,width:384,height:512,
+  referenceHeight:512,foot:{x:192,y:proof.assets[i]!.toeRow},
+  kind:'source' as const,
+ }));
+}
 export const OMEGA_VISUAL_INFECTED_GROUPS=['basic','runner','armored','elite'] as const;
-export type OmegaVisualAuditMode='aira'|'infected';
+export type OmegaVisualAuditMode='aira'|'infected'|'walk';
 /** Exactly four distinct source filenames in native 0→1→2→3 order.
  * A header or a repeated image is not an additional painted frame. */
 export function omegaVisualAuditGroupFrames(
  cards:readonly OmegaVisualAuditFrame[],mode:OmegaVisualAuditMode,group:string,
 ):readonly OmegaVisualAuditFrame[]{
- const allowed:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
+ const allowed:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:
+  mode==='walk'?OMEGA_VISUAL_SILVER_WALK_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
  if(!allowed.includes(group))return [];
- const prefix=mode==='aira'?'aira-east-'+group+'-':group+'-';
+ const prefix=mode==='aira'||mode==='walk'?'aira-east-'+group+'-':group+'-';
  const filtered=cards.filter(card=>card.file.startsWith(prefix)&&/^[0-3]\.webp$/.test(card.file.slice(prefix.length)));
  if(filtered.length!==4)return [];
  const byIndex=new Map(filtered.map(card=>[Number(card.file.slice(prefix.length,prefix.length+1)),card]));
@@ -65,22 +87,24 @@ const SILVER_REFERENCE:OmegaVisualAuditFrame={
 export function OmegaCandidateArtAudit({
  mode,cards,onClose,
 }:{
- readonly mode:'aira'|'infected';
+ readonly mode:OmegaVisualAuditMode;
  readonly cards:readonly OmegaVisualAuditFrame[];
  readonly onClose:()=>void;
 }){
- const [selectedGroup,setSelectedGroup]=useState<string>(mode==='aira'?'fire':'basic');
+ const [selectedGroup,setSelectedGroup]=useState<string>(mode==='aira'?'fire':mode==='walk'?'walk':'basic');
  const [selectedFrame,setSelectedFrame]=useState<0|1|2|3>(0);
  const closeRef=useRef<HTMLButtonElement>(null);
  useEffect(()=>{closeRef.current?.focus();},[]);
- const groups:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
+ const groups:readonly string[]=mode==='aira'?OMEGA_VISUAL_AIRA_GROUPS:
+  mode==='walk'?OMEGA_VISUAL_SILVER_WALK_GROUPS:OMEGA_VISUAL_INFECTED_GROUPS;
  const frames=omegaVisualAuditGroupFrames(cards,mode,selectedGroup);
  const selected=frames[selectedFrame];
  const displayed=selected?(mode==='aira'?[SILVER_REFERENCE,selected]:[frames[0]!,selected]):[];
  const chooseGroup=(group:string)=>{setSelectedGroup(group);setSelectedFrame(0);};
  const advance=(dir:-1|1)=>setSelectedFrame(v=>omegaVisualAuditNextFrame(v,dir));
  return <section className="omega-art-audit-overlay" role="dialog" aria-modal="true"
-  aria-label={mode==='aira'?'AIRA 전투 후보 실제 크기 비교':'감염체 4종 16프레임 실제 크기 비교'}
+  aria-label={mode==='aira'?'AIRA 전투 후보 실제 크기 비교':
+   mode==='walk'?'SHA 검증된 AIRA E 걷기 원화 4장 실제 비교':'감염체 4종 16프레임 실제 크기 비교'}
   data-omega-g5k-audit={mode}
   onKeyDown={e=>{
    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();onClose();}
@@ -95,8 +119,9 @@ export function OmegaCandidateArtAudit({
    }
   }}>
    <header className="omega-art-audit-header">
-    <div><strong>{mode==='aira'?'AIRA E · 전투 원화 12장 / 기존 걷기 기준':'감염체 4종 · 동작 후보 16장'}</strong>
-     <p>원본을 다시 그리지 않고 현재 로컬 세션에서 검증한 이미지 바이트로 표시합니다. 동일 기준 높이와 입력 앵커로만 정렬하며 미술 승인과 무관합니다.</p></div>
+    <div><strong>{mode==='aira'?'AIRA E · 전투 원화 12장 / 기존 걷기 기준':
+      mode==='walk'?'AIRA E · SHA 검증 실제 걷기 원화 4장':'감염체 4종 · 동작 후보 16장'}</strong>
+     <p>{mode==='walk'?'저장소 원본 G5d WebP 4장을 SHA-256·픽셀 검증 후 사용합니다. 발 기준은 불투명 픽셀 끝점 추정이므로 작화나 접지 승인 증거는 아닙니다.':'원본을 다시 그리지 않고 현재 로컬 세션에서 검증한 이미지 바이트로 표시합니다. 동일 기준 높이와 입력 앵커로만 정렬하며 미술 승인과 무관합니다.'}</p></div>
     <button type="button" ref={closeRef} onClick={onClose} aria-label="원화 비교 화면 닫기">게임으로 돌아가기 ×</button>
    </header>
    <nav className="omega-art-audit-groups" aria-label="원화 종류 선택">
