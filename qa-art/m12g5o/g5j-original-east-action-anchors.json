@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "frames": [
+    {
+      "file": "aira-east-fire-0.webp",
+      "sha256": "0865184486599ff7c8fc17623bb4659d6c5b1dc51003e2b0b5a2b576baf4fe38",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 429,
+        "y": 310
+      }
+    },
+    {
+      "file": "aira-east-fire-1.webp",
+      "sha256": "cfc5a49600d12468b2e3cc0a5909b7d4091d08c1cc8986bd702d08065b143efa",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 448,
+        "y": 198
+      }
+    },
+    {
+      "file": "aira-east-fire-2.webp",
+      "sha256": "3215d08bbc6f6e5283443480941b73d70120dd68e4bbd88c9ebe23de906c8995",
+      "foot": {
+        "x": 320,
+        "y": 487
+      },
+      "muzzle": {
+        "x": 373,
+        "y": 230
+      }
+    },
+    {
+      "file": "aira-east-fire-3.webp",
+      "sha256": "7d78b2b88eab426da49063c90d1d979fedc790cb78148edfbb155df42f7209c9",
+      "foot": {
+        "x": 320,
+        "y": 486
+      },
+      "muzzle": {
+        "x": 475,
+        "y": 238
+      }
+    },
+    {
+      "file": "aira-east-dash-0.webp",
+      "sha256": "b0b6fbc436c39bcf98175d991b047fc7407048dfe463d9873d2a00a298f7dcbb",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 467,
+        "y": 289
+      }
+    },
+    {
+      "file": "aira-east-dash-1.webp",
+      "sha256": "9806f26f362f13658d393921cd55c9bc1f263fd385c993b7743f521892b734bb",
+      "foot": {
+        "x": 320,
+        "y": 486
+      },
+      "muzzle": {
+        "x": 524,
+        "y": 373
+      }
+    },
+    {
+      "file": "aira-east-dash-2.webp",
+      "sha256": "b370b57b4a16dad8faacd16b4ea64d760877cd1f7757c00a6830ac364f22183e",
+      "foot": {
+        "x": 320,
+        "y": 480
+      },
+      "muzzle": {
+        "x": 427,
+        "y": 330
+      }
+    },
+    {
+      "file": "aira-east-dash-3.webp",
+      "sha256": "3914c96f2fbab375d13f7871f901dc4e249160a89138ebf8b5be356ee171402c",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 443,
+        "y": 326
+      }
+    },
+    {
+      "file": "aira-east-hit-0.webp",
+      "sha256": "4b7051747c8d001e688ea57bd97ab02975cfcdb49d2a62767d078846809a3b58",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 464,
+        "y": 284
+      }
+    },
+    {
+      "file": "aira-east-hit-1.webp",
+      "sha256": "d184f7be45cc2d6c1fbe67bf3cbcb559746a6606b62e064b5042c788f36d3f5b",
+      "foot": {
+        "x": 320,
+        "y": 488
+      },
+      "muzzle": {
+        "x": 435,
+        "y": 216
+      }
+    },
+    {
+      "file": "aira-east-hit-2.webp",
+      "sha256": "bdf3731b3efcf84d8e4a1837490534e666ec901a33fc96e9125ed3ebe6869a35",
+      "foot": {
+        "x": 320,
+        "y": 485
+      },
+      "muzzle": {
+        "x": 435,
+        "y": 378
+      }
+    },
+    {
+      "file": "aira-east-hit-3.webp",
+      "sha256": "112b885c40bc1bb9bae0e5cf2fa66b62e7a33046ffa6bf022ada68fce113264a",
+      "foot": {
+        "x": 320,
+        "y": 486
+      },
+      "muzzle": {
+        "x": 388,
+        "y": 305
+      }
+    }
+  ]
+}
