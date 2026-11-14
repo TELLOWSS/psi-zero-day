@@ -900,3 +900,11 @@
 - Chrome 1440×900, 1024×768, 390×844, 844×390에서 텍스처 HTTP 200, 4종 실제 적과 실제 경고 발생, pageerror 0을 확인하고 `scripts/qa-omega-surface-review-browser.mjs`로 재현했다. 일반 화면에서는 텍스처 요청 0. 화면과 JSON은 `outputs/omega-art/quarantine-surface-20261114/repro/`, 개발 후보 화면 `desktop.png`, 일반 비교 `baseline-desktop.png`. 캡처는 각기 다른 실행으로 캐릭터 위치·AI 시간까지 동일한 A/B 측정은 아니다. 4 viewport는 Android 실기기가 아니다.
 - 기존 지게차를 사실적인 원화로 바꾸려 2개 AI 후보를 생성했지만 반투명 광륜이 남고 기존 충돌 범위/포크 길이와 정합이 불확실해 두 장 모두 게임에 넣지 않았다. 원본은 같은 outputs 폴더 `forklift-first-unapproved.png`, `forklift-retry-unapproved.png`. 입체 구조물·지게차·원거리 배경의 실사 수준 개선, 가림과 충돌 정합, 시야 제한하 감염체 가독성, 물리 Android 성능 및 감독 시각 승인은 계속 필요하다.
 - Vitest 전체 2791 통과/1 skipped, typecheck 및 build 통과. 신규 개발 플래그 검증 및 브라우저 재현을 해당 CI workflow에 연결했다. CI 최종 결과는 새 HEAD에서 별도 확인. 일반 모드와 main/Production은 미변경이며 PR #235는 Draft다.
+
+## 57. 검역 게이트 원거리 구조물 개발 검수 (2026-11-14)
+
+- PR #265 선행 HEAD `d5ee57d0f70b9f42fc57dff2fb1eba73c96c116c`의 GitHub Actions 12개 및 Vercel Preview 전체 성공을 확인했다.
+- §56 바닥 후보에 이어 이미지 생성으로 사람·차량·문자 없는 야간 건설 현장 원경을 제작했다. 원본 2172×724는 작업 PC `outputs/omega-art/quarantine-horizon-20261114/construction-horizon-source.png`, 축소 WebP 후보는 `public/assets/omega/sector01/construction-horizon-review.webp`, 1600×533, SHA-256 `74bdee866255e352ff590f8340cadbd066ad1924bf73db2ce3c220dbc5dd7918`. 시각 후보이며 감독 승인 원화는 아니다.
+- 기존 `?omegaLab=1&omegaSurfaceReview=1` DEV-only 경로에서 1구역 화면 상부에 배경판을 추가했다. 기존 실제 카메라와 G3 far parallax 계산을 사용하며 아래쪽을 점차 투명하게 처리하고, 적·경고·실제 장애물보다 먼저 그린다. 재사용 offscreen canvas로 화면 크기가 변할 때만 배경 합성을 다시 한다. 이는 화면 공간의 2D 이미지 깊이 표현이지 실제 3D 건물·충돌·보행 영역이 아니다. 일반 화면 및 게임 로직/저장은 변경하지 않는다.
+- 첫 화면은 원경이 너무 어두워 표시 범위와 밝기를 조정했다. 최종 Chrome 네 viewport에서 바닥 및 원경 HTTP 200, 실제 적 4종과 경고 존재, pageerror 0 및 일반 화면 두 이미지 요청 0 확인. 데스크톱·모바일 예시는 `outputs/omega-art/quarantine-horizon-20261114/v2/desktop.png`, `landscape.png`와 report. 화면 상단 구조물과 기존 UI·안개가 겹쳐 원경이 은은하게 보이는 수준이며, 실제 카메라 이동 영상·시차의 체감 및 시야 제한 적 식별력은 추가 검수가 필요하다. 브라우저 네 viewport는 Android 실기기가 아니다.
+- 국소 테스트 5개, TypeScript, 전체 2791 통과/1 skipped, build 통과. `qa-omega-surface-review-browser.mjs`는 두 이미지와 정상 화면 격리를 검사한다. 새 HEAD CI는 별도 확인. 지게차는 §56의 광륜/충돌 정합 문제로 미적용; 구조물 실사 품질·가림·실기기 성능·감독 승인이 남는다. PR #235 Draft, main/Production 보류.

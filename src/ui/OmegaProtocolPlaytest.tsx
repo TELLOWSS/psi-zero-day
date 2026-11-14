@@ -8,7 +8,7 @@ import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
-import {drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
+import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -76,6 +76,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   // hero-following quarter-view camera; restore leaves native physics intact.
   drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
+  if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV))
+   drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom);
   drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);

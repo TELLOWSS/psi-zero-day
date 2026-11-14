@@ -41,6 +41,7 @@ on:
       - 'src/ui/omega-quarantine-surface-review.ts'
       - 'tests/omega-quarantine-surface-review.test.ts'
       - 'public/assets/omega/sector01/concrete-surface-review.webp'
+      - 'public/assets/omega/sector01/construction-horizon-review.webp'
       - 'src/ui/omega-protocol-sector-one-scene.ts'
       - 'src/ui/omega-protocol-depth-scene.ts'
       - 'src/ui/omega-protocol-m12-depth.ts'

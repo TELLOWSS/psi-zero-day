@@ -7,9 +7,10 @@ await mkdir(output,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 const rows=[];
 for(const [name,width,height] of [['desktop',1440,900],['tablet',1024,768],['portrait',390,844],['landscape',844,390]]){
- const page=await browser.newPage({viewport:{width,height}}),errors=[],assetStatuses=[];
+ const page=await browser.newPage({viewport:{width,height}}),errors=[],assetStatuses=[],horizonStatuses=[];
  page.on('pageerror',e=>errors.push(String(e)));
  page.on('response',r=>{if(r.url().includes('concrete-surface-review.webp'))assetStatuses.push(r.status());});
+ page.on('response',r=>{if(r.url().includes('construction-horizon-review.webp'))horizonStatuses.push(r.status());});
  try{
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaSurfaceReview=1&omegaQaState=zombieAI');
   await page.waitForFunction(()=>{
@@ -19,13 +20,13 @@ for(const [name,width,height] of [['desktop',1440,900],['tablet',1024,768],['por
   },null,{timeout:30000});
   await page.screenshot({path:`${output}/${name}.png`});
   const telemetry=await page.locator('.omega-protocol-arena').getAttribute('data-omega-zombie-telemetry');
-  rows.push({name,assetStatuses,errors,telemetry:JSON.parse(telemetry||'[]')});
-  if(!assetStatuses.includes(200)||errors.length)process.exitCode=1;
+  rows.push({name,assetStatuses,horizonStatuses,errors,telemetry:JSON.parse(telemetry||'[]')});
+  if(!assetStatuses.includes(200)||!horizonStatuses.includes(200)||errors.length)process.exitCode=1;
  }catch(error){rows.push({name,error:String(error),errors,assetStatuses});process.exitCode=1;}
  await page.close();
 }
 const normal=await browser.newPage();let normalRequests=0;
-normal.on('request',r=>{if(r.url().includes('concrete-surface-review.webp'))normalRequests++;});
+normal.on('request',r=>{if(/(?:concrete-surface|construction-horizon)-review\.webp/.test(r.url()))normalRequests++;});
 await normal.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=zombieAI');
 await normal.waitForTimeout(1000);await normal.close();
 if(normalRequests!==0)process.exitCode=1;
