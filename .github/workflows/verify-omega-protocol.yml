@@ -88,6 +88,12 @@ on:
       - 'tests/omega-protocol-boss-pattern.test.ts'
       - 'src/ui/omega-protocol-enemy-render.ts'
       - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/ui/omega-scene-art-preview.ts'
+      - 'src/ui/omega-scene-art-preview-metadata.json'
+      - 'tests/omega-scene-art-preview.test.ts'
+      - 'tests/omega-scene-east-native-originals.test.ts'
+      - 'qa-art/m12g5o/**'
+      - 'public/assets/omega/scene-art-preview/**'
       - 'src/ui/omega-protocol-playtest.css'
       - 'src/ui/omega-protocol-actor-render.ts'
       - 'src/ui/omega-aira-v2-candidate.ts'
@@ -207,6 +213,6 @@ jobs:
       - name: Reject corrupt, duplicate, ungrounded and unapproved sprite fixtures
         run: npm run omega:art-test
       - name: Verify infected candidate isolation and pose rules
-        run: npx vitest run tests/omega-infected-candidate-review.test.ts tests/omega-quarantine-surface-review.test.ts
+        run: npx vitest run tests/omega-scene-art-preview.test.ts tests/omega-scene-east-native-originals.test.ts tests/omega-infected-candidate-review.test.ts tests/omega-quarantine-surface-review.test.ts
       - name: Run deterministic roguelite contract
         run: npx vitest run tests/omega-protocol-m12g5i-action-art.test.ts tests/omega-protocol-m12g5h-native-hit.test.ts tests/omega-protocol-m12g5g-native-pose.test.ts tests/omega-protocol-m12g5e-silver-action-fx.test.ts tests/omega-protocol-m12g5d-actual-art.test.ts tests/omega-protocol-m12g5c-local-art-review.test.ts tests/omega-protocol-m12g5b-art-and-layout.test.ts tests/omega-protocol-m12-g5-art.test.ts tests/omega-protocol-m12-combat-fidelity.test.ts tests/omega-protocol-m12-parallax.test.ts tests/omega-protocol-m12-authored-industrial.test.ts tests/omega-protocol-m12-depth.test.ts tests/omega-protocol-m04d9-boss15-cross-threat.test.ts tests/omega-protocol-m04d8-wave13-first8.test.ts tests/omega-protocol-m04d7-noskip-replay.test.ts tests/omega-protocol-cart-counterplay-fairness.test.ts tests/omega-protocol-counterplay.test.ts tests/omega-protocol-legit-build-matrix.test.ts tests/omega-protocol-noskip-loss-audit.test.ts tests/omega-protocol-damage-audit.test.ts tests/omega-protocol-field-transit.test.ts tests/omega-protocol-zombie-ai.test.ts tests/omega-combat-browser-probe.test.ts tests/omega-silver-watch-native.test.ts tests/omega-silver-watch-native-actions.test.ts tests/omega-silver-action-parity.test.ts tests/omega-silver-guard-review.test.tsx tests/omega-canonical-local-preview.test.ts tests/omega-aira-v2-walk-frames.test.ts tests/omega-aira-v2-directional-parity.test.ts tests/omega-aira-v2-special-frames.test.ts tests/omega-aira-v2-hit-frames.test.ts tests/omega-aira-v2-dash-frames.test.ts tests/omega-aira-v2-fire-frames.test.ts tests/omega-aira-v2-weapon-vfx.test.ts tests/omega-aira-v2-walk-rig.test.ts tests/omega-aira-v2-candidate.test.ts tests/omega-protocol-aira-kinetics.test.ts tests/omega-protocol-mission-visuals.test.ts tests/omega-protocol-depth-scene.test.ts tests/omega-protocol-dash-visuals.test.ts tests/omega-protocol-encounter-stage.test.ts tests/omega-protocol-authored-scene.test.ts tests/omega-protocol-sector-one-scene.test.ts tests/omega-protocol-extreme-unlock.test.ts tests/omega-protocol-blade.test.ts tests/omega-protocol-infected-zombie.test.ts tests/omega-protocol-story.test.ts tests/omega-protocol-run.test.ts tests/omega-protocol-combat.test.ts tests/omega-protocol-performance.test.ts tests/omega-protocol-field.test.ts tests/omega-protocol-navigation.test.ts tests/omega-protocol-live-traversal.test.ts tests/omega-protocol-camera.test.ts tests/omega-protocol-boss-pattern.test.ts tests/omega-protocol-boss-visuals.test.ts tests/omega-protocol-actor-render.test.ts tests/omega-protocol-directional-identity.test.ts tests/omega-protocol-grounded-gait.test.ts tests/omega-protocol-actor-cues.test.ts tests/omega-protocol-action-facing.test.ts tests/omega-protocol-art-motion.test.ts tests/omega-protocol-impact-vfx.test.ts tests/omega-protocol-art-slot.test.ts tests/omega-aira-production-candidate.test.ts tests/omega-protocol-motion-qa-gate.test.ts --maxConcurrency=1
