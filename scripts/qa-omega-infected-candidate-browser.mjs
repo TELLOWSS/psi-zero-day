@@ -5,7 +5,8 @@ const files=['basic','runner','armored','elite'].flatMap(k=>[0,1,2,3].map(i=>`${
 for(const [name,w,h] of [['desktop',1440,900],['tablet',1024,768],['portrait',390,844],['landscape',844,390]]){
  const page=await browser.newPage({viewport:{width:w,height:h}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));let row={name};
  try{
-  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI');await page.locator('#omega-infected-files').waitFor({timeout:30000});await page.getByRole('button',{name:'일시정지'}).click();
+  const surface=process.env.OMEGA_INFECTED_SURFACE==='1'?'&omegaSurfaceReview=1':'';
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI'+surface);await page.locator('#omega-infected-files').waitFor({timeout:30000});await page.getByRole('button',{name:'일시정지'}).click();
   await page.screenshot({path:`${out}/original-${name}.png`});await page.locator('#omega-infected-files').setInputFiles(files);await page.locator('[data-omega-infected-feedback="ready"]').waitFor({timeout:30000});await page.locator('[data-omega-infected-toggle]').click();await page.getByRole('button',{name:'계속하기'}).click();
   // Real user movement opens space for the fast enemy to pursue before warning.
   await page.keyboard.down('ArrowLeft');await page.waitForTimeout(1100);await page.keyboard.up('ArrowLeft');

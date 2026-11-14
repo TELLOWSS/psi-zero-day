@@ -908,3 +908,12 @@
 - 기존 `?omegaLab=1&omegaSurfaceReview=1` DEV-only 경로에서 1구역 화면 상부에 배경판을 추가했다. 기존 실제 카메라와 G3 far parallax 계산을 사용하며 아래쪽을 점차 투명하게 처리하고, 적·경고·실제 장애물보다 먼저 그린다. 재사용 offscreen canvas로 화면 크기가 변할 때만 배경 합성을 다시 한다. 이는 화면 공간의 2D 이미지 깊이 표현이지 실제 3D 건물·충돌·보행 영역이 아니다. 일반 화면 및 게임 로직/저장은 변경하지 않는다.
 - 첫 화면은 원경이 너무 어두워 표시 범위와 밝기를 조정했다. 최종 Chrome 네 viewport에서 바닥 및 원경 HTTP 200, 실제 적 4종과 경고 존재, pageerror 0 및 일반 화면 두 이미지 요청 0 확인. 데스크톱·모바일 예시는 `outputs/omega-art/quarantine-horizon-20261114/v2/desktop.png`, `landscape.png`와 report. 화면 상단 구조물과 기존 UI·안개가 겹쳐 원경이 은은하게 보이는 수준이며, 실제 카메라 이동 영상·시차의 체감 및 시야 제한 적 식별력은 추가 검수가 필요하다. 브라우저 네 viewport는 Android 실기기가 아니다.
 - 국소 테스트 5개, TypeScript, 전체 2791 통과/1 skipped, build 통과. `qa-omega-surface-review-browser.mjs`는 두 이미지와 정상 화면 격리를 검사한다. 새 HEAD CI는 별도 확인. 지게차는 §56의 광륜/충돌 정합 문제로 미적용; 구조물 실사 품질·가림·실기기 성능·감독 승인이 남는다. PR #235 Draft, main/Production 보류.
+
+## 58. 배경·감염체 반복 시뮬레이션과 Vercel 프리뷰 동기화 (2026-11-14)
+
+- 사용자 요청에 따라 PR #265 직전 HEAD `fd7f4b7c2c2051c7ce699e1564b4b3dbfc5f0011` 및 Vercel 프로젝트 `tellowss-projects/psi-zero-day`를 확인했다. 해당 SHA GitHub Actions 12개 전체 성공, Vercel Git preview `dpl_6NqA7yThtP1swYD66in7Y3uvgKjL` READY, source branch/SHA가 동일하다. 이는 운영 배포가 아니다.
+- `scripts/qa-omega-surface-simulation.mjs`로 네 화면 크기 각 2회, 총 8회 실 Chrome 테스트: 실제 방향키 이동·실제 감염체 경고, 원경의 두 계산된 카메라 위치에 대한 픽셀 변화, 페이지 오류 0을 확인했다. 카메라 두 위치의 픽셀 비교는 별도 Canvas 재현이며 실제 게임 동영상에서 적 가독성이나 물리 Android 성능을 수치화한 것은 아니다. 8회 결과 및 PNG는 `outputs/omega-art/quarantine-simulation-20261114/`.
+- 새 배경에 §54의 미승인 감염체 후보 16장도 함께 선택하여 Chrome 네 화면에서 실제 AI 4종 각 자세 0~3, warning, 실 HP 감소, 원본 복귀, pageerror 0을 확인했다(`infected-scene/report.json`). 원거리 배경과 경고는 보이나 적과 플레이어가 가까이 모일 때 서로 겹치므로 개별 실루엣/가독성 개선은 미완. `OMEGA_INFECTED_SURFACE=1`은 이 로컬 시험만을 위한 스크립트 옵션이며 이미지와 앵커는 승인 전이다.
+- 전체 2791 통과/1 skipped, preview 플래그로 빌드 및 TypeScript 통과. `VITE_OMEGA_PROTOCOL_LAB=1`을 넣은 로컬 빌드에서 검수 URL은 두 배경 WebP HTTP 200, 일반 URL은 두 자산 요청 0, 페이지 오류 0을 확인했다(`built-preview-report.json`). 정상 게임/Production은 기존과 동일하다.
+- 개발 서버에 한정됐던 검수 표시 조건을 기존 `VITE_OMEGA_PROTOCOL_LAB=1` preview 조건에서도 동작하도록 연결하고 반복 브라우저 검사를 CI에 추가했다. Vercel Git 연결은 새 브랜치 push 후 preview를 자동 생성한다. 그러나 이 프로젝트의 브랜치 preview 전용 `VITE_OMEGA_PROTOCOL_LAB=1` 환경 변수 생성을 Vercel API가 **403 권한 부족**으로 거부했고 이 PC에는 인증된 Vercel CLI가 없다. 따라서 관리자가 `codex/omega-g5i-art-review-20261113` 브랜치의 Preview에 해당 변수를 설정하고 새 프리뷰를 빌드하기 전에는 배포 코드는 동기화되어도 원경 검수 URL이 열리지 않는다. Production 변수는 설정하지 않는다.
+- 다음: 새 HEAD Actions와 Vercel preview의 SHA/READY 재확인, 필요 시 프로젝트 관리자에게 브랜치 전용 변수 설정 요청. 후보 시각 승인·지게차 충돌 정합·적 겹침·Android 실기기·15개 전장 미완. PR #235 Draft, main 병합/Production 보류.
