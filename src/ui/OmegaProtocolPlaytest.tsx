@@ -9,7 +9,7 @@ import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
-import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
+import {drawOmegaSceneArt,omegaSceneArtRequested,omegaPrimeSceneArtSources} from './omega-scene-art-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -422,6 +422,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const g5iImportEpoch=useRef(0);
  const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ // Pre-decode the real 12 E action WebPs so the native 90ms FIRE cue can
+ // display more than its first frame. Runs ONLY in explicit QA scene mode.
+ useEffect(()=>{if(scenePreview)omegaPrimeSceneArtSources();},[scenePreview]);
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
