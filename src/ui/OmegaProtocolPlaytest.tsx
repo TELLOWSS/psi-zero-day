@@ -9,7 +9,7 @@ import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
-import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
+import {drawOmegaSceneArt,omegaSceneArtRequested,omegaPrimeSceneArtSources,omegaSceneNativeFireHoldUntil} from './omega-scene-art-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -52,7 +52,7 @@ const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'�
 // In-memory only, development QA provenance. Never available to production
 // users, never writes a profile/save and never bypasses a real unlock CTA.
 const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,sceneNativeShotHoldUntil=0){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -139,7 +139,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   gameTime:state.gameTime,runPhase:session.run.phase,
   enginePhase:state.phase,directorShoutTimer:state.directorShoutTimer,
   isDashing:Boolean(p.isDashing),dashRemaining:p.dashDuration??0,
-  hurtRemaining:state.lastDamage?.remaining??0,fireUntil:fireCue.until,
+  hurtRemaining:state.lastDamage?.remaining??0,fireUntil:scenePreview?sceneNativeShotHoldUntil:fireCue.until,
   terminalElapsed,
  });
  // Native HP damage + actual infected brain strike is the ONLY G5h source.
@@ -156,7 +156,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting:Boolean(renderAction.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
- if(!(scenePreview&&drawOmegaSceneArt(ctx,artView))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
+ if(!(scenePreview&&drawOmegaSceneArt(ctx,{...artView,sceneAction:renderAction.action}))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)&&
     !drawOmegaAiraV2Candidate(ctx,artView,userApprovedAiraV2)){
   drawOmegaProtocolActor(ctx,{...actorView,
@@ -422,6 +422,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const g5iImportEpoch=useRef(0);
  const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ // Pre-decode the real 12 E action WebPs so the native 90ms FIRE cue can
+ // display more than its first frame. Runs ONLY in explicit QA scene mode.
+ useEffect(()=>{if(scenePreview)omegaPrimeSceneArtSources();},[scenePreview]);
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
@@ -619,6 +622,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let cinematicZoom=1.55;
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
+   // Scene art retains ONLY a native Watch handheld launch timestamp
+   // to complete a 75ms draw-only recoil; never alters the 90ms muzzle.
+   let sceneNativeShotHoldUntil=0;
   let impacts:OmegaImpactFx[]=[];
   let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0;
   const fixture=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
@@ -698,6 +704,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     }
    if((infectedLab||scenePreview)&&arenaRef.current)arenaRef.current.dataset.omegaInfectedEvidence=JSON.stringify(omegaInfectedCandidateReview.evidence());
     fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
+    if(scenePreview)sceneNativeShotHoldUntil=omegaSceneNativeFireHoldUntil(
+     sceneNativeShotHoldUntil,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
    dashEchoes=omegaAdvanceDashEchoes(dashEchoes,player,priorPlayer,session.facing,
@@ -727,7 +735,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     const easing=dt>0?1-Math.exp(-Math.min(dt,.05)*3.8):0;
     cinematicZoom+=(target-cinematicZoom)*easing;
     drawLab(ctx,session,fireCue,impacts,gait,pose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,sceneNativeShotHoldUntil);
    }
    if(dt>0){fpsTotal+=dt;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
