@@ -960,3 +960,10 @@
 - 후면 사격 첫 4칸 `fire-back-sheet-v1-rejected.png`는 총구가 옆 방향이며 1~3번 동작이 반복되어 후면 사격 주기로 기각했다. 별도 `fire-back-aim-v2.png`는 총이 짧게 보이는 후면 조준 시험이나 정확한 총 방향은 미승인이다. 이를 참조한 `fire-back-sheet-v2.png`에서 543×724 WebP 네 장 `fire-back-crops`를 원본 크기 그대로 분리했고 각 alpha/보이는 RGB 불일치 0, 셀 경계 alpha64 이상 0, SHA는 `crop-proof.json`에 기록했다. 그러나 조준·반동·복귀 1~3번은 매우 비슷하고 포신이 머리 뒤에 가려 정합이 불명확하므로 완성 사격 세트로 채택하지 않는다.
 - `aira-recoil-and-back-fire-studies.zip`에는 정면 수정본·비교, 후면 단일 시안·기각 시트·재시도 시트/분리본/증빙이 있다. `fire-back-review.png`는 칸 맞춤 정지 비교로 공통 스케일·피벗이나 동작 검증이 아니다. 모든 결과는 AI 후보이며 게임 등록, 실제 발사 재생, 감독 승인, 160/320 완료 계산을 하지 않았다.
 - 계속 원화 우선: 후면에서 무기가 조준하는 축을 명확히 하고 실제로 다른 반동/복귀 그림, 정면 반동의 인물·무기 정합과 나머지 방향 원화를 먼저 만든다. 이후 축척·피벗/마스크/실게임 검증. 선행 PR #265 HEAD `d3f0c9daabc1fa8e7bbf7bde5ea49cd5165b2d9a` Vercel preview 성공·responsive-capture 조회 시 실행 중. PR #235 Draft, main/Production 보류.
+
+## 65. 원화 우선 — AIRA 후면 피격·대시 후보 (2026-11-14)
+
+- §64의 후면 조준을 참조해 `fire-back-recoil-v3-uncertain.png`를 AI 생성했으나 발 위치 외 어깨·총 반동이 충분히 구분되지 않아 사격 완성 프레임으로 채택하지 않았다. 총의 실제 방향·동일 무기 정합도 미승인이다.
+- 같은 후면 기준으로 피격 2×2 `hit-back-sheet-v1.png` 및 대시 2×2 `dash-back-sheet-v1.png`를 AI 생성했다. 피격은 상체·무릎 기울기, 대시는 준비·출발·전진·착지 후보의 몸체 변화가 보이나, 일부 총이 옆 방향으로 보여 실제 정면 조준 축·얼굴/복장/무기 정합과 동작 연결은 검토 전이다.
+- 피격 원화 네 장 `hit-back-crops`는 656×599/600, 원본 alpha/보이는 RGB 불일치 0 및 각 경계 alpha64 이상 0을 확인했다. 후면 대시는 정중앙 y=646으로 분리한 첫 `dash-back-crops`에서 두 프레임 경계 alpha64 픽셀 24/23개가 검출되어 실패로 보존했다. 원본 행 y580~636에서 alpha64 픽셀 0임을 찾아 y=610으로 재분리한 `dash-back-crops-y610` 네 장은 608×610/683, 원본 alpha/보이는 RGB 불일치 0 및 경계 alpha64 이상 0. 각 해시와 실패/성공 보고서를 보존했다.
+- `back-combat-original-review.png`는 칸 맞춤 시각 비교이며 각 그림의 공통 스케일/발 피벗을 보증하지 않는다. 원본 두 시트, 8장 분리본, 실패·성공 증빙과 반동 미완 시안은 `outputs/omega-art/aira-art-first-20261114/aira-back-hit-dash-art-candidates.zip`. 게임 등록·재생·감독 승인은 하지 않았다. 부수 기능보다 남은 방향/동작 원화와 총 방향 정합을 우선한다; 160/320 승인 0, PR #235 Draft, main/Production 보류. 선행 HEAD `c08e4c57e2daf7383db2c08694f98413cf4cd3c8` preview 성공, responsive-capture 조회 시 진행 중.
