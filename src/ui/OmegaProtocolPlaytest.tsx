@@ -31,7 +31,7 @@ import {omegaG5dLabRequested,omegaG5dImportRepoCandidates,OMEGA_G5D_ART_GATE} fr
 import {omegaG5eLabRequested,OMEGA_G5E_ART_STATUS,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 import {omegaG5iLabRequested,omegaG5iActionPreview,OMEGA_G5I_ART_GATE} from './omega-protocol-m12g5i-action-art';
-import {OmegaCandidateArtAudit,type OmegaVisualAuditFrame} from './omega-candidate-art-audit';
+import {OmegaCandidateArtAudit,omegaVerifiedG5dWalkCards,type OmegaVisualAuditFrame} from './omega-candidate-art-audit';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -418,7 +418,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
- const [visualAudit,setVisualAudit]=useState<'aira'|'infected'|null>(null);
+ const [visualAudit,setVisualAudit]=useState<'aira'|'infected'|'walk'|null>(null);
  const visualAuditInputBlock=useRef(false);
  const closeVisualAudit=()=>{visualAuditInputBlock.current=false;setVisualAudit(null);};
  const infectedEpoch=useRef(0);
@@ -776,7 +776,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   }
   setPaused(!paused);setSnapshot(session.snapshot);
  };
- const openVisualAudit=(mode:'aira'|'infected')=>{
+ const openVisualAudit=(mode:'aira'|'infected'|'walk')=>{
   // The artwork overlay is intentionally a paused-only visual session.
   // Never resume automatically; the player chooses when to resume.
   visualAuditInputBlock.current=true;
@@ -798,7 +798,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   ?omegaInfectedCandidateReview.reviewCards().map(card=>({
     file:card.file,imageUrl:card.imageUrl,width:card.width,height:card.height,
     referenceHeight:card.referenceHeight,foot:card.foot,alphaBounds:card.alphaBounds,
-   })):[];
+   }))
+  :visualAudit==='walk'&&g5dActualReview&&!g5eNativeActionLab&&g5cStatus==='ready'
+  ?omegaVerifiedG5dWalkCards(omegaG5cReview.sessionProof):[];
  const dashFeedback=omegaDashAvailability(session.engine.state.player);
  const counterplay=omegaNearestCounterplayCue(
   omegaCounterplayCues(session.engine.state.hazards,id=>session.zombieBrain(id)),
@@ -902,6 +904,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        aria-label="동쪽 걷기 원화 WebP 4장 불러오기"
        onChange={e=>{void importG5cFiles(e.currentTarget.files);e.currentTarget.value='';}} />
      </>}
+     {g5dActualReview&&!g5eNativeActionLab&&<button type="button"
+      data-omega-g5m-walk-review="true"
+      disabled={g5cStatus!=='ready'||silverPreviewStatus!=='ready'||
+       omegaVerifiedG5dWalkCards(omegaG5cReview.sessionProof).length!==4}
+      onClick={()=>openVisualAudit('walk')}>SHA 원본 E 걷기 4장 비교</button>}
      <button type="button" data-omega-g5c-toggle="true"
       disabled={g5cStatus!=='ready'||silverPreviewStatus!=='ready'}
       onClick={()=>{const enabled=omegaG5cReview.activate(!g5cPreviewOn);setG5cPreviewOn(enabled);}}
