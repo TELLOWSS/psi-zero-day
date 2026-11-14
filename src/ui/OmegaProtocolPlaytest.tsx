@@ -866,7 +866,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   {scenePreview&&<aside className="omega-infected-review-bar" role="status">
    <strong>AIRA·감염체·배경 통합 원화 시안 · 승인 전</strong>
    <span>{infectedStatus==='ready'?'감염체 원화 16장 로드됨':infectedStatus==='failed'?'감염체 원화 로드 실패':'감염체 원화 로딩 중'}</span>
-   <small>4방향 걷기 및 왼쪽 전투 후보만 연결됨 · 나머지 동작과 발 접지 조정 필요</small>
+   <small>4방향 걷기·일부 전투 후보 연결 · 나머지 동작과 발 접지 조정 필요</small>
   </aside>}
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>

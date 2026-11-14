@@ -1005,3 +1005,11 @@
 - 로컬 dev Chrome 네 화면 크기의 실제 플레이에서 주인공 W/E 걷기 각 0~3이 모두 표시됐고 감염체 후보 4종 draw, 파일 요청 200, pageerror 0을 확인했다. QA fixture가 아닌 일반 검수 세션이며 `scene-integration-20261114/real-play-report.json`, 각 화면 PNG와 `scene-native-movement.webm` 보존. 별도 빌드 preview에서도 이미지 로드와 실제 이동을 확인했다. 영상은 시각 확인용 실게임 녹화다. 프레임 호출은 자연스러운 보행·발 접지·아트 정합 승인이나 Android 실기기 검증을 의미하지 않는다.
 - 특히 대각선 이동은 아직 정지 그림, 동쪽/앞/뒤 전투 포즈는 이번 통합에 미연결, 몸/머리·무기·보폭·피벗 불일치, 감염체 겹침 및 vector 지게차·장애물은 남아 있다. 원화 160/마스크 320 승인 0. 게임 동작과 스타일 정합을 재검수하고 부족한 방향/행동과 실사 구조물을 제작해야 한다. 기존 운영 기본 게임과 승인 게이트는 변경하지 않았다. 선행 497bb53d는 Vercel READY·GitHub Actions 12개 성공; production 28dc1e1b READY, PR #235 Draft.
 - 전체 회귀 2795 통과/1 skipped, typecheck·preview 빌드 및 마지막 변경 후 관련 단위 테스트 통과. 렌더링은 새 프레임이 디코딩되기 전 마지막 은백색 후보를 유지해 예전 캐릭터가 깜박이지 않도록 한다. 새 HEAD의 배포·CI 결과는 push 후 별도 확인.
+
+## 71. 정면·후면 전투 원화 통합과 대각선 걷기 재시도 (2026-11-14)
+
+- §70 다음으로 앞오른 사선 걷기 2×2 `walk-front-right-sheet-v1-repeated.png`를 AI 생성했지만 네 칸에서 앞서는 발이 거의 같아 주기로 채택하지 않았다. 별도 반대발 접지 `walk-front-right-opposite-attempt-v2.png`도 앞뒤 교대가 명확하지 않다. 두 원본 1086×1448, 외곽 alpha64 이상 0이며 `outputs/omega-art/aira-art-first-20261114/aira-front-right-walk-attempts.zip`에 보존했다. 대각선 움직임은 여전히 정지 그림이다. SHA-256은 각각 `140e41172d23d70f7aa4a3765cfedee1188ad13031a85a51a49512fcaa9cec53`, `da3396cb705b463feb1b7459c982216243da10497fda77bb75f0aeaf37ffa85b`.
+- 별도로 §63·65의 AI 원화 원본을 보존한 20개 분리본을 통합 검수에 연결했다: S(정면) 사격·대시·피격 각 4, N(후면) 대시·피격 각 4. 기존 실제 전투 `actionAge`/행동 상태로 선택하며 후면 사격은 §64의 방향·포즈 불확실성 때문에 연결하지 않았다. S 사격의 표정 문제, 후면 총 방향, 프레임별 인물·장비·발 정합과 임시 alpha 바운딩 기준은 미승인이다.
+- 기존 W 동작을 포함해 행동별 선택을 실제 사격 .09초·대시 .22초·피격 .15초 시간창에 맞췄다. 처음엔 짧은 대시 중 네 이미지가 늦게 로딩되어 중간 자세를 건너뛰었고, 현재 바라보는 방향의 사용 가능한 동작 파일을 선행 로드하도록 수정했다. 한 방향의 원화가 모두 디코딩되는 메모리/성능 영향은 Android 실기기 검증 전이다.
+- 실제 Chrome DEV `zombieAI` 엔진에서 S 대시 3회와 N 대시 1회 모두 0~3 프레임 관찰, S 피격도 실제 감염체 공격 중 0~3 확인. 빌드된 일반 검수 세션(별도 QA fixture 아님)의 S 대시도 0~3·오류 0을 확인했다. 첫 피격 테스트는 잘못된 테스트 스크립트 선택자 timeout이었고 수정 재시도에서 통과했다. S 사격은 프레임 선택 단위 테스트만 통과했으며 실전 재현은 미완. 상세 `outputs/omega-art/scene-action-20261114/`. 캔버스 프레임 호출은 자연스러운 연기·발 접지나 최종 미술 품질 보증이 아니다.
+- `scripts/qa-omega-scene-action-browser.mjs`를 CI에 연결했다. S/N 실제 대시 프레임 각 최소 2개·이미지 오류·pageerror를 검사하며 로컬 실행에서는 각각 4개가 관찰됐다. `npm test` 2796 통과/1 skipped, typecheck 및 Vercel preview 환경 build 통과. Android 실기기, 나머지 방향/행동, 지게차·구조물 원화와 전체 게임 흐름은 남는다. 원화 160/마스크 320 승인 0, PR #235 Draft, main/Production 보류.

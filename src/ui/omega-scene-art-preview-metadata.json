@@ -286,5 +286,165 @@
     "anchorY": 486,
     "refHeight": 480,
     "sha256": "7fe9a9b91b60f40c25abd286906db2b014c51f0de91d72fffa72af08e7eda759"
+  },
+  "fire-S-0": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 328.5,
+    "anchorY": 589,
+    "refHeight": 575,
+    "sha256": "8d1154663558bbd237caaf79253e6425fb9caad3ffa9c0ba6036fb767994ff59"
+  },
+  "fire-S-1": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 321.5,
+    "anchorY": 589,
+    "refHeight": 574,
+    "sha256": "4319a7f2be4590841cf6fe6c12ab2d5e36cf0953964dbd9a85b5af1117520e2b"
+  },
+  "fire-S-2": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 355,
+    "anchorY": 578,
+    "refHeight": 565,
+    "sha256": "c9865ae472f57470fffc627faaf3c7b0cd2cff460c69dfd311c908d602e31b8b"
+  },
+  "fire-S-3": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 327,
+    "anchorY": 579,
+    "refHeight": 565,
+    "sha256": "666a5764961363d2a512997b03568ea5c202b0cd10db45961d902f8a64bcda7b"
+  },
+  "dash-S-0": {
+    "width": 608,
+    "height": 646,
+    "anchorX": 308.5,
+    "anchorY": 536,
+    "refHeight": 409,
+    "sha256": "ddddd7286377f4f10a956c23c477e879f6484d7320636062f8e5356a9b1c984e"
+  },
+  "dash-S-1": {
+    "width": 609,
+    "height": 646,
+    "anchorX": 300.5,
+    "anchorY": 546,
+    "refHeight": 485,
+    "sha256": "64c4de3f52ac53e956715e3c052ead2a8ee7ec89f082184cfe689ac10bde1fd3"
+  },
+  "dash-S-2": {
+    "width": 608,
+    "height": 647,
+    "anchorX": 298.5,
+    "anchorY": 605,
+    "refHeight": 584,
+    "sha256": "2d6400c635541c575cb5360fb00d6b3cecf6e5b24bd202ea2361f9840178d6b2"
+  },
+  "dash-S-3": {
+    "width": 609,
+    "height": 647,
+    "anchorX": 303,
+    "anchorY": 582,
+    "refHeight": 461,
+    "sha256": "4a103c151c0f81ef6a2fc9f976fab90e0019b3ba37434ca0a4e376e68814bcba"
+  },
+  "hit-S-0": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 332.5,
+    "anchorY": 572,
+    "refHeight": 518,
+    "sha256": "1fb798d58c06e2a1dd7a171d824de9f807b5d53ebabf86e82e61c21db353dbdc"
+  },
+  "hit-S-1": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 317.5,
+    "anchorY": 571,
+    "refHeight": 506,
+    "sha256": "ae7653a97a1b116977f224331e556c745fe91aab5fc9956a673077850f09acf9"
+  },
+  "hit-S-2": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 353,
+    "anchorY": 549,
+    "refHeight": 459,
+    "sha256": "3bca81e4283d22853f8e434c6159d520ea71708a6780ee44c7016c54f669fcd7"
+  },
+  "hit-S-3": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 329.5,
+    "anchorY": 551,
+    "refHeight": 488,
+    "sha256": "7e46b4fd37b99cb5e12f5cdc4b3fcab70acf75b11f08fb5b7722878a7e836660"
+  },
+  "dash-N-0": {
+    "width": 608,
+    "height": 610,
+    "anchorX": 312.5,
+    "anchorY": 538,
+    "refHeight": 419,
+    "sha256": "6faa216b16581e622fea2ef919d581d3eeefaf913cdf315142e5cbd6fcbd1633"
+  },
+  "dash-N-1": {
+    "width": 608,
+    "height": 610,
+    "anchorX": 303,
+    "anchorY": 566,
+    "refHeight": 519,
+    "sha256": "102b19839bcc501eaebb151c7a3e458550175bf4f371de3c9c898c6ce7858e22"
+  },
+  "dash-N-2": {
+    "width": 608,
+    "height": 683,
+    "anchorX": 326.5,
+    "anchorY": 643,
+    "refHeight": 617,
+    "sha256": "b1821b34d33e705559b2b4e59eb6232c908c97fe7cd26c39b4acedb6cf5bb7d9"
+  },
+  "dash-N-3": {
+    "width": 608,
+    "height": 683,
+    "anchorX": 296,
+    "anchorY": 617,
+    "refHeight": 488,
+    "sha256": "84bf6e0ba98ba722db384d1c81db366ccd36b38a2a3cb01c15c731b32e424fbf"
+  },
+  "hit-N-0": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 327.5,
+    "anchorY": 577,
+    "refHeight": 548,
+    "sha256": "b7c5c39816ef6d94ea0389c574abc6afca536516bd49b863ce29b2a7dcd98505"
+  },
+  "hit-N-1": {
+    "width": 656,
+    "height": 599,
+    "anchorX": 327,
+    "anchorY": 567,
+    "refHeight": 514,
+    "sha256": "3b81060a0ffadc885d19fc7c669412af3512c55fe6e1325b11b76f3d452889d8"
+  },
+  "hit-N-2": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 376.5,
+    "anchorY": 560,
+    "refHeight": 492,
+    "sha256": "fff940305a780187c2f24fc033a8558a96d48fd9238258f62a4bb0c74a95b386"
+  },
+  "hit-N-3": {
+    "width": 656,
+    "height": 600,
+    "anchorX": 324.5,
+    "anchorY": 569,
+    "refHeight": 526,
+    "sha256": "6f9cb944c641c147f9fd96e5778c7334852c7ede17e172223a5aaa03d36f81f7"
   }
 }

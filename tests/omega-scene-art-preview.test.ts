@@ -19,4 +19,10 @@ describe('integrated art preview',()=>{
  it('does not invent painted walking frames for diagonal headings',()=>{
   expect(omegaSceneArtFrame({...view,facingY:1})).toBe('idle-SW');
  });
+ it('uses the native action duration to select the available combat poses',()=>{
+  expect(omegaSceneArtFrame({...view,facingX:0,facingY:1,dashing:true,actionAge:.2})).toBe('dash-S-3');
+  expect(omegaSceneArtFrame({...view,facingX:0,facingY:-1,hurt:true,actionAge:.12})).toBe('hit-N-3');
+  expect(omegaSceneArtFrame({...view,facingX:0,facingY:1,shooting:true,actionAge:.08})).toBe('fire-S-3');
+  expect(omegaSceneArtFrame({...view,facingX:0,facingY:-1,shooting:true,actionAge:.08})).toBe('idle-N');
+ });
 });
