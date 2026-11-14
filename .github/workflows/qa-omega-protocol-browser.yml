@@ -6,6 +6,8 @@ on:
       - 'src/ui/OmegaProtocolPlaytest.tsx'
       - 'src/engine/omega-protocol-combat.ts'
       - 'scripts/qa-omega-hp-hud-browser.mjs'
+      - 'scripts/qa-omega-surface-review-browser.mjs'
+      - 'src/ui/omega-quarantine-surface-review.ts'
       - 'src/ui/omega-combat-browser-probe.ts'
       - 'scripts/qa-omega-gun-blade-browser.mjs'
       - 'src/ui/omega-protocol-field-render.ts'
@@ -217,6 +219,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-hp-hud-browser.mjs
+      - name: Quarantine surface review and normal-mode isolation
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-surface-review-browser.mjs
       - name: M04-D6 actual native cart warning / charge and mobile-landscape boss HUD
         env:
           CHROME_BIN: /usr/bin/google-chrome

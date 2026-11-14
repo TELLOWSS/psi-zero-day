@@ -8,6 +8,7 @@ import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
+import {drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -66,6 +67,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
   drawOmegaFieldGround(ctx,field.plan,false);
+  if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV))
+   drawOmegaSurfaceReview(ctx,field.plan);
   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
   drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);

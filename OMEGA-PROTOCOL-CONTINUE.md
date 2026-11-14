@@ -892,3 +892,11 @@
 - alpha64 이상 바운딩 높이는 runner-0 409px, runner-1 499px, runner-2 518px, runner-3 487px이다. 구부린 자세·뻗은 팔과 탱크를 모두 포함하는 값이므로 신체 비례나 스케일 변화의 정량 판정으로 해석하지 않는다. runner-0 바운딩 최하단과 임시 앵커는 같은 y이며 다른 프레임도 최하단과 앵커 차이가 0~1px이다. 최하단이 손·발·잡음 중 무엇인지는 이 수치로 알 수 없고 공중 자세가 지면에 닿았음을 뜻하지 않는다.
 - 데스크톱 Chrome 실제 게임에서 §54 파일 16장과 앵커를 불러오고 단독 sprinter 및 사용자 방향키 이동을 녹화했다. 5.76초 WebM과 `runner-motion-native-video/report.json`: 실제 AI warning1/attack1 및 후보 0~3 호출, pageerror 0. 이는 실제 게임 영상이나 거리가 벌어지면 화면 시야 제한으로 적이 어둡고 작아, 발 미끄럼/공중 높이의 정밀 판정과 모든 자세의 개별 영상 검증은 미완이다. 녹화·HTML 모두 후보나 앵커의 감독 승인이 아니다.
 - 다음: 조명이 확보된 실제 상태에서 동작별 화면과 발 피벗을 추적하고, basic·armored 반대 보폭, AIRA 정합 및 Android 실기기 검증. PR #235 Draft, main/Production 보류.
+
+## 56. 검역 게이트 사실적 바닥 개발 검수 (2026-11-14)
+
+- Director가 배경의 입체감·사실감 개선 구현을 요청하여 기존 검역 게이트(1구역)부터 착수했다. 생성한 실제 콘크리트 텍스처 PNG를 768×768 WebP 후보로 변환해 `public/assets/omega/sector01/concrete-surface-review.webp`(SHA-256 `82a85666b3fd24ab965d5516852a94e9073267e96d720375a895f791fd90cf74`)에 등록했다. 원본 PNG는 작업 PC `outputs/omega-art/quarantine-surface-20261114/concrete-source.png`. AI 후보이며 최종 승인 자산이 아니다.
+- `?omegaLab=1&omegaSurfaceReview=1` 개발 환경에서만 1구역 실제 월드 좌표에 텍스처를 반투명하게 겹치도록 `omega-quarantine-surface-review.ts`와 기존 renderer를 연결했다. 기존 바닥·원근·장애물 깊이 정렬과 조명 위에 재질감을 더하고, 경고·적·플레이어·실제 충돌 장애물보다 아래에 그린다. 도메인/충돌/AI/저장은 건드리지 않는다. 이 단계는 바닥 표면 검수이지 전장 전체 3D 제작이나 최종 상업 아트 완료가 아니다.
+- Chrome 1440×900, 1024×768, 390×844, 844×390에서 텍스처 HTTP 200, 4종 실제 적과 실제 경고 발생, pageerror 0을 확인하고 `scripts/qa-omega-surface-review-browser.mjs`로 재현했다. 일반 화면에서는 텍스처 요청 0. 화면과 JSON은 `outputs/omega-art/quarantine-surface-20261114/repro/`, 개발 후보 화면 `desktop.png`, 일반 비교 `baseline-desktop.png`. 캡처는 각기 다른 실행으로 캐릭터 위치·AI 시간까지 동일한 A/B 측정은 아니다. 4 viewport는 Android 실기기가 아니다.
+- 기존 지게차를 사실적인 원화로 바꾸려 2개 AI 후보를 생성했지만 반투명 광륜이 남고 기존 충돌 범위/포크 길이와 정합이 불확실해 두 장 모두 게임에 넣지 않았다. 원본은 같은 outputs 폴더 `forklift-first-unapproved.png`, `forklift-retry-unapproved.png`. 입체 구조물·지게차·원거리 배경의 실사 수준 개선, 가림과 충돌 정합, 시야 제한하 감염체 가독성, 물리 Android 성능 및 감독 시각 승인은 계속 필요하다.
+- Vitest 전체 2791 통과/1 skipped, typecheck 및 build 통과. 신규 개발 플래그 검증 및 브라우저 재현을 해당 CI workflow에 연결했다. CI 최종 결과는 새 HEAD에서 별도 확인. 일반 모드와 main/Production은 미변경이며 PR #235는 Draft다.
