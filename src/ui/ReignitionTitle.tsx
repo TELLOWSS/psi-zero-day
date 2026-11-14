@@ -170,17 +170,17 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
      <picture className="rg-hero-picture">
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
-      <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      <img src={theme==='cinematic'?'/assets/omega/scene-art-preview/buildings-v3.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
      {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2"
       src={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
-        silverMalePortrait:(silverPortrait??"/assets/omega/aira-v2/hero-splash.webp")}
+        silverMalePortrait:(silverPortrait??"/assets/omega/aira-v2/aira-silver-home-candidate.webp")}
       alt={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
        '신규 남성 요원 M01 원화 후보':'은백색 AIRA V2 캐릭터 원화'}
       loading="eager" decoding="async"
       onError={event=>{event.currentTarget.onerror=null;
        if(silverPreviewRequested){event.currentTarget.style.visibility='hidden';return;}
-       event.currentTarget.src='/assets/reignition/veteran-return.webp';
+       event.currentTarget.src='/assets/omega/scene-art-preview/idle-S.webp';
       }}
       onLoad={event=>{event.currentTarget.style.visibility='';}}/>}
      {silverPreviewRequested&&<aside className="rg-silver-review-banner" role="status">

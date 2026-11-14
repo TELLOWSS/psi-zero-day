@@ -641,3 +641,22 @@
   width:82%;height:70%;top:1%;right:-8%;bottom:auto;
  }
 }
+
+/* Current silver AIRA candidate: transparent full-body title artwork. */
+.rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-art{
+ filter:brightness(.55) saturate(.9);transform:scale(1.03);object-position:50% 36%;
+}
+.rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-aira-v2{
+ object-fit:contain;object-position:center bottom;width:min(45vw,620px);height:78%;right:3%;bottom:110px;top:auto;
+ opacity:1;transform:none;filter:drop-shadow(-16px 12px 34px rgba(3,8,20,.7));
+ -webkit-mask-image:none;mask-image:none;
+}
+@media(max-width:800px) and (orientation:portrait){
+ .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-aira-v2{
+  width:76%;height:clamp(235px,65vw,310px);right:0;top:3px;bottom:auto;object-position:center top;
+ }
+}
+
+@media(orientation:landscape) and (max-height:540px){
+ .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-aira-v2{height:82%;bottom:32px;top:auto;right:3%;width:42%}
+}
