@@ -184,10 +184,16 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(gait.active&&!p.isDashing)drawOmegaGroundedSplash(ctx,[gait.left,gait.right],state.gameTime);
  ctx.restore();
  };
+ const projectilesInDepth=Boolean(scenePreview&&field?.plan.sector===1);
+ const renderProjectile=(projectile:(typeof state.projectiles)[number])=>{
+  ctx.fillStyle='#7df3fa';ctx.beginPath();
+  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
+  ctx.fill();
+ };
  if(field){
   // Stable painter's order: the player, enemies, and original collision
   // objects share one actual world-foot depth. No translucent fake cover.
-  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress)){
+  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress,projectilesInDepth?state.projectiles:[])){
    if(item.kind==='prop'){
     const obstacle=field.plan.obstacles[item.index]!;
     if(!(scenePreview&&drawOmegaSceneProp(ctx,field.plan,obstacle,camera))){
@@ -200,6 +206,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
+   else if(item.kind==='projectile')renderProjectile(state.projectiles[item.index]!);
    else renderHero();
   }
  }else{
@@ -208,12 +215,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  // The native prop's depth can hide the hero: show only a subtle floor beacon.
  if(field)drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
- // Native projectiles and impacts always render above solid geometry.
- for(const projectile of state.projectiles){
-  ctx.fillStyle='#7df3fa';ctx.beginPath();
-  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
-  ctx.fill();
- }
+ // Keep the old draw path outside the opt-in scene. Impacts remain visible
+ // feedback; only projectile sprites participate in real obstacle depth.
+ if(!projectilesInDepth)for(const projectile of state.projectiles)renderProjectile(projectile);
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  const slash=session.lastBladeStrike;
  if(slash && state.gameTime-slash.time>=0 && state.gameTime-slash.time<.22){
