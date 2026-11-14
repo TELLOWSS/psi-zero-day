@@ -4,7 +4,7 @@ import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/ome
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
-import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
+import {omegaFieldTargetGuide,omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
@@ -470,6 +470,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
  const mouseAimRef=useRef<{x:number;y:number}|null>(null);
+ const touchAimRef=useRef<{x:number;y:number}|null>(null);
+ const fireDragOrigin=useRef<{id:number;x:number;y:number}|null>(null);
+ const fireAimMarker=useRef<HTMLSpanElement>(null);
+ const clearFireDrag=()=>{
+  firePointerRef.current=false;touchAimRef.current=null;fireDragOrigin.current=null;
+  if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
+ };
  const arenaRef=useRef<HTMLDivElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
@@ -482,7 +489,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const n=Number(seedValue);
   const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
-  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
+  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
  useEffect(()=>{
@@ -613,7 +620,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
    if(session.run.phase==='battle'&&session.engine.state.phase==='playing'){
     session.pause();setPaused(true);setSnapshot(session.snapshot);
@@ -664,7 +671,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const length=Math.hypot(mx,my)||1;
    const aimCanvas=canvasRef.current,aimClient=mouseAimRef.current;
    let aim:{x:number;y:number}|undefined;
-   if(scenePreview&&aimCanvas&&aimClient&&!autoFireRef.current){
+   if(scenePreview&&touchAimRef.current&&!autoFireRef.current){
+    const world=omegaFieldScreenMoveToWorld(touchAimRef.current.x,touchAimRef.current.y);
+    const player=session.engine.state.player;
+    aim={x:player.x+world.x*100,y:player.y+world.y*100};
+   }else if(scenePreview&&aimCanvas&&aimClient&&!autoFireRef.current){
     const rect=aimCanvas.getBoundingClientRect();
     if(rect.width>0&&rect.height>0){
      const camera=omegaQuarterViewCamera(session.engine.state.player,aimCanvas.width,aimCanvas.height,cinematicZoom);
@@ -833,7 +844,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();
   else{
    session.pause();
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
   }
   setPaused(!paused);setSnapshot(session.snapshot);
@@ -1089,20 +1100,27 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <div className="omega-protocol-action-pad">
       {scenePreview&&<>
        <button type="button" className="omega-protocol-fire-mode" aria-pressed={autoFire}
-        onClick={()=>{autoFireRef.current=!autoFireRef.current;setAutoFire(autoFireRef.current);firePointerRef.current=false;}}>
+        onClick={()=>{autoFireRef.current=!autoFireRef.current;setAutoFire(autoFireRef.current);clearFireDrag();}} >
         자동 사격 {autoFire?'켜짐':'꺼짐'}
        </button>
        <button type="button" className="omega-protocol-action omega-protocol-fire"
-        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||paused}
-        aria-label="총기 사격 · J 키 · 누르고 있으면 연속 사격"
+        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||paused||autoFire}
+        aria-label="총기 사격 · J 키 · 누른 채 드래그하여 조준"
         onKeyDown={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=true;}}}
         onKeyUp={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=false;}}}
         onBlur={()=>{fireKeyRef.current=false;}}
-        onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);firePointerRef.current=true;}}
-        onPointerUp={()=>{firePointerRef.current=false;}}
-        onPointerCancel={()=>{firePointerRef.current=false;}}
-        onLostPointerCapture={()=>{firePointerRef.current=false;}}>
-        <span className="omega-protocol-action-glyph" aria-hidden="true">◎</span><span>사격</span><small>J · 누르기</small>
+        onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);firePointerRef.current=true;
+         if(e.pointerType!=='mouse'){mouseAimRef.current=null;fireDragOrigin.current={id:e.pointerId,x:e.clientX,y:e.clientY};}}}
+        onPointerMove={e=>{const start=fireDragOrigin.current;if(!start||start.id!==e.pointerId)return;
+         const dx=e.clientX-start.x,dy=e.clientY-start.y,distance=Math.hypot(dx,dy);
+         touchAimRef.current=distance>12?{x:dx/distance,y:dy/distance}:null;
+         if(fireAimMarker.current){const r=Math.min(32,distance);fireAimMarker.current.style.opacity=distance>12?'1':'0';
+          fireAimMarker.current.style.transform=`translate(${dx/(distance||1)*r}px,${dy/(distance||1)*r}px)`;}}}
+        onPointerUp={clearFireDrag}
+        onPointerCancel={clearFireDrag}
+        onLostPointerCapture={clearFireDrag}>
+        <span ref={fireAimMarker} className="omega-protocol-fire-aim-marker" aria-hidden="true"/>
+        <span className="omega-protocol-action-glyph" aria-hidden="true">◎</span><span>사격</span><small>끌어 조준</small>
        </button>
       </>}
       <button type="button" className="omega-protocol-action omega-protocol-blade"

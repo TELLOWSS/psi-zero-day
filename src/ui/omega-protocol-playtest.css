@@ -1211,3 +1211,8 @@
 .omega-protocol-action-pad button.omega-protocol-fire-mode{position:static;width:68px;height:48px;min-height:44px;white-space:normal;line-height:1.2}
 @media(max-width:760px){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:55px;height:48px}}
 @media(max-height:430px) and (orientation:landscape){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:47px;height:47px;min-height:44px;padding:2px;font-size:9px}}
+/* Touch aiming marker follows the drag, without creating a React render per move. */
+.omega-protocol-action-pad button.omega-protocol-fire{position:relative;touch-action:none}
+.omega-protocol-fire-aim-marker{position:absolute;width:12px;height:12px;left:calc(50% - 6px);top:calc(50% - 6px);border:2px solid #bafff4;border-radius:50%;background:#63dcd2;box-shadow:0 0 9px #71e7e0;opacity:0;pointer-events:none}
+.omega-protocol-fire small{font-size:8px;line-height:1;white-space:nowrap}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-fire small{font-size:7px}}
