@@ -660,3 +660,20 @@
 @media(orientation:landscape) and (max-height:540px){
  .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-aira-v2{height:82%;bottom:32px;top:auto;right:3%;width:42%}
 }
+
+/* Integrated scene: character and site share one painted light and ground. */
+.rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-art{
+ object-fit:contain;object-position:right center;background:#08101e;filter:brightness(1);transform:none;
+}
+.rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-shade{
+ background:linear-gradient(90deg,rgba(5,14,24,.94) 0%,rgba(5,14,24,.75) 35%,rgba(5,14,24,.12) 74%),linear-gradient(0deg,rgba(5,14,24,.72),transparent 32%);
+}
+@media(max-width:670px) and (orientation:portrait){
+ .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-art{object-position:center top}
+ .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-shade{
+  background:linear-gradient(180deg,rgba(4,12,22,.06) 0%,rgba(4,12,22,.1) 32%,rgba(4,12,22,.89) 52%,#07111b 100%);
+ }
+}
+@media(orientation:landscape){
+ .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-missions{margin-top:-10px!important}
+}

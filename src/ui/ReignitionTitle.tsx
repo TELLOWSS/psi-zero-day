@@ -169,10 +169,11 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    <div className="rg-main">
     <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
      <picture className="rg-hero-picture">
+      {theme==='cinematic'&&!silverPreviewRequested&&<source media="(max-width:670px) and (orientation:portrait)" srcSet="/assets/omega/aira-v2/integrated-home-portrait-candidate.webp"/>}
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
-      <img src={theme==='cinematic'?'/assets/omega/aira-v2/home-environment-candidate-v1.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      <img src={theme==='cinematic'?(silverPreviewRequested?'/assets/omega/aira-v2/home-environment-candidate-v1.webp':'/assets/omega/aira-v2/integrated-home-wide-candidate.webp'):theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt={theme==='cinematic'&&!silverPreviewRequested?'비 내리는 현장에서 전진하는 은백색 AIRA':''} fetchPriority="high" decoding="async"/>
      </picture>
-     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2"
+     {theme==='cinematic'&&silverPreviewRequested&&<img className="rg-veteran-character rg-aira-v2"
       src={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
         silverMalePortrait:(silverPortrait??"/assets/omega/aira-v2/aira-silver-home-candidate.webp")}
       alt={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?

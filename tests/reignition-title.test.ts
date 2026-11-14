@@ -14,8 +14,9 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('RE:IGNITION');
   expect(html).toContain('class="rg-appearance"');
   expect(html).toContain('화면 스타일');
-  expect(html).toContain('src="/assets/omega/aira-v2/home-environment-candidate-v1.webp"');
-  expect(html).toContain('/assets/omega/aira-v2/aira-silver-home-candidate.webp');
+  expect(html).toContain('src="/assets/omega/aira-v2/integrated-home-wide-candidate.webp"');
+  expect(html).toContain('/assets/omega/aira-v2/integrated-home-portrait-candidate.webp');
+  expect(html).not.toContain('class="rg-veteran-character rg-aira-v2"');
   expect(html).toContain('시그널 가드');expect(html).toContain('시그널 워치');
   expect(html).toContain('max="6" value="6"');expect(html).toContain('max="50" value="50"');
   expect(html).toContain('가드 마스터 3성 3개 / 6개');expect(html).toContain('워치 마스터 3성 7개 / 50개');

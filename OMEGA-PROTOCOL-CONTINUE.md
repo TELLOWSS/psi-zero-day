@@ -1102,3 +1102,12 @@
 - Aside 브라우저에서 1440×900, 1024×768, 390×844, 844×390, 320×640의 배경과 인물 로딩·가로 넘침 없음·세로 화면 인물/본문 미겹침을 확인했다. 실제 `첫 작전 시작`으로 시그널 가드 진입도 확인했다. 캡처는 `outputs/omega-art/aira-home-environment-20261115/`. 변경 파일과 원본 프롬프트는 이 절을 기준으로 추적한다. 사람의 화면 품질 검수와 Android 실기기 확인은 남으며 main/Production 배포는 하지 않았다.
 - 실제 Vite preview 빌드 390×844에서 배경 1672px·인물 1024px 로드, 가로 넘침 없음, 첫 작전 시작→가드 진입 확인. typecheck·메인 관련 5개 테스트·preview build 통과. 전체 회귀 및 새 HEAD 원격 상태는 완료 후 확인한다.
 - 전체 npm test 2804 통과/1 skipped. 새 HEAD의 GitHub CI 및 Vercel preview는 push 후 별도 확인.
+
+## 83. AIRA·현장 통합 메인 원화 (2026-11-15)
+
+- Director가 §81–82의 분리된 인물·배경이 이질적이며 더욱 역동적이고 매력적인 표현을 요청했다. 내장 이미지 생성 도구에 기존 은백색 AIRA와 현장 배경을 참조로 제공해, 비 내리는 공사 현장에서 움직이는 성인 AIRA를 인물·배경·젖은 발밑·그림자·반사·현장 조명이 한 장면으로 이어지도록 재제작했다. 선정한 모습은 후보이며 동작 애니메이션이 아닌 단일 일러스트다.
+- 가로 원본 `outputs/omega-art/aira-integrated-home-20261115/wide-source.png` SHA-256 `35c0698ba74d8f10b0de4371e5da804b312008dc040859f634e9bfae4e75413a`, 세로 원본 `portrait-source.png` SHA-256 `7e326d804897fed93d29ca171d130c57b010688126040c4e1cd4d4ac1076794e`. WebP `public/assets/omega/aira-v2/integrated-home-wide-candidate.webp` 1672×941 / 328612바이트 / SHA-256 `ae29a0d113384727d21a27ec39fa21a12b8c3563f482f961000dadfff99c2433`, `integrated-home-portrait-candidate.webp` 1024×1536 / 314954바이트 / SHA-256 `025d5a56f82e450800ec121c12cc56ec73752d771d3eaee4131c04cd0cfd5933`. 원본과 이전 분리 이미지는 보존했다.
+- 기본 시네마틱 홈은 가로·세로에 맞는 통합 원화를 각각 사용하고 별도의 인물 레이어를 중복 렌더링하지 않는다. 실제 메뉴 텍스트와 버튼은 DOM이며, 은백색/남성 별도 비교 모드는 유지한다. Aside 실제 화면 1440×900·1024×768·390×844·844×390·320×640에서 해당 원화 디코딩·가로 넘침 0 확인, PC·모바일 캡처를 `outputs/omega-art/aira-integrated-home-20261115/`에 저장했다. 데스크톱 원화의 발끝이 다음 패널에 가리는 문제를 패널 위치 조정으로 보완했다.
+- 실제 버튼으로 가드 화면 진입 확인. 기존 AIRA 8방향 원본과 홈 소스 QA 통과, 스토리·홈·게임 화면 기존 자동 검증 PC/모바일 3크기 통과. 원화는 감독 시각 검수 후보이며, Android 실기기와 게임 내 애니메이션·연속 월드/입체 배경 완성은 별도다.
+- 실제 Vite preview 빌드 390×844에서 화면 크기 변경 직후 이전 가로 이미지가 잠시 남아 첫 판정이 false였으나, picture 소스 전환을 기다린 뒤 1024px 세로 이미지 로딩·가로 넘침 없음 및 첫 작전→가드 진입을 확인했다. typecheck·메인 테스트 5개·preview build 통과. 전체 회귀와 새 HEAD 원격 상태는 별도 확인.
+- 최종 전체 npm test 2804 통과/1 skipped, typecheck·preview build 통과. 새 HEAD CI/Vercel 상태는 push 후 확인한다.
