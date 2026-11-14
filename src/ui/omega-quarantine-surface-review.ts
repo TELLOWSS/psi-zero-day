@@ -17,13 +17,15 @@ let cachedHorizon:{width:number;height:number;detailed:boolean;canvas:HTMLCanvas
 /** Distant, non-solid scenic plate; camera-derived parallax and no gameplay state. */
 export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,camera:OmegaCameraState,zoom:number,detailed=false):boolean {
  if(plan.sector!==1||typeof Image==='undefined'||typeof document==='undefined')return false;
- if(detailed&&!detailedHorizon){detailedHorizon=new Image();detailedHorizon.decoding='async';detailedHorizon.src='/assets/omega/scene-art-preview/industrial-horizon-v2.webp';}
+ if(detailed&&!detailedHorizon){detailedHorizon=new Image();detailedHorizon.decoding='async';detailedHorizon.src='/assets/omega/scene-art-preview/buildings-v3.webp';}
  if(!detailed&&!horizon){horizon=new Image();horizon.decoding='async';horizon.src=OMEGA_HORIZON_REVIEW_ASSET;}
  const selected=detailed?detailedHorizon:horizon;
  if(!selected?.complete||!selected.naturalWidth||!selected.naturalHeight)return false;
  const width=ctx.canvas.width,height=ctx.canvas.height;
  if(width<=0||height<=0||!Number.isFinite(zoom))return false;
- const band=Math.max(1,Math.round(Math.min(height*(detailed ? .44 : .38),width*.40)));
+ // Keep the distant building layer near the horizon. Extending it too far
+ // down the screen makes live actors look as though they stand on a facade.
+ const band=Math.max(1,Math.round(Math.min(height*(detailed ? .32 : .38),width*.40)));
  if(!cachedHorizon||cachedHorizon.width!==width||cachedHorizon.height!==band||cachedHorizon.detailed!==detailed){
   const canvas=document.createElement('canvas');canvas.width=width+240;canvas.height=band;
   const layer=canvas.getContext('2d');if(!layer)return false;
@@ -34,7 +36,7 @@ export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFi
    const scale=Math.max(canvas.width/selected.naturalWidth,band/selected.naturalHeight);
    const sw=canvas.width/scale,sh=band/scale;
    const sx=(selected.naturalWidth-sw)/2;
-   const sy=Math.max(0,Math.min(selected.naturalHeight-sh,selected.naturalHeight*.55-sh/2));
+   const sy=Math.max(0,Math.min(selected.naturalHeight-sh,selected.naturalHeight*.32-sh/2));
    layer.drawImage(selected,sx,sy,sw,sh,0,0,canvas.width,band);
   }else layer.drawImage(selected,0,0,canvas.width,band);
   layer.filter='none';
@@ -50,6 +52,18 @@ export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFi
 }
 let texture:HTMLImageElement|undefined;
 let detailedTexture:HTMLImageElement|undefined;
+let yard:HTMLImageElement|undefined;
+/** Orthographic single-field ground art, projected by the real world camera. */
+export function drawOmegaSceneYard(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan):boolean {
+ if(plan.sector!==1||typeof Image==='undefined')return false;
+ if(!yard){yard=new Image();yard.decoding='async';yard.src='/assets/omega/scene-art-preview/yard-ground-v3.webp';}
+ if(!yard.complete||!yard.naturalWidth||!yard.naturalHeight)return false;
+ const sourceRatio=yard.naturalWidth/yard.naturalHeight,targetRatio=OMEGA_FIELD_WIDTH/OMEGA_FIELD_HEIGHT;
+ const sw=sourceRatio>targetRatio?yard.naturalHeight*targetRatio:yard.naturalWidth;
+ const sh=sourceRatio>targetRatio?yard.naturalHeight:yard.naturalWidth/targetRatio;
+ ctx.drawImage(yard,(yard.naturalWidth-sw)/2,(yard.naturalHeight-sh)/2,sw,sh,0,0,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
+ return true;
+}
 export function drawOmegaSurfaceReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,detailed=false):boolean {
  if(plan.sector!==1||typeof Image==='undefined')return false;
  if(detailed&&!detailedTexture){detailedTexture=new Image();detailedTexture.decoding='async';detailedTexture.src='/assets/omega/scene-art-preview/concrete-detail-v2.webp';}

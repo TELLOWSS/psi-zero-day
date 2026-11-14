@@ -1023,3 +1023,11 @@
 - 로컬 실제 게임 네 화면 크기에서 세 이미지 HTTP 200, 이동 및 네 감염체 표시, pageerror 0 확인. 정상 세션의 before/after 동작 기록과 영상, 실제 빌드 화면, `cached-throttled.json`, `final-viewport-report.json`은 `outputs/omega-art/smooth-scene-20261114/`. 로컬 Chrome 1440×900에서 준비 이후 5초 rAF 측정: CPU 1배 p95 16.8ms, 4배 감속 p95 16.8ms/p99 33.3ms, 각각 50ms 초과 0회. 하나의 데스크톱 합성 측정이지 Android 실기기 보증이나 실제 사용자의 FPS 측정이 아니다.
 - §71의 GitHub Capture 브라우저 CI가 대시 프레임 한 개만 관측해 실패한 사실을 확인했다. 키 입력 전 비동기 관찰기 준비를 보장하지 않은 경쟁과 실제 피격의 우선순위 간섭을 수정하여, 관찰기를 먼저 설치하고 무피해 native combatGun fixture를 사용하는 QA로 바꾸었다. 느린 로딩·실패 복구와 S/N 대시 각 최소 2프레임을 검사하며, 로컬에서는 4프레임 모두 확인했다. 검사를 삭제하거나 요구치를 낮추지 않았다.
 - 전체 `npm test` 2797 통과/1 skipped, typecheck 및 preview 환경 전체 build 통과. 실제 사용자 기기와 Android 성능·발 미끄럼 정량 분석·건물/구조물 충돌 가시성 및 전체 전투 품질은 미검증이다. 변경은 `omegaSceneArt=1` 미승인 검수 화면에 한정하고, PR #235 Draft/main·Production 보류. 새 HEAD CI/Vercel preview는 push 후 확인한다.
+
+## 73. 1구역 현장 원화 재구성 검수 후보 (2026-11-14)
+
+- Director가 구조물이 흉내에 그치고 어설프다고 지적했다. `omegaSceneArt=1`의 1구역만 같은 시점의 단일 월드 바닥, 후방 건물층 및 기존 실제 장애물에 연결된 현장 사무실·안전 차단물·지게차·비계 후보로 재구성했다. 기존 평면 장식과 과장된 타원 장애물 그림자는 이 검수 화면에서 숨겼다. 이미지 그림자와 깊이 순서는 시각 표현이며 충돌 엔진은 유지된다.
+- 이미지 생성 원본은 `outputs/omega-art/coherent-yard-20261114/`에 보존. 게임용 WebP SHA-256: `yard-ground-v3.webp` 92b101eede43f3ff43ca3b5500e4d606b3cf14226f59274a3e54673bc8580458, `buildings-v3.webp` 133bad2a475caa84f88283e90e68493cc1def4be8cf9a57faddde114c4d20ec2, `barrier-v3.webp` 0240273a93c097f2133b315c2c3d8f36d4d757efef5110b533c62baeca195688, `site-office-v3.webp` 1558f22c10d8769aa97bc204822b186847f307f1a45d502c2c884bd17cd6c269. 기존 forklift/scaffold는 §72 참조.
+- 로컬 개발 서버와 preview 빌드에서 1440×900, 1024×768, 390×844, 844×390의 6종 이미지 HTTP 200, 이동·감염체 표시·pageerror 0 확인. 사무실 남쪽 접근에서 y=326으로 정지, 지게차 왼쪽 접근에서 x=774로 정지 확인. 일반 실험 화면에는 신규 6종 요청 0. 기존 액션 QA는 느린 로딩과 실패 복구, 앞·뒤 대시 각 4프레임 통과. 증거는 `outputs/omega-art/coherent-yard-20261114/`, 자동 검사는 `scripts/qa-omega-scene-yard-browser.mjs`.
+- 이것은 여전히 2D/2.5D 검수 후보이며 실제 입체 건물이 아니다. 후방 건물은 화면 배경이고 충돌하지 않으며, 구조물의 그림 윤곽과 기존 사각형 충돌·가림·조명이 모든 방향에서 맞는다는 보장은 없다. 원경과 인물 위치가 겹쳐 부유해 보일 수 있다. 사용자 지적의 핵심인 실제 공간감은 미완성이다. 다음 작업에서 공간에 고정된 구조물의 기하·높이·다방향 충돌·가림·광원을 설계해 검증하고 Android 실기기 성능과 자연스러운 동작도 확인한다. PR #235 Draft 및 main/Production 보류.
+- 전체 `npm test` 2797 통과 / 1 skipped, typecheck 및 preview 빌드 통과. 새 HEAD의 GitHub CI 및 Vercel 배포 상태는 push 후 확인한다.

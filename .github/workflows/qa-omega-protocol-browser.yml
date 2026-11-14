@@ -9,6 +9,7 @@ on:
       - 'scripts/qa-omega-surface-review-browser.mjs'
       - 'scripts/qa-omega-surface-simulation.mjs'
       - 'scripts/qa-omega-scene-action-browser.mjs'
+      - 'scripts/qa-omega-scene-yard-browser.mjs'
       - 'src/ui/omega-scene-art-preview*'
       - 'src/ui/omega-scene-prop-preview.ts'
       - 'src/ui/omega-infected-candidate-review.ts'
@@ -237,6 +238,10 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: node scripts/qa-omega-scene-action-browser.mjs
+      - name: Coherent yard, real movement, office collision and isolation
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-scene-yard-browser.mjs
       - name: M04-D6 actual native cart warning / charge and mobile-landscape boss HUD
         env:
           CHROME_BIN: /usr/bin/google-chrome

@@ -8,9 +8,9 @@ import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
-import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
+import {drawOmegaHorizonReview,drawOmegaSceneYard,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
 import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
-import {drawOmegaSceneProp} from './omega-scene-prop-preview';
+import {drawOmegaSceneProp,drawOmegaScenePropShadows} from './omega-scene-prop-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -69,19 +69,23 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
-  drawOmegaFieldGround(ctx,field.plan,false);
-  if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
-   drawOmegaSurfaceReview(ctx,field.plan,scenePreview);
-  drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
-  drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
-  drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
+  const coherentYard=scenePreview&&field.plan.sector===1;
+  if(!(coherentYard&&drawOmegaSceneYard(ctx,field.plan)))drawOmegaFieldGround(ctx,field.plan,false);
+  if(!coherentYard){
+   if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'))
+    drawOmegaSurfaceReview(ctx,field.plan);
+   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
+   drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
+   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
+  }
   // Three independent screen-space atmospheric planes sample the REAL
   // hero-following quarter-view camera; restore leaves native physics intact.
-  drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
+  if(!coherentYard)drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
   if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
    drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom,scenePreview);
-  drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
+  if(coherentYard)drawOmegaScenePropShadows(ctx,field.plan);
+  else drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
@@ -99,7 +103,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
   for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
  }
- ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ if(!(scenePreview&&field?.plan.sector===1)){
+  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ }
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
@@ -218,7 +224,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
-  drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
+  if(!(scenePreview&&field.plan.sector===1))drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
  }
  // Modifier fog is presentation-only; crosswind and unstable ground also
  // affect the actual enemy motion or movement input in the run-scoped engine.
