@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "frames": [
+    {
+      "file": "basic-0.webp",
+      "sha256": "bbe6c6e08958b2ed51ecc7b4d85696e9dae0f75ce6dd85436f33a52b55428545",
+      "foot": {
+        "x": 325,
+        "y": 535
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "basic-1.webp",
+      "sha256": "de23806eaadb5df779bda23683b487562668183599032d36186c5b652a57b341",
+      "foot": {
+        "x": 295,
+        "y": 539
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "basic-2.webp",
+      "sha256": "21172af504802db83474404596f9e1819c947952a8c0b3f5066cd94fe1c2eb37",
+      "foot": {
+        "x": 332,
+        "y": 534
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "basic-3.webp",
+      "sha256": "4b658bcf0c1d2d800cc9a07718a76a5bcbfc192e8c14c1eeb37e5388673f3a33",
+      "foot": {
+        "x": 287,
+        "y": 537
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "runner-0.webp",
+      "sha256": "cb90e7d6a464138f0079a822fa97a850df044ba7004c45f6361fa67c1133d3e0",
+      "foot": {
+        "x": 315,
+        "y": 517
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "runner-1.webp",
+      "sha256": "eb309b820b2e2303b5ac27f22ce3e11bb74ef892717ecdac1c8ce08e0760fef1",
+      "foot": {
+        "x": 300,
+        "y": 551
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "runner-2.webp",
+      "sha256": "13ee19a9f371a1d5b3c8d1256d2a1e173bbe98115b060e0fae4e7290f9d14412",
+      "foot": {
+        "x": 309,
+        "y": 554
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "runner-3.webp",
+      "sha256": "52c6e036b77c5d28a619cead191e1d140910a30bb9681459eba21279530930d8",
+      "foot": {
+        "x": 347,
+        "y": 552
+      },
+      "referenceHeight": 500
+    },
+    {
+      "file": "armored-0.webp",
+      "sha256": "9518332f54eb5a9b5718ed0da3c4ec54d3ddcc2d0a5a7f0a05f00bba96da57fd",
+      "foot": {
+        "x": 353,
+        "y": 550
+      },
+      "referenceHeight": 550
+    },
+    {
+      "file": "armored-1.webp",
+      "sha256": "1553c458b98ca3578b3e2591fa302e99d73bcc3c3a81033c0eae0fe5ac045685",
+      "foot": {
+        "x": 333,
+        "y": 548
+      },
+      "referenceHeight": 550
+    },
+    {
+      "file": "armored-2.webp",
+      "sha256": "d64b313ace29b648b9217a8be7cc33a5658f6d4453ac7089cd495885389ab7fe",
+      "foot": {
+        "x": 359,
+        "y": 596
+      },
+      "referenceHeight": 550
+    },
+    {
+      "file": "armored-3.webp",
+      "sha256": "49b90885a9d656e4b11db34d07910714683ad1bf943e1f70e29ee250395bf4d7",
+      "foot": {
+        "x": 324,
+        "y": 598
+      },
+      "referenceHeight": 550
+    },
+    {
+      "file": "elite-0.webp",
+      "sha256": "4053ca98c66e3ffa27019176380974874dda3f6b86f3e16956459da15c0cc0ce",
+      "foot": {
+        "x": 360,
+        "y": 541
+      },
+      "referenceHeight": 560
+    },
+    {
+      "file": "elite-1.webp",
+      "sha256": "8e41bca537a57e83a840c4db8ad237a10218b79ba388a8aa3b91be85aa7a4bd5",
+      "foot": {
+        "x": 330,
+        "y": 539
+      },
+      "referenceHeight": 560
+    },
+    {
+      "file": "elite-2.webp",
+      "sha256": "898631ac224b8f9f0743aaf25c34a5ee283affa2543150293688e924f94ebe99",
+      "foot": {
+        "x": 352,
+        "y": 569
+      },
+      "referenceHeight": 560
+    },
+    {
+      "file": "elite-3.webp",
+      "sha256": "291c8ccdb936b8cc735785dc79cb75a929dd6e09c5010b58986bea58c2a7191a",
+      "foot": {
+        "x": 330,
+        "y": 568
+      },
+      "referenceHeight": 560
+    }
+  ]
+}

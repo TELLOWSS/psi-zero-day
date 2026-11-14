@@ -4,15 +4,19 @@ import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/ome
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
-import {omegaFieldTargetGuide} from '../domain/omega-protocol-field';
+import {omegaFieldTargetGuide,omegaFieldScreenMoveToWorld} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
+import {drawOmegaHorizonReview,drawOmegaSceneYard,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
+import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
+import {drawOmegaSceneProp,drawOmegaScenePropShadows} from './omega-scene-prop-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
-import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
+import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaScreenToWorld,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
+import {omegaInfectedCandidateReview,omegaInfectedLabRequested,omegaInfectedSoloKind} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
 import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
@@ -39,6 +43,15 @@ import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega
 import {omegaAdvanceDashEchoes,drawOmegaDashEnergy,drawOmegaGroundedSplash,type OmegaDashEcho} from './omega-protocol-dash-visuals';
 import './omega-protocol-playtest.css';
 
+/** Preview HUD symbols communicate the real controls; weapon art remains separate. */
+function OmegaActionIcon({kind}:{kind:'blade'|'dash'|'ultimate'|'interact'}){
+ return <svg className="omega-protocol-action-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+  {kind==='blade'&&<><path d="M22.7 3.4 27.8 2l-1.4 5.1-13 13-3.7-3.7 13-13Z"/><path d="m8.1 14.8 9.1 9.1M10.4 20.9 4.1 27.2m-.6-4.1 5.4 5.4"/></>}
+  {kind==='dash'&&<><path d="M4 12h12M2.5 17H13M6 22h8M16 10l9 6-9 6M25 16H10"/></>}
+  {kind==='ultimate'&&<><path d="m16 2 3.2 9.8L29 15l-9.8 3.2L16 28l-3.2-9.8L3 15l9.8-3.2L16 2Z"/><circle cx="16" cy="15" r="2"/></>}
+  {kind==='interact'&&<><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="2.5"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4M6.8 6.8l2.8 2.8m12.8 12.8 2.8 2.8m0-18.4-2.8 2.8M9.6 22.4l-2.8 2.8"/></>}
+ </svg>;
+}
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
 const validKeys=new Set<string>(keys);
 // Explicit fail-closed sprite slot: binaries from PR #234 are not yet approved
@@ -59,20 +72,29 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const camera=omegaQuarterViewCamera(state.player,ctx.canvas.width,ctx.canvas.height,cameraZoom);
  applyOmegaQuarterView(ctx,camera);
  const field=session.field;
+ const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  if(field){
-  drawOmegaFieldGround(ctx,field.plan,false);
-  drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
-  drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
-  drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
+  const coherentYard=scenePreview&&field.plan.sector===1;
+  if(!(coherentYard&&drawOmegaSceneYard(ctx,field.plan)))drawOmegaFieldGround(ctx,field.plan,false);
+  if(!coherentYard){
+   if(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'))
+    drawOmegaSurfaceReview(ctx,field.plan);
+   drawOmegaG2EntrySurface(ctx,field.plan,state.gameTime,m12G2Quality);
+   drawOmegaG4CenterStageMaterial(ctx,field.plan,m12G4Budget);
+   drawOmegaG2RearEnvironment(ctx,field.plan,state.gameTime,m12G2Quality);
+  }
   // Three independent screen-space atmospheric planes sample the REAL
   // hero-following quarter-view camera; restore leaves native physics intact.
-  drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
+  if(!coherentYard)drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
-  drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
+  if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
+   drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom,scenePreview);
+  if(coherentYard)drawOmegaScenePropShadows(ctx,field.plan);
+  else drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
@@ -90,7 +112,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
   for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
  }
- ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ if(!(scenePreview&&field?.plan.sector===1)){
+  ctx.strokeStyle='#446377';ctx.lineWidth=14;ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ }
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
@@ -105,7 +129,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
    {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15,
-    zombie:session.zombieBrain(h.id)??undefined});
+    zombie:session.zombieBrain(h.id)??undefined,
+    infectedReview:scenePreview||(typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')),targetX:p.x});
   ctx.restore();
  };
  const renderHero=()=>{
@@ -147,7 +172,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting:Boolean(renderAction.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
- if(!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
+ if(!(scenePreview&&drawOmegaSceneArt(ctx,artView))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)&&
     !drawOmegaAiraV2Candidate(ctx,artView,userApprovedAiraV2)){
   drawOmegaProtocolActor(ctx,{...actorView,
@@ -159,20 +184,29 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(gait.active&&!p.isDashing)drawOmegaGroundedSplash(ctx,[gait.left,gait.right],state.gameTime);
  ctx.restore();
  };
+ const projectilesInDepth=Boolean(scenePreview&&field?.plan.sector===1);
+ const renderProjectile=(projectile:(typeof state.projectiles)[number])=>{
+  ctx.fillStyle='#7df3fa';ctx.beginPath();
+  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
+  ctx.fill();
+ };
  if(field){
   // Stable painter's order: the player, enemies, and original collision
   // objects share one actual world-foot depth. No translucent fake cover.
-  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress)){
+  for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress,projectilesInDepth?state.projectiles:[])){
    if(item.kind==='prop'){
     const obstacle=field.plan.obstacles[item.index]!;
-    drawOmegaFieldProp(ctx,field.plan,obstacle);
-    drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
-    drawOmegaG2NativeFacade(ctx,field.plan,obstacle,state.gameTime,m12G2Quality);
-    drawOmegaG3NativeMesh(ctx,field.plan,obstacle,m12G3Budget);
+    if(!(scenePreview&&drawOmegaSceneProp(ctx,field.plan,obstacle,camera))){
+     drawOmegaFieldProp(ctx,field.plan,obstacle);
+     drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
+     drawOmegaG2NativeFacade(ctx,field.plan,obstacle,state.gameTime,m12G2Quality);
+     drawOmegaG3NativeMesh(ctx,field.plan,obstacle,m12G3Budget);
+    }
    }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
+   else if(item.kind==='projectile')renderProjectile(state.projectiles[item.index]!);
    else renderHero();
   }
  }else{
@@ -181,12 +215,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  // The native prop's depth can hide the hero: show only a subtle floor beacon.
  if(field)drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
- // Native projectiles and impacts always render above solid geometry.
- for(const projectile of state.projectiles){
-  ctx.fillStyle='#7df3fa';ctx.beginPath();
-  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
-  ctx.fill();
- }
+ // Keep the old draw path outside the opt-in scene. Impacts remain visible
+ // feedback; only projectile sprites participate in real obstacle depth.
+ if(!projectilesInDepth)for(const projectile of state.projectiles)renderProjectile(projectile);
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  const slash=session.lastBladeStrike;
  if(slash && state.gameTime-slash.time>=0 && state.gameTime-slash.time<.22){
@@ -206,7 +237,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
-  drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
+  if(!(scenePreview&&field.plan.sector===1))drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
  }
  // Modifier fog is presentation-only; crosswind and unstable ground also
  // affect the actual enemy motion or movement input in the run-scoped engine.
@@ -314,6 +345,8 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
    h.x=starts[i]!.x;h.y=starts[i]!.y;
    h.hp=25000;h.maxHp=25000;h.isStunned=0;
   });
+  const solo=omegaInfectedSoloKind(window.location.search,import.meta.env.DEV);
+  if(solo){const id=four.find(z=>z.kind===solo)?.id;state.hazards=state.hazards.filter(h=>h.id===id);}
   return session;
  }
  if(qa==='cartWarning'){
@@ -375,6 +408,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const combatProbe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
+ const [autoFire,setAutoFire]=useState(false);
+ const autoFireRef=useRef(false),fireKeyRef=useRef(false),firePointerRef=useRef(false);
  const [classicPad,setClassicPad]=useState(false);
  const [fps,setFps]=useState(0);
  const [interactionMessage,setInteractionMessage]=useState('');
@@ -408,11 +443,46 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iStatus,setG5iStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [g5iFeedback,setG5iFeedback]=useState('새로 그린 동쪽 사격·대시·피격 원화 WebP 12개를 선택하세요.');
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
+ const g5iImportEpoch=useRef(0);
+ const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const scenePreview=typeof window!=='undefined'&&omegaSceneArtRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
+ const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
+ const [infectedOn,setInfectedOn]=useState(false);
+ const infectedEpoch=useRef(0);
+ useEffect(()=>{
+  if(!scenePreview)return;
+  let mounted=true;
+  const root='/assets/omega/scene-art-preview/infected/';
+  (async()=>{
+   const response=await fetch(root+'infected-anchors.json');
+   if(!response.ok)throw Error('감염체 앵커를 불러오지 못했습니다');
+   const manifest=await response.json() as {frames:{file:string}[]};
+   const files=await Promise.all(manifest.frames.map(async row=>{
+    const result=await fetch(root+row.file);if(!result.ok)throw Error('감염체 원화 누락: '+row.file);
+    return new File([await result.blob()],row.file,{type:'image/webp'});
+   }));
+   if(!mounted)return;
+   await omegaInfectedCandidateReview.import(files,manifest,{cooperative:true});
+   if(mounted){omegaInfectedCandidateReview.activate(true);setInfectedStatus('ready');}
+  })().catch(error=>{if(mounted){setInfectedStatus('failed');console.warn('Scene art preview failed',error);}});
+  return ()=>{mounted=false;};
+ },[scenePreview]);
  const silverPreviewRequested=typeof window!=='undefined'&&
   (omegaSilverPreviewEnabled(window.location.search)||g4SilverLab||g5ArtLab||g5bPainterlyReview||g5cArtReview||g5iArtLab);
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
+ const mouseAimRef=useRef<{x:number;y:number}|null>(null);
+ const touchAimRef=useRef<{x:number;y:number}|null>(null);
+ const fireDragOrigin=useRef<{id:number;x:number;y:number;started:number}|null>(null);
+ const touchShotLaunched=useRef(false);
+ const queuedTap=useRef<{until:number;aim:{x:number;y:number}|null}|null>(null);
+ const fireAimMarker=useRef<HTMLSpanElement>(null);
+ const clearFireDrag=()=>{
+  firePointerRef.current=false;touchAimRef.current=null;fireDragOrigin.current=null;
+  if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
+ };
  const arenaRef=useRef<HTMLDivElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
@@ -425,7 +495,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const n=Number(seedValue);
   const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
-  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;queuedTap.current=null;touchShotLaunched.current=false;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
  useEffect(()=>{
@@ -464,23 +534,50 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    lease?.revoke();
   };
  },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview,g5iArtLab]);
- useEffect(()=>()=>{omegaG5cReview.dispose();omegaG5iActionPreview.dispose();},[]);
+ useEffect(()=>()=>{g5iImportEpoch.current++;infectedEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();omegaInfectedCandidateReview.dispose();},[]);
+ const importInfected=useCallback(async(files:FileList|null)=>{
+  if(!infectedLab||!files)return;const epoch=++infectedEpoch.current;omegaInfectedCandidateReview.dispose();setInfectedOn(false);setInfectedStatus('loading');
+  try{
+   const list=Array.from(files),docs=list.filter(f=>f.name==='infected-anchors.json');
+   if(docs.length!==1||list.length!==17||docs[0]!.size>100_000)throw Error('WebP 16개와 infected-anchors.json을 함께 선택하세요');
+   const manifest=JSON.parse(await docs[0]!.text());if(epoch!==infectedEpoch.current)return;
+   await omegaInfectedCandidateReview.import(list.filter(f=>f!==docs[0]),manifest);if(epoch!==infectedEpoch.current)return;
+   setInfectedStatus('ready');setInfectedMessage('16장 해시·경계·앵커 형식 확인 · 원화·발 위치는 미승인');
+  }catch(e){if(epoch!==infectedEpoch.current)return;omegaInfectedCandidateReview.dispose();setInfectedStatus('failed');setInfectedMessage(e instanceof Error?e.message:'감염체 후보 오류');}
+ },[infectedLab]);
  useEffect(()=>{omegaG5eFx.reset();},[g5eNativeActionLab]);
  useEffect(()=>{omegaG5gNativePoseStudy.reset();},[g5gSourcePoseLab]);
  const importG5iFiles=useCallback(async(files:FileList|null)=>{
   if(!g5iArtLab||!files)return;
+  const epoch=++g5iImportEpoch.current;
   setG5iPreviewOn(false);setG5iStatus('loading');
-  setG5iFeedback('12개 원본 파일 SHA·투명도·발 접지·몸체 포즈 차이 검사 중…');
+  setG5iFeedback('12개 후보 파일 SHA·알파 범위·몸체 포즈 차이 검사 중… 발 접지는 별도 시각 검수');
   try{
    const proof=await omegaG5iActionPreview.import(Array.from(files));
+   if(epoch!==g5iImportEpoch.current)return;
    setG5iStatus('ready');
    const score=Object.entries(proof.minCoreSilhouetteChange)
     .map(([action,value])=>action.toUpperCase()+' '+(value*100).toFixed(1)+'%').join(' / ');
    setG5iFeedback('12/12 후보 검증 · '+score+' · 독립 작화 여부는 사람 시각 승인 필요');
   }catch(error){
+   if(epoch!==g5iImportEpoch.current)return;
    omegaG5iActionPreview.dispose();setG5iStatus('failed');
    setG5iFeedback(error instanceof Error?error.message:'원화 후보 검증 실패');
   }
+ },[g5iArtLab]);
+ const importG5iWide=useCallback(async(files:FileList|null)=>{
+  if(!g5iArtLab||!files)return;
+  const epoch=++g5iImportEpoch.current;
+  omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
+  try{
+   const list=Array.from(files),docs=list.filter(f=>f.name==='g5j-anchors.json');
+   if(docs.length!==1||list.length!==13||docs[0]!.size>100_000)throw Error('640×512 WebP 12개와 g5j-anchors.json을 함께 선택하세요');
+   const manifest=JSON.parse(await docs[0]!.text());
+   if(epoch!==g5iImportEpoch.current)return;
+   await omegaG5iActionPreview.importWide(list.filter(f=>f!==docs[0]),manifest);
+   if(epoch!==g5iImportEpoch.current)return;
+   setG5iStatus('ready');setG5iFeedback('와이드 12장 및 앵커 형식 확인 · 좌표 정확성과 작화는 시각 승인 전');
+  }catch(error){if(epoch!==g5iImportEpoch.current)return;omegaG5iActionPreview.dispose();setG5iStatus('failed');setG5iFeedback(error instanceof Error?error.message:'앵커 검사 실패');}
  },[g5iArtLab]);
  const importG5cFiles=useCallback(async (files:FileList|null)=>{
   if(!g5cArtReview||!files)return;
@@ -511,6 +608,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
+   if(scenePreview&&!omegaInfectedCandidateReview.ready)return;
+   if(scenePreview&&e.key.toLowerCase()==='j'){fireKeyRef.current=true;e.preventDefault();}
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
@@ -523,10 +622,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    }
   };
   const onKeyUp=(e:KeyboardEvent)=>{
+   if(e.key.toLowerCase()==='j'){fireKeyRef.current=false;e.preventDefault();}
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;queuedTap.current=null;touchShotLaunched.current=false;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
    if(session.run.phase==='battle'&&session.engine.state.phase==='playing'){
     session.pause();setPaused(true);setSnapshot(session.snapshot);
@@ -557,7 +657,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
-  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0;
+  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0,qaRadioLaunches=0,qaLastGunAngle=0;
   const fixture=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
   let dashEchoes:readonly OmegaDashEcho[]=[];
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
@@ -569,13 +669,40 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
-   const dt=last?Math.min(.05,Math.max(0,(now-last)/1000)):0;last=now;
+   const elapsed=last?Math.max(0,(now-last)/1000):0;
+   const dt=Math.min(.05,elapsed);last=now;
    const k=keysRef.current;
    const mx=(Number(k.has('d')||k.has('D')||k.has('ArrowRight'))-Number(k.has('a')||k.has('A')||k.has('ArrowLeft')))+mobileDir.current.x;
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
-   if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
+   // Give a new touch a short chance to indicate a direction before its
+   // first shot; a stationary hold still fires after the grace interval.
+   const touchStart=fireDragOrigin.current;
+   if(touchStart&&now-touchStart.started>=90)firePointerRef.current=true;
+   if(queuedTap.current&&now>queuedTap.current.until)queuedTap.current=null;
+   const pendingAim=touchAimRef.current??queuedTap.current?.aim;
+   const aimCanvas=canvasRef.current,aimClient=mouseAimRef.current;
+   let aim:{x:number;y:number}|undefined;
+   if(scenePreview&&pendingAim&&!autoFireRef.current){
+    const world=omegaFieldScreenMoveToWorld(pendingAim.x,pendingAim.y);
+    const player=session.engine.state.player;
+    aim={x:player.x+world.x*100,y:player.y+world.y*100};
+   }else if(scenePreview&&aimCanvas&&aimClient&&!autoFireRef.current){
+    const rect=aimCanvas.getBoundingClientRect();
+    if(rect.width>0&&rect.height>0){
+     const camera=omegaQuarterViewCamera(session.engine.state.player,aimCanvas.width,aimCanvas.height,cinematicZoom);
+     aim=omegaScreenToWorld({x:(aimClient.x-rect.left)*aimCanvas.width/rect.width,y:(aimClient.y-rect.top)*aimCanvas.height/rect.height},camera);
+    }
+   }
+   if(dt>0&&(!scenePreview||omegaInfectedCandidateReview.ready))
+    session.update(dt,{moveX:mx/length,moveY:my/length,aimX:aim?.x,aimY:aim?.y,
+     triggerAction:scenePreview?(autoFireRef.current||fireKeyRef.current||firePointerRef.current||!!queuedTap.current):true,
+     protocolGunMode:scenePreview?(autoFireRef.current?'auto':'manual'):undefined});
    const engineEvents=session.engine.drainProjectileFeedback();
+   if(engineEvents.some(e=>e.phase==='launch'&&(e.kind==='radio'||e.kind==='satellite_wave'))){
+    if(fireDragOrigin.current)touchShotLaunched.current=true;
+    queuedTap.current=null;
+   }
    if(cartWarningQa&&arenaRef.current){
     // Real engine state, observed once per animation frame; not injected.
     const realCart=session.engine.state.hazards.find(h=>h.type==='RUNAWAY_CART'&&h.hp>0);
@@ -595,6 +722,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No damage is synthesized, injected or applied from telemetry.
    if(fixture&&arenaRef.current){
     for(const e of engineEvents){
+     if(e.kind==='radio'&&e.phase==='launch'){qaRadioLaunches++;qaLastGunAngle=e.angle;}
      if(e.kind!=='radio'||e.phase!=='impact')continue;
      if(e.targetId===fixture.zombieId&&(e.appliedDamage??0)>0){
       qaRadioHits++;
@@ -612,6 +740,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     arena.dataset.omegaQaFacing=JSON.stringify(session.facing);
     arena.dataset.omegaQaBladeDamage=String(session.lastBladeStrike?.totalDamage??0);
     arena.dataset.omegaQaBladeTime=String(session.lastBladeStrike?.time??-1);
+    arena.dataset.omegaQaGunLaunches=String(qaRadioLaunches);
+    arena.dataset.omegaQaGunAngle=String(qaLastGunAngle);
     arena.dataset.omegaQaGunHits=String(qaRadioHits);
     arena.dataset.omegaQaGunDamage=qaRadioDamage.toFixed(3);
     arena.dataset.omegaQaGunBlocked=String(qaRadioBlocked);
@@ -633,6 +763,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      arenaRef.current.dataset.omegaG5iLiveActionFrames=JSON.stringify(e.frames);
      arenaRef.current.dataset.omegaG5iLiveActionCounts=JSON.stringify(e.counts);
     }
+   if((infectedLab||scenePreview)&&arenaRef.current)arenaRef.current.dataset.omegaInfectedEvidence=JSON.stringify(omegaInfectedCandidateReview.evidence());
     fireCue=omegaAdvanceActorFireCue(fireCue,engineEvents,session.engine.state.gameTime);
    impacts=omegaAdvanceImpactFx(impacts,engineEvents,session.engine.state.gameTime);
    const player=session.engine.state.player;
@@ -665,7 +796,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     drawLab(ctx,session,fireCue,impacts,gait,pose,
      finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
    }
-   if(dt>0){fpsTotal+=dt;fpsCount++;}
+   // Simulation remains capped, but FPS must include the full elapsed time
+   // or a long render stall is incorrectly reported as a much shorter one.
+   if(elapsed>0){fpsTotal+=elapsed;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
    }
@@ -727,7 +860,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();
   else{
    session.pause();
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;queuedTap.current=null;touchShotLaunched.current=false;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
   }
   setPaused(!paused);setSnapshot(session.snapshot);
@@ -745,6 +878,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
   data-omega-silver-preview={silverPreviewStatus}
   data-omega-review-layout={silverPreviewRequested?'true':'false'}
+  data-omega-infected-layout={infectedLab?'true':'false'}
   data-omega-m12g4-silver-review={g4SilverLab?'source-sha256-dev-only':'off'}
   data-omega-m12g5-lab={g5ArtLab?'source-verified-silver-originals':'off'}
   data-omega-m12g5-vector-study={g5VectorStudy?'isolated-unapproved':'off'}
@@ -776,8 +910,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    <div className="omega-protocol-brand">
     <div className="omega-protocol-hero-identity"
      title="사용자가 채택한 AIRA V2 · 8방향 후보 원화 적용">
-     <img src="/assets/omega/aira-v2/portrait.webp"
-      onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}
+     <img src={scenePreview?'/assets/omega/scene-art-preview/portrait.webp':'/assets/omega/aira-v2/portrait.webp'}
+      onError={event=>{event.currentTarget.onerror=null;if(!scenePreview)event.currentTarget.src='/assets/reignition/veteran-return.webp';}}
       alt="AIRA V2 캐릭터 초상" width={56} height={56}
       decoding="async" draggable={false} />
      <span aria-hidden="true">Ω</span>
@@ -790,10 +924,23 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
+  {infectedLab&&<aside className="omega-infected-review-bar" role="status">
+    <strong>감염체 4종 후보 · 개발 검수 전용</strong>
+    <label htmlFor="omega-infected-files">WebP 16장과 앵커 JSON 선택</label>
+    <input id="omega-infected-files" type="file" accept=".webp,.json" multiple onChange={e=>{void importInfected(e.currentTarget.files);e.currentTarget.value='';}} />
+    <button type="button" data-omega-infected-toggle="true" disabled={infectedStatus!=='ready'} onClick={()=>setInfectedOn(omegaInfectedCandidateReview.activate(!infectedOn))}>{infectedOn?'기존 적으로 복귀':'실제 AI 후보 비교'}</button>
+    <span data-omega-infected-feedback={infectedStatus}>{infectedMessage}</span>
+    <small>이동·공격은 실제 AI 상태이며, 이미지·앵커·동작은 승인 전입니다.</small>
+   </aside>}
+  {scenePreview&&<aside className="omega-infected-review-bar" role="status">
+   <strong>AIRA·감염체·배경 통합 원화 시안 · 승인 전</strong>
+   <span>{infectedStatus==='ready'?'감염체 원화 16장 로드됨':infectedStatus==='failed'?'감염체 원화 로드 실패':'감염체 원화 로딩 중'}</span>
+   <small>4방향 걷기·일부 전투 후보 연결 · 나머지 동작과 발 접지 조정 필요</small>
+  </aside>}
   {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
-     ?(g5iArtLab?'본인 선택 WebP 12장 무결성·몸체 자세 대조 후 네이티브 동작에 임시 적용 · 신규 독립 도색은 별도 육안 검증':g5hRealHitLab?'실제 감염체가 공격하여 플레이어 HP가 감소할 때만 HIT 표시 · 신규 상업 원화 승인 0':g5gSourcePoseLab?'SHA-256 고정 E 걷기 원본 4장 몸체 자세를 실제 전투 이벤트에 사용 · 신작 독립 원화 0':g5eNativeActionLab?'실제 엔진 이벤트의 원본 AIRA 사격·대시·피격 연출 · 160원화/320마스크 미승인':g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
+     ?(g5iArtLab?'로컬 후보 12장 검수 후 네이티브 동작에 임시 적용 · 와이드 앵커와 작화는 별도 육안 검증':g5hRealHitLab?'실제 감염체가 공격하여 플레이어 HP가 감소할 때만 HIT 표시 · 신규 상업 원화 승인 0':g5gSourcePoseLab?'SHA-256 고정 E 걷기 원본 4장 몸체 자세를 실제 전투 이벤트에 사용 · 신작 독립 원화 0':g5eNativeActionLab?'실제 엔진 이벤트의 원본 AIRA 사격·대시·피격 연출 · 160원화/320마스크 미승인':g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
      :silverPreviewStatus==='loading'?'로컬 원화 무결성 확인 중'
      :'연결 실패 · 기존 캐릭터 유지 · 검수실에서 원화 8개를 먼저 등록하세요'}</span>
     <a href="/omega-canonical-art-review/index.html">원화 검수실</a>
@@ -802,6 +949,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <input id="omega-g5i-files" type="file" accept="image/webp,.webp" multiple
        aria-label="사격 대시 피격 각각 4장씩 총 12개 투명 원화 WebP 선택"
        onChange={e=>{void importG5iFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+      <label htmlFor="omega-g5i-wide-files">와이드 후보 12장과 앵커 JSON 선택</label>
+      <input id="omega-g5i-wide-files" type="file" accept=".webp,.json" multiple
+       onChange={e=>{void importG5iWide(e.currentTarget.files);e.currentTarget.value='';}} />
       <button type="button" data-omega-g5i-toggle="true"
        disabled={g5iStatus!=='ready'||silverPreviewStatus!=='ready'}
        onClick={()=>{const enabled=omegaG5iActionPreview.activate(!g5iPreviewOn);setG5iPreviewOn(enabled);}}>
@@ -861,7 +1011,18 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-dash-ready={String(dashFeedback.ready)}
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
       Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
-    <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    <canvas ref={canvasRef} width={1120} height={720}
+     onPointerMove={e=>{if(scenePreview&&e.pointerType==='mouse')mouseAimRef.current={x:e.clientX,y:e.clientY};}}
+     onPointerDown={e=>{if(scenePreview&&e.pointerType==='mouse'&&e.button===0){e.preventDefault();mouseAimRef.current={x:e.clientX,y:e.clientY};e.currentTarget.setPointerCapture(e.pointerId);firePointerRef.current=true;}}}
+     onPointerUp={e=>{if(e.pointerType==='mouse')firePointerRef.current=false;}}
+     onPointerCancel={()=>{firePointerRef.current=false;}}
+     onLostPointerCapture={()=>{firePointerRef.current=false;}}
+     aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    {scenePreview&&infectedStatus!=='ready'&&<div className="omega-scene-loading" role="status">
+     <strong>{infectedStatus==='failed'?'원화를 불러오지 못했습니다':'전장과 캐릭터를 준비하고 있습니다'}</strong>
+     <span>{infectedStatus==='failed'?'연결을 확인한 뒤 다시 시도해 주세요.':'준비가 끝나면 전투가 시작됩니다.'}</span>
+     {infectedStatus==='failed'&&<button type="button" onClick={()=>window.location.reload()}>다시 시도</button>}
+    </div>}
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     <div className="omega-protocol-stats" aria-label="전투 상태">
      <div className="omega-protocol-wave">
@@ -869,9 +1030,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <strong>ROUTE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
      </div>
      <div className="omega-protocol-hp">
-      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.run.maxHp}</span>
-      <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.run.maxHp} aria-valuenow={Math.max(0,Math.ceil(snapshot.playerHp))}>
-       <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.run.maxHp)))*100)+'%'}} />
+      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.playerMaxHp}</span>
+      <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.playerMaxHp} aria-valuenow={Math.max(0,Math.min(snapshot.playerMaxHp,Math.ceil(snapshot.playerHp)))}>
+       <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.playerMaxHp)))*100)+'%'}} />
       </div>
      </div>
      <div className="omega-protocol-threat"><small>THREATS</small><strong>{snapshot.enemiesAlive.toString().padStart(2,'0')}</strong></div>
@@ -953,32 +1114,62 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
      <div className="omega-protocol-action-pad">
+      {scenePreview&&<>
+       <button type="button" className="omega-protocol-fire-mode" aria-pressed={autoFire}
+        onClick={()=>{autoFireRef.current=!autoFireRef.current;setAutoFire(autoFireRef.current);clearFireDrag();queuedTap.current=null;}} >
+        자동 사격 {autoFire?'켜짐':'꺼짐'}
+       </button>
+       <button type="button" className="omega-protocol-action omega-protocol-fire"
+        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||paused||autoFire}
+        aria-label="총기 사격 · J 키 · 누른 채 드래그하여 조준"
+        onKeyDown={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=true;}}}
+        onKeyUp={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=false;}}}
+        onBlur={()=>{fireKeyRef.current=false;}}
+        onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);queuedTap.current=null;
+         if(e.pointerType==='mouse')firePointerRef.current=true;
+         else{mouseAimRef.current=null;touchShotLaunched.current=false;firePointerRef.current=false;
+          fireDragOrigin.current={id:e.pointerId,x:e.clientX,y:e.clientY,started:performance.now()};}}}
+        onPointerMove={e=>{const start=fireDragOrigin.current;if(!start||start.id!==e.pointerId)return;
+         const dx=e.clientX-start.x,dy=e.clientY-start.y,distance=Math.hypot(dx,dy);
+         touchAimRef.current=distance>12?{x:dx/distance,y:dy/distance}:null;
+         if(touchAimRef.current)firePointerRef.current=true;
+         if(fireAimMarker.current){const r=Math.min(32,distance);fireAimMarker.current.style.opacity=distance>12?'1':'0';
+          fireAimMarker.current.style.transform=`translate(${dx/(distance||1)*r}px,${dy/(distance||1)*r}px)`;}}}
+        onPointerUp={e=>{const shouldQueue=e.pointerType!=='mouse'&&!!fireDragOrigin.current&&!touchShotLaunched.current;
+         const aim=touchAimRef.current;clearFireDrag();
+         if(shouldQueue)queuedTap.current={until:performance.now()+150,aim};}}
+        onPointerCancel={()=>{clearFireDrag();queuedTap.current=null;}}
+        onLostPointerCapture={clearFireDrag}>
+        <span ref={fireAimMarker} className="omega-protocol-fire-aim-marker" aria-hidden="true"/>
+        <span className="omega-protocol-action-glyph" aria-hidden="true">◎</span><span>사격</span><small>끌어 조준</small>
+       </button>
+      </>}
       <button type="button" className="omega-protocol-action omega-protocol-blade"
        onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
        aria-label="공진 검격 · F 키 · 안전모 감염 좀비 및 기계형 적 3단 연속 공격">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
+       {scenePreview?<OmegaActionIcon kind="blade"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span>}<span>검격</span>
        <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s': 'READY'}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
        disabled={snapshot.run.phase!=='battle'||paused||snapshot.enemiesAlive>0}
        aria-label="현장 상호작용 E">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">E</span><span>조작</span>
+       {scenePreview?<OmegaActionIcon kind="interact"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">E</span>}<span>조작</span>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
        aria-label="회피 · 스페이스 또는 시프트">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
+       {scenePreview?<OmegaActionIcon kind="dash"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">↗</span>}<span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
        aria-label={'궁극기 · 충전 '+Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))+'퍼센트'}>
-       <span className="omega-protocol-action-glyph" aria-hidden="true">✦</span><span>궁극기</span>
+       {scenePreview?<OmegaActionIcon kind="ultimate"/>:<span className="omega-protocol-action-glyph" aria-hidden="true">✦</span>}<span>궁극기</span>
        <small>{Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))}%</small>
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span>{scenePreview&&<span>마우스 / J · 사격</span>}<span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
     {snapshot.gateTransit&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}

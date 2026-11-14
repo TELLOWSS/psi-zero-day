@@ -85,7 +85,7 @@ export function omegaG5iGeometryAudit(pixels:readonly Uint8ClampedArray[]):
   crossAction.every(x=>x>=.10);
  return {minimumPerAction,crossAction,candidateGeometryEligible};
 }
-function inspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:number;toeRow:number}>{
+export function omegaG5iInspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:number;toeRow:number}>{
  if(pixels.length!==384*512*4)throw Error('G5i requires decoded RGBA 384x512');
  let opaque=0,minY=512,maxY=-1;
  for(let p=0;p<384*512;p++){
@@ -95,8 +95,11 @@ function inspectPixelAlpha(pixels:Uint8ClampedArray):Readonly<{opaqueFraction:nu
   minY=Math.min(minY,y);maxY=Math.max(maxY,y);
  }
  const opaqueFraction=opaque/(384*512);
+ const height=maxY-minY+1;
  if(opaqueFraction<.12||opaqueFraction>.70||minY>110||maxY<455||
-    maxY-minY<345)throw Error('G5i alpha silhouette / ground-contact check failed');
+    maxY-minY<345)throw Error(
+     `알파 실루엣 기준 미달 (불투명 ${(opaqueFraction*100).toFixed(1)}%, 상단 ${minY}, 하단 ${maxY}, 높이 ${height}px). 낮은 자세·발 위치는 별도 시각 검수가 필요합니다.`);
+ // This is the last opaque pixel, not proof that it belongs to a boot.
  return {opaqueFraction,toeRow:maxY};
 }
 function rgba(image:HTMLImageElement):Uint8ClampedArray{
@@ -111,7 +114,41 @@ async function digest(bytes:ArrayBuffer):Promise<string>{
  const hash=await crypto.subtle.digest('SHA-256',bytes);
  return Array.from(new Uint8Array(hash),x=>x.toString(16).padStart(2,'0')).join('');
 }
-interface VerifiedAction{readonly image:HTMLImageElement;readonly url:string;readonly toeRow:number}
+type Anchor={x:number;y:number};
+export interface OmegaWideFrame {file:string;sha256:string;foot:Anchor;muzzle:Anchor}
+export function omegaWideManifest(value:unknown):OmegaWideFrame[]{
+ if(!value||typeof value!=='object')throw Error('앵커 JSON 형식 오류');
+ const doc=value as {version?:unknown;frames?:unknown};
+ if(doc.version!==1||!Array.isArray(doc.frames)||doc.frames.length!==12)throw Error('앵커 JSON은 version 1과 12개 프레임이 필요합니다');
+ const rows=doc.frames as OmegaWideFrame[];
+ if(new Set(rows.map(x=>x?.file)).size!==12||!OMEGA_G5I_FILE_NAMES.every(n=>rows.some(x=>x?.file===n)))throw Error('앵커 파일명 불일치');
+ for(const row of rows){
+  if(!looksLikeSha256(row.sha256)||![row.foot,row.muzzle].every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.x<640&&p.y>=0&&p.y<512))throw Error('SHA 또는 앵커 좌표 오류: '+row.file);
+ }
+ return OMEGA_G5I_FILE_NAMES.map(n=>rows.find(x=>x.file===n)!);
+}
+export function omegaWideAlphaValid(pixels:Uint8ClampedArray):boolean{
+ if(pixels.length!==640*512*4)return false;
+ let opaque=0;
+ for(let y=0;y<512;y++)for(let x=0;x<640;x++)if(pixels[(y*640+x)*4+3]!>=64){
+  if(x===0||x===639||y===0||y===511)return false;
+  opaque++;
+ }
+ return opaque>=640*512*.04&&opaque<=640*512*.70;
+}
+export function omegaWidePlacement(frame:OmegaWideFrame,height:number){
+ const scale=height/512;
+ return {left:-frame.foot.x*scale,top:-frame.foot.y*scale,width:640*scale,height,
+  muzzleX:(frame.muzzle.x-frame.foot.x)*scale,muzzleY:(frame.muzzle.y-frame.foot.y)*scale};
+}
+/** Presentation only: use the native visible action windows, not G5e's
+ * longer effect windows. No action state or gameplay timer is extended. */
+export function omegaWideNativeFrame(action:OmegaG5iAction,age:number):0|1|2|3{
+ const duration=action==='fire'?.09:action==='dash'?.22:.15;
+ const elapsed=Number.isFinite(age)?Math.max(0,age):0;
+ return Math.min(3,Math.floor(elapsed/duration*4)) as 0|1|2|3;
+}
+interface VerifiedAction{readonly image:HTMLImageElement;readonly url:string;readonly toeRow:number;readonly wide?:OmegaWideFrame}
 export class OmegaG5iLocalActionArtPreview {
  private sources:VerifiedAction[]=[];
  private proof:OmegaG5iArtProof|null=null;
@@ -156,7 +193,10 @@ export class OmegaG5iLocalActionArtPreview {
     await image.decode();
     if(image.naturalWidth!==384||image.naturalHeight!==512)
      throw Error('Expected 384×512 transparent authored frame: '+name);
-    const pixels=rgba(image),quality=inspectPixelAlpha(pixels);
+    const pixels=rgba(image);
+    let quality:ReturnType<typeof omegaG5iInspectPixelAlpha>;
+    try{quality=omegaG5iInspectPixelAlpha(pixels);}
+    catch(error){throw Error(name+': '+(error instanceof Error?error.message:'알파 검사 실패'));}
     temporary[temporary.length-1]={image,url,toeRow:quality.toeRow};
     proofs.push({file:name,sha256:hash,width:384,height:512,
      toeRow:quality.toeRow,opaqueFraction:quality.opaqueFraction});
@@ -180,13 +220,48 @@ export class OmegaG5iLocalActionArtPreview {
    throw error;
   }
  }
+ async importWide(files:readonly File[],manifest:unknown):Promise<void>{
+  this.dispose();
+  if(!omegaG5iFileSelectionValid(files))throw Error('이름이 정확한 WebP 12개가 필요합니다');
+  const entries=omegaWideManifest(manifest),epoch=this.generation;
+  const byName=new Map(files.map(f=>[f.name,f])),temporary:VerifiedAction[]=[],hashes:string[]=[];
+  try{
+   for(const entry of entries){
+    const data=await byName.get(entry.file)!.arrayBuffer(),hash=await digest(data);
+    if(hash!==entry.sha256)throw Error('SHA 불일치: '+entry.file);
+    hashes.push(hash);
+    const url=URL.createObjectURL(new Blob([data],{type:'image/webp'}));
+    const image=new Image();image.decoding='async';image.src=url;
+    temporary.push({image,url,toeRow:0,wide:entry});await image.decode();
+    if(image.naturalWidth!==640||image.naturalHeight!==512)throw Error('640×512 필요: '+entry.file);
+    const c=document.createElement('canvas');c.width=640;c.height=512;const ctx=c.getContext('2d',{willReadFrequently:true});
+    if(!ctx)throw Error('Canvas 검사 불가');
+    ctx.drawImage(image,0,0);if(!omegaWideAlphaValid(ctx.getImageData(0,0,640,512).data))throw Error('투명도 또는 가장자리 잘림: '+entry.file);
+   }
+   if(!omegaG5iSourceHashesValid(hashes))throw Error('중복 또는 기존 걷기 원화');
+   if(epoch!==this.generation)throw Error('검수 취소됨');
+   this.sources=temporary.splice(0);
+   // This proof deliberately does not imply that geometry or art is approved.
+   this.proof={status:'DEV_ONLY_HUMAN_PAINTING_REVIEW_REQUIRED',frames:[],minCoreSilhouetteChange:{fire:0,dash:0,hit:0},crossActionCoreChange:[],independentPaintingProven:false,humanArtworkSignoff:false,commercialReleaseAllowed:false};
+  }catch(error){temporary.forEach(s=>URL.revokeObjectURL(s.url));throw error;}
+ }
  draw(ctx:CanvasRenderingContext2D,view:OmegaActorView,height:number):boolean{
   if(!this.active)return false;
   const cue=omegaG5eCue(view,height);
   if(!cue||!isAction(cue.action))return false;
   const group=OMEGA_G5I_ACTIONS.indexOf(cue.action);
-  const source=this.sources[group*4+cue.frame];
+  const wide=this.sources[group*4]?.wide;
+  const frame=wide?omegaWideNativeFrame(cue.action,view.actionAge??0):cue.frame;
+  const source=this.sources[group*4+frame];
   if(!source)return false;
+  if(source.wide){
+   const p=omegaWidePlacement(source.wide,height);
+   ctx.save();ctx.drawImage(source.image,p.left,p.top,p.width,p.height);
+   if(cue.action==='fire'){
+    ctx.fillStyle='rgba(230,180,255,.85)';ctx.beginPath();ctx.arc(p.muzzleX,p.muzzleY,Math.max(2,height*.035),0,Math.PI*2);ctx.fill();
+   }
+   ctx.restore();this.counts[cue.action]++;this.frames[cue.action].add(frame);return true;
+  }
   // Native Watch actor (0,0) is the sole world-foot pivot. Source transparent
   // bottom margins must not lift painted boots above the collision floor.
   ctx.save();ctx.translate(0,height*(512-source.toeRow)/512);

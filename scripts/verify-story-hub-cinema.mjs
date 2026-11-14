@@ -108,11 +108,11 @@ try{
        throw new Error('RE:IGNITION title wrapped into broken lines: '+JSON.stringify(visuals));
      if(design==='cinematic'){
        await page.waitForFunction(()=>{
-         const art=document.querySelector('.rg-veteran-character');
+         const art=document.querySelector('.rg-hero-art');
          return art instanceof HTMLImageElement&&art.complete&&art.naturalWidth>=500;
        },null,{timeout:20000});
-       const heroArt=await page.locator('.rg-veteran-character').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
-       if(heroArt.width<500||heroArt.height<600)throw new Error('Approved RE:IGNITION artwork failed to load: '+JSON.stringify(heroArt));
+       const heroArt=await page.locator('.rg-hero-art').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
+       if(heroArt.width<500||heroArt.height<600)throw new Error('Integrated RE:IGNITION artwork failed to load: '+JSON.stringify(heroArt));
      }
      await page.screenshot({path:path.join(out,width+'x'+height+'-title-'+design+'.png'),animations:'disabled',fullPage:true});
      tested.push({design,...visuals});

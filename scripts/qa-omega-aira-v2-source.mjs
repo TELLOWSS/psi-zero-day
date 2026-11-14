@@ -3,7 +3,8 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {chromium} from 'playwright-core';
 
-const root=resolve('qa-omega-protocol-captures');
+const root=resolve(process.env.OMEGA_AIRA_V2_QA_DIR||'qa-omega-protocol-captures');
+const base=process.env.OMEGA_QA_ORIGIN||'http://127.0.0.1:4173';
 await mkdir(root,{recursive:true});
 const browser=await chromium.launch({
  executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',
@@ -15,7 +16,7 @@ const results={source:'real Vite + Chromium, AIRA V2 user-selected source art',
 try{
  const page=await browser.newPage({viewport:{width:1440,height:900}});
  page.on('pageerror',e=>failures.push('JS '+e.message));
- await page.goto('http://127.0.0.1:4173/?omegaLab=1',
+ await page.goto(`${base}/?omegaLab=1`,
   {waitUntil:'domcontentloaded',timeout:45000});
  await page.locator('main[data-omega-protocol-internal="true"]').waitFor();
  await page.waitForFunction(()=>document.querySelector('main[data-omega-protocol-internal="true"]')
@@ -77,9 +78,9 @@ try{
  for(const [label,w,h] of [['desktop',1440,900],['portrait',390,844]]){
   const home=await browser.newPage({viewport:{width:w,height:h},deviceScaleFactor:1});
   home.on('pageerror',e=>failures.push(label+' '+e.message));
-  await home.goto('http://127.0.0.1:4173/',
+  await home.goto(`${base}/`,
    {waitUntil:'domcontentloaded',timeout:45000});
-  const image=home.locator('.rg-veteran-character.rg-aira-v2');
+  const image=home.locator('.rg-hero-art');
   await image.waitFor({timeout:20000});
   await image.evaluate(img=>img.decode());
   const meta=await image.evaluate(el=>({
@@ -87,8 +88,8 @@ try{
    width:el.naturalWidth,height:el.naturalHeight,
   }));
   const nativeButtons=await home.locator('.rg-hero-buttons button').count();
-  const valid=meta.loaded&&meta.url.includes('/aira-v2/hero-splash.webp')&&nativeButtons>=2;
-  if(!valid)failures.push(label+' home AIRA V2 image or live DOM buttons not available');
+  const valid=meta.loaded&&meta.url.includes(label==='portrait'?'/aira-v2/integrated-home-portrait-candidate.webp':'/aira-v2/integrated-home-wide-candidate.webp')&&nativeButtons>=2;
+  if(!valid)failures.push(label+' home integrated AIRA scene or live DOM buttons not available');
   results.home.push({label,width:w,height:h,...meta,nativeButtons,pass:valid});
   await home.screenshot({path:resolve(root,'aira-v2-main-'+label+'.png'),fullPage:false});
   await home.close();
