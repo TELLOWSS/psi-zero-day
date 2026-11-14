@@ -80,12 +80,46 @@ for(const [name,w,h,mobile] of [
   // sometimes reached a terminal encounter phase before Shift.
   await page.keyboard.down('ArrowRight');
   await page.waitForTimeout(155);
-  await page.keyboard.press('Shift');
-  const dash=await (await page.waitForFunction(()=>{
-   const e=window.__omegaG5gNativePoseQa.evidence();
-   return e.counts.dash>0?{counts:e.counts,poseFrames:e.sourceFrames}:false;
-  },null,{timeout:13000,polling:'raf'})).jsonValue();
+  // Portrait Chrome may miss the short native dash source window if the
+  // first input lands during a real cooldown/React resume frame. Keep the
+  // assertion strict: retry only a genuine user Shift event after the native
+  // HUD reports READY; NEVER inject player velocity or source-frame counters.
+  const dashAttempts=[];
+  let dash=null;
+  for(let attempt=0;attempt<3&&!dash;attempt++){
+   const arena=page.locator('.omega-protocol-arena');
+   await page.waitForFunction(()=>{
+    const a=document.querySelector('.omega-protocol-arena');
+    return a?.getAttribute('data-omega-dash-ready')==='true'||
+           a?.getAttribute('data-omega-phase')!=='battle';
+   },null,{timeout:9000,polling:'raf'});
+   const before=await arena.evaluate(el=>({
+    phase:el.getAttribute('data-omega-phase'),
+    ready:el.getAttribute('data-omega-dash-ready'),
+    hp:el.getAttribute('data-omega-g5h-player-hp'),
+    x:el.getAttribute('data-omega-player-x'),
+   }));
+   if(before.phase!=='battle'||before.ready!=='true')break;
+   // Release the direction before a repeat input, then restore real movement.
+   if(attempt>0){await page.keyboard.up('ArrowRight');await page.keyboard.down('ArrowRight');}
+   await page.keyboard.press('Shift');
+   try{
+    dash=await (await page.waitForFunction(()=>{
+     const e=window.__omegaG5gNativePoseQa.evidence();
+     return e.counts.dash>0?{counts:e.counts,poseFrames:e.sourceFrames}:false;
+    },null,{timeout:3000,polling:'raf'})).jsonValue();
+   }catch(error){
+    if(!(error instanceof Error)||!error.message.includes('Timeout'))throw error;
+   }
+   dashAttempts.push({attempt:attempt+1,before,after:await arena.evaluate(el=>({
+    phase:el.getAttribute('data-omega-phase'),
+    ready:el.getAttribute('data-omega-dash-ready'),
+    x:el.getAttribute('data-omega-player-x'),
+   })),observed:dash!==null});
+  }
   await page.keyboard.up('ArrowRight');
+  if(!dash)throw Error('G5g native dash poses absent after real user inputs: '+
+   JSON.stringify({name,dashAttempts,last:await read()}));
   // Real engine automatic gun fire and actual enemy HP loss; neither firing
   // nor enemy HP is synthesized from instrumentation.
   const fire=await (await page.waitForFunction(()=>{

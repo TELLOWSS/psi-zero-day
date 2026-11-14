@@ -1289,3 +1289,54 @@
  .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
   .omega-g5c-art-controls{max-height:none}
 }
+
+
+/* M12-G5l: manual four-pose selection, no frame interpolation or implicit
+ * GAME timer. Same anchor/pixel size as G5k, only the chosen source swaps. */
+.omega-art-audit-groups{display:flex;gap:6px;flex-wrap:wrap}
+.omega-art-audit-groups button,
+.omega-art-audit-stepper button,
+.omega-art-audit-strip-item{
+ color:#eee8fc;background:#29334c;border:1px solid #65738f;
+ border-radius:7px;cursor:pointer;padding:6px 10px;
+}
+.omega-art-audit-groups button[aria-pressed="true"],
+.omega-art-audit-strip-item[aria-pressed="true"]{
+ border-color:#dbc0ff;background:#4a3972;
+ outline:2px solid #a681db;outline-offset:-2px;
+}
+.omega-art-audit-groups button:focus-visible,
+.omega-art-audit-stepper button:focus-visible,
+.omega-art-audit-strip-item:focus-visible{
+ outline:2px solid #f4d680;outline-offset:2px;
+}
+.omega-art-audit-stepper{
+ display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+ background:#20273b;border:1px solid #425474;border-radius:8px;padding:7px;
+}
+.omega-art-audit-stepper strong{font-size:13px;min-width:142px;text-align:center}
+.omega-art-audit-stepper small{flex-basis:100%;font-size:10px;color:#bbcce0}
+.omega-art-audit-strip{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:8px;align-items:stretch;
+}
+.omega-art-audit-strip-item{min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;padding:6px}
+.omega-art-audit-strip-item img{
+ width:100%;max-width:130px;height:95px;object-fit:contain;
+ background:#1b2537;border-radius:4px;
+}
+.omega-art-audit-strip-item span{
+ font-size:10px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:600px){
+ .omega-art-audit-strip{gap:3px}
+ .omega-art-audit-strip-item{padding:3px}
+ .omega-art-audit-strip-item img{height:65px}
+ .omega-art-audit-strip-item span{font-size:9px}
+ .omega-art-audit-stepper{gap:4px}
+ .omega-art-audit-stepper strong{font-size:11px;min-width:105px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-art-audit-strip-item img{height:52px}
+ .omega-art-audit-stepper small{display:none}
+}
