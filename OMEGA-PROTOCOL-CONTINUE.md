@@ -925,3 +925,16 @@
 - M12-G5l 수동 원화 비교는 기술적으로 CODED+TESTED(순서·중복·좌표)이며 **로컬 실제 AIRA 12+감염체 16 WebP/JPG 및 JSON을 직접 로드한 새 비교창 네 해상도 육안 검증은 미완**. G5k 실제 원화 미등록, 감독 작화 승인0, 160/320 승인0. 후속 8방향 애니메이션/기본·장갑형 역보폭/질주형 접지/Android 실기기 필요.
 - 이 기록 당시 PR #267 최신 HEAD의 G5g+core 포함 개별 작업은 순차 검증 중이었고, 전체 브라우저 회귀와 G2 전장 집중 워크플로도 종료 대기. **최신 12/12 성공 확인 전 PR #266·#267 병합 금지.** 특히 기술 체크 PASS만으로 상업급 그래픽·폰 실기기 품질 합격 표기 금지.
 - NEXT: PR #267 정확한 최신 CODE SHA 12개 Actions 결과 최종 확인. 실패가 있으면 원인과 실제 브라우저 캡처를 확인해 수정, PASS 시에만 개발 브랜치 병합 검토(사용자 출시 승인 전 main/Production 금지). 실제 사용자 후보 WebP 28장/JSON의 검증 가능한 접근경로를 확보해 수동 0..3 키프레임 화면·AIRA 총구/접지·감염체 반대 보폭을 PC/태블릿/모바일 세로·가로 4조건에서 심사할 것.
+
+
+## 59. M12-G5m — 저장소 실제 AIRA E WALK 4장 원화 검수 연결·실 Chromium 증빙 (2026-11-14)
+
+- **기준/분기:** §58과 PR #267의 Draft 개발 HEAD를 기준으로 별도 브랜치 `qa/omega-m12g5m-real-silver-walk-four-viewports-20261114`, Draft PR #268 생성. PR #267 HEAD `3ba133e7e4e6e950d85301f6b99bc7f46b5f88f9`의 기존 GitHub Actions 12개 모두 SUCCESS 재확인. PR #266/#267 및 core PR #235에는 병합하지 않음.
+- **선택 이유:** 신규 FIRE/DASH/HIT 12장과 감염체 16장은 이전 작업 PC의 별도 로컬 ZIP/원화로 GitHub에 없음. 무관한 이미지를 새 원화로 꾸며 넣지 않고 이미 GitHub의 `public/assets/omega/g5d/aira-east-walk-0..3.webp`에 존재하는 진짜 은백색 원화 4개로 G5l 비교기를 검증한다.
+- **실제 구현:** `omegaVerifiedG5dWalkCards(proof)`는 기존 엄격한 `omegaG5dImportRepoCandidates`의 SHA-256, WebP 및 투명도 검증을 거친 세션 proof의 4 파일명/정확한 source SHA/384×512/추정 toeRow가 맞을 때만 4개의 기존 GitHub 원본 경로를 반환, 아니면 빈 배열. G5d DEV 화면에서만 명시적으로 'SHA 원본 E 걷기 4장 비교' 버튼을 누르게 한다. `walk` 새 모드는 실 4프레임의 반복 표시/지면 기준 수동 비교만 하며, FIRE/DASH/HIT 원화로 속여 사용하거나 미승인 그래픽을 정식으로 교체하지 않는다.
+- **일관성/반응형:** 검수 시 기존 Watch/OMEGA 실제 전투 pause 및 입력 격리, 종료 후 수동 재개. 모바일 세로/가로 및 PC/태블릿에 추가된 3번째 버튼이 가려지지 않도록 G5d 조건에만 CSS 스크롤/그리드 설정 추가. G5g/H 등 이후 전투용 원본 검수 UI는 변경하지 않음.
+- **검증:** `tests/omega-m12g5m-real-walk-audit.test.ts` 4개 negative/positive 계약을 실제 core Vitest 실행 명령에 추가. 코드 HEAD `c02d74bf349df4adca9b8c52a4fcace55d65947d`의 GitHub core에서 TypeScript PASS, **69파일/313개 Vitest PASS**.
+- **실브라우저 최초 결함과 수정:** 최초 전용 CI #43532675132는 desktop 1440×900, tablet 1024×768, portrait 390×844, landscape 844×390에서 4개 원본 WebP SHA 일치, 0..3 화면·키보드 동작, pause 및 복귀·화면 폭을 실제 통과시킨 뒤 React 경고 **원본 0과 선택 0을 동일 React key로 렌더**한 이슈 때문에 4조건을 모두 FAIL 처리했다. 원화 자체나 전투 물리 문제는 아님. `omega-candidate-art-audit.tsx`에서 두 시각 비교 슬롯의 key를 slot+file로 구분한 수정 `5ba2259e122e9c56f58faba4cce13910ad93dc67` 적용. **이 결함이 사라졌는지는 재실행 CI 최종 결과 확인 필요.** 검수 스크립트에서 React 경고를 포함한 console.error를 그대로 FAIL로 처리 유지.
+- **실제 캡처 확인:** 최초 CI artifact `omega-m12g5m-real-walk-focused-chrome`에 실 G5d 원본 4프레임 × 4해상도 스크린샷이 남았다. PC/모바일 세로의 이미지/가상 지면 표시를 실제 검토했으나 해당 GitHub Chrome에 한국어 CJK 글꼴이 없어 일부 설명이 깨진 것을 확인. 전용 workflow에 fonts-noto-cjk 설치 및 fc-cache를 추가 `7b2b5f624b13cef1249ece93ef627b3813b69b76`. **한글 렌더 재검증 대기.**
+- **엄격한 미완료:** 새 독립 페인터리 원화 12+16 작성/승인 없음, 수동 0–3 리뷰 UI를 실제 해당 후보 28장으로 확인한 결과 없음, 발 toeRow는 불투명 픽셀 최하단 추정이지 해부학적 부츠 피벗 증명이 아님. basic/armored 반대 보폭·sprinter 손/부츠 접지/공중 프레임·AIRA 8방향 액션 및 160프레임/320마스크·Android 실기기 검증/실계정 Extreme-50 모두 BLOCKED. 사용자 감독 승인 0, main 병합/Production/유료 전환 금지.
+- **NEXT:** PR #268의 정확한 최신 code/CI SHA에서 13개 workflow 중 new focused real 4-size screenshot/console 0 및 core PASS를 먼저 확인하고, 실제 Chrome 캡처에서 한글+반응형/초상 연속성 검수. 실패는 원인 수정 후 같은 테스트 재실행. 후보 28개와 JSON의 원본 보존 파일을 복구한 뒤 G5l 0–3 도구로 원화 자체를 검수하고, 기본/장갑형 진짜 반대 보폭과 질주형 손·부츠 접지를 직접 고품질 재작화. 검증·감독 승인 이전에 기본 자산 교체/개발 브랜치 병합/운영 배포 금지.
