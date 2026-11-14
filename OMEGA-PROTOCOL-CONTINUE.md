@@ -914,3 +914,14 @@
 - **검증 계약:** tests/omega-candidate-art-audit.test.ts에 정확한 액션/감염체 4파일 정렬과 중복·누락 차단, 0→1→2→3→0 및 역방향 수동 전환을 추가. 개발 검수 화면 CSS는 모바일 세로/가로·PC에서 버튼/4장 작은 미리보기를 표시하도록 확장.
 - **명확한 한계:** 여전히 **실제 QA 후보 28장 WebP와 두 앵커 JSON**은 과거 작업 PC에만 있으며 GitHub 소스/이 PR에 바이너리 등록되지 않음. 이번 변경에 대해 최신 CI/실 4해상도 Chromium 결과는 따로 확인해야 하며, 실제 인물 비례·발/손 접지·공중자세·감염체 좌우 반대 보폭의 인간 시각 승인 증거는 0. 실제 Android, 원화 160/320 승인 0, 정식 출시 차단.
 - **NEXT:** G5l Draft QA PR에서 typecheck + 신규 9계약/전체 Vitest + 실제 browser 4 viewport 검증. 가능하면 로컬 후보 실제 28장을 검증된 파일 경로로 공급해 새 수동 0~3 비교 및 anchor/조명/신체 연결을 게임 내 육안 검토. 통과 전 개발 브랜치 병합·main·Production·유료 API 전환 금지. 이어서 basic/armored 반대 보폭 페인터리 원화를 실제로 다시 제작하고 sprinter 손·부츠/공중 피벗 정합 및 8방향 AIRA 액션 확장.
+
+
+## 58. M12-G5l 결함 확인·G5g 모바일 회귀 수정·신규 테스트 실제 실행 (2026-11-14)
+
+- QA PR #267은 QA PR #266을 base로 한 별도 Draft. `main`·운영 Production·유료 API·기본 이미지 변경 없음.
+- G5l 최초 HEAD `18bf3fb996195c0c006eae44c97fea6cebfde6aa`의 G5g focused CI에서 PC·태블릿·모바일가로 PASS, **모바일세로 390×844 FAIL**(native Dash 원화 호출을 기다리다 13초 Timeout). 해당 로그와 12개 실제 이미지/JSON GitHub artifact를 다운로드하여 확인했으며, 에러를 성공으로 덮지 않음.
+- `scripts/qa-omega-m12g5g-native-pose-browser.mjs`에서 실제 `data-omega-dash-ready=true` 확인 후 물리 게임 입력 `Shift`를 최대 3회 재시도하고 실제 렌더의 dash source count가 증가해야만 PASS 하도록 보완. 누락 시 현재 단계/HP/원화 증빙을 상세 오류로 남김. **게임 엔진·대시 판정·피해·타이머·저장·보상은 미수정.** 이 코드 SHA `5cf80e3a85542bb067637f813b9cec7c2cc73f04`에 대해 [G5g native 4해상도 #43531343189](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43531343189) **SUCCESS**.
+- 새 `tests/omega-candidate-art-audit.test.ts`는 이전 G5k에서 CI paths만 등록되고 **실제 67파일 300테스트 Vitest 명령에는 빠져 있었음**을 발견. 따라서 과거 CI PASS로 이 파일이 실행됐다는 주장은 철회. `.github/workflows/verify-omega-protocol.yml`의 실제 Vitest 명령에 파일을 포함하여 커밋 `66565aacfc0fd3cdc97c0704ead65bff73beb044`. [Core #43531535806](https://github.com/TELLOWSS/psi-zero-day/actions/runs/43531535806)에서 TypeScript PASS 및 **68파일/309테스트 전부 PASS**, 이 중 새 9개 계약이 실제 실행됨.
+- M12-G5l 수동 원화 비교는 기술적으로 CODED+TESTED(순서·중복·좌표)이며 **로컬 실제 AIRA 12+감염체 16 WebP/JPG 및 JSON을 직접 로드한 새 비교창 네 해상도 육안 검증은 미완**. G5k 실제 원화 미등록, 감독 작화 승인0, 160/320 승인0. 후속 8방향 애니메이션/기본·장갑형 역보폭/질주형 접지/Android 실기기 필요.
+- 이 기록 당시 PR #267 최신 HEAD의 G5g+core 포함 개별 작업은 순차 검증 중이었고, 전체 브라우저 회귀와 G2 전장 집중 워크플로도 종료 대기. **최신 12/12 성공 확인 전 PR #266·#267 병합 금지.** 특히 기술 체크 PASS만으로 상업급 그래픽·폰 실기기 품질 합격 표기 금지.
+- NEXT: PR #267 정확한 최신 CODE SHA 12개 Actions 결과 최종 확인. 실패가 있으면 원인과 실제 브라우저 캡처를 확인해 수정, PASS 시에만 개발 브랜치 병합 검토(사용자 출시 승인 전 main/Production 금지). 실제 사용자 후보 WebP 28장/JSON의 검증 가능한 접근경로를 확보해 수동 0..3 키프레임 화면·AIRA 총구/접지·감염체 반대 보폭을 PC/태블릿/모바일 세로·가로 4조건에서 심사할 것.
