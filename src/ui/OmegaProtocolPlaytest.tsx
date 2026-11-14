@@ -32,6 +32,7 @@ import {omegaG5eLabRequested,OMEGA_G5E_ART_STATUS,omegaG5eFx} from './omega-prot
 import {omegaG5gLabRequested,omegaG5hRealHitLabRequested,omegaG5hFourPoseNativeHitHold,OMEGA_G5H_ART_GATE,OMEGA_G5G_ART_APPROVAL,omegaG5gNativePoseStudy} from './omega-protocol-m12g5g-native-pose';
 import {omegaG5iLabRequested,omegaG5iActionPreview,OMEGA_G5I_ART_GATE} from './omega-protocol-m12g5i-action-art';
 import {OmegaCandidateArtAudit,omegaVerifiedG5dWalkCards,type OmegaVisualAuditFrame} from './omega-candidate-art-audit';
+import {omegaG5nFetchQaSources} from './omega-m12g5n-recovered-sources';
 import {OmegaGroundedGait,type OmegaWalkPose} from './omega-protocol-grounded-gait';
 import {OmegaActorFacingController,type OmegaActorDirectionPose} from './omega-protocol-action-facing';
 import {omegaResolveArtAction,OmegaTerminalMotionClock} from './omega-protocol-art-motion';
@@ -479,7 +480,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   };
  },[silverPreviewRequested,g4SilverLab,g5ArtLab,g5VectorStudy,g5bPainterlyReview,g5cArtReview,g5iArtLab]);
  useEffect(()=>()=>{g5iImportEpoch.current++;infectedEpoch.current++;omegaG5cReview.dispose();omegaG5iActionPreview.dispose();omegaInfectedCandidateReview.dispose();},[]);
- const importInfected=useCallback(async(files:FileList|null)=>{
+ const importInfected=useCallback(async(files:FileList|readonly File[]|null)=>{
   if(!infectedLab||!files)return;const epoch=++infectedEpoch.current;setVisualAudit(null);omegaInfectedCandidateReview.dispose();setInfectedOn(false);setInfectedStatus('loading');
   try{
    const list=Array.from(files),docs=list.filter(f=>f.name==='infected-anchors.json');
@@ -509,7 +510,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    setG5iFeedback(error instanceof Error?error.message:'원화 후보 검증 실패');
   }
  },[g5iArtLab]);
- const importG5iWide=useCallback(async(files:FileList|null)=>{
+ const importG5iWide=useCallback(async(files:FileList|readonly File[]|null)=>{
   if(!g5iArtLab||!files)return;
   const epoch=++g5iImportEpoch.current;
   setVisualAudit(null);omegaG5iActionPreview.dispose();setG5iPreviewOn(false);setG5cPreviewOn(false);setG5iStatus('loading');
@@ -523,6 +524,24 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    setG5iStatus('ready');setG5iFeedback('와이드 12장 및 앵커 형식 확인 · 좌표 정확성과 작화는 시각 승인 전');
   }catch(error){if(epoch!==g5iImportEpoch.current)return;omegaG5iActionPreview.dispose();setG5iStatus('failed');setG5iFeedback(error instanceof Error?error.message:'앵커 검사 실패');}
  },[g5iArtLab]);
+ // Source recovery is a manually triggered DEV-only action; no cloud API at
+ // gameplay runtime, no automatic artwork swap, no user save mutations.
+ const importRecoveredQaAira=useCallback(async()=>{
+  if(!import.meta.env.DEV||!g5iArtLab)return;
+  setG5iStatus('loading');
+  setG5iFeedback('GitHub 격리 저장소에서 실제 AIRA 원본 12장과 앵커를 SHA 검사 중…');
+  try{const files=await omegaG5nFetchQaSources('aira');await importG5iWide(files);}
+  catch(e){omegaG5iActionPreview.dispose();setG5iStatus('failed');
+   setG5iFeedback(e instanceof Error?e.message:'복구 원화 읽기 실패');}
+ },[g5iArtLab,importG5iWide]);
+ const importRecoveredQaInfected=useCallback(async()=>{
+  if(!import.meta.env.DEV||!infectedLab)return;
+  setInfectedStatus('loading');
+  setInfectedMessage('GitHub 격리 저장소에서 실제 감염체 원본 16장과 앵커를 SHA 검사 중…');
+  try{const files=await omegaG5nFetchQaSources('infected');await importInfected(files);}
+  catch(e){omegaInfectedCandidateReview.dispose();setInfectedStatus('failed');
+   setInfectedMessage(e instanceof Error?e.message:'복구 감염체 읽기 실패');}
+ },[infectedLab,importInfected]);
  const importG5cFiles=useCallback(async (files:FileList|null)=>{
   if(!g5cArtReview||!files)return;
   setG5cPreviewOn(false);setG5cStatus('loading');
@@ -863,6 +882,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   </header>
   {infectedLab&&<aside className="omega-infected-review-bar" role="status">
     <strong>감염체 4종 후보 · 개발 검수 전용</strong>
+    {import.meta.env.DEV&&<button type="button" data-omega-g5n-load="infected"
+     onClick={()=>{void importRecoveredQaInfected();}}
+     disabled={infectedStatus==='loading'}>복구된 실제 감염체 16장 불러오기 (QA)</button>}
     <label htmlFor="omega-infected-files">WebP 16장과 앵커 JSON 선택</label>
     <input id="omega-infected-files" type="file" accept=".webp,.json" multiple onChange={e=>{void importInfected(e.currentTarget.files);e.currentTarget.value='';}} />
     <button type="button" data-omega-infected-toggle="true" disabled={infectedStatus!=='ready'} onClick={()=>setInfectedOn(omegaInfectedCandidateReview.activate(!infectedOn))}>{infectedOn?'기존 적으로 복귀':'실제 AI 후보 비교'}</button>
@@ -883,6 +905,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <input id="omega-g5i-files" type="file" accept="image/webp,.webp" multiple
        aria-label="사격 대시 피격 각각 4장씩 총 12개 투명 원화 WebP 선택"
        onChange={e=>{void importG5iFiles(e.currentTarget.files);e.currentTarget.value='';}} />
+      {import.meta.env.DEV&&<button type="button" data-omega-g5n-load="aira"
+       disabled={g5iStatus==='loading'}
+       onClick={()=>{void importRecoveredQaAira();}}>복구된 실제 AIRA 전투 원화 12장 불러오기 (QA)</button>}
       <label htmlFor="omega-g5i-wide-files">와이드 후보 12장과 앵커 JSON 선택</label>
       <input id="omega-g5i-wide-files" type="file" accept=".webp,.json" multiple
        onChange={e=>{void importG5iWide(e.currentTarget.files);e.currentTarget.value='';}} />
