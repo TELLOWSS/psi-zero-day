@@ -10,6 +10,7 @@ import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {drawOmegaHorizonReview,drawOmegaSurfaceReview,omegaSurfaceReviewRequested} from './omega-quarantine-surface-review';
 import {drawOmegaSceneArt,omegaSceneArtRequested} from './omega-scene-art-preview';
+import {drawOmegaSceneProp} from './omega-scene-prop-preview';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
@@ -79,7 +80,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaG3ParallaxArchitecture(ctx,field.plan,camera,
    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
   if(scenePreview||(typeof window!=='undefined'&&omegaSurfaceReviewRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')))
-   drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom);
+   drawOmegaHorizonReview(ctx,field.plan,camera,cameraZoom,scenePreview);
   drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
@@ -174,10 +175,12 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(const item of omegaFieldDepthOrder(field.plan,state.hazards,p.y,field.progress)){
    if(item.kind==='prop'){
     const obstacle=field.plan.obstacles[item.index]!;
-    drawOmegaFieldProp(ctx,field.plan,obstacle);
-    drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
-    drawOmegaG2NativeFacade(ctx,field.plan,obstacle,state.gameTime,m12G2Quality);
-    drawOmegaG3NativeMesh(ctx,field.plan,obstacle,m12G3Budget);
+    if(!(scenePreview&&drawOmegaSceneProp(ctx,field.plan,obstacle,camera))){
+     drawOmegaFieldProp(ctx,field.plan,obstacle);
+     drawOmegaM12StructureFacets(ctx,field.plan,obstacle,state.gameTime,m12Budget);
+     drawOmegaG2NativeFacade(ctx,field.plan,obstacle,state.gameTime,m12G2Quality);
+     drawOmegaG3NativeMesh(ctx,field.plan,obstacle,m12G3Budget);
+    }
    }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
@@ -439,7 +442,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     return new File([await result.blob()],row.file,{type:'image/webp'});
    }));
    if(!mounted)return;
-   await omegaInfectedCandidateReview.import(files,manifest);
+   await omegaInfectedCandidateReview.import(files,manifest,{cooperative:true});
    if(mounted){omegaInfectedCandidateReview.activate(true);setInfectedStatus('ready');}
   })().catch(error=>{if(mounted){setInfectedStatus('failed');console.warn('Scene art preview failed',error);}});
   return ()=>{mounted=false;};
@@ -574,6 +577,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
+   if(scenePreview&&!omegaInfectedCandidateReview.ready)return;
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
@@ -632,12 +636,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
    if(!alive)return;
-   const dt=last?Math.min(.05,Math.max(0,(now-last)/1000)):0;last=now;
+   const elapsed=last?Math.max(0,(now-last)/1000):0;
+   const dt=Math.min(.05,elapsed);last=now;
    const k=keysRef.current;
    const mx=(Number(k.has('d')||k.has('D')||k.has('ArrowRight'))-Number(k.has('a')||k.has('A')||k.has('ArrowLeft')))+mobileDir.current.x;
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
-   if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
+   if(dt>0&&(!scenePreview||omegaInfectedCandidateReview.ready))
+    session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
    if(cartWarningQa&&arenaRef.current){
     // Real engine state, observed once per animation frame; not injected.
@@ -729,7 +735,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     drawLab(ctx,session,fireCue,impacts,gait,pose,
      finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
    }
-   if(dt>0){fpsTotal+=dt;fpsCount++;}
+   // Simulation remains capped, but FPS must include the full elapsed time
+   // or a long render stall is incorrectly reported as a much shorter one.
+   if(elapsed>0){fpsTotal+=elapsed;fpsCount++;}
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
    }
@@ -943,6 +951,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
       Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
     <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    {scenePreview&&infectedStatus!=='ready'&&<div className="omega-scene-loading" role="status">
+     <strong>{infectedStatus==='failed'?'원화를 불러오지 못했습니다':'전장과 캐릭터를 준비하고 있습니다'}</strong>
+     <span>{infectedStatus==='failed'?'연결을 확인한 뒤 다시 시도해 주세요.':'준비가 끝나면 전투가 시작됩니다.'}</span>
+     {infectedStatus==='failed'&&<button type="button" onClick={()=>window.location.reload()}>다시 시도</button>}
+    </div>}
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     <div className="omega-protocol-stats" aria-label="전투 상태">
      <div className="omega-protocol-wave">

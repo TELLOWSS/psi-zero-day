@@ -12,27 +12,40 @@ export function omegaSurfaceReviewRequested(query:string,dev:boolean):boolean {
 }
 
 let horizon:HTMLImageElement|undefined;
-let cachedHorizon:{width:number;height:number;canvas:HTMLCanvasElement}|undefined;
+let detailedHorizon:HTMLImageElement|undefined;
+let cachedHorizon:{width:number;height:number;detailed:boolean;canvas:HTMLCanvasElement}|undefined;
 /** Distant, non-solid scenic plate; camera-derived parallax and no gameplay state. */
-export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,camera:OmegaCameraState,zoom:number):boolean {
+export function drawOmegaHorizonReview(ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,camera:OmegaCameraState,zoom:number,detailed=false):boolean {
  if(plan.sector!==1||typeof Image==='undefined'||typeof document==='undefined')return false;
- if(!horizon){horizon=new Image();horizon.decoding='async';horizon.src=OMEGA_HORIZON_REVIEW_ASSET;}
- if(!horizon.complete||!horizon.naturalWidth||!horizon.naturalHeight)return false;
+ if(detailed&&!detailedHorizon){detailedHorizon=new Image();detailedHorizon.decoding='async';detailedHorizon.src='/assets/omega/scene-art-preview/industrial-horizon-v2.webp';}
+ if(!detailed&&!horizon){horizon=new Image();horizon.decoding='async';horizon.src=OMEGA_HORIZON_REVIEW_ASSET;}
+ const selected=detailed?detailedHorizon:horizon;
+ if(!selected?.complete||!selected.naturalWidth||!selected.naturalHeight)return false;
  const width=ctx.canvas.width,height=ctx.canvas.height;
  if(width<=0||height<=0||!Number.isFinite(zoom))return false;
- const band=Math.max(1,Math.round(Math.min(height*.38,width*.40)));
- if(!cachedHorizon||cachedHorizon.width!==width||cachedHorizon.height!==band){
+ const band=Math.max(1,Math.round(Math.min(height*(detailed ? .44 : .38),width*.40)));
+ if(!cachedHorizon||cachedHorizon.width!==width||cachedHorizon.height!==band||cachedHorizon.detailed!==detailed){
   const canvas=document.createElement('canvas');canvas.width=width+240;canvas.height=band;
   const layer=canvas.getContext('2d');if(!layer)return false;
-  layer.filter='brightness(1.28)';layer.drawImage(horizon,0,0,canvas.width,band);layer.filter='none';
+  layer.filter='brightness(1.28)';
+  if(detailed){
+   // Cover without squeezing buildings horizontally; crop around the
+   // architectural middle band, leaving the live field below unobstructed.
+   const scale=Math.max(canvas.width/selected.naturalWidth,band/selected.naturalHeight);
+   const sw=canvas.width/scale,sh=band/scale;
+   const sx=(selected.naturalWidth-sw)/2;
+   const sy=Math.max(0,Math.min(selected.naturalHeight-sh,selected.naturalHeight*.55-sh/2));
+   layer.drawImage(selected,sx,sy,sw,sh,0,0,canvas.width,band);
+  }else layer.drawImage(selected,0,0,canvas.width,band);
+  layer.filter='none';
   const fade=layer.createLinearGradient(0,band*.52,0,band);
   fade.addColorStop(0,'rgba(0,0,0,1)');fade.addColorStop(1,'rgba(0,0,0,0)');
   layer.globalCompositeOperation='destination-in';layer.fillStyle=fade;layer.fillRect(0,0,canvas.width,band);
-  cachedHorizon={width,height:band,canvas};
+  cachedHorizon={width,height:band,detailed,canvas};
  }
  const baseline=omegaQuarterViewCamera(plan.entry,width,height,zoom);
  const shift=omegaG3ParallaxShift(camera,baseline,'far');
- ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=.78;
+ ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=detailed ? .95 : .78;
  ctx.drawImage(cachedHorizon.canvas,-120+shift.dx,0);ctx.restore();return true;
 }
 let texture:HTMLImageElement|undefined;

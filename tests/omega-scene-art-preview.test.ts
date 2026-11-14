@@ -13,8 +13,14 @@ describe('integrated art preview',()=>{
   const foot={x:0,y:0,planted:true};
   const gait={active:true,phase:0,distanceTravelled:1,left:foot,right:foot};
   expect(omegaSceneArtFrame({...view,gait})).toBe('walk-W-0');
-  expect(omegaSceneArtFrame({...view,gait:{...gait,phase:.76}})).toBe('walk-W-3');
+  expect(omegaSceneArtFrame({...view,gait:{...gait,phase:.76,distanceTravelled:91}})).toBe('walk-W-3');
   expect(omegaSceneArtFrame({...view,gait:{...gait,active:false}})).toBe('idle-W');
+ });
+ it('advances once per 30 world units and repeats after 120, independent of frame timing',()=>{
+  const foot={x:0,y:0,planted:true};
+  const gait={active:true,phase:0,distanceTravelled:0,left:foot,right:foot};
+  expect([0,30,60,90,120].map(distanceTravelled=>omegaSceneArtFrame({...view,gait:{...gait,distanceTravelled}})))
+   .toEqual(['walk-W-0','walk-W-1','walk-W-2','walk-W-3','walk-W-0']);
  });
  it('does not invent painted walking frames for diagonal headings',()=>{
   expect(omegaSceneArtFrame({...view,facingY:1})).toBe('idle-SW');

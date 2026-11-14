@@ -10,6 +10,8 @@ on:
       - 'scripts/qa-omega-surface-simulation.mjs'
       - 'scripts/qa-omega-scene-action-browser.mjs'
       - 'src/ui/omega-scene-art-preview*'
+      - 'src/ui/omega-scene-prop-preview.ts'
+      - 'src/ui/omega-infected-candidate-review.ts'
       - 'public/assets/omega/scene-art-preview/**'
       - 'src/ui/omega-quarantine-surface-review.ts'
       - 'src/ui/omega-combat-browser-probe.ts'
