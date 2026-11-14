@@ -72,6 +72,12 @@ export function omegaQuarterViewCamera(
   playerScreenY:fit*(projected.y+projectedOffsetY),
  };
 }
+/** Reverse the exact canvas camera projection for pointer aiming. */
+export function omegaScreenToWorld(point:OmegaFieldPoint,camera:OmegaCameraState):OmegaFieldPoint{
+ const y=(point.y/camera.scale-camera.projectedOffsetY)/camera.groundYScale;
+ const x=point.x/camera.scale-camera.projectedOffsetX-camera.skewX*y;
+ return {x,y};
+}
 /** Apply only to world geometry and ground-foot positions, not HUD/controls. */
 export function applyOmegaQuarterView(
  ctx:CanvasRenderingContext2D,camera:OmegaCameraState,

@@ -14,6 +14,13 @@ describe('OMEGA opt-in gun control',()=>{
   for(let i=0;i<90;i++)session.update(1/60,{...input,moveX:0,triggerAction:false});
   expect(session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch')).toHaveLength(0);
  });
+ it('aims at the provided world target independently of movement',()=>{
+  const session=new OmegaProtocolCombatSession(9182,50),p=session.engine.state.player;
+  const target={x:p.x,y:p.y-200};
+  for(let i=0;i<60;i++)session.update(1/60,{moveX:1,moveY:0,protocolGunMode:'manual',triggerAction:true,aimX:target.x,aimY:target.y});
+  const shots=session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch');
+  expect(shots.length).toBeGreaterThan(0);expect(shots[0]!.angle).toBeLessThan(-1.3);
+ });
  it('keeps the evolved satellite shot behind the manual trigger too',()=>{
   const session=new OmegaProtocolCombatSession(9182,50);
   session.engine.state.activePerks.satellite_broadcast=1;

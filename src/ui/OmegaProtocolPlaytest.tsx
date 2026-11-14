@@ -14,7 +14,7 @@ import {drawOmegaSceneProp,drawOmegaScenePropShadows} from './omega-scene-prop-p
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
-import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
+import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaScreenToWorld,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {omegaInfectedCandidateReview,omegaInfectedLabRequested,omegaInfectedSoloKind} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
@@ -469,6 +469,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [silverPreviewStatus,setSilverPreviewStatus]=useState<'off'|'loading'|'ready'|'failed'>(
   silverPreviewRequested?'loading':'off');
  const canvasRef=useRef<HTMLCanvasElement>(null);
+ const mouseAimRef=useRef<{x:number;y:number}|null>(null);
  const arenaRef=useRef<HTMLDivElement>(null);
  const keysRef=useRef(new Set<string>());
  const mobileDir=useRef({x:0,y:0});
@@ -481,7 +482,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const n=Number(seedValue);
   const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
-  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
+  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
  useEffect(()=>{
@@ -612,7 +613,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
    if(session.run.phase==='battle'&&session.engine.state.phase==='playing'){
     session.pause();setPaused(true);setSnapshot(session.snapshot);
@@ -643,7 +644,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
-  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0,qaRadioLaunches=0;
+  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0,qaRadioLaunches=0,qaLastGunAngle=0;
   const fixture=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
   let dashEchoes:readonly OmegaDashEcho[]=[];
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
@@ -661,8 +662,17 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const mx=(Number(k.has('d')||k.has('D')||k.has('ArrowRight'))-Number(k.has('a')||k.has('A')||k.has('ArrowLeft')))+mobileDir.current.x;
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
+   const aimCanvas=canvasRef.current,aimClient=mouseAimRef.current;
+   let aim:{x:number;y:number}|undefined;
+   if(scenePreview&&aimCanvas&&aimClient&&!autoFireRef.current){
+    const rect=aimCanvas.getBoundingClientRect();
+    if(rect.width>0&&rect.height>0){
+     const camera=omegaQuarterViewCamera(session.engine.state.player,aimCanvas.width,aimCanvas.height,cinematicZoom);
+     aim=omegaScreenToWorld({x:(aimClient.x-rect.left)*aimCanvas.width/rect.width,y:(aimClient.y-rect.top)*aimCanvas.height/rect.height},camera);
+    }
+   }
    if(dt>0&&(!scenePreview||omegaInfectedCandidateReview.ready))
-    session.update(dt,{moveX:mx/length,moveY:my/length,
+    session.update(dt,{moveX:mx/length,moveY:my/length,aimX:aim?.x,aimY:aim?.y,
      triggerAction:scenePreview?(autoFireRef.current||fireKeyRef.current||firePointerRef.current):true,
      protocolGunMode:scenePreview?(autoFireRef.current?'auto':'manual'):undefined});
    const engineEvents=session.engine.drainProjectileFeedback();
@@ -685,7 +695,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No damage is synthesized, injected or applied from telemetry.
    if(fixture&&arenaRef.current){
     for(const e of engineEvents){
-     if(e.kind==='radio'&&e.phase==='launch')qaRadioLaunches++;
+     if(e.kind==='radio'&&e.phase==='launch'){qaRadioLaunches++;qaLastGunAngle=e.angle;}
      if(e.kind!=='radio'||e.phase!=='impact')continue;
      if(e.targetId===fixture.zombieId&&(e.appliedDamage??0)>0){
       qaRadioHits++;
@@ -704,6 +714,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     arena.dataset.omegaQaBladeDamage=String(session.lastBladeStrike?.totalDamage??0);
     arena.dataset.omegaQaBladeTime=String(session.lastBladeStrike?.time??-1);
     arena.dataset.omegaQaGunLaunches=String(qaRadioLaunches);
+    arena.dataset.omegaQaGunAngle=String(qaLastGunAngle);
     arena.dataset.omegaQaGunHits=String(qaRadioHits);
     arena.dataset.omegaQaGunDamage=qaRadioDamage.toFixed(3);
     arena.dataset.omegaQaGunBlocked=String(qaRadioBlocked);
@@ -822,7 +833,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();
   else{
    session.pause();
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
   }
   setPaused(!paused);setSnapshot(session.snapshot);
@@ -973,7 +984,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-dash-ready={String(dashFeedback.ready)}
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
       Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
-    <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    <canvas ref={canvasRef} width={1120} height={720}
+     onPointerMove={e=>{if(scenePreview&&e.pointerType==='mouse')mouseAimRef.current={x:e.clientX,y:e.clientY};}}
+     onPointerDown={e=>{if(scenePreview&&e.pointerType==='mouse'&&e.button===0){e.preventDefault();mouseAimRef.current={x:e.clientX,y:e.clientY};e.currentTarget.setPointerCapture(e.pointerId);firePointerRef.current=true;}}}
+     onPointerUp={e=>{if(e.pointerType==='mouse')firePointerRef.current=false;}}
+     onPointerCancel={()=>{firePointerRef.current=false;}}
+     onLostPointerCapture={()=>{firePointerRef.current=false;}}
+     aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
     {scenePreview&&infectedStatus!=='ready'&&<div className="omega-scene-loading" role="status">
      <strong>{infectedStatus==='failed'?'원화를 불러오지 못했습니다':'전장과 캐릭터를 준비하고 있습니다'}</strong>
      <span>{infectedStatus==='failed'?'연결을 확인한 뒤 다시 시도해 주세요.':'준비가 끝나면 전투가 시작됩니다.'}</span>
@@ -1113,7 +1130,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span>{scenePreview&&<span>J · 사격</span>}<span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span>{scenePreview&&<span>마우스 / J · 사격</span>}<span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
     {snapshot.gateTransit&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}

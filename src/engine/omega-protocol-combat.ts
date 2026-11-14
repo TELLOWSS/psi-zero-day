@@ -304,9 +304,12 @@ export class OmegaProtocolCombatSession {
    ? {...input,moveX:move.x*.78,moveY:move.y*.78}
    :{...input,moveX:move.x,moveY:move.y};
   if(input.protocolGunMode==='manual'){
-   const aim=this.fieldTraversal?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y):this.lastFacing;
-   adjusted.aimX=this.engine.state.player.x+aim.x;
-   adjusted.aimY=this.engine.state.player.y+aim.y;
+   const p=this.engine.state.player;
+   const explicit=Number.isFinite(input.aimX)&&Number.isFinite(input.aimY)&&Math.hypot(input.aimX!-p.x,input.aimY!-p.y)>1;
+   if(!explicit){
+    const aim=this.fieldTraversal?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y):this.lastFacing;
+    adjusted.aimX=p.x+aim.x;adjusted.aimY=p.y+aim.y;
+   }
   }
   const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
   const hpBeforeNative=this.engine.state.player.hp;
