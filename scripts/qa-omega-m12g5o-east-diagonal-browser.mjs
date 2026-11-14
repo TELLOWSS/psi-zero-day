@@ -16,7 +16,7 @@ const browser=await chromium.launch({
 const output=[];let failures=0;
 async function recordFrames(page,ms=1200){
  return page.evaluate(duration=>new Promise(resolve=>{
-  const seen=new Set(),states=[],begin=performance.now();
+  const seen=new Set(),requestedSeen=new Set(),nativeAges=[],states=[],begin=performance.now();
   function poll(){
    const canvas=document.querySelector('.omega-protocol-arena canvas');
    const arena=document.querySelector('.omega-protocol-arena');
@@ -24,13 +24,16 @@ async function recordFrames(page,ms=1200){
    const requested=d?.omegaSceneArtRequestedFrame||'';
    const displayed=d?.omegaSceneArtFrame||'';
    if(requested===displayed&&requested)seen.add(requested);
+   if(requested)requestedSeen.add(requested);
+   if(d?.omegaSceneArtNativeAction==='fire'&&nativeAges.length<40)
+    nativeAges.push({requested,displayed,age:d.omegaSceneArtActionAge});
    if(states.length<28&&d)states.push({
     head:d.omegaSceneArtHeading,requested,displayed,
     derived:d.omegaSceneArtDiagonalFallback,native:d.omegaSceneArtNativeAction,
     x:Number(arena?.dataset.omegaPlayerX),
     y:Number(arena?.dataset.omegaPlayerY),
    });
-   if(performance.now()-begin>=duration){resolve({seen:[...seen],states});return}
+   if(performance.now()-begin>=duration){resolve({seen:[...seen],requested:[...requestedSeen],nativeAges,states});return}
    requestAnimationFrame(poll);
   }requestAnimationFrame(poll);
  }),ms);
@@ -84,6 +87,9 @@ for(const [name,width,height,mobile] of [
   // Second REAL native Watch fixture: it supplies no fake art flags. All
   // E action pixels are triggered by the engine's real session signals.
   await scene(page,'?omegaLab=1&omegaSceneArt=1&omegaQaState=combatGun');
+  await page.evaluate(async()=>{window.__g5oScene=(await import('/src/ui/omega-scene-art-preview.ts'));});
+  await page.waitForFunction(()=>window.__g5oScene?.omegaScenePreloadStatus().readyEast===12,
+    null,{timeout:15000,polling:100});
   const arena=page.locator('.omega-protocol-arena');
   await page.keyboard.down('ArrowRight');
   await page.waitForTimeout(170);
@@ -94,10 +100,11 @@ for(const [name,width,height,mobile] of [
   const actionSet=[...new Set(requested)];
   const observed={fire:actionSet.filter(x=>x.startsWith('fire-E-')),
    dash:actionSet.filter(x=>x.startsWith('dash-E-'))};
+  const requestedEast=combat.requested.filter(x=>/^(fire|dash)-E-[0-3]$/.test(x));
   const nativeHits=Number(await arena.getAttribute('data-omega-qa-gun-hits')||0);
   if(observed.dash.length<1||observed.fire.length<1||nativeHits<1)
    throw Error('Actual Watch E DASH and FIRE frames must render: '+
-    JSON.stringify({observed,nativeHits,samples:combat.states.slice(-6)}));
+    JSON.stringify({observed,requestedEast,nativeAges:combat.nativeAges,nativeHits,samples:combat.states.slice(-6)}));
   // Source WebP decode is independently verified, not merely file naming.
   const decoded=await page.evaluate(async()=>{
    const names=['fire','dash','hit'].flatMap(kind=>Array.from({length:4},(_,i)=>
@@ -115,7 +122,7 @@ for(const [name,width,height,mobile] of [
     viewport:window.innerWidth}));
   if(view.documentWidth>view.viewport+3||errors.length)
    throw Error('Overflow or console JS errors '+JSON.stringify({view,errors}));
-  const row={name,pass:true,original,diag,observed,nativeHits,
+  const row={name,pass:true,original,diag,observed,requestedEast,nativeAges:combat.nativeAges,nativeHits,
    decodedCount:decoded.length,layout:view,errors,artApproved:false};
   output.push(row);console.log('QA_PASS M12_G5O',name,JSON.stringify(row));
  }catch(e){
