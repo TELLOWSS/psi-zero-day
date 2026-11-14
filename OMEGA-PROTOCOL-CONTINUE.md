@@ -988,3 +988,11 @@
 - §67의 기존 접지와 반대발 접지 두 그림을 참조해 동일한 인물·무기·복장과 적당한 보폭을 목표로 AI 2×2 시트 `walk-west-consistent-sheet-v4.png`를 새로 생성했다. 첫 접지는 밝은 다리, 세 번째 접지는 어두운 다리가 각각 왼쪽 앞으로 나와 이전 시트보다 반대발이 구별된다. 두 중간 자세는 뒤꿈치와 다리 위치가 달라지나 발의 교차가 충분한지, 자연스럽게 이어지는지 정지 그림만으로 확정할 수 없다. 크기·무기·머리카락·의상 세부 및 해부학 정합도 사람의 검수 전이다.
 - 1086×1448 원본 외곽 alpha64 이상 픽셀 0. 투명 간격 x=546, y=711에서 원본 크기 그대로 4장 lossless WebP를 추출했다. 각 분리본 alpha/보이는 RGB 불일치 0, 경계 alpha64 이상 0이며 크기와 SHA는 `walk-west-consistent-crops-v4/crop-proof.json`. 이 수치는 미술 품질이나 애니메이션 정합을 보증하지 않는다.
 - 원본 시트·분리본·검증 기록은 `outputs/omega-art/aira-art-first-20261114/aira-west-walk-consistent-v4-candidates.zip`에 보존했다. 정지 그림 검토만 진행했으며 실제 재생·게임 적용·마스크·감독 승인은 하지 않았다. 다음은 네 자세를 같은 기준으로 재생해 동작과 발 접지를 살피고, 중간 자세 및 캐릭터·장비 정합을 수정한 다음 나머지 방향 원화를 이어간다. 160 원화/320 마스크 승인 0, PR #235 Draft, main/Production 보류.
+
+## 69. 1구역 배경 적용 플레이 프리뷰 (2026-11-14)
+
+- Director가 배경을 입힌 게임 진행을 요청했다. §56~58의 미승인 1구역 콘크리트 및 원경 후보는 이미 실제 필드 렌더러에 연결되어 있었으나 Vercel preview의 브랜치 전용 환경변수 생성이 403으로 막혀 있었다. `omega-preview-policy.ts`와 `vite.config.ts`에서 Vercel 환경이 정확히 `preview`이고 Git 브랜치가 `codex/omega-g5i-art-review-20261113`인 빌드에만 기존 `VITE_OMEGA_PROTOCOL_LAB=1`을 주입해 이 작업 브랜치에서 검수 링크를 열도록 했다. 다른 브랜치 및 production에는 자동 주입하지 않는다. 환경변수 관리 권한 자체를 수정한 것은 아니다.
+- 테스트용 URL은 `/?omegaLab=1&omegaSurfaceReview=1`. 기존 실제 1구역 세션에서 바닥·원경이 캐릭터 및 위협 아래 나타나며, 시안은 최종 배경 승인이나 3D 지형이 아니다. 실제 저장 해금 없이 들어가는 내부 QA이고 화면에도 미승인 상태가 표시된다. 1구역 외 배경은 이번에 적용하지 않았다.
+- 로컬에서 실제 Vercel preview 환경값으로 빌드한 후 Chrome 1440×900, 1024×768, 390×844, 844×390에서 두 이미지 HTTP 200, 왼쪽 방향키 이동, 페이지 오류 0을 확인했다. F·Space 입력을 보냈으나 전투 효과·승패 진행 전체를 검증한 것은 아니다. 일반 진입에서는 검수 이미지 요청과 QA 화면이 0이었다. 별도 production 환경값 빌드에서 동일 검수 URL로 진입해도 QA 화면 및 이미지 요청 0을 확인했다. 결과 `outputs/omega-art/quarantine-playable-preview-20261114/report.json`, 스크린샷 같은 폴더. 모바일 크기는 실제 Android 기기가 아니다.
+- 정책 단위 테스트·typecheck·preview 환경 전체 빌드 통과. 화면은 배경 후보와 기존 임시 감염체의 스타일 차이가 크고 어두운 구간의 가독성, 실기기 성능, 15개 전장, 승인 원화 및 실제 플레이 전 과정을 추가 검증해야 한다. 선행 HEAD `ec70e2fc` Actions 12개와 Vercel preview READY, production은 `28dc1e1b` READY였다. 새 HEAD CI 및 Vercel 배포는 push 후 별도 확인. PR #235 Draft, main/Production 변경 없음.
+- 전체 회귀: `npm test` 2792 통과/1 skipped (499개 테스트 파일 중 498 통과/1 skipped).
