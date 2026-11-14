@@ -1,6 +1,8 @@
 import metadata from './omega-scene-art-preview-metadata.json';
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import type {OmegaArtAction} from './omega-protocol-art-motion';
+import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
+import {OMEGA_ACTOR_FIRE_CUE_MS} from './omega-protocol-actor-cues';
 
 /**
  * M12-G5o: user-authored candidate-source preview only, NEVER approved art.
@@ -12,6 +14,29 @@ export function omegaSceneArtRequested(search:string, enabled:boolean):boolean {
  return enabled&&q.get('omegaLab')==='1'&&q.get('omegaSceneArt')==='1';
 }
 export type OmegaSceneArtView=OmegaActorView&{readonly sceneAction?:OmegaArtAction};
+/**
+ * Render-only afterglow from the ACTUAL engine's handheld launch events.
+ * The 90ms muzzle/weapon bearing remains owned by omegaAdvanceActorFireCue;
+ * preserving the timestamp here permits the existing 75ms authored recoil
+ * follow-through to finish after the muzzle has ceased, without firing again.
+ * No events, gameplay cooldowns, shots, damage or session state are created.
+ */
+export function omegaSceneNativeFireHoldUntil(
+ previousUntil:number,
+ events:readonly Pick<ProjectileFeedback,'phase'|'kind'>[],
+ gameTime:number,
+):number{
+ if(!Number.isFinite(gameTime)||gameTime<0)return 0;
+ const lifetime=OMEGA_ACTOR_FIRE_CUE_MS/1000;
+ let until=Number.isFinite(previousUntil)&&
+  previousUntil>gameTime-lifetime&&previousUntil<=gameTime+lifetime
+   ?previousUntil:0;
+ for(const event of events){
+  if(event.phase==='launch'&&(event.kind==='radio'||event.kind==='grout_slug'))
+   until=gameTime+lifetime;
+ }
+ return until;
+}
 type Meta={width:number;height:number;anchorX:number;anchorY:number;refHeight:number;sha256:string};
 const frames:Record<string,Meta>=metadata;
 const cache=new Map<string,HTMLImageElement>();
