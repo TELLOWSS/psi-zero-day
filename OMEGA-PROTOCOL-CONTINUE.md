@@ -967,3 +967,11 @@
 - 같은 후면 기준으로 피격 2×2 `hit-back-sheet-v1.png` 및 대시 2×2 `dash-back-sheet-v1.png`를 AI 생성했다. 피격은 상체·무릎 기울기, 대시는 준비·출발·전진·착지 후보의 몸체 변화가 보이나, 일부 총이 옆 방향으로 보여 실제 정면 조준 축·얼굴/복장/무기 정합과 동작 연결은 검토 전이다.
 - 피격 원화 네 장 `hit-back-crops`는 656×599/600, 원본 alpha/보이는 RGB 불일치 0 및 각 경계 alpha64 이상 0을 확인했다. 후면 대시는 정중앙 y=646으로 분리한 첫 `dash-back-crops`에서 두 프레임 경계 alpha64 픽셀 24/23개가 검출되어 실패로 보존했다. 원본 행 y580~636에서 alpha64 픽셀 0임을 찾아 y=610으로 재분리한 `dash-back-crops-y610` 네 장은 608×610/683, 원본 alpha/보이는 RGB 불일치 0 및 경계 alpha64 이상 0. 각 해시와 실패/성공 보고서를 보존했다.
 - `back-combat-original-review.png`는 칸 맞춤 시각 비교이며 각 그림의 공통 스케일/발 피벗을 보증하지 않는다. 원본 두 시트, 8장 분리본, 실패·성공 증빙과 반동 미완 시안은 `outputs/omega-art/aira-art-first-20261114/aira-back-hit-dash-art-candidates.zip`. 게임 등록·재생·감독 승인은 하지 않았다. 부수 기능보다 남은 방향/동작 원화와 총 방향 정합을 우선한다; 160/320 승인 0, PR #235 Draft, main/Production 보류. 선행 HEAD `c08e4c57e2daf7383db2c08694f98413cf4cd3c8` preview 성공, responsive-capture 조회 시 진행 중.
+
+## 66. 원화 우선 — AIRA 왼쪽 전투와 뒤오른 사선 사격 후보 (2026-11-14)
+
+- 기존 왼쪽 방향 기준을 참조해 AI로 사격·대시·피격 각 4자세의 독립 원본 시트 `fire-west-sheet-v1.png`, `dash-west-sheet-v1.png`, `hit-west-sheet-v1.png`를 제작했다. 사격의 준비·조준·반동·복귀와 대시 및 피격의 자세 변화는 보이나, 동작 간 인물 크기·얼굴·복장·총의 세부와 실제 모션 연결은 일치 여부를 더 검토해야 한다. 감독 승인된 원화가 아니다.
+- `west-combat-crops`의 12장 WebP는 원본에서 크기 조절 없이 lossless 분리했으며 alpha 및 보이는 RGB 불일치 0, 각 프레임 경계 alpha64 이상 0이다. 왼쪽 대시 시트는 정중앙 열 x=641에 alpha64 이상 16픽셀이 있어 투명 간격을 찾아 x=629, y=613으로 분리했다. 크기·해시·검사값은 `crop-proof.json`. `west-combat-original-review.png`는 칸 맞춤 비교로 공통 스케일이나 피벗을 보장하지 않는다.
+- 별도로 뒤오른 사선 사격 4자세 `fire-rear-right-sheet-v1.png`를 생성하고 투명 간격 x=610, y=653을 기준으로 `fire-rear-right-crops` 네 장을 크기 조절 없이 분리했다. alpha/보이는 RGB 불일치 0, 각 경계 alpha64 이상 0이며 해시와 위치는 `crop-proof.json`. 후면 사선 각도, 총 방향과 반동의 차이 및 다른 방향과 인물·장비 일관성은 시각 승인 전이다.
+- 원본 4시트, 분리본 16장, 픽셀 검사와 왼쪽 비교 이미지는 작업 PC `outputs/omega-art/aira-art-first-20261114/aira-west-and-rear-right-combat-candidates.zip`에 보존했다. 픽셀 검사는 그림의 미술 품질이나 모션을 승인하는 검사가 아니다. 게임 등록·동작 시뮬레이션·마스크·실기기 검증은 하지 않았다. 전체 160 원화/320 마스크 승인 0, PR #235 Draft, main/Production 보류.
+- 다음은 남은 방향과 행동의 실제로 구별되는 원화를 제작하고, 기존 후보들의 인물·총·복장 및 방향 정합을 먼저 맞춘다. 후면 사격의 구분이 부족한 문제와 좌우 걷기 반대 보폭도 미완이다. 원화 확보 후 공통 크기·피벗·마스크 및 실제 게임 검증을 진행한다. 기존 Vercel 브랜치 전용 검수 변수의 403 권한 문제는 그대로다.
