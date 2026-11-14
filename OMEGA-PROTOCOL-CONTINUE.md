@@ -1094,3 +1094,11 @@
 - 현재 원화는 감독 시각 검수 후보이며 인물 애니메이션·총구·가림·배경 입체화/연속 맵의 완성을 뜻하지 않는다. main/Production 병합 전 기존 품질 게이트는 유지한다.
 - 투명 원화 외곽 alpha 64 이상 픽셀 0(가장자리 잘림 자동 증거만, 미술 승인 아님). 실제 Vite preview 빌드에서도 390×844 이미지 1024px 로드·가로 넘침 없음 및 첫 작전 시작→시그널 가드 진입 확인. 이전 HEAD `2a43d526` GitHub Actions 12개 전부 통과.
 - 최종 전체 npm test 2804 통과/1 skipped, typecheck와 preview build 통과. GitHub 검수 브랜치와 Vercel preview 상태는 push 후 확인한다.
+
+## 82. 메인 AIRA 전용 배경 후보 (2026-11-15)
+
+- Director가 §81의 캐릭터를 돋보이게 할 매력적인 배경을 요청했다. 내장 이미지 생성 도구에 기존 건설 현장과 은백색 AIRA를 각각 현장·조명 참고로 제공하고, 인물 없는 블루아워 미완성 공사 현장, 가까운 철골/비계·중경 구조물·원경 크레인과 도시·젖은 바닥의 보랏빛/작업등 반사, 왼쪽 제목 가독성 및 오른쪽 인물 실루엣을 위한 조명, 글자/로고 없음으로 원본을 생성했다.
+- 원본 `outputs/omega-art/aira-home-environment-20261115/home-environment-source.png`(SHA-256 `3a7d0ea143fa88662b1b93add935b6309344e0c7e9475826fb2daac8d8b4f010`)를 보존하고 `public/assets/omega/aira-v2/home-environment-candidate-v1.webp`로 변환했다. 1672×941, 275820바이트, SHA-256 `d87a2a101c0578bf8a8ca838ecee714b19b8663d9006fca9b9268e927ffd2756`. 기본 시네마틱 홈에만 새 배경과 기존 은백색 AIRA를 합성하고 명암을 조정했다. 인물·배경은 별도 후보이며 게임 내 전투 배경이나 실제 3D 월드가 아니다.
+- Aside 브라우저에서 1440×900, 1024×768, 390×844, 844×390, 320×640의 배경과 인물 로딩·가로 넘침 없음·세로 화면 인물/본문 미겹침을 확인했다. 실제 `첫 작전 시작`으로 시그널 가드 진입도 확인했다. 캡처는 `outputs/omega-art/aira-home-environment-20261115/`. 변경 파일과 원본 프롬프트는 이 절을 기준으로 추적한다. 사람의 화면 품질 검수와 Android 실기기 확인은 남으며 main/Production 배포는 하지 않았다.
+- 실제 Vite preview 빌드 390×844에서 배경 1672px·인물 1024px 로드, 가로 넘침 없음, 첫 작전 시작→가드 진입 확인. typecheck·메인 관련 5개 테스트·preview build 통과. 전체 회귀 및 새 HEAD 원격 상태는 완료 후 확인한다.
+- 전체 npm test 2804 통과/1 skipped. 새 HEAD의 GitHub CI 및 Vercel preview는 push 후 별도 확인.

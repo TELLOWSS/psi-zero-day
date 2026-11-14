@@ -644,7 +644,7 @@
 
 /* Current silver AIRA candidate: transparent full-body title artwork. */
 .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-hero-art{
- filter:brightness(.55) saturate(.9);transform:scale(1.03);object-position:50% 36%;
+ filter:brightness(.85) saturate(.95);transform:scale(1.03);object-position:50% 36%;
 }
 .rg-home[data-reignition-concept=cinematic]:not([data-omega-silver-preview=ready]) .rg-aira-v2{
  object-fit:contain;object-position:center bottom;width:min(45vw,620px);height:78%;right:3%;bottom:110px;top:auto;

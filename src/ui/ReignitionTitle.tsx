@@ -170,7 +170,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
      <picture className="rg-hero-picture">
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
-      <img src={theme==='cinematic'?'/assets/omega/scene-art-preview/buildings-v3.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      <img src={theme==='cinematic'?'/assets/omega/aira-v2/home-environment-candidate-v1.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
      </picture>
      {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2"
       src={silverPreviewRequested&&silverPreviewCharacter==='M01'&&silverMalePortrait?
