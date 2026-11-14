@@ -15,6 +15,40 @@ export type OmegaSceneArtView=OmegaActorView&{readonly sceneAction?:OmegaArtActi
 type Meta={width:number;height:number;anchorX:number;anchorY:number;refHeight:number;sha256:string};
 const frames:Record<string,Meta>=metadata;
 const cache=new Map<string,HTMLImageElement>();
+// Source SHA is verified in tests; this is only a responsive DEV preload.
+const eastBattleKeys=['fire','dash','hit'].flatMap(action=>
+ Array.from({length:4},(_,i)=>action+'-E-'+i));
+const neighborWalkKeys=['E','W'].flatMap(heading=>
+ Array.from({length:4},(_,i)=>'walk-'+heading+'-'+i));
+const previewWarmKeys=[...eastBattleKeys,...neighborWalkKeys];
+function loadPreviewImage(key:string):HTMLImageElement{
+ let img=cache.get(key);
+ if(!img){
+  img=new Image();img.decoding='async';
+  img.src='/assets/omega/scene-art-preview/'+key+'.webp';
+  cache.set(key,img);
+ }
+ return img;
+}
+/** Explicit QA-scene only: finish decoding exact original E combat 12
+ * before a 90ms Watch gun cue can start. Does not touch game state. */
+export function omegaPrimeSceneArtSources():void{
+ if(typeof Image==='undefined')return;
+ for(const key of previewWarmKeys){
+  const img=loadPreviewImage(key);
+  // decode() is asynchronous; errors stay visible in the QA browser proof.
+  if(!img.complete)void img.decode().catch(()=>undefined);
+ }
+}
+export function omegaScenePreloadStatus():Readonly<{readyEast:number;totalEast:12}>{
+ let readyEast=0;
+ for(const key of eastBattleKeys){
+  const img=cache.get(key),meta=frames[key];
+  if(img&&meta&&img.complete&&img.naturalWidth===meta.width&&img.naturalHeight===meta.height)
+   readyEast++;
+ }
+ return {readyEast,totalEast:12};
+}
 let lastReady:{image:HTMLImageElement;meta:Meta;key:string}|undefined;
 const diagonalWalk:Partial<Record<OmegaHeading,'E'|'W'>>={
  NE:'E',SE:'E',NW:'W',SW:'W',
@@ -62,12 +96,7 @@ export function drawOmegaSceneArt(ctx:CanvasRenderingContext2D,view:OmegaSceneAr
  const heading=omegaFieldHeading(view.facingX,view.facingY);
  const desired=omegaSceneArtFrame(view),meta=frames[desired];
  if(!meta)return false;
- let image=cache.get(desired);
- if(!image){
-  image=new Image();image.decoding='async';
-  image.src='/assets/omega/scene-art-preview/'+desired+'.webp';
-  cache.set(desired,image);
- }
+ const image=loadPreviewImage(desired);
  if(image.complete&&image.naturalWidth===meta.width&&image.naturalHeight===meta.height)
   lastReady={image,meta,key:desired};
  // Keep a decoded silver painted candidate on screen while the next pose
@@ -82,6 +111,8 @@ export function drawOmegaSceneArt(ctx:CanvasRenderingContext2D,view:OmegaSceneAr
  dataset.omegaSceneArtDiagonalFallback=view.gait?.active&&diagonalWalk[heading]
   ?diagonalWalk[heading]:'none';
  dataset.omegaSceneArtNativeAction=view.sceneAction??'not-supplied';
+ dataset.omegaSceneArtActionAge=Number.isFinite(view.actionAge)
+  ?String(view.actionAge):'unavailable';
  ctx.drawImage(selected.image,-selected.meta.anchorX*size,
   -selected.meta.anchorY*size,selected.meta.width*size,selected.meta.height*size);
  return true;
