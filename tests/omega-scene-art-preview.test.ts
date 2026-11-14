@@ -50,6 +50,15 @@ describe('M12-G5o integrated original scene-art preview / NEVER production appro
    }
   }
  });
+ it('real FIRE/DASH/HIT survives E-to-SE and W-to-NW heading transitions',()=>{
+  for(const [x,y,side] of [[1,1,'E'],[1,-1,'E'],[-1,1,'W'],[-1,-1,'W']] as const)
+   for(const action of ['fire','dash','hit'] as const)
+    for(let i=0;i<4;i++){
+     const duration=action==='fire'?.165:action==='dash'?.22:.15;
+     expect(omegaSceneArtFrame({...view,facingX:x,facingY:y,
+      gait,sceneAction:action,actionAge:(i+.25)*duration/4})).toBe(action+'-'+side+'-'+i);
+    }
+ });
  it('explicit native walk cannot be spoofed into fire by stale shoot flags',()=>{
   expect(omegaSceneArtFrame({...view,facingX:1,gait,shooting:true,sceneAction:'walk'})).toBe('walk-E-0');
   expect(omegaSceneArtFrame({...view,facingX:-1,shooting:true,gait,sceneAction:'walk'})).toBe('walk-W-0');
