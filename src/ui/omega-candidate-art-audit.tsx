@@ -150,11 +150,11 @@ export function OmegaCandidateArtAudit({
     <span>청록 점 = 입력 총구</span><span>표시 경계 = 실제 알파≥64 픽셀</span>
    </div>
    <div className="omega-art-audit-grid">
-    {displayed.map(frame=>{
+    {displayed.map((frame,slot)=>{
      const layout=omegaVisualAuditLayout(frame);
      const imageStyle:CSSProperties={left:layout.left,top:layout.top,width:layout.width,height:layout.height};
      const muzzle=frame.muzzle?omegaVisualAuditMarker(frame.muzzle,layout):null;
-     return <figure key={frame.file} className="omega-art-audit-card" data-omega-g5k-frame={frame.file}>
+     return <figure key={slot+'-'+frame.file} className="omega-art-audit-card" data-omega-g5k-frame={frame.file}>
       <figcaption><strong>{frame.file}</strong>
        <small>{frame.width}×{frame.height} · 기준높이 {frame.referenceHeight}px</small></figcaption>
       <div className="omega-art-audit-stage">
