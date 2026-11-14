@@ -156,7 +156,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   shooting:Boolean(renderAction.shooting&&pose.shooting)};
  // The fallback receives real ultimate/finish flags; its muzzle only uses
  // the native 90ms fire event, not the 75ms authored-sprite follow-through.
- if(!(scenePreview&&drawOmegaSceneArt(ctx,artView))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
+ if(!(scenePreview&&drawOmegaSceneArt(ctx,{...artView,sceneAction:renderAction.action}))&&!drawOmegaApprovedActor(ctx,OMEGA_PROTOCOL_APPROVED_ART,
      OMEGA_PROTOCOL_BINARY_AUDIT_PASSED,approvedHeroCache,artView)&&
     !drawOmegaAiraV2Candidate(ctx,artView,userApprovedAiraV2)){
   drawOmegaProtocolActor(ctx,{...actorView,
