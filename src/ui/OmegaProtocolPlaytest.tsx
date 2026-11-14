@@ -919,7 +919,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <div className="omega-protocol-heading">
     <span className="omega-protocol-tag">INTERNAL QA · SPECIAL EDITION · 실제 극한 {realUnlockStatus.extremeStagesCleared}/50</span>
     <h1>OMEGA <em>PROTOCOL</em></h1>
-    <p>극한 50/50 이후 해금 · 오염 산업단지 좀비 총·검 로그라이트 · 승인 전 QA</p>
+    <p>비밀번호 입장 · 오염 산업단지 좀비 총·검 로그라이트 · 승인 전 QA</p>
    </div>
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
@@ -1288,7 +1288,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <button type="button" onClick={restart}>새 도전</button>
     <button type="button" onClick={()=>{session.abandon();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase==='defeat'||snapshot.run.phase==='victory'}>도전 포기</button>
    </div>
-   <p className="omega-protocol-warning">미출시 내부 시험 · 시험용 50/50 진입 · 실제 해금 {realUnlockStatus.canEnter?'달성':'미달성'} ({realUnlockStatus.extremeStagesCleared}/50) · 원화 미승인</p>
+   <p className="omega-protocol-warning">미출시 내부 시험 · 비밀번호 입장 · 극한 기록 {realUnlockStatus.extremeStagesCleared}/50 · 원화 미승인</p>
   </footer>
  </main>;
 }
