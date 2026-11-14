@@ -303,6 +303,11 @@ export class OmegaProtocolCombatSession {
   const adjusted= this.latestPlan.modifier==='unstable_ground'
    ? {...input,moveX:move.x*.78,moveY:move.y*.78}
    :{...input,moveX:move.x,moveY:move.y};
+  if(input.protocolGunMode==='manual'){
+   const aim=this.fieldTraversal?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y):this.lastFacing;
+   adjusted.aimX=this.engine.state.player.x+aim.x;
+   adjusted.aimY=this.engine.state.player.y+aim.y;
+  }
   const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
   const hpBeforeNative=this.engine.state.player.hp;
   this.engine.update(dt,adjusted);

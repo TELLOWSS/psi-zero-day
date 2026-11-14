@@ -1201,3 +1201,13 @@
  .omega-protocol-action-icon{width:17px;height:17px}
  .omega-protocol-auto-fire{font-size:9px;padding:2px 6px;bottom:calc(100% + 4px)}
 }
+/* Manual-fire review: hold to fire, or explicitly opt into automatic fire. */
+.omega-protocol-action-pad button.omega-protocol-fire-mode{position:absolute;right:0;bottom:calc(100% + 8px);width:auto;height:auto;min-height:32px;border-radius:5px;padding:5px 10px;white-space:nowrap;background:#102838;color:#c8f7ef;border:1px solid #6cbdb8;font-size:10px;box-shadow:none}
+.omega-protocol-action-pad button.omega-protocol-fire-mode[aria-pressed="true"]{background:#1b695e;color:#fff}
+.omega-protocol-action-pad button.omega-protocol-fire{border-color:#7de0e7;background:linear-gradient(145deg,#24667b,#12364f);box-shadow:0 0 0 1px #7de0e755,inset 0 0 18px #69d9ef2a}
+@media(max-width:760px){.omega-protocol-action-pad:has(.omega-protocol-fire){grid-template-columns:repeat(3,minmax(0,1fr));width:210px}}
+@media(max-width:480px) and (orientation:portrait){.omega-protocol-action-pad:has(.omega-protocol-fire){width:190px}}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-action-pad:has(.omega-protocol-fire){grid-template-columns:repeat(3,minmax(0,1fr));width:162px}.omega-protocol-action-pad button.omega-protocol-fire-mode{min-height:27px;bottom:calc(100% + 4px)}}
+.omega-protocol-action-pad button.omega-protocol-fire-mode{position:static;width:68px;height:48px;min-height:44px;white-space:normal;line-height:1.2}
+@media(max-width:760px){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:55px;height:48px}}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:47px;height:47px;min-height:44px;padding:2px;font-size:9px}}

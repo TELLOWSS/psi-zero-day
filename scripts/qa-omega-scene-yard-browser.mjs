@@ -19,16 +19,16 @@ for(const [name,width,height] of [['desktop',1440,900],['tablet',1024,768],['por
   const arena=page.locator('.omega-protocol-arena'),before=Number(await arena.getAttribute('data-omega-player-x'));
   await page.keyboard.down('ArrowRight');await page.waitForTimeout(600);await page.keyboard.up('ArrowRight');
   const after=Number(await arena.getAttribute('data-omega-player-x'));
-  const controls=await page.locator('.omega-protocol-action-pad button').evaluateAll(buttons=>buttons.map(button=>{
-   const box=button.getBoundingClientRect();return {width:box.width,height:box.height,icon:!!button.querySelector('svg')};
+  const controls=await page.locator('.omega-protocol-action-pad button.omega-protocol-action').evaluateAll(buttons=>buttons.map(button=>{
+   const box=button.getBoundingClientRect();return {width:box.width,height:box.height,icon:!!button.querySelector('svg')||button.classList.contains('omega-protocol-fire')};
   }));
-  const autoFire=await page.getByLabel('총기 자동 사격').isVisible();
+  const autoFire=await page.locator('.omega-protocol-fire-mode').getAttribute('aria-pressed')==='false';
   await page.locator('.omega-protocol-blade').click();
   await page.waitForFunction(()=>Number(document.querySelector('.omega-protocol-arena')?.getAttribute('data-omega-blade-combo'))>=1,null,{timeout:5000});
   await page.screenshot({path:`${output}/${name}.png`});
   const evidence=JSON.parse(await arena.getAttribute('data-omega-infected-evidence')||'{}');
   const pass=after>before+2&&expected.every(n=>assets.some(x=>x.name===n&&x.status===200))&&
-   Object.values(evidence.draws??{}).some(n=>n>0)&&controls.length===4&&controls.every(c=>c.icon&&c.width>=44&&c.height>=44)&&autoFire&&!errors.length;
+   Object.values(evidence.draws??{}).some(n=>n>0)&&controls.length===5&&controls.every(c=>c.icon&&c.width>=44&&c.height>=44)&&autoFire&&!errors.length;
   rows.push({name,before,after,assets,controls,autoFire,errors,pass});if(!pass)process.exitCode=1;
  }catch(error){rows.push({name,error:String(error),assets,errors});process.exitCode=1;}
  await page.close();

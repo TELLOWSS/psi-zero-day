@@ -404,6 +404,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const combatProbe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
  const [snapshot,setSnapshot]=useState<OmegaCombatSnapshot>(()=>session.snapshot);
  const [paused,setPaused]=useState(false);
+ const [autoFire,setAutoFire]=useState(false);
+ const autoFireRef=useRef(false),fireKeyRef=useRef(false),firePointerRef=useRef(false);
  const [classicPad,setClassicPad]=useState(false);
  const [fps,setFps]=useState(0);
  const [interactionMessage,setInteractionMessage]=useState('');
@@ -479,7 +481,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const n=Number(seedValue);
   const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
-  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+  keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
  },[seedValue]);
  useEffect(()=>{
@@ -593,6 +595,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const onKeyDown=(e:KeyboardEvent)=>{
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
    if(scenePreview&&!omegaInfectedCandidateReview.ready)return;
+   if(scenePreview&&e.key.toLowerCase()==='j'){fireKeyRef.current=true;e.preventDefault();}
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
@@ -605,10 +608,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    }
   };
   const onKeyUp=(e:KeyboardEvent)=>{
+   if(e.key.toLowerCase()==='j'){fireKeyRef.current=false;e.preventDefault();}
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
    if(session.run.phase==='battle'&&session.engine.state.phase==='playing'){
     session.pause();setPaused(true);setSnapshot(session.snapshot);
@@ -639,7 +643,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   // Visual-only gun pulse. Each new session owns its own timer and heading.
   let fireCue:OmegaActorFireCue=OMEGA_EMPTY_FIRE_CUE;
   let impacts:OmegaImpactFx[]=[];
-  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0;
+  let qaRadioHits=0,qaRadioDamage=0,qaRadioBlocked=0,qaRadioLaunches=0;
   const fixture=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
   let dashEchoes:readonly OmegaDashEcho[]=[];
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
@@ -658,7 +662,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
    if(dt>0&&(!scenePreview||omegaInfectedCandidateReview.ready))
-    session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
+    session.update(dt,{moveX:mx/length,moveY:my/length,
+     triggerAction:scenePreview?(autoFireRef.current||fireKeyRef.current||firePointerRef.current):true,
+     protocolGunMode:scenePreview?(autoFireRef.current?'auto':'manual'):undefined});
    const engineEvents=session.engine.drainProjectileFeedback();
    if(cartWarningQa&&arenaRef.current){
     // Real engine state, observed once per animation frame; not injected.
@@ -679,6 +685,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No damage is synthesized, injected or applied from telemetry.
    if(fixture&&arenaRef.current){
     for(const e of engineEvents){
+     if(e.kind==='radio'&&e.phase==='launch')qaRadioLaunches++;
      if(e.kind!=='radio'||e.phase!=='impact')continue;
      if(e.targetId===fixture.zombieId&&(e.appliedDamage??0)>0){
       qaRadioHits++;
@@ -696,6 +703,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     arena.dataset.omegaQaFacing=JSON.stringify(session.facing);
     arena.dataset.omegaQaBladeDamage=String(session.lastBladeStrike?.totalDamage??0);
     arena.dataset.omegaQaBladeTime=String(session.lastBladeStrike?.time??-1);
+    arena.dataset.omegaQaGunLaunches=String(qaRadioLaunches);
     arena.dataset.omegaQaGunHits=String(qaRadioHits);
     arena.dataset.omegaQaGunDamage=qaRadioDamage.toFixed(3);
     arena.dataset.omegaQaGunBlocked=String(qaRadioBlocked);
@@ -814,7 +822,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   if(paused)session.resume();
   else{
    session.pause();
-   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
+   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;
    if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
   }
   setPaused(!paused);setSnapshot(session.snapshot);
@@ -1062,7 +1070,24 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
      <div className="omega-protocol-action-pad">
-      {scenePreview&&<div className="omega-protocol-auto-fire" aria-label="총기 자동 사격"><span aria-hidden="true">●</span> 총기 자동 사격</div>}
+      {scenePreview&&<>
+       <button type="button" className="omega-protocol-fire-mode" aria-pressed={autoFire}
+        onClick={()=>{autoFireRef.current=!autoFireRef.current;setAutoFire(autoFireRef.current);firePointerRef.current=false;}}>
+        자동 사격 {autoFire?'켜짐':'꺼짐'}
+       </button>
+       <button type="button" className="omega-protocol-action omega-protocol-fire"
+        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||paused}
+        aria-label="총기 사격 · J 키 · 누르고 있으면 연속 사격"
+        onKeyDown={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=true;}}}
+        onKeyUp={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();fireKeyRef.current=false;}}}
+        onBlur={()=>{fireKeyRef.current=false;}}
+        onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);firePointerRef.current=true;}}
+        onPointerUp={()=>{firePointerRef.current=false;}}
+        onPointerCancel={()=>{firePointerRef.current=false;}}
+        onLostPointerCapture={()=>{firePointerRef.current=false;}}>
+        <span className="omega-protocol-action-glyph" aria-hidden="true">◎</span><span>사격</span><small>J · 누르기</small>
+       </button>
+      </>}
       <button type="button" className="omega-protocol-action omega-protocol-blade"
        onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
@@ -1088,7 +1113,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span>{scenePreview&&<span>J · 사격</span>}<span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
     {snapshot.gateTransit&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
