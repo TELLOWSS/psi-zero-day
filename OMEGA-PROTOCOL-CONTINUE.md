@@ -917,3 +917,12 @@
 - 전체 2791 통과/1 skipped, preview 플래그로 빌드 및 TypeScript 통과. `VITE_OMEGA_PROTOCOL_LAB=1`을 넣은 로컬 빌드에서 검수 URL은 두 배경 WebP HTTP 200, 일반 URL은 두 자산 요청 0, 페이지 오류 0을 확인했다(`built-preview-report.json`). 정상 게임/Production은 기존과 동일하다.
 - 개발 서버에 한정됐던 검수 표시 조건을 기존 `VITE_OMEGA_PROTOCOL_LAB=1` preview 조건에서도 동작하도록 연결하고 반복 브라우저 검사를 CI에 추가했다. Vercel Git 연결은 새 브랜치 push 후 preview를 자동 생성한다. 그러나 이 프로젝트의 브랜치 preview 전용 `VITE_OMEGA_PROTOCOL_LAB=1` 환경 변수 생성을 Vercel API가 **403 권한 부족**으로 거부했고 이 PC에는 인증된 Vercel CLI가 없다. 따라서 관리자가 `codex/omega-g5i-art-review-20261113` 브랜치의 Preview에 해당 변수를 설정하고 새 프리뷰를 빌드하기 전에는 배포 코드는 동기화되어도 원경 검수 URL이 열리지 않는다. Production 변수는 설정하지 않는다.
 - 다음: 새 HEAD Actions와 Vercel preview의 SHA/READY 재확인, 필요 시 프로젝트 관리자에게 브랜치 전용 변수 설정 요청. 후보 시각 승인·지게차 충돌 정합·적 겹침·Android 실기기·15개 전장 미완. PR #235 Draft, main 병합/Production 보류.
+
+## 59. 원화 우선 — AIRA 동작 원화 후보 12장 (2026-11-14)
+
+- Director 지시: 부수 기능보다 원화를 먼저 제작·완성하고 이후 게임 정렬/검증을 맞춘다. PR #265 선행 HEAD `50d9cfcf09a9bd7a797c415168c3cb9df8fa5a5c`의 GitHub Actions 12개 및 Vercel preview 성공을 확인했다. 기존 Vercel branch Preview 검수 변수 생성 403은 여전히 미해결이다.
+- 기존 은백색 AIRA `reference.webp`를 참조해 AI 생성 사격·대시·피격 각 4자세 시트와 개별 대시·피격 시안을 제작했다. 사격 최초 시트는 조준/반동 차이가 작아 재생성한 `fire-sheet-v3-recoil.png`를 시험 선택; 발사 반동에서 총구와 상체가 확연히 들린다. `dash-sheet-v1.png`는 준비·도약·공중·착지, `hit-sheet-v1.png`는 정상·피격 반동·복귀 후보. 첫 대시 단일 시안은 과도한 스플릿 자세로 기각하고 자연스러운 대시 단일 시안도 별도 보존했다.
+- 세 원본 시트에서 크기 조절 없이 손실 없는 WebP로 4장씩 분리했다. 선택 12장은 `outputs/omega-art/aira-art-first-20261114/selected-12/`이며 fire 768×512, dash 613×641/642, hit 599/600×656이다. SHA와 원본 셀 alpha/보이는 RGB 불일치 0, 각 분리 경계 alpha64 이상 0은 `crop-proof.json`으로 보존. 이는 셀 추출의 정확성이지 인체 정합, 동작 완성 또는 최종 승인 증거가 아니다.
+- `aira-12-recoil-contact.png`는 셀 크기에 맞춘 시각 비교여서 실제 공통 인물 크기/발 지면/총구 위치가 아님. 현 단계에서 동작별 스케일과 동일 인물/무기 디테일, 프레임간 발·총구·머리카락 연결, 7개 추가 방향·마스크 및 감독 시각 승인은 남았다. 독립 신규 AI 시트 기반 후보이며 12개 수작업 도색·160원화/320마스크 완료로 계산하지 않는다. 실제 엔진 등록/게임 검증은 하지 않았고 사용자 요청대로 원화 제작을 우선했다. `aira-selected-12-original-art.zip`에 12장·증빙·3시트·비교 그림을 보관했다.
+- 정정: 이전 §56 지게차 후보 및 이번 AIRA 시트의 이미지 도구 미리보기에 보인 광륜은 비가시 투명 픽셀 RGB 표시가 섞인 것으로, 실제 밝은 격자/어두운 배경에 브라우저로 alpha 합성해 보니 제시된 지게차 두 장과 AIRA 대시/사격 주변에 그 광륜이 보이지 않았다. `quarantine-surface-20261114/forklift-alpha-review.png`, `aira-art-first-20261114/dash-transparency-review.png`, `fire-transparency-review.png` 참조. 앞서 광륜이 남았다는 판정은 취소하며, 지게차 포크·차체의 실제 충돌/가림 정합과 감독 승인 문제는 별개로 남는다.
+- 다음: AIRA 12장 원화의 해부학·얼굴·무기/장비 통일과 동작 키포즈·다른 방향 신규 작화를 계속 우선 제작하고, 원화가 충분해진 뒤 공통 축척·피벗·마스크/실게임 검증을 수행한다. main/Production 보류.
