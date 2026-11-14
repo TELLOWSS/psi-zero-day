@@ -953,3 +953,10 @@
 - `fire-front-crops`, `dash-front-crops`, `hit-front-crops` 12개 WebP를 각 시트에서 크기 조절 없이 lossless 추출했다. 각각 656×599/600, 608/609×646/647, 656×599/600이며 원본 alpha/보이는 RGB 불일치 0, 셀 경계 alpha64 이상 0. 파일별 SHA·크기·검사 결과는 각 `crop-proof.json`. `front-combat-original-review.png`는 칸 맞춤 비교로 실제 공통 크기나 발·총구 좌표를 뜻하지 않는다.
 - 정면 사격 recoil 시트의 2번은 눈을 감고 찡그려 피격처럼 보이는 문제가 있어 사람이 정합과 표정을 추가 검토해야 한다. 이를 해결하려 별도 1장을 재생성했으나 지시하지 않은 총구 화염이 들어가 `fire-front-recoil-attempt-with-flash.png`로만 보존하고 선택 세트에 넣지 않았다. 사격/대시/피격 간 얼굴·무기/장비, 실제 모션 연결과 8방향의 나머지 원화는 미완이다.
 - 원본 3시트·분리본 12장·해시 증빙·비교 그림·별도 실패 시도는 `outputs/omega-art/aira-art-first-20261114/aira-front-combat-art-candidates.zip`에 보존. 게임에 등록·재생하지 않았고 공통 피벗/마스크, 물리 기기, 감독 승인은 아직 수행하지 않았다. 160/320 승인 0, 원화 우선 지속. 선행 PR #265 HEAD `b943a433f48615f7dbd454df03cb4611b8145409` Actions 12개 및 Vercel preview 성공 확인. PR #235 Draft, main/Production 보류.
+
+## 64. 원화 우선 — 정면 반동 표정 및 후면 사격 시도 (2026-11-14)
+
+- §63의 정면 사격 반동 프레임을 참조해 찡그린 표정을 차분한 조준 표정으로 바꾸고 총구 화염이 없는 `fire-front-recoil-calm-v2.png` AI 후보를 제작했다(1312×1199, SHA-256 `d639931e4f0f18a027183798b664d48b709def4009ccca95c0ebbef0fcbb0833`, 바깥 경계 alpha64 이상 0). 원했던 얼굴만이 아니라 머리/몸/무기와 구도가 일부 다시 그려졌고 기존 셀 크기와도 달라 원본이나 선택 프레임을 덮어쓰지 않았다. `fire-front-recoil-comparison.png`의 칸 맞춤 시각 비교에는 기존과 수정 후보가 함께 보인다. 실제 얼굴/총 디테일·발 및 동작 반동량/공통 축척은 사람 검수 전이다.
+- 후면 사격 첫 4칸 `fire-back-sheet-v1-rejected.png`는 총구가 옆 방향이며 1~3번 동작이 반복되어 후면 사격 주기로 기각했다. 별도 `fire-back-aim-v2.png`는 총이 짧게 보이는 후면 조준 시험이나 정확한 총 방향은 미승인이다. 이를 참조한 `fire-back-sheet-v2.png`에서 543×724 WebP 네 장 `fire-back-crops`를 원본 크기 그대로 분리했고 각 alpha/보이는 RGB 불일치 0, 셀 경계 alpha64 이상 0, SHA는 `crop-proof.json`에 기록했다. 그러나 조준·반동·복귀 1~3번은 매우 비슷하고 포신이 머리 뒤에 가려 정합이 불명확하므로 완성 사격 세트로 채택하지 않는다.
+- `aira-recoil-and-back-fire-studies.zip`에는 정면 수정본·비교, 후면 단일 시안·기각 시트·재시도 시트/분리본/증빙이 있다. `fire-back-review.png`는 칸 맞춤 정지 비교로 공통 스케일·피벗이나 동작 검증이 아니다. 모든 결과는 AI 후보이며 게임 등록, 실제 발사 재생, 감독 승인, 160/320 완료 계산을 하지 않았다.
+- 계속 원화 우선: 후면에서 무기가 조준하는 축을 명확히 하고 실제로 다른 반동/복귀 그림, 정면 반동의 인물·무기 정합과 나머지 방향 원화를 먼저 만든다. 이후 축척·피벗/마스크/실게임 검증. 선행 PR #265 HEAD `d3f0c9daabc1fa8e7bbf7bde5ea49cd5165b2d9a` Vercel preview 성공·responsive-capture 조회 시 실행 중. PR #235 Draft, main/Production 보류.
