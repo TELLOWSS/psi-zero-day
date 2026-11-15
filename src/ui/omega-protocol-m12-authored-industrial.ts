@@ -175,7 +175,7 @@ function drawCargoCladding(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,qua
  grad.addColorStop(.4,'rgba(44,77,96,.68)');
  grad.addColorStop(1,'rgba(8,25,39,.70)');
  ctx.fillStyle=grad;
- polygon(ctx,[x+3,y-70,x+w-4,y-70,x+w-4,y+h+7,x+3,y+h+7]);
+ polygon(ctx,[x+3,y-70,x+w-4,y-70,x+w-4,y+h,x+3,y+h]);
  beam(ctx,x+8,y-70,w-16,9,'rgba(181,218,223,.42)');
  ctx.strokeStyle='rgba(194,228,227,.30)';ctx.lineWidth=2;
  for(let i=1;i<8;i++){
@@ -199,7 +199,7 @@ function drawGangform(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,quality:
  const x=o.x,y=o.y,w=o.width,h=o.height;
  // Not a climbable new platform. High rail and panel are tied to scaffold solid.
  ctx.save();
- const top=y-95,front=y+h+7;
+ const top=y-95,front=y+h;
  const grad=ctx.createLinearGradient(x,top,x+w,front);
  grad.addColorStop(0,'rgba(128,165,178,.72)');
  grad.addColorStop(.43,'rgba(59,96,111,.62)');

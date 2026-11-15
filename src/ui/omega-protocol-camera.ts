@@ -46,21 +46,25 @@ function cameraCenter(value:number,min:number,max:number,viewLength:number):numb
 export function omegaQuarterViewCamera(
  actor:OmegaFieldPoint,viewWidth:number,viewHeight:number,
  zoomMultiplier=1.55,
+ fieldWidth:number=OMEGA_FIELD_WIDTH,
+ fieldRise=0,
 ):OmegaCameraState{
  if(!Number.isFinite(actor.x)||!Number.isFinite(actor.y)||
     !Number.isFinite(viewWidth)||!Number.isFinite(viewHeight)||
     viewWidth<=0||viewHeight<=0||
+    !Number.isFinite(fieldWidth)||fieldWidth<OMEGA_FIELD_WIDTH||
+    !Number.isFinite(fieldRise)||fieldRise<0||
     !Number.isFinite(zoomMultiplier)||zoomMultiplier<1||zoomMultiplier>2.5)
   throw new RangeError('Invalid camera inputs');
  const {skewX,groundYScale}=OMEGA_QUARTER_VIEW;
  const boundLeft=Math.min(0,skewX*OMEGA_FIELD_HEIGHT);
- const boundRight=OMEGA_FIELD_WIDTH+Math.max(0,skewX*OMEGA_FIELD_HEIGHT);
- const boundTop=0,boundBottom=OMEGA_FIELD_HEIGHT*groundYScale;
+ const boundRight=fieldWidth+Math.max(0,skewX*OMEGA_FIELD_HEIGHT);
+ const boundTop=-fieldRise*groundYScale,boundBottom=OMEGA_FIELD_HEIGHT*groundYScale;
  const projected=omegaProjectFieldPoint(actor);
  // Combat camera: ~1.55x closer than the former full-field spectator
  // view. Keep the actor readable (~18% of typical 844x390 screen height).
  // Arena bounds and actual Watch physics are unaffected.
- const fit=Math.max(viewWidth/(boundRight-boundLeft),viewHeight/(boundBottom-boundTop))*zoomMultiplier;
+ const fit=Math.max(viewWidth/(OMEGA_FIELD_WIDTH+Math.abs(skewX*OMEGA_FIELD_HEIGHT)),viewHeight/(OMEGA_FIELD_HEIGHT*groundYScale))*zoomMultiplier;
  const worldVisibleWidth=viewWidth/fit,worldVisibleHeight=viewHeight/fit;
  const centerX=cameraCenter(projected.x,boundLeft,boundRight,worldVisibleWidth);
  const centerY=cameraCenter(projected.y,boundTop,boundBottom,worldVisibleHeight);

@@ -12,7 +12,8 @@ import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_C
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
- omegaGateTransitStep,omegaGateTransitIsLocked,
+ omegaGateTransitStep,omegaGateTransitIsLocked,OMEGA_SCAFFOLD_RISE,
+ OMEGA_SCAFFOLD_BOARDING_SECONDS,OMEGA_SCAFFOLD_TRAVEL_SECONDS,
  type OmegaFieldTransit,type OmegaFieldTransitLink,
 } from '../domain/omega-protocol-field-transit';
 import {
@@ -25,7 +26,7 @@ import {
  type OmegaBossTelegraph,
 } from './omega-protocol-boss-pattern';
 import {
- omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
+ OMEGA_FIELD_WIDTH,omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
 import {
@@ -76,6 +77,26 @@ export class OmegaProtocolCombatSession {
  private readonly fieldTraversal:boolean;
  private readonly gateTransition:boolean;
  private readonly qaGateTravel:boolean;
+ private readonly qaGateTravelUntilWave:number;
+ readonly connectedFields:readonly [OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan]|null;
+ private passageStart:{x:number;y:number}|null=null;
+ get crossingConnectedPassage():boolean{return this.passageStart!==null;}
+ get fieldWorldOffsetX():number{
+  const wave=this.currentField?.wave;
+  return wave&&this.connectedFields?.[wave-1]?OMEGA_FIELD_WIDTH*(wave-1):0;
+ }
+ get fieldElevation():number{
+  return this.connectedFields&&this.currentField?.wave===4?OMEGA_SCAFFOLD_RISE:0;
+ }
+ get playerElevation():number{
+  const transit=this.transit;
+  if(this.crossingConnectedPassage&&transit?.link.kind==='scaffold_lift'&&transit.phase==='depart'){
+   const fraction=Math.max(0,Math.min(1,
+    (transit.elapsed-OMEGA_SCAFFOLD_BOARDING_SECONDS)/OMEGA_SCAFFOLD_TRAVEL_SECONDS));
+   return OMEGA_SCAFFOLD_RISE*fraction*fraction*(3-2*fraction);
+  }
+  return this.fieldElevation;
+ }
  private transit:OmegaFieldTransit|null=null;
  private pendingArrival:OmegaFieldTransitLink|null=null;
  private currentField:OmegaFieldPlan|null=null;
@@ -90,7 +111,7 @@ export class OmegaProtocolCombatSession {
  private readonly damageLog:OmegaDamageEvent[]=[];
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
-  options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean}>={},
+  options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean;qaGateTravelUntilWave?:number;continuousOpening?:boolean}>={},
  ){
   this.fieldTraversal=options.fieldTraversal===true;
   this.gateTransition=this.fieldTraversal&&options.gateTransition===true;
@@ -101,10 +122,24 @@ export class OmegaProtocolCombatSession {
   if(options.qaGateTravel&&!this.gateTransition)
    throw new Error('Test-only gate-walk requires real field gate transitions');
   this.qaGateTravel=this.gateTransition&&options.qaGateTravel===true;
+  this.qaGateTravelUntilWave=options.qaGateTravelUntilWave??Infinity;
   const access=omegaProtocolAccess(extremeStageClears,masterCosmeticEligible);
   const run=omegaStartRun(seed,access);
   if(!run)throw new Error('Complete all 50 Watch Extreme stages before entering OMEGA PROTOCOL');
   this.active=run;
+  this.connectedFields=null;
+  if(this.gateTransition&&options.continuousOpening){
+   const first=omegaFieldPlan(run.seed,1);
+   const second=omegaFieldPlan(run.seed,2);
+   const third=omegaFieldPlan(run.seed,3);
+   const fourth=omegaFieldPlan(run.seed,4);
+   this.connectedFields=[
+    first,
+    {...second,entry:{...second.entry,y:first.exit.y}},
+    {...third,entry:{...third.entry,y:second.exit.y}},
+    {...fourth,entry:{...fourth.entry,y:third.exit.y}},
+   ];
+  }
   // Isolated zero-upgrade base character with no premium or operation handoff.
   const state=createInitialSurvivorsState('player',{...DEFAULT_PERMANENT_UPGRADES},
    'stage_01','standard',{owned:[],equipped:[]},[]);
@@ -182,7 +217,7 @@ export class OmegaProtocolCombatSession {
   this.bladeResult=null;
   this.zombieBrains.clear();
   if(this.fieldTraversal){
-   this.currentField=omegaFieldPlan(this.active.seed,plan.wave);
+   this.currentField=this.connectedFields?.[plan.wave-1]??omegaFieldPlan(this.active.seed,plan.wave);
    this.fieldStatus=omegaFieldInitialProgress();
    // No leftover projectiles, drops or defeated enemy sprites can leak from
    // the previous room into a newly entered field node.
@@ -240,7 +275,7 @@ export class OmegaProtocolCombatSession {
   }
   if(plan.modifier==='crosswind')
    for(const hazard of this.engine.state.hazards)if(!hazard.isStageBoss)hazard.behavior='crosswind';
-  if(this.qaGateTravel&&this.currentField){
+  if(this.qaGateTravel&&this.currentField&&plan.wave<this.qaGateTravelUntilWave){
    // Setup only, never updated while walking: in DEV, tasks/hostiles are
    // already resolved so E + physical movement test the *real* gate.
    // Not a normal mode, no account save, no runtime teleport commands.
@@ -254,7 +289,7 @@ export class OmegaProtocolCombatSession {
     // In-sector DEV gate starts remain 190 units outside the actual exit.
     this.engine.state.player.x=this.currentField.entry.x;
     this.engine.state.player.y=this.currentField.entry.y;
-   }else{
+   }else if(!this.crossingConnectedPassage){
     this.engine.state.player.x=this.currentField.exit.x-190;
     this.engine.state.player.y=this.currentField.exit.y;
    }
@@ -270,20 +305,27 @@ export class OmegaProtocolCombatSession {
    if(this.engine.state.phase==='paused')return this.snapshot;
    const phase=this.transit!.phase;
    const progressed=omegaGateTransitStep(this.transit!,dt);
-   this.transit=progressed.next;
+   this.transit=this.passageStart?{...progressed.next,opacity:0}:progressed.next;
+   if(this.passageStart){
+    const {player}=this.engine.state;
+    const {link,elapsed,duration}=this.transit;
+    const walkDuration=phase==='depart'&&link.kind==='scaffold_lift'
+     ?OMEGA_SCAFFOLD_BOARDING_SECONDS:duration;
+    const fraction=Math.min(1,elapsed/walkDuration);
+    const from=phase==='depart'?this.passageStart:{x:0,y:link.arrival.y};
+    const to=phase==='depart'?{x:OMEGA_FIELD_WIDTH,y:link.departure.y}:link.arrival;
+    player.x=from.x+(to.x-from.x)*fraction;
+    player.y=from.y+(to.y-from.y)*fraction;
+    this.lastFacing={x:1,y:0};
+   }
    if(progressed.complete){
     if(phase==='depart'){
      this.settleWave();
-     if(this.active.phase==='battle'&&this.pendingArrival){
-      this.transit=omegaGateTransitArrive(this.pendingArrival);
-      this.pendingArrival=null;
-     }else{
-      // Reward cards appear inside the safe portal pause; arrival opens
-      // after the player chooses a card and enters the next physical map.
-      this.transit=null;
-     }
+     this.transit=null;
+     if(this.active.phase==='battle')this.enterPendingArrival();
     }else{
      this.transit=null;
+     this.passageStart=null;
     }
    }
    return this.snapshot;
@@ -425,9 +467,17 @@ export class OmegaProtocolCombatSession {
     return {success:false,reason:'OUT_OF_RANGE'};
    if(this.gateTransition&&this.currentField.wave<15){
     if(this.transit)return {success:false,reason:'NOT_READY'};
-    const destination=omegaFieldPlan(this.active.seed,this.currentField.wave+1);
+    const nextPassageField=this.connectedFields?.[this.currentField.wave];
+    const destination=nextPassageField??omegaFieldPlan(this.active.seed,this.currentField.wave+1);
+    if(nextPassageField){
+     const player=this.engine.state.player;
+     this.passageStart={x:player.x,y:player.y};
+    }
     this.pendingArrival=omegaGateTransitLink(this.currentField,destination);
     this.transit=omegaGateTransitStart(this.pendingArrival);
+    if(nextPassageField&&this.pendingArrival.kind==='scaffold_lift'){
+     this.transit={...this.transit,duration:OMEGA_SCAFFOLD_BOARDING_SECONDS+OMEGA_SCAFFOLD_TRAVEL_SECONDS};
+    }
    }else this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
   }
@@ -475,12 +525,12 @@ export class OmegaProtocolCombatSession {
   * invulnerability. Cannot be called during a reward or terminal outcome.
   */
  dash():boolean {
-  return this.armed && this.active.phase==='battle'
+  return this.armed && this.active.phase==='battle' && !this.crossingConnectedPassage
    && this.engine.triggerPlayerDash();
  }
  /** Watch's existing charge-gated director intervention, run-only. */
  ultimate():boolean{
-  return this.armed && this.active.phase==='battle'
+  return this.armed && this.active.phase==='battle' && !this.crossingConnectedPassage
    && this.engine.triggerDirectorShout();
  }
  /** Choices change real in-session engine weapons and player stats. */
@@ -511,11 +561,19 @@ export class OmegaProtocolCombatSession {
   this.active={...after,hp:Math.min(p.maxHp,p.hp),maxHp:p.maxHp};
   if(this.engine.state.phase==='paused')this.engine.setPaused(false);
   this.beginWave();
-  if(this.pendingArrival){
-   this.transit=omegaGateTransitArrive(this.pendingArrival);
-   this.pendingArrival=null;
-  }
+  this.enterPendingArrival();
   return this.snapshot;
+ }
+ private enterPendingArrival():void{
+  const link=this.pendingArrival;
+  if(!link)return;
+  this.transit=omegaGateTransitArrive(link);
+  if(this.crossingConnectedPassage){
+   this.transit={...this.transit,opacity:0};
+   this.engine.state.player.x=0;
+   this.engine.state.player.y=link.arrival.y;
+  }
+  this.pendingArrival=null;
  }
  pause():void{
   if(this.active.phase==='battle')this.engine.setPaused(true);

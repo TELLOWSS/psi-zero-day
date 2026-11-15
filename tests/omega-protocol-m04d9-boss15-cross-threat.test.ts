@@ -671,6 +671,23 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
   runPhase:s.run.phase,rewardChoices,segments,failureReason,
  };
 }
+it('completes three real opening encounters and arrives in the live raised-deck encounter',()=>{
+ const s=new OmegaProtocolCombatSession(20261109,50,false,{
+  fieldTraversal:true,gateTransition:true,continuousOpening:true,
+ });
+ for(let wave=1;wave<=3;wave++){
+  expect(s.run.wave).toBe(wave);
+  completeRealNode(s,180);
+  if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
+  for(let tick=0;tick<90&&s.snapshot.gateTransit;tick++)s.update(DT,idle);
+  expect(s.snapshot.gateTransit).toBeNull();
+ }
+ expect(s.run).toMatchObject({wave:4,victories:3,phase:'battle'});
+ expect(s.playerElevation).toBeGreaterThan(0);
+ expect(s.field?.progress.phase).toBe('combat');
+ expect(s.snapshot.enemiesAlive).toBeGreaterThanOrEqual(5);
+},60000);
+
 describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit',()=>{
  it('compares unchanged native baseline vs actual warned user inputs and reports all losses as losses',()=>{
   const results=[runActualBuild('original','bounded'),runActualBuild('original','bossSafe')];
