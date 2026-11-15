@@ -1,5 +1,6 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {readOmegaProtocolAccess} from '../app/omega-protocol-access';
+import {createOmegaFieldSession} from '../app/omega-protocol-session';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
@@ -296,9 +297,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  // preserve them ONLY in those explicit DEV modes. Ordinary M04 play and
  // gateTravel use the actual timed physical airlock transfer.
  const legacyStageSnapshot=['reward','boss','finalBoss','objective','exit'].includes(qaMode??'');
- const session=new OmegaProtocolCombatSession(seed,50,false,{
-  fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
- });
+ const session=createOmegaFieldSession(seed,{legacyStageSnapshot,qaGateTravel:gateWalk});
  if(!import.meta.env.DEV)return session;
  if(actBoundary!==null){
   // M04-C: DEV-only preroll BEFORE the interactive browser opens.
@@ -493,7 +492,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const lastHudAt=useRef(0);
  const restart=useCallback(()=>{
   const n=Number(seedValue);
-  const newSession=new OmegaProtocolCombatSession(Number.isFinite(n)?Math.trunc(n):0,50,false,{fieldTraversal:true});
+  const newSession=createOmegaFieldSession(Number.isFinite(n)?Math.trunc(n):0);
   setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};fireKeyRef.current=false;firePointerRef.current=false;mouseAimRef.current=null;touchAimRef.current=null;fireDragOrigin.current=null;queuedTap.current=null;touchShotLaunched.current=false;if(fireAimMarker.current)fireAimMarker.current.style.opacity='0';
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';

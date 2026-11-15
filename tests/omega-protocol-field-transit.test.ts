@@ -1,4 +1,5 @@
 import {describe,it,expect} from 'vitest';
+import {createOmegaFieldSession} from '../src/app/omega-protocol-session';
 import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
@@ -11,6 +12,25 @@ const advance=(s:OmegaProtocolCombatSession,frames:number)=>{
  for(let i=0;i<frames;i++)s.update(.05,idle);
 };
 describe('M04 physically entered quarantine passage: deterministic real field handoff',()=>{
+ it('keeps the physical gate transition after starting a fresh session',()=>{
+  const session=createOmegaFieldSession(20261108);
+  session.engine.state.hazards=[];
+  session.update(1/60,idle);
+  const field=session.field!;
+  for(const step of field.plan.event.steps){
+   session.engine.state.player.x=step.target.x;
+   session.engine.state.player.y=step.target.y;
+   expect(session.interact().success).toBe(true);
+  }
+  session.engine.state.player.x=field.plan.exit.x;
+  session.engine.state.player.y=field.plan.exit.y;
+  expect(session.interact()).toEqual({success:true,reason:'EXIT_OPENED'});
+  expect(session.run.wave).toBe(1);
+  expect(session.snapshot.gateTransit?.phase).toBe('depart');
+  advance(session,15);
+  expect(session.run.wave).toBe(2);
+  expect(session.snapshot.gateTransit?.phase).toBe('arrive');
+ });
  it('joins only adjacent world nodes, uses meaningful real gate types at act boundaries',()=>{
   const a=omegaFieldPlan(88,1),b=omegaFieldPlan(88,2);
   expect(omegaGateTransitLink(a,b)).toMatchObject({

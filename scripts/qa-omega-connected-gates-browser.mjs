@@ -9,7 +9,8 @@
 import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {chromium} from 'playwright-core';
-const output=resolve('qa-omega-protocol-captures');
+const output=resolve(process.env.OMEGA_GATE_QA_DIR||'qa-omega-protocol-captures');
+const origin=process.env.OMEGA_QA_ORIGIN||'http://127.0.0.1:4173';
 await mkdir(output,{recursive:true});
 const browser=await chromium.launch({
  executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',
@@ -102,7 +103,7 @@ for(const s of scenarios){
   throw Error('Actual player touch/key did not reach gate '+JSON.stringify(await read()));
  };
  try{
-  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=gateTravel',
+  await page.goto(`${origin}/?omegaLab=1&omegaQaState=gateTravel`,
    {waitUntil:'domcontentloaded',timeout:45000});
   await arena.waitFor({timeout:25000});
   const provenance=await page.locator('main[data-omega-protocol-internal="true"]')
@@ -235,8 +236,19 @@ for(const s of scenarios){
   if(errors.length)throw Error(errors.join('; '));
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
+  // Restart must return to a normal fresh combat, not the pre-cleared QA
+  // fixture or the last field. Gate behavior is separately checked by the
+  // actual session-factory integration test.
+  await page.getByRole('button',{name:'새 도전'}).click();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='1'&&
+    el?.getAttribute('data-omega-field-phase')==='combat'&&
+    el?.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:5000});
+  const restarted=await read();
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
+   provenance,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,restarted,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
    worldTransitions:3,
    normalMissionSkipAllowed:false,
