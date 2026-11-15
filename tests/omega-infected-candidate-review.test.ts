@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {OMEGA_INFECTED_FILES,omegaInfectedLabRequested,omegaInfectedSoloKind,omegaInfectedManifest,omegaInfectedPose,omegaInfectedFacesLeft,omegaInfectedIsWebP,OmegaInfectedCandidateReview} from '../src/ui/omega-infected-candidate-review';
+import {OMEGA_INFECTED_FILES,omegaInfectedLabRequested,omegaInfectedSoloKind,omegaInfectedManifest,omegaInfectedPose,omegaAdvanceInfectedStride,omegaInfectedFacesLeft,omegaInfectedIsWebP,OmegaInfectedCandidateReview} from '../src/ui/omega-infected-candidate-review';
 
 describe('OMEGA infected candidate audition',()=>{
  it('permits a solo native actor only in the explicit local art fixture',()=>{
@@ -25,13 +25,32 @@ describe('OMEGA infected candidate audition',()=>{
   expect(()=>omegaInfectedManifest({version:1,frames:frames.map((f,i)=>i===0?{...f,referenceHeight:400}:f)})).toThrow();
   expect(()=>omegaInfectedManifest({version:1,frames:frames.map((f,i)=>i===0?{...f,foot:{x:NaN,y:1}}:f)})).toThrow();
  });
- it('shows walking poses only during real movement, and warning pose for native warnings',()=>{
-  expect(omegaInfectedPose('pursue',false,0)).toBe(0);
-  expect(omegaInfectedPose('pursue',true,0)).toBe(1);
-  expect(omegaInfectedPose('pursue',true,.3)).toBe(2);
-  expect(omegaInfectedPose('warning',false,0)).toBe(3);
-  expect(omegaInfectedPose('charge',true,0)).toBe(3);
-  expect(omegaInfectedPose('recovery',false,0)).toBe(0);
+ it('advances walk by actual displacement and returns to rest when blocked',()=>{
+  const initial={x:100,y:300,time:0,phase:'pursue'} as const;
+  const start=omegaAdvanceInfectedStride(undefined,initial,'drifter');
+  const first=omegaAdvanceInfectedStride(start,{...initial,x:109,time:.04},'drifter');
+  const fast=omegaAdvanceInfectedStride(first,{...initial,x:118,time:.08},'drifter');
+  const slow=omegaAdvanceInfectedStride(first,{...initial,x:118,time:.18},'drifter');
+  expect(omegaInfectedPose('drifter',start)).toBe(0);
+  expect(omegaInfectedPose('drifter',first)).toBe(1);
+  expect(omegaInfectedPose('drifter',fast)).toBe(2);
+  expect(omegaInfectedPose('drifter',slow)).toBe(2);
+  const held=omegaAdvanceInfectedStride(fast,{...initial,x:118,time:.11},'drifter');
+  expect(omegaInfectedPose('drifter',held)).toBe(2);
+  const stopped=omegaAdvanceInfectedStride(held,{...initial,x:118,time:.25},'drifter');
+  expect(omegaInfectedPose('drifter',stopped)).toBe(0);
+  const jump=omegaAdvanceInfectedStride(fast,{...initial,x:270,time:.12},'drifter');
+  expect(omegaInfectedPose('drifter',jump)).toBe(0);
+ });
+ it('uses the runner crouch for warning, a raised attack for charge and neither for walking',()=>{
+  const warning=omegaAdvanceInfectedStride(undefined,{phase:'warning',x:100,y:300,time:0},'sprinter');
+  expect(omegaInfectedPose('sprinter',warning)).toBe(0);
+  expect(omegaInfectedPose('armored',warning)).toBe(3);
+  const charge=omegaAdvanceInfectedStride(warning,{...warning,phase:'charge',time:.04},'sprinter');
+  expect(omegaInfectedPose('sprinter',charge)).toBe(3);
+  const first=omegaAdvanceInfectedStride(charge,{...charge,phase:'pursue',time:.08},'sprinter');
+  const walk=omegaAdvanceInfectedStride(first,{...first,x:110,time:.12},'sprinter');
+  expect(omegaInfectedPose('sprinter',walk)).toBe(1);
  });
  it('keeps the telegraphed horizontal direction during warning and charge',()=>{
   expect(omegaInfectedFacesLeft({phase:'warning',lockedX:-1},100,200)).toBe(true);
