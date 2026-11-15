@@ -15,9 +15,18 @@ try{
   const page=await browser.newPage({viewport:{width,height},serviceWorkers:'block'}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));page.setDefaultTimeout(30000);
   try{
-   await page.goto(root+(root.includes('?')?'&':'?')+'home=cinematic',{waitUntil:'domcontentloaded'});
+   await page.addInitScript(()=>{
+    localStorage.setItem('psi.zero-day.home.reignition.design.v3','elite');
+   });
+   await page.goto(root,{waitUntil:'domcontentloaded'});
    const home=page.locator('main.rg-home');
    await home.waitFor();
+   if(await home.getAttribute('data-reignition-concept')!=='cinematic')
+    throw Error('The older appearance preference hid the updated default title');
+   await page.waitForFunction(()=>{
+    const art=document.querySelector('.rg-aira-v2');
+    return art?.complete&&art.naturalWidth>0&&art.currentSrc.endsWith('/assets/omega/aira-v2/hero-splash.webp');
+   });
    if(width===1440&&height===900){
      const control=page.getByRole('button',{name:'게임 설정 열기'});
      await control.click();

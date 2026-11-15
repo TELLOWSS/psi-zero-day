@@ -1,6 +1,6 @@
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
-import {describe,it,expect} from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import {ReignitionTitle,HOME_THEMES,resolveHomeTheme,resolveHomePrimaryMission,resolveHomeNextChallenge} from '../src/ui/ReignitionTitle';
 import type {EndgameHomeStatus} from '../src/app/endgame-home';
 const status:EndgameHomeStatus={guardClears:6,guardMastered:3,watchClears:50,watchMastered:7,veteran:true,guardUnlocked:true,watchUnlocked:true,lastStageNumber:50};
@@ -21,6 +21,20 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('가드 마스터 3성 3개 / 6개');expect(html).toContain('워치 마스터 3성 7개 / 50개');
   expect(html).toContain('/signal-breaker-dev/index.html?entry=play');
   expect(html).toContain('rg-story-button');
+ });
+ it('opens the updated AIRA title for a returning browser with an older appearance preference',()=>{
+  const getItem=vi.fn((key:string)=>key==='psi.zero-day.home.reignition.design.v3'?'elite':null);
+  vi.stubGlobal('window',{location:{search:''},localStorage:{getItem}});
+  try{
+   const props={status,brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',
+    heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions};
+   const render=()=>renderToStaticMarkup(React.createElement(ReignitionTitle,props));
+   expect(render()).toContain('data-reignition-concept="cinematic"');
+   expect(render()).toContain('/assets/omega/aira-v2/hero-splash.webp');
+   expect(getItem).toHaveBeenCalledWith('psi.zero-day.home.reignition.design.v4');
+   getItem.mockReturnValue('elite');
+   expect(render()).toContain('data-reignition-concept="elite"');
+  }finally{vi.unstubAllGlobals();}
  });
  it('validates URL variant selection with safe defaults',()=>{
   expect(resolveHomeTheme('?home=terminal','elite')).toBe('terminal');
