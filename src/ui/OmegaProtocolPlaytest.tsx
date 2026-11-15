@@ -537,8 +537,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const importRecoveredQaInfected=useCallback(async()=>{
   if(!import.meta.env.DEV||!infectedLab)return;
   setInfectedStatus('loading');
-  setInfectedMessage('GitHub 격리 저장소에서 실제 감염체 원본 16장과 앵커를 SHA 검사 중…');
-  try{const files=await omegaG5nFetchQaSources('infected');await importInfected(files);}
+  const repaint=new URLSearchParams(window.location.search).get('omegaStrideArt')==='1';
+  setInfectedMessage(repaint?'보폭 보정 시안 2장과 기존 프레임 14장 검증 중…':
+   'GitHub 격리 저장소에서 실제 감염체 원본 16장과 앵커를 SHA 검사 중…');
+  try{const files=await omegaG5nFetchQaSources('infected',fetch,repaint);await importInfected(files);}
   catch(e){omegaInfectedCandidateReview.dispose();setInfectedStatus('failed');
    setInfectedMessage(e instanceof Error?e.message:'복구 감염체 읽기 실패');}
  },[infectedLab,importInfected]);
