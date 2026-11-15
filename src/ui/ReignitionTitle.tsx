@@ -17,6 +17,7 @@ export const HOME_THEMES=[
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
 // The approved AIRA launch art shipped after the v3 appearance preference.
 // A fresh v4 default exposes that title once, while preserving future user choices.
+const OMEGA_REVIEW_URL='https://psi-zero-dj3fzsoj9-tellowss-projects.vercel.app/?omegaLab=1';
 const CINEMATIC_KEY_ART='/assets/reignition/aira-silver-dawn.webp';
 const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v4';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
@@ -178,14 +179,9 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span><small>WATCH</small><strong>{status.watchClears}<em>/ 50</em></strong></span>
        <span className="rg-hero-record-label">{status.veteran?'VETERAN RECORD SYNCED':'NEW OPERATOR'}</span>
       </div>
-      {theme==='cinematic'?<div className="rg-hero-mission-deck" role="group" aria-label="메인 작전 바로 시작">
-       <button type="button" aria-label="시그널 가드 바로 실행" className="rg-hero-mission guard" onClick={props.onGuard} disabled={!props.onGuard}>
-        <span><strong>시그널 가드</strong><small>{mission.mode==='guard'?mission.label:'현장 방어'}</small></span><span aria-hidden="true">↗</span>
-       </button>
-       <button type="button" aria-label="시그널 워치 바로 실행" className="rg-hero-mission watch" onClick={props.onWatch} disabled={!props.onWatch}>
-        <span><strong>시그널 워치</strong><small>{mission.mode==='watch'?mission.label:'위험 순찰'}</small></span><span aria-hidden="true">↗</span>
-       </button>
-      </div>:<div className="rg-hero-buttons">
+      {theme==='cinematic'?<a className="rg-hero-operations-link" href="#reignition-missions">
+       작전 선택 <span aria-hidden="true">↓</span>
+      </a>:<div className="rg-hero-buttons">
        <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {active.primary}</button>
        <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>두 게임 보기 <span aria-hidden="true">↓</span></button>
       </div>}
@@ -194,7 +190,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     </section>
 
     <section className="rg-missions" id="reignition-missions" aria-labelledby="rg-missions-title">
-     <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">새로운 전선, 두 개의 선택.</h2></div><span>ENDGAME · 2026.11</span></div>
+     <div className="rg-missions-heading"><div><small>LIVE MISSIONS / RE:IGNITION</small><h2 id="rg-missions-title">작전 선택</h2></div><span>ENDGAME · 2026.11</span></div>
      <div className="rg-mission-grid" data-compact-entry="full-card">
       <button type="button" className="rg-card is-guard" onClick={props.onGuard} disabled={!props.onGuard} aria-label={`시그널 가드 · 6개 중 ${status.guardClears}개 완료 · ${guardUnlocked?"마스터 작전":"일반 작전"} 진입`}>
        <img src={'/'+DEFENSE_PREMIUM_HERO} alt="" loading="eager" decoding="async"/>
@@ -204,7 +200,7 @@ export function ReignitionTitle(props:ReignitionTitleProps){
         <span className="rg-card-progress" role="progressbar" aria-label="가드 완료 작전" aria-valuemin={0} aria-valuemax={6} aria-valuenow={status.guardClears}><i style={{width:guardPercent+"%"}}/></span>
         <span className="rg-card-count">CLEAR {status.guardClears} / 06 <em>{guardUnlocked?'MASTER CHALLENGE':'CAMPAIGN'}</em></span>
         {guardUnlocked?<span className="rg-card-mastery" aria-label={`가드 마스터 3성 ${status.guardMastered}개 / 6개`}><span className="rg-card-mastery-label">MASTER 3★ <strong>{status.guardMastered} / 06</strong></span><span className="rg-card-mastery-track" aria-hidden="true"><i style={{width:guardMasterPercent+'%'}}/></span></span>:null}
-        <b>{guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
+        <b>{mission.mode==='guard'?mission.label:guardUnlocked?'마스터 작전 선택':'작전 시작'} <span aria-hidden="true">↗</span></b></span>
       </button>
       <button type="button" className="rg-card is-watch" onClick={props.onWatch} disabled={!props.onWatch} aria-label={`시그널 워치 · 50개 중 ${status.watchClears}개 완료 · ${watchUnlocked?"마스터 작전":"일반 작전"} 진입`}>
        <img src={SIGNAL_WATCH_KEY_ART} alt="" loading="eager" decoding="async"/>
@@ -214,8 +210,16 @@ export function ReignitionTitle(props:ReignitionTitleProps){
         <span className="rg-card-progress" role="progressbar" aria-label="워치 완료 스테이지" aria-valuemin={0} aria-valuemax={50} aria-valuenow={status.watchClears}><i style={{width:watchPercent+"%"}}/></span>
         <span className="rg-card-count">CLEAR {status.watchClears} / 50 <em>{watchUnlocked?'MASTER CHALLENGE':'CAMPAIGN'}</em></span>
         {watchUnlocked?<span className="rg-card-mastery" aria-label={`워치 마스터 3성 ${status.watchMastered}개 / 50개`}><span className="rg-card-mastery-label">MASTER 3★ <strong>{status.watchMastered} / 50</strong></span><span className="rg-card-mastery-track" aria-hidden="true"><i style={{width:watchMasterPercent+'%'}}/></span></span>:null}
-        <b>{watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
+        <b>{mission.mode==='watch'?mission.label:watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
       </button>
+      <a className="rg-card is-omega" href={OMEGA_REVIEW_URL} target="_blank" rel="noopener noreferrer"
+       aria-label="오메가 프로토콜 특별판 개발판 접속 · Vercel 로그인 필요 · 새 탭">
+       <img src="/assets/omega/aira-v2/hero-splash.webp" alt="" loading="lazy" decoding="async"/>
+       <span className="rg-card-screen" aria-hidden="true"/>
+       <span className="rg-card-info"><small>특별판 · 개발 중</small><strong>OMEGA PROTOCOL</strong>
+        <span>1~4구역 연결 전장 검수</span>
+        <b>개발판 입장 <span aria-hidden="true">↗</span></b></span>
+      </a>
      </div>
      <aside className="rg-command-status" aria-label="실제 클리어 기록 기반 도전 현황">
       <div className="rg-command-heading"><span className="rg-led" aria-hidden="true"/><strong>VETERAN RECORD</strong><small>저장기록 연동</small></div>
