@@ -11,6 +11,8 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(HOME_THEMES.map(t=>t.id)).toEqual(['cinematic','operations','terminal','elite']);
   expect(html).toContain('data-reignition-concept="cinematic"');
   expect((html.match(/aria-pressed=/g)||[]).length).toBe(4);
+  expect(html).toContain('data-hero-layout="mission-deck"');
+  expect(html).toMatch(/rg-hero-mission guard.*시그널 가드.*rg-hero-mission watch.*시그널 워치/);
   expect(html).toContain('RE:IGNITION');
   expect(html).toContain('class="rg-appearance"');
   expect(html).toContain('화면 스타일');

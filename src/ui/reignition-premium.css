@@ -620,3 +620,73 @@
 @media (prefers-reduced-motion:reduce){
  .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{animation:none;transform:none}
 }
+
+/* First-fold mission selection for the default Re:Ignition title. */
+.rg-home .rg-hero[data-hero-layout=mission-deck] {
+ background:#0a1027;
+}
+.rg-home .rg-hero[data-hero-layout=mission-deck]:after {display:none}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-shade {
+ background:linear-gradient(90deg,#080d21 5%,#101731ee 36%,#14163345 70%,#11142a60),
+            radial-gradient(ellipse at 78% 32%,#743d844f,transparent 57%);
+}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-cinematic-rings {
+ border-color:#aa86fa74;
+ box-shadow:0 0 54px #8259ce30,inset 0 0 68px #6d77c72b;
+}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name {
+ margin:0 0 14px;
+ color:#f2eeff;
+ letter-spacing:-.07em;
+}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name>span {display:block}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name small {
+ display:block;
+ margin-top:9px;
+ color:#bdb5ff;
+ font:800 clamp(11px,1.4vw,19px)/1.2 system-ui,sans-serif;
+ letter-spacing:.25em;
+}
+.rg-hero-mission-deck {
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px;
+ max-width:490px;
+}
+.rg-hero-mission {
+ --rg-entry-accent:#8fe9d8;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ min-width:0;
+ min-height:64px;
+ padding:9px 13px;
+ text-align:left;
+ color:#f7f4ff;
+ background:linear-gradient(125deg,#1e424d,#152039 72%);
+ border:1px solid #6cb7ac;
+ border-top:3px solid var(--rg-entry-accent);
+ border-radius:4px 4px 12px 12px;
+ cursor:pointer;
+}
+.rg-hero-mission.watch {
+ --rg-entry-accent:#d9a9ff;
+ background:linear-gradient(125deg,#482e65,#211e3c 72%);
+ border-color:#ad84d0;
+ border-top-color:var(--rg-entry-accent);
+}
+.rg-hero-mission strong,.rg-hero-mission small {display:block;word-break:keep-all}
+.rg-hero-mission strong {font-size:clamp(13px,1.35vw,18px)}
+.rg-hero-mission small {margin-top:3px;color:#e3dbef;font-size:11px}
+.rg-hero-mission>span:last-child {color:var(--rg-entry-accent);font-size:18px}
+.rg-hero-mission:focus-visible {outline:2px solid white;outline-offset:3px}
+.rg-hero-mission:hover {filter:brightness(1.15)}
+.rg-hero-mission:disabled {opacity:.4;cursor:default}
+@media(max-width:800px) {
+ .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-shade {
+  background:linear-gradient(0deg,#090e22 17%,#10132c 44%,#1615311c 84%);
+ }
+ .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name small {margin-top:5px}
+ .rg-hero-mission {min-height:54px}
+}

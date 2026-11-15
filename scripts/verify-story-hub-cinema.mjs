@@ -27,6 +27,16 @@ try{
     const art=document.querySelector('.rg-aira-v2');
     return art?.complete&&art.naturalWidth>0&&art.currentSrc.endsWith('/assets/omega/aira-v2/hero-splash.webp');
    });
+   const missionDeck=home.locator('[data-hero-layout="mission-deck"]');
+   const deckEntries=missionDeck.locator('.rg-hero-mission-deck button');
+   if(await deckEntries.count()!==2)throw Error('New first-fold game controls are missing');
+   for(const entry of await deckEntries.all()){
+    const box=await entry.boundingBox();
+    if(!box||!(await entry.isEnabled())||box.height<44||(height>=844&&box.y+box.height>height))
+     throw Error('New title mission control is outside its usable viewport '+JSON.stringify(box));
+   }
+   await page.screenshot({path:path.join(out,width+'x'+height+'-new-mission-deck.png'),
+    animations:'disabled',fullPage:false});
    if(width===1440&&height===900){
      const control=page.getByRole('button',{name:'게임 설정 열기'});
      await control.click();
@@ -97,7 +107,7 @@ try{
        const heroRect=hero?.getBoundingClientRect();
        const name=document.querySelector('.rg-hero-name');
        const titleStyle=name?getComputedStyle(name):null;
-       const nameRect=name?.getBoundingClientRect();
+       const nameRect=(name?.querySelector('span')??name)?.getBoundingClientRect();
        const lineHeight=titleStyle?parseFloat(titleStyle.lineHeight):0;
        return {heroHeight:heroRect?.height??0,heroWidth:heroRect?.width??0,
          homeWidth:home?.width??0,rootWidth:root?.width??0,viewport:innerWidth,
@@ -114,7 +124,7 @@ try{
         visuals.heroWidth<width*(fullBleed?.97:.72))
        throw new Error('Main title must fit its authored layout '+design+': '+JSON.stringify(visuals));
      if(design==='cinematic'&&(visuals.wordmarkHeight>visuals.wordmarkLineHeight*1.18))
-       throw new Error('RE:IGNITION title wrapped into broken lines: '+JSON.stringify(visuals));
+       throw new Error('ZERO DAY wordmark wrapped into broken lines: '+JSON.stringify(visuals));
      if(design==='cinematic'){
        await page.waitForFunction(()=>{
          const art=document.querySelector('.rg-veteran-character');
