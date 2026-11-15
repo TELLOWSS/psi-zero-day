@@ -25,9 +25,10 @@ for(const [name,width,height,mobile] of [
   page.on('pageerror',e=>errors.push(String(e)));
   page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   try{
+   const repainted=mode==='infected'&&name==='desktop';
    const query=mode==='aira'
     ?'?omegaLab=1&omegaM12G5i=1&omegaQaState=combatGun'
-    :'?omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI';
+    :'?omegaLab=1&omegaInfectedArtLab=1&omegaQaState=zombieAI'+(repainted?'&omegaStrideArt=1':'');
    await page.goto('http://127.0.0.1:4173/'+query,{waitUntil:'domcontentloaded',timeout:45000});
    await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
    await page.getByRole('button',{name:'일시정지'}).click();
@@ -35,7 +36,10 @@ for(const [name,width,height,mobile] of [
     await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:30000});
    const load=page.locator('[data-omega-g5n-load="'+mode+'"]');
    await load.waitFor({timeout:15000});
+   const repaintRequest=repainted?page.waitForResponse(response=>
+    response.url().includes('/qa-art/stride-repaint/armored-2.webp')&&response.ok()):null;
    await load.click();
+   await repaintRequest;
    const ready=page.locator(mode==='aira'?'[data-omega-g5i-feedback="ready"]':'[data-omega-infected-feedback="ready"]');
    await ready.waitFor({timeout:45000});
    const proof=await page.evaluate(async(which)=>{
@@ -170,7 +174,7 @@ for(const [name,width,height,mobile] of [
     if(errors.length)throw Error('Native candidate art caused a browser error '+JSON.stringify(errors));
    }
    records.push({name,mode,width,height,pass:true,count:seen.length,files:seen,
-    proof,stillPaused:frozen,geometry,native,errors,artApproved:false});
+    proof,stillPaused:frozen,geometry,native,repainted,errors,artApproved:false});
    console.log('QA_PASS M12_G5N',mode,name,seen.length,'genuine files');
   }catch(error){
    failures++;records.push({name,mode,width,height,pass:false,error:String(error),errors});

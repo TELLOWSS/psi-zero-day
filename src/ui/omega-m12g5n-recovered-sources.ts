@@ -25,15 +25,20 @@ export const OMEGA_G5N_RECOVERY_GATE={
  productionAllowed:false,
 } as const;
 
+export const OMEGA_STRIDE_REPAINT_DIR='/qa-art/stride-repaint';
+export const OMEGA_STRIDE_REPAINT_FILES=['basic-2.webp','armored-2.webp'] as const;
+
 export async function omegaG5nFetchQaSources(
- kind:OmegaG5nKind,fetcher:typeof fetch=fetch,
+ kind:OmegaG5nKind,fetcher:typeof fetch=fetch,repaint=false,
 ):Promise<readonly File[]>{
  if(!import.meta.env.DEV)throw Error('Recovered art is only for Vite DEV review');
  const spec=OMEGA_G5N_RECOVERED_ART[kind];
  const files:File[]=[];
  const required=[...spec.names,spec.anchor];
  for(const name of required){
-  const url=spec.dir+'/'+name;
+  const alternate=kind==='infected'&&repaint&&
+   (name===spec.anchor||OMEGA_STRIDE_REPAINT_FILES.some(file=>file===name));
+  const url=(alternate?OMEGA_STRIDE_REPAINT_DIR:spec.dir)+'/'+name;
   const res=await fetcher(url,{cache:'no-store'});
   if(!res.ok)throw Error('Missing genuine recovered QA source: '+name);
   const bytes=await res.arrayBuffer();
