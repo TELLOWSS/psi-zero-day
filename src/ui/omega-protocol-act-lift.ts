@@ -1,5 +1,5 @@
 import type {OmegaFieldPlan} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock,type OmegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
+import {omegaActBoundaryDock,type OmegaActBoundaryDock,type OmegaFieldTransit} from '../domain/omega-protocol-field-transit';
 
 /**
  * Original in-world 2.5D lift/airlock study, painted at the actual native
@@ -118,6 +118,45 @@ export function drawOmegaConnectedLift(
 
 /** M04-C: three deliberately non-interchangeable industrial portal silhouettes,
  * each painted at the real exit/entry foothold in native world coordinates. */
+export function drawOmegaConnectedServiceTunnel(
+ ctx:CanvasRenderingContext2D,x:number,y:number,drop:number,platformOffset:number,skew:number,
+):void{
+ ctx.save();ctx.translate(x,y);
+ ctx.transform(1,0,-skew,1,0,0);
+ ctx.fillStyle='#091923';ctx.fillRect(-75,-73,150,drop+85);
+ ctx.strokeStyle='#5d9ba7';ctx.lineWidth=5;
+ ctx.strokeRect(-75,-73,150,drop+85);
+ for(const side of [-1,1]){
+  const rail=side*57;
+  ctx.beginPath();ctx.moveTo(rail,-27);ctx.lineTo(rail,drop+9);ctx.stroke();
+  ctx.fillStyle='#f0b767';ctx.fillRect(rail-4,-38,8,13);
+ }
+ ctx.fillStyle='#a9e6eb';ctx.font='bold 12px system-ui';ctx.textAlign='center';
+ ctx.fillText('SERVICE TUNNEL ↓ 12M',0,-51);
+ ctx.translate(0,platformOffset);
+ ctx.fillStyle='#1c4753';ctx.fillRect(-50,-42,100,42);
+ ctx.strokeStyle='#72c3cc';ctx.lineWidth=3;ctx.strokeRect(-50,-42,100,42);
+ ctx.fillStyle='#c7d3cc';ctx.fillRect(-55,0,110,8);
+ ctx.restore();
+}
+
+export function drawOmegaConnectedAirlock(
+ ctx:CanvasRenderingContext2D,x:number,y:number,skew:number,
+ transit:OmegaFieldTransit|null,atSupply:boolean,passed:boolean,
+):void{
+ const progress=transit?transit.elapsed/transit.duration:0;
+ const open=atSupply?0:transit?.phase==='depart'?1-progress:transit?progress:1;
+ ctx.save();ctx.translate(x,y);ctx.transform(1,0,-skew,1,0,0);
+ ctx.fillStyle='#18182a';ctx.fillRect(-78,-146,156,146);
+ ctx.strokeStyle='#a38ba9';ctx.lineWidth=7;ctx.strokeRect(-78,-146,156,146);
+ for(const side of [-1,1]){
+  ctx.fillStyle='#5c4c68';ctx.fillRect(side<0?-69:69-69*(1-open),-113,69*(1-open),104);
+ }
+ ctx.fillStyle=atSupply?'#ffba75':'#b3f3d9';ctx.font='bold 12px system-ui';ctx.textAlign='center';
+ ctx.fillText(atSupply?'PRESSURE EQUALIZING':passed?'PRESSURE OK':'CONTROL AIRLOCK',0,-125);
+ ctx.restore();
+}
+
 function drawOmegaSpecialActDock(
  ctx:CanvasRenderingContext2D,dock:OmegaActBoundaryDock,seconds:number,
 ):void{

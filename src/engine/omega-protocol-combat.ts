@@ -13,8 +13,8 @@ import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
  omegaGateTransitStep,omegaGateTransitIsLocked,
- OMEGA_CONNECTED_OPENING_END,omegaConnectedDeckElevation,
- OMEGA_DECK_BOARDING_SECONDS,omegaConnectedLiftTravelSeconds,
+ OMEGA_CONNECTED_FIELD_COUNT,omegaConnectedDeckElevation,
+ OMEGA_DECK_BOARDING_SECONDS,omegaConnectedVerticalTravelSeconds,
  type OmegaFieldTransit,type OmegaFieldTransitLink,
 } from '../domain/omega-protocol-field-transit';
 import {
@@ -96,12 +96,13 @@ export class OmegaProtocolCombatSession {
   if(this.active.phase==='reward'&&this.pendingArrival)
    return omegaConnectedDeckElevation(this.pendingArrival.toWave);
   if(transit?.phase!=='depart')return elevation;
-  const travel=omegaConnectedLiftTravelSeconds(transit.link.kind);
+  const travel=omegaConnectedVerticalTravelSeconds(transit.link.kind);
   if(!travel)return elevation;
   const fraction=Math.max(0,Math.min(1,(transit.elapsed-OMEGA_DECK_BOARDING_SECONDS)/travel));
   const rise=omegaConnectedDeckElevation(transit.link.toWave)-elevation;
   return elevation+rise*fraction*fraction*(3-2*fraction);
  }
+ get gateTransit():OmegaFieldTransit|null{return this.transit;}
  private transit:OmegaFieldTransit|null=null;
  private pendingArrival:OmegaFieldTransitLink|null=null;
  private currentField:OmegaFieldPlan|null=null;
@@ -135,7 +136,7 @@ export class OmegaProtocolCombatSession {
   this.connectedFields=null;
   if(this.gateTransition&&options.continuousOpening){
    const fields:OmegaFieldPlan[]=[];
-   for(let wave=1;wave<=OMEGA_CONNECTED_OPENING_END;wave++){
+   for(let wave=1;wave<=OMEGA_CONNECTED_FIELD_COUNT;wave++){
     const plan=omegaFieldPlan(run.seed,wave);
     const previous=fields.at(-1);
     fields.push(previous?{...plan,entry:{...plan.entry,y:previous.exit.y}}:plan);
@@ -313,7 +314,7 @@ export class OmegaProtocolCombatSession {
    if(this.passageStart){
     const {player}=this.engine.state;
     const {link,elapsed,duration}=this.transit;
-    const walkDuration=phase==='depart'&&omegaConnectedLiftTravelSeconds(link.kind)
+    const walkDuration=phase==='depart'&&omegaConnectedVerticalTravelSeconds(link.kind)
      ?OMEGA_DECK_BOARDING_SECONDS:duration;
     const fraction=Math.min(1,elapsed/walkDuration);
     const from=phase==='depart'?this.passageStart:{x:0,y:link.arrival.y};
@@ -479,8 +480,8 @@ export class OmegaProtocolCombatSession {
     }
     this.pendingArrival=omegaGateTransitLink(this.currentField,destination);
     this.transit=omegaGateTransitStart(this.pendingArrival);
-    const liftTravel=nextPassageField?omegaConnectedLiftTravelSeconds(this.pendingArrival.kind):0;
-    if(liftTravel)this.transit={...this.transit,duration:OMEGA_DECK_BOARDING_SECONDS+liftTravel};
+    const verticalTravel=nextPassageField?omegaConnectedVerticalTravelSeconds(this.pendingArrival.kind):0;
+    if(verticalTravel)this.transit={...this.transit,duration:OMEGA_DECK_BOARDING_SECONDS+verticalTravel};
    }else this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
   }

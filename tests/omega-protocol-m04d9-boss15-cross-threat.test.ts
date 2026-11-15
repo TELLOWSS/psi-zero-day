@@ -250,7 +250,7 @@ function tacticalStep(
   const corrected=combinedBossWarningMove(s,telemetry!);
   if(corrected)return corrected;
  }
- if((pilot==='bounded'||pilot==='bossSafe')&&s.run.wave>=13){
+ if((pilot==='bounded'||pilot==='bossSafe')&&s.run.wave>=(s.connectedFields?7:13)){
   // Last surviving native cart may remain at range ~250 behind solid cover.
   // With no simultaneous threats, approaching via the normal legal route
   // restores genuine radio LOS and real blade contact, without changing HP.
@@ -450,7 +450,7 @@ function completeRealNode(s:OmegaProtocolCombatSession,maxSeconds=125,pilot:Pilo
    const preBossPlayer={x:player.x,y:player.y,hp:player.hp,
     cooldown:player.dashCooldown??0};
    const warned=s.snapshot.bossTelegraph;
-   const danger=(pilot==='reaction'||pilot==='bounded'||pilot==='bossSafe')&&wave>=13
+   const danger=(pilot==='reaction'||pilot==='bounded'||pilot==='bossSafe')&&wave>=(s.connectedFields?7:13)
     ?omegaCounterplayCues(s.engine.state.hazards,id=>s.zombieBrain(id)).some(c=>{
       const delta=dist(player,c);
       if(c.phase==='warning'&&c.seconds>.16)return false;
@@ -623,7 +623,7 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
   let complete:NodeEvidence|null=null;
   try{
    complete=completeRealNode(s,
-    (pilot==='bounded'||pilot==='bossSafe')&&wave>=13?360:wave===9||wave===15?300:180,
+    (pilot==='bounded'||pilot==='bossSafe')&&wave>=(s.connectedFields?7:13)?360:wave===9||wave===15?300:180,
     pilot,telemetry);
   }catch(error){
    failureReason=String(error);
@@ -671,16 +671,19 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
   runPhase:s.run.phase,rewardChoices,segments,failureReason,
  };
 }
-it('clears eight native encounters through both lifts and starts encounter nine',()=>{
- const s=new OmegaProtocolCombatSession(20261109,50,false,{
+it('clears all 15 native encounters across the connected world',()=>{
+ const s=new OmegaProtocolCombatSession(20261110,50,false,{
   fieldTraversal:true,gateTransition:true,continuousOpening:true,
  });
+ const telemetry:PilotTelemetry={warningsObserved:0,sidesteps:0,dashAccepted:0,
+  lineOfSightDetourTicks:0,damageContexts:[],firstEight:[],safetyMoves:0,rejectedMoves:0,
+  bossFrames:[],bossSafeInputs:0,bossSafeRejected:0,bossHitDetails:[]};
  const deckSeams:number[]=[];
- for(let wave=1;wave<=8;wave++){
+ for(let wave=1;wave<=15;wave++){
   expect(s.run.wave).toBe(wave);
-  completeRealNode(s,180,'bossSafe');
+  completeRealNode(s,wave>=13?360:wave===9?300:180,'bossSafe',telemetry);
   if(s.run.phase==='reward'){
-   const preferred=priorities.original.find(id=>s.run.offers.includes(id as UpgradeChoice));
+   const preferred=priorities.firepower.find(id=>s.run.offers.includes(id as UpgradeChoice));
    if(wave===4){
     expect(s.engine.state.player.x+s.fieldWorldOffsetX).toBe(5600);
     expect(s.playerElevation).toBe(180);
@@ -691,18 +694,16 @@ it('clears eight native encounters through both lifts and starts encounter nine'
    }
    s.selectUpgrade((preferred as UpgradeChoice|undefined)??s.run.offers[0]!);
   }
-  if(wave>=4){
+  if(wave>=4&&wave<15){
    deckSeams.push(s.engine.state.player.x+s.fieldWorldOffsetX);
-   expect(s.playerElevation).toBe(wave<6?180:420);
+   expect(s.playerElevation).toBe(wave<6?180:wave<9?420:300);
   }
   for(let tick=0;tick<90&&s.snapshot.gateTransit;tick++)s.update(DT,idle);
   expect(s.snapshot.gateTransit).toBeNull();
  }
- expect(deckSeams).toEqual([5600,7000,8400,9800,11200]);
- expect(s.run).toMatchObject({wave:9,victories:8,phase:'battle'});
- expect(s.playerElevation).toBeGreaterThan(0);
- expect(s.field?.progress.phase).toBe('combat');
- expect(s.snapshot.enemiesAlive).toBeGreaterThan(0);
+ expect(deckSeams).toEqual([5600,7000,8400,9800,11200,12600,14000,15400,16800,18200,19600]);
+ expect(s.run).toMatchObject({wave:16,victories:15,phase:'victory'});
+ expect(s.snapshot.enemiesAlive).toBe(0);
 },60000);
 
 describe('M04-D9 final-core first-ten-seconds true native counterplay risk audit',()=>{

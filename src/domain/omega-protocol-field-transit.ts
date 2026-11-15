@@ -33,14 +33,17 @@ export interface OmegaFieldTransit{
 // World-art units for the first 18m lift. Native collision remains tile-local.
 export const OMEGA_SCAFFOLD_RISE=180;
 export const OMEGA_CRANE_RISE=240;
-export const OMEGA_CONNECTED_OPENING_END=9;
+export const OMEGA_TUNNEL_DROP=120;
+export const OMEGA_CONNECTED_FIELD_COUNT=15;
+export const OMEGA_CONNECTED_MAX_ELEVATION=OMEGA_SCAFFOLD_RISE+OMEGA_CRANE_RISE;
 export function omegaConnectedDeckElevation(wave:number):number{
- if(wave>=7&&wave<=OMEGA_CONNECTED_OPENING_END)return OMEGA_SCAFFOLD_RISE+OMEGA_CRANE_RISE;
+ if(wave>=10&&wave<=OMEGA_CONNECTED_FIELD_COUNT)return OMEGA_CONNECTED_MAX_ELEVATION-OMEGA_TUNNEL_DROP;
+ if(wave>=7&&wave<=9)return OMEGA_CONNECTED_MAX_ELEVATION;
  return wave>=4&&wave<=6?OMEGA_SCAFFOLD_RISE:0;
 }
 export const OMEGA_DECK_BOARDING_SECONDS=.75;
-export function omegaConnectedLiftTravelSeconds(kind:OmegaFieldTransitKind):number{
- return kind==='scaffold_lift'?1.25:kind==='crane_elevator'?1.6:0;
+export function omegaConnectedVerticalTravelSeconds(kind:OmegaFieldTransitKind):number{
+ return kind==='scaffold_lift'?1.25:kind==='crane_elevator'?1.6:kind==='service_tunnel'?1.35:0;
 }
 const DURATIONS={depart:.75,arrive:.7} as const;
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
