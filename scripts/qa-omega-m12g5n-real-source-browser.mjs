@@ -47,9 +47,13 @@ for(const [name,width,height,mobile] of [
     }
     const {omegaInfectedCandidateReview}=await import('/src/ui/omega-infected-candidate-review.ts');
     const c=omegaInfectedCandidateReview.reviewCards();
-    return {files:c.map(x=>x.file),sizes:c.map(x=>[x.width,x.height]),
+    const contact=c.map(x=>({file:x.file,anchorX:x.foot.x,anchorY:x.foot.y,
+     bottomY:x.alphaBounds.maxY,bottomMinusAnchor:x.alphaBounds.maxY-x.foot.y}));
+    return {files:c.map(x=>x.file),sizes:c.map(x=>[x.width,x.height]),contact,
      ready:c.length===16,origin:'local-GitHub-qa-source'};
    },mode);
+   if(mode==='infected'&&proof.contact.some(row=>Math.abs(row.bottomMinusAnchor)>2))
+    throw Error('Recovered infected art has a vertical contact mismatch '+JSON.stringify(proof.contact));
    if(!proof.ready||proof.files.length!==(mode==='aira'?12:16))
     throw Error('All original real source frames were not imported: '+JSON.stringify(proof));
    const open=page.locator('[data-omega-g5k-open="'+mode+'"]');
@@ -103,9 +107,8 @@ for(const [name,width,height,mobile] of [
       ?(await import('/src/ui/omega-protocol-m12g5i-action-art.ts')).omegaG5iActionPreview
       :(await import('/src/ui/omega-infected-candidate-review.ts')).omegaInfectedCandidateReview;
     },mode);
+    const arena=page.locator('.omega-protocol-arena');
     if(mode==='aira'){
-     // Drive authentic game controls. Gun targets are not initially in firing
-     // range: actual player movement/dash must precede verified action paint.
      await page.keyboard.down('ArrowRight');
      await page.waitForTimeout(180);
      await page.keyboard.press('Shift');
@@ -116,16 +119,17 @@ for(const [name,width,height,mobile] of [
      native=await (await page.waitForFunction(selectedMode=>{
       const source=window.__omegaG5nActiveSource;
       if(!source?.active)return false;
-      if(selectedMode==='aira'){
-       const e=source.evidence();
-       const count=e.counts.fire+e.counts.dash+e.counts.hit;
-       return count>0?{mode:selectedMode,active:true,draws:count,
-        counts:e.counts,frames:e.frames}:false;
-      }
       const e=source.evidence();
-      const count=Object.values(e.draws).reduce((x,y)=>x+y,0);
-      return count>0?{mode:selectedMode,active:true,draws:count,poses:e.poses}:false;
-     },mode,{timeout:16000,polling:100})).jsonValue();
+      if(selectedMode==='aira'){
+       const gunHits=Number(document.querySelector('.omega-protocol-arena')?.dataset.omegaQaGunHits);
+       return gunHits>0&&e.counts.fire>0&&e.counts.dash>0
+        ?{mode:selectedMode,active:true,draws:e.counts.fire+e.counts.dash,
+         counts:e.counts,frames:e.frames,gunHits}:false;
+      }
+      const counts=Object.values(e.draws);
+      return counts.every(count=>count>0)?{mode:selectedMode,active:true,
+       draws:counts.reduce((a,b)=>a+b,0),poses:e.poses}:false;
+     },mode,{timeout:24000,polling:'raf'})).jsonValue();
     }catch(error){
      const evidence=await page.evaluate(()=>window.__omegaG5nActiveSource?.evidence?.());
      throw Error('Actual native candidate source did not render: '+
@@ -135,6 +139,33 @@ for(const [name,width,height,mobile] of [
      throw Error('Native original-source evidence must be positive: '+JSON.stringify(native));
     await page.screenshot({path:dir+'/m12g5n-REAL-NATIVE-ACTIVE-'+mode+'-'+name+'.png',
       fullPage:false,animations:'disabled'});
+    if(mode==='aira'){
+     await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5i=1&omegaQaState=combatHit',
+      {waitUntil:'domcontentloaded',timeout:45000});
+     await page.getByRole('button',{name:'일시정지'}).click();
+     await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:30000});
+     await page.locator('[data-omega-g5n-load="aira"]').click();
+     await page.locator('[data-omega-g5i-feedback="ready"]').waitFor({timeout:45000});
+     await page.locator('[data-omega-g5i-toggle="true"]').click();
+     const initialHp=Number(await arena.getAttribute('data-omega-g5h-player-hp'));
+     if(!Number.isFinite(initialHp)||initialHp<=0)throw Error('Missing initial native HP');
+     await page.getByRole('button',{name:'계속하기'}).click();
+     await page.keyboard.down('ArrowRight');
+     await page.waitForTimeout(120);
+     await page.keyboard.up('ArrowRight');
+     native.hit=await (await page.waitForFunction(initialHp=>{
+      const a=document.querySelector('.omega-protocol-arena');
+      const hp=Number(a?.dataset.omegaG5hPlayerHp);
+      const hits=Number(a?.dataset.omegaG5hZombieHits);
+      const damage=Number(a?.dataset.omegaG5hZombieDamage);
+      const counts=JSON.parse(a?.dataset.omegaG5iLiveActionCounts??'{}');
+      const frames=JSON.parse(a?.dataset.omegaG5iLiveActionFrames??'{}');
+      return hp<initialHp&&hits>0&&damage>0&&counts.hit>0
+       ?{initialHp,hp,nativeHits:hits,damage,draws:counts.hit,frames:frames.hit}:false;
+     },initialHp,{timeout:26000,polling:'raf'})).jsonValue();
+     await page.screenshot({path:dir+'/m12g5n-NATIVE-AIRA-HIT-'+name+'.png',
+      fullPage:false,animations:'disabled'});
+    }
     if(errors.length)throw Error('Native candidate art caused a browser error '+JSON.stringify(errors));
    }
    records.push({name,mode,width,height,pass:true,count:seen.length,files:seen,
