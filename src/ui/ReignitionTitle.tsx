@@ -150,7 +150,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
     <small>RE:IGNITION / 2026.11</small>
    </nav>
    <div className="rg-main">
-    <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인">
+    <section className="rg-hero" aria-label="PSI 제로데이 엔드게임 메인"
+     data-hero-layout={theme==='cinematic'?'mission-deck':undefined}>
      <picture className="rg-hero-picture">
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
       <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
@@ -161,9 +162,9 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      <div className="rg-cinematic-rings" aria-hidden="true"><span/><span/></div>
      <div className="rg-hero-micro" aria-hidden="true"><span>PSI / OPERATIONS</span><span>SEASON 01 — RE:IGNITION</span></div>
      <div className="rg-hero-content">
-      <span className="rg-hero-eyebrow">{active.eyebrow}</span>
-      <div className="rg-hero-update"><span aria-hidden="true" className="rg-led"/> MAJOR UPDATE · NOVEMBER 2026</div>
-      <p className="rg-hero-name">RE:IGNITION</p>
+      {theme!=='cinematic'&&<span className="rg-hero-eyebrow">{active.eyebrow}</span>}
+      {theme!=='cinematic'&&<div className="rg-hero-update"><span aria-hidden="true" className="rg-led"/> MAJOR UPDATE · NOVEMBER 2026</div>}
+      <p className="rg-hero-name">{theme==='cinematic'?<><span>ZERO DAY</span><small>RE:IGNITION</small></>:'RE:IGNITION'}</p>
       <h1>{status.veteran?active.title:'위험을 읽고, 오늘을 지켜라.'}</h1>
       <p className="rg-hero-lead">{active.lead}</p>
       <div className="rg-hero-brief" aria-label="현재 저장된 작전 진행도">
@@ -172,11 +173,17 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span><small>WATCH</small><strong>{status.watchClears}<em>/ 50</em></strong></span>
        <span className="rg-hero-record-label">{status.veteran?'VETERAN RECORD SYNCED':'NEW OPERATOR'}</span>
       </div>
-      <div className="rg-hero-buttons">
-       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {theme==='cinematic'?mission.label:active.primary}</button>
+      {theme==='cinematic'?<div className="rg-hero-mission-deck" role="group" aria-label="메인 작전 바로 시작">
+       <button type="button" className="rg-hero-mission guard" onClick={props.onGuard} disabled={!props.onGuard}>
+        <span><strong>시그널 가드</strong><small>{mission.mode==='guard'?mission.label:'현장 방어'}</small></span><span aria-hidden="true">↗</span>
+       </button>
+       <button type="button" className="rg-hero-mission watch" onClick={props.onWatch} disabled={!props.onWatch}>
+        <span><strong>시그널 워치</strong><small>{mission.mode==='watch'?mission.label:'위험 순찰'}</small></span><span aria-hidden="true">↗</span>
+       </button>
+      </div>:<div className="rg-hero-buttons">
+       <button type="button" className="rg-hero-action" onClick={theme==='operations'?scrollToMissions:heroGo} disabled={theme!=='operations'&&!heroGo}><span aria-hidden="true">▷</span> {active.primary}</button>
        <button type="button" className="rg-hero-alt" onClick={scrollToMissions}>두 게임 보기 <span aria-hidden="true">↓</span></button>
-      </div>
-      <div className="rg-hero-caption"><span aria-hidden="true">✦</span><span>WATCH THE SIGNAL. MAKE THE CALL.</span></div>
+      </div>}
      </div>
      <div className="rg-hero-index" aria-hidden="true"><span>001 / VETERAN OPERATIONS</span><b>ZERO DAY</b><span>SURVIVE · SECURE · RETURN</span></div>
     </section>
