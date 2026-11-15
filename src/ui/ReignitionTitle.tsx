@@ -17,7 +17,7 @@ export const HOME_THEMES=[
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
 // The approved AIRA launch art shipped after the v3 appearance preference.
 // A fresh v4 default exposes that title once, while preserving future user choices.
-const OMEGA_REVIEW_URL='https://psi-zero-dj3fzsoj9-tellowss-projects.vercel.app/?omegaLab=1';
+const OMEGA_REVIEW_URL='https://psi-zero-day-git-qa-omega-protected-br-aed7b6-tellowss-projects.vercel.app/?omegaLab=1';
 const CINEMATIC_KEY_ART='/assets/reignition/aira-silver-dawn.webp';
 const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v4';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
