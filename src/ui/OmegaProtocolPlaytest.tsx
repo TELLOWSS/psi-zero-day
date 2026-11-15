@@ -6,6 +6,7 @@ import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide,OMEGA_QUARTER_VIEW,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE} from '../domain/omega-protocol-field-transit';
+import {drawOmegaUpperDeckEdge,drawOmegaUpperDeckProp} from './omega-protocol-upper-deck';
 import {drawOmegaActBoundaryDock,drawOmegaConnectedScaffoldLift} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
@@ -94,6 +95,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   }
  };
  const drawProp=(plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle)=>{
+  if(drawOmegaUpperDeckProp(ctx,plan,obstacle))return;
   drawOmegaFieldProp(ctx,plan,obstacle);
   drawOmegaM12StructureFacets(ctx,plan,obstacle,state.gameTime,m12Budget);
   drawOmegaG2NativeFacade(ctx,plan,obstacle,state.gameTime,m12G2Quality);
@@ -101,6 +103,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  };
  if(field){
   drawGround(field.plan);
+  if(field.plan.wave===4&&!passage)drawOmegaUpperDeckEdge(ctx,field.plan.entry.y);
   if(passage){
    const viewLeft=-worldCamera.projectedOffsetX;
    const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
@@ -115,6 +118,14 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     drawGround(neighbor);
     drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
     for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
+    ctx.restore();
+   }
+
+   const upperDeck=passage[3];
+   if(viewRight>=3*WORLD_WIDTH+Math.min(0,tileSkew)-128){
+    const rise=OMEGA_SCAFFOLD_RISE-fieldElevation;
+    ctx.save();ctx.translate(3*WORLD_WIDTH-offset+rise*skew,-rise);
+    drawOmegaUpperDeckEdge(ctx,upperDeck.entry.y);
     ctx.restore();
    }
 
