@@ -66,13 +66,14 @@ export function drawOmegaFieldProp(
 function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:string,sectorOne=false){
  const {x,y,width,height}=o;
  ctx.save();
- ctx.fillStyle='#06101bbb';ctx.fillRect(x+18,y+25,width,height);
- ctx.fillStyle=color;ctx.fillRect(x,y+15,width,height);
+ const front=y+height;
+ ctx.beginPath();ctx.rect(x,y-8,width,front-(y-8));ctx.clip();
+ ctx.fillStyle=color;ctx.fillRect(x,y+15,width,height-15);
  ctx.fillStyle='#142a37';
  ctx.beginPath();
- ctx.moveTo(x,y+15);ctx.lineTo(x+19,y-8);
- ctx.lineTo(x+width+19,y-8);ctx.lineTo(x+width,y+15);ctx.closePath();ctx.fill();
- ctx.strokeStyle='#b8d8e06b';ctx.lineWidth=3;ctx.strokeRect(x,y+15,width,height);
+ ctx.moveTo(x,y+15);ctx.lineTo(x+12,y-8);
+ ctx.lineTo(x+width,y-8);ctx.lineTo(x+width,y+15);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#b8d8e06b';ctx.lineWidth=3;ctx.strokeRect(x,y+15,width,height-15);
  ctx.strokeStyle='#0d263a99';ctx.lineWidth=2;
  for(let n=1;n<4;n++){
   ctx.beginPath();ctx.moveTo(x+width*n/4,y+20);ctx.lineTo(x+width*n/4,y+height+12);ctx.stroke();
