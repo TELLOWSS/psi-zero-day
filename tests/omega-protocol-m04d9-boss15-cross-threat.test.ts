@@ -671,18 +671,31 @@ function runActualBuild(policy:Policy,pilot:PilotMode='baseline'):BuildResult{
   runPhase:s.run.phase,rewardChoices,segments,failureReason,
  };
 }
-it('completes three real opening encounters and arrives in the live raised-deck encounter',()=>{
+it('clears five native encounters across the lift and raised deck, then starts encounter six',()=>{
  const s=new OmegaProtocolCombatSession(20261109,50,false,{
   fieldTraversal:true,gateTransition:true,continuousOpening:true,
  });
- for(let wave=1;wave<=3;wave++){
+ const deckSeams:number[]=[];
+ for(let wave=1;wave<=5;wave++){
   expect(s.run.wave).toBe(wave);
   completeRealNode(s,180);
-  if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
+  if(s.run.phase==='reward'){
+   const preferred=priorities.original.find(id=>s.run.offers.includes(id as UpgradeChoice));
+   if(wave===4){
+    expect(s.engine.state.player.x+s.fieldWorldOffsetX).toBe(5600);
+    expect(s.playerElevation).toBe(180);
+   }
+   s.selectUpgrade((preferred as UpgradeChoice|undefined)??s.run.offers[0]!);
+  }
+  if(wave>=4){
+   deckSeams.push(s.engine.state.player.x+s.fieldWorldOffsetX);
+   expect(s.playerElevation).toBe(180);
+  }
   for(let tick=0;tick<90&&s.snapshot.gateTransit;tick++)s.update(DT,idle);
   expect(s.snapshot.gateTransit).toBeNull();
  }
- expect(s.run).toMatchObject({wave:4,victories:3,phase:'battle'});
+ expect(deckSeams).toEqual([5600,7000]);
+ expect(s.run).toMatchObject({wave:6,victories:5,phase:'battle'});
  expect(s.playerElevation).toBeGreaterThan(0);
  expect(s.field?.progress.phase).toBe('combat');
  expect(s.snapshot.enemiesAlive).toBeGreaterThanOrEqual(5);

@@ -13,6 +13,7 @@ try{
   await page.goto(base+'?omegaLab=1');
   const ready=page.locator('[data-omega-protected-art="ready"][data-omega-silver-preview="ready"]');
   await ready.waitFor({timeout:45000});
+  assert.match(await ready.locator('.omega-silver-review-bar strong').innerText(),/1–6구역 연결 전장 검수/);
   const arena=ready.locator('.omega-protocol-arena');
   await page.waitForFunction(()=>{
    const el=document.querySelector('.omega-protocol-arena');

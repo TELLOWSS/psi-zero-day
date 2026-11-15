@@ -6,7 +6,7 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide,OMEGA_QUARTER_VIEW,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE} from '../domain/omega-protocol-field-transit';
+import {omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE,omegaScaffoldDeckElevation} from '../domain/omega-protocol-field-transit';
 import {drawOmegaUpperDeckEdge,drawOmegaUpperDeckProp} from './omega-protocol-upper-deck';
 import {drawOmegaActBoundaryDock,drawOmegaConnectedScaffoldLift} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
@@ -108,29 +108,25 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  };
  if(field){
   drawGround(field.plan);
-  if(field.plan.wave===4&&!passage)drawOmegaUpperDeckEdge(ctx,field.plan.entry.y);
+  if(!passage&&omegaScaffoldDeckElevation(field.plan.wave))
+   drawOmegaUpperDeckEdge(ctx,field.plan.wave===4?field.plan.entry.y:undefined);
   if(passage){
    const viewLeft=-worldCamera.projectedOffsetX;
    const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
    const tileSkew=worldCamera.skewX*WORLD_HEIGHT;
    for(const [index,neighbor] of passage.entries()){
     const origin=index*WORLD_WIDTH;
-    if(neighbor.wave===field.plan.wave||
-       viewRight<origin+Math.min(0,tileSkew)-128||
+    if(viewRight<origin+Math.min(0,tileSkew)-128||
        viewLeft>origin+WORLD_WIDTH+Math.max(0,tileSkew)+128)continue;
-    const raised=(neighbor.wave===4?OMEGA_SCAFFOLD_RISE:0)-fieldElevation;
+    const elevation=omegaScaffoldDeckElevation(neighbor.wave);
+    const raised=elevation-fieldElevation;
     ctx.save();ctx.translate(origin-offset+raised*skew,-raised);
-    drawGround(neighbor);
-    drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
-    for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
-    ctx.restore();
-   }
-
-   const upperDeck=passage[3];
-   if(viewRight>=3*WORLD_WIDTH+Math.min(0,tileSkew)-128){
-    const rise=OMEGA_SCAFFOLD_RISE-fieldElevation;
-    ctx.save();ctx.translate(3*WORLD_WIDTH-offset+rise*skew,-rise);
-    drawOmegaUpperDeckEdge(ctx,upperDeck.entry.y);
+    if(neighbor.wave!==field.plan.wave){
+     drawGround(neighbor);
+     drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
+     for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
+    }
+    if(elevation)drawOmegaUpperDeckEdge(ctx,neighbor.wave===4?neighbor.entry.y:undefined);
     ctx.restore();
    }
 
@@ -147,14 +143,19 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     const start=index*WORLD_WIDTH+exit.x;
     const edge=(index+1)*WORLD_WIDTH;
     const end=edge+passage[index+1]!.entry.x;
-    if(index!==2){drawLane(start,end,exit.y);continue;}
-    drawLane(start,edge,exit.y);
-    ctx.save();ctx.translate(OMEGA_SCAFFOLD_RISE*skew,-OMEGA_SCAFFOLD_RISE);
+    const fromElevation=omegaScaffoldDeckElevation(index+1);
+    const nextElevation=omegaScaffoldDeckElevation(index+2);
+    ctx.save();ctx.translate(fromElevation*skew,-fromElevation);
+    drawLane(start,fromElevation===nextElevation?end:edge,exit.y);
+    ctx.restore();
+    if(fromElevation===nextElevation)continue;
+    ctx.save();ctx.translate(nextElevation*skew,-nextElevation);
     drawLane(edge,end,exit.y);
     ctx.restore();
-    ctx.setLineDash([]);
+    ctx.save();ctx.setLineDash([]);
     drawOmegaConnectedScaffoldLift(ctx,edge,exit.y,OMEGA_SCAFFOLD_RISE,
      field.plan.wave>=3?actorElevation:0,skew);
+    ctx.restore();
    }
    ctx.restore();
   }
@@ -838,7 +839,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No actual displacement => do not animate a run cycle.
    const gait=gaitController.advance(
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
-    session.connectedFields&&session.plan.wave<=4?1:session.plan.wave,
+    session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
    const pose=facingController.advance(
     session.engine.state.gameTime,session.facing,fireCue,{
@@ -1026,7 +1027,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   {OMEGA_PROTECTED_REVIEW&&<aside className="omega-silver-review-bar" role="status">
    {reviewBlocked?<><strong>{reviewFailed?'검수 원화를 확인하지 못했습니다.':'최신 검수 원화 확인 중'}</strong>
     {reviewFailed&&<button type="button" onClick={()=>window.location.reload()}>다시 불러오기</button>}</>
-   :<><strong>은백색 AIRA · 감염체 4종 · 1–4구역 연결 전장 검수</strong>
+   :<><strong>은백색 AIRA · 감염체 4종 · 1–6구역 연결 전장 검수</strong>
     <a href="?omegaLab=1&amp;omegaView=lift">3→4구역 리프트·상부 데크 확인</a>
     <a href="?omegaLab=1">1구역부터 플레이</a></>}
   </aside>}

@@ -13,6 +13,7 @@ import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
  omegaGateTransitStep,omegaGateTransitIsLocked,OMEGA_SCAFFOLD_RISE,
+ OMEGA_CONNECTED_OPENING_END,omegaScaffoldDeckElevation,
  OMEGA_SCAFFOLD_BOARDING_SECONDS,OMEGA_SCAFFOLD_TRAVEL_SECONDS,
  type OmegaFieldTransit,type OmegaFieldTransitLink,
 } from '../domain/omega-protocol-field-transit';
@@ -78,7 +79,7 @@ export class OmegaProtocolCombatSession {
  private readonly gateTransition:boolean;
  private readonly qaGateTravel:boolean;
  private readonly qaGateTravelUntilWave:number;
- readonly connectedFields:readonly [OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan]|null;
+ readonly connectedFields:readonly OmegaFieldPlan[]|null;
  private passageStart:{x:number;y:number}|null=null;
  get crossingConnectedPassage():boolean{return this.passageStart!==null;}
  get fieldWorldOffsetX():number{
@@ -86,7 +87,7 @@ export class OmegaProtocolCombatSession {
   return wave&&this.connectedFields?.[wave-1]?OMEGA_FIELD_WIDTH*(wave-1):0;
  }
  get fieldElevation():number{
-  return this.connectedFields&&this.currentField?.wave===4?OMEGA_SCAFFOLD_RISE:0;
+  return this.connectedFields&&this.currentField?omegaScaffoldDeckElevation(this.currentField.wave):0;
  }
  get playerElevation():number{
   const transit=this.transit;
@@ -129,16 +130,13 @@ export class OmegaProtocolCombatSession {
   this.active=run;
   this.connectedFields=null;
   if(this.gateTransition&&options.continuousOpening){
-   const first=omegaFieldPlan(run.seed,1);
-   const second=omegaFieldPlan(run.seed,2);
-   const third=omegaFieldPlan(run.seed,3);
-   const fourth=omegaFieldPlan(run.seed,4);
-   this.connectedFields=[
-    first,
-    {...second,entry:{...second.entry,y:first.exit.y}},
-    {...third,entry:{...third.entry,y:second.exit.y}},
-    {...fourth,entry:{...fourth.entry,y:third.exit.y}},
-   ];
+   const fields:OmegaFieldPlan[]=[];
+   for(let wave=1;wave<=OMEGA_CONNECTED_OPENING_END;wave++){
+    const plan=omegaFieldPlan(run.seed,wave);
+    const previous=fields.at(-1);
+    fields.push(previous?{...plan,entry:{...plan.entry,y:previous.exit.y}}:plan);
+   }
+   this.connectedFields=fields;
   }
   // Isolated zero-upgrade base character with no premium or operation handoff.
   const state=createInitialSurvivorsState('player',{...DEFAULT_PERMANENT_UPGRADES},

@@ -1,3 +1,4 @@
+import {omegaScaffoldDeckElevation} from '../domain/omega-protocol-field-transit';
 import {
  OMEGA_FIELD_HEIGHT,OMEGA_FIELD_WIDTH,
  type OmegaFieldObstacle,type OmegaFieldPlan,
@@ -23,7 +24,7 @@ function fillFace(ctx:CanvasRenderingContext2D,color:string,points:readonly [num
 export function drawOmegaUpperDeckProp(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle,
 ):boolean{
- if(plan.wave!==4||!plan.obstacles.includes(obstacle))return false;
+ if(!omegaScaffoldDeckElevation(plan.wave)||!plan.obstacles.includes(obstacle))return false;
  const {x,y,width,height,kind}=obstacle;
  const {rise,roof,face,side,trim}=STRUCTURE[kind];
  const right=x+width,front=y+height;
@@ -60,7 +61,7 @@ export function drawOmegaUpperDeckProp(
 }
 
 /** Presents the edge below the deck and keeps the west landing throat open. */
-export function drawOmegaUpperDeckEdge(ctx:CanvasRenderingContext2D,entryY:number):void{
+export function drawOmegaUpperDeckEdge(ctx:CanvasRenderingContext2D,entryY?:number):void{
  ctx.save();
  const south=OMEGA_FIELD_HEIGHT;
  const east=OMEGA_FIELD_WIDTH;
@@ -73,7 +74,8 @@ export function drawOmegaUpperDeckEdge(ctx:CanvasRenderingContext2D,entryY:numbe
  }
  // Boundary rail posts sit outside the native player radius. Lift opening
  // follows the actual entry and the width of the painted service route.
- for(const [start,end] of [[20,entryY-40],[entryY+40,south-20]] as const){
+ const rails=entryY===undefined?[]:[[20,entryY-40],[entryY+40,south-20]] as const;
+ for(const [start,end] of rails){
   ctx.strokeStyle='#c29b63';ctx.lineWidth=4;
   ctx.beginPath();ctx.moveTo(8,start);ctx.lineTo(8,end);ctx.stroke();
   ctx.fillStyle='#9fb4b8';
