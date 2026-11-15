@@ -18,6 +18,13 @@ export function omegaAuthoredAssetPaths():readonly string[]{
   ...OMEGA_SECTOR01_PROP_TYPES.map(kind=>OMEGA_SECTOR01_ART_ROOT+kind+'.svg'),
  ];
 }
+// Bounds of the source silhouette in the 256×180 SVG viewBox.
+const PROP_SOURCE_BOUNDS={
+ container:{left:16,right:246,top:25,base:168,rise:72},
+ scaffold:{left:12,right:254,top:16,base:161,rise:95},
+ machine:{left:22,right:235,top:53,base:155,rise:80},
+ barrier:{left:13,right:247,top:42,base:169,rise:38},
+} as const;
 const cache=new Map<string,HTMLImageElement>();
 function readyImage(src:string):HTMLImageElement|null{
  if(typeof Image==='undefined')return null;
@@ -50,11 +57,8 @@ export function omegaDrawAuthoredProp(
  if(!OMEGA_SECTOR01_PROP_TYPES.includes(o.kind))return false;
  const image=readyImage(OMEGA_SECTOR01_ART_ROOT+o.kind+'.svg');
  if(!image)return false;
- // Lower edge is tied to existing solid footprint, while the drawn
- // superstructure rises upward to create honest occlusion depth.
- const rise=o.kind==='scaffold'?95:o.kind==='machine'?80:o.kind==='barrier'?38:72;
- const bleed=12;
- ctx.drawImage(image,o.x-bleed,o.y-rise,
-  o.width+bleed*2,o.height+rise+17);
+ const source=PROP_SOURCE_BOUNDS[o.kind];
+ ctx.drawImage(image,source.left,source.top,source.right-source.left,source.base-source.top,
+  o.x,o.y-source.rise,o.width,o.height+source.rise);
  return true;
 }

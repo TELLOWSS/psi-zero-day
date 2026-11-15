@@ -61,13 +61,13 @@ for(const s of scenarios){
    const mode=await pad.getAttribute('data-omega-pad-mode');
    const btn=mode==='analog'
     ?page.locator('.omega-protocol-stick')
-    :pad.locator('button').nth(direction==='right'?3:1);
+    :pad.locator('button').nth({up:0,left:1,down:2,right:3}[direction]);
    const box=await btn.boundingBox();
    if(!box)throw Error('Actual visible '+mode+' touch navigation control missing');
    const cdp=await context.newCDPSession(page);
    const center={x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)};
-   const offset=direction==='right'?45:-45;
-   const target=mode==='analog'?{x:center.x+offset,y:center.y}:center;
+   const [dx,dy]={up:[0,-45],down:[0,45],left:[-45,0],right:[45,0]}[direction];
+   const target=mode==='analog'?{x:center.x+dx,y:center.y+dy}:center;
    await cdp.send('Input.dispatchTouchEvent',{
     type:'touchStart',touchPoints:[{...center,id:7}],
    });
@@ -81,7 +81,7 @@ for(const s of scenarios){
    await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
    await cdp.detach();
   }else{
-   const key=direction==='right'?'ArrowRight':'ArrowLeft';
+   const key={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'}[direction];
    await page.keyboard.down(key);await sleep(ms);await page.keyboard.up(key);
   }
   await sleep(130); // let React's read-only 130ms HUD sample reflect native XY
@@ -102,6 +102,145 @@ for(const s of scenarios){
   throw Error('Actual player touch/key did not reach gate '+JSON.stringify(await read()));
  };
  try{
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=continuousLink',
+   {waitUntil:'domcontentloaded',timeout:45000});
+  await arena.waitFor({timeout:25000});
+  const seamWalk=await travelToGate();
+  const collectSeam=()=>arena.evaluate(el=>{
+   const history=[];
+   window.omegaSeamHistory=history;
+   const sample=at=>{
+    if(window.omegaSeamHistory!==history)return;
+    history.push({at,x:Number(el.dataset.omegaSeamPlayerX),
+     camera:Number(el.dataset.omegaSeamCameraX),screen:Number(el.dataset.omegaSeamScreenX),
+     elevation:Number(el.dataset.omegaLiftElevation),cameraY:Number(el.dataset.omegaLiftCameraY),
+     screenY:Number(el.dataset.omegaLiftScreenY),shutter:!!document.querySelector('.omega-protocol-gate-transit')});
+    if(history.length<600)requestAnimationFrame(sample);
+   };
+   requestAnimationFrame(sample);
+  });
+  await collectSeam();
+  await pressE();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='2'&&
+    el.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:6000});
+  const readSeam=boundary=>page.evaluate(boundary=>{
+   const samples=window.omegaSeamHistory.filter(v=>Number.isFinite(v.x));
+   const maximumStep=key=>Math.max(...samples.slice(1).map((v,i)=>Math.abs(v[key]-samples[i][key])));
+   const intervals=samples.slice(1).map((sample,i)=>sample.at-samples[i].at)
+    .filter(ms=>ms>0).sort((a,b)=>a-b);
+   const percentile=ratio=>intervals[Math.ceil((intervals.length-1)*ratio)]??null;
+   return {count:samples.length,frameIntervals:{sampleCount:intervals.length,medianMs:percentile(.5),
+    p95Ms:percentile(.95),maxMs:intervals.at(-1)??null,physicalAndroid:false},from:samples[0]?.x,to:samples.at(-1)?.x,
+    maxWorldStep:maximumStep('x'),maxCameraStep:maximumStep('camera'),
+    maxScreenStep:maximumStep('screen'),maxCameraYStep:maximumStep('cameraY'),
+    maxScreenYStep:maximumStep('screenY'),maxCameraY:Math.max(...samples.map(v=>v.cameraY)),
+    minCameraY:Math.min(...samples.map(v=>v.cameraY)),elevation:samples.at(-1)?.elevation,
+    intermediateRise:samples.some(v=>v.elevation>0&&v.elevation<180),
+    shutter:samples.some(v=>v.shutter),
+    crossed:samples.some(v=>v.x<boundary)&&samples.some(v=>v.x>=boundary)};
+  },boundary);
+  const seam=await readSeam(1400);
+  if(seamWalk.finalX-seamWalk.initialX<75||seam.count<12||!seam.crossed||
+     seam.to<1549||seam.shutter||seam.maxWorldStep>24||
+     seam.maxCameraStep>32||seam.maxScreenStep>38)
+   throw Error('Continuous player/camera seam failed '+JSON.stringify(seam));
+  await page.screenshot({path:output+'/m04-continuous-seam-'+s.name+'.png',
+   animations:'disabled',fullPage:false});
+  console.log('QA_PASS M04_CONTINUOUS_SEAM',s.name,JSON.stringify(seam));
+  // Align with the second exit south of the equipment and north of the scaffold.
+  for(let turn=0;turn<14;turn++){
+   const {y}=await read();
+   if(Math.abs(y-615)<12)break;
+   await holdRight(85,y>615?'up':'down');
+  }
+  if(Math.abs((await read()).y-615)>=12)throw Error('Second gate lane was not reached');
+  for(let turn=0;turn<12&&(await read()).x<950;turn++)await holdRight(450);
+  await travelToGate();
+  await collectSeam();
+  await pressE();
+  const seamReward=page.locator('[data-omega-reward-next-wave="3"]');
+  await seamReward.waitFor({state:'visible',timeout:6500});
+  const edge=await arena.getAttribute('data-omega-seam-player-x');
+  await sleep(250);
+  if(Number(edge)!==2800||await arena.getAttribute('data-omega-seam-player-x')!==edge||
+     (await read()).wave!==2)throw Error('Supply selection did not hold at the live boundary');
+  const card=seamReward.locator('.omega-protocol-reward-cards button').first();
+  if(s.touch)await card.tap();else await card.click();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='3'&&
+    el.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:6000});
+  const supplySeam=await readSeam(2800);
+  if(!supplySeam.crossed||supplySeam.to<2949||supplySeam.shutter||
+     supplySeam.maxWorldStep>24||supplySeam.maxCameraStep>32||supplySeam.maxScreenStep>38)
+   throw Error('Supply passage did not resume continuously '+JSON.stringify(supplySeam));
+  console.log('QA_PASS M04_SUPPLY_SEAM',s.name,JSON.stringify(supplySeam));
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=connectedLift&omegaInfectedArtLab=1&omegaStrideArt=1',
+   {waitUntil:'domcontentloaded',timeout:45000});
+  await arena.waitFor({timeout:25000});
+  if((await read()).wave!==3)throw Error('Connected lift fixture did not reach wave 3');
+  await page.getByRole('button',{name:'일시정지'}).click();
+  const repainted=page.waitForResponse(response=>
+   response.url().includes('/qa-art/stride-repaint/armored-2.webp')&&response.ok());
+  await page.locator('[data-omega-g5n-load="infected"]').click();
+  await repainted;
+  await page.locator('[data-omega-infected-feedback="ready"]').waitFor({timeout:45000});
+  await page.locator('[data-omega-infected-toggle="true"]').click();
+  await page.getByRole('button',{name:'계속하기'}).click();
+  await travelToGate();
+  await collectSeam();
+  await pressE();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='4'&&
+    el.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:6500});
+  const liftSeam=await readSeam(4200);
+  const postLiftCombat=await (await page.waitForFunction(()=>{
+   const arena=document.querySelector('.omega-protocol-arena');
+   if(arena?.dataset.omegaFieldPhase!=='combat')return false;
+   const {draws,poses}=JSON.parse(arena.dataset.omegaInfectedEvidence??'{}');
+   return draws&&Object.keys(draws).length===4&&Object.values(draws).every(count=>count>0)
+    ?{draws,poses}:false;
+  },undefined,{timeout:15000,polling:'raf'})).jsonValue();
+  if(!liftSeam.crossed||liftSeam.to<4349||liftSeam.elevation!==180||
+     !liftSeam.intermediateRise||liftSeam.shutter||liftSeam.maxWorldStep>24||
+     liftSeam.maxCameraY-liftSeam.minCameraY<20||liftSeam.maxCameraYStep>32||
+     liftSeam.maxScreenYStep>42)
+   throw Error('In-world scaffold lift continuity failed '+JSON.stringify(liftSeam));
+  await page.screenshot({path:output+'/m04-connected-lift-'+s.name+'.png',
+   animations:'disabled',fullPage:false});
+  const upperDeck = await page.evaluate(async () => {
+   const {omegaFieldPlan,omegaFieldNativeTerrain} = await import('/src/domain/omega-protocol-field.ts');
+   const {drawOmegaUpperDeckProp,drawOmegaUpperDeckEdge} = await import('/src/ui/omega-protocol-upper-deck.ts');
+   const plan = omegaFieldPlan(20261109,4);
+   const canvas = document.createElement('canvas');
+   canvas.width = 1400;
+   canvas.height = 940;
+   const ctx = canvas.getContext('2d',{willReadFrequently:true});
+   const hasInk = (x,y,w=1,h=1) => ctx.getImageData(x,y,w,h).data.some((value,index) => index%4===3&&value>0);
+   const props = omegaFieldNativeTerrain(plan).map((solid,index)=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const drawn=drawOmegaUpperDeckProp(ctx,plan,plan.obstacles[index]);
+    const {x,y,width,height}=solid;
+    return {id:solid.id,
+     rises:drawn&&hasInk(x,y-128,width,128),
+     reachesFront:hasInk(x,y+height-1,width),
+     insideWidth:!hasInk(x-1,y-128,1,height+128)&&!hasInk(x+width,y-128,1,height+128),
+     clearInFront:!hasInk(x,y+height,width)};
+   });
+   ctx.clearRect(0,0,canvas.width,canvas.height);
+   drawOmegaUpperDeckEdge(ctx,plan.entry.y);
+   return {props,thickEdge:hasInk(380,920),openEntry:!hasInk(8,plan.entry.y),rail:hasInk(8,plan.entry.y-50)};
+  });
+  if(!upperDeck.thickEdge||!upperDeck.openEntry||!upperDeck.rail||
+     upperDeck.props.length!==4||upperDeck.props.some(({id,...checks})=>!Object.values(checks).every(Boolean)))
+   throw Error('Upper deck painted geometry failed '+JSON.stringify(upperDeck));
+  console.log('QA_PASS M04_CONNECTED_LIFT',s.name,JSON.stringify(liftSeam));
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=gateTravel',
    {waitUntil:'domcontentloaded',timeout:45000});
   await arena.waitFor({timeout:25000});
@@ -236,7 +375,7 @@ for(const s of scenarios){
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
+   provenance,seam,supplySeam,liftSeam,upperDeck,postLiftCombat,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
    worldTransitions:3,
    normalMissionSkipAllowed:false,
