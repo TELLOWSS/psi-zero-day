@@ -1,3 +1,4 @@
+import {OMEGA_QUARTER_VIEW} from '../domain/omega-protocol-field';
 import type {Hazard} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain,OmegaZombieKind} from '../domain/omega-protocol-zombie-ai';
 
@@ -31,9 +32,37 @@ export function omegaInfectedManifest(value:unknown):Frame[]{
  for(const n of names){const scales=rows.filter(r=>r.file.startsWith(n+'-')).map(r=>r.referenceHeight);if(new Set(scales).size!==1)throw Error('같은 종류의 스케일이 다릅니다: '+n);}
  return OMEGA_INFECTED_FILES.map(n=>rows.find(r=>r.file===n)!);
 }
-export function omegaInfectedPose(phase:OmegaZombieBrain['phase'],moved:boolean,time:number):0|1|2|3{
- if(phase==='warning'||phase==='charge')return 3;
- if(phase==='pursue'&&moved&&Number.isFinite(time))return Math.floor(time*4)%2===0?1:2;
+const stepDistance:Readonly<Record<OmegaZombieKind,number>>={
+ drifter:15,sprinter:23,armored:18,stalker:16,
+};
+interface InfectedStrideSample {
+ readonly x:number;readonly y:number;readonly time:number;
+ readonly phase:OmegaZombieBrain['phase'];
+}
+interface InfectedStride extends InfectedStrideSample {
+ readonly distance:number;readonly movingUntil:number;
+}
+export function omegaAdvanceInfectedStride(
+ previous:InfectedStride|undefined,sample:InfectedStrideSample,kind:OmegaZombieKind,
+):InfectedStride{
+ const reset={...sample,distance:0,movingUntil:0};
+ if(!previous||sample.phase!=='pursue'||previous.phase!=='pursue'||
+    !Number.isFinite(sample.time)||sample.time<previous.time||sample.time-previous.time>.25)return reset;
+ const dy=sample.y-previous.y;
+ const step=Math.hypot(sample.x-previous.x+OMEGA_QUARTER_VIEW.skewX*dy,
+  dy*OMEGA_QUARTER_VIEW.groundYScale);
+ // Initialization and teleports never replay as a sprint.
+ if(!Number.isFinite(step)||step>64)return reset;
+ if(step>.05)return {...sample,distance:(previous.distance+step)%(2*stepDistance[kind]),
+  movingUntil:sample.time+.12};
+ if(sample.time>=previous.movingUntil)return reset;
+ return {...sample,distance:previous.distance,movingUntil:previous.movingUntil};
+}
+export function omegaInfectedPose(kind:OmegaZombieKind,stride:InfectedStride):0|1|2|3{
+ if(stride.phase==='warning')return kind==='sprinter'?0:3;
+ if(stride.phase==='charge')return 3;
+ if(stride.phase==='pursue'&&stride.time<stride.movingUntil)
+  return stride.distance<stepDistance[kind]?1:2;
  return 0;
 }
 export function omegaInfectedFacesLeft(brain:Pick<OmegaZombieBrain,'phase'|'lockedX'>,enemyX:number,targetX:number):boolean{
@@ -61,7 +90,7 @@ type Source={image:HTMLImageElement;url:string;meta:Frame;
  bounds?:Readonly<{minX:number;minY:number;maxX:number;maxY:number}>};
 export class OmegaInfectedCandidateReview{
  private sources=new Map<string,Source>();private generation=0;private selected=false;
- private prior=new Map<string,{x:number;y:number;time:number;movingUntil:number}>();
+ private prior=new Map<string,InfectedStride>();
  private draws:Record<OmegaZombieKind,number>={drifter:0,sprinter:0,armored:0,stalker:0};
  private poses:Record<OmegaZombieKind,Set<number>>={drifter:new Set(),sprinter:new Set(),armored:new Set(),stalker:new Set()};
  get ready(){return this.sources.size===16} get active(){return this.ready&&this.selected}
@@ -101,9 +130,13 @@ export class OmegaInfectedCandidateReview{
  }
  draw(ctx:CanvasRenderingContext2D,h:Hazard,brain:OmegaZombieBrain,time:number,targetX:number):boolean{
   if(!this.active||!Number.isFinite(time))return false;
-  const id=h.id??`${brain.kind}:${brain.slot}`,previous=this.prior.get(id),old=previous&&time>=previous.time?previous:undefined,moved=Boolean(old&&Math.hypot(h.x-old.x,h.y-old.y)>.05);
-  const movingUntil=moved?time+.12:(old?.movingUntil??0);this.prior.set(id,{x:h.x,y:h.y,time,movingUntil});
-  const index=omegaInfectedPose(brain.phase,time<movingUntil,time),source=this.sources.get(`${mapping[brain.kind]}-${index}.webp`);if(!source)return false;
+  const id=h.id??`${brain.kind}:${brain.slot}`;
+  const stride=omegaAdvanceInfectedStride(this.prior.get(id),
+   {x:h.x,y:h.y,time,phase:brain.phase},brain.kind);
+  this.prior.set(id,stride);
+  const index=omegaInfectedPose(brain.kind,stride);
+  const source=this.sources.get(`${mapping[brain.kind]}-${index}.webp`);
+  if(!source)return false;
   const scale=76/source.meta.referenceHeight;ctx.save();if(omegaInfectedFacesLeft(brain,h.x,targetX))ctx.scale(-1,1);
   ctx.drawImage(source.image,-source.meta.foot.x*scale,-source.meta.foot.y*scale,source.image.naturalWidth*scale,source.image.naturalHeight*scale);ctx.restore();
   this.draws[brain.kind]++;this.poses[brain.kind].add(index);return true;
