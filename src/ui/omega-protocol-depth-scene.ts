@@ -1,18 +1,19 @@
 import type {OmegaFieldPlan,OmegaFieldProgress} from '../domain/omega-protocol-field';
+import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
 
 /**
  * Stable world-space draw ordering of existing native obstacles, living Watch
  * hazards, projectiles, and one hero. This is purely a 2.5D canvas ordering decision: game
  * collision, damage, AI, navigation and actual XY are never changed.
  */
-export type OmegaDepthDrawKind='prop'|'console'|'extraction'|'hazard'|'hero'|'projectile';
+export type OmegaDepthDrawKind='prop'|'console'|'extraction'|'dock'|'hazard'|'hero'|'projectile';
 export interface OmegaDepthDrawItem {
  readonly kind:OmegaDepthDrawKind;
  readonly index:number;
  readonly depth:number;
 }
 const priority:Readonly<Record<OmegaDepthDrawKind,number>>={
- prop:0,console:1,extraction:2,hazard:3,hero:4,projectile:5,
+ prop:0,console:1,extraction:2,dock:3,hazard:4,hero:5,projectile:6,
 };
 export function omegaFieldDepthOrder(
  plan:OmegaFieldPlan,
@@ -34,6 +35,8 @@ export function omegaFieldDepthOrder(
   });
   out.push({kind:'extraction',index:0,depth:plan.exit.y});
  }
+ const dock=omegaActBoundaryDock(plan);
+ if(dock)out.push({kind:'dock',index:0,depth:dock.point.y});
  for(const [i,h] of hazards.entries())if(h.hp>0)out.push({
   kind:'hazard',index:i,depth:h.y,
  });

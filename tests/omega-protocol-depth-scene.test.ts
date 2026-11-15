@@ -1,6 +1,17 @@
 import {describe,it,expect} from 'vitest';
 import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {omegaFieldDepthOrder} from '../src/ui/omega-protocol-depth-scene';
+
+it('draws actors behind and in front of each lift using its actual dock coordinates',()=>{
+ for(const wave of [3,4,6,7,9,10,12,13]){
+  const plan=omegaFieldPlan(88,wave);
+  const dockY=(wave%3===0?plan.exit:plan.entry).y;
+  const hazards=[{y:dockY+10,hp:1}];
+  const order=omegaFieldDepthOrder(plan,hazards,dockY-10);
+  expect(order.filter(item=>['hero','dock','hazard'].includes(item.kind)).map(item=>item.kind))
+   .toEqual(['hero','dock','hazard']);
+ }
+});
 describe('OMEGA 3/4 solid-actor painter order',()=>{
  it('puts genuine props behind or in front of AIRA by actual world foot Y',()=>{
   const plan=omegaFieldPlan(20261108,1);

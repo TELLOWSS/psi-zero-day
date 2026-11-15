@@ -97,7 +97,6 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   if(coherentYard)drawOmegaScenePropShadows(ctx,field.plan);
   else drawOmegaM12TerrainShadows(ctx,field.plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,field.plan,state.gameTime,m12Budget);
-  drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
   // All original actor contact reflections sit on the floor BEFORE real
   // boss warnings, enemy AI indicators, walls, players and weapons.
@@ -206,6 +205,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction')drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
+   else if(item.kind==='dock')drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
    else if(item.kind==='projectile')renderProjectile(state.projectiles[item.index]!);
    else renderHero();
