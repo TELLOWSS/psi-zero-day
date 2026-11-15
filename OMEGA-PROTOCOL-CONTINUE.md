@@ -963,3 +963,9 @@
 - **최신 회귀 기준:** 코드 HEAD `ad1f486fc1e4c8fb3931165dd3e65685d6d4c0d1`의 focused Chrome+core 포함 13개 workflow success 확인, 전체 Chromium `Capture OMEGA PROTOCOL browser QA` #43536239846은 이 §61 기록 당시 **실행 중**. 정확한 CODE SHA의 14/14 completion 전 개발 브랜치 병합 또는 운영 Release 불가. §61 Markdown 변경은 CODE SHA 이후이므로 그 자체 HEAD에서도 CI 상태 새로 확인.
 - **남은 미술/정책 게이트:** AIRA 사격·피격 전체 실게임 이벤트/프레임 별 실제 body pose 및 muzzle 정합, silver-white AIRA 기존 G5d 기준 identity와 12장 연결, 감염체 basic/armored 반대 보폭·runner 공중/손/부츠 접지, 8방향 160원화·320마스크, Android 실제 FPS/유저 Extreme50, 사람 감독 원화 최종 승인 0. JSON의 toeRow/foot는 픽셀/입력 추정값이고 해부학적 접지 증거 아님.
 - **NEXT:** 기존 full Chrome #43536239846 정확한 결과 확인, AIRA FIRE/HIT 본래의 Watch 이벤트로 native draw count와 source frame 증거를 각각 확보하여 실패 시 수정. 28개 원본을 양산/승인으로 오인하지 말고 개별 동작의 시각 결함에 집중해 기본형·중장갑형 실보폭 반대자세와 질주형 접지/공중 형태, AIRA 상체 포즈·총구·실루엣을 새 원본으로 개선 후 감독 검수. `main` / Vercel Production / 유료 전환 절대 보류.
+
+## 62. 감염체 원화 보행 재생 및 접지 검수 — 2026-11-15 (KST)
+
+- 네 후보 감염체는 실제 추적 이동을 화면 좌표계로 투영한 거리에 따라 보행 1·2번을 반복한다. 이동이 멈추면 정지 자세로 돌아간다. 순간이동, 시계 초기화, 공격 전후 위상은 보행 거리에서 제외한다.
+- 질주형의 손 지지 자세는 정지와 공격 예고에, 돌진 자세는 실제 돌진에 사용한다. 추적 이동에는 보행 자세만 사용한다. 기존 원화·SHA 검증과 엔진 좌표·충돌은 보존한다.
+- 기본형과 중장갑형의 실전 보행 두 자세와 AIRA 사격·피격을 브라우저에서 함께 확인한다. 기본형·중장갑형 원화의 좌우 앞발 실루엣 차이 개선, 정식 원화 승인, Android 물리 기기 조작·성능은 별도 검수 대상이다.

@@ -127,7 +127,8 @@ for(const [name,width,height,mobile] of [
          counts:e.counts,frames:e.frames,gunHits}:false;
       }
       const counts=Object.values(e.draws);
-      return counts.every(count=>count>0)?{mode:selectedMode,active:true,
+      const walkingPair=['drifter','armored'].every(kind=>[1,2].every(pose=>e.poses[kind].includes(pose)));
+      return counts.every(count=>count>0)&&walkingPair?{mode:selectedMode,active:true,
        draws:counts.reduce((a,b)=>a+b,0),poses:e.poses}:false;
      },mode,{timeout:24000,polling:'raf'})).jsonValue();
     }catch(error){
