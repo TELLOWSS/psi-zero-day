@@ -102,6 +102,42 @@ for(const s of scenarios){
   throw Error('Actual player touch/key did not reach gate '+JSON.stringify(await read()));
  };
  try{
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=continuousLink',
+   {waitUntil:'domcontentloaded',timeout:45000});
+  await arena.waitFor({timeout:25000});
+  const seamWalk=await travelToGate();
+  await arena.evaluate(el=>{
+   const history=[];
+   window.omegaSeamHistory=history;
+   const sample=()=>{
+    history.push({x:Number(el.dataset.omegaSeamPlayerX),
+     camera:Number(el.dataset.omegaSeamCameraX),screen:Number(el.dataset.omegaSeamScreenX),
+     shutter:!!document.querySelector('.omega-protocol-gate-transit')});
+    if(history.length<600)requestAnimationFrame(sample);
+   };
+   requestAnimationFrame(sample);
+  });
+  await pressE();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='2'&&
+    el.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:6000});
+  const seam=await page.evaluate(()=>{
+   const samples=window.omegaSeamHistory.filter(v=>Number.isFinite(v.x));
+   const maximumStep=key=>Math.max(...samples.slice(1).map((v,i)=>Math.abs(v[key]-samples[i][key])));
+   return {count:samples.length,from:samples[0]?.x,to:samples.at(-1)?.x,
+    maxWorldStep:maximumStep('x'),maxCameraStep:maximumStep('camera'),
+    maxScreenStep:maximumStep('screen'),shutter:samples.some(v=>v.shutter),
+    crossed:samples.some(v=>v.x<1400)&&samples.some(v=>v.x>=1400)};
+  });
+  if(seamWalk.finalX-seamWalk.initialX<75||seam.count<12||!seam.crossed||
+     seam.to<1549||seam.shutter||seam.maxWorldStep>24||
+     seam.maxCameraStep>32||seam.maxScreenStep>38)
+   throw Error('Continuous player/camera seam failed '+JSON.stringify(seam));
+  await page.screenshot({path:output+'/m04-continuous-seam-'+s.name+'.png',
+   animations:'disabled',fullPage:false});
+  console.log('QA_PASS M04_CONTINUOUS_SEAM',s.name,JSON.stringify(seam));
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=gateTravel',
    {waitUntil:'domcontentloaded',timeout:45000});
   await arena.waitFor({timeout:25000});
@@ -236,7 +272,7 @@ for(const s of scenarios){
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
+   provenance,seam,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
    worldTransitions:3,
    normalMissionSkipAllowed:false,
