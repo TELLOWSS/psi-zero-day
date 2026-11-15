@@ -530,6 +530,8 @@ export interface GameInput {
   aimX?: number; // target coordinate
   aimY?: number;
   triggerAction?: boolean;
+  /** Opt-in only for OMEGA: manual trigger and world-space aim. */
+  protocolGunMode?: 'manual' | 'auto';
 }
 
 export const DEFAULT_PERMANENT_UPGRADES: PermanentUpgrades = {
@@ -1327,7 +1329,7 @@ export class SurvivorsEngine {
     }
   }
 
-  private updateWeapons(dt: number, _input?: GameInput) {
+  private updateWeapons(dt: number, input?: GameInput) {
     const { activePerks, hazards } = this.state;
     // Apply 30% damage buff if standing in floodlight zone
     const floodlightDmgBonus = this.state.inFloodlight ? 1.3 : 1.0;
@@ -1341,10 +1343,11 @@ export class SurvivorsEngine {
     // ==========================================
     // 1. Radio Weapon & Evolution: Satellite Broadcast
     // ==========================================
+    const manualGun=this.protocolExternalEncounter && input?.protocolGunMode==='manual';
     const hasSatellite = activePerks.satellite_broadcast > 0;
     if (hasSatellite) {
-      this.cooldowns.satellite -= dt;
-      if (this.cooldowns.satellite <= 0) {
+      this.cooldowns.satellite = manualGun ? Math.max(0,this.cooldowns.satellite-dt) : this.cooldowns.satellite-dt;
+      if (this.cooldowns.satellite <= 0 && (!manualGun || input?.triggerAction===true)) {
         this.cooldowns.satellite = equipmentTuning('satellite_broadcast', 1)!.interval * cdReduction;
         // Fire 8-directional cosmic sonic waves across the screen
         const count = equipmentTuning('satellite_broadcast', 1)!.count;
@@ -1368,11 +1371,12 @@ export class SurvivorsEngine {
     } else {
       const radioLvl = activePerks.radio_boost;
       if (radioLvl > 0) {
-        this.cooldowns.radio -= dt;
+        this.cooldowns.radio = manualGun ? Math.max(0,this.cooldowns.radio-dt) : this.cooldowns.radio-dt;
         const radioBaseCd = equipmentTuning('radio_boost', radioLvl)!.interval * cdReduction;
-        if (this.cooldowns.radio <= 0) {
+        if (this.cooldowns.radio <= 0 && (!manualGun || input?.triggerAction===true)) {
           this.cooldowns.radio = radioBaseCd;
-          const target = this.findNearestHazard(player.x, player.y);
+          const target = manualGun && Number.isFinite(input?.aimX) && Number.isFinite(input?.aimY)
+            ? {x:input!.aimX!,y:input!.aimY!} : this.findNearestHazard(player.x, player.y);
           if (target) {
             const dx = target.x - player.x;
             const dy = target.y - player.y;

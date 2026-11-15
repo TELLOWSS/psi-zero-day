@@ -45,6 +45,7 @@ import { zeroBreachContent } from '../content/defense';
 import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import { defenseEvents } from '../content/defense-events';
 import { browserLocalStoragePort } from '../platform/browser-storage';
+import { OmegaPasswordGate } from './OmegaPasswordGate';
 
 type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -264,13 +265,15 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setInGame(true);
   };
 
-  if(inOmegaLab)return <Suspense fallback={<GameplayChunkFallback />}>
-    <OmegaProtocolPlaytest onExit={()=>{
+  if(inOmegaLab){
+    const exitOmega=()=>{
       const url=new URL(window.location.href);url.searchParams.delete('omegaLab');
       window.history.replaceState(null,'',url.pathname+url.search+url.hash);
       setInOmegaLab(false);
-    }}/>
-  </Suspense>;
+    };
+    const playtest=<Suspense fallback={<GameplayChunkFallback />}><OmegaProtocolPlaytest onExit={exitOmega}/></Suspense>;
+    return import.meta.env.DEV ? playtest : <OmegaPasswordGate onExit={exitOmega}>{playtest}</OmegaPasswordGate>;
+  }
 
   if (survivorsLoading) return <SignalWatchLoadingScreen
     loadGame={loadSurvivorsGame}

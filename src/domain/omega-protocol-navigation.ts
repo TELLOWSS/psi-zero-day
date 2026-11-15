@@ -41,17 +41,23 @@ function crosses(a:OmegaFieldPoint,b:OmegaFieldPoint,r:Box):boolean{
 export function omegaFieldNextRoute(
  actor:OmegaFieldPoint,destination:OmegaFieldPoint,
  obstacles:readonly OmegaFieldObstacle[],
- width=1400,height=900,
+ width=1400,height=900,physicalEdgeFallback=false,
 ):OmegaFieldRoute|null{
  if(!finite(actor)||!finite(destination)||!Number.isFinite(width)||
   !Number.isFinite(height)||width<=0||height<=0)return null;
- const clearance=21; // matches the existing field player collision radius
+ // Prefer the established generous routing clearance. Fall back to the
+ // actual 14-unit Watch collision radius only when an endpoint is within
+ // the extra margin: such positions are valid player positions, not walls.
+ const closeToObstacle=(p:OmegaFieldPoint)=>obstacles.some(o=>
+  p.x>o.x-21&&p.x<o.x+o.width+21&&p.y>o.y-21&&p.y<o.y+o.height+21);
+ const clearance=physicalEdgeFallback&&(closeToObstacle(actor)||closeToObstacle(destination))?14:21;
  const boxes:Box[]=obstacles.map(o=>({
   left:o.x-clearance,right:o.x+o.width+clearance,
   top:o.y-clearance,bottom:o.y+o.height+clearance,
  }));
- const valid=(p:OmegaFieldPoint)=>p.x>=22&&p.x<=width-22&&
-  p.y>=22&&p.y<=height-22&&!boxes.some(b=>inside(p,b));
+ const padding=physicalEdgeFallback?20:22;
+ const valid=(p:OmegaFieldPoint)=>p.x>=padding&&p.x<=width-padding&&
+  p.y>=padding&&p.y<=height-padding&&!boxes.some(b=>inside(p,b));
  if(!valid(actor)||!valid(destination))return null;
  const clear=(a:OmegaFieldPoint,b:OmegaFieldPoint)=>
   !boxes.some(box=>crosses(a,b,box));
@@ -60,9 +66,11 @@ export function omegaFieldNextRoute(
    detour:false,waypoints:[destination]};
  }
  const nodes:OmegaFieldPoint[]=[actor,destination];
- // Corner candidates are 7 units OUTSIDE the expanded solids.
- for(const b of boxes)for(const x of [b.left-7,b.right+7])
-  for(const y of [b.top-7,b.bottom+7]){
+ // Keep the same 28-unit corner distance for discrete movement at either
+ // clearance, preserving the established paths when there is room.
+ const cornerMargin=28-clearance;
+ for(const b of boxes)for(const x of [b.left-cornerMargin,b.right+cornerMargin])
+  for(const y of [b.top-cornerMargin,b.bottom+cornerMargin]){
    const p={x,y};if(valid(p))nodes.push(p);
   }
  const size=nodes.length;

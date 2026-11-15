@@ -1,0 +1,44 @@
+import {describe,it,expect} from 'vitest';
+import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
+
+describe('OMEGA opt-in gun control',()=>{
+ it('waits for the manual trigger, aims along the last movement and stops on release',()=>{
+  const session=new OmegaProtocolCombatSession(9182,50);
+  const input={moveX:1,moveY:0,protocolGunMode:'manual' as const};
+  for(let i=0;i<90;i++)session.update(1/60,{...input,triggerAction:false});
+  expect(session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch')).toHaveLength(0);
+  for(let i=0;i<60;i++)session.update(1/60,{...input,moveX:0,triggerAction:true});
+  const shots=session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch');
+  expect(shots.length).toBeGreaterThan(0);
+  expect(Math.abs(shots[0]!.angle)).toBeLessThan(.1);
+  for(let i=0;i<90;i++)session.update(1/60,{...input,moveX:0,triggerAction:false});
+  expect(session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch')).toHaveLength(0);
+ });
+ it('aims at the provided world target independently of movement',()=>{
+  const session=new OmegaProtocolCombatSession(9182,50),p=session.engine.state.player;
+  const target={x:p.x,y:p.y-200};
+  for(let i=0;i<60;i++)session.update(1/60,{moveX:1,moveY:0,protocolGunMode:'manual',triggerAction:true,aimX:target.x,aimY:target.y});
+  const shots=session.engine.drainProjectileFeedback().filter(e=>e.kind==='radio'&&e.phase==='launch');
+  expect(shots.length).toBeGreaterThan(0);expect(shots[0]!.angle).toBeLessThan(-1.3);
+ });
+ it('uses pointer aim for character and blade facing while moving in another direction',()=>{
+  const s=new OmegaProtocolCombatSession(9182,50,false,{fieldTraversal:true});
+  const p=s.engine.state.player;
+  s.update(1/30,{moveX:1,moveY:0,protocolGunMode:'manual',triggerAction:false,aimX:p.x,aimY:p.y-200});
+  expect(s.facing.y).toBeLessThan(-.9);
+  const strike=s.blade();expect(strike).not.toBeNull();expect(strike!.facingY).toBeLessThan(-.9);
+ });
+ it('keeps the evolved satellite shot behind the manual trigger too',()=>{
+  const session=new OmegaProtocolCombatSession(9182,50);
+  session.engine.state.activePerks.satellite_broadcast=1;
+  for(let i=0;i<120;i++)session.update(1/60,{moveX:0,moveY:0,protocolGunMode:'manual',triggerAction:false});
+  expect(session.engine.drainProjectileFeedback().filter(e=>e.kind==='satellite_wave'&&e.phase==='launch')).toHaveLength(0);
+  for(let i=0;i<60;i++)session.update(1/60,{moveX:0,moveY:0,protocolGunMode:'manual',triggerAction:true});
+  expect(session.engine.drainProjectileFeedback().some(e=>e.kind==='satellite_wave'&&e.phase==='launch')).toBe(true);
+ });
+ it('allows the explicitly selected automatic mode to shoot without trigger input',()=>{
+  const session=new OmegaProtocolCombatSession(9182,50);
+  for(let i=0;i<120;i++)session.update(1/60,{moveX:0,moveY:0,protocolGunMode:'auto',triggerAction:false});
+  expect(session.engine.drainProjectileFeedback().some(e=>e.kind==='radio'&&e.phase==='launch')).toBe(true);
+ });
+});

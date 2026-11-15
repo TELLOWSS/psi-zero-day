@@ -53,6 +53,15 @@ describe('OMEGA obstacle-aware navigation: only visible and reachable objectives
   const wall:OmegaFieldObstacle={id:'full-wall',kind:'barrier',x:630,y:0,width:100,height:900};
   expect(omegaFieldNextRoute({x:200,y:450},{x:900,y:450},[wall])).toBeNull();
  });
+ it('keeps objectives reachable at actual player collision and world edges',()=>{
+  // The running Watch engine uses a 14-unit terrain radius and 20-unit
+  // world padding. These are real reachable positions, not embedded actors.
+  const nearWall={x:block.x-15,y:405};
+  expect(omegaFieldNextRoute(nearWall,{x:400,y:405},[block],1400,900,true)).not.toBeNull();
+  expect(omegaFieldCanInteract(nearWall,{x:450,y:405},[block])).toBe(true);
+  expect(omegaFieldNextRoute({x:20,y:100},{x:100,y:100},[],1400,900,true)).not.toBeNull();
+  expect(omegaFieldNextRoute({x:block.x-13,y:405},{x:400,y:405},[block],1400,900,true)).toBeNull();
+ });
  it('does not return a zero-distance waypoint after reaching a graph corner',()=>{
   const start={x:400,y:405},target={x:700,y:405};
   const first=omegaFieldNextRoute(start,target,[block]);

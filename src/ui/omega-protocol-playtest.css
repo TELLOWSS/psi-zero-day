@@ -40,6 +40,13 @@
  box-shadow:inset 0 0 0 1px #ffffff10,0 5px 28px #0006
 }
 .omega-protocol-arena canvas{display:block;width:100%;height:100%;image-rendering:auto;touch-action:none}
+.omega-scene-loading{
+ position:absolute;inset:0;z-index:100;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:8px;background:rgba(5,12,22,.96);
+ color:#e7f4fa;text-align:center;padding:20px;font-size:14px;
+}
+.omega-scene-loading strong{font-size:18px}.omega-scene-loading span{color:#a8c6d3}
+.omega-scene-loading button{padding:8px 16px;border:1px solid #80c9dd;border-radius:8px;background:#163449;color:white;cursor:pointer}
 .omega-protocol-stage-shade{
  pointer-events:none;position:absolute;inset:0;z-index:1;
  background:linear-gradient(180deg,rgba(5,10,21,.83) 0%,rgba(5,10,21,.08) 21%,rgba(5,10,21,0) 63%,rgba(5,10,21,.43) 100%)
@@ -1053,6 +1060,17 @@
 .omega-protocol-lab[data-omega-review-layout="true"]{
  grid-template-rows:auto auto minmax(0,1fr) auto;
 }
+.omega-protocol-lab[data-omega-infected-layout="true"]{
+ grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+.omega-infected-review-bar{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;
+ padding:5px 10px;background:#352848;color:#f2e9ff;font-size:11px;
+ max-height:110px;overflow:auto;min-height:0;
+}
+.omega-infected-review-bar input{max-width:220px;font-size:10px}
+.omega-infected-review-bar button{font-size:11px}
+@media(max-height:430px){.omega-infected-review-bar{max-height:64px;padding:2px 6px;font-size:9px}.omega-infected-review-bar button{font-size:9px}}
 .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
  min-height:0;max-height:80px;overflow:hidden;
 }
@@ -1174,3 +1192,27 @@
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
  }
 }
+
+/* Opt-in art-review HUD: vector symbols stay crisp at every touch size. */
+.omega-protocol-action-icon{width:25px;height:25px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.omega-protocol-auto-fire{position:absolute;right:0;bottom:calc(100% + 8px);white-space:nowrap;pointer-events:none;padding:4px 9px;border:1px solid #75dcd887;border-radius:4px;background:#0b1e2be8;color:#c7fbf4;font-size:10px;letter-spacing:.03em}
+.omega-protocol-auto-fire span{color:#68e9c8;font-size:8px}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-action-icon{width:17px;height:17px}
+ .omega-protocol-auto-fire{font-size:9px;padding:2px 6px;bottom:calc(100% + 4px)}
+}
+/* Manual-fire review: hold to fire, or explicitly opt into automatic fire. */
+.omega-protocol-action-pad button.omega-protocol-fire-mode{position:absolute;right:0;bottom:calc(100% + 8px);width:auto;height:auto;min-height:32px;border-radius:5px;padding:5px 10px;white-space:nowrap;background:#102838;color:#c8f7ef;border:1px solid #6cbdb8;font-size:10px;box-shadow:none}
+.omega-protocol-action-pad button.omega-protocol-fire-mode[aria-pressed="true"]{background:#1b695e;color:#fff}
+.omega-protocol-action-pad button.omega-protocol-fire{border-color:#7de0e7;background:linear-gradient(145deg,#24667b,#12364f);box-shadow:0 0 0 1px #7de0e755,inset 0 0 18px #69d9ef2a}
+@media(max-width:760px){.omega-protocol-action-pad:has(.omega-protocol-fire){grid-template-columns:repeat(3,minmax(0,1fr));width:210px}}
+@media(max-width:480px) and (orientation:portrait){.omega-protocol-action-pad:has(.omega-protocol-fire){width:190px}}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-action-pad:has(.omega-protocol-fire){grid-template-columns:repeat(3,minmax(0,1fr));width:162px}.omega-protocol-action-pad button.omega-protocol-fire-mode{min-height:27px;bottom:calc(100% + 4px)}}
+.omega-protocol-action-pad button.omega-protocol-fire-mode{position:static;width:68px;height:48px;min-height:44px;white-space:normal;line-height:1.2}
+@media(max-width:760px){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:55px;height:48px}}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-action-pad button.omega-protocol-fire-mode{width:47px;height:47px;min-height:44px;padding:2px;font-size:9px}}
+/* Touch aiming marker follows the drag, without creating a React render per move. */
+.omega-protocol-action-pad button.omega-protocol-fire{position:relative;touch-action:none}
+.omega-protocol-fire-aim-marker{position:absolute;width:12px;height:12px;left:calc(50% - 6px);top:calc(50% - 6px);border:2px solid #bafff4;border-radius:50%;background:#63dcd2;box-shadow:0 0 9px #71e7e0;opacity:0;pointer-events:none}
+.omega-protocol-fire small{font-size:8px;line-height:1;white-space:nowrap}
+@media(max-height:430px) and (orientation:landscape){.omega-protocol-fire small{font-size:7px}}

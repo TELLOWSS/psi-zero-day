@@ -55,6 +55,9 @@ for(const [name,w,h,mobile] of [
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaM12G5g=1&omegaQaState=combatGun',
    {waitUntil:'domcontentloaded',timeout:45000});
   await page.locator('main[data-omega-protocol-internal="true"]').waitFor({timeout:25000});
+  // Freeze the real encounter while original art is decoded and screenshots
+  // are taken. Otherwise auto-fire can end the fixture before the dash input.
+  await page.getByRole('button',{name:'일시정지'}).click();
   await page.locator('[data-omega-silver-preview="ready"]').waitFor({timeout:30000});
   await page.evaluate(async()=>{
    const {omegaG5gNativePoseStudy}=await import('/src/ui/omega-protocol-m12g5g-native-pose.ts');
@@ -70,6 +73,7 @@ for(const [name,w,h,mobile] of [
   await page.locator('[data-omega-g5c-feedback="ready"]').waitFor({timeout:30000});
   await page.locator('[data-omega-g5c-toggle="true"]').click();
   const active=await read();
+  await page.getByRole('button',{name:'계속하기'}).click();
   // Drive ACTUAL user DASH first, before the test target's live health can
   // fall to zero and a phase/reward prompt legitimately disables combat
   // inputs. The previous QA waited for several hits first and PC/tablet

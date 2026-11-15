@@ -9,6 +9,13 @@ function clearWave(session:OmegaProtocolCombatSession){
  session.update(1/60,idle);
 }
 describe('OMEGA PROTOCOL uses the ACTUAL Watch engine under an external encounter director',()=>{
+ it('reports current and maximum HP from the same live engine state',()=>{
+  const s=new OmegaProtocolCombatSession(7,50);
+  expect(s.snapshot).toMatchObject({playerHp:100,playerMaxHp:100});
+  s.engine.state.player.maxHp=800;s.engine.state.player.hp=789;
+  expect(s.run.maxHp).toBe(100);
+  expect(s.snapshot).toMatchObject({playerHp:789,playerMaxHp:800});
+ });
  it('locks mode before 50 Watch Extreme clears and does not install master-only cosmetic',()=>{
   expect(()=>new OmegaProtocolCombatSession(7,49)).toThrow('50 Watch Extreme stages');
   const s=new OmegaProtocolCombatSession(7,50);

@@ -135,7 +135,8 @@ export function omegaFieldTargetGuide(
  if(!dest||!Number.isFinite(actor.x)||!Number.isFinite(actor.y))return null;
  // Follow a collision-safe waypoint when structures block the straight
  // bearing. Readiness still depends on the genuine interaction radius.
- const route=omegaFieldNextRoute(actor,dest,plan.obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
+ const route=omegaFieldNextRoute(actor,dest,plan.obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT)
+  ??omegaFieldNextRoute(actor,dest,plan.obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT,true);
  if(!route)return null;
  const dx=route.next.x-actor.x,dy=route.next.y-actor.y;
  const screenDx=dx+OMEGA_QUARTER_VIEW.skewX*dy;
@@ -160,7 +161,8 @@ export function omegaFieldCanInteract(
  if(!obstacles?.length)return true;
  // An objective behind solid cover is not operable through a wall even
  // when world-space straight-line distance is inside the 100-unit radius.
- const route=omegaFieldNextRoute(actor,target,obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
+ const route=omegaFieldNextRoute(actor,target,obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT)
+  ??omegaFieldNextRoute(actor,target,obstacles,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT,true);
  return route!==null&&route.length<=OMEGA_FIELD_INTERACT_RADIUS;
 }
 /** Player-vs-rect collision for independently authored field props.

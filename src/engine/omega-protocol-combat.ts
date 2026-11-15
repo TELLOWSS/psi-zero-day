@@ -25,7 +25,7 @@ import {
  type OmegaBossTelegraph,
 } from './omega-protocol-boss-pattern';
 import {
- omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
+ omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,OMEGA_QUARTER_VIEW,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
 import {
@@ -49,6 +49,7 @@ export interface OmegaCombatSnapshot {
  readonly enemiesAlive:number;
  readonly enginePhase:string;
  readonly playerHp:number;
+ readonly playerMaxHp:number;
  readonly bossHp:number|null;
  readonly bossMaxHp:number|null;
  readonly playerX:number;
@@ -159,6 +160,7 @@ export class OmegaProtocolCombatSession {
    enemiesAlive:this.engine.state.hazards.filter(h=>h.hp>0).length,
    enginePhase:this.engine.state.phase,
    playerHp:this.engine.state.player.hp,
+   playerMaxHp:this.engine.state.player.maxHp,
    bossHp:liveBoss?Math.max(0,liveBoss.hp):null,
    bossMaxHp:liveBoss?Math.max(1,liveBoss.maxHp):null,
    playerX:this.engine.state.player.x,
@@ -301,6 +303,20 @@ export class OmegaProtocolCombatSession {
   const adjusted= this.latestPlan.modifier==='unstable_ground'
    ? {...input,moveX:move.x*.78,moveY:move.y*.78}
    :{...input,moveX:move.x,moveY:move.y};
+  if(input.protocolGunMode==='manual'){
+   const p=this.engine.state.player;
+   const explicit=Number.isFinite(input.aimX)&&Number.isFinite(input.aimY)&&Math.hypot(input.aimX!-p.x,input.aimY!-p.y)>1;
+   if(explicit){
+    const dx=input.aimX!-p.x,dy=input.aimY!-p.y;
+    const screenX=this.fieldTraversal?dx+OMEGA_QUARTER_VIEW.skewX*dy:dx;
+    const screenY=this.fieldTraversal?OMEGA_QUARTER_VIEW.groundYScale*dy:dy;
+    const length=Math.hypot(screenX,screenY);
+    this.lastFacing={x:screenX/length,y:screenY/length};
+   }else{
+    const aim=this.fieldTraversal?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y):this.lastFacing;
+    adjusted.aimX=p.x+aim.x;adjusted.aimY=p.y+aim.y;
+   }
+  }
   const prior={x:this.engine.state.player.x,y:this.engine.state.player.y};
   const hpBeforeNative=this.engine.state.player.hp;
   this.engine.update(dt,adjusted);

@@ -1,6 +1,6 @@
 import {describe,it,expect,vi} from 'vitest';
 import {
- OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom
+ OMEGA_QUARTER_VIEW,omegaProjectFieldPoint,omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,omegaScreenToWorld
 } from '../src/ui/omega-protocol-camera';
 import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldScreenMoveToWorld} from '../src/domain/omega-protocol-field';
 describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
@@ -75,4 +75,14 @@ describe('OMEGA field quarter view camera has no effect on combat physics',()=>{
   expect(()=>omegaQuarterViewCamera({x:0,y:NaN},844,390)).toThrow(RangeError);
   expect(()=>omegaQuarterViewCamera({x:0,y:0},844,0)).toThrow(RangeError);
  });
+});
+
+it('inverts the camera projection for mouse aim across screen sizes and zooms',()=>{
+ for(const [width,height,zoom] of [[1440,900,1.4],[844,390,1.8],[390,844,1.55]]){
+  const camera=omegaQuarterViewCamera({x:630,y:400},width!,height!,zoom!);
+  const world={x:850,y:600};const projected=omegaProjectFieldPoint(world);
+  const screen={x:(projected.x+camera.projectedOffsetX)*camera.scale,y:(projected.y+camera.projectedOffsetY)*camera.scale};
+  const actual=omegaScreenToWorld(screen,camera);
+  expect(actual.x).toBeCloseTo(world.x,8);expect(actual.y).toBeCloseTo(world.y,8);
+ }
 });

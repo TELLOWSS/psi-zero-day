@@ -1,6 +1,17 @@
 import {describe,it,expect} from 'vitest';
 import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {omegaFieldDepthOrder} from '../src/ui/omega-protocol-depth-scene';
+
+it('draws actors behind and in front of each lift using its actual dock coordinates',()=>{
+ for(const wave of [3,4,6,7,9,10,12,13]){
+  const plan=omegaFieldPlan(88,wave);
+  const dockY=(wave%3===0?plan.exit:plan.entry).y;
+  const hazards=[{y:dockY+10,hp:1}];
+  const order=omegaFieldDepthOrder(plan,hazards,dockY-10);
+  expect(order.filter(item=>['hero','dock','hazard'].includes(item.kind)).map(item=>item.kind))
+   .toEqual(['hero','dock','hazard']);
+ }
+});
 describe('OMEGA 3/4 solid-actor painter order',()=>{
  it('puts genuine props behind or in front of AIRA by actual world foot Y',()=>{
   const plan=omegaFieldPlan(20261108,1);
@@ -15,6 +26,18 @@ describe('OMEGA 3/4 solid-actor painter order',()=>{
   expect(near.findIndex(x=>x.kind==='prop'&&x.index===nearMachine)).toBeGreaterThan(heroIndex);
   expect(near.findIndex(x=>x.kind==='hazard'&&x.index===0)).toBeLessThan(heroIndex);
   expect(near.findIndex(x=>x.kind==='hazard'&&x.index===1)).toBeGreaterThan(heroIndex);
+ });
+ it('draws actual projectile positions on their correct side of a solid',()=>{
+  const plan=omegaFieldPlan(20261108,1),cargo=plan.obstacles.findIndex(o=>o.id==='cargo');
+  const obstacle=plan.obstacles[cargo]!,edge=obstacle.y+obstacle.height;
+  const bullets=[{y:edge-20},{y:edge+20},{y:edge}];
+  const order=omegaFieldDepthOrder(plan,[],edge+100,undefined,bullets);
+  const prop=order.findIndex(x=>x.kind==='prop'&&x.index===cargo);
+  expect(order.findIndex(x=>x.kind==='projectile'&&x.index===0)).toBeLessThan(prop);
+  expect(order.findIndex(x=>x.kind==='projectile'&&x.index===1)).toBeGreaterThan(prop);
+  expect(order.findIndex(x=>x.kind==='projectile'&&x.index===2)).toBeGreaterThan(prop);
+  expect(bullets).toEqual([{y:edge-20},{y:edge+20},{y:edge}]);
+  expect(()=>omegaFieldDepthOrder(plan,[],0,undefined,[{y:NaN}])).toThrow(RangeError);
  });
  it('preserves native navigation plan, exact hazard positions, health and encounter count',()=>{
   const plan=omegaFieldPlan(20261108,1);
