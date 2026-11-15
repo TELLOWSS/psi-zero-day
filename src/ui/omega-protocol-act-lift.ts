@@ -84,6 +84,32 @@ export function drawOmegaActBoundaryDock(
  ctx.restore();
 }
 
+/** The shared shaft is drawn once at the seam between the two landings.
+ * Opposite skew keeps the car's travel vertical in the quarter view. */
+export function drawOmegaConnectedScaffoldLift(
+ ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,
+):void{
+ ctx.save();ctx.translate(x,y);
+ ctx.transform(1,0,-skew,1,0,0);
+ ctx.lineWidth=6;ctx.strokeStyle='#8caab7';
+ for(const side of [-1,1]){
+  const railX=side*63;
+  ctx.beginPath();ctx.moveTo(railX,10);ctx.lineTo(railX,-rise-101);ctx.stroke();
+ }
+ ctx.lineWidth=3;ctx.strokeStyle='#466779';
+ for(let rung=0;rung<rise+95;rung+=34){
+  ctx.beginPath();ctx.moveTo(-62,-rung);ctx.lineTo(62,-rung-26);ctx.stroke();
+ }
+ ctx.fillStyle='#aac6cd';ctx.fillRect(-73,-rise-102,146,9);
+ ctx.translate(0,-cageRise);
+ ctx.fillStyle='#142f42';ctx.fillRect(-49,-78,98,78);
+ ctx.strokeStyle='#efb06c';ctx.lineWidth=4;ctx.strokeRect(-49,-78,98,78);
+ ctx.fillStyle='#c5dce0';ctx.fillRect(-53,0,106,8);
+ ctx.fillStyle='#ffe0a2';ctx.font='bold 13px system-ui';ctx.textAlign='center';
+ ctx.fillText('LIFT ↑ 18M',0,-55);
+ ctx.restore();
+}
+
 /** M04-C: three deliberately non-interchangeable industrial portal silhouettes,
  * each painted at the real exit/entry foothold in native world coordinates. */
 function drawOmegaSpecialActDock(

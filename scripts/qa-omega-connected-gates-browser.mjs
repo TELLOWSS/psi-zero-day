@@ -113,7 +113,8 @@ for(const s of scenarios){
     if(window.omegaSeamHistory!==history)return;
     history.push({x:Number(el.dataset.omegaSeamPlayerX),
      camera:Number(el.dataset.omegaSeamCameraX),screen:Number(el.dataset.omegaSeamScreenX),
-     shutter:!!document.querySelector('.omega-protocol-gate-transit')});
+     elevation:Number(el.dataset.omegaLiftElevation),cameraY:Number(el.dataset.omegaLiftCameraY),
+     screenY:Number(el.dataset.omegaLiftScreenY),shutter:!!document.querySelector('.omega-protocol-gate-transit')});
     if(history.length<600)requestAnimationFrame(sample);
    };
    requestAnimationFrame(sample);
@@ -130,7 +131,11 @@ for(const s of scenarios){
    const maximumStep=key=>Math.max(...samples.slice(1).map((v,i)=>Math.abs(v[key]-samples[i][key])));
    return {count:samples.length,from:samples[0]?.x,to:samples.at(-1)?.x,
     maxWorldStep:maximumStep('x'),maxCameraStep:maximumStep('camera'),
-    maxScreenStep:maximumStep('screen'),shutter:samples.some(v=>v.shutter),
+    maxScreenStep:maximumStep('screen'),maxCameraYStep:maximumStep('cameraY'),
+    maxScreenYStep:maximumStep('screenY'),maxCameraY:Math.max(...samples.map(v=>v.cameraY)),
+    minCameraY:Math.min(...samples.map(v=>v.cameraY)),elevation:samples.at(-1)?.elevation,
+    intermediateRise:samples.some(v=>v.elevation>0&&v.elevation<180),
+    shutter:samples.some(v=>v.shutter),
     crossed:samples.some(v=>v.x<boundary)&&samples.some(v=>v.x>=boundary)};
   },boundary);
   const seam=await readSeam(1400);
@@ -170,6 +175,27 @@ for(const s of scenarios){
      supplySeam.maxWorldStep>24||supplySeam.maxCameraStep>32||supplySeam.maxScreenStep>38)
    throw Error('Supply passage did not resume continuously '+JSON.stringify(supplySeam));
   console.log('QA_PASS M04_SUPPLY_SEAM',s.name,JSON.stringify(supplySeam));
+  await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=connectedLift',
+   {waitUntil:'domcontentloaded',timeout:45000});
+  await arena.waitFor({timeout:25000});
+  if((await read()).wave!==3)throw Error('Connected lift fixture did not reach wave 3');
+  await travelToGate();
+  await collectSeam();
+  await pressE();
+  await page.waitForFunction(()=>{
+   const el=document.querySelector('.omega-protocol-arena');
+   return el?.getAttribute('data-omega-world-wave')==='4'&&
+    el.getAttribute('data-omega-transit-phase')==='none';
+  },undefined,{timeout:6500});
+  const liftSeam=await readSeam(4200);
+  if(!liftSeam.crossed||liftSeam.to<4349||liftSeam.elevation!==180||
+     !liftSeam.intermediateRise||liftSeam.shutter||liftSeam.maxWorldStep>24||
+     liftSeam.maxCameraY-liftSeam.minCameraY<20||liftSeam.maxCameraYStep>32||
+     liftSeam.maxScreenYStep>42)
+   throw Error('In-world scaffold lift continuity failed '+JSON.stringify(liftSeam));
+  await page.screenshot({path:output+'/m04-connected-lift-'+s.name+'.png',
+   animations:'disabled',fullPage:false});
+  console.log('QA_PASS M04_CONNECTED_LIFT',s.name,JSON.stringify(liftSeam));
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=gateTravel',
    {waitUntil:'domcontentloaded',timeout:45000});
   await arena.waitFor({timeout:25000});
@@ -304,7 +330,7 @@ for(const s of scenarios){
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,seam,supplySeam,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
+   provenance,seam,supplySeam,liftSeam,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
    worldTransitions:3,
    normalMissionSkipAllowed:false,

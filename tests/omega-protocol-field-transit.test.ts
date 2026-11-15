@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {OMEGA_FIELD_WIDTH,omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
- omegaGateTransitStep,omegaActBoundaryDock,
+ omegaGateTransitStep,omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE,
 } from '../src/domain/omega-protocol-field-transit';
 import {OmegaProtocolCombatSession} from '../src/engine/omega-protocol-combat';
 
@@ -137,6 +137,43 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
   expect(s.snapshot.gateTransit).toBeNull();
   expect(worldX()).toBe(boundary+s.field!.plan.entry.x);
   expect(s.crossingConnectedPassage).toBe(false);
+ });
+ it('boards, rises and exits the first scaffold lift on the same world seam',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,continuousOpening:true,
+  });
+  const player=s.engine.state.player;
+  for(let wave=1;wave<=2;wave++){
+   const {exit}=s.field!.plan;
+   Object.assign(player,exit);
+   expect(s.interact().reason).toBe('EXIT_OPENED');
+   advance(s,15);
+   if(s.run.phase==='reward')s.selectUpgrade(s.run.offers[0]!);
+   advance(s,14);
+  }
+  const {exit}=s.field!.plan;
+  Object.assign(player,{x:exit.x-50,y:exit.y});
+  expect(s.interact().reason).toBe('EXIT_OPENED');
+  expect(s.snapshot.gateTransit?.link.kind).toBe('scaffold_lift');
+  const boundary=3*OMEGA_FIELD_WIDTH;
+  advance(s,15);
+  expect(player.x+s.fieldWorldOffsetX).toBeCloseTo(boundary);
+  expect(s.playerElevation).toBeCloseTo(0);
+  advance(s,10);
+  expect(s.playerElevation).toBeGreaterThan(0);
+  expect(s.playerElevation).toBeLessThan(OMEGA_SCAFFOLD_RISE);
+  expect(s.run.wave).toBe(3);
+  expect(player.x+s.fieldWorldOffsetX).toBe(boundary);
+  advance(s,15);
+  expect(s.run.wave).toBe(4);
+  expect(s.playerElevation).toBe(OMEGA_SCAFFOLD_RISE);
+  expect(player.x+s.fieldWorldOffsetX).toBe(boundary);
+  expect(player.y).toBe(exit.y);
+  expect(s.snapshot.gateTransit).toMatchObject({phase:'arrive',opacity:0});
+  advance(s,14);
+  expect(s.crossingConnectedPassage).toBe(false);
+  expect(s.playerElevation).toBe(OMEGA_SCAFFOLD_RISE);
+  expect(player.x+s.fieldWorldOffsetX).toBe(boundary+s.field!.plan.entry.x);
  });
  it('passes two actual exits consecutively, retaining mandatory run-only safe-room upgrade after the second',()=>{
   const s=new OmegaProtocolCombatSession(373737,50,false,{

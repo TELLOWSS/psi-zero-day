@@ -12,7 +12,8 @@ import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_C
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
- omegaGateTransitStep,omegaGateTransitIsLocked,
+ omegaGateTransitStep,omegaGateTransitIsLocked,OMEGA_SCAFFOLD_RISE,
+ OMEGA_SCAFFOLD_BOARDING_SECONDS,OMEGA_SCAFFOLD_TRAVEL_SECONDS,
  type OmegaFieldTransit,type OmegaFieldTransitLink,
 } from '../domain/omega-protocol-field-transit';
 import {
@@ -75,12 +76,24 @@ export class OmegaProtocolCombatSession {
  private readonly fieldTraversal:boolean;
  private readonly gateTransition:boolean;
  private readonly qaGateTravel:boolean;
- readonly connectedFields:readonly [OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan]|null;
+ readonly connectedFields:readonly [OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan,OmegaFieldPlan]|null;
  private passageStart:{x:number;y:number}|null=null;
  get crossingConnectedPassage():boolean{return this.passageStart!==null;}
  get fieldWorldOffsetX():number{
   const wave=this.currentField?.wave;
   return wave&&this.connectedFields?.[wave-1]?OMEGA_FIELD_WIDTH*(wave-1):0;
+ }
+ get fieldElevation():number{
+  return this.connectedFields&&this.currentField?.wave===4?OMEGA_SCAFFOLD_RISE:0;
+ }
+ get playerElevation():number{
+  const transit=this.transit;
+  if(this.crossingConnectedPassage&&transit?.link.kind==='scaffold_lift'&&transit.phase==='depart'){
+   const fraction=Math.max(0,Math.min(1,
+    (transit.elapsed-OMEGA_SCAFFOLD_BOARDING_SECONDS)/OMEGA_SCAFFOLD_TRAVEL_SECONDS));
+   return OMEGA_SCAFFOLD_RISE*fraction*fraction*(3-2*fraction);
+  }
+  return this.fieldElevation;
  }
  private transit:OmegaFieldTransit|null=null;
  private pendingArrival:OmegaFieldTransitLink|null=null;
@@ -116,10 +129,12 @@ export class OmegaProtocolCombatSession {
    const first=omegaFieldPlan(run.seed,1);
    const second=omegaFieldPlan(run.seed,2);
    const third=omegaFieldPlan(run.seed,3);
+   const fourth=omegaFieldPlan(run.seed,4);
    this.connectedFields=[
     first,
     {...second,entry:{...second.entry,y:first.exit.y}},
     {...third,entry:{...third.entry,y:second.exit.y}},
+    {...fourth,entry:{...fourth.entry,y:third.exit.y}},
    ];
   }
   // Isolated zero-upgrade base character with no premium or operation handoff.
@@ -290,7 +305,9 @@ export class OmegaProtocolCombatSession {
    if(this.passageStart){
     const {player}=this.engine.state;
     const {link,elapsed,duration}=this.transit;
-    const fraction=elapsed/duration;
+    const walkDuration=phase==='depart'&&link.kind==='scaffold_lift'
+     ?OMEGA_SCAFFOLD_BOARDING_SECONDS:duration;
+    const fraction=Math.min(1,elapsed/walkDuration);
     const from=phase==='depart'?this.passageStart:{x:0,y:link.arrival.y};
     const to=phase==='depart'?{x:OMEGA_FIELD_WIDTH,y:link.departure.y}:link.arrival;
     player.x=from.x+(to.x-from.x)*fraction;
@@ -454,6 +471,9 @@ export class OmegaProtocolCombatSession {
     }
     this.pendingArrival=omegaGateTransitLink(this.currentField,destination);
     this.transit=omegaGateTransitStart(this.pendingArrival);
+    if(nextPassageField&&this.pendingArrival.kind==='scaffold_lift'){
+     this.transit={...this.transit,duration:OMEGA_SCAFFOLD_BOARDING_SECONDS+OMEGA_SCAFFOLD_TRAVEL_SECONDS};
+    }
    }else this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
   }
