@@ -86,8 +86,8 @@ export function drawOmegaActBoundaryDock(
 
 /** The shared shaft is drawn once at the seam between the two landings.
  * Opposite skew keeps the car's travel vertical in the quarter view. */
-export function drawOmegaConnectedScaffoldLift(
- ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,
+export function drawOmegaConnectedLift(
+ ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,crane:boolean,
 ):void{
  ctx.save();ctx.translate(x,y);
  ctx.transform(1,0,-skew,1,0,0);
@@ -100,13 +100,19 @@ export function drawOmegaConnectedScaffoldLift(
  for(let rung=0;rung<rise+95;rung+=34){
   ctx.beginPath();ctx.moveTo(-62,-rung);ctx.lineTo(62,-rung-26);ctx.stroke();
  }
- ctx.fillStyle='#aac6cd';ctx.fillRect(-73,-rise-102,146,9);
+ ctx.fillStyle=crane?'#d49b59':'#aac6cd';ctx.fillRect(-73,-rise-102,146,9);
+ if(crane){
+  ctx.fillRect(63,-rise-112,50,24);
+  ctx.strokeStyle='#d6ae84';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(82,-rise-90);ctx.lineTo(82,-16);ctx.stroke();
+  ctx.fillStyle='#b47e53';ctx.fillRect(74,-rise+cageRise-19,16,34);
+ }
  ctx.translate(0,-cageRise);
  ctx.fillStyle='#142f42';ctx.fillRect(-49,-78,98,78);
  ctx.strokeStyle='#efb06c';ctx.lineWidth=4;ctx.strokeRect(-49,-78,98,78);
  ctx.fillStyle='#c5dce0';ctx.fillRect(-53,0,106,8);
  ctx.fillStyle='#ffe0a2';ctx.font='bold 13px system-ui';ctx.textAlign='center';
- ctx.fillText('LIFT ↑ 18M',0,-55);
+ ctx.fillText(crane?'CRANE ↑ 24M':'LIFT ↑ 18M',0,-55);
  ctx.restore();
 }
 

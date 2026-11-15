@@ -6,9 +6,9 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide,OMEGA_QUARTER_VIEW,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE,omegaScaffoldDeckElevation} from '../domain/omega-protocol-field-transit';
+import {omegaActBoundaryDock,omegaConnectedDeckElevation} from '../domain/omega-protocol-field-transit';
 import {drawOmegaUpperDeckEdge,drawOmegaUpperDeckProp} from './omega-protocol-upper-deck';
-import {drawOmegaActBoundaryDock,drawOmegaConnectedScaffoldLift} from './omega-protocol-act-lift';
+import {drawOmegaActBoundaryDock,drawOmegaConnectedLift} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
@@ -70,7 +70,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const worldCamera=omegaQuarterViewCamera({
   x:state.player.x+offset+actorElevation*skew,y:state.player.y-actorElevation,
  },ctx.canvas.width,ctx.canvas.height,cameraZoom,(passage?.length??1)*WORLD_WIDTH,
-  passage?OMEGA_SCAFFOLD_RISE:0);
+  passage?omegaConnectedDeckElevation(passage.length):0);
  const camera=offset===0?worldCamera:{
   ...worldCamera,projectedOffsetX:worldCamera.projectedOffsetX+offset,
  };
@@ -108,8 +108,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  };
  if(field){
   drawGround(field.plan);
-  if(!passage&&omegaScaffoldDeckElevation(field.plan.wave))
-   drawOmegaUpperDeckEdge(ctx,field.plan.wave===4?field.plan.entry.y:undefined);
+  if(!passage&&omegaConnectedDeckElevation(field.plan.wave))
+   drawOmegaUpperDeckEdge(ctx,(field.plan.wave===4||field.plan.wave===7)?field.plan.entry.y:undefined);
   if(passage){
    const viewLeft=-worldCamera.projectedOffsetX;
    const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
@@ -118,7 +118,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     const origin=index*WORLD_WIDTH;
     if(viewRight<origin+Math.min(0,tileSkew)-128||
        viewLeft>origin+WORLD_WIDTH+Math.max(0,tileSkew)+128)continue;
-    const elevation=omegaScaffoldDeckElevation(neighbor.wave);
+    const elevation=omegaConnectedDeckElevation(neighbor.wave);
     const raised=elevation-fieldElevation;
     ctx.save();ctx.translate(origin-offset+raised*skew,-raised);
     if(neighbor.wave!==field.plan.wave){
@@ -126,7 +126,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
      drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
      for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
     }
-    if(elevation)drawOmegaUpperDeckEdge(ctx,neighbor.wave===4?neighbor.entry.y:undefined);
+    if(elevation)drawOmegaUpperDeckEdge(ctx,(neighbor.wave===4||neighbor.wave===7)?neighbor.entry.y:undefined);
     ctx.restore();
    }
 
@@ -143,8 +143,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     const start=index*WORLD_WIDTH+exit.x;
     const edge=(index+1)*WORLD_WIDTH;
     const end=edge+passage[index+1]!.entry.x;
-    const fromElevation=omegaScaffoldDeckElevation(index+1);
-    const nextElevation=omegaScaffoldDeckElevation(index+2);
+    const fromElevation=omegaConnectedDeckElevation(index+1);
+    const nextElevation=omegaConnectedDeckElevation(index+2);
     ctx.save();ctx.translate(fromElevation*skew,-fromElevation);
     drawLane(start,fromElevation===nextElevation?end:edge,exit.y);
     ctx.restore();
@@ -153,8 +153,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     drawLane(edge,end,exit.y);
     ctx.restore();
     ctx.save();ctx.setLineDash([]);
-    drawOmegaConnectedScaffoldLift(ctx,edge,exit.y,OMEGA_SCAFFOLD_RISE,
-     field.plan.wave>=3?actorElevation:0,skew);
+    const rise=nextElevation-fromElevation;
+    const cageRise=field.plan.wave<index+1?0:Math.max(0,Math.min(rise,actorElevation-fromElevation));
+    ctx.translate(fromElevation*skew,-fromElevation);
+    drawOmegaConnectedLift(ctx,edge,exit.y,rise,cageRise,skew,index===5);
     ctx.restore();
    }
    ctx.restore();
@@ -354,9 +356,11 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
  const actBoundary=(qaMode==='actBoundary6'?6:qaMode==='actBoundary9'?9:
   qaMode==='actBoundary12'?12:null);
- const liftTour=OMEGA_PROTECTED_REVIEW&&typeof window!=='undefined'&&
-  new URLSearchParams(window.location.search).get('omegaView')==='lift';
+ const reviewView=OMEGA_PROTECTED_REVIEW&&typeof window!=='undefined'
+  ?new URLSearchParams(window.location.search).get('omegaView'):null;
+ const liftTour=reviewView==='lift'||reviewView==='crane';
  const liftWalk=qaMode==='connectedLift'||liftTour;
+ const liftDeparture=reviewView==='crane'?6:3;
  const seamWalk=qaMode==='continuousLink'||liftWalk;
  const gateWalk=qaMode==='gateTravel'||actBoundary!==null||seamWalk;
  // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
@@ -366,12 +370,12 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const session=new OmegaProtocolCombatSession(seed,50,false,{
   fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
   continuousOpening:!gateWalk||seamWalk,
-  qaGateTravelUntilWave:liftWalk?4:undefined,
+  qaGateTravelUntilWave:liftWalk?liftDeparture+1:undefined,
  });
  if(!import.meta.env.DEV&&!liftTour)return session;
  if(actBoundary!==null||liftWalk){
-  const targetWave=liftWalk?3:actBoundary!;
-  // M04-C: DEV-only preroll BEFORE the interactive browser opens.
+  const targetWave=liftWalk?liftDeparture:actBoundary!;
+  // Explicit QA tour preroll before the browser opens.
   // This deliberately pre-resolves all earlier combat/objective requirements.
   // The ACT-boundary exit itself is subsequently completed only by real
   // browser movement and E/touch; never by this initial test fixture.
@@ -383,9 +387,9 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
    session.engine.state.player.x=exit.x-45;
    session.engine.state.player.y=exit.y;
    if(!session.interact().success)throw new Error('M04-C QA setup cannot reach exit');
-   for(let i=0;i<15;i++)session.update(.05,idle);
+   for(let i=0;i<60&&session.run.wave===wave&&session.run.phase==='battle';i++)session.update(.05,idle);
    if(session.run.phase==='reward')session.selectUpgrade(session.run.offers[0]!);
-   for(let i=0;i<14;i++)session.update(.05,idle);
+   for(let i=0;i<30&&session.snapshot.gateTransit;i++)session.update(.05,idle);
   }
   if(session.run.wave!==targetWave||session.field?.progress.phase!=='exit')
    throw new Error('M04-C initial QA world did not reach target ACT seam');
@@ -1027,8 +1031,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   {OMEGA_PROTECTED_REVIEW&&<aside className="omega-silver-review-bar" role="status">
    {reviewBlocked?<><strong>{reviewFailed?'검수 원화를 확인하지 못했습니다.':'최신 검수 원화 확인 중'}</strong>
     {reviewFailed&&<button type="button" onClick={()=>window.location.reload()}>다시 불러오기</button>}</>
-   :<><strong>은백색 AIRA · 감염체 4종 · 1–6구역 연결 전장 검수</strong>
+   :<><strong>은백색 AIRA · 감염체 4종 · 1–9구역 연결 전장 검수</strong>
     <a href="?omegaLab=1&amp;omegaView=lift">3→4구역 리프트·상부 데크 확인</a>
+    <a href="?omegaLab=1&amp;omegaView=crane">6→7구역 크레인 승강기 확인</a>
     <a href="?omegaLab=1">1구역부터 플레이</a></>}
   </aside>}
   {infectedLab&&!OMEGA_PROTECTED_REVIEW&&<aside className="omega-infected-review-bar" role="status">
@@ -1118,6 +1123,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-transit-arrive-x={snapshot.gateTransit?.link.arrival.x??0}
      data-omega-transit-phase={snapshot.gateTransit?.phase??'none'}
      data-omega-transit-to={snapshot.gateTransit?.link.toWave??0}
+     data-omega-player-elevation={OMEGA_PROTECTED_REVIEW?session.playerElevation.toFixed(1):undefined}
      data-omega-transit-opacity={snapshot.gateTransit?.opacity.toFixed(3)??'0'}
      data-omega-blade-combo={snapshot.blade?.combo??0}
      data-omega-blade-hits={snapshot.blade?.hits??0}

@@ -1,4 +1,4 @@
-import {omegaScaffoldDeckElevation} from '../domain/omega-protocol-field-transit';
+import {omegaConnectedDeckElevation} from '../domain/omega-protocol-field-transit';
 import {
  OMEGA_FIELD_HEIGHT,OMEGA_FIELD_WIDTH,
  type OmegaFieldObstacle,type OmegaFieldPlan,
@@ -24,7 +24,7 @@ function fillFace(ctx:CanvasRenderingContext2D,color:string,points:readonly [num
 export function drawOmegaUpperDeckProp(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle,
 ):boolean{
- if(!omegaScaffoldDeckElevation(plan.wave)||!plan.obstacles.includes(obstacle))return false;
+ if(!omegaConnectedDeckElevation(plan.wave)||!plan.obstacles.includes(obstacle))return false;
  const {x,y,width,height,kind}=obstacle;
  const {rise,roof,face,side,trim}=STRUCTURE[kind];
  const right=x+width,front=y+height;

@@ -12,9 +12,9 @@ import {omegaBladeDamage,omegaBladeNextCombo,omegaBladeTargetInArc,OMEGA_BLADE_C
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
- omegaGateTransitStep,omegaGateTransitIsLocked,OMEGA_SCAFFOLD_RISE,
- OMEGA_CONNECTED_OPENING_END,omegaScaffoldDeckElevation,
- OMEGA_SCAFFOLD_BOARDING_SECONDS,OMEGA_SCAFFOLD_TRAVEL_SECONDS,
+ omegaGateTransitStep,omegaGateTransitIsLocked,
+ OMEGA_CONNECTED_OPENING_END,omegaConnectedDeckElevation,
+ OMEGA_DECK_BOARDING_SECONDS,omegaConnectedLiftTravelSeconds,
  type OmegaFieldTransit,type OmegaFieldTransitLink,
 } from '../domain/omega-protocol-field-transit';
 import {
@@ -87,16 +87,20 @@ export class OmegaProtocolCombatSession {
   return wave&&this.connectedFields?.[wave-1]?OMEGA_FIELD_WIDTH*(wave-1):0;
  }
  get fieldElevation():number{
-  return this.connectedFields&&this.currentField?omegaScaffoldDeckElevation(this.currentField.wave):0;
+  return this.connectedFields&&this.currentField?omegaConnectedDeckElevation(this.currentField.wave):0;
  }
  get playerElevation():number{
   const transit=this.transit;
-  if(this.crossingConnectedPassage&&transit?.link.kind==='scaffold_lift'&&transit.phase==='depart'){
-   const fraction=Math.max(0,Math.min(1,
-    (transit.elapsed-OMEGA_SCAFFOLD_BOARDING_SECONDS)/OMEGA_SCAFFOLD_TRAVEL_SECONDS));
-   return OMEGA_SCAFFOLD_RISE*fraction*fraction*(3-2*fraction);
-  }
-  return this.fieldElevation;
+  const elevation=this.fieldElevation;
+  if(!this.crossingConnectedPassage)return elevation;
+  if(this.active.phase==='reward'&&this.pendingArrival)
+   return omegaConnectedDeckElevation(this.pendingArrival.toWave);
+  if(transit?.phase!=='depart')return elevation;
+  const travel=omegaConnectedLiftTravelSeconds(transit.link.kind);
+  if(!travel)return elevation;
+  const fraction=Math.max(0,Math.min(1,(transit.elapsed-OMEGA_DECK_BOARDING_SECONDS)/travel));
+  const rise=omegaConnectedDeckElevation(transit.link.toWave)-elevation;
+  return elevation+rise*fraction*fraction*(3-2*fraction);
  }
  private transit:OmegaFieldTransit|null=null;
  private pendingArrival:OmegaFieldTransitLink|null=null;
@@ -273,6 +277,8 @@ export class OmegaProtocolCombatSession {
   }
   if(plan.modifier==='crosswind')
    for(const hazard of this.engine.state.hazards)if(!hazard.isStageBoss)hazard.behavior='crosswind';
+  if(this.qaGateTravel&&plan.wave===this.qaGateTravelUntilWave)
+   this.engine.state.player.invincibleTime=0;
   if(this.qaGateTravel&&this.currentField&&plan.wave<this.qaGateTravelUntilWave){
    // Setup only, never updated while walking: in DEV, tasks/hostiles are
    // already resolved so E + physical movement test the *real* gate.
@@ -307,8 +313,8 @@ export class OmegaProtocolCombatSession {
    if(this.passageStart){
     const {player}=this.engine.state;
     const {link,elapsed,duration}=this.transit;
-    const walkDuration=phase==='depart'&&link.kind==='scaffold_lift'
-     ?OMEGA_SCAFFOLD_BOARDING_SECONDS:duration;
+    const walkDuration=phase==='depart'&&omegaConnectedLiftTravelSeconds(link.kind)
+     ?OMEGA_DECK_BOARDING_SECONDS:duration;
     const fraction=Math.min(1,elapsed/walkDuration);
     const from=phase==='depart'?this.passageStart:{x:0,y:link.arrival.y};
     const to=phase==='depart'?{x:OMEGA_FIELD_WIDTH,y:link.departure.y}:link.arrival;
@@ -473,9 +479,8 @@ export class OmegaProtocolCombatSession {
     }
     this.pendingArrival=omegaGateTransitLink(this.currentField,destination);
     this.transit=omegaGateTransitStart(this.pendingArrival);
-    if(nextPassageField&&this.pendingArrival.kind==='scaffold_lift'){
-     this.transit={...this.transit,duration:OMEGA_SCAFFOLD_BOARDING_SECONDS+OMEGA_SCAFFOLD_TRAVEL_SECONDS};
-    }
+    const liftTravel=nextPassageField?omegaConnectedLiftTravelSeconds(this.pendingArrival.kind):0;
+    if(liftTravel)this.transit={...this.transit,duration:OMEGA_DECK_BOARDING_SECONDS+liftTravel};
    }else this.settleWave();
    return {success:true,reason:'EXIT_OPENED'};
   }
