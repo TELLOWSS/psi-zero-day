@@ -30,6 +30,10 @@ export interface OmegaFieldTransit{
  readonly duration:number;
  readonly opacity:number;
 }
+// World-art units for the first 18m lift. Native collision remains tile-local.
+export const OMEGA_SCAFFOLD_RISE=180;
+export const OMEGA_SCAFFOLD_BOARDING_SECONDS=.75;
+export const OMEGA_SCAFFOLD_TRAVEL_SECONDS=1.25;
 const DURATIONS={depart:.75,arrive:.7} as const;
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export function omegaGateTransitLink(from:OmegaFieldPlan,to:OmegaFieldPlan):OmegaFieldTransitLink{

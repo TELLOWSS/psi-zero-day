@@ -4,9 +4,9 @@ import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/ome
 import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../domain/omega-protocol-run';
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
-import {omegaFieldTargetGuide,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock} from '../domain/omega-protocol-field-transit';
-import {drawOmegaActBoundaryDock} from './omega-protocol-act-lift';
+import {omegaFieldTargetGuide,OMEGA_QUARTER_VIEW,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
+import {omegaActBoundaryDock,OMEGA_SCAFFOLD_RISE} from '../domain/omega-protocol-field-transit';
+import {drawOmegaActBoundaryDock,drawOmegaConnectedScaffoldLift} from './omega-protocol-act-lift';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
@@ -56,14 +56,20 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  // 3/4 field view is strictly visual: world XY hitboxes and Watch
  // movement are unchanged. Follow the projected hero and bound the map.
  const field=session.field;
- const passage=field&&field.plan.wave<=3?session.connectedFields:null;
+ const passage=field&&session.connectedFields?.[field.plan.wave-1]?session.connectedFields:null;
  const offset=session.fieldWorldOffsetX;
- const worldCamera=omegaQuarterViewCamera({x:state.player.x+offset,y:state.player.y},
-  ctx.canvas.width,ctx.canvas.height,cameraZoom,(passage?.length??1)*WORLD_WIDTH);
+ const fieldElevation=session.fieldElevation;
+ const actorElevation=session.playerElevation;
+ const skew=OMEGA_QUARTER_VIEW.skewX;
+ const worldCamera=omegaQuarterViewCamera({
+  x:state.player.x+offset+actorElevation*skew,y:state.player.y-actorElevation,
+ },ctx.canvas.width,ctx.canvas.height,cameraZoom,(passage?.length??1)*WORLD_WIDTH,
+  passage?OMEGA_SCAFFOLD_RISE:0);
  const camera=offset===0?worldCamera:{
   ...worldCamera,projectedOffsetX:worldCamera.projectedOffsetX+offset,
  };
  applyOmegaQuarterView(ctx,camera);
+ ctx.translate(fieldElevation*skew,-fieldElevation);
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
@@ -75,6 +81,17 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaG2RearEnvironment(ctx,plan,state.gameTime,m12G2Quality);
   drawOmegaM12TerrainShadows(ctx,plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,plan,state.gameTime,m12Budget);
+  if(passage){
+   ctx.strokeStyle='#446377';ctx.lineWidth=14;
+   ctx.beginPath();
+   ctx.moveTo(0,14);ctx.lineTo(WORLD_WIDTH,14);
+   ctx.moveTo(0,WORLD_HEIGHT-14);ctx.lineTo(WORLD_WIDTH,WORLD_HEIGHT-14);
+   if(plan.wave===1){ctx.moveTo(14,14);ctx.lineTo(14,WORLD_HEIGHT-14);}
+   if(plan.wave===passage.length){
+    ctx.moveTo(WORLD_WIDTH-14,14);ctx.lineTo(WORLD_WIDTH-14,WORLD_HEIGHT-14);
+   }
+   ctx.stroke();
+  }
  };
  const drawProp=(plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle)=>{
   drawOmegaFieldProp(ctx,plan,obstacle);
@@ -87,28 +104,41 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   if(passage){
    const viewLeft=-worldCamera.projectedOffsetX;
    const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
-   const skew=worldCamera.skewX*WORLD_HEIGHT;
+   const tileSkew=worldCamera.skewX*WORLD_HEIGHT;
    for(const [index,neighbor] of passage.entries()){
     const origin=index*WORLD_WIDTH;
     if(neighbor.wave===field.plan.wave||
-       viewRight<origin+Math.min(0,skew)-128||
-       viewLeft>origin+WORLD_WIDTH+Math.max(0,skew)+128)continue;
-    ctx.save();ctx.translate(origin-offset,0);
+       viewRight<origin+Math.min(0,tileSkew)-128||
+       viewLeft>origin+WORLD_WIDTH+Math.max(0,tileSkew)+128)continue;
+    const raised=(neighbor.wave===4?OMEGA_SCAFFOLD_RISE:0)-fieldElevation;
+    ctx.save();ctx.translate(origin-offset+raised*skew,-raised);
     drawGround(neighbor);
+    drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
     for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
     ctx.restore();
    }
 
-   ctx.save();ctx.translate(-offset,0);
+   ctx.save();ctx.translate(-offset-fieldElevation*skew,fieldElevation);
    ctx.fillStyle='#263c46';
    ctx.strokeStyle='#f5ba6388';ctx.lineWidth=3;ctx.setLineDash([22,16]);
+   const drawLane=(start:number,end:number,y:number)=>{
+    ctx.fillRect(start,y-36,end-start,72);
+    ctx.beginPath();ctx.moveTo(start,y-36);ctx.lineTo(end,y-36);
+    ctx.moveTo(start,y+36);ctx.lineTo(end,y+36);ctx.stroke();
+   };
    for(let index=0;index<passage.length-1;index++){
     const {exit}=passage[index]!;
     const start=index*WORLD_WIDTH+exit.x;
-    const end=(index+1)*WORLD_WIDTH+passage[index+1]!.entry.x;
-    ctx.fillRect(start,exit.y-36,end-start,72);
-    ctx.beginPath();ctx.moveTo(start,exit.y-36);ctx.lineTo(end,exit.y-36);
-    ctx.moveTo(start,exit.y+36);ctx.lineTo(end,exit.y+36);ctx.stroke();
+    const edge=(index+1)*WORLD_WIDTH;
+    const end=edge+passage[index+1]!.entry.x;
+    if(index!==2){drawLane(start,end,exit.y);continue;}
+    drawLane(start,edge,exit.y);
+    ctx.save();ctx.translate(OMEGA_SCAFFOLD_RISE*skew,-OMEGA_SCAFFOLD_RISE);
+    drawLane(edge,end,exit.y);
+    ctx.restore();
+    ctx.setLineDash([]);
+    drawOmegaConnectedScaffoldLift(ctx,edge,exit.y,OMEGA_SCAFFOLD_RISE,
+     field.plan.wave>=3?actorElevation:0,skew);
    }
    ctx.restore();
   }
@@ -130,8 +160,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(let x=0;x<=WORLD_WIDTH;x+=70){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD_HEIGHT);ctx.stroke();}
   for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
  }
- ctx.strokeStyle='#446377';ctx.lineWidth=14;
- ctx.strokeRect(14-offset,14,(passage?.length??1)*WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ if(!passage){
+  ctx.strokeStyle='#446377';ctx.lineWidth=14;
+  ctx.strokeRect(14,14,WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ }
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
@@ -150,6 +182,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.restore();
  };
  const renderHero=()=>{
+ ctx.save();
+ const lift=actorElevation-fieldElevation;
+ ctx.translate(lift*skew,-lift);
  // Independent eight-heading tactical actor placeholder, not an AIRA skin.
  if(field)drawOmegaM12ActorFootShadow(ctx,p,27);
  ctx.save();ctx.translate(p.x,p.y);
@@ -198,6 +233,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    actionAge:action.actionAge});
  }
  if(gait.active&&!p.isDashing)drawOmegaGroundedSplash(ctx,[gait.left,gait.right],state.gameTime);
+ ctx.restore();
  ctx.restore();
  };
  if(field){
@@ -300,7 +336,8 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
  const actBoundary=(qaMode==='actBoundary6'?6:qaMode==='actBoundary9'?9:
   qaMode==='actBoundary12'?12:null);
- const seamWalk=qaMode==='continuousLink';
+ const liftWalk=qaMode==='connectedLift';
+ const seamWalk=qaMode==='continuousLink'||liftWalk;
  const gateWalk=qaMode==='gateTravel'||actBoundary!==null||seamWalk;
  // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
  // preserve them ONLY in those explicit DEV modes. Ordinary M04 play and
@@ -311,13 +348,14 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   continuousOpening:!gateWalk||seamWalk,
  });
  if(!import.meta.env.DEV)return session;
- if(actBoundary!==null){
+ if(actBoundary!==null||liftWalk){
+  const targetWave=liftWalk?3:actBoundary!;
   // M04-C: DEV-only preroll BEFORE the interactive browser opens.
   // This deliberately pre-resolves all earlier combat/objective requirements.
   // The ACT-boundary exit itself is subsequently completed only by real
   // browser movement and E/touch; never by this initial test fixture.
   const idle={moveX:0,moveY:0,triggerAction:false};
-  for(let wave=1;wave<actBoundary;wave++){
+  for(let wave=1;wave<targetWave;wave++){
    if(session.run.wave!==wave||session.field?.progress.phase!=='exit')
     throw new Error('M04-C initial QA expedition is not ready for preroll');
    const exit=session.field.plan.exit;
@@ -328,8 +366,12 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
    if(session.run.phase==='reward')session.selectUpgrade(session.run.offers[0]!);
    for(let i=0;i<14;i++)session.update(.05,idle);
   }
-  if(session.run.wave!==actBoundary||session.field?.progress.phase!=='exit')
+  if(session.run.wave!==targetWave||session.field?.progress.phase!=='exit')
    throw new Error('M04-C initial QA world did not reach target ACT seam');
+  if(liftWalk){
+   const exit=session.field.plan.exit;
+   Object.assign(session.engine.state.player,{x:exit.x-190,y:exit.y});
+  }
   return session;
  }
  const combatMode=omegaCombatProbeMode(window.location.search);
@@ -661,7 +703,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No actual displacement => do not animate a run cycle.
    const gait=gaitController.advance(
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
-    session.connectedFields&&session.plan.wave<=3?1:session.plan.wave,
+    session.connectedFields&&session.plan.wave<=4?1:session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
    const pose=facingController.advance(
     session.engine.state.gameTime,session.facing,fireCue,{
@@ -688,6 +730,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);
      dataset.omegaSeamCameraX=String(-renderedCamera.projectedOffsetX);
      dataset.omegaSeamScreenX=String(renderedCamera.playerScreenX);
+     dataset.omegaLiftElevation=String(session.playerElevation);
+     dataset.omegaLiftCameraY=String(-renderedCamera.projectedOffsetY);
+     dataset.omegaLiftScreenY=String(renderedCamera.playerScreenY);
     }
    }
    if(dt>0){fpsTotal+=dt;fpsCount++;}
@@ -792,7 +837,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-zombie-ai-qa={zombieAiQa?'native-watch-engine':'off'}
   data-omega-cart-qa={cartWarningQa?'real-native-watch-cart-dev-fixture':'off'}
   data-omega-gate-walk-qa={import.meta.env.DEV&&typeof window!=='undefined'&&
-   ['gateTravel','continuousLink','actBoundary6','actBoundary9','actBoundary12'].includes(
+   ['gateTravel','continuousLink','connectedLift','actBoundary6','actBoundary9','actBoundary12'].includes(
     new URLSearchParams(window.location.search).get('omegaQaState')??''
    )?'precleared-dev-only':'off'}>
   <header className="omega-protocol-topbar">
