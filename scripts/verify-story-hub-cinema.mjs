@@ -28,13 +28,15 @@ try{
     return art?.complete&&art.naturalWidth>0&&art.currentSrc.endsWith('/assets/reignition/aira-silver-dawn.webp');
    });
    const missionDeck=home.locator('[data-hero-layout="mission-deck"]');
-   const deckEntries=missionDeck.locator('.rg-hero-mission-deck button');
-   if(await deckEntries.count()!==2)throw Error('New first-fold game controls are missing');
-   for(const entry of await deckEntries.all()){
-    const box=await entry.boundingBox();
-    if(!box||!(await entry.isEnabled())||box.height<44||(height>=844&&box.y+box.height>height))
-     throw Error('New title mission control is outside its usable viewport '+JSON.stringify(box));
-   }
+   const jump=missionDeck.getByRole('link',{name:'작전 선택'});
+   if(await jump.getAttribute('href')!=='#reignition-missions'||
+      await missionDeck.locator('.rg-hero-mission-deck').count()!==0)
+    throw Error('Hero must link to the original illustrated mission cards');
+   const omega=home.locator('a.rg-card.is-omega');
+   const omegaUrl=new URL(await omega.getAttribute('href'));
+   if(!omegaUrl.hostname.endsWith('-tellowss-projects.vercel.app')||
+      omegaUrl.searchParams.get('omegaLab')!=='1'||await omega.getAttribute('target')!=='_blank')
+    throw Error('OMEGA does not point to the protected review deployment');
    await page.screenshot({path:path.join(out,width+'x'+height+'-new-mission-deck.png'),
     animations:'disabled',fullPage:false});
    if(width===1440&&height===900){
@@ -137,7 +139,7 @@ try{
      if(!topCard||topCard.y>=height*.96)
        throw new Error('Premium desktop launcher is hidden below the first viewport: '+JSON.stringify(topCard));
    }
-   const panels=await page.locator('.rg-card').count();
+   const panels=await page.locator('button.rg-card').count();
    await page.locator('#reignition-missions').scrollIntoViewIfNeeded();
    const cardInfo=await launchers.evaluateAll(buttons=>buttons.map(b=>({
      height:b.getBoundingClientRect().height,
@@ -154,11 +156,13 @@ try{
        return image.naturalWidth>0&&image.naturalHeight>0;
      }));
    });
-   if(artReadiness.length!==2||artReadiness.some(ok=>!ok))
+   if(artReadiness.length!==3||artReadiness.some(ok=>!ok))
      throw new Error('Playable Guard/Watch cards missing finished key artwork: '+JSON.stringify(artReadiness));
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
    if(overflow)throw new Error('RE:IGNITION layout horizontally overflows '+width+'x'+height);
    await page.screenshot({path:path.join(out,width+'x'+height+'-game-choices.png'),animations:'disabled'});
+   await omega.scrollIntoViewIfNeeded();
+   await omega.screenshot({path:path.join(out,width+'x'+height+'-omega-card.png'),animations:'disabled'});
    const entryCount=await page.locator('button.rg-story-button').count(),splitCount=await page.locator('button.is-episode02-entry').count();
    if(entryCount!==1||splitCount!==0)throw new Error('Story episode entry contract '+entryCount+'/'+splitCount);
    await page.locator('button.rg-story-button').click();

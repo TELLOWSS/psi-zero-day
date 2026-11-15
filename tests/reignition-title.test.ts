@@ -12,7 +12,10 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('data-reignition-concept="cinematic"');
   expect((html.match(/aria-pressed=/g)||[]).length).toBe(4);
   expect(html).toContain('data-hero-layout="mission-deck"');
-  expect(html).toMatch(/rg-hero-mission guard.*시그널 가드.*rg-hero-mission watch.*시그널 워치/);
+  expect(html).toContain('class="rg-hero-operations-link" href="#reignition-missions"');
+  expect(html).not.toContain('class="rg-hero-mission-deck"');
+  expect(html).toMatch(/class="rg-card is-omega" href="https:\/\/[^"]+\/\?omegaLab=1"/);
+  expect(html).toContain('Vercel 로그인 필요');
   expect(html).toContain('RE:IGNITION');
   expect(html).toContain('class="rg-appearance"');
   expect(html).toContain('화면 스타일');
@@ -75,13 +78,13 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('aria-label="가드 완료 작전" aria-valuemin="0" aria-valuemax="6" aria-valuenow="6"');
   expect(html).toContain('aria-label="워치 완료 스테이지" aria-valuemin="0" aria-valuemax="50" aria-valuenow="50"');
   expect(html).toContain('style="width:100%"');
-  expect(html).toContain('aria-label="메인 작전 바로 시작"');
+  expect(html).toContain('class="rg-mission-grid"');
   expect(html).toContain('data-next-mode="watch"');
   expect(html).toContain('시그널 워치 · 마스터 3성 43개 남음');
   expect(html).toContain('style="width:50%"');
   expect(html).toContain('style="width:14%"');
-  expect(html).toContain('aria-label="시그널 가드 바로 실행"');
-  expect(html).toContain('aria-label="시그널 워치 바로 실행"');
+  expect(html).toContain('aria-label="시그널 가드 ·');
+  expect(html).toContain('aria-label="시그널 워치 ·');
   expect(html).toContain('class="rg-header-missions"');
   const empty=renderToStaticMarkup(React.createElement(ReignitionTitle,{status:{...status,guardClears:0,watchClears:0,guardUnlocked:false,watchUnlocked:false,veteran:false},brand:'NEW-PSI',emblem:'/shield.svg',heroWide:'/wide.webp',heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions}));
   expect(empty).toContain('aria-label="가드 완료 작전" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"');
