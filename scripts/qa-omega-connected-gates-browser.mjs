@@ -195,6 +195,32 @@ for(const s of scenarios){
    throw Error('In-world scaffold lift continuity failed '+JSON.stringify(liftSeam));
   await page.screenshot({path:output+'/m04-connected-lift-'+s.name+'.png',
    animations:'disabled',fullPage:false});
+  const upperDeck = await page.evaluate(async () => {
+   const {omegaFieldPlan,omegaFieldNativeTerrain} = await import('/src/domain/omega-protocol-field.ts');
+   const {drawOmegaUpperDeckProp,drawOmegaUpperDeckEdge} = await import('/src/ui/omega-protocol-upper-deck.ts');
+   const plan = omegaFieldPlan(20261109,4);
+   const canvas = document.createElement('canvas');
+   canvas.width = 1400;
+   canvas.height = 940;
+   const ctx = canvas.getContext('2d',{willReadFrequently:true});
+   const hasInk = (x,y,w=1,h=1) => ctx.getImageData(x,y,w,h).data.some((value,index) => index%4===3&&value>0);
+   const props = omegaFieldNativeTerrain(plan).map((solid,index)=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const drawn=drawOmegaUpperDeckProp(ctx,plan,plan.obstacles[index]);
+    const {x,y,width,height}=solid;
+    return {id:solid.id,
+     rises:drawn&&hasInk(x,y-128,width,128),
+     reachesFront:hasInk(x,y+height-1,width),
+     insideWidth:!hasInk(x-1,y-128,1,height+128)&&!hasInk(x+width,y-128,1,height+128),
+     clearInFront:!hasInk(x,y+height,width)};
+   });
+   ctx.clearRect(0,0,canvas.width,canvas.height);
+   drawOmegaUpperDeckEdge(ctx,plan.entry.y);
+   return {props,thickEdge:hasInk(380,920),openEntry:!hasInk(8,plan.entry.y),rail:hasInk(8,plan.entry.y-50)};
+  });
+  if(!upperDeck.thickEdge||!upperDeck.openEntry||!upperDeck.rail||
+     upperDeck.props.length!==4||upperDeck.props.some(({id,...checks})=>!Object.values(checks).every(Boolean)))
+   throw Error('Upper deck painted geometry failed '+JSON.stringify(upperDeck));
   console.log('QA_PASS M04_CONNECTED_LIFT',s.name,JSON.stringify(liftSeam));
   await page.goto('http://127.0.0.1:4173/?omegaLab=1&omegaQaState=gateTravel',
    {waitUntil:'domcontentloaded',timeout:45000});
@@ -330,7 +356,7 @@ for(const s of scenarios){
   await page.screenshot({path:output+'/m04-third-map-'+s.name+'.png',
    animations:'disabled',fullPage:false});
   reports.push({pass:true,name:s.name,width:s.width,height:s.height,
-   provenance,seam,supplySeam,liftSeam,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
+   provenance,seam,supplySeam,liftSeam,upperDeck,firstWalk,arrived2,secondWalk,reward,finale,thirdWalk,liftDepart,actArrive,fourthWorld,
    actualInput:s.touch?'Chrome touchStart/touchEnd':'keydown/keyup',
    worldTransitions:3,
    normalMissionSkipAllowed:false,
