@@ -16,8 +16,8 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('RE:IGNITION');
   expect(html).toContain('class="rg-appearance"');
   expect(html).toContain('화면 스타일');
-  expect(html).toContain('src="/assets/reignition/veteran-return.webp"');
-  expect(html).toContain('/assets/reignition/veteran-return.webp');
+  expect(html).toContain('src="/assets/reignition/aira-silver-dawn.webp"');
+  expect(html).not.toContain('class="rg-mobile-dock"');
   expect(html).toContain('시그널 가드');expect(html).toContain('시그널 워치');
   expect(html).toContain('max="6" value="6"');expect(html).toContain('max="50" value="50"');
   expect(html).toContain('가드 마스터 3성 3개 / 6개');expect(html).toContain('워치 마스터 3성 7개 / 50개');
@@ -32,7 +32,7 @@ describe('RE:IGNITION title selectable four concepts',()=>{
     heroPortrait:'/portrait.webp',audioMuted:false,motionEnabled:true,...actions};
    const render=()=>renderToStaticMarkup(React.createElement(ReignitionTitle,props));
    expect(render()).toContain('data-reignition-concept="cinematic"');
-   expect(render()).toContain('/assets/omega/aira-v2/hero-splash.webp');
+   expect(render()).toContain('/assets/reignition/aira-silver-dawn.webp');
    expect(getItem).toHaveBeenCalledWith('psi.zero-day.home.reignition.design.v4');
    getItem.mockReturnValue('elite');
    expect(render()).toContain('data-reignition-concept="elite"');
@@ -75,7 +75,7 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('aria-label="가드 완료 작전" aria-valuemin="0" aria-valuemax="6" aria-valuenow="6"');
   expect(html).toContain('aria-label="워치 완료 스테이지" aria-valuemin="0" aria-valuemax="50" aria-valuenow="50"');
   expect(html).toContain('style="width:100%"');
-  expect(html).toContain('aria-label="게임 빠른 실행"');
+  expect(html).toContain('aria-label="메인 작전 바로 시작"');
   expect(html).toContain('data-next-mode="watch"');
   expect(html).toContain('시그널 워치 · 마스터 3성 43개 남음');
   expect(html).toContain('style="width:50%"');

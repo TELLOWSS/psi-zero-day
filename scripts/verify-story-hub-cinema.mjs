@@ -24,8 +24,8 @@ try{
    if(await home.getAttribute('data-reignition-concept')!=='cinematic')
     throw Error('The older appearance preference hid the updated default title');
    await page.waitForFunction(()=>{
-    const art=document.querySelector('.rg-aira-v2');
-    return art?.complete&&art.naturalWidth>0&&art.currentSrc.endsWith('/assets/omega/aira-v2/hero-splash.webp');
+    const art=document.querySelector('.rg-silver-keyart');
+    return art?.complete&&art.naturalWidth>0&&art.currentSrc.endsWith('/assets/reignition/aira-silver-dawn.webp');
    });
    const missionDeck=home.locator('[data-hero-layout="mission-deck"]');
    const deckEntries=missionDeck.locator('.rg-hero-mission-deck button');
@@ -75,15 +75,8 @@ try{
        compactHeader.themeRight>compactHeader.settingsLeft+2||
        compactHeader.settingsRight>width+1)
        throw new Error('Premium phone header controls overlap: '+JSON.stringify(compactHeader));
-     const dock=await page.locator('.rg-mobile-dock').evaluate(el=>({
-       position:getComputedStyle(el).position,
-       visible:getComputedStyle(el).display!=='none',
-       bottom:el.getBoundingClientRect().bottom,
-       buttons:[...el.querySelectorAll('button')].map(button=>({width:button.getBoundingClientRect().width,height:button.getBoundingClientRect().height,disabled:button.disabled}))
-     }));
-     if(dock.position!=='fixed'||!dock.visible||Math.abs(dock.bottom-height)>3||dock.buttons.length!==2||
-       dock.buttons.some(button=>button.disabled||button.width<130||button.height<44))
-       throw new Error('Premium mobile Guard/Watch quick launcher fails touch contract: '+JSON.stringify(dock));
+     if(await home.locator('.rg-mobile-dock').count()!==0)
+      throw new Error('Default phone home still has a duplicate fixed launcher');
      const headerOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
      if(headerOverflow){
       const offenders=await page.evaluate(()=>[...document.querySelectorAll('main.rg-home *')].map(el=>({selector:el.tagName.toLowerCase()+'.'+String(el.className||'').replace(/\\s+/g,'.'),left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),scroll:el.scrollWidth,client:el.clientWidth})).filter(x=>x.right>innerWidth+2||x.left< -2).slice(0,18));
@@ -127,10 +120,10 @@ try{
        throw new Error('ZERO DAY wordmark wrapped into broken lines: '+JSON.stringify(visuals));
      if(design==='cinematic'){
        await page.waitForFunction(()=>{
-         const art=document.querySelector('.rg-veteran-character');
+         const art=document.querySelector('.rg-silver-keyart');
          return art instanceof HTMLImageElement&&art.complete&&art.naturalWidth>=500;
        },null,{timeout:20000});
-       const heroArt=await page.locator('.rg-veteran-character').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
+       const heroArt=await page.locator('.rg-silver-keyart').evaluate(img=>({width:img.naturalWidth,height:img.naturalHeight,opacity:getComputedStyle(img).opacity}));
        if(heroArt.width<500||heroArt.height<600)throw new Error('Approved RE:IGNITION artwork failed to load: '+JSON.stringify(heroArt));
      }
      await page.screenshot({path:path.join(out,width+'x'+height+'-title-'+design+'.png'),animations:'disabled',fullPage:true});

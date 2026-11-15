@@ -17,6 +17,7 @@ export const HOME_THEMES=[
 export type HomeTheme=typeof HOME_THEMES[number]['id'];
 // The approved AIRA launch art shipped after the v3 appearance preference.
 // A fresh v4 default exposes that title once, while preserving future user choices.
+const CINEMATIC_KEY_ART='/assets/reignition/aira-silver-dawn.webp';
 const HOME_THEME_STORAGE_KEY='psi.zero-day.home.reignition.design.v4';
 export function resolveHomeTheme(query:string,stored:string|null):HomeTheme{
   const requested=new URLSearchParams(query).get('home');
@@ -52,7 +53,7 @@ export interface ReignitionTitleProps {
 }
 
 const descriptions:Record<HomeTheme,{eyebrow:string,title:string,lead:string,primary:string}>={
- cinematic:{eyebrow:'THE NEXT SHIFT / A NEW STANDARD',title:'완료한 전선 너머, 더 어려운 선택.',lead:'승리의 기록은 그대로. 이제 더 날카로운 판단과 끝까지 흔들리지 않는 대응으로 다음 현장을 지켜내세요.',primary:'마스터 작전 개시'},
+ cinematic:{eyebrow:'THE NEXT SHIFT / A NEW STANDARD',title:'다음 현장에 투입할 작전을 선택하세요.',lead:'현장을 방어하는 시그널 가드와 위험을 추적하는 시그널 워치.',primary:'마스터 작전 개시'},
  operations:{eyebrow:'OPERATION CONTROL / VETERAN HQ',title:'다음 현장을 지휘할 시간.',lead:'시그널 가드와 워치의 달성도, 위험 작전, 새로운 도전을 한눈에 확인하세요.',primary:'작전 현황 보기'},
  terminal:{eyebrow:'SYSTEM READY / RISK CONTAINMENT',title:'위험 신호를 분석하라.',lead:'여섯 번의 방어, 쉰 번의 순찰 다음에도 끝나지 않는 현장 판단.',primary:'작전 신호 연결'},
  elite:{eyebrow:'RE:IGNITION / THE VETERAN ERA',title:'다시, 현장으로.',lead:'전과 다른 압박. 같은 판단력. 오늘의 무사귀환을 완성하세요.',primary:'도전 시작'},
@@ -154,9 +155,13 @@ export function ReignitionTitle(props:ReignitionTitleProps){
      data-hero-layout={theme==='cinematic'?'mission-deck':undefined}>
      <picture className="rg-hero-picture">
       {theme!=='cinematic'&&<source media="(max-width:670px) and (orientation:portrait)" srcSet={props.heroPortrait}/>}
-      <img src={theme==='cinematic'?'/assets/reignition/veteran-return.webp':theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className="rg-hero-art" alt="" fetchPriority="high" decoding="async"/>
+      <img src={theme==='cinematic'?CINEMATIC_KEY_ART:theme==='operations'?'/'+DEFENSE_PREMIUM_HERO:theme==='terminal'?SIGNAL_WATCH_KEY_ART:props.heroWide} className={theme==='cinematic'?'rg-hero-art rg-silver-keyart':'rg-hero-art'}
+       alt="" fetchPriority="high" decoding="async"
+       onError={theme==='cinematic'?event=>{
+        if(!event.currentTarget.src.endsWith('/assets/reignition/veteran-return.webp'))
+         event.currentTarget.src='/assets/reignition/veteran-return.webp';
+       }:undefined}/>
      </picture>
-     {theme==='cinematic'&&<img className="rg-veteran-character rg-aira-v2" src="/assets/omega/aira-v2/hero-splash.webp" alt="AIRA V2 캐릭터 원화" loading="eager" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/assets/reignition/veteran-return.webp';}}/>}
      <div className="rg-terminal-grid" aria-hidden="true"><span/><span/><span/><span/></div>
      <div className="rg-hero-shade" aria-hidden="true"/>
      <div className="rg-cinematic-rings" aria-hidden="true"><span/><span/></div>
@@ -174,10 +179,10 @@ export function ReignitionTitle(props:ReignitionTitleProps){
        <span className="rg-hero-record-label">{status.veteran?'VETERAN RECORD SYNCED':'NEW OPERATOR'}</span>
       </div>
       {theme==='cinematic'?<div className="rg-hero-mission-deck" role="group" aria-label="메인 작전 바로 시작">
-       <button type="button" className="rg-hero-mission guard" onClick={props.onGuard} disabled={!props.onGuard}>
+       <button type="button" aria-label="시그널 가드 바로 실행" className="rg-hero-mission guard" onClick={props.onGuard} disabled={!props.onGuard}>
         <span><strong>시그널 가드</strong><small>{mission.mode==='guard'?mission.label:'현장 방어'}</small></span><span aria-hidden="true">↗</span>
        </button>
-       <button type="button" className="rg-hero-mission watch" onClick={props.onWatch} disabled={!props.onWatch}>
+       <button type="button" aria-label="시그널 워치 바로 실행" className="rg-hero-mission watch" onClick={props.onWatch} disabled={!props.onWatch}>
         <span><strong>시그널 워치</strong><small>{mission.mode==='watch'?mission.label:'위험 순찰'}</small></span><span aria-hidden="true">↗</span>
        </button>
       </div>:<div className="rg-hero-buttons">
@@ -248,10 +253,10 @@ export function ReignitionTitle(props:ReignitionTitleProps){
    {releaseOpen?<div id="rg-release-detail" className="rg-release-items"><p><strong>시그널 가드</strong> 6개 작전 완료 이후 더 강한 적 특성과 새로운 대응 과제. 마스터 별도 기록.</p><p><strong>시그널 워치</strong> 50스테이지 완주 이후 마스터 난이도. 보스 경고·회피·약점 파악이 중요합니다.</p><p><strong>복귀 유저</strong> 기존 저장기록 유지, 완료 수치 표시, 다음 마스터 목표 자동 안내.</p></div>:<div id="rg-release-detail" hidden/>}
   </section>
   <footer className="rg-footer"><span>PSI : ZERO DAY</span><span>RE:IGNITION · BUILD PEOPLE A SAFER TOMORROW</span><span>VETERAN EDITION · 2026.11</span></footer>
-  <nav className="rg-mobile-dock" aria-label="게임 빠른 실행">
+  {theme!=='cinematic'&&<nav className="rg-mobile-dock" aria-label="게임 빠른 실행">
    <button type="button" onClick={props.onGuard} disabled={!props.onGuard} aria-label="시그널 가드 바로 실행"><small>01 / DEFENSE</small><strong>시그널 가드</strong><span aria-hidden="true">↗</span></button>
    <button type="button" onClick={props.onWatch} disabled={!props.onWatch} aria-label="시그널 워치 바로 실행"><small>02 / ACTION</small><strong>시그널 워치</strong><span aria-hidden="true">↗</span></button>
-  </nav>
+  </nav>}
   {settings?<div ref={settingsDialog.dialogRef} onKeyDown={settingsDialog.onKeyDown} className="rg-settings-backdrop" role="presentation" onClick={()=>setSettings(false)}>
    <section role="dialog" aria-modal="true" aria-labelledby="rg-settings-title" className="rg-settings-panel" onClick={e=>e.stopPropagation()}>
     <header><h2 id="rg-settings-title">게임·화면 설정</h2><button ref={settingsDialog.closeRef} type="button" onClick={()=>setSettings(false)}>닫기 ×</button></header>

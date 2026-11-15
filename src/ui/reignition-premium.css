@@ -345,7 +345,7 @@
  .rg-home[data-reignition-concept=cinematic] .rg-hero-name{font-size:clamp(42px,6.4vw,80px)}
 }
 @media(max-width:800px) {
- .rg-home[data-reignition-concept=cinematic] {padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ .rg-home[data-reignition-concept=cinematic] {padding-bottom:env(safe-area-inset-bottom,0px)}
  .rg-home[data-reignition-concept=cinematic] .rg-hero {
   min-height:clamp(580px,82svh,710px)!important;
   padding:56px 23px 84px!important;
@@ -591,48 +591,21 @@
  .rg-home .rg-card-mastery-track i{transition:none}
 }
 
-/* AIRA V2 selected on 2026-11-09: dark high ponytail and magenta accents.
- * The source illustration has NO baked app controls: buttons remain native DOM.
- * CSS mask hides the tiny paper-cropped edge of the source scene on right.
- */
-.rg-home[data-reignition-concept=cinematic] .rg-aira-v2 {
- object-position:52% 18%;
- width:min(39vw,575px);height:112%;right:4%;bottom:-6%;
- filter:contrast(1.04) saturate(1.12) brightness(.95)
-  drop-shadow(-25px 12px 45px rgba(18,8,33,.65));
- opacity:1;
- -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 13%,#000 87%,transparent 100%),
-   linear-gradient(180deg,#000 0%,#000 79%,transparent 100%);
- mask-image:linear-gradient(90deg,transparent 0%,#000 13%,#000 87%,transparent 100%),
-   linear-gradient(180deg,#000 0%,#000 79%,transparent 100%);
-}
-@media (max-width:1100px){
- .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{
-  right:0;width:48%;height:104%;object-position:50% 12%
- }
-}
-@media (max-width:800px){
- .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{
-  top:-2%;bottom:auto;right:-7%;width:88%;height:73%;
-  object-position:50% 9%;opacity:.95
- }
-}
-@media (prefers-reduced-motion:reduce){
- .rg-home[data-reignition-concept=cinematic] .rg-aira-v2{animation:none;transform:none}
-}
-
 /* First-fold mission selection for the default Re:Ignition title. */
 .rg-home .rg-hero[data-hero-layout=mission-deck] {
  background:#0a1027;
 }
 .rg-home .rg-hero[data-hero-layout=mission-deck]:after {display:none}
 .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-shade {
- background:linear-gradient(90deg,#080d21 5%,#101731ee 36%,#14163345 70%,#11142a60),
-            radial-gradient(ellipse at 78% 32%,#743d844f,transparent 57%);
+ background:linear-gradient(90deg,#080e22ee 4%,#101b34df 32%,#14233b26 62%,transparent),
+            linear-gradient(0deg,#091223d9,transparent 40%);
 }
-.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-cinematic-rings {
- border-color:#aa86fa74;
- box-shadow:0 0 54px #8259ce30,inset 0 0 68px #6d77c72b;
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-cinematic-rings {display:none}
+.rg-home .rg-hero[data-hero-layout=mission-deck] .rg-silver-keyart {
+ height:100%;
+ transform:none;
+ filter:none;
+ object-position:69% 38%;
 }
 .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name {
  margin:0 0 14px;
@@ -685,7 +658,11 @@
 .rg-hero-mission:disabled {opacity:.4;cursor:default}
 @media(max-width:800px) {
  .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-shade {
-  background:linear-gradient(0deg,#090e22 17%,#10132c 44%,#1615311c 84%);
+  background:linear-gradient(0deg,#081222 9%,#091526f5 33%,#131d3c42 63%,transparent 82%);
+ }
+ .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-silver-keyart {
+  height:78%;
+  object-position:73% 29%;
  }
  .rg-home .rg-hero[data-hero-layout=mission-deck] .rg-hero-name small {margin-top:5px}
  .rg-hero-mission {min-height:54px}
