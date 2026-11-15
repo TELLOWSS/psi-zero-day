@@ -70,7 +70,7 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
  });
  it('walks across a shared world edge without jumping or bypassing exit controls',()=>{
   const s=new OmegaProtocolCombatSession(20261109,50,false,{
-   fieldTraversal:true,gateTransition:true,qaGateTravel:true,continuousFirstLink:true,
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,continuousOpening:true,
   });
   expect(s.interact().reason).toBe('OUT_OF_RANGE');
   const exit=s.field!.plan.exit;
@@ -98,10 +98,45 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
    positions.push(player.x+s.fieldWorldOffsetX);
   }
   expect(s.snapshot.gateTransit).toBeNull();
-  expect(s.crossingFirstPassage).toBe(false);
+  expect(s.crossingConnectedPassage).toBe(false);
   expect(player.x).toBe(s.field!.plan.entry.x);
   expect(player.y).toBe(s.field!.plan.entry.y);
   expect(positions.slice(1).every((x,i)=>x>=positions[i]!&&x-positions[i]!<20)).toBe(true);
+ });
+ it('holds at the second shared edge until a real supply card is selected',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,continuousOpening:true,
+  });
+  const player=s.engine.state.player;
+  for(let wave=1;wave<=2;wave++){
+   const {exit}=s.field!.plan;
+   player.x=exit.x-40;
+   player.y=exit.y;
+   expect(s.interact().reason).toBe('EXIT_OPENED');
+   advance(s,15);
+   if(wave===1)advance(s,14);
+  }
+  const worldX=()=>player.x+s.fieldWorldOffsetX;
+  const boundary=2*OMEGA_FIELD_WIDTH;
+  const exitY=s.field!.plan.exit.y;
+  expect(s.field!.plan.wave).toBe(2);
+  expect(s.run).toMatchObject({wave:3,phase:'reward',victories:2});
+  expect(s.run.offers).toHaveLength(3);
+  expect(worldX()).toBe(boundary);
+  advance(s,40);
+  expect(worldX()).toBe(boundary);
+  expect(player.y).toBe(exitY);
+  const card=s.run.offers[0]!;
+  s.selectUpgrade(card);
+  expect(s.run.owned[card]).toBe(1);
+  expect(s.field!.plan.wave).toBe(3);
+  expect(worldX()).toBe(boundary);
+  expect(player.y).toBe(exitY);
+  expect(s.snapshot.gateTransit).toMatchObject({phase:'arrive',opacity:0});
+  advance(s,14);
+  expect(s.snapshot.gateTransit).toBeNull();
+  expect(worldX()).toBe(boundary+s.field!.plan.entry.x);
+  expect(s.crossingConnectedPassage).toBe(false);
  });
  it('passes two actual exits consecutively, retaining mandatory run-only safe-room upgrade after the second',()=>{
   const s=new OmegaProtocolCombatSession(373737,50,false,{

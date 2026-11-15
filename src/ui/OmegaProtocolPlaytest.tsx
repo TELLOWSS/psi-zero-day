@@ -56,10 +56,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  // 3/4 field view is strictly visual: world XY hitboxes and Watch
  // movement are unchanged. Follow the projected hero and bound the map.
  const field=session.field;
- const passage=field&&field.plan.wave<=2?session.firstPassageFields:null;
+ const passage=field&&field.plan.wave<=3?session.connectedFields:null;
  const offset=session.fieldWorldOffsetX;
  const worldCamera=omegaQuarterViewCamera({x:state.player.x+offset,y:state.player.y},
-  ctx.canvas.width,ctx.canvas.height,cameraZoom,passage?2*WORLD_WIDTH:WORLD_WIDTH);
+  ctx.canvas.width,ctx.canvas.height,cameraZoom,(passage?.length??1)*WORLD_WIDTH);
  const camera=offset===0?worldCamera:{
   ...worldCamera,projectedOffsetX:worldCamera.projectedOffsetX+offset,
  };
@@ -85,27 +85,31 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(field){
   drawGround(field.plan);
   if(passage){
-   const adjacent=passage[field.plan.wave===1?1:0];
-   const seamLeft=WORLD_WIDTH+Math.min(0,worldCamera.skewX*WORLD_HEIGHT)-128;
-   const seamRight=WORLD_WIDTH+Math.max(0,worldCamera.skewX*WORLD_HEIGHT)+128;
    const viewLeft=-worldCamera.projectedOffsetX;
    const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
-   const adjacentVisible=field.plan.wave===1?viewRight>=seamLeft:viewLeft<=seamRight;
-   if(adjacentVisible){
-    ctx.save();
-    ctx.translate(field.plan.wave===1?WORLD_WIDTH:-WORLD_WIDTH,0);
-    drawGround(adjacent);
-    for(const obstacle of adjacent.obstacles)drawProp(adjacent,obstacle);
+   const skew=worldCamera.skewX*WORLD_HEIGHT;
+   for(const [index,neighbor] of passage.entries()){
+    const origin=index*WORLD_WIDTH;
+    if(neighbor.wave===field.plan.wave||
+       viewRight<origin+Math.min(0,skew)-128||
+       viewLeft>origin+WORLD_WIDTH+Math.max(0,skew)+128)continue;
+    ctx.save();ctx.translate(origin-offset,0);
+    drawGround(neighbor);
+    for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
     ctx.restore();
    }
 
-   const {exit}=passage[0];
-   const end=WORLD_WIDTH+passage[1].entry.x;
    ctx.save();ctx.translate(-offset,0);
-   ctx.fillStyle='#263c46';ctx.fillRect(exit.x,exit.y-36,end-exit.x,72);
+   ctx.fillStyle='#263c46';
    ctx.strokeStyle='#f5ba6388';ctx.lineWidth=3;ctx.setLineDash([22,16]);
-   ctx.beginPath();ctx.moveTo(exit.x,exit.y-36);ctx.lineTo(end,exit.y-36);
-   ctx.moveTo(exit.x,exit.y+36);ctx.lineTo(end,exit.y+36);ctx.stroke();
+   for(let index=0;index<passage.length-1;index++){
+    const {exit}=passage[index]!;
+    const start=index*WORLD_WIDTH+exit.x;
+    const end=(index+1)*WORLD_WIDTH+passage[index+1]!.entry.x;
+    ctx.fillRect(start,exit.y-36,end-start,72);
+    ctx.beginPath();ctx.moveTo(start,exit.y-36);ctx.lineTo(end,exit.y-36);
+    ctx.moveTo(start,exit.y+36);ctx.lineTo(end,exit.y+36);ctx.stroke();
+   }
    ctx.restore();
   }
   drawOmegaG3ParallaxArchitecture(ctx,passage?.[0]??field.plan,worldCamera,
@@ -127,7 +131,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   for(let y=0;y<=WORLD_HEIGHT;y+=70){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(WORLD_WIDTH,y);ctx.stroke();}
  }
  ctx.strokeStyle='#446377';ctx.lineWidth=14;
- ctx.strokeRect(14-offset,14,(passage?2:1)*WORLD_WIDTH-28,WORLD_HEIGHT-28);
+ ctx.strokeRect(14-offset,14,(passage?.length??1)*WORLD_WIDTH-28,WORLD_HEIGHT-28);
  const telegraph=session.snapshot.bossTelegraph;
  if(telegraph)drawOmegaBossTelegraph(ctx,telegraph,state.gameTime);
  // Native-only locked headings; unchanged Watch hitboxes/timers.
@@ -205,7 +209,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
    else if(item.kind==='console')drawOmegaMissionDevice(ctx,field.plan,field.progress,item.index,state.gameTime);
    else if(item.kind==='extraction'){
-    if(!session.crossingFirstPassage)drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
+    if(!session.crossingConnectedPassage)drawOmegaExtractionUnit(ctx,field.plan.exit,field.progress.exitUnlocked,state.gameTime);
    }
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
    else renderHero();
@@ -304,7 +308,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
  const legacyStageSnapshot=['reward','boss','finalBoss','objective','exit'].includes(qaMode??'');
  const session=new OmegaProtocolCombatSession(seed,50,false,{
   fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
-  continuousFirstLink:!gateWalk||seamWalk,
+  continuousOpening:!gateWalk||seamWalk,
  });
  if(!import.meta.env.DEV)return session;
  if(actBoundary!==null){
@@ -657,7 +661,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    // No actual displacement => do not animate a run cycle.
    const gait=gaitController.advance(
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
-    session.firstPassageFields&&session.plan.wave<=2?1:session.plan.wave,
+    session.connectedFields&&session.plan.wave<=3?1:session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
    const pose=facingController.advance(
     session.engine.state.gameTime,session.facing,fireCue,{
@@ -676,10 +680,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     // Purely visual: Watch XY, movement and dash physics are unchanged.
     const easing=dt>0?1-Math.exp(-Math.min(dt,.05)*3.8):0;
     cinematicZoom+=(target-cinematicZoom)*easing;
-    const passagePose=session.crossingFirstPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
+    const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
      finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
-    if(import.meta.env.DEV&&session.firstPassageFields&&arenaRef.current){
+    if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);
      dataset.omegaSeamCameraX=String(-renderedCamera.projectedOffsetX);
@@ -985,7 +989,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      </div>
     </div>
     <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
-    {snapshot.gateTransit&&!(session.firstPassageFields&&snapshot.gateTransit.link.fromWave===1)&&<div className="omega-protocol-gate-transit"
+    {snapshot.gateTransit&&!(session.connectedFields&&snapshot.gateTransit.link.fromWave<session.connectedFields.length)&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
       data-omega-passage-kind={snapshot.gateTransit.link.kind}
