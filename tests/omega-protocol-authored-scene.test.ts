@@ -1,5 +1,5 @@
 import {describe,it,expect,vi,afterAll} from 'vitest';
-import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
+import {omegaFieldNativeTerrain,omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaAuthoredAssetPaths,OMEGA_SECTOR01_ART_ROOT,OMEGA_SECTOR01_PROP_TYPES,
  omegaPrepareAuthoredScene,omegaDrawAuthoredFloor,omegaDrawAuthoredProp,
@@ -38,13 +38,16 @@ describe('OMEGA sector 01 real terrain-aligned art bridge',()=>{
   expect(ctx.drawImage).toHaveBeenCalledTimes(5);
   const calls=vi.mocked(ctx.drawImage).mock.calls;
   expect(calls[0]!.slice(1)).toEqual([0,0,1400,900]);
-  for(let i=0;i<plan.obstacles.length;i++){
-   const o=plan.obstacles[i]!;
-   const [,x,y,w,h]=calls[i+1]!;
-   expect(x).toBe(o.x-12);
-   expect(y).toBeLessThan(o.y);
-   expect(w).toBe(o.width+24);
-   expect(h).toBeGreaterThan(o.height);
+  for(const [index,solid] of omegaFieldNativeTerrain(plan).entries()){
+   const [,sx,sy,sw,sh,x,y,w,h]=calls[index+1]!;
+   expect(sx).toBeGreaterThan(0);
+   expect(sy).toBeGreaterThan(0);
+   expect(sx+sw).toBeLessThan(256);
+   expect(sy+sh).toBeLessThan(180);
+   expect(x).toBe(solid.x);
+   expect(y).toBeLessThan(solid.y);
+   expect(w).toBe(solid.width);
+   expect(y+h).toBe(solid.y+solid.height);
   }
   expect(JSON.stringify(plan)).toBe(original);
   expect(omegaDrawAuthoredFloor(ctx,omegaFieldPlan(20261108,4))).toBe(false);

@@ -86,17 +86,17 @@ export function drawOmegaM12StructureFacets(
  ctx.strokeStyle='rgba(174,222,229,.35)';ctx.lineWidth=2;
  ctx.beginPath();
  ctx.moveTo(x+4,top+12);ctx.lineTo(x+w-4,top+12);
- ctx.moveTo(x+w-5,top+12);ctx.lineTo(x+w-5,y+h+4);
+ ctx.moveTo(x+w-5,top+12);ctx.lineTo(x+w-5,y+h);
  ctx.stroke();
  // The broad unlit right face gives the existing SVG a visible side plane.
  ctx.fillStyle='rgba(4,15,29,.26)';
  ctx.beginPath();ctx.moveTo(x+w-16,top+14);ctx.lineTo(x+w-4,top+12);
- ctx.lineTo(x+w-4,y+h+4);ctx.lineTo(x+w-16,y+h-5);ctx.closePath();ctx.fill();
+ ctx.lineTo(x+w-4,y+h);ctx.lineTo(x+w-16,y+h-5);ctx.closePath();ctx.fill();
  if(o.kind==='scaffold'){
   ctx.lineWidth=2.4;ctx.strokeStyle='rgba(153,201,205,.66)';
   for(let n=0;n<3;n++){
    const bx=x+8+n*(w-16)/2;
-   ctx.beginPath();ctx.moveTo(bx,top+24);ctx.lineTo(bx+8,y+h+4);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(bx,top+24);ctx.lineTo(bx+8,y+h);ctx.stroke();
   }
   ctx.strokeStyle='rgba(247,198,120,.75)';ctx.lineWidth=3;
   ctx.beginPath();ctx.moveTo(x+8,top+40);ctx.lineTo(x+w-9,top+40);ctx.stroke();
