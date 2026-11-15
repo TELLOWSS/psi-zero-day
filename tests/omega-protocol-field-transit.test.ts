@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {omegaFieldPlan} from '../src/domain/omega-protocol-field';
+import {OMEGA_FIELD_WIDTH,omegaFieldPlan} from '../src/domain/omega-protocol-field';
 import {
  omegaGateTransitLink,omegaGateTransitStart,omegaGateTransitArrive,
  omegaGateTransitStep,omegaActBoundaryDock,
@@ -67,6 +67,41 @@ describe('M04 physically entered quarantine passage: deterministic real field ha
   advance(s,14);
   expect(s.snapshot.gateTransit).toBeNull();
   expect(s.run.phase).toBe('battle');
+ });
+ it('walks across a shared world edge without jumping or bypassing exit controls',()=>{
+  const s=new OmegaProtocolCombatSession(20261109,50,false,{
+   fieldTraversal:true,gateTransition:true,qaGateTravel:true,continuousFirstLink:true,
+  });
+  expect(s.interact().reason).toBe('OUT_OF_RANGE');
+  const exit=s.field!.plan.exit;
+  const player=s.engine.state.player;
+  player.x=exit.x-50;
+  player.y=exit.y-20;
+  expect(s.interact().reason).toBe('EXIT_OPENED');
+  expect(s.dash()).toBe(false);
+  const positions=[player.x];
+  for(let i=0;i<15;i++){
+   advance(s,1);
+   positions.push(player.x+s.fieldWorldOffsetX);
+  }
+  expect(s.run).toMatchObject({wave:2,victories:1,phase:'battle'});
+  expect(s.snapshot.gateTransit?.phase).toBe('arrive');
+  expect(player.x).toBe(0);
+  expect(player.y).toBe(exit.y);
+  expect(positions.at(-1)).toBe(OMEGA_FIELD_WIDTH);
+  s.pause();
+  advance(s,4);
+  expect(player.x).toBe(0);
+  s.resume();
+  for(let i=0;i<14;i++){
+   advance(s,1);
+   positions.push(player.x+s.fieldWorldOffsetX);
+  }
+  expect(s.snapshot.gateTransit).toBeNull();
+  expect(s.crossingFirstPassage).toBe(false);
+  expect(player.x).toBe(s.field!.plan.entry.x);
+  expect(player.y).toBe(s.field!.plan.entry.y);
+  expect(positions.slice(1).every((x,i)=>x>=positions[i]!&&x-positions[i]!<20)).toBe(true);
  });
  it('passes two actual exits consecutively, retaining mandatory run-only safe-room upgrade after the second',()=>{
   const s=new OmegaProtocolCombatSession(373737,50,false,{
