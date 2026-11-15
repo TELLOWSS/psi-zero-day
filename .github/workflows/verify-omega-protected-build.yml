@@ -1,0 +1,38 @@
+name: Verify protected OMEGA production-mode bundle
+on:
+  push:
+    branches: [qa/omega-protected-browser-preview-20261115]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build exactly as the protected Vercel preview
+        env:
+          VERCEL_ENV: preview
+          VERCEL_GIT_COMMIT_REF: qa/omega-protected-browser-preview-20261115
+        run: node -e 'require("node:child_process").execSync(require("./vercel.json").buildCommand,{stdio:"inherit"})'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Verify opening and lift in the production bundle
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: |
+          npx vite preview --host 127.0.0.1 --port 4173 --strictPort >/tmp/omega-protected.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/qa-omega-protected-build-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: omega-protected-build-screens
+          path: artifacts/omega-protected

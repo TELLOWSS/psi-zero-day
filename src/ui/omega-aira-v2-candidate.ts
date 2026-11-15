@@ -1,3 +1,4 @@
+import {OMEGA_PROTECTED_REVIEW} from './omega-protected-review';
 import {omegaFieldHeading,type OmegaActorView,type OmegaHeading} from './omega-protocol-actor-render';
 import {drawOmegaAiraV2WalkRig} from './omega-aira-v2-walk-rig';
 import {OmegaAiraV2WalkFrames} from './omega-aira-v2-walk-frames';
@@ -138,8 +139,8 @@ export function drawOmegaAiraV2Candidate(
   // posture transforms are NOT independent authored animation frames.
   const g5Review=typeof window!=='undefined'&&omegaG5DevRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
-  const g5iArtReview=typeof window!=='undefined'&&omegaG5iLabRequested(
-   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+  const g5iArtReview=OMEGA_PROTECTED_REVIEW||(typeof window!=='undefined'&&omegaG5iLabRequested(
+   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   const g5hRealHitReview=typeof window!=='undefined'&&omegaG5hRealHitLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   const g5gPoseStudy=g5hRealHitReview||(typeof window!=='undefined'&&omegaG5gLabRequested(
@@ -158,7 +159,7 @@ export function drawOmegaAiraV2Candidate(
   // Human screenshot review rejected this vector prototype as insufficient
   // fidelity: only the explicit second study flag may paint it in-game.
   if(g5Review&&g5VectorStudy&&omegaG5Art.drawSilverE(ctx,view,h))return true;
-  const g5cReview=g5dReview||g5eReview||(typeof window!=='undefined'&&omegaG5cLabRequested(
+  const g5cReview=OMEGA_PROTECTED_REVIEW||g5dReview||g5eReview||(typeof window!=='undefined'&&omegaG5cLabRequested(
    window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
   // ONLY after explicit verified-local-source opt-in, draw genuinely distinct
   // E WALK WebP frames in the live native player gait. This never sets the

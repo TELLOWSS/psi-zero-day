@@ -1,3 +1,4 @@
+import {OMEGA_PROTECTED_REVIEW} from './omega-protected-review';
 import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth,setEpisodeSaveHealth} from '../app/episode-save-health';
 import './shooting-entry.css';
 import './hub-unified.css';
@@ -266,6 +267,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
 
   if(inOmegaLab)return <Suspense fallback={<GameplayChunkFallback />}>
     <OmegaProtocolPlaytest onExit={()=>{
+      if(OMEGA_PROTECTED_REVIEW){
+        window.location.assign('https://psi-zero-day.vercel.app/?home=cinematic#reignition-missions');
+        return;
+      }
       const url=new URL(window.location.href);url.searchParams.delete('omegaLab');
       window.history.replaceState(null,'',url.pathname+url.search+url.hash);
       setInOmegaLab(false);

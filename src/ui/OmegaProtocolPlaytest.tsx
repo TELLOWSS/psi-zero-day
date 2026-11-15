@@ -1,3 +1,4 @@
+import {OMEGA_PROTECTED_REVIEW} from './omega-protected-review';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {readOmegaProtocolAccess} from '../app/omega-protocol-access';
 import {OmegaProtocolCombatSession,type OmegaCombatSnapshot} from '../engine/omega-protocol-combat';
@@ -194,7 +195,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaProtocolEnemy(ctx,h,state.gameTime,
    {finalBoss:Boolean(h.isStageBoss)&&session.plan.wave===15,
     zombie:session.zombieBrain(h.id)??undefined,
-    infectedReview:typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'),targetX:p.x});
+    infectedReview:OMEGA_PROTECTED_REVIEW||(typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')),targetX:p.x});
   ctx.restore();
  };
  const renderHero=()=>{
@@ -352,7 +353,9 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   ?new URLSearchParams(window.location.search).get('omegaQaState'):null;
  const actBoundary=(qaMode==='actBoundary6'?6:qaMode==='actBoundary9'?9:
   qaMode==='actBoundary12'?12:null);
- const liftWalk=qaMode==='connectedLift';
+ const liftTour=OMEGA_PROTECTED_REVIEW&&typeof window!=='undefined'&&
+  new URLSearchParams(window.location.search).get('omegaView')==='lift';
+ const liftWalk=qaMode==='connectedLift'||liftTour;
  const seamWalk=qaMode==='continuousLink'||liftWalk;
  const gateWalk=qaMode==='gateTravel'||actBoundary!==null||seamWalk;
  // Historical single-snapshot QA shortcuts expect synchronous stage jumps;
@@ -364,7 +367,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   continuousOpening:!gateWalk||seamWalk,
   qaGateTravelUntilWave:liftWalk?4:undefined,
  });
- if(!import.meta.env.DEV)return session;
+ if(!import.meta.env.DEV&&!liftTour)return session;
  if(actBoundary!==null||liftWalk){
   const targetWave=liftWalk?3:actBoundary!;
   // M04-C: DEV-only preroll BEFORE the interactive browser opens.
@@ -493,8 +496,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const g5bPainterlyReview=typeof window!=='undefined'&&omegaG5bLabRequested(
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
- const g5iArtLab=typeof window!=='undefined'&&omegaG5iLabRequested(
-  window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const g5iArtLab=OMEGA_PROTECTED_REVIEW||(typeof window!=='undefined'&&omegaG5iLabRequested(
+  window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
  const g5hRealHitLab=typeof window!=='undefined'&&omegaG5hRealHitLabRequested(
   window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
  const g5gSourcePoseLab=g5hRealHitLab||(typeof window!=='undefined'&&omegaG5gLabRequested(
@@ -512,7 +515,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const [g5iFeedback,setG5iFeedback]=useState('새로 그린 동쪽 사격·대시·피격 원화 WebP 12개를 선택하세요.');
  const [g5iPreviewOn,setG5iPreviewOn]=useState(false);
  const g5iImportEpoch=useRef(0);
- const infectedLab=typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
+ const infectedLab=OMEGA_PROTECTED_REVIEW||(typeof window!=='undefined'&&omegaInfectedLabRequested(window.location.search,import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1'));
  const [infectedStatus,setInfectedStatus]=useState<'idle'|'loading'|'ready'|'failed'>('idle');
  const [infectedMessage,setInfectedMessage]=useState('감염체 후보 16장과 앵커 JSON을 선택하세요.');
  const [infectedOn,setInfectedOn]=useState(false);
@@ -621,6 +624,35 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    setG5iStatus('ready');setG5iFeedback('와이드 12장 및 앵커 형식 확인 · 좌표 정확성과 작화는 시각 승인 전');
   }catch(error){if(epoch!==g5iImportEpoch.current)return;omegaG5iActionPreview.dispose();setG5iStatus('failed');setG5iFeedback(error instanceof Error?error.message:'앵커 검사 실패');}
  },[g5iArtLab]);
+ const [protectedArt,setProtectedArt]=useState<'loading'|'ready'|'failed'>('loading');
+ const reviewFailed=protectedArt==='failed'||silverPreviewStatus==='failed';
+ const reviewBlocked=OMEGA_PROTECTED_REVIEW&&(protectedArt!=='ready'||silverPreviewStatus!=='ready');
+ useEffect(()=>{
+  if(!OMEGA_PROTECTED_REVIEW)return;
+  let active=true;
+  void Promise.all([
+   omegaG5nFetchQaSources('aira'),
+   omegaG5nFetchQaSources('infected',fetch,true),
+  ]).then(async ([aira,infected])=>{
+   if(!active)return;
+   await Promise.all([importG5iWide(aira),importInfected(infected),omegaG5dImportRepoCandidates()]);
+   if(!active)return;
+   const walk=omegaG5cReview.activate(true);
+   const action=omegaG5iActionPreview.activate(true);
+   const enemies=omegaInfectedCandidateReview.activate(true);
+   if(!walk||!action||!enemies)throw Error('검수 원화 무결성 확인 실패');
+   setProtectedArt('ready');
+   setG5cStatus('ready');setG5cPreviewOn(true);
+   setG5iPreviewOn(true);setInfectedOn(true);
+  }).catch(()=>{if(active)setProtectedArt('failed');});
+  return ()=>{active=false;};
+ },[importG5iWide,importInfected]);
+ useEffect(()=>{
+  if(!OMEGA_PROTECTED_REVIEW)return;
+  if(reviewBlocked)session.pause();else session.resume();
+  setPaused(reviewBlocked);
+  setSnapshot(session.snapshot);
+ },[session,reviewBlocked]);
  // Source recovery is a manually triggered DEV-only action; no cloud API at
  // gameplay runtime, no automatic artwork swap, no user save mutations.
  const importRecoveredQaAira=useCallback(async()=>{
@@ -669,7 +701,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  },[g5dActualReview]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
-   if(visualAuditInputBlock.current)return;
+   if(visualAuditInputBlock.current||reviewBlocked)return;
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
    if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
@@ -683,7 +715,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    }
   };
   const onKeyUp=(e:KeyboardEvent)=>{
-   if(visualAuditInputBlock.current)return;
+   if(visualAuditInputBlock.current||reviewBlocked)return;
    if(validKeys.has(e.key)){keysRef.current.delete(e.key);e.preventDefault();}
   };
   const pauseOnBackground=()=>{
@@ -853,7 +885,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    window.removeEventListener('resize',scaleCanvas);
    document.removeEventListener('visibilitychange',onVisibility);
   };
- },[session]);
+ },[session,reviewBlocked]);
  // QA states are initialized synchronously in makeOmegaFieldSession().
  const setDirection=(pointerId:number,x:number,y:number)=>{
   pointerMoves.current.set(pointerId,{x,y});
@@ -941,6 +973,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-protocol-internal="true"
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
+  data-omega-protected-art={OMEGA_PROTECTED_REVIEW?(reviewFailed?'failed':reviewBlocked?'loading':'ready'):'off'}
   data-omega-silver-preview={silverPreviewStatus}
   data-omega-review-layout={silverPreviewRequested?'true':'false'}
   data-omega-infected-layout={infectedLab?'true':'false'}
@@ -990,7 +1023,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    </div>
    <button type="button" className="omega-protocol-exit" onClick={onExit} aria-label="내부 시험 종료">나가기 <span aria-hidden="true">×</span></button>
   </header>
-  {infectedLab&&<aside className="omega-infected-review-bar" role="status">
+  {OMEGA_PROTECTED_REVIEW&&<aside className="omega-silver-review-bar" role="status">
+   {reviewBlocked?<><strong>{reviewFailed?'검수 원화를 확인하지 못했습니다.':'최신 검수 원화 확인 중'}</strong>
+    {reviewFailed&&<button type="button" onClick={()=>window.location.reload()}>다시 불러오기</button>}</>
+   :<><strong>은백색 AIRA · 감염체 4종 · 1–4구역 연결 전장 검수</strong>
+    <a href="?omegaLab=1&amp;omegaView=lift">3→4구역 리프트·상부 데크 확인</a>
+    <a href="?omegaLab=1">1구역부터 플레이</a></>}
+  </aside>}
+  {infectedLab&&!OMEGA_PROTECTED_REVIEW&&<aside className="omega-infected-review-bar" role="status">
     <strong>감염체 4종 후보 · 개발 검수 전용</strong>
     {import.meta.env.DEV&&<button type="button" data-omega-g5n-load="infected"
      onClick={()=>{void importRecoveredQaInfected();}}
@@ -1003,7 +1043,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     <button type="button" data-omega-g5k-open="infected" disabled={infectedStatus!=='ready'}
      onClick={()=>openVisualAudit('infected')}>16장 크기·접지 비교</button>
    </aside>}
-  {silverPreviewRequested&&<aside className="omega-silver-review-bar" role="status">
+  {silverPreviewRequested&&!OMEGA_PROTECTED_REVIEW&&<aside className="omega-silver-review-bar" role="status">
     <strong>{g5iArtLab?'AIRA E 사격·대시·피격 신규 원화 12장 로컬 실게임 대조 · 아트 승인 전':g5hRealHitLab?'AIRA E 감염체 실제 피격·원본 HIT 포즈 검수 · 신규 도색 아님':g5gSourcePoseLab?'AIRA E 액션 실제 몸체 4자세 원본 연결 검수 · 독립 도색 아님':g5eNativeActionLab?'AIRA E 사격·대시·피격 엔진 연출 검수 (신규 도색 원화 아님)':g5dActualReview?'은백색 AIRA · 실제 E 걷기 원화 4장 개발 검수':g5cArtReview?'은백색 AIRA · 독립 E 걷기 원화 4장 실게임 검수':g5bPainterlyReview?'은백색 AIRA 원본 유지 · 신규 4장 제작·승인 대기':g5VectorStudy?'AIRA E·감염체 원화 6장 비교 · 시각 품질 미합격':g5ArtLab?'은백색 AIRA 원본 유지 · 원화 비교 별도':g4SilverLab?'은백색 AIRA · 원본 8방향 게임 검수':'은백색 AIRA · 로컬 원화 시험'}</strong>
     <span>{silverPreviewStatus==='ready'
      ?(g5iArtLab?'로컬 후보 12장 검수 후 네이티브 동작에 임시 적용 · 와이드 앵커와 작화는 별도 육안 검증':g5hRealHitLab?'실제 감염체가 공격하여 플레이어 HP가 감소할 때만 HIT 표시 · 신규 상업 원화 승인 0':g5gSourcePoseLab?'SHA-256 고정 E 걷기 원본 4장 몸체 자세를 실제 전투 이벤트에 사용 · 신작 독립 원화 0':g5eNativeActionLab?'실제 엔진 이벤트의 원본 AIRA 사격·대시·피격 연출 · 160원화/320마스크 미승인':g5dActualReview?'실제 GitHub 4개 WebP 원화 후보 · 원본 8방향 기본 유지 · 아트 승인 미완':g5cArtReview?'원본 8방향 고정 · 외부 API 없음 · 160원화/320마스크 미승인':g5bPainterlyReview?'원본 8방향 검증 · 독립 페인터리 E 4장 미제작 · 기존 캐릭터 유지':g5VectorStudy?'비교용 별도 동작 6장 · 기존 AIRA 대비 그래픽 저하로 미승인 · 전체160/320 미완':g5ArtLab?'원본 8방향 검증·기존 주인공 원화 유지·독립 동작 원화 검수 별도':'원화 8개 SHA-256 확인 · 실제 Watch 엔진 화면에 표시 · 160프레임 및 마스크 미완')
@@ -1054,7 +1094,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    </aside>}
   {visualAudit&&visualFrames.length>0&&<OmegaCandidateArtAudit mode={visualAudit}
    cards={visualFrames} onClose={closeVisualAudit}/>}
-  <section className="omega-protocol-stage" aria-label="OMEGA PROTOCOL 내부 전투 시험">
+  <section className="omega-protocol-stage" inert={reviewBlocked} aria-label="OMEGA PROTOCOL 내부 전투 시험">
    <div ref={arenaRef} className="omega-protocol-arena" data-omega-phase={snapshot.run.phase}
      data-omega-qa-mode={combatProbe?.mode}
      data-omega-qa-provenance={combatProbe?'dev-fixture-genuine-engine':undefined}
@@ -1310,7 +1350,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     </div>}
    </div>
   </section>
-  <footer className="omega-protocol-bottom-toolbar">
+  <footer className="omega-protocol-bottom-toolbar" inert={reviewBlocked}>
    <div className="omega-protocol-run-tools">
     <button type="button" className="omega-protocol-control-switch"
      aria-pressed={classicPad}

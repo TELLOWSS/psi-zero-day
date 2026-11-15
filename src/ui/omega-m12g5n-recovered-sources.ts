@@ -1,3 +1,4 @@
+import {OMEGA_PROTECTED_REVIEW} from './omega-protected-review';
 import {OMEGA_G5I_FILE_NAMES} from './omega-protocol-m12g5i-action-art';
 import {OMEGA_INFECTED_FILES} from './omega-infected-candidate-review';
 
@@ -31,11 +32,10 @@ export const OMEGA_STRIDE_REPAINT_FILES=['basic-2.webp','armored-2.webp'] as con
 export async function omegaG5nFetchQaSources(
  kind:OmegaG5nKind,fetcher:typeof fetch=fetch,repaint=false,
 ):Promise<readonly File[]>{
- if(!import.meta.env.DEV)throw Error('Recovered art is only for Vite DEV review');
+ if(!import.meta.env.DEV&&!OMEGA_PROTECTED_REVIEW)throw Error('Recovered art is only for an isolated review build');
  const spec=OMEGA_G5N_RECOVERED_ART[kind];
- const files:File[]=[];
  const required=[...spec.names,spec.anchor];
- for(const name of required){
+ return Promise.all(required.map(async name=>{
   const alternate=kind==='infected'&&repaint&&
    (name===spec.anchor||OMEGA_STRIDE_REPAINT_FILES.some(file=>file===name));
   const url=(alternate?OMEGA_STRIDE_REPAINT_DIR:spec.dir)+'/'+name;
@@ -52,9 +52,6 @@ export async function omegaG5nFetchQaSources(
     String.fromCharCode(...u8.subarray(8,12))!=='WEBP')
      throw Error('Recovered source is not a WebP: '+name);
   }
-  files.push(new File([bytes],name,{type:isJson?'application/json':'image/webp'}));
- }
- // These files still pass the strict existing SHA / alpha / anchor importers.
- // Merely fetching a file never toggles the current game art.
- return files;
+  return new File([bytes],name,{type:isJson?'application/json':'image/webp'});
+ }));
 }
