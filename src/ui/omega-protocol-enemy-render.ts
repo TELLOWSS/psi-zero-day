@@ -2,6 +2,7 @@ import type {Hazard} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
 import {omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {omegaInfectedCandidateReview} from './omega-infected-candidate-review';
+import {drawOmegaAuthoredHazardOrBoss} from './omega-protocol-entity-art';
 
 /**
  * Wave-15-only original POWER WARDEN silhouette. This is authored technical
@@ -162,6 +163,8 @@ export function drawOmegaProtocolEnemy(
   // native telegraph above, all real health bars, and original other species.
   if(!(options.infectedReview&&options.zombie&&omegaInfectedCandidateReview.draw(ctx,h,options.zombie,time,options.targetX??h.x))&&!(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)))
    drawOmegaHelmetZombie(ctx,h,time,options.zombie);
+ }else if(drawOmegaAuthoredHazardOrBoss(ctx,h,time,Boolean(options.finalBoss))){
+  // Authored 3/4 isometric entity or boss sprite drawn above.
  }else if(h.type==='RUNAWAY_CART'){
   ctx.fillStyle='#39485a';ctx.fillRect(-28,-25,58,24);
   ctx.strokeStyle='#ffce73';ctx.lineWidth=4;ctx.strokeRect(-27,-25,54,24);
@@ -214,9 +217,22 @@ export function drawOmegaProtocolEnemy(
   ctx.beginPath();ctx.arc(0,-54,43,-Math.PI*.9,Math.PI*.2);ctx.stroke();
  }
  if((h.hitFlashTimer??0)>0){
-  ctx.globalAlpha=.34;ctx.fillStyle='#fff8df';
-  ctx.fillRect(boss?-60:-28,boss?-115:-45,boss?120:56,boss?120:48);
-  ctx.globalAlpha=1;
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  const flashY=boss?-58:-28;
+  const flashR=boss?56:28;
+  const flashGrad=ctx.createRadialGradient?.(0,flashY,4,0,flashY,flashR);
+  if(flashGrad&&typeof flashGrad.addColorStop==='function'){
+   flashGrad.addColorStop(0,'rgba(255,250,232,0.52)');
+   flashGrad.addColorStop(0.5,'rgba(136,236,255,0.28)');
+   flashGrad.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=flashGrad;
+  }else{
+   ctx.globalAlpha=.34;
+   ctx.fillStyle='#fff8df';
+  }
+  ctx.beginPath();ctx.arc(0,flashY,flashR,0,Math.PI*2);ctx.fill();
+  ctx.restore();
  }
  ctx.fillStyle='#0b1423';ctx.fillRect(boss?-45:-27,boss?-125:-55,boss?90:54,6);
  ctx.fillStyle=boss?'#ffa2c7':'#8df5d4';

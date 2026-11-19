@@ -47,12 +47,25 @@ export function drawOmegaDashEnergy(
  for(const echo of echoes){
   const opacity=omegaDashEchoOpacity(echo,now);
   if(opacity<=0)continue;
-  ctx.save();ctx.translate(echo.x,echo.y);
-  ctx.globalAlpha=opacity;
-  ctx.fillStyle='#d17ef0';ctx.strokeStyle='#8de6ff';
-  ctx.lineWidth=3;ctx.shadowColor='#ef9dff';ctx.shadowBlur=10;
-  ctx.beginPath();ctx.ellipse(0,0,37,13,0,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.ellipse(0,0,28,8,0,0,Math.PI*2);ctx.stroke();
+  const angle=Math.atan2(echo.facingY||0,echo.facingX||1);
+  ctx.save();
+  ctx.translate(echo.x,echo.y);
+  ctx.rotate(angle);
+  ctx.globalCompositeOperation='lighter';
+  const aura=ctx.createRadialGradient?.(-6,0,2,-6,0,42);
+  if(aura&&typeof aura.addColorStop==='function'){
+   aura.addColorStop(0,`rgba(164,244,255,${(opacity*1.2).toFixed(3)})`);
+   aura.addColorStop(0.45,`rgba(196,118,255,${(opacity*0.72).toFixed(3)})`);
+   aura.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=aura;
+  }else{
+   ctx.globalAlpha=opacity;
+   ctx.fillStyle='#a4f4ff';
+  }
+  ctx.beginPath();ctx.ellipse(-6,0,40,12,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=`rgba(141,230,255,${(opacity*1.35).toFixed(3)})`;
+  ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.ellipse(2,0,28,7,0,0,Math.PI*2);ctx.stroke();
   ctx.restore();
  }
 }
@@ -68,13 +81,16 @@ export function drawOmegaGroundedSplash(
  for(const contact of contacts){
   if(!contact.landed||!finite(contact.x)||!finite(contact.y))continue;
   ctx.save();ctx.translate(contact.x,contact.y);
-  ctx.strokeStyle='#9aeaf4';ctx.fillStyle='#d0f6fd';
-  ctx.globalAlpha=.68;ctx.lineWidth=2;
-  ctx.beginPath();ctx.ellipse(0,2,21,6,0,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='rgba(208,242,255,0.48)';
+  ctx.fillStyle='rgba(232,248,255,0.62)';
+  ctx.lineWidth=1.1;
+  ctx.beginPath();ctx.ellipse(0,2,16,5,0,0,Math.PI*2);ctx.stroke();
   for(const side of [-1,1]){
-   ctx.beginPath();ctx.moveTo(side*12,-2);ctx.lineTo(side*20,-10);
-   ctx.lineTo(side*25,-8);ctx.stroke();
-   ctx.beginPath();ctx.arc(side*26,-11,1.8,0,Math.PI*2);ctx.fill();
+   ctx.beginPath();
+   ctx.moveTo(side*8,0);
+   ctx.quadraticCurveTo(side*15,-7,side*19,-4);
+   ctx.stroke();
+   ctx.beginPath();ctx.arc(side*20,-5,1.2,0,Math.PI*2);ctx.fill();
   }
   ctx.restore();
  }

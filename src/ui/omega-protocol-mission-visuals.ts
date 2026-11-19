@@ -1,4 +1,5 @@
 import type {OmegaFieldPlan,OmegaFieldProgress,OmegaFieldPoint} from '../domain/omega-protocol-field';
+import {drawOmegaAuthoredExtractionGate,drawOmegaAuthoredMissionConsole} from './omega-protocol-entity-art';
 
 /** Actual 3/4 mission-prop artwork, rendered at native real mission XY.
  * Not a collider: the Watch mission interaction radius and player navigation
@@ -24,6 +25,7 @@ export function drawOmegaMissionDevice(
 ):void{
  const step=plan.event.steps[index];
  if(!step||!Number.isFinite(seconds))return;
+ if(drawOmegaAuthoredMissionConsole(ctx,plan,progress,index,seconds))return;
  const state=omegaDeviceState(progress,index);
  const color=finish[state],pulse=.65+.35*Math.sin(seconds*4+index);
  const active=state==='active';
@@ -93,6 +95,7 @@ export function drawOmegaExtractionUnit(
  ctx:CanvasRenderingContext2D,point:OmegaFieldPoint,unlocked:boolean,seconds:number,
 ):void {
  if(!Number.isFinite(seconds))return;
+ if(drawOmegaAuthoredExtractionGate(ctx,point,unlocked,seconds))return;
  ctx.save();ctx.translate(point.x,point.y);
  const color=unlocked?'#70f0bd':'#ffb87a';
  const blink=.6+.4*Math.sin(seconds*4);

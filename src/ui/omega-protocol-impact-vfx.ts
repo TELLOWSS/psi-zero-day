@@ -1,4 +1,5 @@
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
+import {drawOmegaAuthoredImpactBurst} from './omega-protocol-entity-art';
 
 export interface OmegaImpactFx{
  readonly x:number;
@@ -53,6 +54,7 @@ export function drawOmegaImpactFx(
  for(const e of effects){
   if(e.until<=gameTime||e.start>gameTime)continue;
   const age=clamp((gameTime-e.start)/OMEGA_IMPACT_FX_DURATION,0,1);
+  if(drawOmegaAuthoredImpactBurst(ctx,e,age))continue;
   const opacity=(1-age)**1.6;
   const warm=e.critical?'#ffe6a6':e.blocked?'#ffad76':'#8cfaf2';
   ctx.save();

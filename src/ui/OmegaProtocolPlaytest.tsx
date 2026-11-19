@@ -56,6 +56,7 @@ import {
 import {
  omegaPrepareVfxAndPropArt,drawOmegaAuthored3DProp,drawOmegaPaintedBladeSlash,
 } from './omega-protocol-vfx-art';
+import {omegaPrepareEntityArt} from './omega-protocol-entity-art';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -843,6 +844,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   omegaPrepareAuthoredScene();
   omegaPrepareEnvArt();
   omegaPrepareVfxAndPropArt();
+  omegaPrepareEntityArt();
   userApprovedAiraV2.prepare();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
