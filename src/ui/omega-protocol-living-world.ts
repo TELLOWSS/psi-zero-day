@@ -142,22 +142,31 @@ export function drawOmegaLivingGround(
  const theme=omega3DSectorTheme(plan.sector);
  ctx.save();
 
- // 1. Expanding concentric raindrop ripples in wet puddles (Sectors 1, 3, 4).
+ // 1. Delicate silver-white raindrop micro-ripples & splash crowns in puddles (Sectors 1, 3, 4).
  if(plan.sector===1||plan.sector===3||plan.sector===4){
   const count=Math.min(budget.puddles,WET_PUDDLES.length);
   for(let i=0;i<count;i++){
    const [px,py,rx,ry]=WET_PUDDLES[i]!;
-   const cycle=((seconds*0.78+i*0.37)%1);
-   const alpha=(1-cycle)*0.34;
-   ctx.strokeStyle=`rgba(${theme.fillRgb},${alpha.toFixed(3)})`;
-   ctx.lineWidth=1.2;
+   const cycle=(seconds*1.15+i*0.37)%1;
+   const alpha=(1-cycle)*0.26;
+   const cx=px+Math.sin(i*3.1)*rx*0.25;
+   const cy=py+Math.cos(i*2.3)*ry*0.2;
+   const ringR=3+Math.min(11,rx*0.18)*cycle;
+   ctx.strokeStyle=`rgba(218,236,252,${alpha.toFixed(3)})`;
+   ctx.lineWidth=0.85;
    ctx.beginPath();
-   ctx.ellipse(
-    px+Math.sin(i*3.1)*rx*0.25,
-    py+Math.cos(i*2.3)*ry*0.2,
-    (8+rx*0.42*cycle),(2.5+ry*0.38*cycle),0,0,Math.PI*2,
-   );
+   ctx.ellipse(cx,cy,ringR,ringR*0.36,0,0,Math.PI*2);
    ctx.stroke();
+   // Brief tiny V-shaped splash crown at droplet impact moment (cycle < 0.22).
+   if(cycle<0.22){
+    const crownFade=(1-cycle/0.22)*0.42;
+    const h=2+cycle*10;
+    ctx.strokeStyle=`rgba(236,246,255,${crownFade.toFixed(3)})`;
+    ctx.lineWidth=0.85;
+    ctx.beginPath();
+    ctx.moveTo(cx-2.4,cy-h);ctx.lineTo(cx,cy);ctx.lineTo(cx+2.4,cy-h);
+    ctx.stroke();
+   }
   }
  }
 
@@ -202,6 +211,7 @@ export function drawOmegaLivingProp(
  player:OmegaFieldPoint,
  seconds:number,
  budget:Omega3DBudget,
+ authoredArt=false,
 ):void {
  if(!Number.isFinite(seconds)||!Number.isFinite(player.x)||!Number.isFinite(player.y)||
     !plan.obstacles.includes(obstacle))
@@ -214,6 +224,60 @@ export function drawOmegaLivingProp(
  const cx=x+w*0.5,cy=y+h*0.5;
 
  ctx.save();
+
+ if(authoredArt){
+  // Subtle living volumetric atmosphere ONLY (zero geometric bars/lines over painted 3D artwork).
+  const dx=player.x-cx,dy=player.y-cy;
+  const dist=Math.hypot(dx,dy);
+  if(dist<280){
+   const strength=(1-dist/280)*0.16;
+   const rimX=cx+dx*0.18;
+   const rimY=cy-rise*0.45+dy*0.12;
+   const heroRim=ctx.createRadialGradient(rimX,rimY,4,rimX,rimY,Math.max(w,h)*0.65);
+   heroRim.addColorStop(0,`rgba(${theme.fillRgb},${strength.toFixed(3)})`);
+   heroRim.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.globalCompositeOperation='lighter';
+   ctx.fillStyle=heroRim;
+   ctx.beginPath();ctx.arc(rimX,rimY,Math.max(w,h)*0.65,0,Math.PI*2);ctx.fill();
+   ctx.globalCompositeOperation='source-over';
+  }
+
+  if(kind==='machine'){
+   const puffCount=budget.tier==='mobile'?2:3;
+   const ventX=x+w*0.36,ventY=top-4;
+   for(let p=0;p<puffCount;p++){
+    const life=(seconds*0.62+p/puffCount+x*0.003)%1;
+    const px=ventX+Math.sin(life*5.5+p)*9;
+    const py=ventY-life*42;
+    const pr=8+life*14;
+    const mist=ctx.createRadialGradient(px,py,1,px,py,pr);
+    mist.addColorStop(0,`rgba(204,238,248,${((1-life)*0.14).toFixed(3)})`);
+    mist.addColorStop(1,'rgba(204,238,248,0)');
+    ctx.fillStyle=mist;
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);ctx.fill();
+   }
+  }else if(kind==='scaffold'){
+   const glow=0.22+0.12*Math.sin(seconds*3.2+x*0.02);
+   const beacon=ctx.createRadialGradient(cx+w*0.06,top-12,2,cx+w*0.06,top-12,28);
+   beacon.addColorStop(0,`rgba(255,188,88,${glow.toFixed(3)})`);
+   beacon.addColorStop(1,'rgba(255,188,88,0)');
+   ctx.globalCompositeOperation='lighter';
+   ctx.fillStyle=beacon;
+   ctx.beginPath();ctx.arc(cx+w*0.06,top-12,28,0,Math.PI*2);ctx.fill();
+  }else if(kind==='container'||kind==='barrier'){
+   const pulse=0.16+0.10*Math.sin(seconds*3.8+x*0.02);
+   const glowRgb=kind==='barrier'?'255,176,72':theme.keyRgb;
+   const halo=ctx.createRadialGradient(cx,cy-rise*0.28,2,cx,cy-rise*0.28,w*0.36);
+   halo.addColorStop(0,`rgba(${glowRgb},${pulse.toFixed(3)})`);
+   halo.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.globalCompositeOperation='lighter';
+   ctx.fillStyle=halo;
+   ctx.beginPath();ctx.arc(cx,cy-rise*0.28,w*0.36,0,Math.PI*2);ctx.fill();
+  }
+
+  ctx.restore();
+  return;
+ }
 
  // 1. Dynamic Hero Torchlight Rim Response on obstacle edges nearest AIRA.
  const dx=player.x-cx,dy=player.y-cy;

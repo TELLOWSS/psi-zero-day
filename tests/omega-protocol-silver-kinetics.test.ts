@@ -1,8 +1,11 @@
 import {describe,expect,it} from 'vitest';
+import {OMEGA_QUARTER_VIEW} from '../src/domain/omega-protocol-field';
 import {OMEGA_DIRECTIONS,type OmegaHeading} from '../src/ui/omega-protocol-actor-render';
 import {
- OmegaMotionSmoother,drawOmegaSilverKineticActor,
- drawOmegaEnhancedWideMuzzle,drawOmegaBladeWorldSlash,
+ OmegaMotionSmoother,OmegaBallisticTracerTracker,
+ omegaSilverLocalMuzzle,omegaWorldPointFromUprightOffset,
+ drawOmegaSilverKineticActor,drawOmegaEnhancedWideMuzzle,
+ drawOmegaBallisticProjectile,drawOmegaBladeWorldSlash,
 } from '../src/ui/omega-protocol-silver-kinetics';
 
 const VECTORS:Readonly<Record<OmegaHeading,readonly [number,number]>>={
@@ -56,7 +59,7 @@ describe('Fluid silver AIRA 8-way walk, recoil gunplay, and 3-hit sword combo ki
   }
  });
 
- it('orders firearm and plasma muzzle BEHIND rear headings (N) and IN FRONT of front/side (S)',()=>{
+ it('orders additive muzzle flash BEHIND rear heading (N) and IN FRONT of S with zero vector fillRect guns',()=>{
   const dummyImage={} as HTMLImageElement;
   const run=(heading:OmegaHeading)=>{
    const [fx,fy]=VECTORS[heading];
@@ -69,16 +72,18 @@ describe('Fluid silver AIRA 8-way walk, recoil gunplay, and 3-hit sword combo ki
   };
   const back=run('N');
   const front=run('S');
-  const backFirstGun=back.findIndex(e=>e.name==='createLinearGradient');
+  expect(back.some(e=>e.name==='fillRect')).toBe(false);
+  expect(front.some(e=>e.name==='fillRect')).toBe(false);
+  const backFirstGun=back.findIndex(e=>e.name==='createRadialGradient');
   const backFirstBody=back.findIndex(e=>e.name==='drawImage');
   const frontLastBody=front.map(e=>e.name).lastIndexOf('drawImage');
-  const frontGun=front.findIndex(e=>e.name==='createLinearGradient');
+  const frontGun=front.findIndex(e=>e.name==='createRadialGradient');
   expect(backFirstGun).toBeGreaterThanOrEqual(0);
   expect(backFirstGun).toBeLessThan(backFirstBody);
   expect(frontGun).toBeGreaterThan(frontLastBody);
  });
 
- it('renders 3-hit energy katana hold, dash afterimages, wide muzzle flare, and world crescent slash',()=>{
+ it('renders 3-hit slash pose without cartoon fillRect blades, dash afterimages, wide muzzle flare, and world slash',()=>{
   const dummyImage={} as HTMLImageElement;
   for(const combo of [1,2,3] as const){
    const {ctx,events}=recorder();
@@ -87,7 +92,8 @@ describe('Fluid silver AIRA 8-way walk, recoil gunplay, and 3-hit sword combo ki
     bladeAge:0.09,bladeCombo:combo,bladeFacingX:1,bladeFacingY:0.2,bladeHits:2,
    },120);
    expect(ok).toBe(true);
-   expect(events.some(e=>e.name==='createLinearGradient')).toBe(true);
+   expect(events.some(e=>e.name==='fillRect')).toBe(false);
+   expect(events.some(e=>e.name==='createRadialGradient')).toBe(true);
   }
   const {ctx:dashCtx,events:dashEvents}=recorder();
   drawOmegaSilverKineticActor(dashCtx,dummyImage,'E',{
@@ -98,7 +104,6 @@ describe('Fluid silver AIRA 8-way walk, recoil gunplay, and 3-hit sword combo ki
   const {ctx:mCtx,events:mOps}=recorder();
   drawOmegaEnhancedWideMuzzle(mCtx,35,-70,128,0.02,1,0);
   expect(mOps.some(e=>e.name==='createRadialGradient')).toBe(true);
-  expect(mOps.some(e=>e.name==='ellipse')).toBe(true);
 
   const {ctx:sCtx,events:sOps}=recorder();
   drawOmegaBladeWorldSlash(sCtx,{
@@ -112,5 +117,37 @@ describe('Fluid silver AIRA 8-way walk, recoil gunplay, and 3-hit sword combo ki
    time:10,combo:1,hits:0,totalDamage:15,x:400,y:450,facingX:1,facingY:0,
   },10.5);
   expect(expiredOps).toHaveLength(0);
+ });
+
+ it('maps all 8 muzzle barrel anchors into world coords and tracks barrel-to-chest tracer elevation',()=>{
+  for(const heading of OMEGA_DIRECTIONS){
+   const local=omegaSilverLocalMuzzle(heading,118);
+   expect(Number.isFinite(local.x)).toBe(true);
+   expect(Number.isFinite(local.y)).toBe(true);
+   expect(local.rear).toBe(heading==='N');
+  }
+  const muzzleWorld=omegaWorldPointFromUprightOffset({x:500,y:400},34.8,-71.4,OMEGA_QUARTER_VIEW);
+  expect(muzzleWorld.x).toBeCloseTo(500+34.8-(-0.22/0.78)*(-71.4),4);
+  expect(muzzleWorld.y).toBeCloseTo(400-71.4/0.78,4);
+
+  const tracker=new OmegaBallisticTracerTracker();
+  tracker.sync([{id:'p1',x:500,y:400}],muzzleWorld,1.0);
+  const atSpawn=tracker.resolveVisual({id:'p1',x:500,y:400},OMEGA_QUARTER_VIEW,1.0);
+  expect(atSpawn.visualX).toBeCloseTo(muzzleWorld.x,3);
+  expect(atSpawn.visualY).toBeCloseTo(muzzleWorld.y,3);
+
+  const cruising=tracker.resolveVisual({id:'p1',x:620,y:400},OMEGA_QUARTER_VIEW,1.15);
+  expect(cruising.groundX).toBe(620);
+  expect(cruising.groundY).toBe(400);
+  expect(cruising.visualY).toBeCloseTo(400-48/OMEGA_QUARTER_VIEW.groundYScale,2);
+
+  const {ctx:bCtx,events:bEvents}=recorder();
+  drawOmegaBallisticProjectile(bCtx,atSpawn,6,600,0,false);
+  expect(bEvents.some(e=>e.name==='ellipse')).toBe(true);
+  expect(bEvents.some(e=>e.name==='createLinearGradient')).toBe(true);
+
+  tracker.sync([],muzzleWorld,1.2);
+  const pruned=tracker.resolveVisual({id:'p1',x:620,y:400},OMEGA_QUARTER_VIEW,1.2);
+  expect(pruned.age).toBe(1);
  });
 });

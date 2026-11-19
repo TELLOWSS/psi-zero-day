@@ -18,7 +18,7 @@ import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {omegaInfectedCandidateReview,omegaInfectedLabRequested,omegaInfectedSoloKind} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
 import {omegaCombatProbeMode,omegaSetupCombatProbe,type OmegaCombatProbeFixture} from './omega-combat-browser-probe';
-import {drawOmegaProtocolActor} from './omega-protocol-actor-render';
+import {drawOmegaProtocolActor,omegaFieldHeading} from './omega-protocol-actor-render';
 import {OmegaAiraV2CandidateImages,drawOmegaAiraV2Candidate} from './omega-aira-v2-candidate';
 import {omegaLoadSilverPreview,omegaLoadSilverRepoReview,omegaSilverPreviewEnabled,type OmegaSilverPreviewSession} from './omega-canonical-local-preview';
 import {omegaSceneBudget,drawOmegaSectorOneActorLight,drawOmegaSectorOneAir,drawOmegaSectorOneGrade} from './omega-protocol-sector-one-scene';
@@ -44,12 +44,18 @@ import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega
 import {omegaAdvanceDashEchoes,drawOmegaDashEnergy,drawOmegaGroundedSplash,type OmegaDashEcho} from './omega-protocol-dash-visuals';
 import {
  omega3DBudget,drawOmega3DBackdrop,drawOmega3DGroundSurface,drawOmega3DPropRelief,
- drawOmega3DActorLighting,drawOmega3DOcclusionGuide,drawOmega3DProjectile,
+ drawOmega3DActorLighting,drawOmega3DOcclusionGuide,
  drawOmega3DForegroundAtmosphere,
 } from './omega-protocol-atmosphere-3d';
 import {omegaPrepareEnvArt,drawOmegaPaintedVista,drawOmegaPaintedFloor} from './omega-protocol-env-art';
 import {drawOmegaLivingBackdrop,drawOmegaLivingGround,drawOmegaLivingProp} from './omega-protocol-living-world';
-import {OmegaMotionSmoother,drawOmegaBladeWorldSlash,type OmegaSmoothedVelocity} from './omega-protocol-silver-kinetics';
+import {
+ OmegaMotionSmoother,omegaSilverLocalMuzzle,omegaWorldPointFromUprightOffset,
+ OmegaBallisticTracerTracker,drawOmegaBallisticProjectile,type OmegaSmoothedVelocity,
+} from './omega-protocol-silver-kinetics';
+import {
+ omegaPrepareVfxAndPropArt,drawOmegaAuthored3DProp,drawOmegaPaintedBladeSlash,
+} from './omega-protocol-vfx-art';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -62,7 +68,7 @@ const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'�
 // In-memory only, development QA provenance. Never available to production
 // users, never writes a profile/save and never bypasses a real unlock CTA.
 const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0}){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0},tracerTracker?:OmegaBallisticTracerTracker){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -117,14 +123,17 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   }
  };
  const drawProp=(plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle)=>{
-  if(!drawOmegaUpperDeckProp(ctx,plan,obstacle)){
-   drawOmegaFieldProp(ctx,plan,obstacle);
-   drawOmegaM12StructureFacets(ctx,plan,obstacle,state.gameTime,m12Budget);
-   drawOmegaG2NativeFacade(ctx,plan,obstacle,state.gameTime,m12G2Quality);
-   drawOmegaG3NativeMesh(ctx,plan,obstacle,m12G3Budget);
+  const authoredProp=drawOmegaAuthored3DProp(ctx,plan,obstacle,camera,state.gameTime);
+  if(!authoredProp){
+   if(!drawOmegaUpperDeckProp(ctx,plan,obstacle)){
+    drawOmegaFieldProp(ctx,plan,obstacle);
+    drawOmegaM12StructureFacets(ctx,plan,obstacle,state.gameTime,m12Budget);
+    drawOmegaG2NativeFacade(ctx,plan,obstacle,state.gameTime,m12G2Quality);
+    drawOmegaG3NativeMesh(ctx,plan,obstacle,m12G3Budget);
+   }
+   drawOmega3DPropRelief(ctx,plan,obstacle,state.gameTime,atm3DBudget);
   }
-  drawOmega3DPropRelief(ctx,plan,obstacle,state.gameTime,atm3DBudget);
-  drawOmegaLivingProp(ctx,plan,obstacle,state.player,state.gameTime,atm3DBudget);
+  drawOmegaLivingProp(ctx,plan,obstacle,state.player,state.gameTime,atm3DBudget,authoredProp);
  };
  if(field){
   drawGround(field.plan);
@@ -326,13 +335,38 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
   drawOmega3DOcclusionGuide(ctx,field.plan,p,state.gameTime);
  }
- // Native projectiles and impacts always render above solid geometry.
+ // Visual-only elevated projectiles & muzzle-to-chest tracers (Watch XY physics untouched).
+ const lift=actorElevation-fieldElevation;
+ const heroHeading=omegaFieldHeading(pose.bodyX,pose.bodyY);
+ const localMuzzle=omegaSilverLocalMuzzle(heroHeading,118);
+ const heroMuzzleWorld=omegaWorldPointFromUprightOffset(
+  {x:p.x+lift*skew,y:p.y-lift},
+  localMuzzle.x,
+  localMuzzle.y,
+  camera,
+ );
+ if(tracerTracker){
+  tracerTracker.sync(state.projectiles,heroMuzzleWorld,state.gameTime);
+ }
  for(const projectile of state.projectiles){
-  drawOmega3DProjectile(ctx,projectile.x,projectile.y,
-   Math.max(2,Math.min(9,projectile.radius)),projectile.vx,projectile.vy,false);
+  const visual=tracerTracker
+   ?tracerTracker.resolveVisual(projectile,camera,state.gameTime)
+   :{
+     visualX:projectile.x,
+     visualY:projectile.y-48/camera.groundYScale,
+     groundX:projectile.x,
+     groundY:projectile.y,
+     spawnX:heroMuzzleWorld.x,
+     spawnY:heroMuzzleWorld.y,
+     age:0.1,
+    };
+  drawOmegaBallisticProjectile(
+   ctx,visual,Math.max(2,Math.min(9,projectile.radius)),
+   projectile.vx,projectile.vy,false,
+  );
  }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
- drawOmegaBladeWorldSlash(ctx,session.lastBladeStrike,state.gameTime);
+ drawOmegaPaintedBladeSlash(ctx,session.lastBladeStrike,state.gameTime,camera,lift);
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
@@ -803,10 +837,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
   const gaitController=new OmegaGroundedGait();
   const motionSmoother=new OmegaMotionSmoother();
+  const tracerTracker=new OmegaBallisticTracerTracker();
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
   omegaPrepareAuthoredScene();
   omegaPrepareEnvArt();
+  omegaPrepareVfxAndPropArt();
   userApprovedAiraV2.prepare();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
@@ -911,7 +947,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     cinematicZoom+=(target-cinematicZoom)*easing;
     const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker);
     if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);

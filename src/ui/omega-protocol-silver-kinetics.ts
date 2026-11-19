@@ -1,5 +1,7 @@
 import type {OmegaBladeStrike} from '../engine/omega-protocol-combat';
 import type {OmegaActorView,OmegaHeading} from './omega-protocol-actor-render';
+import type {OmegaCameraState} from './omega-protocol-camera';
+import {drawOmegaPaintedMuzzleFlash} from './omega-protocol-vfx-art';
 
 /**
  * Fluid visual-only animation kinematics for silver-haired AIRA V2 (384x512
@@ -24,8 +26,54 @@ const STRIDE_FACTOR:Readonly<Record<OmegaHeading,number>>={
 };
 
 const clamp=(v:number,min:number,max:number)=>Math.max(min,Math.min(max,v));
-const isRearHeading=(heading:OmegaHeading)=>
- heading==='N'||heading==='NW'||heading==='NE';
+const easeOutCubic=(t:number)=>{const k=1-clamp(t,0,1);return 1-k*k*k;};
+
+export interface OmegaMuzzleAnchor {
+ readonly u:number;
+ readonly v:number;
+ readonly rear:boolean;
+}
+
+/**
+ * Pixel-measured gun barrel tip normalized offsets (in multiples of visualHeight)
+ * for all 8 genuine 384x512 silver AIRA paintings (`foot` anchored at (0,0)).
+ */
+export const SILVER_AIRA_MUZZLE_ANCHORS:Readonly<Record<OmegaHeading,OmegaMuzzleAnchor>>={
+ E:{u:0.295,v:-0.605,rear:false},
+ SE:{u:0.255,v:-0.520,rear:false},
+ S:{u:0.140,v:-0.495,rear:false},
+ SW:{u:-0.245,v:-0.530,rear:false},
+ W:{u:-0.300,v:-0.600,rear:false},
+ NW:{u:-0.250,v:-0.630,rear:false},
+ N:{u:0.100,v:-0.575,rear:true},
+ NE:{u:0.245,v:-0.640,rear:false},
+};
+
+export function omegaSilverLocalMuzzle(
+ heading:OmegaHeading,
+ visualHeight:number,
+):{readonly x:number;readonly y:number;readonly rear:boolean} {
+ const anchor=SILVER_AIRA_MUZZLE_ANCHORS[heading];
+ const h=Number.isFinite(visualHeight)&&visualHeight>0?visualHeight:118;
+ return {x:anchor.u*h,y:anchor.v*h,rear:anchor.rear};
+}
+
+/**
+ * Exact inverse 3/4 isometric matrix converting an upright actor-local offset `(ux, uy)`
+ * relative to grounded foot `(anchor.x, anchor.y)` back into Watch world coordinates.
+ */
+export function omegaWorldPointFromUprightOffset(
+ anchor:{readonly x:number;readonly y:number},
+ ux:number,
+ uy:number,
+ camera:Pick<OmegaCameraState,'skewX'|'groundYScale'>,
+):{readonly x:number;readonly y:number} {
+ const invY=camera.groundYScale>0.1?1/camera.groundYScale:1;
+ return {
+  x:anchor.x+ux-(camera.skewX*invY)*uy,
+  y:anchor.y+uy*invY,
+ };
+}
 
 export interface OmegaSmoothedVelocity {
  readonly vx:number;
@@ -132,121 +180,29 @@ function drawFourPointFlare(
  ctx.restore();
 }
 
-function drawHandgunAndMuzzle(
+function drawSwordHandReflection(
  ctx:CanvasRenderingContext2D,
- heading:OmegaHeading,
- aimX:number,aimY:number,
- age:number,height:number,
- layer:'rear'|'front',
-):void {
- const rear=isRearHeading(heading);
- if((layer==='rear')!==rear)return;
- const aimLen=Math.hypot(aimX,aimY);
- if(aimLen<1e-5)return;
- const angle=Math.atan2(aimY,aimX);
- const left=heading==='W'||heading==='NW'||heading==='SW';
- const gripX=height*(left?-0.17:rear?0.06:0.17);
- const gripY=-height*(rear?0.56:0.53);
- const decay=Math.max(0,1-age/0.12);
- const recoil=4.2*decay;
-
- ctx.save();
- ctx.translate(gripX,gripY);
- ctx.rotate(angle);
- ctx.translate(-recoil,0);
-
- // Silver-white sleeve cuff with violet cyber trim leading to grip.
- ctx.strokeStyle='#1b2434';ctx.lineWidth=height*0.075;ctx.lineCap='round';
- ctx.beginPath();ctx.moveTo(-height*0.11,height*0.04);ctx.lineTo(height*0.04,0);ctx.stroke();
- ctx.strokeStyle='#dfe5f2';ctx.lineWidth=height*0.036;
- ctx.beginPath();ctx.moveTo(-height*0.07,height*0.02);ctx.lineTo(height*0.03,-height*0.006);ctx.stroke();
-
- // Compact tactical plasma carbine body.
- const gunLen=height*0.24;
- const gunH=height*0.09;
- const metal=ctx.createLinearGradient(0,-gunH*0.5,gunLen,gunH*0.5);
- metal.addColorStop(0,'#e7ecf7');
- metal.addColorStop(0.45,'#7f92ad');
- metal.addColorStop(1,'#182034');
- ctx.fillStyle=metal;
- ctx.fillRect(0,-gunH*0.48,gunLen,gunH*0.75);
- ctx.fillStyle='#f47ad2';
- ctx.fillRect(gunLen*0.26,-gunH*0.56,gunLen*0.58,height*0.018);
-
- if(decay>0.05){
-  // Layered directional plasma star-flash, shock ring, and spent energy casing.
-  const mx=gunLen+height*0.03;
-  ctx.globalAlpha=decay;
-  const bloom=ctx.createRadialGradient(mx,0,1,mx,0,height*0.22);
-  bloom.addColorStop(0,'rgba(255,252,232,.95)');
-  bloom.addColorStop(0.25,'rgba(128,246,255,.78)');
-  bloom.addColorStop(0.55,'rgba(196,98,255,.32)');
-  bloom.addColorStop(1,'rgba(80,25,115,0)');
-  ctx.fillStyle=bloom;
-  ctx.beginPath();ctx.arc(mx,0,height*0.22,0,Math.PI*2);ctx.fill();
-  drawFourPointFlare(ctx,mx,0,height*(0.13+0.07*decay),height*0.022,age*18,'rgba(245,253,255,.94)');
-  ctx.strokeStyle='rgba(148,247,255,.75)';ctx.lineWidth=1.8;
-  ctx.beginPath();ctx.ellipse(mx+height*0.04,0,height*0.024,height*0.075,0,0,Math.PI*2);ctx.stroke();
-  // Ejecting golden-cyan spent shell casing arc.
-  const shellProgress=clamp(age/0.11,0,1);
-  const sx=gunLen*0.35-shellProgress*height*0.14;
-  const sy=-height*0.05-Math.sin(shellProgress*Math.PI)*height*0.12;
-  ctx.save();
-  ctx.translate(sx,sy);ctx.rotate(shellProgress*7.5);
-  ctx.fillStyle='#ffd98a';
-  ctx.fillRect(-3,-1.5,6,3);
-  ctx.restore();
- }
- ctx.restore();
-}
-
-function drawHeldEnergyKatana(
- ctx:CanvasRenderingContext2D,
- heading:OmegaHeading,
+ combo:1|2|3,
  bladeAngle:number,
  progress:number,
- combo:1|2|3,
  height:number,
  layer:'rear'|'front',
 ):void {
- const rear=isRearHeading(heading);
- if((layer==='rear')!==rear)return;
- const ease=1-Math.pow(1-progress,3);
- const sweepSpan=combo===3?2.45:combo===2?2.15:1.95;
- const dir=combo===2?-1:1;
- const currentAngle=bladeAngle+dir*(-sweepSpan*0.5+ease*sweepSpan);
- const alpha=clamp(1-progress*0.55,0.25,1);
- const pivotY=-height*0.52;
- const swordLen=height*(combo===3?0.66:0.56);
-
+ const wantRear=Math.sin(bladeAngle)<-0.35;
+ if((layer==='rear')!==wantRear)return;
+ const fade=Math.sin(clamp(progress,0,1)*Math.PI);
+ if(fade<=0.02)return;
+ const sx=Math.cos(bladeAngle)*height*0.18;
+ const sy=-height*0.56+Math.sin(bladeAngle)*height*0.09;
+ const rgb=combo===3?'255,172,92':combo===2?'204,132,255':'116,232,255';
  ctx.save();
- ctx.translate(0,pivotY);
- ctx.rotate(currentAngle);
- ctx.globalAlpha=alpha;
-
- // Motion smear fan behind moving katana edge.
- ctx.strokeStyle=combo===3?'rgba(255,134,178,.42)':'rgba(128,236,255,.38)';
- ctx.lineWidth=height*0.09*(1-progress*0.5);
- ctx.beginPath();
- ctx.arc(0,0,swordLen*0.78,-dir*0.52,0,dir<0);
- ctx.stroke();
-
- // Metallic hilt + glowing plasma blade edge.
- ctx.strokeStyle='#182236';ctx.lineWidth=height*0.036;ctx.lineCap='round';
- ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(height*0.13,0);ctx.stroke();
- ctx.fillStyle='#ffd28e';ctx.fillRect(height*0.11,-height*0.04,height*0.025,height*0.08);
- const bladeGrad=ctx.createLinearGradient(height*0.13,0,swordLen,0);
- bladeGrad.addColorStop(0,'#e8fcff');
- bladeGrad.addColorStop(0.55,combo===3?'#ff98cf':'#92e9ff');
- bladeGrad.addColorStop(1,'#b57dff');
- ctx.fillStyle=bladeGrad;
- ctx.beginPath();
- ctx.moveTo(height*0.13,-height*0.024);
- ctx.lineTo(swordLen,0);
- ctx.lineTo(height*0.13,height*0.018);
- ctx.closePath();
- ctx.fill();
-
+ ctx.globalCompositeOperation='lighter';
+ const grad=ctx.createRadialGradient(sx,sy,2,sx,sy,height*0.24);
+ grad.addColorStop(0,`rgba(255,255,255,${(0.42*fade).toFixed(3)})`);
+ grad.addColorStop(0.42,`rgba(${rgb},${(0.30*fade).toFixed(3)})`);
+ grad.addColorStop(1,'rgba(0,0,0,0)');
+ ctx.fillStyle=grad;
+ ctx.beginPath();ctx.arc(sx,sy,height*0.24,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
 
@@ -351,12 +307,21 @@ export function drawOmegaSilverKineticActor(
  const by=Number.isFinite(view.bladeFacingY)?view.bladeFacingY!:view.facingY;
  const bladeAngle=Math.atan2(by,bx);
  const slashProgress=slashing?clamp(bladeAge/BLADE_VISUAL_SECONDS,0,1):0;
+ const aimAngle=Math.hypot(aimX,aimY)>1e-5?Math.atan2(aimY,aimX):0;
+ const muzzle=omegaSilverLocalMuzzle(heading,height);
 
- // 2. Rear-layer weapon/blade (drawn BEHIND actor on N/NW/NE headings).
+ // 2. Rear-layer VFX ONLY when weapon/slash sits behind AIRA (e.g., N heading).
  if(slashing){
-  drawHeldEnergyKatana(ctx,heading,bladeAngle,slashProgress,combo,height,'rear');
- }else if(firing){
-  drawHandgunAndMuzzle(ctx,heading,aimX,aimY,actionAge,height,'rear');
+  drawSwordHandReflection(ctx,combo,bladeAngle,slashProgress,height,'rear');
+ }else if(firing&&muzzle.rear){
+  drawOmegaPaintedMuzzleFlash(
+   ctx,
+   muzzle.x+offsetX,
+   muzzle.y+offsetY,
+   aimAngle,
+   height/118,
+   actionAge,
+  );
  }
 
  // 3. Articulated lower legs & upper body from authentic unmirrored 384x512 WebP.
@@ -374,11 +339,18 @@ export function drawOmegaSilverKineticActor(
  ctx.restore();
  ctx.restore();
 
- // 4. Front-layer weapon/blade (drawn IN FRONT of actor on side/front headings).
+ // 4. Front-layer VFX at exact painted barrel pixel or slash hand bounce.
  if(slashing){
-  drawHeldEnergyKatana(ctx,heading,bladeAngle,slashProgress,combo,height,'front');
- }else if(firing){
-  drawHandgunAndMuzzle(ctx,heading,aimX,aimY,actionAge,height,'front');
+  drawSwordHandReflection(ctx,combo,bladeAngle,slashProgress,height,'front');
+ }else if(firing&&!muzzle.rear){
+  drawOmegaPaintedMuzzleFlash(
+   ctx,
+   muzzle.x+offsetX,
+   muzzle.y+offsetY,
+   aimAngle,
+   height/118,
+   actionAge,
+  );
  }
 
  ctx.restore();
@@ -386,8 +358,8 @@ export function drawOmegaSilverKineticActor(
 }
 
 /**
- * Replaces bare dot muzzle glow on wide 640x512 E firing frames with an
- * anisotropic plasma star-flare, shock ring, and spent energy casing.
+ * Replaces bare dot muzzle glow on wide 640x512 E firing frames with the
+ * painterly additive supersonic plasma burst anchored directly at g5j muzzle pixels.
  */
 export function drawOmegaEnhancedWideMuzzle(
  ctx:CanvasRenderingContext2D,
@@ -402,27 +374,185 @@ export function drawOmegaEnhancedWideMuzzle(
     !Number.isFinite(height)||height<=0)
   return;
  const age=Number.isFinite(actionAge)?Math.max(0,actionAge):0;
- const decay=Math.max(0.15,1-age/0.11);
  const angle=Number.isFinite(aimX)&&Number.isFinite(aimY)&&Math.hypot(aimX,aimY)>1e-5
   ?Math.atan2(aimY,aimX):0;
+ drawOmegaPaintedMuzzleFlash(ctx,muzzleX,muzzleY,angle,height/128,age);
+}
+
+export interface OmegaBallisticTracerVisual {
+ readonly visualX:number;
+ readonly visualY:number;
+ readonly groundX:number;
+ readonly groundY:number;
+ readonly spawnX:number;
+ readonly spawnY:number;
+ readonly age:number;
+}
+
+interface TrackedProjectileRecord {
+ readonly spawnX:number;
+ readonly spawnY:number;
+ readonly originX:number;
+ readonly originY:number;
+ readonly bornAt:number;
+}
+
+/**
+ * Visual-only projectile origin tracker: keeps Watch collision `(x, y)` untouched
+ * while making bullets visibly launch directly out of AIRA's painted gun barrel tip
+ * and smoothly travel along chest height above their ground shadow.
+ */
+export class OmegaBallisticTracerTracker {
+ private readonly seen=new Map<string,TrackedProjectileRecord>();
+
+ reset():void {
+  this.seen.clear();
+ }
+
+ sync(
+  projectiles:readonly {readonly id:string;readonly x:number;readonly y:number}[],
+  muzzleWorld:{readonly x:number;readonly y:number},
+  gameTime:number,
+ ):void {
+  const activeIds=new Set<string>();
+  const now=Number.isFinite(gameTime)?gameTime:0;
+  for(const p of projectiles){
+   activeIds.add(p.id);
+   if(!this.seen.has(p.id)){
+    const sx=Number.isFinite(muzzleWorld.x)?muzzleWorld.x:p.x;
+    const sy=Number.isFinite(muzzleWorld.y)?muzzleWorld.y:p.y;
+    this.seen.set(p.id,{
+     spawnX:sx,
+     spawnY:sy,
+     originX:p.x,
+     originY:p.y,
+     bornAt:now,
+    });
+   }
+  }
+  for(const id of this.seen.keys()){
+   if(!activeIds.has(id))this.seen.delete(id);
+  }
+ }
+
+ resolveVisual(
+  projectile:{readonly id:string;readonly x:number;readonly y:number},
+  camera:Pick<OmegaCameraState,'skewX'|'groundYScale'>,
+  gameTime:number,
+ ):OmegaBallisticTracerVisual {
+  const chestOffset=omegaWorldPointFromUprightOffset({x:0,y:0},0,-48,camera);
+  const chestX=projectile.x+chestOffset.x;
+  const chestY=projectile.y+chestOffset.y;
+  const rec=this.seen.get(projectile.id);
+  if(!rec){
+   return {
+    visualX:chestX,
+    visualY:chestY,
+    groundX:projectile.x,
+    groundY:projectile.y,
+    spawnX:chestX,
+    spawnY:chestY,
+    age:1,
+   };
+  }
+  const age=Math.max(0,(Number.isFinite(gameTime)?gameTime:rec.bornAt)-rec.bornAt);
+  const dx=projectile.x-rec.originX;
+  const dy=projectile.y-rec.originY;
+  const travel=Math.hypot(dx,dy);
+  const blend=easeOutCubic(clamp(Math.max(age/0.065,travel/55),0,1));
+  const muzzlePlusX=rec.spawnX+dx;
+  const muzzlePlusY=rec.spawnY+dy;
+  return {
+   visualX:muzzlePlusX+(chestX-muzzlePlusX)*blend,
+   visualY:muzzlePlusY+(chestY-muzzlePlusY)*blend,
+   groundX:projectile.x,
+   groundY:projectile.y,
+   spawnX:rec.spawnX,
+   spawnY:rec.spawnY,
+   age,
+  };
+ }
+}
+
+/**
+ * Renders an elevated supersonic plasma tracer round with a matching ground contact shadow
+ * and a brief barrel-to-bolt muzzle exit beam during the initial 55ms of flight.
+ */
+export function drawOmegaBallisticProjectile(
+ ctx:CanvasRenderingContext2D,
+ visual:OmegaBallisticTracerVisual,
+ radius:number,
+ vx:number,
+ vy:number,
+ isEnemy=false,
+):void {
+ if(
+  !Number.isFinite(visual.visualX)||!Number.isFinite(visual.visualY)||
+  !Number.isFinite(visual.groundX)||!Number.isFinite(visual.groundY)||
+  !(radius>0)
+ )return;
+
+ const speed=Math.hypot(vx,vy);
+ const ux=speed>1e-4?vx/speed:1;
+ const uy=speed>1e-4?vy/speed:0;
+ const boltLen=clamp(18+radius*2.2,18,34);
+ const boltWidth=clamp(radius*0.62,2.2,4.4);
+ const colorRgb=isEnemy?'255,108,158':'114,232,255';
 
  ctx.save();
- ctx.translate(muzzleX,muzzleY);
- ctx.rotate(angle);
- ctx.globalAlpha=decay;
 
- const glowR=height*0.18;
- const g=ctx.createRadialGradient(2,0,1,2,0,glowR);
- g.addColorStop(0,'rgba(255,253,235,.96)');
- g.addColorStop(0.28,'rgba(130,248,255,.84)');
- g.addColorStop(0.65,'rgba(195,102,255,.36)');
- g.addColorStop(1,'rgba(72,22,115,0)');
- ctx.fillStyle=g;
- ctx.beginPath();ctx.arc(2,0,glowR,0,Math.PI*2);ctx.fill();
+ // 1. Ground shadow directly at unmodified Watch projectile coordinates.
+ ctx.fillStyle='rgba(2,8,16,.38)';
+ ctx.beginPath();
+ ctx.ellipse(visual.groundX,visual.groundY,radius*1.45,Math.max(2.5,radius*0.52),0,0,Math.PI*2);
+ ctx.fill();
 
- drawFourPointFlare(ctx,3,0,height*(0.11+0.05*decay),height*0.02,age*22,'rgba(250,255,255,.95)');
- ctx.strokeStyle='rgba(155,246,255,.78)';ctx.lineWidth=2;
- ctx.beginPath();ctx.ellipse(height*0.04,0,height*0.02,height*0.065,0,0,Math.PI*2);ctx.stroke();
+ // 2. Barrel-to-bolt supersonic plasma launch bridge in first 55ms.
+ if(!isEnemy&&visual.age>=0&&visual.age<0.055){
+  const beamFade=1-visual.age/0.055;
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  const bGrad=ctx.createLinearGradient(visual.spawnX,visual.spawnY,visual.visualX,visual.visualY);
+  bGrad.addColorStop(0,'rgba(255,255,255,0)');
+  bGrad.addColorStop(0.35,`rgba(${colorRgb},${(0.45*beamFade).toFixed(3)})`);
+  bGrad.addColorStop(1,`rgba(255,255,255,${(0.92*beamFade).toFixed(3)})`);
+  ctx.strokeStyle=bGrad;
+  ctx.lineWidth=2.6*beamFade+0.8;
+  ctx.beginPath();
+  ctx.moveTo(visual.spawnX,visual.spawnY);
+  ctx.lineTo(visual.visualX,visual.visualY);
+  ctx.stroke();
+  ctx.restore();
+ }
+
+ // 3. Additive supersonic plasma bolt + ionization wake at chest height.
+ ctx.globalCompositeOperation='lighter';
+ const tailX=visual.visualX-ux*boltLen;
+ const tailY=visual.visualY-uy*boltLen;
+ const wake=ctx.createLinearGradient(tailX,tailY,visual.visualX+ux*4,visual.visualY+uy*4);
+ wake.addColorStop(0,`rgba(${colorRgb},0)`);
+ wake.addColorStop(0.55,`rgba(${colorRgb},.78)`);
+ wake.addColorStop(1,'rgba(255,255,255,.98)');
+ ctx.strokeStyle=wake;
+ ctx.lineWidth=boltWidth*1.45;
+ ctx.lineCap='round';
+ ctx.beginPath();
+ ctx.moveTo(tailX,tailY);
+ ctx.lineTo(visual.visualX+ux*4,visual.visualY+uy*4);
+ ctx.stroke();
+
+ const headGlow=ctx.createRadialGradient(
+  visual.visualX,visual.visualY,0,
+  visual.visualX,visual.visualY,radius*2.6,
+ );
+ headGlow.addColorStop(0,'rgba(255,255,255,.98)');
+ headGlow.addColorStop(0.35,`rgba(${colorRgb},.72)`);
+ headGlow.addColorStop(1,'rgba(0,0,0,0)');
+ ctx.fillStyle=headGlow;
+ ctx.beginPath();
+ ctx.arc(visual.visualX,visual.visualY,radius*2.6,0,Math.PI*2);
+ ctx.fill();
+
  ctx.restore();
 }
 

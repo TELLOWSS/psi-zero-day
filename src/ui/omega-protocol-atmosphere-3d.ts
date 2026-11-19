@@ -2,6 +2,7 @@ import type {OmegaFieldObstacle,OmegaFieldPlan,OmegaFieldPoint} from '../domain/
 import {OMEGA_FIELD_HEIGHT as FIELD_H,OMEGA_FIELD_WIDTH as FIELD_W} from '../domain/omega-protocol-field';
 import {omegaConnectedDeckElevation} from '../domain/omega-protocol-field-transit';
 import type {OmegaCameraState} from './omega-protocol-camera';
+import {drawOmegaPaintedRainOverlay} from './omega-protocol-vfx-art';
 
 /**
  * Diablo Immortal-inspired 3D atmospheric depth, multi-plane parallax backdrop,
@@ -747,16 +748,28 @@ export function drawOmega3DForegroundAtmosphere(
   ]);
  }
 
- // 3. Deterministic sector weather particles.
- for(let i=0;i<budget.weatherCount;i++){
-  const px=((i*197+seconds*(theme.weather==='embers'?18:54+i%5*19))%(width+80)+width+80)%(width+80)-40;
+ // 3. Painted rain-sheet overlay (Sectors 1 & 3) + ultra-fine tapered streaks.
+ const paintedRain=drawOmegaPaintedRainOverlay(ctx,plan,camera,width,height,seconds,budget);
+ const streakCount=paintedRain&&(theme.weather==='rain'||theme.weather==='storm')
+  ?Math.max(8,Math.floor(budget.weatherCount*0.35))
+  :budget.weatherCount;
+ for(let i=0;i<streakCount;i++){
+  const rainSpeed=(theme.weather==='storm'?860:690)+(i%5)*38;
+  const windVX=theme.weather==='storm'?-215:-155;
+  const px=((i*197+seconds*(theme.weather==='embers'?18:theme.weather==='rain'||theme.weather==='storm'?windVX:54+i%5*19))%(width+80)+width+80)%(width+80)-40;
   const dir=theme.weather==='embers'?-1:1;
-  const py=((i*139+seconds*dir*(theme.weather==='storm'?380:theme.weather==='rain'?270:62+i%4*18))%(height+60)+height+60)%(height+60)-30;
+  const py=((i*139+seconds*dir*(theme.weather==='rain'||theme.weather==='storm'?rainSpeed:62+i%4*18))%(height+60)+height+60)%(height+60)-30;
   const alpha=.16+(i%5)*.055;
   if(theme.weather==='rain'||theme.weather==='storm'){
-   ctx.strokeStyle=`rgba(${theme.fillRgb},${alpha.toFixed(2)})`;
-   ctx.lineWidth=theme.weather==='storm'?1.6:1.2;
-   drawLine(ctx,px,py,px-(theme.weather==='storm'?11:6),py+(theme.weather==='storm'?22:15));
+   const dx=theme.weather==='storm'?-7.5:-4.8;
+   const dy=theme.weather==='storm'?29:20;
+   const grad=ctx.createLinearGradient(px,py,px+dx,py+dy);
+   grad.addColorStop(0,'rgba(220,238,255,0)');
+   grad.addColorStop(0.7,`rgba(226,242,255,${(alpha*0.72).toFixed(3)})`);
+   grad.addColorStop(1,`rgba(248,252,255,${(alpha*1.12).toFixed(3)})`);
+   ctx.strokeStyle=grad;
+   ctx.lineWidth=theme.weather==='storm'?0.95:0.75;
+   drawLine(ctx,px,py,px+dx,py+dy);
   }else if(theme.weather==='sparks'||theme.weather==='embers'){
    ctx.fillStyle=`rgba(${theme.keyRgb},${(alpha+.18).toFixed(2)})`;
    ctx.beginPath();ctx.arc(px+Math.sin(seconds*3+i)*4,py,1.8+(i%2)*.9,0,Math.PI*2);ctx.fill();
