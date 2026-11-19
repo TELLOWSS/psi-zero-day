@@ -56,8 +56,6 @@ const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ defau
 const loadDefenseGame = () => import('./DefenseGame');
 const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
 const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
-const loadOmegaProtocol = () => import('./OmegaProtocolGame');
-const OmegaProtocolGame = lazy(() => loadOmegaProtocol().then(module => ({ default: module.OmegaProtocolGame })));
 const OperationHandoffDossier = lazy(() => import('./OperationHandoffDossier').then(module => ({default:module.OperationHandoffDossier})));
 const MODE_PREVIEW_ART = {
   signal: SIGNAL_WATCH_KEY_ART,
@@ -173,27 +171,6 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const [chapterGateOpen,setChapterGateOpen]=useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
-  const [inOmega, setInOmega] = useState(() => {
-    try {
-      const q = new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search);
-      return q.get('omegaLab') === '1' || q.get('mode') === 'omega';
-    } catch {
-      return false;
-    }
-  });
-  const closeOmega = () => {
-    setInOmega(false);
-    try {
-      const url = new URL(window.location.href);
-      if (url.searchParams.has('omegaLab') || url.searchParams.has('mode')) {
-        url.searchParams.delete('omegaLab');
-        url.searchParams.delete('mode');
-        window.history.replaceState(null, '', url.toString());
-      }
-    } catch {
-      /* URL query cleanup is optional */
-    }
-  };
   const [survivorsLoading, setSurvivorsLoading] = useState(false);
   const enterSurvivors = useCallback(() => {
     setSurvivorsLoading(false);
@@ -296,10 +273,6 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     <DefenseGame key={defenseScenarioId??"legacy"} session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} onPractice={()=>openDefense(zeroBreachContent.scenario.id)} />
   </Suspense>;
 
-  if (inOmega) return <Suspense fallback={<GameplayChunkFallback />}>
-    <OmegaProtocolGame onExit={closeOmega} audioMuted={audioMuted} onToggleAudio={() => setAudioMuted(!audioMuted)} />
-  </Suspense>;
-
   if(chapterGateOpen) return <section className="story-chapter-gate" aria-labelledby="story-chapter-title">
     <header><span>PSI : ZERO DAY / STORY</span><button type="button" onClick={()=>setChapterGateOpen(false)}>메인으로</button></header>
     <div className="story-chapter-gate-world" aria-hidden="true"><img src={cinematicBackground} alt="" /></div>
@@ -363,17 +336,15 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     onNewGame={newGame}
     onDefense={scenarioId => openDefense(scenarioId ?? null)}
     onSurvivors={() => setSurvivorsLoading(true)}
-    onOmega={() => { void loadOmegaProtocol(); setInOmega(true); }}
   />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors, onOmega }: {
+export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
   onDefense?: (scenarioId?: string | null) => void;
   onSurvivors?: () => void;
-  onOmega?: () => void;
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
@@ -433,7 +404,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors, on
     onMap={()=>setPage('map')}
     onGuard={onDefense?()=>onDefense('guard-campaign'):undefined}
     onWatch={onSurvivors}
-    onOmega={onOmega}
     onStory={onPlay}
     restartVisible={snapshot.phase!=='start'||saveHealth==='preserved'}
     onRestart={()=>setModePreview('story')}
