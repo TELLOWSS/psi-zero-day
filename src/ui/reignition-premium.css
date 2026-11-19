@@ -636,6 +636,17 @@
  background:#19102b;
  border-color:#9e74ce84;
 }
+.rg-home button.rg-card.is-omega {
+ width:100%;
+ text-align:left;
+ font:inherit;
+ cursor:pointer;
+}
+.rg-home .rg-card.is-omega:hover,
+.rg-home .rg-card.is-omega:focus-visible {
+ border-color:#e9b6ff;
+ box-shadow:0 24px 56px #000a,0 0 32px #d96bff48;
+}
 .rg-home .rg-card.is-omega>img {object-position:67% 24%}
 .rg-home .rg-card.is-omega .rg-card-screen {
  background:linear-gradient(90deg,#100819ed,#170f29da 39%,#120a2413 76%),

@@ -4,6 +4,7 @@ import type {EndgameHomeStatus} from '../app/endgame-home';
 import {DEFENSE_PREMIUM_HERO} from '../app/defense-premium-art';
 import {SIGNAL_WATCH_KEY_ART} from './signal-watch-art';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
+import {countClearedOmegaSectors,readOmegaSave} from '../app/omega-save';
 import './reignition-title.css';
 import './reignition-premium.css';
 import './psi-experience-ui.css';
@@ -36,6 +37,7 @@ export interface ReignitionTitleProps {
  readonly onMap?:()=>void;
  readonly onGuard?:()=>void;
  readonly onWatch?:()=>void;
+ readonly onOmega?:()=>void;
  readonly onStory:()=>void;
  readonly onGuide:()=>void;
  readonly onPeople:()=>void;
@@ -113,6 +115,8 @@ export function ReignitionTitle(props:ReignitionTitleProps){
  const watchPercent=Math.max(0,Math.min(100,status.watchClears/50*100));
  const guardMasterPercent=Math.round(Math.max(0,Math.min(100,status.guardMastered/6*100)));
  const watchMasterPercent=Math.round(Math.max(0,Math.min(100,status.watchMastered/50*100)));
+ const omegaCleared=(()=>{try{return countClearedOmegaSectors(readOmegaSave(typeof window==='undefined'?null:window.localStorage));}catch{return 0;}})();
+ const omegaPercent=Math.max(0,Math.min(100,omegaCleared/4*100));
  const mission=resolveHomePrimaryMission(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const nextChallenge=resolveHomeNextChallenge(status,Boolean(props.onGuard),Boolean(props.onWatch));
  const heroGo=mission.mode==='guard'?props.onGuard:mission.mode==='watch'?props.onWatch:undefined;
@@ -212,14 +216,24 @@ export function ReignitionTitle(props:ReignitionTitleProps){
         {watchUnlocked?<span className="rg-card-mastery" aria-label={`워치 마스터 3성 ${status.watchMastered}개 / 50개`}><span className="rg-card-mastery-label">MASTER 3★ <strong>{status.watchMastered} / 50</strong></span><span className="rg-card-mastery-track" aria-hidden="true"><i style={{width:watchMasterPercent+'%'}}/></span></span>:null}
         <b>{mission.mode==='watch'?mission.label:watchUnlocked?'마스터 작전 선택':'스테이지 선택'} <span aria-hidden="true">↗</span></b></span>
       </button>
-      <a className="rg-card is-omega" href={OMEGA_REVIEW_URL} target="_blank" rel="noopener noreferrer"
+      {props.onOmega?<button type="button" className="rg-card is-omega" onClick={props.onOmega}
+       aria-label={`오메가 프로토콜 · 4개 구역 중 ${omegaCleared}개 완료 · 1~4구역 연결 전장 입장`}>
+       <img src="/assets/omega/aira-v2/hero-splash.webp" alt="" loading="lazy" decoding="async"/>
+       <span className="rg-card-screen" aria-hidden="true"/><span className="rg-card-serial" aria-hidden="true">03</span>
+       <span className="rg-card-info"><small>SPECIAL EDITION · 1~4구역 연결 전장</small><strong>OMEGA PROTOCOL</strong>
+        <em>TACTICAL COVER GUN ACTION · AIRA</em>
+        <span>시네마틱 엄폐 건액션 · AIRA</span>
+        <span className="rg-card-progress" role="progressbar" aria-label="오메가 프로토콜 완료 구역" aria-valuemin={0} aria-valuemax={4} aria-valuenow={omegaCleared}><i style={{width:omegaPercent+'%'}}/></span>
+        <span className="rg-card-count">CLEAR {omegaCleared} / 04 <em>{omegaCleared===4?'ALL SECTORS CLEARED':'1~4 CONNECTED OPS'}</em></span>
+        <b>작전 투입 <span aria-hidden="true">↗</span></b></span>
+      </button>:<a className="rg-card is-omega" href={OMEGA_REVIEW_URL} target="_blank" rel="noopener noreferrer"
        aria-label="오메가 프로토콜 특별판 개발판 접속 · Vercel 로그인 필요 · 새 탭">
        <img src="/assets/omega/aira-v2/hero-splash.webp" alt="" loading="lazy" decoding="async"/>
        <span className="rg-card-screen" aria-hidden="true"/>
        <span className="rg-card-info"><small>특별판 · 개발 중</small><strong>OMEGA PROTOCOL</strong>
         <span>1~4구역 연결 전장 검수</span>
         <b>개발판 입장 <span aria-hidden="true">↗</span></b></span>
-      </a>
+      </a>}
      </div>
      <aside className="rg-command-status" aria-label="실제 클리어 기록 기반 도전 현황">
       <div className="rg-command-heading"><span className="rg-led" aria-hidden="true"/><strong>VETERAN RECORD</strong><small>저장기록 연동</small></div>
