@@ -1,0 +1,329 @@
+name: Capture OMEGA PROTOCOL browser QA
+
+on:
+  pull_request:
+    paths:
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'src/engine/omega-protocol-combat.ts'
+      - 'scripts/qa-omega-hp-hud-browser.mjs'
+      - 'src/ui/omega-combat-browser-probe.ts'
+      - 'scripts/qa-omega-gun-blade-browser.mjs'
+      - 'src/ui/omega-protocol-field-render.ts'
+      - 'src/ui/omega-protocol-sector-one-scene.ts'
+      - 'src/ui/omega-protocol-depth-scene.ts'
+      - 'src/ui/omega-protocol-m12-depth.ts'
+      - 'src/ui/omega-protocol-m12-parallax.ts'
+      - 'src/ui/omega-protocol-m12-combat-fidelity.ts'
+      - 'src/ui/omega-protocol-m12-g5-art.ts'
+      - 'src/ui/omega-protocol-m12g5b-art-gate.ts'
+      - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'src/ui/omega-protocol-m12g5d-actual-source.ts'
+      - 'src/ui/omega-protocol-m12g5e-silver-action-fx.ts'
+      - 'src/ui/omega-protocol-m12g5g-native-pose.ts'
+      - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'scripts/qa-omega-m12g5g-native-pose-browser.mjs'
+      - 'scripts/qa-omega-m12g5h-real-player-hit-browser.mjs'
+      - 'src/ui/omega-combat-browser-probe.ts'
+      - 'scripts/qa-omega-m12g5e-real-native-action-browser.mjs'
+      - 'public/assets/omega/g5d/**'
+      - 'scripts/qa-omega-m12g5d2-real-webp-browser.mjs'
+      - 'scripts/qa-omega-m12g5c-local-source-browser.mjs'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'scripts/qa-omega-m12g5b-portrait-art-browser.mjs'
+      - 'public/assets/omega/g5/**'
+      - 'scripts/qa-omega-m12g5-six-pose-browser.mjs'
+      - 'scripts/qa-omega-m12g4-silver-identity-browser.mjs'
+      - 'scripts/qa-omega-m12g3-parallax-browser.mjs'
+      - 'src/ui/omega-protocol-m12-authored-industrial.ts'
+      - 'scripts/qa-omega-m12g2-industrial-browser.mjs'
+      - 'scripts/qa-omega-m12g1-industrial-depth-browser.mjs'
+      - 'src/ui/omega-protocol-mission-visuals.ts'
+      - 'src/ui/omega-protocol-authored-scene.ts'
+      - 'public/assets/omega/sector01/**'
+      - 'src/ui/omega-protocol-actor-render.ts'
+      - 'src/ui/omega-aira-v2-candidate.ts'
+      - 'src/ui/omega-canonical-local-preview.ts'
+      - 'src/ui/omega-silver-watch-native.ts'
+      - 'src/ui/omega-silver-watch-native-actions.ts'
+      - 'src/ui/omega-silver-action-parity.ts'
+      - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'src/ui/omega-aira-v2-directional-action-rig.ts'
+      - 'src/ui/omega-aira-v2-directional-parity.ts'
+      - 'src/ui/omega-aira-v2-walk-rig.ts'
+      - 'src/ui/omega-aira-v2-walk-frames.ts'
+      - 'src/ui/omega-aira-v2-weapon-vfx.ts'
+      - 'src/ui/omega-aira-v2-fire-frames.ts'
+      - 'src/ui/omega-aira-v2-dash-frames.ts'
+      - 'src/ui/omega-aira-v2-hit-frames.ts'
+      - 'src/ui/omega-aira-v2-special-frames.ts'
+      - 'public/assets/omega/aira-v2/**'
+      - 'content/art/omega-aira-v2-user-approved.json'
+      - 'src/ui/omega-protocol-aira-kinetics.ts'
+      - 'src/ui/omega-protocol-directional-identity.ts'
+      - 'src/ui/omega-protocol-grounded-gait.ts'
+      - 'src/ui/omega-protocol-enemy-render.ts'
+      - 'src/domain/omega-protocol-zombie-ai.ts'
+      - 'scripts/qa-omega-zombie-ai-browser.mjs'
+      - 'scripts/qa-omega-m04d6-counterplay-browser.mjs'
+      - 'src/ui/omega-protocol-counterplay.ts'
+      - 'tests/omega-protocol-zombie-ai.test.ts'
+      - 'tests/omega-protocol-infected-zombie.test.ts'
+      - 'src/ui/omega-protocol-actor-cues.ts'
+      - 'src/ui/omega-protocol-action-facing.ts'
+      - 'src/ui/omega-protocol-art-motion.ts'
+      - 'src/ui/omega-protocol-impact-vfx.ts'
+      - 'src/ui/omega-protocol-dash-visuals.ts'
+      - 'src/ui/omega-protocol-art-slot.ts'
+      - 'content/art/omega-approved-v1.json'
+      - 'public/assets/omega/approved/**'
+      - 'src/domain/omega-protocol-field.ts'
+      - 'src/domain/omega-protocol-field-transit.ts'
+      - 'src/ui/omega-protocol-act-lift.ts'
+      - 'scripts/qa-omega-connected-gates-browser.mjs'
+      - 'scripts/qa-omega-three-act-boundaries-browser.mjs'
+      - 'src/domain/omega-protocol-run.ts'
+      - 'src/domain/omega-protocol-blade.ts'
+      - 'src/domain/omega-protocol-story.ts'
+      - 'src/app/omega-protocol-access.ts'
+      - 'src/domain/omega-protocol-encounter-stage.ts'
+      - 'src/domain/omega-protocol-navigation.ts'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'src/engine/omega-protocol-combat.ts'
+      - 'scripts/qa-omega-protocol-browser.mjs'
+      - 'scripts/qa-omega-actor-source-sheet.mjs'
+      - 'scripts/qa-omega-mission-source-sheet.mjs'
+      - 'scripts/qa-omega-aira-action-motion-sheet.mjs'
+      - 'scripts/qa-omega-aira-v2-source.mjs'
+      - 'scripts/qa-omega-canonical-review.mjs'
+      - 'scripts/qa-omega-silver-preview-browser.mjs'
+      - 'scripts/qa-omega-silver-github-binaries-browser.mjs'
+      - 'scripts/qa-omega-silver-native-watch.mjs'
+      - 'scripts/qa-omega-silver-native-guard.mjs'
+      - 'src/ui/OmegaSilverGuardReview.tsx'
+      - 'src/ui/DefenseGame.tsx'
+      - 'scripts/qa-omega-silver-real-motion-lab.mjs'
+      - 'public/omega-canonical-art-review/**'
+      - 'public/assets/omega/canonical-review/**'
+      - 'scripts/qa-omega-aira-v2-directional-parity.mjs'
+      - 'scripts/qa-omega-aira-v2-walk-source.mjs'
+      - 'scripts/qa-omega-aira-e-walk-atlas.mjs'
+      - 'scripts/qa-omega-aira-v2-fire-source.mjs'
+      - 'scripts/qa-omega-aira-e-fire-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-dash-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-hit-atlas.mjs'
+      - 'scripts/qa-omega-aira-e-special-source.mjs'
+      - 'src/ui/ReignitionTitle.tsx'
+      - 'src/ui/reignition-title.css'
+      - 'src/ui/reignition-premium.css'
+      - '.github/workflows/qa-omega-protocol-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prepare source art files as Vite normally does
+        run: npm run predev
+      - name: Install test-only browser driver (no browser download)
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Enable Korean typography for visual QA
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+          fc-match "Noto Sans CJK KR"
+      - name: Start development-only OMEGA cockpit
+        env:
+          VITE_OMEGA_PROTOCOL_LAB: '1'
+        run: |
+          npx vite --host 127.0.0.1 --port 4173 --strictPort > /tmp/omega-vite.log 2>&1 &
+          echo $! > /tmp/omega-vite.pid
+          for attempt in $(seq 1 70); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omega-vite.log
+          exit 1
+      - name: Real React/Canvas screenshots and viewport checks
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-protocol-browser.mjs
+      - name: M12-G1 live industrial-depth four-size screenshots and real movement
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g1-industrial-depth-browser.mjs
+      - name: M12-G2 authored native gangform hoist crane painter pixel/scene real browser QA
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g2-industrial-browser.mjs
+      - name: M12-G3 live native camera 3-plane parallax and mesh four-size visual QA
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g3-parallax-browser.mjs
+      - name: M12-G4 SHA-pinned silver eight-source real Canvas and material QA at four viewports
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g4-silver-identity-browser.mjs
+      # Deprecated, user-rejected G5 SVG tech-study retains independent 4-size
+      # browser acceptance in qa-omega-m12g5-fast.yml. This older test has
+      # an unstable module-singleton evidence getter when serialized with the
+      # full suite; do not duplicate a prototype rejected for visual quality.
+      # Actual approved/real silver originals and NEW four true WebPs remain
+      # tested here below by G5b, G5c and G5d-2 real native browser steps.
+      - name: M12-G5b four real browser screens original silver source and explicit 4-row HUD layout
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5b-portrait-art-browser.mjs
+      - name: M12-G5c actual silver AIRA original and four transient WebP source QA four viewports
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5c-local-source-browser.mjs
+      - name: M12-G5d-2 Four actual AI-painted silver E source WebP binary SHA-verified native combat at four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5d2-real-webp-browser.mjs
+      - name: M12-G5e silver original E native FIRE/DASH actual game 4-size event-driven FX QA
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5e-real-native-action-browser.mjs
+      - name: M12-G5g real 4-pose original painterly actor source in live native E fire dash game four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5g-native-pose-browser.mjs
+      - name: M12-G5h true native zombie warned melee causes player HP drop and silver AIRA HIT in four sizes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5h-real-player-hit-browser.mjs
+      - name: M02 genuine zombie gun / three-hit sword / facing / solid cover browser proof
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-gun-blade-browser.mjs
+      - name: M03 four distinct zombie AI real Canvas combat and warned HP browser QA
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-zombie-ai-browser.mjs
+      - name: Live HP maximum and meter in normal and QA sessions
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-hp-hud-browser.mjs
+      - name: M04-D6 actual native cart warning / charge and mobile-landscape boss HUD
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m04d6-counterplay-browser.mjs
+      - name: M04 walk through two real quarantine gates via PC keys and mobile touch
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-connected-gates-browser.mjs
+      - name: M04-C three distinct ACT boundary 6→7 9→10 12→13 real Chrome PC and touch
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-three-act-boundaries-browser.mjs
+      - name: Render actual AIRA eight-heading source and action contact sheet
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-actor-source-sheet.mjs
+      - name: Render real mission devices across all interaction states
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-mission-source-sheet.mjs
+      - name: Capture 8-way AIRA action anatomy and per-frame pixel deltas
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-action-motion-sheet.mjs
+      - name: Source-render AIRA V2 eight directions and real home viewports
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-source.mjs
+      - name: Verify actual user-selected AIRA V2 8-way articulated walk imagery
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-walk-source.mjs
+      - name: Render AIRA V2 native-shot pose and verify no false flash
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-fire-source.mjs
+      - name: Verify actual committed E fire atlas pixel changes and source frame gating
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-fire-atlas.mjs
+      - name: Verify committed E dash illustrated source and original Watch pose integration
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-dash-atlas.mjs
+      - name: Real E-direction AIRA hit keyframe pixel and native-cue QA
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-hit-atlas.mjs
+      - name: Source-render original E ultimate and finisher art with native Watch cues
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-special-source.mjs
+      - name: Verify eight actual AIRA V2 original views across five action phases
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-v2-directional-parity.mjs
+      - name: Verify original E four walk paintings in actual source renderer
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-aira-e-walk-atlas.mjs
+      - name: Check canonical silver AIRA and male review UI (no game deployment)
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-canonical-review.mjs
+      - name: Simulate verified eight-angle local silver import into native Watch battlefield
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-preview-browser.mjs
+      - name: Validate REAL silver AIRA GitHub WebPs in Watch and two-game home at four responsive sizes
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-github-binaries-browser.mjs
+      - name: Render real nine-source AIRA and male motion-lab on PC and mobile
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-real-motion-lab.mjs
+      - name: Verify ORIGINAL AIRA player renders in actual SIGNAL WATCH Canvas at PC/mobile sizes
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-native-watch.mjs
+      - name: Verify original AIRA draws in the actual SIGNAL GUARD SVG battlefield on PC/mobile
+        if: always()
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-silver-native-guard.mjs
+      - name: Upload source-run screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-protocol-source-browser-screenshots
+          path: qa-omega-protocol-captures/
+          retention-days: 14
+          if-no-files-found: warn

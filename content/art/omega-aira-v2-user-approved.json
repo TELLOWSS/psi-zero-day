@@ -1,0 +1,76 @@
+{
+  "version": "AIRA_V2_USER_SELECTED_20261109",
+  "status": "USER_APPROVED_CHARACTER_IDENTITY_ONLY",
+  "commercial_sprite_pack_approved": false,
+  "independently_handpainted_160_frames": false,
+  "source_character_sheet": "AIRA design image produced in prior ChatGPT turn, 2026-11-09",
+  "source_art": "Canonical silver-lavender AIRA V2 user screenshot, confirmed 2026-11-09; older candidate assets require re-audit against this reference",
+  "native_game_direction_mapping": "S is front, N is back (reverse of printed illustration turntable labels)",
+  "original_asset_qa": "Eight separate non-mirrored, isolated, background-transparent neutral standing views. Not 8x20 animation.",
+  "assets": {
+    "portrait.webp": {
+      "path": "public/assets/omega/aira-v2/portrait.webp",
+      "bytes": 39692,
+      "sha256": "c6a04b4a697c4de487f063d9d1e67a632cf89ee62334832be1d884cba5aac5b6"
+    },
+    "nw-idle.webp": {
+      "path": "public/assets/omega/aira-v2/nw-idle.webp",
+      "bytes": 18454,
+      "sha256": "198fd3072d63cc972d8c1756bd6607c752805fd1e04f32ccaf435f668cf322d7"
+    },
+    "w-idle.webp": {
+      "path": "public/assets/omega/aira-v2/w-idle.webp",
+      "bytes": 15168,
+      "sha256": "97ed192c4c727ce9b5f3989596471479103f8feb5ee6a4ee805510bcc41476e0"
+    },
+    "s-idle.webp": {
+      "path": "public/assets/omega/aira-v2/s-idle.webp",
+      "bytes": 18122,
+      "sha256": "4aa217b0899a6a289d06bbe8b886af8107da0bba70706094485a6a46816d93ba"
+    },
+    "sw-idle.webp": {
+      "path": "public/assets/omega/aira-v2/sw-idle.webp",
+      "bytes": 19836,
+      "sha256": "d9768795bf4f063b719673d6d51a6ea3cd160643cf57d45228a803ca5cf6398d"
+    },
+    "hero-splash.webp": {
+      "path": "public/assets/omega/aira-v2/hero-splash.webp",
+      "bytes": 230838,
+      "sha256": "b1dea3c53cc213e93ccf683950925a8d4dd71cd16eb1d5a60c25c4700b00bb25"
+    },
+    "e-idle.webp": {
+      "path": "public/assets/omega/aira-v2/e-idle.webp",
+      "bytes": 15032,
+      "sha256": "5c7beba45f97a012ac482e33890053bb4b014f0c95b9318440bfe0eaa3d2c691"
+    },
+    "n-idle.webp": {
+      "path": "public/assets/omega/aira-v2/n-idle.webp",
+      "bytes": 16046,
+      "sha256": "9569bbaab03a89d1b39342e8b31e860d7eb10ec4318f68fbe1f63ff3fbfd81c2"
+    },
+    "se-idle.webp": {
+      "path": "public/assets/omega/aira-v2/se-idle.webp",
+      "bytes": 18882,
+      "sha256": "379dbd266954fe91c9f0f351ac6504d718f77f825c4afebe892bd2203fd3a33a"
+    },
+    "ne-idle.webp": {
+      "path": "public/assets/omega/aira-v2/ne-idle.webp",
+      "bytes": 17088,
+      "sha256": "db12c3b62cc9ed574ff60552b248184ad07346a4c951bbdc50d4015ecaef38a3"
+    }
+  },
+  "canonical_identity_reference": {
+    "status": "USER_EXPLICITLY_RECONFIRMED_2026-11-09",
+    "source": "User-uploaded screenshot of silver-lavender AIRA V2 portrait with white Ω coat and violet eyes",
+    "hair": "SILVER_WHITE_LAVENDER_LONG_HIGH_PONYTAIL",
+    "eyes": "VIOLET",
+    "wardrobe": "WHITE_OMEGA_MARKED_COAT_OVER_BLACK_PURPLE_TACTICAL_ARMOR",
+    "accents": "VIOLET_EMISSIVE_OMEGA_BRANDING",
+    "no_substitution": "NO_BLACK_HAIR_OR_PINK_STREAK_CHARACTER",
+    "appearance_audit": "PENDING_CORRECTED_BINARY_ASSETS_AND_BROWSER_REVIEW",
+    "title_art_audit": "PENDING_CORRECTED_CANONICAL_PORTRAIT",
+    "direction_art_audit": "PENDING_EIGHT_CORRECTED_INDEPENDENT_ANGLES",
+    "action_art_audit": "PREVIOUS_BLACK_HAIR_ACTION_STUDIES_NOT_APPROVED_FOR_SILVER_AIRA",
+    "production_approved": false
+  }
+}

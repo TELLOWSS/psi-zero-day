@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "stage": "review_only",
+  "selected_identity": "AIRA V2 silver-white/lavender high ponytail, violet eyes, white Ω coat",
+  "production_approved": false,
+  "main_games": [
+    "SIGNAL GUARD",
+    "SIGNAL WATCH"
+  ],
+  "sha256_by_slot": {
+    "E": "6f12fdc0f45f3fcb977d8377e49ad0dd5e37fbd519d6c3a3beede11dffdebe08",
+    "SE": "07511e267c036a32384ee0c602d160856f7918a04144593b4bebb5ea50ab17ef",
+    "S": "7cab0074025c854c54d64c538b3adbae0765131a1f7057285034aeadbf61cfda",
+    "SW": "0b30dd5410c900e3f567b9443d6228075a0821e589661c1e3cee7fd235dd8464",
+    "W": "770bf37f82e4647a933db17522ba151b60c06226cff7e2dfeae37c4f880c5773",
+    "NW": "1da427ce5ff298ac17cdaa90159dc65eeba64a7fa2f3c097007e75097018c4f5",
+    "N": "29ad9c6269f13ec83d078bfad0faedf1aea1fe25b4890360d135dfe3986fc305",
+    "NE": "d31718bf41e4b088934e80647b32680b14c0d77061d57035c4b2715256853e30",
+    "M01": "6d0e9e4d48dd80266bae6cec3d027522724b4febbffaea62da9d722d4a4154d9"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "character": "AIRA V2",
+  "male_candidate": "M01",
+  "canonical_reference": "User-confirmed silver-white/lavender ponytail, violet eyes, white Omega jacket, black-violet armor",
+  "live_games": [
+    "SIGNAL GUARD",
+    "SIGNAL WATCH"
+  ],
+  "source_stage": "review_only",
+  "game_integration_enabled": false,
+  "main_menu_image_approved": false,
+  "full_eight_direction_turnaround_approved": false,
+  "action_animation_approved": false,
+  "release_allowed": false,
+  "frames_required": 160,
+  "occlusion_masks_required": 320,
+  "visual_review_note": "NW rear-left inaccurate; E frontal oblique not exact side; SE SW NE require orientation review.",
+  "female": [
+    {
+      "slot": "E",
+      "quality": "REVIEW_RIGHT_OBLIQUE",
+      "sha256": "6f12fdc0f45f3fcb977d8377e49ad0dd5e37fbd519d6c3a3beede11dffdebe08"
+    },
+    {
+      "slot": "SE",
+      "quality": "REVIEW_FRONT_RIGHT",
+      "sha256": "07511e267c036a32384ee0c602d160856f7918a04144593b4bebb5ea50ab17ef"
+    },
+    {
+      "slot": "S",
+      "quality": "IDENTITY_REFERENCE_UNAPPROVED_SPRITE",
+      "sha256": "7cab0074025c854c54d64c538b3adbae0765131a1f7057285034aeadbf61cfda"
+    },
+    {
+      "slot": "SW",
+      "quality": "REVIEW_FRONT_LEFT",
+      "sha256": "0b30dd5410c900e3f567b9443d6228075a0821e589661c1e3cee7fd235dd8464"
+    },
+    {
+      "slot": "W",
+      "quality": "REVIEW_LEFT_PROFILE",
+      "sha256": "770bf37f82e4647a933db17522ba151b60c06226cff7e2dfeae37c4f880c5773"
+    },
+    {
+      "slot": "NW",
+      "quality": "REDRAW_REQUIRED_REAR_LEFT",
+      "sha256": "1da427ce5ff298ac17cdaa90159dc65eeba64a7fa2f3c097007e75097018c4f5"
+    },
+    {
+      "slot": "N",
+      "quality": "REVIEW_REAR_VIEW",
+      "sha256": "29ad9c6269f13ec83d078bfad0faedf1aea1fe25b4890360d135dfe3986fc305"
+    },
+    {
+      "slot": "NE",
+      "quality": "REVIEW_REAR_RIGHT",
+      "sha256": "d31718bf41e4b088934e80647b32680b14c0d77061d57035c4b2715256853e30"
+    }
+  ],
+  "male": {
+    "slot": "M01",
+    "status": "DESIGN_CANDIDATE_ONLY",
+    "sha256": "6d0e9e4d48dd80266bae6cec3d027522724b4febbffaea62da9d722d4a4154d9"
+  }
+}

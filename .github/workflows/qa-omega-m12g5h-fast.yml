@@ -1,0 +1,59 @@
+name: M12-G5h quick live Canvas real-player-hit acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'src/ui/omega-protocol-m12g5g-native-pose.ts'
+      - 'src/ui/omega-combat-browser-probe.ts'
+      - 'tests/omega-protocol-m12g5h-native-hit.test.ts'
+      - 'src/ui/omega-protocol-m12g5c-local-art-review.ts'
+      - 'src/ui/omega-aira-v2-candidate.ts'
+      - 'src/ui/omega-protocol-playtest.css'
+      - 'src/ui/OmegaProtocolPlaytest.tsx'
+      - 'scripts/qa-omega-m12g5h-real-player-hit-browser.mjs'
+      - '.github/workflows/qa-omega-m12g5h-fast.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-player-hit-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prepare Vite development assets
+        run: npm run predev
+      - name: Install test-only driver without browser download
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright-core@1.56.1
+      - name: Launch dev-only game scene
+        env:
+          VITE_OMEGA_PROTOCOL_LAB: '1'
+        run: |
+          npx vite --host 127.0.0.1 --port 4173 --strictPort >/tmp/omega-m12g5h-vite.log 2>&1 &
+          for attempt in $(seq 1 65); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/omega-m12g5h-vite.log
+          exit 1
+      - name: Four real browser sizes native real-player-hit render pixel probes
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: node scripts/qa-omega-m12g5h-real-player-hit-browser.mjs
+      - name: Upload four-size native scene proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-m12g5h-focused-chrome
+          path: |
+            qa-omega-protocol-captures/m12g5h-*
+          retention-days: 14
+          if-no-files-found: warn

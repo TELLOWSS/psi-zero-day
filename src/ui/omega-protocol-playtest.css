@@ -1,0 +1,1369 @@
+/* OMEGA PROTOCOL — full-viewport QA cockpit.
+   Gameplay shell only: no master-cosmetic approval or production enablement. */
+.omega-protocol-lab,.omega-protocol-lab *{box-sizing:border-box}
+.omega-protocol-lab{
+ --op-ink:#e9f6ff;--op-muted:#a1b8ca;--op-pink:#fc8cca;--op-border:rgba(140,184,218,.22);
+ width:100%;height:100dvh;min-height:0;overflow:hidden;display:grid;
+ grid-template-rows:auto minmax(0,1fr) auto;padding:0;
+ background:#070d18;color:var(--op-ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
+}
+.omega-protocol-lab button{
+ font:inherit;cursor:pointer;border:1px solid #536d88;border-radius:11px;
+ background:rgba(28,50,77,.94);color:#eaf6ff;padding:10px 14px;
+ touch-action:manipulation;transition:background .15s,border-color .15s,transform .15s
+}
+.omega-protocol-lab button:hover:not(:disabled){border-color:#a5d6f6;background:#27425e}
+.omega-protocol-lab button:active:not(:disabled){transform:scale(.97)}
+.omega-protocol-lab button:focus-visible{outline:2px solid #9cecf9;outline-offset:3px}
+.omega-protocol-lab button:disabled{opacity:.4;cursor:not-allowed}
+.omega-protocol-topbar{
+ min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+ padding:11px clamp(14px,2.8vw,36px);
+ background:linear-gradient(90deg,#101c31 0%,#18233b 58%,#15182d 100%);
+ border-bottom:1px solid rgba(153,190,220,.16);z-index:2
+}
+.omega-protocol-heading{min-width:0}
+.omega-protocol-tag{color:#ffa8d2;letter-spacing:.19em;font-size:9px;font-weight:800}
+.omega-protocol-heading h1{font-weight:900;letter-spacing:.07em;font-size:clamp(22px,2.5vw,31px);margin:3px 0 0;line-height:1.05}
+.omega-protocol-heading h1 em{color:#ffa5d5;font-style:normal}
+.omega-protocol-heading p{color:#9fb9cd;font-size:10px;letter-spacing:.03em;margin:3px 0 0}
+.omega-protocol-exit{white-space:nowrap;font-size:12px;font-weight:750;flex:0 0 auto}
+.omega-protocol-exit span{margin-left:9px;font-size:18px;vertical-align:middle}
+.omega-protocol-stage{
+ min-height:0;width:100%;margin:0 auto;display:flex;align-items:stretch;
+ overflow:hidden;max-width:1680px;padding:clamp(5px,.8vw,11px);
+}
+.omega-protocol-arena{
+ position:relative;isolation:isolate;flex:1;min-height:0;min-width:0;
+ overflow:hidden;border-radius:15px;border:1px solid rgba(100,156,202,.49);
+ background:radial-gradient(ellipse at center,#162740,#0a1121 78%);
+ box-shadow:inset 0 0 0 1px #ffffff10,0 5px 28px #0006
+}
+.omega-protocol-arena canvas{display:block;width:100%;height:100%;image-rendering:auto;touch-action:none}
+.omega-protocol-stage-shade{
+ pointer-events:none;position:absolute;inset:0;z-index:1;
+ background:linear-gradient(180deg,rgba(5,10,21,.83) 0%,rgba(5,10,21,.08) 21%,rgba(5,10,21,0) 63%,rgba(5,10,21,.43) 100%)
+}
+.omega-protocol-stats{
+ position:absolute;z-index:3;pointer-events:none;inset:12px 15px auto 15px;
+ display:flex;align-items:center;gap:10px;max-width:none;margin:0
+}
+.omega-protocol-stats>div{
+ flex:0 1 auto;display:flex;gap:2px;flex-direction:column;
+ border:1px solid var(--op-border);border-radius:10px;
+ padding:8px 11px;min-width:0;background:rgba(13,27,48,.81);
+ box-shadow:0 4px 15px #0003;backdrop-filter:blur(12px)
+}
+.omega-protocol-stats small{font-size:9px;letter-spacing:.09em;color:#9dbbd0;font-weight:750}
+.omega-protocol-wave{min-width:158px!important;border-color:rgba(250,156,210,.44)!important}
+.omega-protocol-wave strong{font-size:19px;letter-spacing:.04em;color:#ffe6f4;line-height:1.15}
+.omega-protocol-wave strong span{color:#9cb0c3;font-size:11px}
+.omega-protocol-hp{min-width:170px!important;flex:1 1 180px!important;max-width:300px}
+.omega-protocol-hp>span{display:flex;align-items:center;gap:9px;justify-content:space-between;font-size:12px;font-weight:850}
+.omega-protocol-hp b{color:#94e5e4;font-size:10px;letter-spacing:.1em}
+.omega-protocol-hp [role="meter"]{margin-top:6px;height:7px;overflow:hidden;border-radius:5px;background:#2b384e;border:1px solid #45526b}
+.omega-protocol-hp [role="meter"] i{height:100%;display:block;border-radius:4px;background:linear-gradient(90deg,#48d8cf,#b2f4db);box-shadow:0 0 10px #45e6df99}
+.omega-protocol-threat{min-width:88px!important}
+.omega-protocol-threat strong{font-size:18px;color:#ffcf9a}
+.omega-protocol-modifier strong{font-size:12px;color:#e2ecff}
+.omega-protocol-boss-alert{
+ z-index:3;position:absolute;top:94px;left:50%;transform:translateX(-50%);
+ color:#ffe1af;background:rgba(86,34,50,.77);border:1px solid rgba(255,191,121,.58);
+ box-shadow:0 0 25px #ff817e37;padding:7px 16px;border-radius:20px;
+ font-size:10px;font-weight:850;letter-spacing:.1em;pointer-events:none;white-space:nowrap
+}
+
+/* Real engine boss health, visually different from the player HP meter. */
+.omega-protocol-boss-alert{
+ display:flex;flex-direction:column;align-items:center;gap:5px;
+ min-width:min(280px,calc(100% - 20px));
+ border-radius:11px;white-space:normal;text-align:center;
+}
+.omega-protocol-boss-hp{
+ width:100%;height:7px;overflow:hidden;border-radius:10px;
+ background:#180e1a;box-shadow:inset 0 0 0 1px #efab9c4f
+}
+.omega-protocol-boss-hp i{
+ display:block;height:100%;border-radius:10px;
+ background:linear-gradient(90deg,#ff7a9b,#ffd2a0);transition:width .12s linear;
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-boss-alert{top:47px;min-width:170px;max-width:calc(100% - 300px);gap:2px;font-size:8px;padding:3px 7px}
+ .omega-protocol-boss-hp{height:4px}
+}
+
+.omega-protocol-controls{position:absolute;inset:0;pointer-events:none;z-index:4}
+.omega-protocol-pad{
+ position:absolute;bottom:clamp(40px,5vh,60px);left:clamp(14px,4vw,46px);
+ width:156px;height:156px;display:grid;grid-template-columns:repeat(3,1fr);
+ grid-template-rows:repeat(3,1fr);gap:5px;touch-action:none;user-select:none;-webkit-user-select:none;
+ pointer-events:auto
+}
+.omega-protocol-pad button{
+ min-height:0!important;display:flex;align-items:center;justify-content:center;
+ background:rgba(34,55,81,.64);backdrop-filter:blur(11px);border:1px solid #789ab69e;
+ padding:0;font-size:23px;font-weight:700;border-radius:15px;touch-action:none
+}
+.omega-protocol-pad button:nth-child(1){grid-column:2;grid-row:1}
+.omega-protocol-pad button:nth-child(2){grid-column:1;grid-row:2}
+.omega-protocol-pad button:nth-child(3){grid-column:2;grid-row:3}
+.omega-protocol-pad button:nth-child(4){grid-column:3;grid-row:2}
+.omega-protocol-pad-center{
+ grid-column:2;grid-row:2;display:grid;place-items:center;
+ color:#91b8d4;border:1px solid #7ca4c45c;background:#213e566e;border-radius:50%;font-size:24px
+}
+.omega-protocol-action-pad{
+ position:absolute;bottom:clamp(50px,7vh,74px);right:clamp(14px,4vw,46px);
+ display:flex;align-items:end;gap:15px;pointer-events:auto
+}
+.omega-protocol-action-pad button{
+ border-radius:50%;width:83px;height:83px;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:2px;padding:5px;font-size:12px;font-weight:850;
+ color:white;box-shadow:0 7px 19px #0008, inset 0 0 0 1px #ffffff30
+}
+.omega-protocol-action-glyph{font-size:27px;line-height:1}
+.omega-protocol-dash{border-color:#9ed9ff!important;background:linear-gradient(150deg,#377ca0,#1d3d6c)!important}
+.omega-protocol-ultimate{width:105px!important;height:105px!important;border-color:#ffa7d7!important;background:linear-gradient(145deg,#a64287,#522e72)!important}
+.omega-protocol-ultimate .omega-protocol-action-glyph{font-size:36px}
+.omega-protocol-ultimate small{color:#ffe1f5;font-size:10px}
+.omega-protocol-action-pad button:disabled{filter:grayscale(.65);opacity:.68}
+.omega-protocol-stage-meta{
+ position:absolute;bottom:11px;left:18px;right:18px;display:flex;gap:14px;
+ color:rgba(197,218,237,.7);font-size:10px;letter-spacing:.03em;
+ pointer-events:none;z-index:3
+}
+.omega-protocol-stage-meta span:last-child{margin-left:auto;color:#a1dce2}
+.omega-protocol-paused{
+ z-index:7;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ background:rgba(8,14,30,.5);color:white;pointer-events:none;gap:7px
+}
+.omega-protocol-paused strong{font-size:clamp(20px,3vw,34px)}
+.omega-protocol-paused span{font-size:12px;color:#b8cadc}
+.omega-protocol-overlay{
+ position:absolute;inset:0;z-index:10;display:grid;place-items:center;
+ background:rgba(4,9,23,.76);backdrop-filter:blur(8px);padding:12px;overflow:auto
+}
+.omega-protocol-rewards,.omega-protocol-end{
+ position:relative;max-height:100%;width:min(800px,100%);overflow:auto;
+ border:1px solid rgba(240,135,207,.65);border-radius:20px;
+ background:linear-gradient(160deg,#263149,#161d31 82%);
+ box-shadow:0 16px 80px #000a,0 0 45px #db58a724;
+ padding:clamp(13px,2.3vw,30px);text-align:center
+}
+.omega-protocol-modal-kicker{font-size:10px;font-weight:850;letter-spacing:.22em;color:#fda1d5}
+.omega-protocol-rewards h2,.omega-protocol-end h2{font-size:clamp(20px,3vw,30px);margin:5px 0 7px}
+.omega-protocol-rewards p,.omega-protocol-end p{font-size:12px;color:#b8cde3;margin:0 0 16px}
+.omega-protocol-reward-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.omega-protocol-reward-cards button{
+ min-height:176px;display:flex;flex-direction:column;justify-content:space-between;
+ align-items:center;gap:12px;padding:18px 10px;
+ background:linear-gradient(160deg,rgba(68,64,115,.94),rgba(37,41,73,.94));
+ border:1px solid #9a8cc8;border-radius:14px
+}
+.omega-protocol-reward-cards button strong{font-size:19px;color:#fff0fc}
+.omega-protocol-reward-cards button span{font-size:12px;color:#cfdeef}
+.omega-protocol-card-index{color:#c0b4ea;font-size:10px;font-weight:800;letter-spacing:.12em}
+.omega-protocol-card-rank{color:#f8c6e1;font-size:11px;font-weight:900}
+.omega-protocol-end{max-width:550px}
+.omega-protocol-end button{border-color:#ec8dc1;background:#653861;margin-top:8px}
+.omega-protocol-arena[data-omega-phase="reward"] .omega-protocol-controls,
+.omega-protocol-arena[data-omega-phase="victory"] .omega-protocol-controls,
+.omega-protocol-arena[data-omega-phase="defeat"] .omega-protocol-controls{pointer-events:none;visibility:hidden}
+.omega-protocol-bottom-toolbar{
+ min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:15px;
+ padding:7px clamp(12px,2.8vw,36px);
+ background:linear-gradient(100deg,#131d31,#1a2137);
+ border-top:1px solid rgba(119,172,212,.23);z-index:2
+}
+.omega-protocol-run-tools{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
+.omega-protocol-run-tools>label{font-size:10px;letter-spacing:.08em;color:#9ec4dd;display:flex;align-items:center;gap:7px}
+.omega-protocol-run-tools input{
+ background:#0d1b2b;color:#fff;border:1px solid #516d86;border-radius:7px;
+ max-width:100px;padding:8px 9px;font:inherit;letter-spacing:0;font-size:12px
+}
+.omega-protocol-run-tools button{padding:8px 12px;font-size:11px;font-weight:800;white-space:nowrap;border-radius:8px}
+.omega-protocol-warning{color:#829bad;font-size:10px;text-align:right;line-height:1.4;margin:0}
+@media(max-width:760px){
+ .omega-protocol-topbar{min-height:59px;padding:6px 10px}
+ .omega-protocol-heading h1{font-size:22px}
+ .omega-protocol-heading p{display:none}
+ .omega-protocol-exit{font-size:10px;padding:6px 9px!important}
+ .omega-protocol-stage{padding:4px}
+ .omega-protocol-arena{border-radius:10px}
+ .omega-protocol-stats{inset:7px 7px auto;gap:4px;flex-wrap:nowrap}
+ .omega-protocol-stats>div{padding:6px;min-width:0!important;border-radius:7px}
+ .omega-protocol-wave{flex:0 0 auto;min-width:105px!important}
+ .omega-protocol-wave strong{font-size:14px}
+ .omega-protocol-wave strong span{font-size:9px}
+ .omega-protocol-stats small{font-size:7px}
+ .omega-protocol-hp{flex:1 1 0!important;max-width:none;min-width:0!important}
+ .omega-protocol-hp>span{font-size:10px}
+ .omega-protocol-threat{min-width:48px!important}
+ .omega-protocol-threat strong{font-size:15px}
+ .omega-protocol-modifier{display:none!important}
+ .omega-protocol-pad{width:144px;height:144px;bottom:43px;left:12px;gap:4px}
+ .omega-protocol-pad button{border-radius:11px;font-size:20px}
+ .omega-protocol-action-pad{right:12px;bottom:52px;gap:9px}
+ .omega-protocol-action-pad button{width:65px;height:65px;font-size:10px}
+ .omega-protocol-ultimate{width:83px!important;height:83px!important}
+ .omega-protocol-action-glyph{font-size:22px}
+ .omega-protocol-ultimate .omega-protocol-action-glyph{font-size:29px}
+ .omega-protocol-stage-meta{font-size:9px;bottom:10px;left:12px;right:12px}
+ .omega-protocol-stage-meta span:nth-child(1),.omega-protocol-stage-meta span:nth-child(2),.omega-protocol-stage-meta span:nth-child(3){display:none}
+ .omega-protocol-bottom-toolbar{min-height:48px;padding:6px 8px;gap:8px}
+ .omega-protocol-run-tools{gap:5px}
+ .omega-protocol-run-tools input{max-width:70px;padding:7px 5px;font-size:10px}
+ .omega-protocol-run-tools>label{font-size:9px;gap:3px}
+ .omega-protocol-run-tools button{padding:8px 7px;font-size:10px}
+ .omega-protocol-warning{display:none}
+ .omega-protocol-reward-cards button{min-height:136px;padding:12px 6px;gap:7px}
+ .omega-protocol-reward-cards button strong{font-size:14px}
+ .omega-protocol-reward-cards button span{font-size:10px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-topbar{min-height:63px}
+ .omega-protocol-stage{padding:3px}
+ .omega-protocol-stats{flex-wrap:wrap}
+ .omega-protocol-modifier{display:none!important}
+ .omega-protocol-boss-alert{top:96px;font-size:9px}
+ .omega-protocol-pad{bottom:55px;left:10px;width:144px;height:144px}
+ .omega-protocol-action-pad{bottom:70px;right:10px;gap:7px}
+ .omega-protocol-action-pad button{width:60px;height:60px}
+ .omega-protocol-ultimate{width:76px!important;height:76px!important}
+ .omega-protocol-reward-cards{grid-template-columns:1fr;gap:7px}
+ .omega-protocol-reward-cards button{min-height:83px;gap:4px;flex-direction:row;padding:10px 12px}
+ .omega-protocol-reward-cards button strong{font-size:15px;max-width:35%}
+ .omega-protocol-reward-cards button span{max-width:38%}
+ .omega-protocol-card-index{max-width:15%;font-size:8px}
+ .omega-protocol-card-rank{max-width:13%;font-size:9px}
+ .omega-protocol-bottom-toolbar{padding:6px}
+ .omega-protocol-run-tools{width:100%;justify-content:space-between}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-topbar{min-height:40px;padding:4px 11px}
+ .omega-protocol-tag{font-size:7px}
+ .omega-protocol-heading h1{font-size:18px;margin:0}
+ .omega-protocol-heading p{display:none}
+ .omega-protocol-exit{font-size:10px;padding:4px 8px!important}
+ .omega-protocol-bottom-toolbar{min-height:36px;padding:4px 10px}
+ .omega-protocol-stage{padding:3px}
+ .omega-protocol-stats{inset:5px auto auto 6px;gap:5px}
+ .omega-protocol-stats>div{padding:4px 7px}
+ .omega-protocol-hp{min-width:130px!important;flex:0 0 140px!important}
+ .omega-protocol-wave{min-width:105px!important}
+ .omega-protocol-threat{min-width:45px!important}
+ .omega-protocol-boss-alert{top:50px;padding:3px 9px;font-size:8px}
+ .omega-protocol-pad{width:140px;height:140px;bottom:19px;left:17px;gap:2px}
+ .omega-protocol-pad button{font-size:16px;border-radius:7px}
+ .omega-protocol-action-pad{right:24px;bottom:22px;gap:9px}
+ .omega-protocol-action-pad button{width:48px;height:48px;font-size:9px}
+ .omega-protocol-ultimate{width:61px!important;height:61px!important}
+ .omega-protocol-action-glyph{font-size:16px}
+ .omega-protocol-ultimate .omega-protocol-action-glyph{font-size:20px}
+ .omega-protocol-stage-meta{font-size:8px;bottom:3px}
+ .omega-protocol-rewards{padding:8px 14px}
+ .omega-protocol-rewards h2{font-size:18px;margin:0 0 3px}
+ .omega-protocol-rewards p{font-size:10px;margin:0 0 5px}
+ .omega-protocol-reward-cards{gap:7px}
+ .omega-protocol-reward-cards button{min-height:109px;padding:10px 6px;gap:4px}
+ .omega-protocol-reward-cards button strong{font-size:13px}
+ .omega-protocol-modal-kicker{font-size:8px}
+ .omega-protocol-run-tools input{padding:4px 6px}
+ .omega-protocol-run-tools button{padding:5px 10px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.omega-protocol-lab button{transition:none}}
+
+
+/* Mission-first traversal HUD; display only the current sector objective. */
+.omega-protocol-mission{
+ position:absolute;z-index:4;left:50%;top:87px;transform:translateX(-50%);
+ width:min(370px,calc(100% - 34px));display:flex;flex-direction:column;
+ align-items:center;gap:3px;pointer-events:none;text-align:center;
+ background:linear-gradient(155deg,rgba(6,22,37,.9),rgba(13,36,52,.82));
+ border:1px solid #66c4c073;border-radius:12px;padding:9px 14px;
+ box-shadow:0 7px 24px #0005;backdrop-filter:blur(8px)
+}
+.omega-protocol-mission small{font-size:9px;color:#96e0d9;letter-spacing:.1em;font-weight:800}
+.omega-protocol-mission strong{font-size:15px;color:#f6faff}
+.omega-protocol-mission span{font-size:10px;color:#c2d4de}
+.omega-protocol-mission em{font-style:normal;font-size:10px;color:#ffd29a;font-weight:800}
+.omega-protocol-action-pad button.omega-protocol-interact{
+ width:70px;height:70px;border-color:#74e3d5!important;
+ background:linear-gradient(150deg,#2b9587,#1e5765)!important;
+ box-shadow:0 7px 19px #0008,inset 0 0 0 1px #c9fff44d
+}
+.omega-protocol-action-pad button.omega-protocol-interact .omega-protocol-action-glyph{
+ color:#dbfff5;font-size:24px;font-weight:950
+}
+@media(max-width:760px){
+ .omega-protocol-mission{top:67px;width:min(300px,calc(100% - 24px));padding:6px 9px}
+ .omega-protocol-mission strong{font-size:12px}
+ .omega-protocol-mission span{font-size:9px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:61px;height:61px}
+ .omega-protocol-action-pad button.omega-protocol-interact .omega-protocol-action-glyph{font-size:18px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-mission{top:130px;left:9px;transform:none;align-items:flex-start;text-align:left;width:min(238px,calc(100% - 24px))}
+ .omega-protocol-mission span{font-size:9px;line-height:1.3}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:55px;height:55px}
+ .omega-protocol-action-pad{gap:5px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission{left:50%;top:54px;width:min(275px,calc(100% - 290px));padding:4px 9px;gap:1px}
+ .omega-protocol-mission small{font-size:7px}
+ .omega-protocol-mission strong{font-size:10px}
+ .omega-protocol-mission span{font-size:8px}
+ .omega-protocol-boss-alert{top:117px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:48px;height:48px}
+}
+
+
+/* Distinct real boss telegraph HUD; all safety timing mirrors the engine state. */
+.omega-protocol-boss-phase{
+ z-index:5;position:absolute;top:148px;left:50%;transform:translateX(-50%);
+ min-width:245px;max-width:min(380px,calc(100% - 22px));
+ display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap;
+ padding:7px 15px;text-align:center;
+ border:1px solid rgba(255,135,132,.58);border-radius:11px;
+ background:linear-gradient(110deg,rgba(65,25,41,.91),rgba(39,27,53,.88));
+ box-shadow:0 0 23px #e9535933;
+ color:#ffe6df;pointer-events:none;font-size:11px
+}
+.omega-protocol-boss-phase strong{font-size:12px;color:#ffeac1}
+.omega-protocol-boss-phase span{font-size:11px}
+.omega-protocol-boss-phase em{font-size:9px;color:#ff9cce;font-weight:950;letter-spacing:.09em;font-style:normal}
+@media(max-width:760px){
+ .omega-protocol-boss-phase{top:119px;padding:4px 8px;min-width:0;width:max-content;max-width:calc(100% - 20px)}
+ .omega-protocol-boss-phase strong,.omega-protocol-boss-phase span{font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-boss-phase{top:139px;max-width:min(340px,calc(100% - 280px));padding:3px 7px;border-radius:7px}
+ .omega-protocol-boss-phase strong,.omega-protocol-boss-phase span{font-size:8px}
+ .omega-protocol-boss-phase em{font-size:7px}
+}
+
+
+/* Screen-oriented mission wayfinder, shown only once a real on-map objective
+   or exit has been unlocked by combat. */
+.omega-protocol-wayfinder{
+ display:flex;align-items:center;justify-content:center;gap:8px;
+ padding:4px 10px;border-radius:7px;border:1px solid rgba(117,242,222,.35);
+ background:rgba(13,59,71,.65);margin-top:3px;color:#defcf9;
+ font-size:10px;max-width:100%;
+}
+.omega-protocol-wayfinder-arrow{display:inline-block;color:#8bffdc;font-size:18px;line-height:1}
+.omega-protocol-wayfinder span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.omega-protocol-wayfinder strong{color:#ffdb9f;white-space:nowrap;font-size:10px}
+@media(max-width:760px){
+ .omega-protocol-wayfinder{padding:3px 7px;gap:5px;font-size:9px}
+ .omega-protocol-wayfinder-arrow{font-size:15px}
+ .omega-protocol-wayfinder strong{font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-wayfinder{padding:2px 6px;margin-top:0}
+ .omega-protocol-wayfinder-arrow{font-size:13px}
+}
+
+/* Boss battle owns the upper center; restore mission panel after boss defeat,
+   when the same field requires physical event interactions and exit traversal. */
+.omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-mission{display:none}
+@media(max-width:760px){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:73px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:132px}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:108px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:162px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-alert{top:44px}
+ .omega-protocol-arena[data-omega-boss-active="true"] .omega-protocol-boss-phase{top:89px}
+}
+
+/* Center stick: 360-degree drag while cardinal buttons remain usable.
+   Thumb displacement is set directly from pointer input, never via React FPS. */
+.omega-protocol-pad .omega-protocol-stick{
+ grid-column:2;grid-row:2;position:relative;z-index:5;overflow:visible;
+ padding:0;border-radius:50%;touch-action:none;
+ background:radial-gradient(circle at 32% 26%,#506a7fdb,#1e334fc9 75%);
+ border:1px solid #9ed6ebd9;box-shadow:0 0 16px #4fdbe53e,inset 0 0 0 4px #091828b0;
+ cursor:grab
+}
+.omega-protocol-pad .omega-protocol-stick:active{cursor:grabbing}
+.omega-protocol-stick-thumb{
+ display:block;width:22px;height:22px;border-radius:50%;pointer-events:none;
+ border:2px solid #d8fff7;
+ background:radial-gradient(circle at 38% 30%,#bbfff4,#4ba9c6 75%);
+ box-shadow:0 0 15px #68e7e68c,0 3px 9px #0009;
+ will-change:transform;transition:transform .07s linear
+}
+.omega-protocol-stick:focus-visible{outline:3px solid #bbfff7;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+ .omega-protocol-stick-thumb{transition:none}
+}
+
+
+/* OMEGA CJK AND FOCUS — source-browser and Android-compatible system fonts.
+   The QA runner installs Noto CJK locally; production phones use installed
+   Korean system fonts. Never rely solely on Latin-only Segoe UI/system-ui. */
+.omega-protocol-lab{
+ font-family:'Noto Sans CJK KR','Noto Sans KR','Apple SD Gothic Neo',
+  'Malgun Gothic','SamsungOneKorean','Nanum Gothic',
+  'Arial Unicode MS',system-ui,sans-serif;
+}
+.omega-protocol-lab button,.omega-protocol-lab input{
+ font-family:inherit;
+}
+.omega-protocol-run-tools .omega-protocol-control-switch{
+ color:#aefff0;border-color:#4ca8ac9c;background:#163d49;
+ font-weight:850;letter-spacing:0;white-space:nowrap;
+}
+.omega-protocol-control-switch[aria-pressed="true"]{
+ color:#ffe2f7!important;background:#603b5b!important;border-color:#bd7fa8!important;
+}
+/* First-person-looking combat is not served by four gigantic cardinal keys.
+   Default to a single, touch-proportional stick; preserve an explicit option
+   to display all four legacy direction buttons for accessibility. */
+.omega-protocol-pad[data-omega-pad-mode="analog"]{
+ width:116px!important;height:116px!important;display:block!important;
+ gap:0;touch-action:none;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"]>button:not(.omega-protocol-stick){
+ display:none!important;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"]>.omega-protocol-stick{
+ display:flex!important;width:100%!important;height:100%!important;
+ align-items:center;justify-content:center;
+ border-radius:50%;min-height:0;
+}
+.omega-protocol-pad[data-omega-pad-mode="analog"] .omega-protocol-stick-thumb{
+ width:38px;height:38px;
+ background:radial-gradient(circle at 31% 28%,#c7fff6,#55baca 72%);
+ border-width:2px;
+}
+.omega-protocol-pad[data-omega-pad-mode="arrows"] .omega-protocol-stick-thumb{
+ width:20px;height:20px;
+}
+.omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission>span{
+ display:none;
+}
+.omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission{
+ gap:2px;min-width:0;
+}
+/* Key fighting information remains; less editorial text covers the arena. */
+@media(max-width:760px){
+ .omega-protocol-mission{max-width:calc(100% - 112px)}
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{bottom:34px;left:12px}
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{bottom:34px}
+ .omega-protocol-stats>div{backdrop-filter:none}
+ .omega-protocol-mission{backdrop-filter:blur(4px)}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-topbar{min-height:54px;padding:5px 10px}
+ .omega-protocol-tag{font-size:7px;letter-spacing:.12em}
+ .omega-protocol-heading h1{font-size:18px;letter-spacing:.04em}
+ .omega-protocol-exit{font-size:10px!important}
+ .omega-protocol-stats{inset:6px 6px auto;gap:4px;flex-wrap:nowrap}
+ .omega-protocol-stats>div{padding:5px 6px;border-radius:8px}
+ .omega-protocol-wave{min-width:96px!important}
+ .omega-protocol-wave strong{font-size:13px}
+ .omega-protocol-hp{min-width:0!important}
+ .omega-protocol-hp>span{font-size:9px}
+ .omega-protocol-threat{min-width:43px!important}
+ .omega-protocol-threat strong{font-size:14px}
+ .omega-protocol-mission{
+  top:84px;left:8px;transform:none;align-items:flex-start;text-align:left;
+  width:min(246px,calc(100% - 106px));padding:6px 9px;
+  gap:2px;border-radius:9px
+ }
+ .omega-protocol-mission small{font-size:8px}
+ .omega-protocol-mission strong{font-size:12px}
+ .omega-protocol-mission>span{font-size:9px;line-height:1.35}
+ .omega-protocol-arena[data-omega-field-phase="combat"] .omega-protocol-mission{
+  width:min(190px,calc(100% - 112px));
+ }
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{
+  width:103px!important;height:103px!important;bottom:41px;left:10px
+ }
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{
+  width:140px;height:140px;bottom:34px;left:9px
+ }
+ .omega-protocol-action-pad{right:8px;bottom:48px;gap:5px}
+ .omega-protocol-action-pad button{width:52px;height:52px;font-size:9px}
+ .omega-protocol-ultimate{width:65px!important;height:65px!important}
+ .omega-protocol-action-pad button.omega-protocol-interact{
+  width:53px;height:53px
+ }
+ .omega-protocol-action-glyph{font-size:18px}
+ .omega-protocol-ultimate .omega-protocol-action-glyph{font-size:23px}
+ .omega-protocol-stage-meta{display:none}
+ .omega-protocol-bottom-toolbar{min-height:42px;padding:3px 6px}
+ .omega-protocol-run-tools{gap:5px;justify-content:space-between}
+ .omega-protocol-run-tools>label{display:none}
+ .omega-protocol-run-tools button{padding:7px 8px;font-size:10px;min-width:0}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-topbar{min-height:34px;padding:3px 10px}
+ .omega-protocol-heading h1{font-size:16px}
+ .omega-protocol-stage-meta{display:none}
+ .omega-protocol-mission{
+  top:47px;left:50%;width:min(212px,calc(100% - 320px));
+  padding:4px 8px;gap:1px
+ }
+ .omega-protocol-mission small{font-size:8px}
+ .omega-protocol-mission strong{font-size:10px}
+ .omega-protocol-mission>span{font-size:8px}
+ .omega-protocol-pad[data-omega-pad-mode="analog"]{
+  width:90px!important;height:90px!important;bottom:13px;left:12px
+ }
+ .omega-protocol-pad[data-omega-pad-mode="arrows"]{
+  width:126px;height:126px;bottom:12px;left:12px
+ }
+ .omega-protocol-action-pad{right:11px;bottom:13px;gap:7px}
+ .omega-protocol-action-pad button{width:47px;height:47px}
+ .omega-protocol-action-pad button.omega-protocol-interact{width:47px;height:47px}
+ .omega-protocol-ultimate{width:56px!important;height:56px!important}
+ .omega-protocol-bottom-toolbar{min-height:33px;padding:3px 8px}
+ .omega-protocol-run-tools>label{display:none}
+ .omega-protocol-run-tools{width:100%;justify-content:space-between;gap:5px}
+ .omega-protocol-run-tools button{padding:5px 9px;font-size:9px}
+}
+/* Do not apply the browser's Latin font-style expansion to Korean headings. */
+.omega-protocol-mission :is(strong,small,span),
+.omega-protocol-action-pad button,
+.omega-protocol-run-tools button{word-break:keep-all}
+
+
+/* AIRA identity anchor: existing title art, never gameplay sprite approval.
+   Keep the actual battle canvas and controls free of decorative overlays. */
+.omega-protocol-brand{
+ display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;
+}
+.omega-protocol-hero-identity{
+ width:58px;height:58px;flex:0 0 58px;position:relative;
+ border-radius:15px;overflow:hidden;isolation:isolate;
+ background:linear-gradient(135deg,#31354f,#202641 70%,#44274a);
+ border:1px solid rgba(252,161,214,.62);
+ box-shadow:0 0 0 2px rgba(15,25,47,.8),0 0 18px rgba(255,122,185,.2);
+ pointer-events:none;
+}
+.omega-protocol-hero-identity img{
+ position:absolute;width:100%;height:100%;inset:0;
+ object-fit:cover;object-position:54% 18%;
+ filter:saturate(.98) contrast(1.08);
+}
+.omega-protocol-hero-identity span{
+ position:absolute;right:0;bottom:0;font-size:9px;font-weight:950;
+ padding:1px 4px;color:#f6eafb;
+ background:rgba(35,21,48,.93);border-radius:5px 0 0 0;
+}
+@media(max-width:760px){
+ .omega-protocol-brand{gap:8px}
+ .omega-protocol-hero-identity{
+  width:42px;height:42px;flex-basis:42px;border-radius:11px
+ }
+ .omega-protocol-heading p{display:none}
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-hero-identity{
+  width:36px;height:36px;flex-basis:36px;border-radius:9px
+ }
+ .omega-protocol-brand{gap:7px}
+ .omega-protocol-exit{padding:6px 9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-hero-identity{
+  width:29px;height:29px;flex-basis:29px;border-radius:8px
+ }
+ .omega-protocol-brand{gap:7px}
+ .omega-protocol-hero-identity span{font-size:7px}
+}
+
+/* On 844×390-style landscape phones every vertical pixel is gameplay space.
+   Preserve title and AIRA portrait, suppress lengthy descriptive copy. */
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-topbar{min-height:42px;height:42px;padding:3px 10px}
+ .omega-protocol-heading p{display:none}
+ .omega-protocol-tag{font-size:7px;line-height:1;letter-spacing:.12em}
+ .omega-protocol-heading h1{font-size:15px;line-height:1.02;margin:1px 0 0}
+ .omega-protocol-hero-identity{width:29px;height:29px;flex-basis:29px}
+}
+
+/* 2026-11-09 Director review: the prior centered mobile mission plaque
+ * covered AIRA's head/torso in real 844×390 gameplay captures. Reserve
+ * the middle for actual combat silhouettes. Left stack fits below HP
+ * and above the virtual stick, without changing desktop/portrait HUD.
+ */
+@media (max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission{
+  left:12px;top:110px;transform:none;
+  width:min(220px,calc(100% - 322px));max-width:220px;
+  align-items:flex-start;text-align:left;
+  padding:5px 9px;gap:2px;border-radius:9px;
+  background:linear-gradient(145deg,rgba(8,23,37,.89),rgba(12,31,44,.78));
+ }
+ .omega-protocol-mission small{font-size:7px}
+ .omega-protocol-mission strong{font-size:10px;line-height:1.2}
+ .omega-protocol-mission>span{font-size:8px;line-height:1.2}
+}
+
+/* AIRA V2 live-combat composition. At 844x390 the previous Environment
+ * status ended over the centered hero's hair; move it above the radar and
+ * keep the middle third of the screen free for actual actor animation.
+ * All meters remain in the DOM and readable.
+ */
+@media (max-height:430px) and (orientation:landscape){
+ .omega-protocol-stats{
+  inset:5px 6px auto 6px;
+  width:auto;max-width:none;gap:5px;align-items:flex-start;
+ }
+ .omega-protocol-wave{flex:0 0 135px!important;min-width:135px!important}
+ .omega-protocol-hp{
+  flex:0 0 135px!important;max-width:135px!important;min-width:135px!important
+ }
+ .omega-protocol-threat{flex:0 0 55px!important;min-width:55px!important}
+ .omega-protocol-modifier{
+  margin-left:auto;flex:0 0 108px!important;
+  max-width:108px;min-width:108px!important
+ }
+}
+
+/* Silver AIRA production-art QA is explicitly opt-in and never covers the
+ * central action corridor. Static review notice lives above the world. */
+.omega-silver-review-bar{
+ display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+ gap:7px 15px;padding:7px 14px;background:#352848;color:#f2e9ff;
+ border-block:1px solid #ab79d855;font-size:11px;line-height:1.35;
+}
+.omega-silver-review-bar strong{font-size:12px;color:#f3deff}
+.omega-silver-review-bar span{flex:1;min-width:170px}
+.omega-silver-review-bar a{color:#f0d4ff;text-decoration:underline;text-underline-offset:3px}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-silver-review-bar{padding:3px 9px;font-size:9px;gap:4px 8px}
+ .omega-silver-review-bar strong{font-size:10px}
+}
+
+
+/* DEV-only OMEGA gun + blade controls. Two-column thumb cluster prevents
+   cramped 390px portrait and low-height landscape button overlap. */
+.omega-protocol-action-pad button.omega-protocol-blade{
+ border-color:#d8a2ff!important;
+ background:linear-gradient(145deg,#6d3c9c,#2a286d)!important;
+ box-shadow:0 0 0 1px #d8a2ff55,inset 0 0 18px #b56aff2a;
+}
+.omega-protocol-blade small{font-size:9px;color:#ebd0ff}
+@media(max-width:760px){
+ .omega-protocol-action-pad{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  width:156px;gap:5px;justify-items:center;align-items:center;
+ }
+ .omega-protocol-action-pad button.omega-protocol-blade{
+  width:65px;height:65px;
+ }
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-action-pad{width:134px;gap:4px;right:7px;bottom:38px}
+ .omega-protocol-action-pad button.omega-protocol-blade{width:58px;height:58px}
+ .omega-protocol-action-pad button.omega-protocol-ultimate{width:65px!important;height:65px!important}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-action-pad{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  width:118px;gap:4px;right:14px;bottom:11px
+ }
+ .omega-protocol-action-pad button.omega-protocol-blade{width:47px;height:47px}
+ .omega-protocol-action-pad button.omega-protocol-ultimate{width:56px!important;height:56px!important}
+}
+
+/* Subtitled AIRA story transmissions: briefings, not persistent screen cover. */
+.omega-protocol-mission .omega-protocol-story-radio{
+ max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ font-size:10px;color:#d9b6ff;letter-spacing:0;display:block;
+}
+@media(max-width:760px){
+ .omega-protocol-mission .omega-protocol-story-radio{font-size:9px;max-width:100%}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-mission .omega-protocol-story-radio{display:none}
+}
+
+/* M04: sector-aware quarantine shutter inside the LIVE game viewport.
+   The old world remains under this until opaque; new terrain is then loaded
+   at the portal seam and the shutters reopen over the actual next field.
+   This is a transitional corridor study, not a fully streamed 15-zone map. */
+.omega-protocol-gate-transit{
+ position:absolute;z-index:8;inset:0;pointer-events:auto;
+ display:grid;place-items:center;isolation:isolate;
+ background:radial-gradient(circle at center,#263d50,#06131f 78%);
+ transition:none;overflow:hidden;color:#e1f8f6;
+}
+.omega-protocol-gate-doors{
+ position:absolute;inset:0;display:flex;gap:6px;
+}
+.omega-protocol-gate-doors i{
+ flex:1;display:block;
+ background:repeating-linear-gradient(90deg,#13283c 0 12px,#243f53 13px 15px,#142d40 17px 23px);
+ border-inline:6px solid #496377;box-shadow:inset 0 0 90px #07111b;
+ transform:skewX(-5deg);
+}
+.omega-protocol-gate-doors i:last-child{transform:skewX(5deg)}
+.omega-protocol-gate-sign{
+ position:relative;z-index:1;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;text-align:center;gap:10px;
+ max-width:min(92%,520px);padding:25px clamp(20px,4vw,42px);
+ border:1px solid #89e6cd9c;border-radius:14px;
+ background:linear-gradient(135deg,#071b2af0,#123746ee);
+ box-shadow:0 0 0 3px #0b1728,0 0 65px #1ccda53c;
+}
+.omega-protocol-gate-sign span{font-size:10px;letter-spacing:.22em;color:#93ead7;font-weight:850}
+.omega-protocol-gate-sign strong{font-size:clamp(19px,3.5vw,32px);color:#f1fffb;line-height:1.16}
+.omega-protocol-gate-sign p{margin:0;color:#b7d4d6;font-size:clamp(11px,1.6vw,15px)}
+.omega-protocol-gate-sign small{color:#e8b984;font-size:11px}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-gate-sign{padding:9px 18px;gap:3px}
+ .omega-protocol-gate-sign strong{font-size:18px}
+ .omega-protocol-gate-sign span,.omega-protocol-gate-sign small{font-size:9px}
+}
+
+/* M04-B: sector 01→02 scaffold-lift section.  The cage's top value is
+   driven by the real game-clock portal state, not a CSS auto-timer. */
+.omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"]{
+ background:linear-gradient(113deg,#0c2236,#223f50 57%,#0a1a2d);
+}
+.omega-protocol-lift-cross-section{
+ position:absolute;inset:0;overflow:hidden;opacity:.78;
+ background:
+  repeating-linear-gradient(0deg,transparent 0 33px,#8bc7cf22 34px 36px,transparent 37px 71px),
+  repeating-linear-gradient(90deg,#142b3b 0 10px,#203749 12px 15px,#102334 18px 24px);
+}
+.omega-protocol-lift-rail{
+ position:absolute;left:50%;top:-2%;bottom:-2%;
+ width:min(350px,70vw);transform:translateX(-50%);
+ border-left:12px solid #81a6b4;border-right:12px solid #81a6b4;
+ box-shadow:inset 0 0 80px #000d,0 0 35px #5ec6bd33;
+}
+.omega-protocol-lift-rail i{
+ position:absolute;left:0;right:0;top:15%;height:5px;
+ background:#c2d1c9;box-shadow:0 85px 0 #c2d1c9,0 170px 0 #c2d1c9,0 255px 0 #c2d1c9;
+}
+.omega-protocol-lift-rail i:nth-child(2){top:20%}
+.omega-protocol-lift-rail i:nth-child(3){top:40%}
+.omega-protocol-lift-rail i:nth-child(4){top:60%}
+.omega-protocol-lift-cage{
+ position:absolute;left:50%;width:min(280px,64vw);
+ height:min(140px,30vh);transform:translate(-50%,-50%);
+ background:linear-gradient(135deg,#567a83d9,#192d3c 70%,#0e2232);
+ border:8px solid #9db5c1;border-top:13px solid #f2be78;
+ outline:3px solid #1b3446;
+ box-shadow:inset 0 0 32px #000b,0 0 55px #4fc9ca55;
+ display:flex;align-items:center;justify-content:space-around;
+ color:#f5e8b5;letter-spacing:.11em;font-size:13px;font-weight:900;
+}
+.omega-protocol-lift-cage:before{
+ content:"";position:absolute;left:20%;right:20%;top:-300px;
+ border-left:3px solid #b2c7cd;border-right:3px solid #b2c7cd;height:300px;
+}
+.omega-protocol-lift-cage b{color:#a0ffde}
+.omega-protocol-lift-cross-section>small{
+ position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+ color:#d6eedf;white-space:nowrap;font-weight:850;letter-spacing:.2em;
+ background:#112b3eb9;padding:6px 14px;border:1px solid #9ae4cb8a;
+}
+.omega-protocol-lift-cross-section>small b{color:#f3c476}
+.omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+ margin-left: min(47vw,430px);max-width:min(48vw,390px);
+}
+.omega-protocol-lift-depth{color:#a7e8c6!important;font-size:11px!important}
+@media(max-width:600px) and (orientation:portrait){
+ .omega-protocol-lift-cage{width:min(215px,64vw);height:100px}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+  margin-left:0;align-self:end;margin-bottom:7vh;max-width:calc(100% - 32px);
+  padding:9px 15px;gap:4px;
+ }
+ .omega-protocol-lift-cross-section>small{bottom:33%}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign strong{font-size:19px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lift-cage{height:85px}
+ .omega-protocol-gate-transit[data-omega-passage-kind="scaffold_lift"] .omega-protocol-gate-sign{
+  max-width:min(44vw,390px);margin-left:min(48vw,420px);gap:3px;
+ }
+ .omega-protocol-lift-cross-section>small{bottom:4%;font-size:8px}
+}
+
+/* M04-C: three world-matched ACT transitions, not a recoloured shutter.
+   State/positions are driven by OmegaCombatSession gateTransit elapsed. */
+.omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"]{
+ background:linear-gradient(120deg,#0b2637,#244351 53%,#0e202d);
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"]{
+ background:radial-gradient(ellipse at 48% 52%,#1c4a54,#091622 78%);
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"]{
+ background:linear-gradient(115deg,#2b1c38,#111a30 55%,#34233c);
+}
+.omega-protocol-crane-cross-section,
+.omega-protocol-tunnel-cross-section,
+.omega-protocol-airlock-cross-section{
+ position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.86;
+}
+.omega-protocol-crane-cross-section{
+ background:repeating-linear-gradient(90deg,transparent 0 39px,#a9d3db23 41px 43px);
+}
+.omega-protocol-crane-shaft{
+ position:absolute;left:29%;top:-12%;bottom:-12%;width:26%;
+ border-inline:10px solid #80a5ad;
+ background:repeating-linear-gradient(0deg,#173544 0 21px,#47788a 23px 27px,#203849 28px 54px);
+ box-shadow:inset 0 0 34px #091522cc,0 0 25px #84c6d63a;
+}
+.omega-protocol-crane-boom{
+ position:absolute;left:-3%;top:9%;width:78%;height:15px;
+ background:repeating-linear-gradient(90deg,#c5a474 0 25px,#675d50 27px 46px);
+ transform:rotate(-8deg);box-shadow:0 13px 0 #142b3a;
+}
+.omega-protocol-crane-counterweight{
+ position:absolute;left:62%;top:23%;width:14%;height:22%;
+ background:repeating-linear-gradient(0deg,#5f6e78 0 9px,#15212c 12px 19px);
+ border:7px solid #c5a57b;box-shadow:0 14px 0 #1d3642;
+}
+.omega-protocol-crane-car{
+ position:absolute;left:42%;transform:translate(-50%,-50%);
+ width:min(250px,36vw);height:min(125px,28vh);
+ background:linear-gradient(115deg,#7d9aab,#243c4e 58%,#16283a);
+ border:9px solid #b7d2de;border-top:13px solid #efbd79;
+ display:flex;align-items:center;flex-direction:column;justify-content:center;
+ box-shadow:inset 0 0 45px #0009,0 0 42px #86d4e450;
+ font-size:13px;color:#fff3d6;letter-spacing:.07em;
+}
+.omega-protocol-crane-car small{font-size:10px;color:#a3fff0}
+.omega-protocol-tunnel-cross-section{
+ background:repeating-radial-gradient(ellipse at 50% 50%,
+ #263f4e 0 16px,#598a9a 17px 20px,#132938 22px 45px);
+}
+.omega-protocol-tunnel-arch{
+ position:absolute;left:7%;right:7%;top:4%;height:87%;
+ border:19px solid #659bac;border-bottom:0;border-radius:49% 49% 0 0;
+ box-shadow:inset 0 0 42px #06131d,0 0 39px #5db5c83c;
+}
+.omega-protocol-tunnel-pipes{
+ position:absolute;top:8%;left:9%;right:9%;height:35px;
+ border-block:10px solid #bd986d;
+ background:repeating-linear-gradient(90deg,#375b67 0 26px,#82c9d6 29px 35px);
+}
+.omega-protocol-tunnel-bore{
+ position:absolute;left:49%;top:54%;height:26vh;min-height:80px;
+ width:min(46vw,370px);border-radius:48%;
+ background:radial-gradient(ellipse,#040c15,#102f3e 61%,#90cdd2 79%,#183240 82%);
+ display:grid;place-items:center;border:6px solid #80b2ba;
+ color:#d9f7f4;letter-spacing:.12em;font-size:12px;
+ box-shadow:0 0 58px #7bd3d862;
+}
+.omega-protocol-airlock-cross-section{
+ background:repeating-linear-gradient(0deg,#20283a 0 20px,#383449 22px 27px);
+}
+.omega-protocol-airlock-gauge{
+ position:absolute;top:12%;left:25%;width:50%;
+ text-align:center;color:#f6d1e2;font-size:12px;letter-spacing:.17em;
+ display:flex;justify-content:space-around;align-items:center;
+ background:#0d1b2c;border:3px solid #bda1c4;padding:8px 14px;
+}
+.omega-protocol-airlock-gauge b{
+ border:4px solid #e1a4c1;border-radius:50%;padding:12px;color:#fff0f6;
+}
+.omega-protocol-airlock-bulkheads{
+ position:absolute;left:10%;right:10%;top:28%;bottom:17%;
+ display:flex;border:11px solid #ad9baf;overflow:hidden;
+ box-shadow:inset 0 0 42px #0009,0 0 32px #ffaad538;
+}
+.omega-protocol-airlock-bulkheads i{
+ width:50%;height:100%;
+ background:repeating-linear-gradient(90deg,#4e526a 0 17px,#79718a 19px 33px,#292f45 35px 39px);
+ border:5px solid #bea7bd;box-shadow:inset 0 0 20px #0a1024;
+}
+.omega-protocol-airlock-seal{
+ position:absolute;bottom:10%;left:50%;transform:translateX(-50%);
+ border:2px solid #e7aaca;background:#16152aca;padding:7px 19px;
+ color:#ffe3ed;font-size:11px;letter-spacing:.1em;white-space:nowrap;
+}
+.omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+.omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+.omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+ margin-left:min(47vw,430px);max-width:min(48vw,380px);
+}
+@media(max-width:600px) and (orientation:portrait){
+ .omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+  margin:0 12px 6vh;align-self:end;max-width:calc(100% - 24px);
+  padding:8px 12px;gap:4px;
+ }
+ .omega-protocol-crane-car{width:185px;height:92px}
+ .omega-protocol-tunnel-bore{width:160px;height:105px;font-size:9px}
+ .omega-protocol-airlock-seal{font-size:8px;bottom:35%}
+ .omega-protocol-airlock-gauge{left:8%;width:84%}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-gate-transit[data-omega-passage-kind="crane_elevator"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="service_tunnel"] .omega-protocol-gate-sign,
+ .omega-protocol-gate-transit[data-omega-passage-kind="control_airlock"] .omega-protocol-gate-sign{
+  margin-left:min(49vw,440px);max-width:46vw;padding:8px;gap:3px;
+ }
+ .omega-protocol-crane-car{height:80px;font-size:10px}
+ .omega-protocol-tunnel-bore{height:90px}
+}
+
+/* M04-D: supply takes place IN the quarantine passage, preserving actual
+   world context instead of a full blackout / faux stage-clear scene. The
+   native engine remains paused until an offered run-only card is selected.
+   Dialog is keyboard/touch accessible. It never changes stored Watch state. */
+.omega-protocol-reward-overlay.omega-protocol-safe-room{
+ display:flex;justify-content:flex-end;align-items:flex-end;
+ padding:clamp(10px,2.5vw,24px);
+ background:linear-gradient(90deg,transparent 0%,#071a2b38 37%,#030c18a6 100%);
+ backdrop-filter:blur(1.5px);
+ overflow:hidden;
+}
+.omega-protocol-safe-room .omega-protocol-rewards{
+ width:min(690px,94%);
+ max-height:min(86%,600px);overflow:auto;text-align:left;
+ border:1px solid #8adfd6a8;border-left:4px solid #7bf2c1;
+ border-radius:16px;
+ background:linear-gradient(137deg,#0b2435f0,#14273df8 55%,#211e3cf2);
+ box-shadow:0 18px 45px #0009,0 0 60px #25dba735;
+ padding:clamp(12px,2vw,22px);
+}
+.omega-protocol-safe-room-head{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.omega-protocol-safe-room-head .omega-protocol-modal-kicker{
+ color:#a1f9dc;font-size:9px;letter-spacing:.18em;
+}
+.omega-protocol-safe-room-head>small{
+ color:#cedae0;font-size:10px;
+}
+.omega-protocol-safe-room-head h2{
+ margin:1px 0 0;font-size:clamp(18px,2.4vw,26px);color:#f3fff9;
+}
+.omega-protocol-safe-room-head p{
+ margin:1px 0 4px;color:#d2e5e6;font-size:11px;
+}
+.omega-protocol-safe-room-live{
+ color:#f4ce96;font-size:10px;border-left:2px solid #f0cf9b;
+ padding-left:8px;
+}
+.omega-protocol-safe-room .omega-protocol-reward-cards{
+ grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+}
+.omega-protocol-safe-room .omega-protocol-reward-cards button{
+ min-height:126px;padding:10px 8px;gap:7px;
+ border-color:#68b5bd9c;background:linear-gradient(155deg,#2c485bcc,#283349ed);
+ align-items:stretch;text-align:left;border-radius:11px;
+ box-shadow:inset 0 0 0 1px #77e5d018;
+}
+.omega-protocol-safe-room .omega-protocol-reward-cards button:hover,
+.omega-protocol-safe-room .omega-protocol-reward-cards button:focus-visible{
+ background:linear-gradient(160deg,#395776,#3b3a68);
+ border-color:#bcffdf;box-shadow:0 0 0 2px #2cae919c;
+ outline:2px solid #b9f8df;outline-offset:1px;
+}
+.omega-protocol-safe-room .omega-protocol-reward-cards button strong{
+ font-size:clamp(12px,1.5vw,16px);color:#fff6ed;
+}
+.omega-protocol-safe-room .omega-protocol-reward-cards button span{
+ font-size:10px;color:#d4e4f1;line-height:1.45;
+}
+.omega-protocol-safe-room .omega-protocol-card-index{
+ font-size:9px;color:#9ef3da;
+}
+.omega-protocol-safe-room .omega-protocol-card-rank{
+ font-size:10px;color:#f4cbad;
+}
+@media(max-width:620px) and (orientation:portrait){
+ .omega-protocol-reward-overlay.omega-protocol-safe-room{
+  align-items:flex-end;justify-content:center;padding:6px;
+  background:linear-gradient(180deg,#02081010,#0814257d 50%,#030918bb);
+ }
+ .omega-protocol-safe-room .omega-protocol-rewards{
+  width:100%;max-height:67%;padding:10px;border-radius:13px;
+ }
+ .omega-protocol-safe-room-head{gap:2px;margin-bottom:7px}
+ .omega-protocol-safe-room-head h2{font-size:19px}
+ .omega-protocol-safe-room-head p{font-size:10px}
+ .omega-protocol-safe-room .omega-protocol-reward-cards{
+  grid-template-columns:1fr;gap:5px;
+ }
+ .omega-protocol-safe-room .omega-protocol-reward-cards button{
+  display:grid;grid-template-columns:minmax(48px,.4fr) minmax(72px,.7fr) minmax(80px,1fr);
+  gap:3px 7px;min-height:58px;padding:7px 9px;align-items:center;
+ }
+ .omega-protocol-safe-room .omega-protocol-reward-cards button strong{
+  max-width:none;font-size:12px;
+ }
+ .omega-protocol-safe-room .omega-protocol-reward-cards button span{
+  max-width:none;font-size:9px;
+ }
+ .omega-protocol-safe-room .omega-protocol-reward-cards button .omega-protocol-card-rank{
+  grid-column:3;text-align:right;
+ }
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-reward-overlay.omega-protocol-safe-room{
+  padding:5px 10px;align-items:flex-end;
+ }
+ .omega-protocol-safe-room .omega-protocol-rewards{
+  max-height:95%;width:min(640px,82%);padding:9px;
+ }
+ .omega-protocol-safe-room-head{margin-bottom:5px;gap:2px}
+ .omega-protocol-safe-room-head h2{font-size:16px}
+ .omega-protocol-safe-room-head p{font-size:9px;margin:0}
+ .omega-protocol-safe-room-live{font-size:8px}
+ .omega-protocol-safe-room .omega-protocol-reward-cards button{
+  min-height:77px;padding:6px;gap:3px;
+ }
+ .omega-protocol-safe-room .omega-protocol-reward-cards button strong{font-size:11px}
+ .omega-protocol-safe-room .omega-protocol-reward-cards button span{font-size:8px}
+}
+
+/* M04-D5 native-locked-direction warning; presentation only. */
+.omega-protocol-counterplay-hud{
+ position:absolute;z-index:5;pointer-events:none;left:50%;bottom:clamp(132px,18vh,180px);
+ transform:translateX(-50%);width:min(310px,calc(100% - 32px));
+ display:flex;flex-direction:column;align-items:center;gap:2px;
+ padding:7px 12px;border:1px solid #ffbb78b5;border-radius:10px;
+ background:linear-gradient(110deg,#3b1d2bee,#27182cea);color:#fff0de;
+ box-shadow:0 5px 15px #0009;text-align:center;
+}
+.omega-protocol-counterplay-hud strong{font-size:12px;line-height:1.2}
+.omega-protocol-counterplay-hud span{font-size:10px;color:#ffe0ad}
+.omega-protocol-dash small{font-size:9px;color:#c1ebff;line-height:1}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-counterplay-hud{bottom:224px;width:min(255px,calc(100% - 28px));padding:6px 9px}
+ .omega-protocol-counterplay-hud strong{font-size:10px}
+ .omega-protocol-counterplay-hud span{font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-counterplay-hud{bottom:74px;width:min(245px,calc(100% - 300px));padding:4px 8px;gap:1px}
+ .omega-protocol-counterplay-hud strong{font-size:10px}
+ .omega-protocol-counterplay-hud span{font-size:9px}
+ .omega-protocol-dash small{font-size:8px}
+}
+
+/* M12-G5b: the review bar is an ACTUAL fourth direct grid child.
+ * Without this explicit row, CSS grid assigns the gameplay arena to a
+ * content-sized implicit fourth row, leaving ~500px of blank purple on a
+ * 390×844 mobile screen. Preserve full-height Canvas and thumb controls. */
+.omega-protocol-lab[data-omega-review-layout="true"]{
+ grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+.omega-protocol-lab[data-omega-infected-layout="true"]{
+ grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+.omega-infected-review-bar{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;
+ padding:5px 10px;background:#352848;color:#f2e9ff;font-size:11px;
+ max-height:110px;overflow:auto;min-height:0;
+}
+.omega-infected-review-bar input{max-width:220px;font-size:10px}
+.omega-infected-review-bar button{font-size:11px}
+@media(max-height:430px){.omega-infected-review-bar{max-height:64px;padding:2px 6px;font-size:9px}.omega-infected-review-bar button{font-size:9px}}
+.omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+ min-height:0;max-height:80px;overflow:hidden;
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:2px 8px;padding:4px 8px;max-height:78px;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar strong{
+  grid-column:1;font-size:10px;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar span{
+  grid-column:1;min-width:0;max-width:100%;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;font-size:9px;line-height:1.25;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar a{
+  grid-column:2;grid-row:1 / span 2;font-size:9px;align-self:center;
+  white-space:nowrap;
+ }
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar{
+  padding:2px 7px;max-height:34px;min-height:0;
+  flex-wrap:nowrap;white-space:nowrap;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar strong{
+  font-size:9px;overflow:hidden;text-overflow:ellipsis;
+ }
+ .omega-protocol-lab[data-omega-review-layout="true"] .omega-silver-review-bar span{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;
+ }
+}
+/* Non-review OMEGA, Guard and Watch keep their existing three-row shell. */
+
+/* M12-G5c: explicit four-original-WebP session-only review has TWO rows of
+ * controls, never an implicit fifth gameplay-grid child. The fighting canvas
+ * still owns the minmax(0,1fr) row. No device file leaves the browser. */
+.omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+ .omega-silver-review-bar{
+ max-height:116px;min-height:0;
+}
+.omega-g5c-art-controls{
+ flex:1 1 100%;min-width:0;display:flex;gap:6px;align-items:center;
+ justify-content:flex-start;font-size:10px;color:#e1d6f8;
+}
+.omega-g5c-art-controls label{font-size:10px;white-space:nowrap}
+.omega-g5c-art-controls input[type=file]{
+ flex:0 1 216px;min-width:0;max-width:216px;font-size:9px;
+ color:#f9eafa;background:transparent;border:0;
+}
+.omega-g5c-art-controls input[type=file]::file-selector-button{
+ background:#3a3059;color:#fff;padding:4px 6px;
+ border:1px solid #ae86d6;border-radius:6px;font-size:9px;
+}
+.omega-g5c-art-controls button{
+ background:#543977!important;border:1px solid #b8a4ff!important;
+ padding:5px 8px!important;font-size:10px!important;
+ border-radius:6px!important;min-height:28px;white-space:nowrap;
+}
+.omega-g5c-art-controls button:disabled{opacity:.42}
+.omega-g5c-art-controls span{
+ flex:1 1 190px;min-width:0;color:#b7cce3;font-size:9px;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+  .omega-silver-review-bar{
+  max-height:130px;grid-template-columns:minmax(0,1fr) auto;
+  gap:3px 5px;padding:5px 7px;
+ }
+ .omega-g5c-art-controls{
+  grid-column:1/-1;display:grid;
+  grid-template-columns:minmax(0,1fr) 92px;gap:3px 6px;
+ }
+ .omega-g5c-art-controls label{display:none}
+ .omega-g5c-art-controls input[type=file]{max-width:100%;grid-column:1}
+ .omega-g5c-art-controls button{grid-column:2;min-width:0}
+ .omega-g5c-art-controls span{grid-column:1/-1;max-width:100%;font-size:9px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-m12g5c-art="AWAITING_FOUR_INDEPENDENT_PAINTED_WEBPS"]
+  .omega-silver-review-bar{
+  max-height:64px;flex-wrap:wrap;
+ }
+ .omega-g5c-art-controls{gap:3px;max-height:30px}
+ .omega-g5c-art-controls label{display:none}
+ .omega-g5c-art-controls span{
+  display:block;flex:0 1 200px;max-width:200px;
+  min-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
+ .omega-g5c-art-controls input[type=file]{max-width:170px}
+}
+
+/* M12-G5d-2: real candidate buttons are TWO commands, not file input+button.
+ * The older 390px template forced both into grid-column:2, hiding the
+ * actual-source import control beyond the right edge. Never conceal a
+ * required action from mobile novice users. */
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  width:100%;min-width:0;gap:4px 6px;box-sizing:border-box;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls button[data-omega-g5d-load="true"]{
+  grid-column:1;grid-row:1;min-width:0;max-width:100%;
+  white-space:normal;line-height:1.1;font-size:9px!important;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls button[data-omega-g5c-toggle="true"]{
+  grid-column:2;grid-row:1;min-width:0;max-width:100%;
+  white-space:normal;line-height:1.1;font-size:9px!important;
+ }
+ .omega-protocol-lab[data-omega-m12g5d-source="git-4-real-webp-candidates-not-approved"]
+  .omega-g5c-art-controls span[data-omega-g5c-feedback]{
+  grid-column:1/-1;grid-row:2;min-width:0;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ }
+}
+
+
+/* M12-G5k: review ONLY already-imported real WebPs; never create fake
+   animation/art, and never move the gameplay arena into an implicit row. */
+.omega-art-audit-overlay{
+ position:fixed;z-index:1200;inset:0;display:flex;flex-direction:column;
+ gap:10px;overflow:auto;overscroll-behavior:contain;box-sizing:border-box;
+ padding:clamp(9px,2vw,20px);color:#f1edf9;background:#090d1cf7;
+ font:400 12px/1.5 system-ui,sans-serif;
+}
+.omega-art-audit-header{
+ display:flex;justify-content:space-between;gap:12px;align-items:start;
+ position:sticky;top:-1px;background:#11192a;border:1px solid #4e5b72;
+ border-radius:12px;padding:10px 14px;z-index:2;
+}
+.omega-art-audit-header strong{font-size:17px;letter-spacing:.01em}
+.omega-art-audit-header p{margin:3px 0 0;max-width:810px;color:#c2d0e4;font-size:11px}
+.omega-art-audit-header button{
+ flex-shrink:0;border:1px solid #a7a4f0;border-radius:8px;
+ background:#433568;color:white;padding:7px 13px;cursor:pointer;
+}
+.omega-art-audit-legend{display:flex;flex-wrap:wrap;gap:5px 16px;color:#c8d7df}
+.omega-art-audit-grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));
+ gap:12px;align-items:start;
+}
+.omega-art-audit-card{
+ min-width:0;max-width:100%;margin:0;padding:8px;
+ border:1px solid #38465e;background:linear-gradient(155deg,#1d2839,#131a28);
+ border-radius:11px;overflow-x:auto;box-sizing:border-box;
+}
+.omega-art-audit-card figcaption{display:flex;flex-direction:column;gap:0;min-height:36px}
+.omega-art-audit-card figcaption strong{font-size:12px;overflow-wrap:anywhere}
+.omega-art-audit-card figcaption small{color:#b3c3d1;font-size:10px}
+.omega-art-audit-stage{
+ width:360px;min-width:360px;height:350px;position:relative;
+ border:1px solid #3c5166;border-radius:6px;overflow:hidden;
+ background-color:#152134;
+ background-image:linear-gradient(transparent 23px,#ffffff07 24px),
+  linear-gradient(90deg,transparent 23px,#ffffff07 24px);
+ background-size:24px 24px;
+}
+.omega-art-audit-stage img{position:absolute;object-fit:fill;max-width:none;max-height:none}
+.omega-art-audit-floor{
+ position:absolute;left:0;right:0;top:314px;border-top:1px dashed #f6bf65;
+ z-index:1;pointer-events:none;
+}
+.omega-art-audit-axis{
+ position:absolute;left:180px;top:0;bottom:0;border-left:1px dashed #b8d0e644;
+ z-index:1;pointer-events:none;
+}
+.omega-art-audit-foot{
+ position:absolute;left:175px;top:309px;width:10px;height:10px;
+ border:1px solid #351d00;background:#ffd24d;border-radius:50%;
+ z-index:2;pointer-events:none;
+}
+.omega-art-audit-muzzle{
+ position:absolute;width:9px;height:9px;border:1px solid #034547;
+ transform:translate(-50%,-50%);background:#4bfff3;border-radius:50%;
+ z-index:2;pointer-events:none;
+}
+.omega-art-audit-card>p{color:#d6d4ec;font-size:10px;margin:4px 0;min-height:15px}
+.omega-art-audit-overlay>footer{color:#b5c4d6;font-size:11px;padding-bottom:8px}
+@media(max-width:600px){
+ .omega-art-audit-overlay{padding:8px;gap:8px}
+ .omega-art-audit-header{gap:5px;align-items:stretch;flex-direction:column}
+ .omega-art-audit-header strong{font-size:13px}
+ .omega-art-audit-header p{font-size:10px}
+ .omega-art-audit-header button{align-self:flex-end;font-size:11px;padding:5px 9px}
+ .omega-art-audit-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-art-audit-header{flex-direction:row}
+ .omega-art-audit-overlay{font-size:10px}
+ .omega-art-audit-grid{grid-template-columns:repeat(auto-fit,minmax(370px,1fr))}
+}
+
+
+/* G5k: keep all G5i import/audit buttons reachable on four viewport sizes.
+   Scrolling is inside the review bar, not a new game Canvas grid row. */
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-silver-review-bar{max-height:124px;overflow:auto;overscroll-behavior:contain}
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-g5c-art-controls{display:flex;flex-wrap:wrap;gap:4px 8px}
+.omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+ .omega-g5c-art-controls button[data-omega-g5k-open]{white-space:normal;line-height:1.2}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-silver-review-bar{max-height:148px}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls{grid-column:1/-1;display:flex;flex-wrap:wrap}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls label{display:none}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls input[type=file]{flex:1 1 135px;min-width:0}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls button{flex:1 1 120px;min-width:0}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-silver-review-bar{max-height:74px;overflow:auto;flex-wrap:wrap;white-space:normal}
+ .omega-protocol-lab[data-omega-m12g5i-art-review="12-file-session-only-no-human-signoff"]
+  .omega-g5c-art-controls{max-height:none}
+}
+
+
+/* M12-G5l: manual four-pose selection, no frame interpolation or implicit
+ * GAME timer. Same anchor/pixel size as G5k, only the chosen source swaps. */
+.omega-art-audit-groups{display:flex;gap:6px;flex-wrap:wrap}
+.omega-art-audit-groups button,
+.omega-art-audit-stepper button,
+.omega-art-audit-strip-item{
+ color:#eee8fc;background:#29334c;border:1px solid #65738f;
+ border-radius:7px;cursor:pointer;padding:6px 10px;
+}
+.omega-art-audit-groups button[aria-pressed="true"],
+.omega-art-audit-strip-item[aria-pressed="true"]{
+ border-color:#dbc0ff;background:#4a3972;
+ outline:2px solid #a681db;outline-offset:-2px;
+}
+.omega-art-audit-groups button:focus-visible,
+.omega-art-audit-stepper button:focus-visible,
+.omega-art-audit-strip-item:focus-visible{
+ outline:2px solid #f4d680;outline-offset:2px;
+}
+.omega-art-audit-stepper{
+ display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+ background:#20273b;border:1px solid #425474;border-radius:8px;padding:7px;
+}
+.omega-art-audit-stepper strong{font-size:13px;min-width:142px;text-align:center}
+.omega-art-audit-stepper small{flex-basis:100%;font-size:10px;color:#bbcce0}
+.omega-art-audit-strip{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:8px;align-items:stretch;
+}
+.omega-art-audit-strip-item{min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;padding:6px}
+.omega-art-audit-strip-item img{
+ width:100%;max-width:130px;height:95px;object-fit:contain;
+ background:#1b2537;border-radius:4px;
+}
+.omega-art-audit-strip-item span{
+ font-size:10px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:600px){
+ .omega-art-audit-strip{gap:3px}
+ .omega-art-audit-strip-item{padding:3px}
+ .omega-art-audit-strip-item img{height:65px}
+ .omega-art-audit-strip-item span{font-size:9px}
+ .omega-art-audit-stepper{gap:4px}
+ .omega-art-audit-stepper strong{font-size:11px;min-width:105px}
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-art-audit-strip-item img{height:52px}
+ .omega-art-audit-stepper small{display:none}
+}
+
+
+/* M12-G5m: real 4-source walking art review is only present in G5d DEV lab.
+ * Preserve the original gameplay grid and allow a third button (load, preview,
+ * visual-review) without hiding one on 390x844 or 844x390. */
+.omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+ .omega-silver-review-bar{max-height:145px;overflow:auto;overscroll-behavior:contain}
+.omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+ .omega-g5c-art-controls{flex-wrap:wrap;gap:4px 7px;max-height:none}
+.omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+ .omega-g5c-art-controls button[data-omega-g5m-walk-review]{
+ min-width:145px;min-height:28px;white-space:normal;line-height:1.15;
+}
+@media(max-width:480px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+  .omega-silver-review-bar{max-height:158px}
+ .omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+  .omega-g5c-art-controls button[data-omega-g5m-walk-review]{
+  grid-column:1/-1;grid-row:3;min-width:0;max-width:100%;font-size:9px!important;
+ }
+}
+@media(max-height:430px) and (orientation:landscape){
+ .omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+  .omega-silver-review-bar{max-height:74px;overflow:auto;flex-wrap:wrap}
+ .omega-protocol-lab[data-omega-m12g5m-source="sha-4-real-walk-review"]
+  .omega-g5c-art-controls{max-height:none;flex-wrap:wrap}
+}

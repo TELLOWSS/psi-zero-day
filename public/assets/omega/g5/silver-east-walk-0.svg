@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="384" height="512" role="img" aria-label="Original development only silver AIRA east walk 0 contact">
+<defs><linearGradient id="armour" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#52627d"/><stop offset=".35" stop-color="#192039"/><stop offset=".8" stop-color="#0c1428"/><stop offset="1" stop-color="#7a5d9b"/></linearGradient><linearGradient id="silver" x1="0" y1="0" x2="1" y2=".7"><stop stop-color="#a1accd"/><stop offset=".3" stop-color="#f6fcff"/><stop offset=".7" stop-color="#c2b3eb"/><stop offset="1" stop-color="#79669f"/></linearGradient><linearGradient id="jacket" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="#fcfcff"/><stop offset=".36" stop-color="#c4d2e7"/><stop offset=".74" stop-color="#777a9b"/><stop offset="1" stop-color="#d6c4f2"/></linearGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9c5e6"/><stop offset=".33" stop-color="#455071"/><stop offset=".74" stop-color="#1c2744"/><stop offset="1" stop-color="#a9a4cb"/></linearGradient><radialGradient id="skin"><stop stop-color="#ffecf0"/><stop offset=".7" stop-color="#e1c8d5"/><stop offset="1" stop-color="#957fa0"/></radialGradient></defs>
+<!-- four independently posed original source-vector keyframe study, never approved silver master WebP -->
+<g stroke-linejoin="round" stroke-linecap="round">
+<!-- Silver long ponytail and original lavender lining, unique inertial shape -->
+<path d="M164 138 Q97 81 92 139 Q62 170 79 232 Q49 280 91 301 Q59 288 48 260 Q41 210 65 180 Q38 130 92 106 Q134 80 171 113Z" fill="#7e719f" opacity=".7"/>
+<path d="M174 122 Q99 90 87 151 Q62 192 82 233 Q59 260 88 289 Q93 261 102 225 Q74 183 114 155 Q138 128 181 128Z" fill="url(#silver)" stroke="#eae6ff" stroke-width="3"/>
+<path d="M153 116 Q102 121 109 182 Q117 204 94 246" fill="none" stroke="#fff" stroke-opacity=".74" stroke-width="8"/>
+<path d="M133 131 Q89 170 111 215" fill="none" stroke="#a9a0ef" stroke-width="3"/>
+<!-- legs: unique four independent impact/contact poses, non-mirrored -->
+<path d="M171 323 Q161 350 148 381 L127 438 Q118 453 140 466 L175 459 L185 442 L185 393 L196 355Z" fill="url(#armour)" stroke="#5e5377" stroke-width="5"/>
+<path d="M205 318 Q226 347 233 387 L262 439 Q276 451 260 463 L230 462 L205 432 L188 381 L181 348Z" fill="url(#armour)" stroke="#8c90b1" stroke-width="5"/>
+<path d="M108 440 L97 457 Q100 473 134 469 L147 459 L137 445Z" fill="#1b1f31" stroke="#a39bc6" stroke-width="3"/>
+<path d="M223 440 L236 463 Q257 475 277 459 L267 441Z" fill="#1b1f32" stroke="#b4a8d8" stroke-width="3"/>
+<path d="M112 453 L136 455 M233 452 L264 455" fill="none" stroke="#9e8acb" stroke-width="5"/>
+<!-- an asymmetrical long split coat with purple inside flap -->
+<path d="M153 234 Q131 260 128 330 L120 387 Q156 367 184 337 L230 349 L236 294Z" fill="#c0b5d1" opacity=".82" stroke="#7c668e" stroke-width="3"/>
+<path d="M151 231 L164 323 L145 388 L180 366 L195 321Z" fill="url(#jacket)" stroke="#e6dbf3" stroke-width="3"/>
+<path d="M187 225 L230 242 L247 319 L201 341 L158 316Z" fill="url(#armour)" stroke="#8e85bd" stroke-width="5"/>
+<path d="M177 252 L211 264 L225 296 L187 304Z" fill="#0d1831" stroke="#778caf" stroke-width="3"/>
+<path d="M183 253 L212 278 M207 252 L180 291" stroke="#cb8bff" stroke-width="3" fill="none"/>
+<path d="M169 312 L230 324 L227 336 L171 336Z" fill="#302b46" stroke="#af99c8" stroke-width="3"/>
+<path d="M186 313 L189 333 M209 314 L208 332" stroke="#e4b6ff" stroke-width="3"/>
+<!-- left padded shoulder and right gloved arm, unique firearm recoil -->
+<path d="M150 236 Q130 240 135 268 L151 291 L170 275 L172 243Z" fill="url(#jacket)" stroke="#e6e5f4" stroke-width="4"/>
+<path d="M224 238 Q251 235 265 253 L252 285 L231 278Z" fill="url(#jacket)" stroke="#f8e9ff" stroke-width="4"/>
+<path d="M146 265 L151 303 L172 314 L191 293 L175 280Z" fill="url(#armour)" stroke="#8b88a4" stroke-width="4"/>
+<path d="M248 272 L281 291 L288 278 L263 255Z" fill="url(#armour)" stroke="#b2abc9" stroke-width="4"/>
+<!-- silver-haired head face in profile, violet eyes -->
+<path d="M176 126 Q204 94 231 126 Q246 154 229 184 Q203 210 182 180Z" fill="url(#skin)" stroke="#8d799a" stroke-width="3"/>
+<path d="M226 145 L245 154 L225 161Z" fill="#f9d9e2"/>
+<path d="M212 154 Q224 146 230 151 Q224 164 214 161Z" fill="#6d4aa9" stroke="#eac8fb" stroke-width="2"/>
+<circle cx="223" cy="155" r="3.5" fill="#c2a9ff"/>
+<path d="M229 176 Q222 184 214 180" fill="none" stroke="#946a91" stroke-width="3"/>
+<path d="M180 118 Q204 89 227 124 L239 149 Q224 137 216 131 Q208 147 189 160 L175 150Z" fill="url(#silver)" stroke="#fff" stroke-width="4"/>
+<path d="M175 120 Q185 81 222 104 Q230 121 234 140" fill="none" stroke="#fbf7ff" stroke-width="9"/>
+<path d="M180 106 L189 100 Q194 102 194 113 L186 125Z" fill="#b068d7" stroke="#efd4ff" stroke-width="2"/>
+<!-- violet iridescent armored rifle (always driven by actual Watch Fire cue) -->
+<g transform="translate(0 0)">
+<path d="M207 272 L244 261 L294 253 L316 266 L313 282 L275 289 L232 289Z" fill="url(#metal)" stroke="#c6b8f4" stroke-width="4"/>
+<path d="M265 253 L277 241 L290 241 L289 258Z" fill="#a79cd9"/>
+<path d="M304 268 L337 267 L338 276 L306 278Z" fill="#30354a" stroke="#ab93c6" stroke-width="3"/>
+<path d="M236 285 L248 306 L258 303 L267 284" fill="#211b3a" stroke="#7e58b3" stroke-width="3"/>
+<path d="M262 271 L300 269" stroke="#c476ff" stroke-width="5"/>
+<circle cx="300" cy="271" r="5" fill="#efd5ff"/>
+</g>
+<path d="M179 270 L215 279 L232 291" stroke="#f6d5ef" stroke-width="9" fill="none"/>
+<path d="M180 268 L218 280" stroke="#4e3b61" stroke-width="7"/>
+<path d="M161 350 L187 345 M206 350 L230 354" stroke="#9a77d1" stroke-width="4"/>
+</g></svg>

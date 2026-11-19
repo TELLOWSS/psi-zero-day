@@ -687,6 +687,61 @@ interface Cooldowns {
 }
 
 export class SurvivorsEngine {
+  private protocolExternalEncounter=false;
+
+  /** Opt-in per-instance encounter source; never changes default Watch mode. */
+  enableProtocolEncounter():void {
+    if(this.state.phase!=='ready')throw new Error('Protocol must be enabled before starting');
+    this.protocolExternalEncounter=true;
+    this.state.hazards=[];this.state.projectiles=[];this.state.drops=[];
+    this.state.terrain=[];this.state.interactiveHazards=[];
+    this.state.stageBossSpawned=false;this.state.stageBossNeutralized=false;
+    this.state.bossEncounter=undefined;
+  }
+
+  /** Spawn real Watch-engine hazards for one externally directed roguelite wave. */
+  spawnProtocolEncounter(entries:readonly {type:HazardType;boss?:boolean;hpScale?:number;speedScale?:number}[]):void{
+    if(!this.protocolExternalEncounter||this.state.phase!=='playing')throw new Error('Protocol encounter inactive');
+    if(entries.length===0||entries.length>32||this.state.hazards.some(h=>h.hp>0))throw new Error('Protocol requires a clear arena and 1..32 threats');
+    for(const entry of entries){
+      if(!['UNHELMETED','RUNAWAY_CART','GAS_LEAK','FALLING_DEBRIS','CRANE_BOSS'].includes(entry.type)||
+        (entry.boss&&entry.type!=='CRANE_BOSS')||
+        !Number.isFinite(entry.hpScale??1)||!Number.isFinite(entry.speedScale??1)||
+        (entry.hpScale??1)<.3||(entry.hpScale??1)>8||(entry.speedScale??1)<.3||(entry.speedScale??1)>2)
+        throw new RangeError('Invalid protocol threat specification');
+    }
+    this.state.stageBossNeutralized=false;
+    for(const entry of entries){
+      this.spawnHazard(entry.type,undefined,Boolean(entry.boss));
+      const hazard=this.state.hazards[this.state.hazards.length-1]!;
+      hazard.hp=Math.max(1,Math.round(hazard.hp*(entry.hpScale??1)));
+      hazard.maxHp=hazard.hp;
+      hazard.speed*=entry.speedScale??1;
+      // Run-only encounter has no campaign XP rewards or scripted boss cutscene.
+      hazard.expValue=0;
+      hazard.bossEncounterManaged=false;hazard.bossGameplay=undefined;
+    }
+  }
+
+  /** Native HP/damage flow for OMEGA's opt-in fictional zombie/construct blade.
+   * UNHELMETED has a different helmet-zombie identity only in OMEGA.
+   * Never callable by normal SIGNAL WATCH; no wallet, perks or saves changed.
+   */
+  damageProtocolConstruct(id:string,amount:number):number{
+    if(!this.protocolExternalEncounter||this.state.phase!=='playing'||
+       !Number.isFinite(amount)||amount<=0)return 0;
+    const h=this.state.hazards.find(target=>target.id===id&&target.hp>0);
+    if(!h||!['UNHELMETED','RUNAWAY_CART','FALLING_DEBRIS','CRANE_BOSS'].includes(h.type))return 0;
+    const before=h.hp;
+    this.damageHazard(h,amount);
+    const dealt=Math.max(0,before-h.hp);
+    if(dealt>0){
+      this.emitAudio('impact',h.x,h.y,{actorKind:h.type});
+      h.isStunned=Math.max(h.isStunned??0,h.isStageBoss?0:0.12);
+    }
+    return dealt;
+  }
+
   private cooldowns: Cooldowns = {
     radio: 0,
     extinguisher: 0,
@@ -1088,8 +1143,10 @@ export class SurvivorsEngine {
     }
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
-    this.updateSignatureEvents();
-    this.updateSpawns(effectiveDt);
+    if(!this.protocolExternalEncounter){
+      this.updateSignatureEvents();
+      this.updateSpawns(effectiveDt);
+    }
     if(this.state.bossEncounter?.phase==='arrival')return;
     this.updateHazards(effectiveDt);
     recordOperationControls(this.state);
@@ -1098,11 +1155,11 @@ export class SurvivorsEngine {
     this.updateDrops(effectiveDt);
     this.checkCollisions();
     if(this.state.player.hp<hpBefore)this.cancelHandoff();
-    this.checkStarChallenges();
+    if(!this.protocolExternalEncounter)this.checkStarChallenges();
 
     // Boss resolution normally ends the stage after a short confirmation.
     // Once extraction has begun, however, the extraction hold owns the terminal outcome.
-    if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    if (!this.protocolExternalEncounter && this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       // End targeting immediately at boss resolution; the post-boss hold is never a trap.
       const lock=this.state.interactiveHazards.find(h=>h.id==='mastery-boss-50-lock');
       if(lock)lock.state='destroyed';
@@ -1131,7 +1188,7 @@ export class SurvivorsEngine {
     if (outcome === 'victory' || outcome === 'defeat') {
       this.state.directorShoutTimer = 0;
       this.state.directorCutinPhase = 'none';
-    } else if (this.state.phase === 'playing' && this.state.directorShoutTimer === 0 && this.state.currentExp >= this.state.nextLevelExp) {
+    } else if (!this.protocolExternalEncounter && this.state.phase === 'playing' && this.state.directorShoutTimer === 0 && this.state.currentExp >= this.state.nextLevelExp) {
       this.addExp(0);
     }
   }
@@ -1416,6 +1473,10 @@ export class SurvivorsEngine {
       // Continuous aura + chain lightning
       for (const h of hazards) {
         if (h.hp <= 0) continue;
+        // Only the isolated PROTOCOL boss uses its visible warning/strike
+        // collision. Unannounced native contact hits would cause misleading
+        // double damage. Default Signal Watch contact remains unchanged.
+        if (this.protocolExternalEncounter && h.isStageBoss && h.type === 'CRANE_BOSS') continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
           this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt);
@@ -1901,6 +1962,12 @@ export class SurvivorsEngine {
   private damageHazard(h: Hazard, amount: number, projectile=false): void {
     if (!Number.isFinite(amount) || amount <= 0 || h.hp <= 0) return;
     const beforeHp=h.hp;
+    if(this.protocolExternalEncounter&&h.isStageBoss){
+      // A single Shout projectile cannot erase the special-edition boss.
+      h.hp=Math.max(0,h.hp-Math.min(amount,Math.max(1,h.maxHp*.08)));
+      if(h.hp<beforeHp)h.hitFlashTimer=.08;
+      return;
+    }
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       if(h.bossGameplay){
@@ -2184,6 +2251,15 @@ export class SurvivorsEngine {
             }
             continue;
           }
+          // In the isolated roguelite a single expanding Shout is allowed
+          // ONE boss hit, not 60-90 repeated 8%-HP hits over its lifetime.
+          // The campaign's scripted boss immunity above remains untouched.
+          if(this.protocolExternalEncounter&&h.isStageBoss&&p.kind==='shout_shockwave'){
+            let bossPulseHits=this.projectileHits.get(p);
+            if(!bossPulseHits){bossPulseHits=new Set();this.projectileHits.set(p,bossPulseHits);}
+            if(bossPulseHits.has(h.id))continue;
+            bossPulseHits.add(h.id);
+          }
           // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
           if(!repeatContact){
             if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
@@ -2303,7 +2379,10 @@ export class SurvivorsEngine {
         if(h.variant==='split_gas'&&hazards.length+fragments.length<spawnPressure(this.state.stage.stageNumber,this.state.gameTime,this.state.difficulty).activeLimit-1){
           for(const side of [-1,1])fragments.push({...h,id:this.genId('gas_fragment'),variant:undefined,x:Math.max(30,Math.min(WORLD_WIDTH-30,h.x+side*30)),hp:Math.max(12,Math.round(h.maxHp*.22)),maxHp:Math.max(12,Math.round(h.maxHp*.22)),radius:16,speed:h.speed*1.2,expValue:2});
         }
-        if (h.type === 'UNHELMETED') {
+        // In the isolated fictional OMEGA quarantine mode, an infected
+        // zombie never transforms into a 'rescued ordinary worker' silhouette
+        // on death. Regular WATCH education still creates resolved workers.
+        if (h.type === 'UNHELMETED'&&!this.protocolExternalEncounter) {
           const workers = this.state.resolvedWorkers ??= [];
           workers.push(createResolvedWorker(h.id,h.x,h.y,workerRouteTerrain(this.state.terrain??[],this.state.interactiveHazards),WORLD_WIDTH,WORLD_HEIGHT));
           if (workers.length > 128) workers.shift();
@@ -2390,6 +2469,16 @@ export class SurvivorsEngine {
     if (player.invincibleTime <= 0 && !player.isDashing) {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
+        // OMEGA infected actors apply damage ONLY after their own visible
+        // warning timer. Zero-damage generic Watch collision would otherwise
+        // grant false .6s immunity and 30px knockback without telegraph.
+        if(this.protocolExternalEncounter&&h.type==='UNHELMETED'&&h.damage===0)continue;
+        // OMEGA-only contract: a RUNAWAY_CART's locked warning is a REAL
+        // counterplay window. Native WATCH otherwise causes 22 HP contact
+        // damage in approach/warning/cooldown BEFORE the rendered charge.
+        // Its existing charge damage, speed, HP, timers and dash grace remain.
+        // Ordinary SIGNAL WATCH retains its established collision policy.
+        if(this.protocolExternalEncounter&&h.type==='RUNAWAY_CART'&&h.motion?.phase!=='charge')continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
           if(h.signatureEventId)this.signatureEventsFailed.add(h.signatureEventId);
@@ -2639,6 +2728,7 @@ export class SurvivorsEngine {
   }
 
   addExp(amount: number) {
+    if(this.protocolExternalEncounter)return; // Cards, not campaign XP, are the only run upgrades.
     this.state.currentExp += amount;
     if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return; // Preserve bulk XP until the intervention/current choice finishes.
     if (this.state.currentExp >= this.state.nextLevelExp) {

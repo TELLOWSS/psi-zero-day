@@ -1,3 +1,4 @@
+import {OMEGA_PROTECTED_REVIEW} from './omega-protected-review';
 import {readEpisodeSaveHealth,subscribeEpisodeSaveHealth,setEpisodeSaveHealth} from '../app/episode-save-health';
 import './shooting-entry.css';
 import './hub-unified.css';
@@ -64,6 +65,7 @@ const MODE_PREVIEW_ART = {
 } as const;
 type ModePreviewKind = keyof typeof MODE_PREVIEW_ART;
 const PatrolSurvivorsGame = lazy(() => loadSurvivorsGame().then(module => ({ default: module.PatrolSurvivorsGame })));
+const OmegaProtocolPlaytest=lazy(()=>import('./OmegaProtocolPlaytest').then(module=>({default:module.OmegaProtocolPlaytest})));
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
 const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
@@ -171,6 +173,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const [chapterGateOpen,setChapterGateOpen]=useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
+  // Internal QA only. No menu, default Preview or Production entry is exposed.
+  const [inOmegaLab,setInOmegaLab]=useState(()=>typeof window!=='undefined'
+    && (import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')
+    && new URLSearchParams(window.location.search).get('omegaLab')==='1');
   const [survivorsLoading, setSurvivorsLoading] = useState(false);
   const enterSurvivors = useCallback(() => {
     setSurvivorsLoading(false);
@@ -258,6 +264,18 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setLoading(false);
     setInGame(true);
   };
+
+  if(inOmegaLab)return <Suspense fallback={<GameplayChunkFallback />}>
+    <OmegaProtocolPlaytest onExit={()=>{
+      if(OMEGA_PROTECTED_REVIEW){
+        window.location.assign('https://psi-zero-day.vercel.app/?home=cinematic#reignition-missions');
+        return;
+      }
+      const url=new URL(window.location.href);url.searchParams.delete('omegaLab');
+      window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+      setInOmegaLab(false);
+    }}/>
+  </Suspense>;
 
   if (survivorsLoading) return <SignalWatchLoadingScreen
     loadGame={loadSurvivorsGame}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "AIRA_OMEGA_8_DIRECTION_TECHNICAL_PREVIEW_20261108",
+  "status": "TECHNICAL_PREVIEW_ONLY",
+  "playable": false,
+  "artistApproved": false,
+  "commercialArtApproved": false,
+  "runtimeIntegrated": false,
+  "source": "Original vector-style engineering layout using the user's AIRA silver-white-haired heroine as identity reference",
+  "userDownloadArchive": "OMEGA_AIRA_8D_TECHNICAL_REVIEW_20261108.zip",
+  "archiveSha256": "19645c5cc69f73dcbb285a268cb0ee8757bd877c7084193a88dc7f01ccfa10bb",
+  "sourceAtlases": {
+    "desktop": "AIRA_8x6_TECHNICAL_ATLAS.png",
+    "sha256": "fc202e1338c1e1d84a6ade51a8ced4df30f5c962fd0283f989e546b08af4eb1d",
+    "resolution": [
+      1536,
+      1536
+    ],
+    "mobile": "AIRA_8x6_MOBILE_TECHNICAL.webp"
+  },
+  "directions": [
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE"
+  ],
+  "gaitFramesPerDirection": 6,
+  "totalPreviewPng": 48,
+  "perFrameResolution": [
+    384,
+    512
+  ],
+  "pngAllRgba": true,
+  "distinctBinaryDigests": 48,
+  "independentProfessionallyAuthoredDirections": false,
+  "finalCombatFramesPresent": false,
+  "finalMasksPresent": false,
+  "finalRequiredFrames": 160,
+  "finalRequiredMasks": 320,
+  "reviewStatus": "Does not match final high-fidelity character illustration. Use for direction/contact/scale QA only.",
+  "mandatoryBlockers": [
+    "Artist-signoff 8-view high-detail AIRA character turnaround",
+    "20 authored keyframes per direction including attack/dash/hit/ultimate",
+    "Genuine equipment front/back occlusion masks for 160 frames",
+    "Exact main-screen identity and independent NE/NW direction review",
+    "GitHub binary asset version pin, alpha/dimension/hash audit, Android real device QA"
+  ],
+  "githubBinaryAssetsIncluded": false,
+  "runtimeReleasePermitted": false,
+  "lastSourceCommit": "4cb57424283bc866f920042cc156147e636d0cce"
+}

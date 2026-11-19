@@ -1,0 +1,95 @@
+{
+  "version": "AIRA_V2_E_SPECIAL_KEY_STUDY_20261109",
+  "characterIdentity": "AIRA_V2_USER_APPROVED_20261109",
+  "source": "Existing user-selected original AIRA official animation keyframe sheet in conversation",
+  "sourceClassification": "cropped concept-sheet illustrations, not separately hand-authored 384x512 action-frame masters",
+  "actionCoverage": {
+    "ultimate": 3,
+    "finish": 2
+  },
+  "assetScope": "E-only cinematic source preview; directional fidelity pending animator review",
+  "releaseGate": {
+    "productionApproved": false,
+    "handAuthoredActionFrames": 0,
+    "productionFrameTarget": 160,
+    "approvedFrontRearMasks": 0,
+    "maskTarget": 320,
+    "phoneQaApproved": false,
+    "artistSignoff": false
+  },
+  "atlases": [
+    {
+      "action": "ultimate",
+      "path": "public/assets/omega/aira-v2/e-ultimate-3key-atlas.svg",
+      "dimensions": [
+        960,
+        240
+      ],
+      "cell": [
+        320,
+        240
+      ],
+      "frames": 3,
+      "bootLine": 228,
+      "svgSha256": "a4eff32520ea38066c24376cca2dc3798bbe426499837f7b1f45487adc1bd03d",
+      "embeddedWebpSha256": "35a598c5b94359f5f2088437a4ae453769685980e5d3e06d9d680421250e6a6a",
+      "sourceCrops": [
+        [
+          773,
+          611,
+          985,
+          743
+        ],
+        [
+          970,
+          607,
+          1207,
+          743
+        ],
+        [
+          1200,
+          608,
+          1403,
+          741
+        ]
+      ]
+    },
+    {
+      "action": "finish",
+      "path": "public/assets/omega/aira-v2/e-finish-2key-atlas.svg",
+      "dimensions": [
+        1160,
+        240
+      ],
+      "cell": [
+        580,
+        240
+      ],
+      "frames": 2,
+      "bootLine": 228,
+      "svgSha256": "d42ac751dab5680c5f959df81dab0369cf6e7af740959f078689d3cf4cf5fea4",
+      "embeddedWebpSha256": "4179e2e0e49dde8a33e3614c6bba5ff57228ec8ec2bacfbe794e9d859487bcd4",
+      "sourceCrops": [
+        [
+          319,
+          823,
+          788,
+          1019
+        ],
+        [
+          804,
+          822,
+          1405,
+          1019
+        ]
+      ]
+    }
+  ],
+  "notes": [
+    "Only render when the real Watch engine reports an active ultimate or final victory",
+    "No actor XY, hitboxes, damage, projectile, XP, reward or cooldown alteration",
+    "Other seven headings remain on the eight independently drawn neutral AIRA V2 views",
+    "Browser screenshots are source-rendered pose QA, not actual live fight proof",
+    "Entire 160 independent production sprite + 320 occlusion-mask gate remains blocked"
+  ]
+}
