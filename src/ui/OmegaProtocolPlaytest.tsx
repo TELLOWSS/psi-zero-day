@@ -47,6 +47,9 @@ import {
  drawOmega3DActorLighting,drawOmega3DOcclusionGuide,drawOmega3DProjectile,
  drawOmega3DForegroundAtmosphere,
 } from './omega-protocol-atmosphere-3d';
+import {omegaPrepareEnvArt,drawOmegaPaintedVista,drawOmegaPaintedFloor} from './omega-protocol-env-art';
+import {drawOmegaLivingBackdrop,drawOmegaLivingGround,drawOmegaLivingProp} from './omega-protocol-living-world';
+import {OmegaMotionSmoother,drawOmegaBladeWorldSlash,type OmegaSmoothedVelocity} from './omega-protocol-silver-kinetics';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -59,7 +62,7 @@ const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'�
 // In-memory only, development QA provenance. Never available to production
 // users, never writes a profile/save and never bypasses a real unlock CTA.
 const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0}){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -81,7 +84,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  };
  const atm3DBudget=omega3DBudget(ctx.canvas.width,ctx.canvas.height);
  if(field){
-  drawOmega3DBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget);
+  const paintedVista=drawOmegaPaintedVista(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,atm3DBudget);
+  drawOmega3DBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget,paintedVista);
+  drawOmegaLivingBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget);
  }
  applyOmegaQuarterView(ctx,camera);
  ctx.translate(fieldElevation*skew,-fieldElevation);
@@ -91,12 +96,14 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
  const drawGround=(plan:OmegaFieldPlan)=>{
   drawOmegaFieldGround(ctx,plan,false);
+  drawOmegaPaintedFloor(ctx,plan);
   drawOmegaG2EntrySurface(ctx,plan,state.gameTime,m12G2Quality);
   drawOmegaG4CenterStageMaterial(ctx,plan,m12G4Budget);
   drawOmegaG2RearEnvironment(ctx,plan,state.gameTime,m12G2Quality);
   drawOmegaM12TerrainShadows(ctx,plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,plan,state.gameTime,m12Budget);
   drawOmega3DGroundSurface(ctx,plan,state.gameTime,atm3DBudget);
+  drawOmegaLivingGround(ctx,plan,state.gameTime,atm3DBudget);
   if(passage){
    ctx.strokeStyle='#446377';ctx.lineWidth=14;
    ctx.beginPath();
@@ -117,6 +124,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    drawOmegaG3NativeMesh(ctx,plan,obstacle,m12G3Budget);
   }
   drawOmega3DPropRelief(ctx,plan,obstacle,state.gameTime,atm3DBudget);
+  drawOmegaLivingProp(ctx,plan,obstacle,state.player,state.gameTime,atm3DBudget);
  };
  if(field){
   drawGround(field.plan);
@@ -241,6 +249,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  ctx.transform(1,0,-camera.skewX/camera.groundYScale,1/camera.groundYScale,0,0);
  // Torso turns with bounded speed while genuine launch feedback aims the
  // muzzle instantly. Gameplay fire/aim physics are never changed.
+ const blade=session.lastBladeStrike;
+ const bladeAge=blade&&state.gameTime-blade.time>=0&&state.gameTime-blade.time<=.28
+  ?state.gameTime-blade.time:undefined;
  const actorView={
   facingX:pose.bodyX,facingY:pose.bodyY,
   weaponFacingX:pose.weaponX,weaponFacingY:pose.weaponY,
@@ -248,6 +259,12 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   time:state.gameTime,dashing:Boolean(p.isDashing),
   shooting:pose.shooting,
   hurt:Boolean(state.lastDamage&&state.lastDamage.remaining>1.85),
+  velocityX:motion.vx,velocityY:motion.vy,speedRatio:motion.speedRatio,
+  ...(blade&&bladeAge!==undefined?{
+   bladeAge,bladeCombo:blade.combo,
+   bladeFacingX:blade.facingX,bladeFacingY:blade.facingY,
+   bladeHits:blade.hits,
+  }:{}),
  };
  // AIRA's final authored 8x20 pack has six action groups. Read real native
  // Watch states in priority order; never use the FIRE age for DASH/HIT or
@@ -315,30 +332,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    Math.max(2,Math.min(9,projectile.radius)),projectile.vx,projectile.vy,false);
  }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
- const slash=session.lastBladeStrike;
- if(slash && state.gameTime-slash.time>=0 && state.gameTime-slash.time<.22){
-  // World-space hit confirmation on real blade timing. It is a technical
-  // combat FX, NOT approved sword character animation artwork.
-  const fade=1-(state.gameTime-slash.time)/.22;
-  const angle=Math.atan2(slash.facingY,slash.facingX);
-  ctx.save();ctx.translate(slash.x,slash.y);ctx.rotate(angle);
-  ctx.strokeStyle=slash.hits>0?'rgba(255,222,255,.96)':'rgba(151,205,255,.65)';
-  ctx.lineWidth=2+4*fade;ctx.shadowColor='#b86bff';
-  ctx.shadowBlur=slash.hits>0?18:6;
-  ctx.beginPath();ctx.arc(0,0,95,-.95,.95);ctx.stroke();
-  ctx.strokeStyle='rgba(121,94,234,.68)';ctx.lineWidth=9*fade;
-  ctx.beginPath();ctx.arc(0,0,81,-.92,.92);ctx.stroke();
-  ctx.strokeStyle='rgba(235,250,255,'+(.72*fade).toFixed(2)+')';ctx.lineWidth=2.5*fade;
-  ctx.beginPath();ctx.arc(0,0,101,-.76,.76);ctx.stroke();
-  ctx.shadowBlur=0;
-  for(const arcAngle of [-.55,0,.55]){
-   const sx=Math.cos(arcAngle)*(98+(1-fade)*12);
-   const sy=Math.sin(arcAngle)*(98+(1-fade)*12);
-   ctx.fillStyle='rgba(248,220,255,'+(.82*fade).toFixed(2)+')';
-   ctx.beginPath();ctx.arc(sx,sy,2.4*fade+1,0,Math.PI*2);ctx.fill();
-  }
-  ctx.restore();
- }
+ drawOmegaBladeWorldSlash(ctx,session.lastBladeStrike,state.gameTime);
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
@@ -808,9 +802,11 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   let dashEchoes:readonly OmegaDashEcho[]=[];
   let priorPlayer={x:session.engine.state.player.x,y:session.engine.state.player.y};
   const gaitController=new OmegaGroundedGait();
+  const motionSmoother=new OmegaMotionSmoother();
   const facingController=new OmegaActorFacingController();
   const finishClock=new OmegaTerminalMotionClock();
   omegaPrepareAuthoredScene();
+  omegaPrepareEnvArt();
   userApprovedAiraV2.prepare();
   session.engine.drainProjectileFeedback();
   const frame=(now:number)=>{
@@ -893,6 +889,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
     session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
+   const motion=motionSmoother.advance(
+    player.x+session.fieldWorldOffsetX,player.y,
+    dt,session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave);
    const pose=facingController.advance(
     session.engine.state.gameTime,session.facing,fireCue,{
      dashing:Boolean(player.isDashing),
@@ -912,7 +911,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     cinematicZoom+=(target-cinematicZoom)*easing;
     const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion);
     if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);

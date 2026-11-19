@@ -1,6 +1,7 @@
 import {omegaG5eCue,omegaG5eFx} from './omega-protocol-m12g5e-silver-action-fx';
 import {OMEGA_G5D_ACTUAL_E_WALK} from './omega-protocol-m12g5d-actual-source';
 import {omegaG5gCoreSilhouetteDifference} from './omega-protocol-m12g5g-native-pose';
+import {drawOmegaEnhancedWideMuzzle} from './omega-protocol-silver-kinetics';
 import type {OmegaActorView} from './omega-protocol-actor-render';
 
 /**
@@ -301,7 +302,10 @@ export class OmegaG5iLocalActionArtPreview {
    const p=omegaWidePlacement(source.wide,height);
    ctx.save();ctx.drawImage(source.image,p.left,p.top,p.width,p.height);
    if(cue.action==='fire'){
-    ctx.fillStyle='rgba(230,180,255,.85)';ctx.beginPath();ctx.arc(p.muzzleX,p.muzzleY,Math.max(2,height*.035),0,Math.PI*2);ctx.fill();
+    drawOmegaEnhancedWideMuzzle(
+     ctx,p.muzzleX,p.muzzleY,height,view.actionAge??0,
+     view.weaponFacingX??view.facingX,view.weaponFacingY??view.facingY,
+    );
    }
    ctx.restore();this.counts[cue.action]++;this.frames[cue.action].add(frame);return true;
   }

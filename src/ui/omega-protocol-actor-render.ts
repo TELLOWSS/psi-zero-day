@@ -29,6 +29,16 @@ export interface OmegaActorView {
  readonly weaponFacingY?:number;
  /** Actual collision-corrected movement, not joystick input or global time. */
  readonly gait?:OmegaWalkPose;
+ /** Visual-only native sword swing state driven strictly by OmegaBladeStrike. */
+ readonly bladeAge?:number;
+ readonly bladeCombo?:1|2|3;
+ readonly bladeFacingX?:number;
+ readonly bladeFacingY?:number;
+ readonly bladeHits?:number;
+ /** Post-collision smoothed visual velocity for organic lean and inertia. */
+ readonly velocityX?:number;
+ readonly velocityY?:number;
+ readonly speedRatio?:number;
 }
 /**
  * Internally authored PROCEDURAL technical placeholder, never an approved

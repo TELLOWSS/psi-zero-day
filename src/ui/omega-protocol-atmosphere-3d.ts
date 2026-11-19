@@ -183,6 +183,7 @@ export function drawOmega3DBackdrop(
  height:number,
  seconds:number,
  budget:Omega3DBudget,
+ hasPaintedVista=false,
 ):void {
  if(!Number.isFinite(seconds)||!Number.isFinite(width)||!Number.isFinite(height)||
     width<=0||height<=0||!Number.isFinite(camera.scale)||
@@ -196,13 +197,22 @@ export function drawOmega3DBackdrop(
  ctx.save();
  ctx.setTransform(1,0,0,1,0,0);
 
- // 1. Deep atmospheric skybox / cavern / abyss base gradient.
- const skyGrad=ctx.createLinearGradient(0,0,0,height);
- skyGrad.addColorStop(0,theme.skyTop);
- skyGrad.addColorStop(.55,theme.skyBottom);
- skyGrad.addColorStop(1,theme.skyTop);
- ctx.fillStyle=skyGrad;
- ctx.fillRect(0,0,width,height);
+ // 1. Deep atmospheric skybox / mood glaze (translucent when painterly vista is underneath).
+ if(hasPaintedVista){
+  const glaze=ctx.createLinearGradient(0,0,0,height);
+  glaze.addColorStop(0,'rgba(4,8,16,.44)');
+  glaze.addColorStop(.52,'rgba(8,14,24,.18)');
+  glaze.addColorStop(1,'rgba(4,8,16,.46)');
+  ctx.fillStyle=glaze;
+  ctx.fillRect(0,0,width,height);
+ }else{
+  const skyGrad=ctx.createLinearGradient(0,0,0,height);
+  skyGrad.addColorStop(0,theme.skyTop);
+  skyGrad.addColorStop(.55,theme.skyBottom);
+  skyGrad.addColorStop(1,theme.skyTop);
+  ctx.fillStyle=skyGrad;
+  ctx.fillRect(0,0,width,height);
+ }
 
  // 2. Deep under-deck chasm bounce glow so elevated platforms float over abyss.
  const abyss=ctx.createRadialGradient(
