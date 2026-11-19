@@ -1,8 +1,10 @@
 #!/bin/sh
 set -eu
 
-if [ "${VERCEL_ENV:-}" = "preview" ] &&
-   [ "${VERCEL_GIT_COMMIT_REF:-}" = "qa/omega-protected-browser-preview-20261115" ]; then
+if [ "${VERCEL_ENV:-}" = "production" ] ||
+   [ "${OMEGA_INCLUDE_REVIEW_ART:-}" = "1" ] ||
+   { [ "${VERCEL_ENV:-}" = "preview" ] &&
+     [ "${VERCEL_GIT_COMMIT_REF:-}" = "qa/omega-protected-browser-preview-20261115" ]; }; then
   VITE_OMEGA_PROTOCOL_LAB=1 VITE_OMEGA_PROTECTED_REVIEW=1 npm run build
   mkdir -p dist/qa-art
   cp -R qa-art/m12g5n qa-art/stride-repaint dist/qa-art/

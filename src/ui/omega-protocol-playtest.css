@@ -19,8 +19,9 @@
 .omega-protocol-topbar{
  min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px;
  padding:11px clamp(14px,2.8vw,36px);
- background:linear-gradient(90deg,#101c31 0%,#18233b 58%,#15182d 100%);
- border-bottom:1px solid rgba(153,190,220,.16);z-index:2
+ background:linear-gradient(90deg,#091220 0%,#121d32 52%,#161224 100%);
+ border-bottom:1px solid rgba(242,188,112,.22);
+ box-shadow:0 4px 20px rgba(0,0,0,.45);z-index:2
 }
 .omega-protocol-heading{min-width:0}
 .omega-protocol-tag{color:#ffa8d2;letter-spacing:.19em;font-size:9px;font-weight:800}
@@ -35,14 +36,14 @@
 }
 .omega-protocol-arena{
  position:relative;isolation:isolate;flex:1;min-height:0;min-width:0;
- overflow:hidden;border-radius:15px;border:1px solid rgba(100,156,202,.49);
- background:radial-gradient(ellipse at center,#162740,#0a1121 78%);
- box-shadow:inset 0 0 0 1px #ffffff10,0 5px 28px #0006
+ overflow:hidden;border-radius:15px;border:1px solid rgba(118,184,228,.54);
+ background:radial-gradient(ellipse at center,#122238,#070d18 80%);
+ box-shadow:inset 0 0 0 1px rgba(245,198,122,.16),inset 0 0 36px rgba(0,0,0,.55),0 10px 36px rgba(0,0,0,.78)
 }
 .omega-protocol-arena canvas{display:block;width:100%;height:100%;image-rendering:auto;touch-action:none}
 .omega-protocol-stage-shade{
  pointer-events:none;position:absolute;inset:0;z-index:1;
- background:linear-gradient(180deg,rgba(5,10,21,.83) 0%,rgba(5,10,21,.08) 21%,rgba(5,10,21,0) 63%,rgba(5,10,21,.43) 100%)
+ background:linear-gradient(180deg,rgba(4,8,16,.84) 0%,rgba(5,10,21,.08) 21%,rgba(5,10,21,0) 63%,rgba(4,8,16,.46) 100%)
 }
 .omega-protocol-stats{
  position:absolute;z-index:3;pointer-events:none;inset:12px 15px auto 15px;
@@ -50,26 +51,29 @@
 }
 .omega-protocol-stats>div{
  flex:0 1 auto;display:flex;gap:2px;flex-direction:column;
- border:1px solid var(--op-border);border-radius:10px;
- padding:8px 11px;min-width:0;background:rgba(13,27,48,.81);
- box-shadow:0 4px 15px #0003;backdrop-filter:blur(12px)
+ border:1px solid rgba(140,194,226,.30);border-radius:10px;
+ padding:8px 11px;min-width:0;
+ background:linear-gradient(155deg,rgba(11,22,39,.88),rgba(7,13,24,.86));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 18px rgba(0,0,0,.45);
+ backdrop-filter:blur(12px)
 }
 .omega-protocol-stats small{font-size:9px;letter-spacing:.09em;color:#9dbbd0;font-weight:750}
-.omega-protocol-wave{min-width:158px!important;border-color:rgba(250,156,210,.44)!important}
+.omega-protocol-wave{min-width:158px!important;border-color:rgba(246,184,120,.48)!important}
 .omega-protocol-wave strong{font-size:19px;letter-spacing:.04em;color:#ffe6f4;line-height:1.15}
 .omega-protocol-wave strong span{color:#9cb0c3;font-size:11px}
 .omega-protocol-hp{min-width:170px!important;flex:1 1 180px!important;max-width:300px}
 .omega-protocol-hp>span{display:flex;align-items:center;gap:9px;justify-content:space-between;font-size:12px;font-weight:850}
 .omega-protocol-hp b{color:#94e5e4;font-size:10px;letter-spacing:.1em}
-.omega-protocol-hp [role="meter"]{margin-top:6px;height:7px;overflow:hidden;border-radius:5px;background:#2b384e;border:1px solid #45526b}
-.omega-protocol-hp [role="meter"] i{height:100%;display:block;border-radius:4px;background:linear-gradient(90deg,#48d8cf,#b2f4db);box-shadow:0 0 10px #45e6df99}
+.omega-protocol-hp [role="meter"]{margin-top:6px;height:7px;overflow:hidden;border-radius:5px;background:#202b3d;border:1px solid #4d607c}
+.omega-protocol-hp [role="meter"] i{height:100%;display:block;border-radius:4px;background:linear-gradient(90deg,#3cd6cf,#b5f9e0);box-shadow:0 0 12px #45e6dfaa}
 .omega-protocol-threat{min-width:88px!important}
 .omega-protocol-threat strong{font-size:18px;color:#ffcf9a}
 .omega-protocol-modifier strong{font-size:12px;color:#e2ecff}
 .omega-protocol-boss-alert{
  z-index:3;position:absolute;top:94px;left:50%;transform:translateX(-50%);
- color:#ffe1af;background:rgba(86,34,50,.77);border:1px solid rgba(255,191,121,.58);
- box-shadow:0 0 25px #ff817e37;padding:7px 16px;border-radius:20px;
+ color:#ffe7bc;background:linear-gradient(120deg,rgba(78,22,40,.88),rgba(40,14,32,.90));
+ border:1px solid rgba(255,186,118,.68);
+ box-shadow:0 6px 26px rgba(0,0,0,.6),0 0 28px rgba(255,96,120,.28);padding:7px 16px;border-radius:20px;
  font-size:10px;font-weight:850;letter-spacing:.1em;pointer-events:none;white-space:nowrap
 }
 
@@ -81,11 +85,11 @@
 }
 .omega-protocol-boss-hp{
  width:100%;height:7px;overflow:hidden;border-radius:10px;
- background:#180e1a;box-shadow:inset 0 0 0 1px #efab9c4f
+ background:#140916;box-shadow:inset 0 0 0 1px #f3af9e66
 }
 .omega-protocol-boss-hp i{
  display:block;height:100%;border-radius:10px;
- background:linear-gradient(90deg,#ff7a9b,#ffd2a0);transition:width .12s linear;
+ background:linear-gradient(90deg,#ff5f8a,#ffcf8f);box-shadow:0 0 10px rgba(255,112,148,.6);transition:width .12s linear;
 }
 @media(max-height:430px) and (orientation:landscape){
  .omega-protocol-boss-alert{top:47px;min-width:170px;max-width:calc(100% - 300px);gap:2px;font-size:8px;padding:3px 7px}
@@ -122,8 +126,8 @@
  color:white;box-shadow:0 7px 19px #0008, inset 0 0 0 1px #ffffff30
 }
 .omega-protocol-action-glyph{font-size:27px;line-height:1}
-.omega-protocol-dash{border-color:#9ed9ff!important;background:linear-gradient(150deg,#377ca0,#1d3d6c)!important}
-.omega-protocol-ultimate{width:105px!important;height:105px!important;border-color:#ffa7d7!important;background:linear-gradient(145deg,#a64287,#522e72)!important}
+.omega-protocol-dash{border-color:#a8e0ff!important;background:linear-gradient(155deg,#3580a8,#17335e)!important;box-shadow:0 8px 22px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.28),0 0 14px rgba(82,208,242,.24)!important}
+.omega-protocol-ultimate{width:105px!important;height:105px!important;border-color:#ffb0dc!important;background:linear-gradient(150deg,#b0428d,#472368)!important;box-shadow:0 10px 26px rgba(0,0,0,.68),inset 0 1px 0 rgba(255,255,255,.3),0 0 18px rgba(232,108,186,.28)!important}
 .omega-protocol-ultimate .omega-protocol-action-glyph{font-size:36px}
 .omega-protocol-ultimate small{color:#ffe1f5;font-size:10px}
 .omega-protocol-action-pad button:disabled{filter:grayscale(.65);opacity:.68}

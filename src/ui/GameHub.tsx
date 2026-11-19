@@ -173,10 +173,19 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const [chapterGateOpen,setChapterGateOpen]=useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
-  // Internal QA only. No menu, default Preview or Production entry is exposed.
+  const omegaLabEnabled = import.meta.env.DEV || import.meta.env.VITE_OMEGA_PROTOCOL_LAB === '1';
   const [inOmegaLab,setInOmegaLab]=useState(()=>typeof window!=='undefined'
-    && (import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1')
+    && omegaLabEnabled
     && new URLSearchParams(window.location.search).get('omegaLab')==='1');
+  const enterOmegaLab = useCallback(() => {
+    if (!omegaLabEnabled) return;
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('omegaLab', '1');
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+    setInOmegaLab(true);
+  }, [omegaLabEnabled]);
   const [survivorsLoading, setSurvivorsLoading] = useState(false);
   const enterSurvivors = useCallback(() => {
     setSurvivorsLoading(false);
@@ -267,12 +276,14 @@ export function GameShell({ session }: { session: EpisodeSession }) {
 
   if(inOmegaLab)return <Suspense fallback={<GameplayChunkFallback />}>
     <OmegaProtocolPlaytest onExit={()=>{
-      if(OMEGA_PROTECTED_REVIEW){
+      if(OMEGA_PROTECTED_REVIEW && typeof window!=='undefined' && window.location.hostname.includes('-git-qa-omega-')){
         window.location.assign('https://psi-zero-day.vercel.app/?home=cinematic#reignition-missions');
         return;
       }
-      const url=new URL(window.location.href);url.searchParams.delete('omegaLab');
-      window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+      if(typeof window!=='undefined'){
+        const url=new URL(window.location.href);url.searchParams.delete('omegaLab');
+        window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+      }
       setInOmegaLab(false);
     }}/>
   </Suspense>;
@@ -354,15 +365,17 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     onNewGame={newGame}
     onDefense={scenarioId => openDefense(scenarioId ?? null)}
     onSurvivors={() => setSurvivorsLoading(true)}
+    onOmega={omegaLabEnabled ? enterOmegaLab : undefined}
   />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
+export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors, onOmega }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
   onDefense?: (scenarioId?: string | null) => void;
   onSurvivors?: () => void;
+  onOmega?: () => void;
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const saveHealth=useSyncExternalStore(subscribeEpisodeSaveHealth,readEpisodeSaveHealth,()=> 'ok' as const);
@@ -422,6 +435,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     onMap={()=>setPage('map')}
     onGuard={onDefense?()=>onDefense('guard-campaign'):undefined}
     onWatch={onSurvivors}
+    onOmega={onOmega}
     onStory={onPlay}
     restartVisible={snapshot.phase!=='start'||saveHealth==='preserved'}
     onRestart={()=>setModePreview('story')}

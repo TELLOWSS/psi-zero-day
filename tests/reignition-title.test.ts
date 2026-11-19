@@ -14,8 +14,8 @@ describe('RE:IGNITION title selectable four concepts',()=>{
   expect(html).toContain('data-hero-layout="mission-deck"');
   expect(html).toContain('class="rg-hero-operations-link" href="#reignition-missions"');
   expect(html).not.toContain('class="rg-hero-mission-deck"');
-  expect(html).toMatch(/class="rg-card is-omega" href="https:\/\/[^"]+\/\?omegaLab=1"/);
-  expect(html).toContain('Vercel 로그인 필요');
+  expect(html).toContain('class="rg-card is-omega" href="/?omegaLab=1"');
+  expect(html).toContain('OMEGA PROTOCOL');
   expect(html).toContain('RE:IGNITION');
   expect(html).toContain('class="rg-appearance"');
   expect(html).toContain('화면 스타일');

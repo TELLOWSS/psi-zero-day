@@ -42,6 +42,11 @@ import {drawOmegaApprovedActor,OmegaApprovedImageCache,OMEGA_PROTOCOL_APPROVED_A
 import {omegaAdvanceActorFireCue,OMEGA_EMPTY_FIRE_CUE,type OmegaActorFireCue} from './omega-protocol-actor-cues';
 import {omegaAdvanceImpactFx,drawOmegaImpactFx,type OmegaImpactFx} from './omega-protocol-impact-vfx';
 import {omegaAdvanceDashEchoes,drawOmegaDashEnergy,drawOmegaGroundedSplash,type OmegaDashEcho} from './omega-protocol-dash-visuals';
+import {
+ omega3DBudget,drawOmega3DBackdrop,drawOmega3DGroundSurface,drawOmega3DPropRelief,
+ drawOmega3DActorLighting,drawOmega3DOcclusionGuide,drawOmega3DProjectile,
+ drawOmega3DForegroundAtmosphere,
+} from './omega-protocol-atmosphere-3d';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -74,6 +79,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const camera=offset===0?worldCamera:{
   ...worldCamera,projectedOffsetX:worldCamera.projectedOffsetX+offset,
  };
+ const atm3DBudget=omega3DBudget(ctx.canvas.width,ctx.canvas.height);
+ if(field){
+  drawOmega3DBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget);
+ }
  applyOmegaQuarterView(ctx,camera);
  ctx.translate(fieldElevation*skew,-fieldElevation);
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
@@ -87,6 +96,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaG2RearEnvironment(ctx,plan,state.gameTime,m12G2Quality);
   drawOmegaM12TerrainShadows(ctx,plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,plan,state.gameTime,m12Budget);
+  drawOmega3DGroundSurface(ctx,plan,state.gameTime,atm3DBudget);
   if(passage){
    ctx.strokeStyle='#446377';ctx.lineWidth=14;
    ctx.beginPath();
@@ -100,11 +110,13 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   }
  };
  const drawProp=(plan:OmegaFieldPlan,obstacle:OmegaFieldObstacle)=>{
-  if(drawOmegaUpperDeckProp(ctx,plan,obstacle))return;
-  drawOmegaFieldProp(ctx,plan,obstacle);
-  drawOmegaM12StructureFacets(ctx,plan,obstacle,state.gameTime,m12Budget);
-  drawOmegaG2NativeFacade(ctx,plan,obstacle,state.gameTime,m12G2Quality);
-  drawOmegaG3NativeMesh(ctx,plan,obstacle,m12G3Budget);
+  if(!drawOmegaUpperDeckProp(ctx,plan,obstacle)){
+   drawOmegaFieldProp(ctx,plan,obstacle);
+   drawOmegaM12StructureFacets(ctx,plan,obstacle,state.gameTime,m12Budget);
+   drawOmegaG2NativeFacade(ctx,plan,obstacle,state.gameTime,m12G2Quality);
+   drawOmegaG3NativeMesh(ctx,plan,obstacle,m12G3Budget);
+  }
+  drawOmega3DPropRelief(ctx,plan,obstacle,state.gameTime,atm3DBudget);
  };
  if(field){
   drawGround(field.plan);
@@ -184,6 +196,12 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    drawOmegaG4ActorGrounding(ctx,field.plan,enemy,enemy.isStageBoss?'boss':'infected',
     m12G4Budget,Math.max(18,Math.min(38,enemy.radius??24)));
   }
+  const latestSlash=session.lastBladeStrike;
+  const bladeFlash=latestSlash&&state.gameTime-latestSlash.time>=0&&state.gameTime-latestSlash.time<.18
+   ?1-(state.gameTime-latestSlash.time)/.18:0;
+  const muzzleFlash=Number.isFinite(fireCue.until)&&fireCue.until>=state.gameTime?1:0;
+  drawOmega3DActorLighting(ctx,field.plan,state.player,{x:pose.weaponX,y:pose.weaponY},
+   state.hazards,state.gameTime,{muzzle:muzzleFlash,blade:bladeFlash},atm3DBudget);
  }
  else{
   ctx.fillStyle='#111a2b';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
@@ -287,12 +305,14 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   renderHero();
  }
  // The native prop's depth can hide the hero: show only a subtle floor beacon.
- if(field)drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
+ if(field){
+  drawOmegaM12OcclusionBeacon(ctx,field.plan,p,state.gameTime);
+  drawOmega3DOcclusionGuide(ctx,field.plan,p,state.gameTime);
+ }
  // Native projectiles and impacts always render above solid geometry.
  for(const projectile of state.projectiles){
-  ctx.fillStyle='#7df3fa';ctx.beginPath();
-  ctx.arc(projectile.x,projectile.y,Math.max(2,Math.min(9,projectile.radius)),0,Math.PI*2);
-  ctx.fill();
+  drawOmega3DProjectile(ctx,projectile.x,projectile.y,
+   Math.max(2,Math.min(9,projectile.radius)),projectile.vx,projectile.vy,false);
  }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  const slash=session.lastBladeStrike;
@@ -307,7 +327,17 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.shadowBlur=slash.hits>0?18:6;
   ctx.beginPath();ctx.arc(0,0,95,-.95,.95);ctx.stroke();
   ctx.strokeStyle='rgba(121,94,234,.68)';ctx.lineWidth=9*fade;
-  ctx.beginPath();ctx.arc(0,0,81,-.92,.92);ctx.stroke();ctx.restore();
+  ctx.beginPath();ctx.arc(0,0,81,-.92,.92);ctx.stroke();
+  ctx.strokeStyle='rgba(235,250,255,'+(.72*fade).toFixed(2)+')';ctx.lineWidth=2.5*fade;
+  ctx.beginPath();ctx.arc(0,0,101,-.76,.76);ctx.stroke();
+  ctx.shadowBlur=0;
+  for(const arcAngle of [-.55,0,.55]){
+   const sx=Math.cos(arcAngle)*(98+(1-fade)*12);
+   const sy=Math.sin(arcAngle)*(98+(1-fade)*12);
+   ctx.fillStyle='rgba(248,220,255,'+(.82*fade).toFixed(2)+')';
+   ctx.beginPath();ctx.arc(sx,sy,2.4*fade+1,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
  }
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
@@ -325,7 +355,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   ctx.fillStyle=radial;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
  }
  ctx.restore();
- if(field)drawOmegaSectorOneGrade(ctx,field.plan,ctx.canvas.width,ctx.canvas.height);
+ if(field){
+  drawOmegaSectorOneGrade(ctx,field.plan,ctx.canvas.width,ctx.canvas.height);
+  drawOmega3DForegroundAtmosphere(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,
+   state.gameTime,session.snapshot.bossHp!==null,atm3DBudget);
+ }
  // Portrait camera follows the player: preserve off-screen enemy awareness
  // with a cheap, always-visible whole-arena radar in screen coordinates.
  const mw=Math.max(70,Math.min(118,ctx.canvas.width*.155));
