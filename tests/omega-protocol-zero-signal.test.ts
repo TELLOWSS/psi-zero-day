@@ -1,0 +1,196 @@
+import { describe, expect, it } from 'vitest';
+import type { Hazard } from '../src/domain/patrol-survivors';
+import {
+ OMEGA_LOADOUTS,
+ OMEGA_STRIKERS,
+ omegaActiveEvolutions,
+ omegaComputeFinalScore,
+ omegaDailySeed,
+ omegaEvaluateBlackboxUnlocks,
+ omegaStyleRankForPoints,
+} from '../src/domain/omega-protocol-zero-signal';
+import { OmegaProtocolCombatSession } from '../src/engine/omega-protocol-combat';
+import { OmegaZeroSignalDirector } from '../src/engine/omega-protocol-zero-signal-director';
+import { OmegaProceduralAudio } from '../src/ui/omega-protocol-audio';
+import {
+ drawOmegaZeroSignalScreenFx,
+ drawOmegaZeroSignalWorldFx,
+} from '../src/ui/omega-protocol-zero-signal-fx';
+
+function createRecorder() {
+ const events: string[] = [];
+ const grad = { addColorStop: () => {} };
+ const ctx = new Proxy(
+  {},
+  {
+   get(_t, key) {
+    if (key === 'createLinearGradient' || key === 'createRadialGradient') {
+     return () => {
+      events.push(String(key));
+      return grad;
+     };
+    }
+    return () => {
+     events.push(String(key));
+    };
+   },
+   set() {
+    return true;
+   },
+  },
+ ) as unknown as CanvasRenderingContext2D;
+ return { ctx, events };
+}
+
+describe('OMEGA PROTOCOL: ZERO SIGNAL commercial roguelite systems', () => {
+ it('provides 3 distinct loadouts, deterministic daily seed, style rank tiers, evolutions, and blackbox archive rules', () => {
+  expect(OMEGA_LOADOUTS).toHaveLength(3);
+  expect(OMEGA_STRIKERS).toHaveLength(4);
+
+  const d1 = omegaDailySeed(new Date('2026-11-20T01:00:00Z'));
+  const d2 = omegaDailySeed(new Date('2026-11-20T22:59:00Z'));
+  expect(d1).toEqual(d2);
+  expect(d1.seed).toBe(20261120);
+
+  expect(omegaStyleRankForPoints(0).current.tier).toBe('D');
+  expect(omegaStyleRankForPoints(750).current.tier).toBe('S');
+  expect(omegaStyleRankForPoints(1550).current.tier).toBe('OMEGA');
+
+  const evos = omegaActiveEvolutions({
+   arc_pulse: 1,
+   shockwave: 1,
+   blade_edge: 1,
+   radio_overdrive: 2,
+  });
+  expect(evos).toContain('volt_phantom');
+  expect(evos).toContain('crimson_moon');
+  expect(evos).toContain('signal_swarm');
+
+  const final = omegaComputeFinalScore({
+   clearedWaves: 15,
+   maxCombo: 60,
+   detonations: 25,
+   phantomDodges: 8,
+   kills: 110,
+   peakPoints: 1800,
+   victory: true,
+  });
+  expect(final.grade).toBe('OMEGA');
+  expect(final.score).toBeGreaterThanOrEqual(12500);
+
+  const unlocked = omegaEvaluateBlackboxUnlocks(
+   {
+    clearedWaves: 9,
+    detonations: 2,
+    strikersCalledById: { m01_snipe: 1 },
+    victory: false,
+    peakTier: 'S',
+   },
+   [],
+  );
+  expect(unlocked).toEqual(['bb_01_q17', 'bb_02_m01']);
+ });
+
+ it('triggers real Signal Mark Detonation on gun hit + blade swing, restoring shield & raising style rank', () => {
+  const session = new OmegaProtocolCombatSession(20261120, 50, false, { fieldTraversal: true });
+  const director = new OmegaZeroSignalDirector('valkyrie', false);
+  director.applyLoadoutToSession(session);
+
+  const target = session.engine.state.hazards[0]!;
+  target.x = session.engine.state.player.x + 64;
+  target.y = session.engine.state.player.y;
+  target.hp = 180;
+  target.maxHp = 180;
+
+  director.onProjectileFeedback(session, [
+   { projectileId: 'p1', kind: 'radio', phase: 'impact', x: target.x, y: target.y, angle: 0, radius: 10, targetId: target.id },
+   { projectileId: 'p2', kind: 'radio', phase: 'impact', x: target.x, y: target.y, angle: 0, radius: 10, targetId: target.id },
+  ]);
+  expect(director.markCount(target.id)).toBe(2);
+
+  // Trigger facing toward target (+x) then swing blade.
+  session.update(1 / 60, { moveX: 1, moveY: 0, triggerAction: false });
+  const hpBeforeBlade = target.hp;
+  const strike = session.blade();
+  expect(strike).not.toBeNull();
+  director.onPlayerBlade(session, strike);
+
+  expect(target.hp).toBeLessThan(hpBeforeBlade);
+  expect(director.markCount(target.id)).toBe(0);
+  const hud = director.hudSnapshot(session);
+  expect(hud.detonations).toBeGreaterThanOrEqual(1);
+  expect(hud.stylePoints).toBeGreaterThan(0);
+ });
+
+ it('activates Zero-Second Phantom Dodge bullet-time slow-mo, absorbs damage via shield, deploys strikers, and auto-interacts on empty zones', () => {
+  const session = new OmegaProtocolCombatSession(20261120, 50, false, { fieldTraversal: true });
+  const director = new OmegaZeroSignalDirector('phantom', false);
+  director.applyLoadoutToSession(session);
+
+  // Place a runaway cart near hero so dash triggers genuine Phantom Dodge.
+  const hazard = session.engine.state.hazards[0]!;
+  (hazard as { type: Hazard['type'] }).type = 'RUNAWAY_CART';
+  hazard.x = session.engine.state.player.x + 90;
+  hazard.y = session.engine.state.player.y;
+  hazard.hp = 200;
+
+  expect(session.dash()).toBe(true);
+  const dodgeRes = director.onPlayerDash(session);
+  expect(dodgeRes.phantomDodge).toBe(true);
+  expect(director.currentOverclockRemaining()).toBeGreaterThan(3);
+
+  const stepSlow = director.step(session, 0.04);
+  expect(stepSlow.effectiveDt).toBeLessThan(0.02);
+
+  // Verify Energy Shield absorbs incoming Watch HP loss before HP falls.
+  const hpStart = session.engine.state.player.hp;
+  session.engine.state.player.hp = hpStart - 10;
+  director.step(session, 0.016, hpStart);
+  expect(session.engine.state.player.hp).toBe(hpStart);
+  expect(director.currentShield()).toBe(10);
+
+  // Deploy unlocked starter Striker (Breaker EMP for phantom loadout).
+  const hpHazardBefore = hazard.hp;
+  expect(director.triggerStriker(session, 'breaker_emp')).toBe(true);
+  expect(hazard.hp).toBeLessThan(hpHazardBefore);
+  expect(director.triggerStriker(session, 'breaker_emp')).toBe(false); // Cooldown enforced.
+
+  // Clear hazards and walk to active objective console -> auto-flow interacts seamlessly.
+  session.engine.state.hazards = [];
+  director.step(session, 0.016);
+  session.update(1 / 60, { moveX: 0, moveY: 0, triggerAction: false });
+  const stepTarget = session.field!.plan.event.steps[0]!.target;
+  session.engine.state.player.x = stepTarget.x;
+  session.engine.state.player.y = stepTarget.y;
+  const autoStep = director.step(session, 0.016);
+  expect(autoStep.events.some((e) => e.kind === 'auto_interact')).toBe(true);
+  expect(session.field!.progress.completedSteps).toBe(1);
+ });
+
+ it('renders world/screen FX and runs procedural audio cleanly without DOM failures', () => {
+  const session = new OmegaProtocolCombatSession(20261120, 50, false, { fieldTraversal: true });
+  const director = new OmegaZeroSignalDirector('siege', true);
+  director.applyLoadoutToSession(session);
+  director.triggerStriker(session, 'guard_sentry');
+
+  const worldRec = createRecorder();
+  drawOmegaZeroSignalWorldFx(worldRec.ctx, director, session, 1.5);
+  expect(worldRec.events.length).toBeGreaterThan(5);
+
+  const screenRec = createRecorder();
+  drawOmegaZeroSignalScreenFx(screenRec.ctx, director, 1120, 720);
+
+  const audio = new OmegaProceduralAudio();
+  audio.unlock();
+  audio.setMuted(true);
+  expect(audio.isMuted()).toBe(true);
+  audio.playGunshot(true);
+  audio.playBladeSlash(3);
+  audio.playDetonation(3);
+  audio.playPhantomDodge();
+  audio.playStriker('m01_snipe');
+  audio.playRankUp('OMEGA');
+  audio.setBgmState(true, 'boss');
+  audio.dispose();
+ });
+});

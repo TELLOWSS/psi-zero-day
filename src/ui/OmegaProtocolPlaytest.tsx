@@ -57,6 +57,16 @@ import {
  omegaPrepareVfxAndPropArt,drawOmegaAuthored3DProp,drawOmegaPaintedBladeSlash,
 } from './omega-protocol-vfx-art';
 import {omegaPrepareEntityArt} from './omega-protocol-entity-art';
+import {
+ OMEGA_LOADOUTS,OMEGA_STRIKERS,OMEGA_EVOLUTIONS,OMEGA_BLACKBOX_DOSSIERS,
+ omegaDailySeed,omegaEvaluateBlackboxUnlocks,
+ type OmegaLoadoutId,type OmegaStrikerId,
+} from '../domain/omega-protocol-zero-signal';
+import {
+ OmegaZeroSignalDirector,type OmegaDirectorEvent,type OmegaZeroSignalHudSnapshot,
+} from '../engine/omega-protocol-zero-signal-director';
+import {OmegaProceduralAudio} from './omega-protocol-audio';
+import {drawOmegaZeroSignalWorldFx,drawOmegaZeroSignalScreenFx} from './omega-protocol-zero-signal-fx';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -69,7 +79,40 @@ const buttonDirections=[{label:'↑',x:0,y:-1},{label:'←',x:-1,y:0},{label:'�
 // In-memory only, development QA provenance. Never available to production
 // users, never writes a profile/save and never bypasses a real unlock CTA.
 const omegaCombatBrowserFixtures=new WeakMap<OmegaProtocolCombatSession,OmegaCombatProbeFixture>();
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0},tracerTracker?:OmegaBallisticTracerTracker){
+const ZERO_SIGNAL_ARCHIVE_KEY='psi:omega-zero-signal:archive:v1';
+function readZeroSignalArchive():readonly string[]{
+ try{
+  if(typeof window==='undefined')return [];
+  const raw=window.localStorage.getItem(ZERO_SIGNAL_ARCHIVE_KEY);
+  const parsed=raw?JSON.parse(raw):[];
+  return Array.isArray(parsed)?parsed.filter((v):v is string=>typeof v==='string'):[];
+ }catch{return [];}
+}
+function saveZeroSignalArchive(ids:readonly string[]):void{
+ try{
+  if(typeof window!=='undefined')window.localStorage.setItem(ZERO_SIGNAL_ARCHIVE_KEY,JSON.stringify(ids));
+ }catch{void 0;}
+}
+function shouldBypassBriefingOnLaunch():boolean{
+ if(typeof window==='undefined')return true;
+ const params=new URLSearchParams(window.location.search);
+ return ['omegaQaState','omegaView','omegaSilverPreview','omegaM12G4','omegaM12G5','omegaM12G5b','omegaM12G5c','omegaM12G5d','omegaM12G5e','omegaM12G5g','omegaM12G5h','omegaM12G5i','omegaInfected','omegaG5VectorStudy','omegaCombatProbe'].some(k=>params.has(k));
+}
+function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirectorEvent[],session:OmegaProtocolCombatSession):void{
+ for(const ev of events){
+  if(ev.kind==='gunshot')audio.playGunshot(ev.detail==='overclock');
+  else if(ev.kind==='detonation')audio.playDetonation(ev.numeric??1);
+  else if(ev.kind==='phantom_dodge')audio.playPhantomDodge();
+  else if(ev.kind==='striker'&&ev.detail)audio.playStriker(ev.detail as OmegaStrikerId);
+  else if(ev.kind==='rank_up'&&ev.detail)audio.playRankUp(ev.detail as OmegaZeroSignalHudSnapshot['styleRank']);
+  else if(ev.kind==='pickup')audio.playPickup();
+  else if(ev.kind==='shield_break')audio.playShieldBreak();
+  else if(ev.kind==='evo_unlock')audio.playEvoUnlock();
+  else if(ev.kind==='auto_interact')audio.playPickup();
+ }
+ void session;
+}
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0},tracerTracker?:OmegaBallisticTracerTracker,director?:OmegaZeroSignalDirector){
  const state=session.engine.state;
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
  ctx.fillStyle='#070e19';ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -84,7 +127,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const skew=OMEGA_QUARTER_VIEW.skewX;
  const worldCamera=omegaQuarterViewCamera({
   x:state.player.x+offset+actorElevation*skew,y:state.player.y-actorElevation,
- },ctx.canvas.width,ctx.canvas.height,cameraZoom,(passage?.length??1)*WORLD_WIDTH,
+ },ctx.canvas.width,ctx.canvas.height,cameraZoom+(director?.zoomPunch??0),(passage?.length??1)*WORLD_WIDTH,
   passage?OMEGA_CONNECTED_MAX_ELEVATION:0);
  const camera=offset===0?worldCamera:{
   ...worldCamera,projectedOffsetX:worldCamera.projectedOffsetX+offset,
@@ -96,6 +139,11 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaLivingBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget);
  }
  applyOmegaQuarterView(ctx,camera);
+ if(director&&director.cameraShake>0.1){
+  const sx=Math.sin(state.gameTime*73)*director.cameraShake*0.5;
+  const sy=Math.cos(state.gameTime*61)*director.cameraShake*0.38;
+  ctx.translate(sx,sy);
+ }
  ctx.translate(fieldElevation*skew,-fieldElevation);
  const m12Budget=omegaM12Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
@@ -368,6 +416,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  drawOmegaImpactFx(ctx,impacts,state.gameTime);
  drawOmegaPaintedBladeSlash(ctx,session.lastBladeStrike,state.gameTime,camera,lift);
+ if(director){
+  drawOmegaZeroSignalWorldFx(ctx,director,session,state.gameTime);
+ }
  if(field){
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
@@ -388,6 +439,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaSectorOneGrade(ctx,field.plan,ctx.canvas.width,ctx.canvas.height);
   drawOmega3DForegroundAtmosphere(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,
    state.gameTime,session.snapshot.bossHp!==null,atm3DBudget);
+ }
+ if(director){
+  drawOmegaZeroSignalScreenFx(ctx,director,ctx.canvas.width,ctx.canvas.height);
  }
  // Portrait camera follows the player: preserve off-screen enemy awareness
  // with a cheap, always-visible whole-arena radar in screen coordinates.
@@ -555,7 +609,26 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   catch{return readOmegaProtocolAccess(undefined);}
  });
  const [seedValue,setSeedValue]=useState('20261108');
- const [session,setSession]=useState(()=>makeOmegaFieldSession(20261108));
+ const [loadoutId,setLoadoutId]=useState<OmegaLoadoutId>('valkyrie');
+ const [dailyMode,setDailyMode]=useState(false);
+ const [sortieStarted,setSortieStarted]=useState(()=>shouldBypassBriefingOnLaunch());
+ const sortieStartedRef=useRef(sortieStarted);
+ sortieStartedRef.current=sortieStarted;
+ const [muted,setMuted]=useState(false);
+ const [blackboxes,setBlackboxes]=useState<readonly string[]>(()=>readZeroSignalArchive());
+ const [blackboxTab,setBlackboxTab]=useState(false);
+ const audioRef=useRef<OmegaProceduralAudio|null>(null);
+ if(!audioRef.current)audioRef.current=new OmegaProceduralAudio();
+ const directorRef=useRef<OmegaZeroSignalDirector|null>(null);
+ const [session,setSession]=useState(()=>{
+  const s=makeOmegaFieldSession(20261108);
+  const d=new OmegaZeroSignalDirector('valkyrie',false);
+  d.applyLoadoutToSession(s);
+  directorRef.current=d;
+  return s;
+ });
+ if(!directorRef.current)directorRef.current=new OmegaZeroSignalDirector(loadoutId,dailyMode);
+ const [zeroHud,setZeroHud]=useState<OmegaZeroSignalHudSnapshot>(()=>directorRef.current!.hudSnapshot(session));
  const zombieAiQa=import.meta.env.DEV&&typeof window!=='undefined'&&
   new URLSearchParams(window.location.search).get('omegaQaState')==='zombieAI';
  const cartWarningQa=import.meta.env.DEV&&typeof window!=='undefined'&&
@@ -618,13 +691,35 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  // Multiple finger presses keep their own direction until released.
  const pointerMoves=useRef(new Map<number,{x:number;y:number}>());
  const lastHudAt=useRef(0);
- const restart=useCallback(()=>{
-  const n=Number(seedValue);
-  const newSession=makeOmegaFieldSession(Number.isFinite(n)?Math.trunc(n):0);
-  setSession(newSession);setSnapshot(newSession.snapshot);setPaused(false);
+ const launchSortie=useCallback((chosenLoadout:OmegaLoadoutId,useDaily:boolean,startImmediately=true)=>{
+  const daily=omegaDailySeed();
+  const rawSeed=useDaily?daily.seed:Number(seedValue);
+  const finalSeed=Number.isFinite(rawSeed)?Math.trunc(rawSeed):20261108;
+  const newSession=makeOmegaFieldSession(finalSeed);
+  const newDirector=new OmegaZeroSignalDirector(chosenLoadout,useDaily);
+  newDirector.applyLoadoutToSession(newSession);
+  directorRef.current=newDirector;
+  setLoadoutId(chosenLoadout);
+  setDailyMode(useDaily);
+  if(useDaily)setSeedValue(String(daily.seed));
+  setSortieStarted(startImmediately);
+  setSession(newSession);
+  setSnapshot(newSession.snapshot);
+  setZeroHud(newDirector.hudSnapshot(newSession));
+  setPaused(false);
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
+  audioRef.current?.unlock();
  },[seedValue]);
+ const restart=useCallback(()=>{
+  launchSortie(loadoutId,dailyMode,true);
+ },[launchSortie,loadoutId,dailyMode]);
+ const toggleMute=useCallback(()=>{
+  const next=!muted;
+  setMuted(next);
+  audioRef.current?.unlock();
+  audioRef.current?.setMuted(next);
+ },[muted]);
  useEffect(()=>{
   if(!silverPreviewRequested){
    userApprovedAiraV2.setSilverReviewSources(null);
@@ -730,11 +825,13 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   return ()=>{active=false;};
  },[importG5iWide,importInfected]);
  useEffect(()=>{
-  if(!OMEGA_PROTECTED_REVIEW)return;
-  if(reviewBlocked)session.pause();else session.resume();
-  setPaused(reviewBlocked);
+  const holdPaused=(OMEGA_PROTECTED_REVIEW&&reviewBlocked)||!sortieStarted;
+  if(holdPaused)session.pause();
+  else session.resume();
+  setPaused(holdPaused&&!(OMEGA_PROTECTED_REVIEW&&!reviewBlocked&&!sortieStarted));
   setSnapshot(session.snapshot);
- },[session,reviewBlocked]);
+ },[session,reviewBlocked,sortieStarted]);
+ useEffect(()=>()=>{audioRef.current?.dispose();},[]);
  // Source recovery is a manually triggered DEV-only action; no cloud API at
  // gameplay runtime, no automatic artwork swap, no user save mutations.
  const importRecoveredQaAira=useCallback(async()=>{
@@ -783,12 +880,38 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  },[g5dActualReview]);
  useEffect(()=>{
   const onKeyDown=(e:KeyboardEvent)=>{
-   if(visualAuditInputBlock.current||reviewBlocked)return;
+   if(visualAuditInputBlock.current||reviewBlocked||!sortieStartedRef.current)return;
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;
+   audioRef.current?.unlock();
    if(validKeys.has(e.key)){keysRef.current.add(e.key);e.preventDefault();}
-   if((e.code==='Space'||e.key==='Shift')&&!e.repeat){e.preventDefault();session.dash();}
+   if((e.code==='Space'||e.key==='Shift')&&!e.repeat){
+    e.preventDefault();
+    if(session.dash()&&directorRef.current){
+     const {phantomDodge}=directorRef.current.onPlayerDash(session);
+     if(phantomDodge)audioRef.current?.playPhantomDodge();
+     setZeroHud(directorRef.current.hudSnapshot(session));
+    }
+   }
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
-   if(e.key.toLowerCase()==='f'&&!e.repeat){e.preventDefault();session.blade();setSnapshot(session.snapshot);}
+   if(e.key.toLowerCase()==='f'&&!e.repeat){
+    e.preventDefault();
+    const strike=session.blade();
+    if(strike){
+     audioRef.current?.playBladeSlash(strike.combo);
+     directorRef.current?.onPlayerBlade(session,strike);
+     setZeroHud(directorRef.current!.hudSnapshot(session));
+    }
+    setSnapshot(session.snapshot);
+   }
+   if(['1','2','3','4'].includes(e.key)&&!e.repeat&&directorRef.current){
+    e.preventDefault();
+    const striker=OMEGA_STRIKERS[Number(e.key)-1];
+    if(striker&&directorRef.current.triggerStriker(session,striker.id)){
+     audioRef.current?.playStriker(striker.id);
+     setZeroHud(directorRef.current.hudSnapshot(session));
+     setSnapshot(session.snapshot);
+    }
+   }
    if(e.key.toLowerCase()==='e'&&!e.repeat){
     e.preventDefault();
     const outcome=session.interact();
@@ -854,8 +977,20 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const mx=(Number(k.has('d')||k.has('D')||k.has('ArrowRight'))-Number(k.has('a')||k.has('A')||k.has('ArrowLeft')))+mobileDir.current.x;
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
-   if(dt>0)session.update(dt,{moveX:mx/length,moveY:my/length,triggerAction:true});
+   const dir=directorRef.current;
+   const timeScale=dir&&dir.currentSlowMoRemaining()>0?0.24:1.0;
+   const hpBeforeUpdate=session.engine.state.player.hp;
+   if(dt>0&&sortieStartedRef.current)session.update(dt*timeScale,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
+   if(dir&&sortieStartedRef.current){
+    dir.onProjectileFeedback(session,engineEvents);
+    const stepResult=dir.step(session,dt,hpBeforeUpdate);
+    if(audioRef.current)playDirectorAudio(audioRef.current,stepResult.events,session);
+   }
+   audioRef.current?.setBgmState(
+    sortieStartedRef.current&&session.run.phase==='battle'&&session.engine.state.phase==='playing'&&!reviewBlocked,
+    session.snapshot.bossHp!==null?'boss':session.engine.state.hazards.some(h=>h.hp>0)?'battle':'calm',
+   );
    if(cartWarningQa&&arenaRef.current){
     // Real engine state, observed once per animation frame; not injected.
     const realCart=session.engine.state.hazards.find(h=>h.type==='RUNAWAY_CART'&&h.hp>0);
@@ -949,7 +1084,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     cinematicZoom+=(target-cinematicZoom)*easing;
     const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker,directorRef.current??undefined);
     if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);
@@ -964,7 +1099,26 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(now-fpsAt>800&&fpsTotal>0){
     setFps(Math.round(fpsCount/fpsTotal));fpsTotal=0;fpsCount=0;fpsAt=now;
    }
-   if(now-lastHudAt.current>130){lastHudAt.current=now;setSnapshot(session.snapshot);}
+   if(now-lastHudAt.current>95){
+    lastHudAt.current=now;
+    setSnapshot(session.snapshot);
+    if(directorRef.current){
+     const hud=directorRef.current.hudSnapshot(session);
+     setZeroHud(hud);
+     const cleared=session.run.phase==='victory'?15:Math.max(0,session.run.victories);
+     setBlackboxes(prev=>{
+      const next=omegaEvaluateBlackboxUnlocks({
+       clearedWaves:cleared,
+       detonations:hud.detonations,
+       strikersCalledById:hud.strikersCalledById,
+       victory:session.run.phase==='victory',
+       peakTier:hud.peakRank,
+      },prev);
+      if(next.length!==prev.length){saveZeroSignalArchive(next);return next;}
+      return prev;
+     });
+    }
+   }
    request=requestAnimationFrame(frame);
   };
   request=requestAnimationFrame(frame);
@@ -1231,14 +1385,34 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <strong>ROUTE {Math.min(OMEGA_PROTOCOL_TOTAL_WAVES,snapshot.run.wave).toString().padStart(2,'0')} <span>/ 15</span></strong>
      </div>
      <div className="omega-protocol-hp">
-      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.playerMaxHp}</span>
+      <span><b>HP</b> {Math.ceil(snapshot.playerHp)} / {snapshot.playerMaxHp} {zeroHud.shield>0&&<em className="omega-zs-shield-text">+ 🛡 {zeroHud.shield}</em>}</span>
       <div role="meter" aria-label="남은 체력" aria-valuemin={0} aria-valuemax={snapshot.playerMaxHp} aria-valuenow={Math.max(0,Math.min(snapshot.playerMaxHp,Math.ceil(snapshot.playerHp)))}>
        <i style={{width:(Math.max(0,Math.min(1,snapshot.playerHp/Math.max(1,snapshot.playerMaxHp)))*100)+'%'}} />
+       {zeroHud.maxShield>0&&zeroHud.shield>0&&<b className="omega-zs-shield-bar" style={{width:(Math.min(1,zeroHud.shield/Math.max(1,zeroHud.maxShield))*100)+'%'}} />}
       </div>
      </div>
      <div className="omega-protocol-threat"><small>THREATS</small><strong>{snapshot.enemiesAlive.toString().padStart(2,'0')}</strong></div>
      <div className="omega-protocol-modifier"><small>ENVIRONMENT</small><strong>{({standard:'표준',crosswind:'횡풍',low_visibility:'시야 제한',unstable_ground:'불안정 지반'} as const)[snapshot.plan.modifier]}</strong></div>
     </div>
+    {sortieStarted&&<aside className="omega-zs-style-badge" aria-label="전투 스타일 랭크" style={{borderColor:zeroHud.styleColorHex}}>
+     <div className="omega-zs-style-top">
+      <strong style={{color:zeroHud.styleColorHex}}>{zeroHud.styleRank}</strong>
+      <div>
+       <span>{zeroHud.styleTitle}</span>
+       <small>{zeroHud.comboCount>0?`${zeroHud.comboCount} COMBO · ` : ''}{zeroHud.score.toLocaleString()} PTS</small>
+      </div>
+     </div>
+     <div className="omega-zs-style-meter"><i style={{width:(zeroHud.styleProgress*100).toFixed(1)+'%',background:zeroHud.styleColorHex}} /></div>
+     <span className="omega-zs-style-bonus">{zeroHud.overclockRemaining>0?'⚡ OVERCLOCK '+zeroHud.overclockRemaining.toFixed(1)+'s':zeroHud.styleBonusSummary}</span>
+     {zeroHud.activeEvos.length>0&&<div className="omega-zs-evo-chips">{zeroHud.activeEvos.map(id=>{
+      const spec=OMEGA_EVOLUTIONS.find(e=>e.id===id);
+      return spec?<span key={id} style={{borderColor:spec.accentHex,color:spec.accentHex}}>{spec.name}</span>:null;
+     })}</div>}
+    </aside>}
+    {zeroHud.radioBanner&&<div className="omega-zs-radio-banner" role="status" style={{borderColor:zeroHud.radioBanner.accentHex}}>
+     <small style={{color:zeroHud.radioBanner.accentHex}}>{zeroHud.radioBanner.seriesTag} · TACTICAL LINK</small>
+     <strong>{zeroHud.radioBanner.text}</strong>
+    </div>}
     {snapshot.field&&<div className="omega-protocol-mission" role="status">
       <small>{snapshot.field.plan.sectorName} · {omegaStoryNode(snapshot.field.plan.wave).title}</small>
       <strong>{snapshot.field.progress.phase==='combat'?'주변 위협 제압':snapshot.field.progress.phase==='objective'?
@@ -1316,7 +1490,16 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      </div>
      <div className="omega-protocol-action-pad">
       <button type="button" className="omega-protocol-action omega-protocol-blade"
-       onClick={()=>{session.blade();setSnapshot(session.snapshot);}}
+       onClick={()=>{
+        audioRef.current?.unlock();
+        const strike=session.blade();
+        if(strike){
+         audioRef.current?.playBladeSlash(strike.combo);
+         directorRef.current?.onPlayerBlade(session,strike);
+         setZeroHud(directorRef.current!.hudSnapshot(session));
+        }
+        setSnapshot(session.snapshot);
+       }}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
        aria-label="공진 검격 · F 키 · 안전모 감염 좀비 및 기계형 적 3단 연속 공격">
        <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
@@ -1327,12 +1510,20 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        aria-label="현장 상호작용 E">
        <span className="omega-protocol-action-glyph" aria-hidden="true">E</span><span>조작</span>
       </button>
-      <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{session.dash();setSnapshot(session.snapshot);}}
+      <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{
+        audioRef.current?.unlock();
+        if(session.dash()&&directorRef.current){
+         const {phantomDodge}=directorRef.current.onPlayerDash(session);
+         if(phantomDodge)audioRef.current?.playPhantomDodge();
+         setZeroHud(directorRef.current.hudSnapshot(session));
+        }
+        setSnapshot(session.snapshot);
+       }}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||(session.engine.state.player.dashCooldown??0)>0}
        aria-label="회피 · 스페이스 또는 시프트">
        <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
       </button>
-      <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{session.ultimate();setSnapshot(session.snapshot);}}
+      <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{audioRef.current?.unlock();session.ultimate();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
        aria-label={'궁극기 · 충전 '+Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))+'퍼센트'}>
        <span className="omega-protocol-action-glyph" aria-hidden="true">✦</span><span>궁극기</span>
@@ -1340,7 +1531,29 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>
      </div>
     </div>
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 회피</span><span>F · 검격</span><span>Q · 궁극기</span><span>E · 조작</span><span>CPU QA · {fps||'—'} FPS</span></div>
+    {sortieStarted&&<div className="omega-zs-striker-dock" aria-label="시그널 올스타 전술 원호">
+     <div className="omega-zs-charge-pill">⚡ LINK {zeroHud.strikerCharge}%</div>
+     {OMEGA_STRIKERS.map(st=>{
+      const unlocked=zeroHud.unlockedStrikers.includes(st.id);
+      const cd=zeroHud.strikerCooldowns[st.id]??0;
+      const ready=unlocked&&cd<=0&&zeroHud.strikerCharge>=st.costCharge&&snapshot.run.phase==='battle';
+      return <button key={st.id} type="button" className="omega-zs-striker-btn" data-ready={ready?'true':'false'}
+       disabled={!ready} style={{borderColor:ready?st.accentHex:undefined}}
+       onClick={()=>{
+        audioRef.current?.unlock();
+        if(directorRef.current?.triggerStriker(session,st.id)){
+         audioRef.current?.playStriker(st.id);
+         setZeroHud(directorRef.current.hudSnapshot(session));
+         setSnapshot(session.snapshot);
+        }
+       }}>
+       <kbd>{st.hotkey}</kbd>
+       <strong>{st.name}</strong>
+       <small>{!unlocked?`${st.unlockWave}구역 해금`:cd>0?`${cd.toFixed(0)}s`:`⚡${st.costCharge}`}</small>
+      </button>;
+     })}
+    </div>}
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 저스트회피</span><span>F · 표식폭파</span><span>1~4 · 시그널원호</span><span>E · 조작</span><span>CPU · {fps||'—'} FPS</span></div>
     {snapshot.gateTransit&&!(session.connectedFields&&snapshot.gateTransit.link.fromWave<session.connectedFields.length)&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
@@ -1412,7 +1625,49 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        <small>{snapshot.gateTransit.phase==='depart'?'격리문 폐쇄 · 다음 구역 연결':'격리문 개방 · 현장 탐험 계속'}</small>
       </div>
      </div>}
-    {paused&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
+    {paused&&sortieStarted&&snapshot.run.phase==='battle'&&<div className="omega-protocol-paused" role="status"><strong>작전 일시정지</strong><span>아래 계속하기를 눌러 진행하세요.</span></div>}
+    {!sortieStarted&&!reviewBlocked&&snapshot.run.phase==='battle'&&<div className="omega-protocol-overlay omega-zs-briefing-overlay" role="presentation">
+      <section className="omega-zs-briefing" role="dialog" aria-modal="true" aria-label="ZERO SIGNAL 작전 브리핑">
+       <div className="omega-zs-briefing-head">
+        <span className="omega-protocol-modal-kicker">OMEGA PROTOCOL · SPECIAL EDITION // ZERO SIGNAL</span>
+        <h2>시그널 올스타 전술 출격</h2>
+        <p>총격(자동)으로 표식을 쌓고, 검격(F)으로 연쇄 폭파하라 · 위기 순간 회피(SPACE)로 불릿타임 &amp; 1~4 시그널 원호 호출</p>
+        <div className="omega-zs-briefing-tabs">
+         <button type="button" className={!blackboxTab?'active':''} onClick={()=>setBlackboxTab(false)}>전술 로드아웃 (3종)</button>
+         <button type="button" className={blackboxTab?'active':''} onClick={()=>setBlackboxTab(true)}>블랙박스 기록 ({blackboxes.length}/3)</button>
+        </div>
+       </div>
+       {!blackboxTab?<>
+        <div className="omega-zs-loadout-grid">
+         {OMEGA_LOADOUTS.map(l=><button key={l.id} type="button" className={`omega-zs-loadout-card ${loadoutId===l.id?'selected':''}`}
+          style={{borderColor:loadoutId===l.id?l.accentHex:undefined}} onClick={()=>setLoadoutId(l.id)}>
+           <small style={{color:l.accentHex}}>{l.callsign}</small>
+           <strong>{l.name}</strong>
+           <em>{l.roleTag}</em>
+           <span>{l.summary}</span>
+          </button>)}
+        </div>
+        <div className="omega-zs-briefing-actions">
+         <button type="button" className={`omega-zs-daily-toggle ${dailyMode?'active':''}`} onClick={()=>setDailyMode(d=>!d)}>
+          📅 {dailyMode?`일일 작전 활성 (${omegaDailySeed().label})`:'일반 시드 → 일일 도전 전환'}
+         </button>
+         <button type="button" className="omega-zs-sortie-cta" onClick={()=>launchSortie(loadoutId,dailyMode,true)}>
+          ⚡ 작전 개시 · SORTIE START
+         </button>
+        </div>
+       </>:<div className="omega-zs-blackbox-list">
+        {OMEGA_BLACKBOX_DOSSIERS.map(doc=>{
+         const open=blackboxes.includes(doc.id);
+         return <article key={doc.id} className={`omega-zs-blackbox-card ${open?'open':''}`}>
+          <small>{doc.code} · {open?'해금됨':'미해금'}</small>
+          <strong>{doc.title}</strong>
+          <p>{open?doc.excerpt:doc.unlockHint}</p>
+         </article>;
+        })}
+        <button type="button" className="omega-zs-sortie-cta" onClick={()=>launchSortie(loadoutId,dailyMode,true)}>전장 복귀 · 작전 개시</button>
+       </div>}
+      </section>
+     </div>}
     {snapshot.run.phase==='reward'&&<div
       className="omega-protocol-overlay omega-protocol-reward-overlay omega-protocol-safe-room"
       role="presentation" data-omega-reward-context="in-world-safe-room"
@@ -1426,20 +1681,37 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
         <p>다음 목적지: {omegaStoryNode(snapshot.run.wave).district} · {omegaStoryNode(snapshot.run.wave).title}</p>
         <span className="omega-protocol-safe-room-live">전투 일시 중지 · 강화 선택 후 바로 탐험 재개</span>
        </div>
-       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;return <button key={id} type="button" onClick={()=>choose(id)}
+       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;const evoHint=u.id==='blade_edge'||u.id==='blade_reach'?'🩸 크림슨 월광 각성':u.tag==='energy'?'⚡ 팬텀 뇌전 시너지':u.tag==='signal'?'🛰️ 오버로드 드론 시너지':'🛡 생존·기동 강화';return <button key={id} type="button" onClick={()=>choose(id)}
          aria-label={'전술 보급 '+(i+1)+'번 · '+u.label+' · '+u.description}>
-         <small className="omega-protocol-card-index">0{i+1} · {u.role.toUpperCase()}</small>
+         <small className="omega-protocol-card-index">0{i+1} · {u.tag.toUpperCase()}</small>
          <strong>{u.label}</strong><span>{u.description}</span>
+         <em className="omega-zs-card-synergy">{evoHint}</em>
          <small className="omega-protocol-card-rank">LV {(snapshot.run.owned[id]??0)+1} / {u.maxStacks}</small>
        </button>;})}</div>
       </section>
     </div>}
     {(snapshot.run.phase==='defeat'||snapshot.run.phase==='victory')&&<div className="omega-protocol-overlay">
-      <section className="omega-protocol-end" role="status">
-       <span className="omega-protocol-modal-kicker">{snapshot.run.phase==='victory'?'MISSION COMPLETED':'OPERATION TERMINATED'}</span>
-       <h2>{snapshot.run.phase==='victory'?'작전 완료':'작전 실패'}</h2>
-       <p>통과한 작전 구역 {snapshot.run.victories}/15 · 임시 강화는 재도전 시 초기화됩니다.</p>
-       <button type="button" onClick={restart}>다시 출격</button>
+      <section className="omega-protocol-end omega-zs-scorecard" role="status">
+       <span className="omega-protocol-modal-kicker">{snapshot.run.phase==='victory'?'MISSION COMPLETED // ZERO SIGNAL':'OPERATION TERMINATED'}</span>
+       <div className="omega-zs-grade-banner">
+        <strong>{zeroHud.finalGrade}</strong>
+        <div>
+         <h2>{snapshot.run.phase==='victory'?'작전 완전 성공':'작전 중지 · 전술 복귀'}</h2>
+         <p>{zeroHud.score.toLocaleString()} PTS · {zeroHud.dailyMode?'일일 도전':'정규 작전'} · 최고 랭크 {zeroHud.peakRank}</p>
+        </div>
+       </div>
+       <div className="omega-zs-stat-grid">
+        <div><small>돌파 구역</small><b>{snapshot.run.victories} / 15</b></div>
+        <div><small>최대 콤보</small><b>{zeroHud.maxCombo}</b></div>
+        <div><small>표식 폭파</small><b>{zeroHud.detonations}회</b></div>
+        <div><small>저스트 회피</small><b>{zeroHud.phantomDodges}회</b></div>
+        <div><small>시그널 원호</small><b>{zeroHud.strikersCalled}회</b></div>
+        <div><small>해금 기밀</small><b>{blackboxes.length} / 3</b></div>
+       </div>
+       <div className="omega-zs-end-actions">
+        <button type="button" onClick={restart}>다시 출격</button>
+        <button type="button" className="secondary" onClick={()=>launchSortie(loadoutId,dailyMode,false)}>로드아웃 · 블랙박스</button>
+       </div>
       </section>
     </div>}
    </div>
@@ -1454,8 +1726,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       pointerMoves.current.clear();mobileDir.current={x:0,y:0};
       if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
      }}>{classicPad?'스틱':'방향키'}</button>
+    <button type="button" onClick={toggleMute} aria-pressed={muted}>{muted?'🔇 음소거':'🔊 사운드 ON'}</button>
     <label>SEED <input inputMode="numeric" aria-label="재현용 시드" value={seedValue} onChange={e=>setSeedValue(e.target.value)} /></label>
-    <button type="button" onClick={togglePause} disabled={snapshot.run.phase!=='battle'}>{paused?'계속하기':'일시정지'}</button>
+    <button type="button" onClick={togglePause} disabled={snapshot.run.phase!=='battle'||!sortieStarted}>{paused?'계속하기':'일시정지'}</button>
+    <button type="button" onClick={()=>launchSortie(loadoutId,dailyMode,false)}>로드아웃</button>
     <button type="button" onClick={restart}>새 도전</button>
     <button type="button" onClick={()=>{session.abandon();setSnapshot(session.snapshot);}} disabled={snapshot.run.phase==='defeat'||snapshot.run.phase==='victory'}>도전 포기</button>
    </div>

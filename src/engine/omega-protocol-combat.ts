@@ -524,6 +524,13 @@ export class OmegaProtocolCombatSession {
   if(hits>0)state.hitStopTimer=Math.max(state.hitStopTimer??0,.025);
   return this.bladeResult;
  }
+ /** Visual-roguelite combo helper: refunds blade cooldown cleanly on confirmed kills. */
+ refundBladeCooldown(ratio:number):void{
+  const r=Math.max(0,Math.min(1,Number.isFinite(ratio)?ratio:0));
+  if(Number.isFinite(this.bladeLastTime)){
+   this.bladeLastTime-=OMEGA_BLADE_COOLDOWN*r;
+  }
+ }
  /**
   * Real engine dash. Not a visual fake: uses Watch cooldown, direction and
   * invulnerability. Cannot be called during a reward or terminal outcome.
