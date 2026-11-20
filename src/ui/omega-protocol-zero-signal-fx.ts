@@ -59,18 +59,39 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.restore();
  }
 
- // 2. AIRA Energy Shield Halo under foot.
- if (director.currentShield() > 0 && state.phase === 'playing') {
+ // 2. AIRA Energy Shield Halo + shield-absorb pulse + micro vitality arc under foot.
+ const shFlash = director.currentShieldFlash();
+ const hpFlash = director.currentHpDamageFlash();
+ if ((director.currentShield() > 0 || shFlash > 0 || hpFlash > 0) && state.phase === 'playing') {
   const px = state.player.x;
   const py = state.player.y;
   const pulse = 0.65 + 0.35 * Math.sin(seconds * 5.2);
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
-  ctx.strokeStyle = `rgba(103,232,249,${(0.38 * pulse).toFixed(3)})`;
-  ctx.lineWidth = 2.2;
-  ctx.beginPath();
-  ctx.ellipse(px, py + 4, 38, 13, 0, 0, Math.PI * 2);
-  ctx.stroke();
+  if (director.currentShield() > 0) {
+   ctx.strokeStyle = `rgba(103,232,249,${((0.36 + shFlash * 0.42) * pulse).toFixed(3)})`;
+   ctx.lineWidth = 2.2 + shFlash * 1.4;
+   ctx.beginPath();
+   ctx.ellipse(px, py + 4, 38 + shFlash * 5, 13 + shFlash * 2, 0, 0, Math.PI * 2);
+   ctx.stroke();
+  }
+  if (shFlash > 0.05) {
+   const rippleR = 32 + (1 - shFlash) * 28;
+   ctx.strokeStyle = `rgba(56,189,248,${(shFlash * 0.78).toFixed(3)})`;
+   ctx.lineWidth = 2.8 * shFlash + 1;
+   ctx.beginPath();
+   ctx.ellipse(px, py + 2, rippleR, rippleR * 0.38, 0, 0, Math.PI * 2);
+   ctx.stroke();
+  }
+  const hpRatio = clamp(state.player.hp / Math.max(1, state.player.maxHp), 0, 1);
+  if (hpFlash > 0.02 || hpRatio < 0.45) {
+   const hpAlpha = Math.max(hpFlash * 0.85, hpRatio < 0.45 ? 0.52 + 0.25 * Math.sin(seconds * 7) : 0);
+   ctx.strokeStyle = `rgba(251,113,133,${hpAlpha.toFixed(3)})`;
+   ctx.lineWidth = 3.0;
+   ctx.beginPath();
+   ctx.ellipse(px, py + 7, 44, 15, 0, Math.PI * 0.12, Math.PI * (0.12 + 0.76 * hpRatio));
+   ctx.stroke();
+  }
   ctx.restore();
  }
 
@@ -389,6 +410,82 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.restore();
  }
 
+ // 10.6 Per-Target Diagonal Slash-Cut Flash & Dissolve Kill Bursts.
+ for (const sc of director.slashCuts) {
+  const p = clamp(sc.age / sc.duration, 0, 1);
+  const fade = Math.pow(1 - p, 1.45);
+  const cx = sc.x;
+  const cy = sc.y - 30 * invY;
+  const len = (sc.crit ? 42 : 30) * (0.55 + 0.65 * Math.min(1, p * 2.2));
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.globalCompositeOperation = 'lighter';
+  const cuts = sc.crit ? [sc.angle - 0.38, sc.angle + 0.58] : [sc.angle - 0.34];
+  for (const ang of cuts) {
+   const ux = Math.cos(ang) * len;
+   const uy = Math.sin(ang) * len * 0.78;
+   ctx.strokeStyle = `rgba(${sc.colorRgb},${(0.86 * fade).toFixed(3)})`;
+   ctx.lineWidth = (sc.crit ? 6.5 : 4.5) * fade + 1;
+   ctx.lineCap = 'round';
+   ctx.beginPath();
+   ctx.moveTo(-ux, -uy);
+   ctx.lineTo(ux, uy);
+   ctx.stroke();
+
+   ctx.strokeStyle = `rgba(255,255,255,${(0.95 * fade).toFixed(3)})`;
+   ctx.lineWidth = (sc.crit ? 2.6 : 1.8) * fade + 0.4;
+   ctx.beginPath();
+   ctx.moveTo(-ux * 0.78, -uy * 0.78);
+   ctx.lineTo(ux * 0.78, uy * 0.78);
+   ctx.stroke();
+  }
+  ctx.restore();
+ }
+
+ for (const kb of director.killBursts) {
+  const p = clamp(kb.age / kb.duration, 0, 1);
+  const fade = Math.pow(1 - p, 1.5);
+  const cy = kb.y - 24 * invY;
+  const r = (kb.boss ? 92 : 44) * (0.3 + 0.85 * p);
+  ctx.save();
+  ctx.translate(kb.x, cy);
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.strokeStyle = `rgba(103,232,249,${(0.75 * fade).toFixed(3)})`;
+  ctx.lineWidth = (kb.boss ? 5 : 3) * fade + 0.8;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r, r * 0.56, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  for (let s = 0; s < 6; s++) {
+   const sa = (s * Math.PI) / 3 + p * 0.5;
+   const dist = r * (0.75 + p * 0.45);
+   ctx.fillStyle = `rgba(255,244,214,${(0.9 * fade).toFixed(3)})`;
+   ctx.beginPath();
+   ctx.arc(Math.cos(sa) * dist, Math.sin(sa) * dist * 0.68, 2.4 * fade + 0.8, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ }
+
+ // 10.7 Unified Floating Combat Damage Numbers.
+ for (const dn of director.damageNumbers) {
+  const p = clamp(dn.age / dn.duration, 0, 1);
+  const fade = p < 0.14 ? p / 0.14 : Math.pow(1 - (p - 0.14) / 0.86, 1.2);
+  const pop = p < 0.16 ? 1.32 - (p / 0.16) * 0.32 : 1.0;
+  const y = dn.y - p * 30;
+  ctx.save();
+  ctx.translate(dn.x, y);
+  ctx.scale(dn.scale * pop, dn.scale * pop);
+  ctx.globalAlpha = clamp(fade, 0, 1);
+  ctx.font = dn.crit ? '900 17px system-ui' : '800 13px system-ui';
+  ctx.textAlign = 'center';
+  ctx.strokeStyle = 'rgba(4,9,20,0.94)';
+  ctx.lineWidth = 4;
+  ctx.strokeText(dn.text, 0, 0);
+  ctx.fillStyle = dn.colorHex;
+  ctx.fillText(dn.text, 0, 0);
+  ctx.restore();
+ }
+
  // 11. World Floating Combat Callouts.
  for (const c of director.callouts) {
   const p = clamp(c.age / c.duration, 0, 1);
@@ -418,10 +515,28 @@ export function drawOmegaZeroSignalScreenFx(
  const slow = director.currentSlowMoRemaining();
  const over = director.currentOverclockRemaining();
  const flash = director.currentImpactFlash();
- if (slow <= 0 && over <= 0 && flash <= 0) return;
+ const hpFlash = director.currentHpDamageFlash();
+ if (slow <= 0 && over <= 0 && flash <= 0 && hpFlash <= 0) return;
 
  ctx.save();
  ctx.setTransform(1, 0, 0, 1, 0, 0);
+ if (hpFlash > 0) {
+  const hurtGrad = ctx.createRadialGradient?.(
+   width * 0.5,
+   height * 0.5,
+   Math.min(width, height) * 0.38,
+   width * 0.5,
+   height * 0.5,
+   Math.max(width, height) * 0.78,
+  );
+  if (hurtGrad && typeof hurtGrad.addColorStop === 'function') {
+   hurtGrad.addColorStop(0, 'rgba(0,0,0,0)');
+   hurtGrad.addColorStop(0.62, `rgba(225,29,72,${(hpFlash * 0.18).toFixed(3)})`);
+   hurtGrad.addColorStop(1, `rgba(225,29,72,${(hpFlash * 0.38).toFixed(3)})`);
+   ctx.fillStyle = hurtGrad;
+   ctx.fillRect(0, 0, width, height);
+  }
+ }
  if (flash > 0) {
   const impactGrad = ctx.createRadialGradient?.(
    width * 0.5,

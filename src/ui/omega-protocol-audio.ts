@@ -495,20 +495,33 @@ export class OmegaProceduralAudio {
   }
  }
 
- playBladeSlash(combo: 1 | 2 | 3): void {
+ playBladeSlash(combo: 1 | 2 | 3, hits = 1): void {
+  const base = combo === 3 ? 1150 : combo === 2 ? 880 : 720;
+  // Always play directional plasma blade air-whoosh; add metallic cleave impact only on hit confirm!
+  this.noiseBurst(base * 2.0, 2.5, hits > 0 ? 0.12 : 0.10, hits > 0 ? 0.11 : 0.08);
+  this.tone(base, base * 0.34, 0.13, 'triangle', hits > 0 ? 0.075 : 0.055);
+  if (hits <= 0) return;
+
   const steelKeys: readonly OmegaAudioCueKey[] = ['impact_steel_a', 'impact_steel_b', 'impact_steel_c'];
   const finKeys: readonly OmegaAudioCueKey[] = ['impact_finisher_a', 'impact_finisher_b', 'impact_finisher_c'];
   const idx = this.steelIndex++ % 3;
 
   if (combo === 3) {
-   this.playSample(finKeys[idx]!, { gain: 0.52, rate: 1.0, jitter: 0.04 });
+   this.playSample(finKeys[idx]!, { gain: 0.54, rate: 1.0, jitter: 0.04 });
    this.tone(1320, 380, 0.20, 'sine', 0.08, 0.01);
   } else {
    this.playSample(steelKeys[idx]!, { gain: combo === 2 ? 0.44 : 0.38, rate: combo === 2 ? 1.08 : 0.98, jitter: 0.05 });
   }
-  const base = combo === 3 ? 1150 : combo === 2 ? 880 : 720;
-  this.noiseBurst(base * 2.1, 2.4, 0.12, 0.11);
-  this.tone(base, base * 0.35, 0.13, 'triangle', 0.07);
+ }
+
+ playShieldAbsorb(): void {
+  this.tone(920, 560, 0.11, 'sine', 0.09);
+  this.tone(1380, 1140, 0.08, 'triangle', 0.05, 0.015);
+ }
+
+ playPlayerHurt(): void {
+  this.playSample('player_hit', { gain: 0.48, rate: 0.96, jitter: 0.05 });
+  this.tone(138, 44, 0.18, 'sawtooth', 0.14);
  }
 
  playDetonation(stacks: number): void {

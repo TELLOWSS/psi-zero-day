@@ -14,15 +14,15 @@ import {drawOmegaPaintedMuzzleFlash} from './omega-protocol-vfx-art';
 
 const SRC_W=384;
 const SRC_H=512;
-const HIP_Y=282;
-const TORSO_OVERLAP=316;
-const LEFT_HIP_X=148;
-const RIGHT_HIP_X=236;
+const HIP_Y=368;
+const TORSO_OVERLAP=382;
+const LEFT_HIP_X=158;
+const RIGHT_HIP_X=226;
 const BLADE_VISUAL_SECONDS=0.28;
 const MAX_WORLD_SPEED=260;
 
 const STRIDE_FACTOR:Readonly<Record<OmegaHeading,number>>={
- E:1.08,SE:0.96,S:0.78,SW:0.96,W:1.08,NW:0.94,N:0.76,NE:0.94,
+ E:1.05,SE:0.95,S:0.78,SW:0.95,W:1.05,NW:0.92,N:0.76,NE:0.92,
 };
 
 const clamp=(v:number,min:number,max:number)=>Math.max(min,Math.min(max,v));
@@ -188,21 +188,66 @@ function drawSwordHandReflection(
  height:number,
  layer:'rear'|'front',
 ):void {
- const wantRear=Math.sin(bladeAngle)<-0.35;
+ const wantRear=Math.sin(bladeAngle)<-0.42;
  if((layer==='rear')!==wantRear)return;
- const fade=Math.sin(clamp(progress,0,1)*Math.PI);
+ const p=clamp(progress,0,1);
+ const fade=p<0.2?p/0.2:Math.pow(1-(p-0.2)/0.8,1.3);
  if(fade<=0.02)return;
- const sx=Math.cos(bladeAngle)*height*0.18;
- const sy=-height*0.56+Math.sin(bladeAngle)*height*0.09;
- const rgb=combo===3?'255,172,92':combo===2?'204,132,255':'116,232,255';
+
+ // Sweep katana blade dynamically from wind-up to follow-through across hand pivot.
+ const sweepNorm=easeOutCubic(clamp(p*1.45,0,1));
+ const handX=Math.cos(bladeAngle)*height*0.14;
+ const handY=-height*0.52+Math.sin(bladeAngle)*height*0.08;
+ const swingArc=combo===3?3.4:combo===2?-2.4:2.3;
+ const startAngle=bladeAngle-swingArc*0.52;
+ const curAngle=startAngle+swingArc*sweepNorm;
+ const bladeLen=height*(combo===3?0.68:0.56);
+ const tipX=handX+Math.cos(curAngle)*bladeLen;
+ const tipY=handY+Math.sin(curAngle)*bladeLen*0.72;
+ const rgb=combo===3?'251,191,36':combo===2?'192,132,252':'103,232,249';
+
  ctx.save();
  ctx.globalCompositeOperation='lighter';
- const grad=ctx.createRadialGradient(sx,sy,2,sx,sy,height*0.24);
- grad.addColorStop(0,`rgba(255,255,255,${(0.42*fade).toFixed(3)})`);
- grad.addColorStop(0.42,`rgba(${rgb},${(0.30*fade).toFixed(3)})`);
+
+ // 1. Sweeping energy katana trail arc from shoulder/hand pivot.
+ const arcR=bladeLen*0.86;
+ const trailStart=swingArc>0?Math.max(startAngle,curAngle-1.25):startAngle;
+ const trailEnd=swingArc>0?curAngle:Math.min(startAngle,curAngle+1.25);
+ ctx.save();
+ ctx.translate(handX,handY);
+ ctx.scale(1,0.72);
+ ctx.strokeStyle=`rgba(${rgb},${(0.46*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?16:12)*fade+2;
+ ctx.lineCap='round';
+ ctx.beginPath();
+ ctx.arc(0,0,arcR,trailStart,trailEnd,swingArc<0);
+ ctx.stroke();
+ ctx.restore();
+
+ // 2. Razor-sharp physical plasma katana blade + hot white edge core.
+ ctx.strokeStyle=`rgba(${rgb},${(0.92*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?5.8:4.4)*fade+1.5;
+ ctx.lineCap='round';
+ ctx.beginPath();
+ ctx.moveTo(handX,handY);
+ ctx.lineTo(tipX,tipY);
+ ctx.stroke();
+
+ ctx.strokeStyle=`rgba(255,255,255,${(0.96*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?2.4:1.8)*fade+0.6;
+ ctx.beginPath();
+ ctx.moveTo(handX,handY);
+ ctx.lineTo(tipX,tipY);
+ ctx.stroke();
+
+ // 3. Energy hilt & tip flare.
+ const grad=ctx.createRadialGradient(handX,handY,1,handX,handY,height*0.17);
+ grad.addColorStop(0,`rgba(255,255,255,${(0.62*fade).toFixed(3)})`);
+ grad.addColorStop(0.45,`rgba(${rgb},${(0.42*fade).toFixed(3)})`);
  grad.addColorStop(1,'rgba(0,0,0,0)');
  ctx.fillStyle=grad;
- ctx.beginPath();ctx.arc(sx,sy,height*0.24,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.arc(handX,handY,height*0.17,0,Math.PI*2);ctx.fill();
+ drawFourPointFlare(ctx,tipX,tipY,10*fade,2.5*fade,curAngle,`rgba(255,250,235,${fade.toFixed(2)})`);
  ctx.restore();
 }
 
@@ -224,6 +269,7 @@ export function drawOmegaSilverKineticActor(
  const rawPhase=view.gait?.phase??((t*1.8)%1);
  const phase=((Number.isFinite(rawPhase)?rawPhase:0)%1+1)%1;
  const wave=walkActive?Math.sin(phase*Math.PI*2):0;
+ const plantPulse=walkActive?Math.pow(Math.max(0,Math.cos(phase*Math.PI*2)),4):0;
 
  const bladeAge=view.bladeAge;
  const slashing=typeof bladeAge==='number'&&Number.isFinite(bladeAge)&&
@@ -236,61 +282,68 @@ export function drawOmegaSilverKineticActor(
   !view.ultimate&&!view.finished;
  const actionAge=Math.max(0,Number.isFinite(view.actionAge)?view.actionAge??0:0);
 
- const speedFactor=clamp(view.speedRatio??(walkActive?0.85:0),0.35,1);
+ const speedFactor=clamp(view.speedRatio??(walkActive?0.85:0),0.3,1);
  const stride=STRIDE_FACTOR[heading]*speedFactor;
  const signLeft=(heading==='W'||heading==='NW'||heading==='SW')?-1:1;
+ const velLean=Number.isFinite(view.velocityX)?clamp((view.velocityX??0)/260,-1,1)*0.058:0.04*speedFactor*signLeft;
 
- // Compute articulated leg swing (disabled or braced during dash/slash/hurt).
- let leftLegAngle=walkActive?wave*0.14*stride:0;
- let rightLegAngle=walkActive?-wave*0.14*stride:0;
- let leftFootLift=walkActive?Math.max(0,wave)*15*stride:0;
- let rightFootLift=walkActive?Math.max(0,-wave)*15*stride:0;
- let leftStrideX=walkActive?wave*9*stride:0;
- let rightStrideX=walkActive?-wave*9*stride:0;
+ // Subtle cohesive boot stride keeping coat & waist 100% seamless.
+ let leftLegAngle=walkActive?wave*0.055*stride:0;
+ let rightLegAngle=walkActive?-wave*0.055*stride:0;
+ let leftFootLift=walkActive?Math.max(0,wave)*6.5*stride:0;
+ let rightFootLift=walkActive?Math.max(0,-wave)*6.5*stride:0;
+ let leftStrideX=walkActive?wave*4.5*stride:0;
+ let rightStrideX=walkActive?-wave*4.5*stride:0;
 
  let offsetX=0;
- let offsetY=walkActive?-Math.abs(wave)*3.4:-Math.sin(t*2.2)*1.4;
- let torsoLean=walkActive?0.045*speedFactor*signLeft:0;
- let torsoTwistX=walkActive?Math.sin(phase*Math.PI*4)*1.6:0;
+ let offsetY=walkActive?-Math.abs(wave)*2.8-speedFactor*0.8:-Math.sin(t*2.4)*1.1;
+ let torsoLean=walkActive?velLean:Math.sin(t*1.8)*0.008;
+ const torsoTwistX=walkActive?Math.sin(phase*Math.PI*2)*0.9:0;
+ let squashX=walkActive?1+plantPulse*0.022:1;
+ let squashY=walkActive?1-plantPulse*0.018:1;
 
  if(slashing){
   const p=clamp(bladeAge/BLADE_VISUAL_SECONDS,0,1);
   const lungeCurve=Math.sin(p*Math.PI);
-  const swingDir=combo===2?-1:1;
   const bx=Number.isFinite(view.bladeFacingX)?view.bladeFacingX!:view.facingX;
   const by=Number.isFinite(view.bladeFacingY)?view.bladeFacingY!:view.facingY;
   const bLen=Math.hypot(bx,by)||1;
-  const lungeDist=(combo===3?15:10)*lungeCurve;
+  const dirSign=(bx/bLen)>=0?1:-1;
+  const lungeDist=(combo===3?22:14)*lungeCurve;
   offsetX+=(bx/bLen)*lungeDist;
-  offsetY+=(by/bLen)*lungeDist*0.45-lungeCurve*4;
-  torsoLean=swingDir*(0.16*lungeCurve);
-  leftStrideX=10*lungeCurve*signLeft;
-  rightStrideX=-12*lungeCurve*signLeft;
-  leftFootLift=4*lungeCurve;
+  offsetY+=(by/bLen)*lungeDist*0.42-lungeCurve*5;
+  torsoLean=dirSign*(combo===3?0.22:0.16)*lungeCurve;
+  leftStrideX=6*lungeCurve*dirSign;
+  rightStrideX=-7*lungeCurve*dirSign;
+  leftFootLift=3*lungeCurve;
   rightFootLift=0;
+  squashX=1+0.045*lungeCurve;
+  squashY=1-0.038*lungeCurve;
  }else if(view.dashing){
-  torsoLean=0.19*signLeft;
-  offsetX=-8*signLeft;
-  offsetY=-4;
-  leftLegAngle=0.22;rightLegAngle=-0.16;
-  leftStrideX=14;rightStrideX=-14;
-  leftFootLift=14;rightFootLift=4;
+  torsoLean=0.17*signLeft;
+  offsetX=-6*signLeft;
+  offsetY=-3;
+  leftLegAngle=0.12;rightLegAngle=-0.10;
+  leftStrideX=8;rightStrideX=-8;
+  leftFootLift=9;rightFootLift=3;
+  squashX=1.06;squashY=0.94;
  }else if(view.hurt){
   const hDecay=clamp(1-actionAge*3,0.2,1);
-  torsoLean=-0.16*signLeft*hDecay;
-  offsetX=-7*signLeft*hDecay;
-  offsetY=4*hDecay;
+  torsoLean=-0.14*signLeft*hDecay;
+  offsetX=-6*signLeft*hDecay;
+  offsetY=3*hDecay;
+  squashX=0.95;squashY=1.04;
  }else if(firing){
   const fLen=Math.hypot(aimX,aimY)||1;
-  const recoilDecay=Math.max(0,1-actionAge/0.12);
-  offsetX-=(aimX/fLen)*5.2*recoilDecay;
-  offsetY-=(aimY/fLen)*2.4*recoilDecay;
-  torsoLean-=0.06*recoilDecay*(aimX>=0?1:-1);
+  const recoilDecay=Math.max(0,1-actionAge/0.11);
+  offsetX-=(aimX/fLen)*4.2*recoilDecay;
+  offsetY-=(aimY/fLen)*2.0*recoilDecay;
+  torsoLean-=0.045*recoilDecay*(aimX>=0?1:-1);
  }
 
  ctx.save();
 
- // 1. Dash afterimage echoes strictly along behind-motion vector (zero flip).
+ // 1. Dash / slash lunge afterimage echoes strictly along behind-motion vector (zero flip).
  if(view.dashing){
   for(let g=2;g>=1;g--){
    ctx.save();
@@ -301,6 +354,19 @@ export function drawOmegaSilverKineticActor(
    ctx.drawImage(image,0,0,SRC_W,SRC_H);
    ctx.restore();
   }
+ }else if(slashing){
+  const p=clamp(bladeAge/BLADE_VISUAL_SECONDS,0,1);
+  const lungeCurve=Math.sin(p*Math.PI);
+  const bxDir=Number.isFinite(view.bladeFacingX)?view.bladeFacingX!:view.facingX;
+  const byDir=Number.isFinite(view.bladeFacingY)?view.bladeFacingY!:view.facingY;
+  const bLen=Math.hypot(bxDir,byDir)||1;
+  ctx.save();
+  ctx.globalAlpha=0.22*lungeCurve;
+  ctx.translate(-(bxDir/bLen)*16*lungeCurve,-(byDir/bLen)*6*lungeCurve);
+  ctx.scale(scale,scale);
+  ctx.translate(-SRC_W/2,-SRC_H);
+  ctx.drawImage(image,0,0,SRC_W,SRC_H);
+  ctx.restore();
  }
 
  const bx=Number.isFinite(view.bladeFacingX)?view.bladeFacingX!:view.facingX;
@@ -324,10 +390,10 @@ export function drawOmegaSilverKineticActor(
   );
  }
 
- // 3. Articulated lower legs & upper body from authentic unmirrored 384x512 WebP.
+ // 3. Seamless cohesive 3-part lower-boot & intact upper-coat draw (zero flip).
  ctx.save();
  if(view.hurt)ctx.globalAlpha=0.78+0.22*Math.sin(t*22)**2;
- ctx.scale(scale,scale);
+ ctx.scale(scale*squashX,scale*squashY);
  ctx.translate(-SRC_W/2+offsetX/scale,-SRC_H+offsetY/scale);
  drawLegCut(ctx,image,'left',leftLegAngle,leftFootLift,leftStrideX);
  drawLegCut(ctx,image,'right',rightLegAngle,rightFootLift,rightStrideX);
@@ -339,7 +405,7 @@ export function drawOmegaSilverKineticActor(
  ctx.restore();
  ctx.restore();
 
- // 4. Front-layer VFX at exact painted barrel pixel or slash hand bounce.
+ // 4. Front-layer VFX at exact painted barrel pixel or sweeping katana blade.
  if(slashing){
   drawSwordHandReflection(ctx,combo,bladeAngle,slashProgress,height,'front');
  }else if(firing&&!muzzle.rear){

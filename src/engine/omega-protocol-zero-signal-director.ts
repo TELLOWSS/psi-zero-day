@@ -47,6 +47,8 @@ export type OmegaDirectorEventKind =
  | 'chain_lightning'
  | 'pickup'
  | 'shield_break'
+ | 'shield_absorb'
+ | 'player_hurt'
  | 'evo_unlock'
  | 'boss_entry'
  | 'wave_clear'
@@ -147,6 +149,36 @@ export interface OmegaFloatingCallout {
  readonly y: number;
  readonly text: string;
  readonly colorHex: string;
+ age: number;
+ readonly duration: number;
+}
+
+export interface OmegaActiveSlashCut {
+ readonly x: number;
+ readonly y: number;
+ readonly angle: number;
+ readonly colorRgb: string;
+ readonly crit: boolean;
+ age: number;
+ readonly duration: number;
+}
+
+export interface OmegaFloatingDamageNumber {
+ x: number;
+ y: number;
+ vx: number;
+ readonly text: string;
+ readonly colorHex: string;
+ readonly scale: number;
+ readonly crit: boolean;
+ age: number;
+ readonly duration: number;
+}
+
+export interface OmegaActiveKillBurst {
+ readonly x: number;
+ readonly y: number;
+ readonly boss: boolean;
  age: number;
  readonly duration: number;
 }
@@ -287,6 +319,8 @@ export class OmegaZeroSignalDirector {
 
  private hitstopRemaining = 0;
  private impactFlash = 0;
+ private shieldFlash = 0;
+ private hpDamageFlash = 0;
  shakeDirX = 0;
  shakeDirY = 0;
  cameraShake = 0;
@@ -302,6 +336,9 @@ export class OmegaZeroSignalDirector {
  readonly domes: OmegaActiveDome[] = [];
  readonly callouts: OmegaFloatingCallout[] = [];
  readonly casings: OmegaActiveCasing[] = [];
+ readonly slashCuts: OmegaActiveSlashCut[] = [];
+ readonly damageNumbers: OmegaFloatingDamageNumber[] = [];
+ readonly killBursts: OmegaActiveKillBurst[] = [];
 
  private waveIdSeq = 1;
  private pendingEvents: OmegaDirectorEvent[] = [];
@@ -493,6 +530,8 @@ export class OmegaZeroSignalDirector {
    const dealt = session.engine.damageProtocolConstruct(h.id, dmg);
    if (dealt <= 0) continue;
    hitCount++;
+   this.pushDamageNumber(h.x, h.y - 26, dealt, 'rail');
+   this.pushSlashCut(h.x, h.y, Math.atan2(uy, ux), this.weaponMode === 'focus' ? '251,191,36' : '103,232,249', true);
    if (h.hp > 0) {
     const addStacks = i === 0 ? 3 : 2;
     this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + addStacks));
@@ -565,6 +604,14 @@ export class OmegaZeroSignalDirector {
   return this.impactFlash;
  }
 
+ currentShieldFlash(): number {
+  return this.shieldFlash;
+ }
+
+ currentHpDamageFlash(): number {
+  return this.hpDamageFlash;
+ }
+
  tickHitstop(rawRealDt: number): boolean {
   if (this.hitstopRemaining <= 0) return false;
   const dt = Number.isFinite(rawRealDt) && rawRealDt > 0 ? Math.min(0.05, rawRealDt) : 0;
@@ -634,6 +681,57 @@ export class OmegaZeroSignalDirector {
   if (this.callouts.length > 12) this.callouts.shift();
  }
 
+ private pushSlashCut(x: number, y: number, angle: number, colorRgb: string, crit: boolean): void {
+  this.slashCuts.push({ x, y, angle, colorRgb, crit, age: 0, duration: crit ? 0.28 : 0.22 });
+  if (this.slashCuts.length > 24) this.slashCuts.shift();
+ }
+
+ private pushDamageNumber(
+  x: number,
+  y: number,
+  amount: number,
+  style: 'blade' | 'blade_crit' | 'rail' | 'detonate' | 'striker' | 'player_hp' | 'player_shield',
+ ): void {
+  const rounded = Math.max(1, Math.round(amount));
+  const idx = this.casingSeed++;
+  const staggerX = ((idx % 5) - 2) * 7;
+  const crit = style === 'blade_crit' || style === 'detonate' || style === 'rail' || style === 'striker';
+  const colorHex =
+   style === 'player_hp'
+    ? '#fb7185'
+    : style === 'player_shield'
+      ? '#38bdf8'
+      : style === 'blade_crit'
+        ? '#fde047'
+        : style === 'detonate'
+          ? '#fb923c'
+          : style === 'rail'
+            ? '#fbbf24'
+            : style === 'striker'
+              ? '#c084fc'
+              : '#67e8f9';
+  const text =
+   style === 'player_hp'
+    ? `-${rounded} HP`
+    : style === 'player_shield'
+      ? `🛡 -${rounded}`
+      : style === 'blade_crit'
+        ? `${rounded}!`
+        : String(rounded);
+  this.damageNumbers.push({
+   x: x + staggerX,
+   y: y - 34,
+   vx: staggerX * 2.4,
+   text,
+   colorHex,
+   scale: crit ? 1.24 : 1.0,
+   crit,
+   age: 0,
+   duration: style === 'player_hp' ? 0.85 : 0.62,
+  });
+  if (this.damageNumbers.length > 24) this.damageNumbers.shift();
+ }
+
  private chargeRateMultiplier(): number {
   const rankIdx = RANK_ORDER.indexOf(this.currentRank);
   return rankIdx >= 5 ? 1.35 : rankIdx >= 1 ? 1.15 : 1.0;
@@ -685,7 +783,8 @@ export class OmegaZeroSignalDirector {
       : material === 'armored'
         ? 14
         : 8;
-    session.engine.damageProtocolConstruct(struckHazard.id, focusDmg);
+    const fDealt = session.engine.damageProtocolConstruct(struckHazard.id, focusDmg);
+    if (fDealt > 0) this.pushDamageNumber(struckHazard.x, struckHazard.y - 24, fDealt, 'rail');
    }
 
    if (this.overclockRemaining > 0) {
@@ -694,7 +793,8 @@ export class OmegaZeroSignalDirector {
      (h) => h.hp > 0 && h.id !== ev.targetId && Math.hypot(h.x - ev.x, h.y - ev.y) <= 210,
     );
     if (secondary) {
-     session.engine.damageProtocolConstruct(secondary.id, 14);
+     const oDealt = session.engine.damageProtocolConstruct(secondary.id, 14);
+     if (oDealt > 0) this.pushDamageNumber(secondary.x, secondary.y - 22, oDealt, 'blade');
      this.marks.set(secondary.id, Math.min(3, (this.marks.get(secondary.id) ?? 0) + 1));
      this.lightnings.push({
       x1: ev.x,
@@ -747,7 +847,8 @@ export class OmegaZeroSignalDirector {
    for (const h of session.engine.state.hazards) {
     if (h.hp <= 0) continue;
     if (Math.hypot(h.x - player.x, h.y - player.y) <= 155) {
-     session.engine.damageProtocolConstruct(h.id, 26);
+     const vDealt = session.engine.damageProtocolConstruct(h.id, 26);
+     if (vDealt > 0) this.pushDamageNumber(h.x, h.y - 22, vDealt, 'blade');
      this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + 1));
      this.lightnings.push({
       x1: player.x,
@@ -800,6 +901,16 @@ export class OmegaZeroSignalDirector {
   const angle = Math.atan2(strike.facingY || 0, strike.facingX || 1);
   const reachCenterX = strike.x + Math.cos(angle) * 78;
   const reachCenterY = strike.y + Math.sin(angle) * 78;
+  const slashColorRgb =
+   strike.combo === 3 ? '251,191,36' : strike.combo === 2 ? '192,132,252' : '103,232,249';
+
+  // Emit per-target slash-cut wound flare & floating damage number for EVERY actual melee hit.
+  if (strike.hitTargets?.length) {
+   for (const hit of strike.hitTargets) {
+    this.pushSlashCut(hit.x, hit.y, angle, slashColorRgb, strike.combo === 3);
+    this.pushDamageNumber(hit.x, hit.y, hit.damage, strike.combo === 3 ? 'blade_crit' : 'blade');
+   }
+  }
 
   // Snapshot alive before extra detonation/moonwave so we can award kill refunds accurately.
   const preKillCount = session.engine.state.hazards.filter((h) => h.hp > 0).length;
@@ -832,7 +943,8 @@ export class OmegaZeroSignalDirector {
    for (const h of session.engine.state.hazards) {
     if (h.hp <= 0) continue;
     if (Math.hypot(h.x - target.x, h.y - target.y) <= radius) {
-     session.engine.damageProtocolConstruct(h.id, dmg);
+     const detDealt = session.engine.damageProtocolConstruct(h.id, dmg);
+     if (detDealt > 0) this.pushDamageNumber(h.x, h.y - 14, detDealt, 'detonate');
      if (h.id !== target.id && h.hp > 0 && rankIdx >= 3) {
       this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + 1));
      }
@@ -845,7 +957,8 @@ export class OmegaZeroSignalDirector {
     for (const h of session.engine.state.hazards) {
      if (h.hp <= 0 || h.id === target.id || jumps >= 4) continue;
      if (Math.hypot(h.x - target.x, h.y - target.y) <= 270) {
-      session.engine.damageProtocolConstruct(h.id, 18);
+      const boltDealt = session.engine.damageProtocolConstruct(h.id, 18);
+      if (boltDealt > 0) this.pushDamageNumber(h.x, h.y - 12, boltDealt, 'blade');
       this.lightnings.push({
        x1: target.x,
        y1: target.y - 26,
@@ -899,7 +1012,8 @@ export class OmegaZeroSignalDirector {
   if (this.overclockRemaining > 0 && strike.hits > 0) {
    for (const h of session.engine.state.hazards) {
     if (h.hp > 0 && Math.hypot(h.x - reachCenterX, h.y - reachCenterY) <= 135) {
-     session.engine.damageProtocolConstruct(h.id, 22);
+     const ocDealt = session.engine.damageProtocolConstruct(h.id, 22);
+     if (ocDealt > 0) this.pushDamageNumber(h.x, h.y - 10, ocDealt, 'blade');
     }
    }
   }
@@ -1006,7 +1120,8 @@ export class OmegaZeroSignalDirector {
    const tx = target ? target.x : player.x + 280;
    const ty = target ? target.y : player.y;
    if (target) {
-    session.engine.damageProtocolConstruct(target.id, 120);
+    const sDealt = session.engine.damageProtocolConstruct(target.id, 120);
+    if (sDealt > 0) this.pushDamageNumber(target.x, target.y - 30, sDealt, 'striker');
     if (target.hp > 0) this.marks.set(target.id, 3);
    }
    this.beams.push({
@@ -1037,7 +1152,8 @@ export class OmegaZeroSignalDirector {
    for (const h of hazards) {
     if (h.hp <= 0) continue;
     if (Math.hypot(h.x - center.x, h.y - center.y) <= 235) {
-     session.engine.damageProtocolConstruct(h.id, 72);
+     const eDealt = session.engine.damageProtocolConstruct(h.id, 72);
+     if (eDealt > 0) this.pushDamageNumber(h.x, h.y - 24, eDealt, 'striker');
      this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + 2));
     }
    }
@@ -1084,16 +1200,31 @@ export class OmegaZeroSignalDirector {
   const state = session.engine.state;
   const player = state.player;
 
-  // 1. Intercept incoming Watch damage with Energy Shield when hpBeforeUpdate provided.
-  if (typeof hpBeforeUpdate === 'number' && hpBeforeUpdate > player.hp && this.shield > 0 && state.phase === 'playing') {
+  // 1. Intercept incoming Watch damage with Energy Shield when hpBeforeUpdate provided,
+  // and give unambiguous shield-absorb vs net-HP-loss feedback on AIRA.
+  if (typeof hpBeforeUpdate === 'number' && hpBeforeUpdate > player.hp && state.phase === 'playing') {
    const lost = hpBeforeUpdate - player.hp;
    const absorbed = Math.min(this.shield, lost);
-   this.shield = Math.max(0, this.shield - absorbed);
-   player.hp = Math.min(player.maxHp, player.hp + absorbed);
-   if (this.shield <= 0.01) {
-    this.shield = 0;
-    this.pendingEvents.push({ kind: 'shield_break' });
-    this.pushCallout(player.x, player.y - 64, '🛡 SHIELD DOWN!', '#fca5a5', 0.9);
+   const netHpLost = lost - absorbed;
+   if (absorbed > 0) {
+    this.shield = Math.max(0, this.shield - absorbed);
+    player.hp = Math.min(player.maxHp, player.hp + absorbed);
+    this.shieldFlash = 1.0;
+    this.pushDamageNumber(player.x, player.y - 36, absorbed, 'player_shield');
+    if (this.shield <= 0.01) {
+     this.shield = 0;
+     this.pendingEvents.push({ kind: 'shield_break' });
+     this.pushCallout(player.x, player.y - 68, '🛡 SHIELD DOWN!', '#fca5a5', 0.9);
+    } else if (netHpLost <= 0.01) {
+     this.pendingEvents.push({ kind: 'shield_absorb' });
+     if (state.lastDamage) state.lastDamage.remaining = Math.min(state.lastDamage.remaining, 1.80);
+    }
+   }
+   if (netHpLost > 0.01) {
+    this.hpDamageFlash = Math.min(1, 0.55 + netHpLost / 30);
+    this.cameraShake = Math.max(this.cameraShake, 6);
+    this.pushDamageNumber(player.x, player.y - 38, netHpLost, 'player_hp');
+    this.pendingEvents.push({ kind: 'player_hurt' });
    }
   }
 
@@ -1157,6 +1288,14 @@ export class OmegaZeroSignalDirector {
      points: info.boss ? 120 : 35,
      age: 0,
     });
+    this.killBursts.push({
+     x: info.x,
+     y: info.y,
+     boss: info.boss,
+     age: 0,
+     duration: info.boss ? 0.55 : 0.34,
+    });
+    if (this.killBursts.length > 24) this.killBursts.shift();
     if (evos.includes('signal_swarm') && this.drones.length < 5) {
      this.drones.push({ x: player.x, y: player.y - 24, vx: 110, vy: -90, remaining: 4.5 });
     }
@@ -1167,6 +1306,8 @@ export class OmegaZeroSignalDirector {
   // 4. Advance timers (using real unscaled dt so slow-mo feels crisp).
   if (this.hitstopRemaining > 0) this.hitstopRemaining = Math.max(0, this.hitstopRemaining - dt);
   if (this.impactFlash > 0) this.impactFlash = Math.max(0, this.impactFlash - dt * 3.4);
+  if (this.shieldFlash > 0) this.shieldFlash = Math.max(0, this.shieldFlash - dt * 2.6);
+  if (this.hpDamageFlash > 0) this.hpDamageFlash = Math.max(0, this.hpDamageFlash - dt * 2.2);
   if (this.slowMoRemaining > 0) this.slowMoRemaining = Math.max(0, this.slowMoRemaining - dt);
   if (this.overclockRemaining > 0) this.overclockRemaining = Math.max(0, this.overclockRemaining - dt);
   if (this.weaveActiveRemaining > 0) this.weaveActiveRemaining = Math.max(0, this.weaveActiveRemaining - dt);
@@ -1221,7 +1362,8 @@ export class OmegaZeroSignalDirector {
      t.aimAngle = Math.atan2(target.y - t.y, target.x - t.x);
      if (t.fireTimer <= 0 && Math.hypot(target.x - t.x, target.y - t.y) <= 440) {
       t.fireTimer = 0.42;
-      session.engine.damageProtocolConstruct(target.id, 14);
+      const tDealt = session.engine.damageProtocolConstruct(target.id, 14);
+      if (tDealt > 0) this.pushDamageNumber(target.x, target.y - 12, tDealt, 'blade');
       this.marks.set(target.id, Math.min(3, (this.marks.get(target.id) ?? 0) + 1));
       this.beams.push({
        x1: t.x,
@@ -1256,7 +1398,8 @@ export class OmegaZeroSignalDirector {
      dr.x += dr.vx * dt;
      dr.y += dr.vy * dt;
      if (dist <= 30) {
-      session.engine.damageProtocolConstruct(target.id, 24);
+      const drDealt = session.engine.damageProtocolConstruct(target.id, 24);
+      if (drDealt > 0) this.pushDamageNumber(target.x, target.y - 14, drDealt, 'detonate');
       this.marks.set(target.id, Math.min(3, (this.marks.get(target.id) ?? 0) + 1));
       this.detonations.push({ x: target.x, y: target.y, radius: 68, stacks: 1, age: 0, duration: 0.22 });
       this.drones.splice(i, 1);
@@ -1276,7 +1419,11 @@ export class OmegaZeroSignalDirector {
      if (h.hp <= 0 || wv.hitIds.has(h.id)) continue;
      if (Math.hypot(h.x - wv.x, h.y - wv.y) <= wv.radius) {
       wv.hitIds.add(h.id);
-      session.engine.damageProtocolConstruct(h.id, wv.damage);
+      const wvDealt = session.engine.damageProtocolConstruct(h.id, wv.damage);
+      if (wvDealt > 0) {
+       this.pushDamageNumber(h.x, h.y - 14, wvDealt, 'blade_crit');
+       this.pushSlashCut(h.x, h.y, wv.angle, wv.crimson ? '244,114,182' : '103,232,249', false);
+      }
       this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + 1));
      }
     }
@@ -1372,6 +1519,23 @@ export class OmegaZeroSignalDirector {
     c.vy *= 0.65;
    }
    if (c.age >= c.duration) this.casings.splice(i, 1);
+  }
+  for (let i = this.slashCuts.length - 1; i >= 0; i--) {
+   const sc = this.slashCuts[i]!;
+   sc.age += dt;
+   if (sc.age >= sc.duration) this.slashCuts.splice(i, 1);
+  }
+  for (let i = this.damageNumbers.length - 1; i >= 0; i--) {
+   const dn = this.damageNumbers[i]!;
+   dn.age += dt;
+   dn.x += dn.vx * dt;
+   dn.vx *= Math.pow(0.08, dt);
+   if (dn.age >= dn.duration) this.damageNumbers.splice(i, 1);
+  }
+  for (let i = this.killBursts.length - 1; i >= 0; i--) {
+   const kb = this.killBursts[i]!;
+   kb.age += dt;
+   if (kb.age >= kb.duration) this.killBursts.splice(i, 1);
   }
 
   const timeScale = this.slowMoRemaining > 0 ? 0.24 : 1.0;

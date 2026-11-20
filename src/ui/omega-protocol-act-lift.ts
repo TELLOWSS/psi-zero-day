@@ -7,7 +7,6 @@ import {drawOmegaAuthoredActDock} from './omega-protocol-entity-art';
  * arrival/departure coordinates (no static screenshot or decorative fake gate).
  * Structural safety rails are visual; the interactable point is the exact
  * plan.exit or plan.entry and standard OMEGA collision/interaction applies.
- * Real 3-D geometry and authored art remain a separate release gate.
  */
 export function drawOmegaActBoundaryDock(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,seconds:number,
@@ -25,8 +24,6 @@ export function drawOmegaActBoundaryDock(
  const first=dock.kind==='scaffold_lift';
  const dark=first?'#163648':'#263b49';
  ctx.save();ctx.translate(dock.point.x,dock.point.y);
- // A real aligned platform at the same world coordinates used by exit E
- // and new-zone player spawn. Not a duplicate gate painted elsewhere.
  ctx.fillStyle='rgba(1,6,17,.63)';
  ctx.beginPath();ctx.ellipse(6,14,92,28,0,0,Math.PI*2);ctx.fill();
  ctx.fillStyle='#536e75';
@@ -36,8 +33,6 @@ export function drawOmegaActBoundaryDock(
  ctx.strokeStyle='#e7a35a';ctx.lineWidth=3;ctx.setLineDash([10,8]);
  ctx.beginPath();ctx.moveTo(-70,17);ctx.lineTo(80,17);ctx.stroke();
  ctx.setLineDash([]);
- // Paired stair-lift cage uprights; the physical shaft at 3→4 is clearly
- // taller than the cargo shutter used at ordinary 1→2→3 interiors.
  for(const side of [-1,1]){
   const x=side*57;
   ctx.fillStyle=dark;ctx.fillRect(x-8,-208,16,215);
@@ -51,7 +46,6 @@ export function drawOmegaActBoundaryDock(
   ctx.beginPath();ctx.moveTo(-53,height);ctx.lineTo(53,height);
   ctx.moveTo(-53,height);ctx.lineTo(53,height+25);ctx.stroke();
  }
- // Overhead pulley beam and two suspension ropes.
  ctx.fillStyle='#293f4e';ctx.fillRect(-76,-219,152,17);
  ctx.fillStyle='#94b9c3';ctx.fillRect(-76,-219,152,4);
  ctx.strokeStyle='#d0e0dc';ctx.lineWidth=2;
@@ -61,15 +55,12 @@ export function drawOmegaActBoundaryDock(
   ctx.strokeStyle='#f3d19d';ctx.lineWidth=3;
   ctx.beginPath();ctx.arc(x,-216,8,0,Math.PI*2);ctx.stroke();
  }
- // Cage footprint / translucent door mesh (painted under the player).
  ctx.fillStyle='rgba(17,38,52,.89)';ctx.fillRect(-47,-90,94,83);
  ctx.fillStyle='#7196a1';ctx.fillRect(-47,-96,94,10);
  ctx.strokeStyle='#adccd6';ctx.lineWidth=3;ctx.strokeRect(-47,-90,94,83);
  ctx.strokeStyle='rgba(153,220,227,.4)';ctx.lineWidth=1;
  for(let x=-43;x<45;x+=14){ctx.beginPath();ctx.moveTo(x,-87);ctx.lineTo(x,-11);ctx.stroke();}
  for(let y=-79;y<-10;y+=14){ctx.beginPath();ctx.moveTo(-44,y);ctx.lineTo(44,y);ctx.stroke();}
- // Landing elevation and status are anchored in actual world plan wave;
- // no invented "lift complete" scene selection.
  ctx.fillStyle='#0b1d2b';ctx.fillRect(-70,-170,140,32);
  ctx.strokeStyle=orange;ctx.lineWidth=2;ctx.strokeRect(-70,-170,140,32);
  ctx.font='bold 12px system-ui';ctx.textAlign='center';
@@ -80,68 +71,238 @@ export function drawOmegaActBoundaryDock(
  ctx.fillText(dock.role==='departure'
   ?'TO '+String(dock.toWave).padStart(2,'0')
   :'FROM '+String(dock.fromWave).padStart(2,'0'),0,-108);
- // An accessible floor beacon pulses at the real gate, never at a
- // non-navigable set dressing position.
  const pulse=.6+.4*Math.sin(seconds*3.1);
  ctx.globalAlpha=.2+.35*pulse;ctx.strokeStyle=orange;ctx.lineWidth=4;
  ctx.beginPath();ctx.ellipse(0,9,84+6*pulse,23+3*pulse,0,0,Math.PI*2);ctx.stroke();
  ctx.restore();
 }
 
-/** The shared shaft is drawn once at the seam between the two landings.
- * Opposite skew keeps the car's travel vertical in the quarter view. */
-export function drawOmegaConnectedLift(
- ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,crane:boolean,
+/**
+ * Clean floor boarding pad rendered on connected passages instead of stacking redundant
+ * duplicate tower sprites next to the true hydraulic lift shaft at the deck seam.
+ */
+export function drawOmegaConnectedBoardingPad(
+ ctx:CanvasRenderingContext2D,dock:OmegaActBoundaryDock,seconds:number,
 ):void{
- if(drawOmegaAuthoredActDock(ctx,'lift',x,y-cageRise*0.45,crane?'CRANE ↑ 24M':'LIFT ↑ 18M','TRANSIT',crane?'#efb06c':'#7ee8ff',0))return;
- ctx.save();ctx.translate(x,y);
- ctx.transform(1,0,-skew,1,0,0);
- ctx.lineWidth=6;ctx.strokeStyle='#8caab7';
- for(const side of [-1,1]){
-  const railX=side*63;
-  ctx.beginPath();ctx.moveTo(railX,10);ctx.lineTo(railX,-rise-101);ctx.stroke();
- }
- ctx.lineWidth=3;ctx.strokeStyle='#466779';
- for(let rung=0;rung<rise+95;rung+=34){
-  ctx.beginPath();ctx.moveTo(-62,-rung);ctx.lineTo(62,-rung-26);ctx.stroke();
- }
- ctx.fillStyle=crane?'#d49b59':'#aac6cd';ctx.fillRect(-73,-rise-102,146,9);
- if(crane){
-  ctx.fillRect(63,-rise-112,50,24);
-  ctx.strokeStyle='#d6ae84';ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(82,-rise-90);ctx.lineTo(82,-16);ctx.stroke();
-  ctx.fillStyle='#b47e53';ctx.fillRect(74,-rise+cageRise-19,16,34);
- }
- ctx.translate(0,-cageRise);
- ctx.fillStyle='#142f42';ctx.fillRect(-49,-78,98,78);
- ctx.strokeStyle='#efb06c';ctx.lineWidth=4;ctx.strokeRect(-49,-78,98,78);
- ctx.fillStyle='#c5dce0';ctx.fillRect(-53,0,106,8);
- ctx.fillStyle='#ffe0a2';ctx.font='bold 13px system-ui';ctx.textAlign='center';
- ctx.fillText(crane?'CRANE ↑ 24M':'LIFT ↑ 18M',0,-55);
+ const accent=dock.kind==='crane_elevator'?'#f8bb75':dock.kind==='service_tunnel'?'#81cce2':'#67e8f9';
+ const pulse=.55+.45*Math.sin(seconds*3.4);
+ ctx.save();
+ ctx.translate(dock.point.x,dock.point.y);
+ ctx.fillStyle='rgba(7,16,28,.78)';
+ ctx.beginPath();
+ ctx.ellipse(0,2,66,20,0,0,Math.PI*2);
+ ctx.fill();
+ ctx.strokeStyle=accent;
+ ctx.globalAlpha=.45+.35*pulse;
+ ctx.lineWidth=2.4;
+ ctx.beginPath();
+ ctx.ellipse(0,2,64,19,0,0,Math.PI*2);
+ ctx.stroke();
+ ctx.globalAlpha=.75;
+ ctx.font='800 10px system-ui';
+ ctx.textAlign='center';
+ ctx.fillStyle=accent;
+ const label=dock.role==='departure'
+  ?(dock.kind==='service_tunnel'?'TUNNEL ↓ 12M':dock.kind==='crane_elevator'?'CRANE ↑ 24M':'LIFT ↑ 18M')
+  :'LANDING DECK';
+ ctx.fillText(label,0,6);
  ctx.restore();
 }
 
-/** M04-C: three deliberately non-interchangeable industrial portal silhouettes,
- * each painted at the real exit/entry foothold in native world coordinates. */
+/**
+ * The shared hydraulic shaft is drawn once at the seam between two connected decks.
+ * Counter-skew aligns `translate(0, -cageRise)` 1:1 with AIRA's true boot coordinates `(lift*skew, -lift)`
+ * so AIRA rides firmly ON the moving platform floor with zero mid-air levitation.
+ */
+export function drawOmegaConnectedLift(
+ ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,crane:boolean,
+):void{
+ const accent=crane?'#fbbf24':'#67e8f9';
+ const accentRgb=crane?'251,191,36':'103,232,249';
+ const totalMeters=crane?24:18;
+ const progress=rise>0?Math.max(0,Math.min(1,cageRise/rise)):0;
+ const curMeters=Math.round(progress*totalMeters);
+
+ ctx.save();
+ ctx.translate(x,y);
+ ctx.transform(1,0,-skew,1,0,0);
+
+ // 1. Stationary recessed structural lift shaft bay (from floor to upper landing + overhead winch crown).
+ const topY=-rise-124;
+ const shaftGrad=ctx.createLinearGradient?.(0,topY,0,20);
+ if(shaftGrad&&typeof shaftGrad.addColorStop==='function'){
+  shaftGrad.addColorStop(0,'#081421');
+  shaftGrad.addColorStop(0.5,'#0d1e2f');
+  shaftGrad.addColorStop(1,'#091420');
+  ctx.fillStyle=shaftGrad;
+ }else{
+  ctx.fillStyle='#0b1a29';
+ }
+ ctx.fillRect(-66,topY,132,rise+144);
+
+ // Cross-braced structural trusses in recessed shaft back.
+ ctx.strokeStyle='rgba(78,122,148,.42)';
+ ctx.lineWidth=2.5;
+ for(let rung=-8;rung<rise+102;rung+=36){
+  ctx.beginPath();
+  ctx.moveTo(-62,-rung);ctx.lineTo(62,-rung-28);
+  ctx.moveTo(62,-rung);ctx.lineTo(-62,-rung-28);
+  ctx.stroke();
+ }
+
+ // Left elevation progress meter & right machined guide rail.
+ for(const side of [-1,1]){
+  const railX=side*65;
+  ctx.fillStyle='#1b3144';
+  ctx.fillRect(railX-5,topY,10,rise+144);
+  ctx.strokeStyle='#88b2c4';
+  ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(railX,18);ctx.lineTo(railX,topY);ctx.stroke();
+ }
+ // Illuminated vertical climb strip on left rail synced 1:1 with carriage rise.
+ if(progress>0.01){
+  ctx.save();
+  ctx.strokeStyle=accent;
+  ctx.lineWidth=3.2;
+  ctx.beginPath();ctx.moveTo(-65,4);ctx.lineTo(-65,-cageRise);ctx.stroke();
+  ctx.restore();
+ }
+ for(let m=0;m<=totalMeters;m+=6){
+  const ty=-(m/totalMeters)*rise;
+  ctx.fillStyle=curMeters>=m?accent:'rgba(148,163,184,.55)';
+  ctx.fillRect(-76,ty-1,10,2);
+ }
+
+ // Upper winch gantry & pulley sheaves.
+ ctx.fillStyle='#1c3448';ctx.fillRect(-78,topY-10,156,16);
+ ctx.fillStyle=accent;ctx.fillRect(-78,topY-10,156,3.5);
+ const carTop=-cageRise-92;
+ ctx.strokeStyle='#cbd5e1';ctx.lineWidth=2;
+ for(const cx of [-34,34]){
+  ctx.beginPath();ctx.arc(cx,topY+4,7,0,Math.PI*2);ctx.stroke();
+  if(carTop>topY+10){
+   ctx.beginPath();ctx.moveTo(cx,topY+8);ctx.lineTo(cx,carTop);ctx.stroke();
+  }
+ }
+
+ if(crane){
+  // Synchronized counterweighted crane block moving opposite to carriage!
+  ctx.fillStyle='#1e3547';ctx.fillRect(65,topY-6,46,20);
+  ctx.strokeStyle='#d6ae84';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(88,topY+12);ctx.lineTo(88,10);ctx.stroke();
+  const cwY=-rise+cageRise-16;
+  ctx.fillStyle='#b47e53';ctx.fillRect(77,cwY,22,34);
+  ctx.strokeStyle='#fde68a';ctx.lineWidth=1.5;ctx.strokeRect(77,cwY,22,34);
+ }
+
+ // 2. Moving hydraulic lift carriage platform (floor centered squarely at y=0 === AIRA's boots!).
+ ctx.translate(0,-cageRise);
+
+ // Hydraulic glow underneath floor deck.
+ ctx.save();
+ ctx.globalCompositeOperation='lighter';
+ const under=ctx.createRadialGradient?.(0,12,6,0,12,64);
+ if(under&&typeof under.addColorStop==='function'){
+  under.addColorStop(0,`rgba(${accentRgb},.36)`);
+  under.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=under;
+  ctx.beginPath();ctx.ellipse(0,12,64,22,0,0,Math.PI*2);ctx.fill();
+ }
+ ctx.restore();
+
+ // Back translucent safety shield & structural side pillars behind AIRA.
+ ctx.fillStyle='rgba(12,28,44,.76)';
+ ctx.fillRect(-56,-88,112,86);
+ ctx.strokeStyle='rgba(125,211,252,.28)';
+ ctx.lineWidth=1;
+ for(let gx=-42;gx<=42;gx+=14){
+  ctx.beginPath();ctx.moveTo(gx,-86);ctx.lineTo(gx,-4);ctx.stroke();
+ }
+ for(const side of [-1,1]){
+  const px=side*56;
+  ctx.fillStyle='#334155';ctx.fillRect(px-5,-94,10,96);
+  ctx.fillStyle=accent;ctx.fillRect(px-2,-90,4,16);
+ }
+
+ // Overhead telemetry header crossbar displaying real live altitude.
+ ctx.fillStyle='#0a1929';ctx.fillRect(-60,-106,120,20);
+ ctx.strokeStyle=accent;ctx.lineWidth=2;ctx.strokeRect(-60,-106,120,20);
+ ctx.fillStyle=accent;ctx.font='800 10px system-ui';ctx.textAlign='center';
+ ctx.fillText(`${crane?'CRANE':'LIFT'} ↑ ${String(curMeters).padStart(2,'0')}M / ${totalMeters}M`,0,-92);
+
+ // Heavy steel deck floor squarely beneath AIRA's boots (y=-14..+12).
+ ctx.fillStyle='#1e293b';
+ ctx.fillRect(-62,-12,124,22);
+ ctx.fillStyle='#334155';
+ ctx.fillRect(-58,-10,116,12);
+ ctx.strokeStyle=accent;ctx.lineWidth=2.5;
+ ctx.strokeRect(-62,-12,124,22);
+ // Hazard chevron lip on floor front edge.
+ ctx.fillStyle=accent;
+ ctx.fillRect(-60,8,120,4);
+ ctx.restore();
+}
+
+/**
+ * Rendered AFTER AIRA so the front waist-high safety bar overlaps her lower boots cleanly,
+ * grounding her firmly INSIDE the hydraulic carriage without hiding her silhouette.
+ */
+export function drawOmegaConnectedLiftFrontRail(
+ ctx:CanvasRenderingContext2D,x:number,y:number,offsetY:number,skew:number,crane:boolean,descending=false,
+):void{
+ const accent=crane?'#fbbf24':descending?'#38bdf8':'#67e8f9';
+ ctx.save();
+ ctx.translate(x,y);
+ ctx.transform(1,0,-skew,1,0,0);
+ ctx.translate(0,offsetY);
+ // Translucent tempered glass front kickplate & safety guardrail bar.
+ ctx.fillStyle=crane?'rgba(251,191,36,0.12)':'rgba(103,232,249,0.12)';
+ ctx.fillRect(-56,-14,112,18);
+ ctx.strokeStyle=accent;
+ ctx.lineWidth=2.4;
+ ctx.beginPath();
+ ctx.moveTo(-58,-14);ctx.lineTo(58,-14);
+ ctx.moveTo(-58,4);ctx.lineTo(58,4);
+ ctx.stroke();
+ for(const sx of [-58,58]){
+  ctx.fillStyle=accent;
+  ctx.beginPath();ctx.arc(sx,-14,3.2,0,Math.PI*2);ctx.fill();
+ }
+ ctx.restore();
+}
+
+/** M04-C: subterranean vertical service tunnel shaft synced 1:1 with descent offset. */
 export function drawOmegaConnectedServiceTunnel(
  ctx:CanvasRenderingContext2D,x:number,y:number,drop:number,platformOffset:number,skew:number,
 ):void{
+ const progress=drop>0?Math.max(0,Math.min(1,platformOffset/drop)):0;
+ const depthM=Math.round(progress*12);
  ctx.save();ctx.translate(x,y);
  ctx.transform(1,0,-skew,1,0,0);
- ctx.fillStyle='#091923';ctx.fillRect(-75,-73,150,drop+85);
- ctx.strokeStyle='#5d9ba7';ctx.lineWidth=5;
- ctx.strokeRect(-75,-73,150,drop+85);
+ ctx.fillStyle='#081520';ctx.fillRect(-74,-82,148,drop+98);
+ ctx.strokeStyle='#38bdf8';ctx.lineWidth=3.5;
+ ctx.strokeRect(-74,-82,148,drop+98);
  for(const side of [-1,1]){
-  const rail=side*57;
-  ctx.beginPath();ctx.moveTo(rail,-27);ctx.lineTo(rail,drop+9);ctx.stroke();
-  ctx.fillStyle='#f0b767';ctx.fillRect(rail-4,-38,8,13);
+  const rail=side*62;
+  ctx.fillStyle='#193242';ctx.fillRect(rail-4,-76,8,drop+88);
+  ctx.strokeStyle='#67e8f9';ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.moveTo(rail,-76);ctx.lineTo(rail,drop+12);ctx.stroke();
+  ctx.fillStyle='#fbbf24';ctx.fillRect(rail-4,-82,8,10);
  }
- ctx.fillStyle='#a9e6eb';ctx.font='bold 12px system-ui';ctx.textAlign='center';
- ctx.fillText('SERVICE TUNNEL ↓ 12M',0,-51);
+ ctx.strokeStyle='rgba(103,232,249,0.28)';ctx.lineWidth=2;
+ for(let d=0;d<drop;d+=32){
+  ctx.beginPath();ctx.moveTo(-58,d);ctx.lineTo(58,d);ctx.stroke();
+ }
+ ctx.fillStyle='#0a1d2b';ctx.fillRect(-62,-78,124,22);
+ ctx.strokeStyle='#67e8f9';ctx.lineWidth=1.6;ctx.strokeRect(-62,-78,124,22);
+ ctx.fillStyle='#a9f0f8';ctx.font='800 10px system-ui';ctx.textAlign='center';
+ ctx.fillText(`TUNNEL ↓ -${String(depthM).padStart(2,'0')}M / -12M`,0,-63);
+
  ctx.translate(0,platformOffset);
- ctx.fillStyle='#1c4753';ctx.fillRect(-50,-42,100,42);
- ctx.strokeStyle='#72c3cc';ctx.lineWidth=3;ctx.strokeRect(-50,-42,100,42);
- ctx.fillStyle='#c7d3cc';ctx.fillRect(-55,0,110,8);
+ ctx.fillStyle='rgba(12,34,48,.78)';ctx.fillRect(-56,-62,112,60);
+ ctx.strokeStyle='#67e8f9';ctx.lineWidth=2.5;ctx.strokeRect(-56,-62,112,60);
+ ctx.fillStyle='#1e3b4c';ctx.fillRect(-60,-10,120,20);
+ ctx.fillStyle='#67e8f9';ctx.fillRect(-60,8,120,4);
  ctx.restore();
 }
 
@@ -177,7 +338,6 @@ function drawOmegaSpecialActDock(
  ctx.fillStyle='#09151ec9';
  ctx.beginPath();ctx.ellipse(0,10,91,27,0,0,Math.PI*2);ctx.fill();
  if(dock.kind==='crane_elevator'){
-  // Counterweighted crane shaft, machine outriggers and structural X braces.
   ctx.fillStyle='#2d4654';ctx.fillRect(-58,-221,116,215);
   ctx.fillStyle='#172e3a';ctx.fillRect(-44,-198,88,191);
   ctx.strokeStyle='#95bbc9';ctx.lineWidth=5;ctx.strokeRect(-58,-221,116,215);
@@ -196,10 +356,8 @@ function drawOmegaSpecialActDock(
   ctx.strokeStyle='#e8ceac';ctx.lineWidth=3;ctx.strokeRect(-47,-91,94,84);
   ctx.fillStyle='#101c2a';ctx.fillRect(-55,-160,110,26);
   ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';
-  ctx.fillText(entering?'CRANE ↑ 24M':'CRANE ↑ 24M',0,-142,108);
+  ctx.fillText('CRANE ↑ 24M',0,-142,108);
  }else if(dock.kind==='service_tunnel'){
-  // Underground bore instead of a lift: perspective nested rib arches,
-  // overhead conduit piping and contamination drainage channels.
   for(let i=0;i<5;i++){
    const scale=1-i*.11;
    ctx.save();ctx.scale(scale,scale);
@@ -224,8 +382,6 @@ function drawOmegaSpecialActDock(
   ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';
   ctx.fillText(entering?'LOWER TUNNEL':'TUNNEL ↓ 12M',0,-141,125);
  }else{
-  // A hermetically locked double bulkhead with pressure gauges, warning
-  // lamps, and an isolated red contamination boundary; not a cargo shutter.
   ctx.fillStyle='#4b465b';ctx.fillRect(-96,-202,192,198);
   ctx.fillStyle='#171c30';ctx.fillRect(-81,-191,162,173);
   ctx.strokeStyle='#b09eb6';ctx.lineWidth=11;ctx.strokeRect(-96,-202,192,198);
@@ -245,7 +401,6 @@ function drawOmegaSpecialActDock(
   ctx.fillText(entering?'PRESSURE OK':'AIRLOCK SEALED',0,-174,128);
   ctx.fillStyle='#f5a8c5';ctx.fillRect(-94,-11,188,8);
  }
- // The moving state/activation is bound to the game clock, never a CSS fake.
  const pulse=.58+.42*Math.sin(seconds*3.7);
  ctx.globalAlpha=.35+.33*pulse;ctx.lineWidth=4;ctx.strokeStyle=color;
  ctx.beginPath();ctx.ellipse(0,9,78+7*pulse,22+4*pulse,0,0,Math.PI*2);ctx.stroke();

@@ -41,6 +41,15 @@ export interface OmegaBladeOptions {
  readonly preferredTargetId?:string|null;
  readonly markedIds?:ReadonlySet<string>;
 }
+export interface OmegaBladeHitTarget {
+ readonly id:string;
+ readonly x:number;
+ readonly y:number;
+ readonly damage:number;
+ readonly killed:boolean;
+ readonly boss:boolean;
+ readonly armored:boolean;
+}
 export interface OmegaBladeStrike {
  readonly time:number;
  readonly combo:OmegaBladeComboStep;
@@ -50,6 +59,7 @@ export interface OmegaBladeStrike {
  readonly y:number;
  readonly facingX:number;
  readonly facingY:number;
+ readonly hitTargets?:readonly OmegaBladeHitTarget[];
 }
 export interface OmegaCombatSnapshot {
  readonly run:OmegaProtocolRun;
@@ -85,6 +95,7 @@ export class OmegaProtocolCombatSession {
  private readonly gateTransition:boolean;
  private readonly qaGateTravel:boolean;
  private readonly qaGateTravelUntilWave:number;
+ private readonly interactivePolish:boolean;
  readonly connectedFields:readonly OmegaFieldPlan[]|null;
  private passageStart:{x:number;y:number}|null=null;
  get crossingConnectedPassage():boolean{return this.passageStart!==null;}
@@ -123,10 +134,11 @@ export class OmegaProtocolCombatSession {
  private readonly damageLog:OmegaDamageEvent[]=[];
  constructor(
   seed:number,extremeStageClears:number,masterCosmeticEligible=false,
-  options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean;qaGateTravelUntilWave?:number;continuousOpening?:boolean}>={},
+  options:Readonly<{fieldTraversal?:boolean;gateTransition?:boolean;qaGateTravel?:boolean;qaGateTravelUntilWave?:number;continuousOpening?:boolean;interactivePolish?:boolean}>={},
  ){
   this.fieldTraversal=options.fieldTraversal===true;
   this.gateTransition=this.fieldTraversal&&options.gateTransition===true;
+  this.interactivePolish=options.interactivePolish===true;
   // This low-level engine has no Vite ImportMetaEnv typings. The *only*
   // production caller (OmegaProtocolPlaytest) gates this scenario behind
   // import.meta.env.DEV and a literal query. Keep the engine test option
@@ -396,6 +408,45 @@ export class OmegaProtocolCombatSession {
      this.recordDamage(omegaDamageSourceForZombie(brain.kind),amount);
     }
    }
+   // Soft non-stacking zombie separation so packs fan out cleanly without hiding HP bars,
+   // plus gentle standoff outside warning/charge so monsters never overlap AIRA's legs.
+   const liveZombies=this.interactivePolish
+    ?state.hazards.filter(h=>h.hp>0&&!h.isStageBoss&&this.zombieBrains.has(h.id))
+    :[];
+   for(let i=0;i<liveZombies.length;i++){
+    const a=liveZombies[i]!;
+    for(let j=i+1;j<liveZombies.length;j++){
+     const b=liveZombies[j]!;
+     const dx=b.x-a.x,dy=b.y-a.y;
+     const dist=Math.hypot(dx,dy);
+     const minSep=(a.radius+b.radius)*0.92;
+     if(dist>=minSep)continue;
+     const nx=dist>1e-3?dx/dist:((i%2===0)?1:-1);
+     const ny=dist>1e-3?dy/dist:0;
+     const push=Math.min(4,(minSep-dist)*0.36)*0.5;
+     const pa={x:a.x,y:a.y},pb={x:b.x,y:b.y};
+     const na={x:Math.max(24,Math.min(OMEGA_FIELD_WIDTH-24,a.x-nx*push)),y:Math.max(24,Math.min(OMEGA_FIELD_HEIGHT-24,a.y-ny*push))};
+     const nb={x:Math.max(24,Math.min(OMEGA_FIELD_WIDTH-24,b.x+nx*push)),y:Math.max(24,Math.min(OMEGA_FIELD_HEIGHT-24,b.y+ny*push))};
+     const ra=this.currentField?omegaFieldResolveCollision(pa,na,obstacles,a.radius):na;
+     const rb=this.currentField?omegaFieldResolveCollision(pb,nb,obstacles,b.radius):nb;
+     a.x=ra.x;a.y=ra.y;b.x=rb.x;b.y=rb.y;
+    }
+    const brain=this.zombieBrains.get(a.id);
+    if(brain&&(brain.phase==='pursue'||brain.phase==='recovery')){
+     const pdx=a.x-state.player.x,pdy=a.y-state.player.y;
+     const pDist=Math.hypot(pdx,pdy);
+     const minGap=a.radius+17;
+     if(pDist<minGap){
+      const pnx=pDist>1e-3?pdx/pDist:1;
+      const pny=pDist>1e-3?pdy/pDist:0;
+      const step=Math.min(3.5,(minGap-pDist)*0.45);
+      const prior={x:a.x,y:a.y};
+      const target={x:Math.max(24,Math.min(OMEGA_FIELD_WIDTH-24,a.x+pnx*step)),y:Math.max(24,Math.min(OMEGA_FIELD_HEIGHT-24,a.y+pny*step))};
+      const resolved=this.currentField?omegaFieldResolveCollision(prior,target,obstacles,a.radius):target;
+      a.x=resolved.x;a.y=resolved.y;
+     }
+    }
+   }
   }
   // One serverless, in-run boss warning/strike. No damage occurs before a
   // visibly timed warning; each attack has a one-time collision event.
@@ -587,10 +638,12 @@ export class OmegaProtocolCombatSession {
   }
 
   let hits=0,totalDamage=0;
+  const hitTargets:OmegaBladeHitTarget[]=[];
+  const obstacles=this.currentField?.obstacles??[];
   for(const h of state.hazards){
    if(!omegaBladeTargetInArc(player,h,direction,range))continue;
    if(this.currentField){
-    const route=omegaFieldNextRoute(player,h,this.currentField.obstacles);
+    const route=omegaFieldNextRoute(player,h,obstacles);
     const direct=Math.hypot(h.x-player.x,h.y-player.y);
     if(!route||route.length>direct+24)continue; // Cannot cut through solid cover.
    }
@@ -598,11 +651,34 @@ export class OmegaProtocolCombatSession {
    const dealt=this.engine.damageProtocolConstruct(h.id,damage);
    if(dealt<=0)continue;
    hits++;totalDamage+=dealt;
+   const armored=this.zombieBrains.get(h.id)?.kind==='armored'||h.variant==='reinforced_cart'||h.type==='RUNAWAY_CART';
+   hitTargets.push({
+    id:h.id,x:h.x,y:h.y,damage:dealt,killed:h.hp<=0,
+    boss:Boolean(h.isStageBoss),armored,
+   });
+   h.hitFlashTimer=Math.max(h.hitFlashTimer??0,combo===3?0.16:0.11);
+   if(this.interactivePolish&&h.hp>0&&h.type==='UNHELMETED'&&!h.isStageBoss){
+    const kdx=h.x-player.x,kdy=h.y-player.y;
+    const kDist=Math.hypot(kdx,kdy);
+    const knx=kDist>1e-3?kdx/kDist:direction.x;
+    const kny=kDist>1e-3?kdy/kDist:direction.y;
+    const knockSpeed=combo===3?280:combo===2?175:140;
+    h.vx=(h.vx??0)+knx*knockSpeed;
+    h.vy=(h.vy??0)+kny*knockSpeed;
+    const shove=combo===3?15:8;
+    const priorPos={x:h.x,y:h.y};
+    const shoved={
+     x:Math.max(24,Math.min(OMEGA_FIELD_WIDTH-24,h.x+knx*shove)),
+     y:Math.max(24,Math.min(OMEGA_FIELD_HEIGHT-24,h.y+kny*shove)),
+    };
+    const resolved=this.currentField?omegaFieldResolveCollision(priorPos,shoved,obstacles,h.radius):shoved;
+    h.x=resolved.x;h.y=resolved.y;
+   }
   }
   this.bladeLastTime=time;
   this.bladeStep=combo;
   this.bladeResult={time,combo,hits,totalDamage,x:player.x,y:player.y,
-   facingX:direction.x,facingY:direction.y};
+   facingX:direction.x,facingY:direction.y,hitTargets};
   if(hits>0)state.hitStopTimer=Math.max(state.hitStopTimer??0,.025);
   return this.bladeResult;
  }

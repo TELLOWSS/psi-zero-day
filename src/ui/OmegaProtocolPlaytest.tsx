@@ -6,9 +6,10 @@ import {OMEGA_UPGRADES,OMEGA_PROTOCOL_TOTAL_WAVES,type OmegaUpgradeId} from '../
 import {omegaStoryNode,OMEGA_STORY_ACTS} from '../domain/omega-protocol-story';
 import {WORLD_WIDTH,WORLD_HEIGHT} from '../engine/patrol-survivors-engine';
 import {omegaFieldTargetGuide,OMEGA_QUARTER_VIEW,type OmegaFieldPlan,type OmegaFieldObstacle} from '../domain/omega-protocol-field';
-import {omegaActBoundaryDock,OMEGA_CONNECTED_MAX_ELEVATION,omegaConnectedDeckElevation} from '../domain/omega-protocol-field-transit';
+import {omegaActBoundaryDock,OMEGA_CONNECTED_MAX_ELEVATION,OMEGA_DECK_BOARDING_SECONDS,omegaConnectedDeckElevation,omegaConnectedVerticalTravelSeconds} from '../domain/omega-protocol-field-transit';
 import {drawOmegaUpperDeckEdge,drawOmegaUpperDeckProp} from './omega-protocol-upper-deck';
-import {drawOmegaActBoundaryDock,drawOmegaConnectedLift,drawOmegaConnectedServiceTunnel,drawOmegaConnectedAirlock} from './omega-protocol-act-lift';
+import {drawOmegaActBoundaryDock,drawOmegaConnectedBoardingPad,drawOmegaConnectedLift,drawOmegaConnectedLiftFrontRail,drawOmegaConnectedServiceTunnel,drawOmegaConnectedAirlock} from './omega-protocol-act-lift';
+import {OmegaSupplyUpgradeIcon,omegaSupplyUpgradeMeta} from './omega-protocol-supply-ui';
 import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaBossTelegraph} from './omega-protocol-field-render';
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
@@ -121,6 +122,8 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
   else if(ev.kind==='striker'&&ev.detail)audio.playStriker(ev.detail as OmegaStrikerId);
   else if(ev.kind==='rank_up'&&ev.detail)audio.playRankUp(ev.detail as OmegaZeroSignalHudSnapshot['styleRank']);
   else if(ev.kind==='pickup'||ev.kind==='weave_bonus')audio.playPickup();
+  else if(ev.kind==='shield_absorb')audio.playShieldAbsorb();
+  else if(ev.kind==='player_hurt')audio.playPlayerHurt();
   else if(ev.kind==='shield_break')audio.playShieldBreak();
   else if(ev.kind==='evo_unlock')audio.playEvoUnlock();
   else if(ev.kind==='boss_entry')audio.playBossEntry();
@@ -234,7 +237,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
     ctx.save();ctx.translate(origin-offset+raised*skew,-raised);
     if(neighbor.wave!==field.plan.wave){
      drawGround(neighbor);
-     drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
+     const nDock=omegaActBoundaryDock(neighbor);
+     if(nDock&&['scaffold_lift','crane_elevator','service_tunnel'].includes(nDock.kind))
+      drawOmegaConnectedBoardingPad(ctx,nDock,state.gameTime);
+     else drawOmegaActBoundaryDock(ctx,neighbor,state.gameTime);
      for(const obstacle of neighbor.obstacles)drawProp(neighbor,obstacle);
     }
     if(elevation)drawOmegaUpperDeckEdge(ctx,([4,7,10].includes(neighbor.wave))?neighbor.entry.y:undefined);
@@ -296,7 +302,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    drawOmegaG3ParallaxArchitecture(ctx,passage?.[0]??field.plan,worldCamera,
     ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
   }
-  drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
+  const curDock=passage?omegaActBoundaryDock(field.plan):null;
+  if(curDock&&['scaffold_lift','crane_elevator','service_tunnel'].includes(curDock.kind))
+   drawOmegaConnectedBoardingPad(ctx,curDock,state.gameTime);
+  else drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
   // All original actor contact reflections sit on the floor BEFORE real
   // boss warnings, enemy AI indicators, walls, players and weapons.
@@ -419,6 +428,31 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
    else if(item.kind==='hazard')renderHazard(state.hazards[item.index]!);
    else renderHero();
+  }
+  if(passage){
+   const viewLeft=-worldCamera.projectedOffsetX;
+   const viewRight=viewLeft+ctx.canvas.width/worldCamera.scale;
+   const tileSkew=worldCamera.skewX*WORLD_HEIGHT;
+   ctx.save();ctx.translate(-offset-fieldElevation*skew,fieldElevation);
+   for(let index=0;index<passage.length-1;index++){
+    const {exit}=passage[index]!;
+    const start=index*WORLD_WIDTH+exit.x;
+    const edge=(index+1)*WORLD_WIDTH;
+    const end=edge+passage[index+1]!.entry.x;
+    if(viewRight<start+Math.min(0,tileSkew)-128||viewLeft>end+Math.max(0,tileSkew)+128)continue;
+    const fromElevation=omegaConnectedDeckElevation(index+1);
+    const nextElevation=omegaConnectedDeckElevation(index+2);
+    if(fromElevation===nextElevation)continue;
+    const rise=nextElevation-fromElevation;
+    const distance=Math.abs(rise);
+    const position=field.plan.wave<=index?0:field.plan.wave>=index+2?distance
+     :Math.max(0,Math.min(distance,(actorElevation-fromElevation)*Math.sign(rise)));
+    ctx.save();
+    ctx.translate(fromElevation*skew,-fromElevation);
+    drawOmegaConnectedLiftFrontRail(ctx,edge,exit.y,rise<0?position:-position,skew,index===5,rise<0);
+    ctx.restore();
+   }
+   ctx.restore();
   }
  }else{
   for(const h of state.hazards)renderHazard(h);
@@ -546,6 +580,7 @@ function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
   fieldTraversal:true,gateTransition:!legacyStageSnapshot,qaGateTravel:gateWalk,
   continuousOpening:!gateWalk||seamWalk,
   qaGateTravelUntilWave:liftWalk?liftDeparture+1:undefined,
+  interactivePolish:!qaMode&&typeof window!=='undefined'&&!omegaCombatProbeMode(window.location.search),
  });
  if(!import.meta.env.DEV&&!liftTour)return session;
  if(actBoundary!==null||liftWalk){
@@ -775,8 +810,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    markedIds:dir?.markedHazardIds(),
   });
   if(strike){
-   audioRef.current?.playBladeSlash(strike.combo);
+   audioRef.current?.playBladeSlash(strike.combo,strike.hits);
    dir?.onPlayerBlade(session,strike);
+   if(dir&&dir.currentHitstopRemaining()>0)session.engine.state.hitStopTimer=0;
    if(dir)setZeroHud(dir.hudSnapshot(session));
   }
   setSnapshot(session.snapshot);
@@ -1130,6 +1166,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(dir&&sortieStartedRef.current){
     dir.onProjectileFeedback(session,engineEvents);
     const stepResult=dir.step(session,inHitstop?0:dt,hpBeforeUpdate);
+    if(dir.currentHitstopRemaining()>0)session.engine.state.hitStopTimer=0;
     if(audioRef.current){
      audioRef.current.setBulletTime(dir.currentSlowMoRemaining()>0);
      playDirectorAudio(audioRef.current,stepResult.events,session);
@@ -1208,10 +1245,12 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    priorPlayer={x:player.x,y:player.y};
    // Sample after Watch movement and physical cover collision correction.
    // No actual displacement => do not animate a run cycle.
+   const liftKind=session.gateTransit?.phase==='depart'?session.gateTransit.link.kind:null;
+   const ridingVerticalLift=Boolean(session.crossingConnectedPassage&&liftKind&&omegaConnectedVerticalTravelSeconds(liftKind)>0&&session.gateTransit!.elapsed>=OMEGA_DECK_BOARDING_SECONDS);
    const gait=gaitController.advance(
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
     session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave,
-    Boolean(player.isDashing)||session.run.phase!=='battle');
+    Boolean(player.isDashing)||session.run.phase!=='battle'||ridingVerticalLift);
    if((gait.left.landed||gait.right.landed)&&!player.isDashing&&session.run.phase==='battle'&&sortieStartedRef.current){
     audioRef.current?.playFootstep();
    }
@@ -1696,7 +1735,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      <small style={{color:zeroHud.radioBanner.accentHex}}>{zeroHud.radioBanner.seriesTag} · TACTICAL LINK</small>
      <strong>{zeroHud.radioBanner.text}</strong>
     </div>}
-    {snapshot.field&&<div className="omega-protocol-mission" role="status">
+    {snapshot.field&&!snapshot.gateTransit&&<div className="omega-protocol-mission" role="status">
       <small>{snapshot.field.plan.sectorName} · {omegaStoryNode(snapshot.field.plan.wave).title}</small>
       <strong>{snapshot.field.progress.phase==='combat'?'주변 위협 제압':snapshot.field.progress.phase==='objective'?
        snapshot.field.plan.event.steps[snapshot.field.progress.completedSteps]?.label+' 조작':'다음 구역 출구 개방'}</strong>
@@ -2008,21 +2047,51 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <section className="omega-protocol-rewards" role="dialog" aria-modal="true"
        aria-label="연결 통로 전술 보급 · 다음 구역 탐험 준비">
        <div className="omega-protocol-safe-room-head">
-        <span className="omega-protocol-modal-kicker">OMEGA · FIELD SUPPLY / SAFE PASSAGE</span>
-        <small>현재 {snapshot.field?.plan.sectorName??'격리 통로'} · 통로는 유지됩니다</small>
-        <h2>전술 보급 지점</h2>
-        <p>다음 목적지: {omegaStoryNode(snapshot.run.wave).district} · {omegaStoryNode(snapshot.run.wave).title}</p>
-        <span className="omega-protocol-safe-room-live">전투 일시 중지 · 강화 선택 후 바로 탐험 재개</span>
+        <div className="omega-supply-top-row">
+         <span className="omega-protocol-modal-kicker">OMEGA · TACTICAL ARMORY TERMINAL</span>
+         <div className="omega-supply-vitals" aria-label="현재 작전 상태">
+          <span>WAVE <b>{String(snapshot.run.wave).padStart(2,'0')}</b></span>
+          <span className="hp">HP <b>{Math.ceil(snapshot.playerHp)}/{Math.ceil(snapshot.playerMaxHp)}</b></span>
+          <span className="sh">🛡 <b>{zeroHud.shield}</b></span>
+          <span className="rk" style={{color:zeroHud.styleColorHex}}>RANK <b>{zeroHud.styleRank}</b></span>
+         </div>
+        </div>
+        <h2>전술 보급 터미널</h2>
+        <p>다음 교전 구역: <strong>{omegaStoryNode(snapshot.run.wave).district}</strong> · {omegaStoryNode(snapshot.run.wave).title}</p>
+        <span className="omega-protocol-safe-room-live">전투 일시 정지 · 카드 1장 선택 시 시너지가 즉시 반영되며 탐험이 재개됩니다</span>
        </div>
-       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{const u=OMEGA_UPGRADES.find(e=>e.id===id)!;const evoHint=u.id==='blade_edge'||u.id==='blade_reach'?'🩸 크림슨 월광 각성':u.tag==='energy'?'⚡ 팬텀 뇌전 시너지':u.tag==='signal'?'🛰️ 오버로드 드론 시너지':'🛡 생존·기동 강화';return <button key={id} type="button" onClick={()=>choose(id)}
-         aria-label={'전술 보급 '+(i+1)+'번 · '+u.label+' · '+u.description}>
-         <small className="omega-protocol-card-index">0{i+1} · {u.tag.toUpperCase()}</small>
-         <strong>{u.label}</strong><span>{u.description}</span>
-         <em className="omega-zs-card-synergy">{evoHint}</em>
-         <small className="omega-protocol-card-rank">LV {(snapshot.run.owned[id]??0)+1} / {u.maxStacks}</small>
-       </button>;})}</div>
+       <div className="omega-protocol-reward-cards">{snapshot.run.offers.map((id,i)=>{
+        const u=OMEGA_UPGRADES.find(e=>e.id===id)!;
+        const ownedStacks=snapshot.run.owned[id]??0;
+        const nextStacks=ownedStacks+1;
+        const meta=omegaSupplyUpgradeMeta(id,snapshot.run.owned);
+        return <button key={id} type="button" onClick={()=>choose(id)}
+          data-theme={meta.theme}
+          data-awakens={meta.synergyStatus==='awakens_now'?'true':'false'}
+          aria-label={'전술 보급 '+(i+1)+'번 · '+u.label+' · '+u.description}>
+          <div className="omega-supply-card-head">
+           <small className="omega-protocol-card-index">0{i+1} · {meta.categoryLabel}</small>
+           <small className="omega-protocol-card-rank">LV {nextStacks}/{u.maxStacks}</small>
+          </div>
+          <div className="omega-supply-card-body">
+           <OmegaSupplyUpgradeIcon id={id} theme={meta.theme}/>
+           <div className="omega-supply-card-copy">
+            <strong>{u.label}</strong>
+            <span>{u.description}</span>
+           </div>
+          </div>
+          <div className="omega-supply-card-foot">
+           <div className="omega-supply-pips" aria-hidden="true">
+            {Array.from({length:u.maxStacks},(_,idx)=>(
+             <i key={idx} className={idx<ownedStacks?'filled':idx===ownedStacks?'next':'empty'}/>
+            ))}
+           </div>
+           <em className={`omega-zs-card-synergy ${meta.synergyStatus}`}>{meta.synergyLabel}</em>
+          </div>
+         </button>;
+       })}</div>
       </section>
-    </div>}
+     </div>}
     {(snapshot.run.phase==='defeat'||snapshot.run.phase==='victory')&&<div className="omega-protocol-overlay">
       <section className="omega-protocol-end omega-zs-scorecard" role="status">
        <span className="omega-protocol-modal-kicker">{snapshot.run.phase==='victory'?'MISSION COMPLETED // ZERO SIGNAL':'OPERATION TERMINATED'}</span>

@@ -294,9 +294,12 @@ export function drawOmegaPaintedBladeSlash(
  ctx.fill();
  ctx.restore();
 
- // 2. 3/4 tilted progressive sweeping liquid-plasma slash at chest height.
+ // 2. 3/4 tilted progressive sweeping liquid-plasma slash reaching forward into targets.
  ctx.save();
- ctx.translate(chestWorldX, chestWorldY);
+ ctx.translate(
+  chestWorldX+Math.cos(facingAngle)*26,
+  chestWorldY+Math.sin(facingAngle)*26*0.72,
+ );
  ctx.rotate(facingAngle);
  ctx.scale(1, 0.72);
  if (combo === 1) {

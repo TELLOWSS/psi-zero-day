@@ -49,7 +49,7 @@ export class OmegaActorFacingController{
   const fireDir=fresh?normalize({x:fire.screenX,y:fire.screenY}):null;
   const shot=fireDir!==null;
   const moveDir=normalize(requested);
-  const desired=fireDir??moveDir;
+  const desired=moveDir??fireDir;
   const locked=action.dashing||action.hurting||!action.playing;
   // A scripted dash cannot redirect the body to a newly auto-acquired enemy.
   // The muzzle still follows actual native projectiles while firing.

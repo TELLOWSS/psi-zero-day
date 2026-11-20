@@ -140,6 +140,33 @@ function traceHpRoundedRect(ctx:CanvasRenderingContext2D,x:number,y:number,w:num
  ctx.closePath();
 }
 
+const enemyDrainTracker = new Map<string, { ratio: number; seenAt: number }>();
+
+function resolveEnemyTrailingRatio(id: string | undefined, hpRatio: number, time: number): number {
+ if (!id || !Number.isFinite(time)) return hpRatio;
+ const key = id;
+ const prev = enemyDrainTracker.get(key);
+ if (!prev) {
+  if (enemyDrainTracker.size >= 180) {
+   for (const [k, v] of enemyDrainTracker) {
+    if (time - v.seenAt > 6) enemyDrainTracker.delete(k);
+    if (enemyDrainTracker.size < 140) break;
+   }
+  }
+  enemyDrainTracker.set(key, { ratio: hpRatio, seenAt: time });
+  return hpRatio;
+ }
+ const dt = Math.max(0, Math.min(0.25, time - prev.seenAt));
+ let ratio = prev.ratio;
+ if (hpRatio > ratio) {
+  ratio = hpRatio;
+ } else if (ratio > hpRatio) {
+  ratio = Math.max(hpRatio, ratio - dt * 1.9);
+ }
+ enemyDrainTracker.set(key, { ratio, seenAt: time });
+ return ratio;
+}
+
 export function drawOmegaProtocolEnemy(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
  options:Readonly<{finalBoss?:boolean;zombie?:OmegaZombieBrain;infectedReview?:boolean;targetX?:number}>={} ,
@@ -149,11 +176,18 @@ export function drawOmegaProtocolEnemy(
  const scale=boss?1.7:Math.max(.8,Math.min(1.5,h.radius/24));
  const sway=Math.sin(time*3+h.x*.019+h.y*.003);
  let spriteTopY=boss?-118:-68;
+ const hitFlash=h.hitFlashTimer??0;
+ const pushSign=options.targetX!==undefined?(h.x>=options.targetX?1:-1):1;
+ const recoilX=hitFlash>0?pushSign*Math.sin(hitFlash*68)*3.8:0;
+ const recoilSqX=hitFlash>0&&!boss?1.045:1;
+ const recoilSqY=hitFlash>0&&!boss?0.955:1;
  ctx.save();
  ctx.scale(scale,scale);
- // Contact shadow and direction-independent feet.
+ // Contact shadow remains planted cleanly at ground origin.
  ctx.fillStyle='rgba(1,7,14,.55)';
  ctx.beginPath();ctx.ellipse(0,4,boss?46:23,boss?11:6,0,0,Math.PI*2);ctx.fill();
+ ctx.save();
+ if(hitFlash>0){ctx.translate(recoilX,0);ctx.scale(recoilSqX,recoilSqY);}
  if(h.type==='UNHELMETED'){
   if(options.zombie){
    const brain=options.zombie;
@@ -277,27 +311,37 @@ export function drawOmegaProtocolEnemy(
   ctx.beginPath();ctx.arc(0,flashY,flashR,0,Math.PI*2);ctx.fill();
   ctx.restore();
  }
+ ctx.restore(); // close recoil shake/squash transform so HP bar stays crisp!
 
- // Sleek beveled tactical HP bar normalized outside enemy scale.
+ // Sleek beveled tactical HP bar with trailing damage-drain ghost chunk & toughness tier clarity.
  const maxHp=Math.max(1,h.maxHp);
  const hpRatio=Math.max(0,Math.min(1,h.hp/maxHp));
+ const trailRatio=resolveEnemyTrailingRatio(h.id,hpRatio,time);
+ const armored=options.zombie?.kind==='armored'||h.variant==='reinforced_cart'||h.type==='RUNAWAY_CART';
  const damaged=hpRatio<0.995||(h.hitFlashTimer??0)>0;
  const invScale=scale>0?1/scale:1;
- const barW=boss?86:damaged?42:32;
- const barH=boss?6:damaged?4.5:3;
+ const barW=boss?94:armored?48:damaged?42:34;
+ const barH=boss?7:armored?5.5:damaged?4.5:3.2;
  const barX=-barW*.5;
  const barY=Math.round(spriteTopY*scale)-10;
 
  ctx.save();
  ctx.scale(invScale,invScale);
- ctx.globalAlpha=boss||damaged?0.96:0.74;
+ ctx.globalAlpha=boss||damaged||armored?0.96:0.78;
  traceHpRoundedRect(ctx,barX-1,barY-1,barW+2,barH+2,barH*.55+1);
- ctx.fillStyle='rgba(5,11,22,0.86)';
+ ctx.fillStyle='rgba(5,11,22,0.88)';
  ctx.fill();
+
+ // Trailing white-gold recent damage drain bar!
+ if(trailRatio>hpRatio+0.008){
+  const trailW=Math.max(2,barW*trailRatio);
+  ctx.fillStyle='rgba(255,244,214,0.88)';
+  traceHpRoundedRect(ctx,barX,barY,trailW,barH,barH*.5);
+  ctx.fill();
+ }
 
  if(hpRatio>0){
   const fillW=Math.max(2,barW*hpRatio);
-  const armored=options.zombie?.kind==='armored'||h.type==='RUNAWAY_CART';
   const barGrad=ctx.createLinearGradient?.(barX,barY,barX+barW,barY);
   if(barGrad&&typeof barGrad.addColorStop==='function'){
    if(boss){
@@ -319,13 +363,34 @@ export function drawOmegaProtocolEnemy(
  }
 
  if(boss){
-  // Phase-2 threshold tick mark at 50% HP.
-  ctx.fillStyle='rgba(255,255,255,0.72)';
-  ctx.fillRect(-0.5,barY-1,1.2,barH+2);
+  for(const frac of [0.25,0.5,0.75]){
+   ctx.fillStyle=frac===0.5?'rgba(255,255,255,0.82)':'rgba(255,255,255,0.42)';
+   ctx.fillRect(barX+barW*frac-0.5,barY-1,1.2,barH+2);
+  }
+ }else if(armored){
+  // Toughness segment ticks + compact armor diamond badge on left rim.
+  const segs=Math.min(4,Math.max(2,Math.round(maxHp/45)));
+  ctx.fillStyle='rgba(6,12,24,0.68)';
+  for(let s=1;s<segs;s++){
+   ctx.fillRect(barX+(barW*s)/segs-0.5,barY,1,barH);
+  }
+  const bx=barX-4,by=barY+barH*0.5;
+  ctx.fillStyle='#fbbf24';
+  ctx.beginPath();
+  ctx.moveTo(bx,by-3.5);ctx.lineTo(bx+3.5,by);ctx.lineTo(bx,by+3.5);ctx.lineTo(bx-3.5,by);
+  ctx.closePath();
+  ctx.fill();
  }
 
+ const critical=hpRatio>0&&hpRatio<=0.3;
  traceHpRoundedRect(ctx,barX-0.5,barY-0.5,barW+1,barH+1,barH*.55);
- ctx.strokeStyle=(h.hitFlashTimer??0)>0?'rgba(224,250,255,0.88)':'rgba(148,197,226,0.34)';
+ ctx.strokeStyle=(h.hitFlashTimer??0)>0
+  ?'rgba(224,250,255,0.92)'
+  :critical
+    ?'rgba(251,113,133,0.78)'
+    :armored
+      ?'rgba(251,191,36,0.52)'
+      :'rgba(148,197,226,0.36)';
  ctx.lineWidth=1;
  ctx.stroke();
  ctx.restore();
