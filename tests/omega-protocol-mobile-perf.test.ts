@@ -79,8 +79,8 @@ describe('Wave 5 Mobile Zero-Occlusion UX & Adaptive 60FPS Performance', () => {
   const portraitBattle = omegaCameraTargetZoom('battle', 390, 844);
   const landscapeBattle = omegaCameraTargetZoom('battle', 844, 390);
   const desktopBattle = omegaCameraTargetZoom('battle', 1440, 900);
-  expect(portraitBattle).toBe(1.48);
-  expect(landscapeBattle).toBe(1.66);
+  expect(portraitBattle).toBe(1.12);
+  expect(landscapeBattle).toBe(1.54);
   expect(desktopBattle).toBe(1.78);
   expect(portraitBattle).toBeLessThan(landscapeBattle);
   expect(landscapeBattle).toBeLessThan(desktopBattle);
@@ -91,5 +91,13 @@ describe('Wave 5 Mobile Zero-Occlusion UX & Adaptive 60FPS Performance', () => {
   expect(css).toContain('backdrop-filter:none');
   expect(css).toContain('.omega-zs-floating-stick-zone');
   expect(css).toContain('.omega-zs-mobile-drawer');
+  expect(css).toContain('.omega-zs-floating-hint');
+  expect(css).toContain('[data-omega-clean-hud="true"]');
+
+  const tsx = fs.readFileSync(path.resolve(process.cwd(), 'src/ui/OmegaProtocolPlaytest.tsx'), 'utf8');
+  expect(tsx).toContain("const mobileImmersion=(Math.min(viewport.w,viewport.h)<=540||viewport.w<=900)&&!devLabReviewUrl;");
+  expect(tsx).toContain('data-omega-clean-hud=');
+  expect(tsx).toContain('data-unlocked={unlocked');
+  expect(tsx).toContain('omega-zs-briefing-exit');
  });
 });

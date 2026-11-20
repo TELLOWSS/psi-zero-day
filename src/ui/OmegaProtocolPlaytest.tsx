@@ -94,6 +94,17 @@ function saveZeroSignalArchive(ids:readonly string[]):void{
   if(typeof window!=='undefined')window.localStorage.setItem(ZERO_SIGNAL_ARCHIVE_KEY,JSON.stringify(ids));
  }catch{void 0;}
 }
+const CLEAN_HUD_STORAGE_KEY='psi:omega-zero-signal:clean-hud:v1';
+function readCleanHudPreference():boolean{
+ try{
+  return typeof window!=='undefined'&&window.localStorage.getItem(CLEAN_HUD_STORAGE_KEY)==='1';
+ }catch{return false;}
+}
+function saveCleanHudPreference(value:boolean):void{
+ try{
+  if(typeof window!=='undefined')window.localStorage.setItem(CLEAN_HUD_STORAGE_KEY,value?'1':'0');
+ }catch{void 0;}
+}
 function shouldBypassBriefingOnLaunch():boolean{
  if(typeof window==='undefined')return true;
  const params=new URLSearchParams(window.location.search);
@@ -118,7 +129,7 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
  }
  void session;
 }
-function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0},tracerTracker?:OmegaBallisticTracerTracker,director?:OmegaZeroSignalDirector,mobileProfile?:OmegaMobileProfile){
+function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession,fireCue:OmegaActorFireCue,impacts:readonly OmegaImpactFx[],gait:OmegaWalkPose,pose:OmegaActorDirectionPose,terminalElapsed:number,cameraZoom=1.55,echoes:readonly OmegaDashEcho[]=[],g5hTrueHitReview=false,motion:OmegaSmoothedVelocity={vx:0,vy:0,speedRatio:0},tracerTracker?:OmegaBallisticTracerTracker,director?:OmegaZeroSignalDirector,mobileProfile?:OmegaMobileProfile,cleanHud=false){
  const state=session.engine.state;
  const effProfile=mobileProfile??resolveOmegaMobileProfile(ctx.canvas.width,ctx.canvas.height,1,'auto');
  ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -474,45 +485,47 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  // Portrait camera follows the player: preserve off-screen enemy awareness
  // with a cheap, always-visible whole-arena radar in screen coordinates.
- const mw=effProfile.radarCompact
-  ?Math.round(62*effProfile.canvasScale)
-  :Math.max(70,Math.min(118,ctx.canvas.width*.155));
- const mh=mw*WORLD_HEIGHT/WORLD_WIDTH;
- const pad=effProfile.radarCompact?Math.round(8*effProfile.canvasScale):ctx.canvas.width<600?10:16;
- const mx=ctx.canvas.width-mw-pad;
- const my=effProfile.radarCompact
-  ?Math.round(44*effProfile.canvasScale)
-  :ctx.canvas.height<400?58:90;
- ctx.save();
- ctx.fillStyle='rgba(10,20,35,.78)';
- const boxPad=effProfile.radarCompact?Math.round(3*effProfile.canvasScale):5;
- const headerH=effProfile.radarCompact?Math.round(11*effProfile.canvasScale):20;
- ctx.fillRect(mx-boxPad,my-headerH,mw+boxPad*2,mh+headerH+boxPad);
- ctx.strokeStyle='rgba(126,205,227,.55)';
- ctx.lineWidth=1;ctx.strokeRect(mx,my,mw,mh);
- ctx.font=`bold ${effProfile.radarCompact?Math.max(8,Math.round(8*effProfile.canvasScale)):10}px system-ui,sans-serif`;
- ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-(effProfile.radarCompact?Math.round(3*effProfile.canvasScale):7));
- if(field){
-  for(const [loc,shade] of [
-   ...field.plan.event.steps.map((step,i)=>[step.target,
-    i<field.progress.completedSteps?'#6bfaac':i===field.progress.completedSteps?'#87edff':'#578dae'] as const),
-   [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'] as const,
-  ]){
-   ctx.fillStyle=shade;ctx.fillRect(mx+loc.x/WORLD_WIDTH*mw-2,my+loc.y/WORLD_HEIGHT*mh-2,5,5);
+ if(!(effProfile.radarCompact&&cleanHud)){
+  const mw=effProfile.radarCompact
+   ?Math.round(54*effProfile.canvasScale)
+   :Math.max(70,Math.min(118,ctx.canvas.width*.155));
+  const mh=mw*WORLD_HEIGHT/WORLD_WIDTH;
+  const pad=effProfile.radarCompact?Math.round(7*effProfile.canvasScale):ctx.canvas.width<600?10:16;
+  const mx=ctx.canvas.width-mw-pad;
+  const my=effProfile.radarCompact
+   ?Math.round(46*effProfile.canvasScale)
+   :ctx.canvas.height<400?58:90;
+  ctx.save();
+  ctx.fillStyle=effProfile.radarCompact?'rgba(8,16,28,.52)':'rgba(10,20,35,.78)';
+  const boxPad=effProfile.radarCompact?Math.round(2.5*effProfile.canvasScale):5;
+  const headerH=effProfile.radarCompact?Math.round(10*effProfile.canvasScale):20;
+  ctx.fillRect(mx-boxPad,my-headerH,mw+boxPad*2,mh+headerH+boxPad);
+  ctx.strokeStyle=effProfile.radarCompact?'rgba(126,205,227,.38)':'rgba(126,205,227,.55)';
+  ctx.lineWidth=1;ctx.strokeRect(mx,my,mw,mh);
+  ctx.font=`bold ${effProfile.radarCompact?Math.max(7,Math.round(7.5*effProfile.canvasScale)):10}px system-ui,sans-serif`;
+  ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-(effProfile.radarCompact?Math.round(2.5*effProfile.canvasScale):7));
+  if(field){
+   for(const [loc,shade] of [
+    ...field.plan.event.steps.map((step,i)=>[step.target,
+     i<field.progress.completedSteps?'#6bfaac':i===field.progress.completedSteps?'#87edff':'#578dae'] as const),
+    [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'] as const,
+   ]){
+    ctx.fillStyle=shade;ctx.fillRect(mx+loc.x/WORLD_WIDTH*mw-2,my+loc.y/WORLD_HEIGHT*mh-2,5,5);
+   }
   }
+  for(const h of state.hazards.slice(0,32)){
+   if(h.hp<=0)continue;
+   const dotX=mx+Math.max(0,Math.min(1,h.x/WORLD_WIDTH))*mw;
+   const dotY=my+Math.max(0,Math.min(1,h.y/WORLD_HEIGHT))*mh;
+   ctx.beginPath();ctx.arc(dotX,dotY,h.isStageBoss?4:2.2,0,Math.PI*2);
+   ctx.fillStyle=h.isStageBoss?'#ffe18e':'#fb94c6';ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.arc(mx+Math.max(0,Math.min(1,p.x/WORLD_WIDTH))*mw,
+          my+Math.max(0,Math.min(1,p.y/WORLD_HEIGHT))*mh,3.2,0,Math.PI*2);
+  ctx.fillStyle='#91fff0';ctx.fill();
+  ctx.restore();
  }
- for(const h of state.hazards.slice(0,32)){
-  if(h.hp<=0)continue;
-  const dotX=mx+Math.max(0,Math.min(1,h.x/WORLD_WIDTH))*mw;
-  const dotY=my+Math.max(0,Math.min(1,h.y/WORLD_HEIGHT))*mh;
-  ctx.beginPath();ctx.arc(dotX,dotY,h.isStageBoss?4:2.2,0,Math.PI*2);
-  ctx.fillStyle=h.isStageBoss?'#ffe18e':'#fb94c6';ctx.fill();
- }
- ctx.beginPath();
- ctx.arc(mx+Math.max(0,Math.min(1,p.x/WORLD_WIDTH))*mw,
-         my+Math.max(0,Math.min(1,p.y/WORLD_HEIGHT))*mh,3.2,0,Math.PI*2);
- ctx.fillStyle='#91fff0';ctx.fill();
- ctx.restore();
  return worldCamera;
 }
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
@@ -654,6 +667,15 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const perfPresetRef=useRef(perfPreset);
  perfPresetRef.current=perfPreset;
  const [mobileMenuOpen,setMobileMenuOpen]=useState(false);
+ const [cleanHud,setCleanHud]=useState<boolean>(()=>readCleanHudPreference());
+ const cleanHudRef=useRef(cleanHud);
+ cleanHudRef.current=cleanHud;
+ const toggleCleanHud=()=>{
+  const next=!cleanHud;
+  saveCleanHudPreference(next);
+  cleanHudRef.current=next;
+  setCleanHud(next);
+ };
  const [viewport,setViewport]=useState(()=>({
   w:typeof window==='undefined'?1280:window.innerWidth,
   h:typeof window==='undefined'?720:window.innerHeight,
@@ -664,7 +686,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   resolveOmegaMobileProfile(viewport.w,viewport.h,typeof window==='undefined'?1:window.devicePixelRatio||1,perfPreset),
  );
  const devLabReviewUrl=typeof window!=='undefined'&&['omegaM12G5','omegaM12G5b','omegaM12G5c','omegaM12G5d','omegaM12G5e','omegaM12G5g','omegaM12G5h','omegaM12G5i','omegaView'].some(k=>new URLSearchParams(window.location.search).has(k));
- const mobileImmersion=(Math.min(viewport.w,viewport.h)<=540||viewport.w<=900)&&!devLabReviewUrl&&!OMEGA_PROTECTED_REVIEW;
+ const mobileImmersion=(Math.min(viewport.w,viewport.h)<=540||viewport.w<=900)&&!devLabReviewUrl;
  const [blackboxes,setBlackboxes]=useState<readonly string[]>(()=>readZeroSignalArchive());
  const [blackboxTab,setBlackboxTab]=useState(false);
  const audioRef=useRef<OmegaProceduralAudio|null>(null);
@@ -740,12 +762,14 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  const stickThumbRef=useRef<HTMLSpanElement>(null);
  const floatingRingRef=useRef<HTMLDivElement>(null);
  const floatingThumbRef=useRef<HTMLSpanElement>(null);
+ const floatingHintRef=useRef<HTMLSpanElement>(null);
  const floatingOrigin=useRef<{pointerId:number;x:number;y:number}|null>(null);
  // Multiple finger presses keep their own direction until released.
  const pointerMoves=useRef(new Map<number,{x:number;y:number}>());
  const lastHudAt=useRef(0);
  const clearMovementInputs=useCallback(()=>{
   floatingOrigin.current=null;
+  arenaRef.current?.setAttribute('data-omega-stick-active','false');
   if(floatingRingRef.current)floatingRingRef.current.style.opacity='0';
   if(floatingThumbRef.current)floatingThumbRef.current.style.transform='translate3d(-50%,-50%,0)';
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
@@ -1169,7 +1193,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     cinematicZoom+=(target-cinematicZoom)*easing;
     const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
-     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker,directorRef.current??undefined,mobileProfileRef.current);
+     finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker,directorRef.current??undefined,mobileProfileRef.current,cleanHudRef.current);
     if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);
@@ -1257,6 +1281,8 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   const ox=clientX-rect.left;
   const oy=clientY-rect.top;
   floatingOrigin.current={pointerId,x:ox,y:oy};
+  arenaRef.current?.setAttribute('data-omega-stick-active','true');
+  if(floatingHintRef.current)floatingHintRef.current.style.display='none';
   if(floatingRingRef.current){
    floatingRingRef.current.style.left=ox.toFixed(1)+'px';
    floatingRingRef.current.style.top=oy.toFixed(1)+'px';
@@ -1285,6 +1311,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  };
  const endFloatingStick=(pointerId:number)=>{
   if(floatingOrigin.current?.pointerId===pointerId)floatingOrigin.current=null;
+  arenaRef.current?.setAttribute('data-omega-stick-active','false');
   releaseDirection(pointerId);
   if(floatingRingRef.current)floatingRingRef.current.style.opacity='0';
   if(floatingThumbRef.current)floatingThumbRef.current.style.transform='translate3d(-50%,-50%,0)';
@@ -1371,6 +1398,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   data-omega-protocol-internal="true"
   data-omega-mobile-immersion={mobileImmersion?'true':'false'}
   data-omega-mobile-active-battle={mobileImmersion&&sortieStarted?'true':'false'}
+  data-omega-clean-hud={cleanHud?'true':'false'}
   data-omega-perf-preset={perfPreset}
   data-omega-aira-v2-ready={userApprovedAiraV2.hasAllDirections()?'true':'false'}
   data-omega-aira-v2-status="user-selected-8-direction-neutral-art"
@@ -1561,6 +1589,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       <div ref={floatingRingRef} className="omega-zs-floating-stick-ring" aria-hidden="true">
        <span ref={floatingThumbRef} className="omega-zs-floating-stick-thumb" />
       </div>
+      <span ref={floatingHintRef} className="omega-zs-floating-hint" aria-hidden="true">좌측 드래그 이동</span>
      </div>
     )}
     <div className="omega-protocol-stats" aria-label="전투 상태">
@@ -1724,6 +1753,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       const cd=zeroHud.strikerCooldowns[st.id]??0;
       const ready=unlocked&&cd<=0&&zeroHud.strikerCharge>=st.costCharge&&snapshot.run.phase==='battle';
       return <button key={st.id} type="button" className="omega-zs-striker-btn" data-ready={ready?'true':'false'}
+       data-unlocked={unlocked?'true':'false'}
        disabled={!ready} style={{borderColor:ready?st.accentHex:undefined}}
        onClick={()=>{
         audioRef.current?.unlock();
@@ -1835,6 +1865,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
         floatingOrigin.current=null;
         if(floatingRingRef.current)floatingRingRef.current.style.opacity='0';
        }}>{classicPad?'🕹️ 플로팅 스틱으로 전환':'✚ 4방향 버튼으로 전환'}</button>
+       <button type="button" className={cleanHud?'active':''} onClick={toggleCleanHud}>{cleanHud?'👁 집중 모드 ON (최소 HUD)':'👁 집중 모드 OFF (전체 HUD)'}</button>
        <button type="button" onClick={toggleMute}>{muted?'🔊 사운드 켜기':'🔇 사운드 끄기'}</button>
        <button type="button" onClick={toggleFullscreen}>⛶ 전체화면 전환</button>
        <button type="button" onClick={()=>{setMobileMenuOpen(false);launchSortie(loadoutId,dailyMode,false);}}>🎒 로드아웃 · 블랙박스</button>
@@ -1846,6 +1877,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     {!sortieStarted&&!reviewBlocked&&snapshot.run.phase==='battle'&&<div className="omega-protocol-overlay omega-zs-briefing-overlay" role="presentation">
       <section className="omega-zs-briefing" role="dialog" aria-modal="true" aria-label="ZERO SIGNAL 작전 브리핑">
        <div className="omega-zs-briefing-head">
+        {mobileImmersion&&<button type="button" className="omega-zs-briefing-exit" onClick={onExit} aria-label="허브로 나가기">✕</button>}
         <span className="omega-protocol-modal-kicker">OMEGA PROTOCOL · SPECIAL EDITION // ZERO SIGNAL</span>
         <h2>시그널 올스타 전술 출격</h2>
         <p>총격(자동)으로 표식을 쌓고, 검격(F)으로 연쇄 폭파하라 · 위기 순간 회피(SPACE)로 불릿타임 &amp; 1~4 시그널 원호 호출</p>

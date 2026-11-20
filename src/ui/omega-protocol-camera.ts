@@ -22,11 +22,11 @@ export function omegaCameraTargetZoom(
   throw new RangeError('Invalid camera viewport');
  const portraitPhone=height>width&&width<=540;
  if(portraitPhone){
-  return focus==='battle'?1.48:focus==='boss'?1.32:1.18;
+  return focus==='battle'?1.12:focus==='boss'?1.06:1.00;
  }
  const landscapePhone=width/height>=1.8&&height<=540;
  if(landscapePhone){
-  return focus==='battle'?1.66:focus==='boss'?1.48:1.30;
+  return focus==='battle'?1.54:focus==='boss'?1.38:1.22;
  }
  return focus==='battle'?1.78:focus==='boss'?1.58:1.38;
 }
