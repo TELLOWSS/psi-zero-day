@@ -125,6 +125,21 @@ export function drawOmegaHelmetZombie(
  * These are recognizable enemy archetypes, not approved production sprites
  * or licensed "Solo Leveling" monsters.
  */
+function traceHpRoundedRect(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number,r:number):void{
+ const rr=Math.max(0,Math.min(r,w*.5,h*.5));
+ ctx.beginPath();
+ ctx.moveTo(x+rr,y);
+ ctx.lineTo(x+w-rr,y);
+ ctx.quadraticCurveTo(x+w,y,x+w,y+rr);
+ ctx.lineTo(x+w,y+h-rr);
+ ctx.quadraticCurveTo(x+w,y+h,x+w-rr,y+h);
+ ctx.lineTo(x+rr,y+h);
+ ctx.quadraticCurveTo(x,y+h,x,y+h-rr);
+ ctx.lineTo(x,y+rr);
+ ctx.quadraticCurveTo(x,y,x+rr,y);
+ ctx.closePath();
+}
+
 export function drawOmegaProtocolEnemy(
  ctx:CanvasRenderingContext2D,h:Hazard,time:number,
  options:Readonly<{finalBoss?:boolean;zombie?:OmegaZombieBrain;infectedReview?:boolean;targetX?:number}>={} ,
@@ -133,7 +148,7 @@ export function drawOmegaProtocolEnemy(
  const boss=Boolean(h.isStageBoss);
  const scale=boss?1.7:Math.max(.8,Math.min(1.5,h.radius/24));
  const sway=Math.sin(time*3+h.x*.019+h.y*.003);
- let authoredZombieRendered=false;
+ let spriteTopY=boss?-118:-68;
  ctx.save();
  ctx.scale(scale,scale);
  // Contact shadow and direction-independent feet.
@@ -143,19 +158,32 @@ export function drawOmegaProtocolEnemy(
   if(options.zombie){
    const brain=options.zombie;
    if(brain.phase==='warning'){
-    const progress=Math.max(0,Math.min(1,brain.timer/brain.warningDuration));
-    ctx.strokeStyle=brain.kind==='armored'?'#ffa05b':'#ff6ecf';
-    ctx.globalAlpha=.5+.4*Math.sin(time*13);
-    ctx.lineWidth=4+3*(1-progress);
-    ctx.beginPath();ctx.arc(0,-17,brain.attackRadius*.62,0,Math.PI*2);ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.strokeStyle='#fff2e1';ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(0,-16);
-    ctx.lineTo(brain.lockedX*28,-16+brain.lockedY*22);ctx.stroke();
+    const progress=Math.max(0,Math.min(1,brain.timer/Math.max(0.01,brain.warningDuration)));
+    const pulse=.55+.45*Math.sin(time*15);
+    const lockAngle=Math.atan2(brain.lockedY,brain.lockedX);
+    ctx.save();
+    ctx.globalCompositeOperation='lighter';
+    ctx.strokeStyle=brain.kind==='armored'
+     ?`rgba(255,176,82,${(0.55*pulse).toFixed(3)})`
+     :`rgba(255,96,142,${(0.55*pulse).toFixed(3)})`;
+    ctx.lineWidth=1.8;
+    ctx.beginPath();
+    ctx.ellipse(0,2,20+progress*6,7+progress*2,0,lockAngle-0.85,lockAngle+0.85);
+    ctx.stroke();
+    ctx.restore();
    }else if(brain.phase==='charge'){
-    ctx.strokeStyle='#ceffb3';ctx.lineWidth=6;
-    ctx.beginPath();ctx.moveTo(-brain.lockedX*34,-18-brain.lockedY*27);
-    ctx.lineTo(0,-18);ctx.stroke();
+    // Sleek motion-streak filaments behind charging zombie (zero solid sticks).
+    ctx.save();
+    ctx.globalCompositeOperation='lighter';
+    for(let i=-1;i<=1;i++){
+     const sy=-36+i*10;
+     const bx=-brain.lockedX*(26+Math.abs(i)*5);
+     const by=sy-brain.lockedY*16;
+     ctx.strokeStyle=i===0?'rgba(164,244,255,0.48)':'rgba(255,132,168,0.34)';
+     ctx.lineWidth=i===0?2.2:1.4;
+     ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(0,sy);ctx.stroke();
+    }
+    ctx.restore();
    }
   }
   const g5=typeof window!=='undefined'&&omegaG5VectorStudyRequested(window.location.search,
@@ -163,17 +191,20 @@ export function drawOmegaProtocolEnemy(
   // Dev-only two independently posed original drifter sources; preserve the
   // native telegraph above, all real health bars, and original other species.
   if(options.infectedReview&&options.zombie&&omegaInfectedCandidateReview.draw(ctx,h,options.zombie,time,options.targetX??h.x)){
-   authoredZombieRendered=true;
+   spriteTopY=-78;
   }else if(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)){
-   authoredZombieRendered=false;
+   spriteTopY=-64;
   }else if(drawOmegaAuthoredZombie(ctx,h,time,options.zombie,options.targetX)){
-   authoredZombieRendered=true;
+   spriteTopY=-96;
   }else{
    drawOmegaHelmetZombie(ctx,h,time,options.zombie);
+   spriteTopY=-64;
   }
  }else if(drawOmegaAuthoredHazardOrBoss(ctx,h,time,Boolean(options.finalBoss))){
   // Authored 3/4 isometric entity or boss sprite drawn above.
+  spriteTopY=boss?-118:h.type==='RUNAWAY_CART'?-68:-74;
  }else if(h.type==='RUNAWAY_CART'){
+  spriteTopY=-50;
   ctx.fillStyle='#39485a';ctx.fillRect(-28,-25,58,24);
   ctx.strokeStyle='#ffce73';ctx.lineWidth=4;ctx.strokeRect(-27,-25,54,24);
   ctx.fillStyle='#f8b45d';ctx.fillRect(-20,-38,38,14);
@@ -185,6 +216,7 @@ export function drawOmegaProtocolEnemy(
    ctx.strokeStyle='#ff9681';ctx.lineWidth=4;ctx.strokeRect(-30,-28,62,30);
   }
  }else if(h.type==='GAS_LEAK'){
+  spriteTopY=-52;
   ctx.fillStyle='#52606a';ctx.fillRect(-8,-21,18,23);
   ctx.fillStyle='#52ead4';ctx.beginPath();ctx.arc(2,-32,14,0,Math.PI*2);ctx.fill();
   ctx.globalAlpha=.38;
@@ -197,6 +229,7 @@ export function drawOmegaProtocolEnemy(
   ctx.globalAlpha=1;
   ctx.strokeStyle='#e3fff2';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,-30,13,0,Math.PI*2);ctx.stroke();
  }else if(h.type==='FALLING_DEBRIS'){
+  spriteTopY=-50;
   ctx.fillStyle='#293d4b';
   ctx.beginPath();ctx.moveTo(-25,-2);ctx.lineTo(-25,-30);ctx.lineTo(-11,-42);ctx.lineTo(23,-31);
   ctx.lineTo(29,-10);ctx.lineTo(10,3);ctx.closePath();ctx.fill();
@@ -205,8 +238,10 @@ export function drawOmegaProtocolEnemy(
   ctx.moveTo(-17,-28);ctx.lineTo(13,-10);ctx.moveTo(18,-25);ctx.lineTo(-8,-6);ctx.stroke();
   ctx.fillStyle='#e6aa73';ctx.fillRect(-12,-18,21,5);
  }else if(h.type==='CRANE_BOSS'&&options.finalBoss){
+  spriteTopY=-114;
   drawOmegaPowerWarden(ctx,time,h.bossPhase===2);
  }else if(h.type==='CRANE_BOSS'){
+  spriteTopY=-114;
   // Wave-9 crane boss: separate original boom-and-hook silhouette.
   ctx.fillStyle='#22283d';ctx.fillRect(-23,-48,46,51);
   ctx.fillStyle='#9e4968';ctx.fillRect(-31,-72,62,30);
@@ -242,9 +277,57 @@ export function drawOmegaProtocolEnemy(
   ctx.beginPath();ctx.arc(0,flashY,flashR,0,Math.PI*2);ctx.fill();
   ctx.restore();
  }
- const hpBarY=boss?-125:authoredZombieRendered?-112:-55;
- ctx.fillStyle='#0b1423';ctx.fillRect(boss?-45:-27,hpBarY,boss?90:54,6);
- ctx.fillStyle=boss?'#ffa2c7':'#8df5d4';
- ctx.fillRect(boss?-45:-27,hpBarY,(boss?90:54)*Math.max(0,h.hp/Math.max(1,h.maxHp)),6);
+
+ // Sleek beveled tactical HP bar normalized outside enemy scale.
+ const maxHp=Math.max(1,h.maxHp);
+ const hpRatio=Math.max(0,Math.min(1,h.hp/maxHp));
+ const damaged=hpRatio<0.995||(h.hitFlashTimer??0)>0;
+ const invScale=scale>0?1/scale:1;
+ const barW=boss?86:damaged?42:32;
+ const barH=boss?6:damaged?4.5:3;
+ const barX=-barW*.5;
+ const barY=Math.round(spriteTopY*scale)-10;
+
+ ctx.save();
+ ctx.scale(invScale,invScale);
+ ctx.globalAlpha=boss||damaged?0.96:0.74;
+ traceHpRoundedRect(ctx,barX-1,barY-1,barW+2,barH+2,barH*.55+1);
+ ctx.fillStyle='rgba(5,11,22,0.86)';
+ ctx.fill();
+
+ if(hpRatio>0){
+  const fillW=Math.max(2,barW*hpRatio);
+  const armored=options.zombie?.kind==='armored'||h.type==='RUNAWAY_CART';
+  const barGrad=ctx.createLinearGradient?.(barX,barY,barX+barW,barY);
+  if(barGrad&&typeof barGrad.addColorStop==='function'){
+   if(boss){
+    barGrad.addColorStop(0,'#f472b6');
+    barGrad.addColorStop(1,'#fbbf24');
+   }else if(armored){
+    barGrad.addColorStop(0,'#f59e0b');
+    barGrad.addColorStop(1,'#fde047');
+   }else{
+    barGrad.addColorStop(0,'#e11d48');
+    barGrad.addColorStop(1,'#fb7185');
+   }
+   ctx.fillStyle=barGrad;
+  }else{
+   ctx.fillStyle=boss?'#ffa2c7':armored?'#fbbf24':'#fb7185';
+  }
+  traceHpRoundedRect(ctx,barX,barY,fillW,barH,barH*.5);
+  ctx.fill();
+ }
+
+ if(boss){
+  // Phase-2 threshold tick mark at 50% HP.
+  ctx.fillStyle='rgba(255,255,255,0.72)';
+  ctx.fillRect(-0.5,barY-1,1.2,barH+2);
+ }
+
+ traceHpRoundedRect(ctx,barX-0.5,barY-0.5,barW+1,barH+1,barH*.55);
+ ctx.strokeStyle=(h.hitFlashTimer??0)>0?'rgba(224,250,255,0.88)':'rgba(148,197,226,0.34)';
+ ctx.lineWidth=1;
+ ctx.stroke();
+ ctx.restore();
  ctx.restore();
 }

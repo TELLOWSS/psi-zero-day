@@ -1,8 +1,11 @@
 import type { Hazard } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
+import type { OmegaBladeComboStep } from '../domain/omega-protocol-blade';
 import {
  OMEGA_FIELD_INTERACT_RADIUS,
  omegaFieldCurrentStep,
+ omegaFieldScreenMoveToWorld,
+ type OmegaFieldObstacle,
  type OmegaFieldPoint,
 } from '../domain/omega-protocol-field';
 import {
@@ -18,6 +21,20 @@ import {
  type OmegaStyleTier,
 } from '../domain/omega-protocol-zero-signal';
 import type { OmegaBladeStrike, OmegaProtocolCombatSession } from './omega-protocol-combat';
+
+export type OmegaWeaponMode = 'rapid' | 'focus';
+
+export interface OmegaActiveCasing {
+ x: number;
+ y: number;
+ vx: number;
+ vy: number;
+ z: number;
+ vz: number;
+ readonly colorHex: string;
+ age: number;
+ readonly duration: number;
+}
 
 export type OmegaDirectorEventKind =
  | 'gunshot'
@@ -35,7 +52,10 @@ export type OmegaDirectorEventKind =
  | 'wave_clear'
  | 'victory'
  | 'defeat'
- | 'auto_interact';
+ | 'auto_interact'
+ | 'rail_burst'
+ | 'weapon_mode'
+ | 'weave_bonus';
 
 export interface OmegaDirectorEvent {
  readonly kind: OmegaDirectorEventKind;
@@ -160,9 +180,60 @@ export interface OmegaZeroSignalHudSnapshot {
  readonly finalGrade: OmegaStyleTier;
  readonly radioBanner: { readonly text: string; readonly accentHex: string; readonly seriesTag: string } | null;
  readonly activeCalloutsCount: number;
+ readonly weaponMode: OmegaWeaponMode;
+ readonly railCharge: number;
+ readonly railChargesReady: number;
+ readonly detonateReadyCount: number;
+ readonly nextBladeCombo: OmegaBladeComboStep;
+ readonly weaveActiveRemaining: number;
+ readonly lockedTargetId: string | null;
+ readonly railBurstsFired: number;
 }
 
 const RANK_ORDER: readonly OmegaStyleTier[] = ['D', 'C', 'B', 'A', 'S', 'SS', 'OMEGA'];
+
+export function clipRayAgainstObstacles(
+ origin: OmegaFieldPoint,
+ dirX: number,
+ dirY: number,
+ maxLength: number,
+ obstacles: readonly OmegaFieldObstacle[],
+ radius = 4,
+): number {
+ let visible = maxLength;
+ if (!(visible > 0)) return 0;
+ for (const o of obstacles) {
+  const r = Math.max(0, radius);
+  const bounds = [
+   { p: origin.x, v: dirX, min: o.x - r, max: o.x + o.width + r },
+   { p: origin.y, v: dirY, min: o.y - r, max: o.y + o.height + r },
+  ];
+  let enter = 0;
+  let exit = visible;
+  let intersects = true;
+  for (const b of bounds) {
+   if (Math.abs(b.v) < 1e-9) {
+    if (b.p < b.min || b.p > b.max) {
+     intersects = false;
+     break;
+    }
+    continue;
+   }
+   const t0 = (b.min - b.p) / b.v;
+   const t1 = (b.max - b.p) / b.v;
+   enter = Math.max(enter, Math.min(t0, t1));
+   exit = Math.min(exit, Math.max(t0, t1));
+   if (exit < enter) {
+    intersects = false;
+    break;
+   }
+  }
+  if (intersects && enter <= exit) {
+   visible = Math.min(visible, Math.max(0, enter - 2));
+  }
+ }
+ return visible;
+}
 
 export class OmegaZeroSignalDirector {
  readonly loadoutId: OmegaLoadoutId;
@@ -191,6 +262,12 @@ export class OmegaZeroSignalDirector {
  private overclockRemaining = 0;
  private slowMoRemaining = 0;
  private phantomGuardCooldown = 0;
+ private weaponMode: OmegaWeaponMode = 'rapid';
+ private railCharge = 60;
+ private railBurstsFired = 0;
+ private weaveActiveRemaining = 0;
+ private lockedTargetId: string | null = null;
+ private casingSeed = 1;
 
  private kills = 0;
  private detonationsCount = 0;
@@ -224,6 +301,7 @@ export class OmegaZeroSignalDirector {
  readonly orbs: OmegaActiveOrb[] = [];
  readonly domes: OmegaActiveDome[] = [];
  readonly callouts: OmegaFloatingCallout[] = [];
+ readonly casings: OmegaActiveCasing[] = [];
 
  private waveIdSeq = 1;
  private pendingEvents: OmegaDirectorEvent[] = [];
@@ -239,6 +317,232 @@ export class OmegaZeroSignalDirector {
 
  markCount(hazardId: string): number {
   return this.marks.get(hazardId) ?? 0;
+ }
+
+ getWeaponMode(): OmegaWeaponMode {
+  return this.weaponMode;
+ }
+
+ markedHazardIds(): ReadonlySet<string> {
+  const ids = new Set<string>();
+  for (const [id, count] of this.marks.entries()) {
+   if (count > 0) ids.add(id);
+  }
+  return ids;
+ }
+
+ private spawnCasing(x: number, y: number, angle: number, colorHex: string): void {
+  const s = this.casingSeed++;
+  const ejectAng = angle - Math.PI * 0.55 + Math.sin(s * 2.13) * 0.35;
+  const spd = 72 + (s % 4) * 14;
+  this.casings.push({
+   x,
+   y,
+   vx: Math.cos(ejectAng) * spd,
+   vy: Math.sin(ejectAng) * spd * 0.72,
+   z: 22,
+   vz: 85 + (s % 3) * 18,
+   colorHex,
+   age: 0,
+   duration: 0.42,
+  });
+  if (this.casings.length > 18) this.casings.shift();
+ }
+
+ toggleWeaponMode(session?: OmegaProtocolCombatSession): OmegaWeaponMode {
+  this.weaponMode = this.weaponMode === 'rapid' ? 'focus' : 'rapid';
+  if (session) {
+   const p = session.engine.state.player;
+   this.pushCallout(
+    p.x,
+    p.y - 68,
+    this.weaponMode === 'focus' ? '🎯 집중 관통 모드' : '🔫 연사 기동 모드',
+    this.weaponMode === 'focus' ? '#fbbf24' : '#67e8f9',
+    0.85,
+   );
+  }
+  this.pendingEvents.push({ kind: 'weapon_mode', detail: this.weaponMode });
+  return this.weaponMode;
+ }
+
+ resolveLockedTarget(session: OmegaProtocolCombatSession): Hazard | null {
+  const state = session.engine.state;
+  const p = state.player;
+  const maxRange = this.weaponMode === 'focus' ? 490 : 455;
+  const obstacles = session.field?.plan.obstacles ?? [];
+  let best: Hazard | null = null;
+  let bestScore = Infinity;
+  for (const h of state.hazards) {
+   if (h.hp <= 0) continue;
+   const dx = h.x - p.x;
+   const dy = h.y - p.y;
+   const dist = Math.hypot(dx, dy);
+   if (dist > maxRange) continue;
+   if (obstacles.length > 0 && dist > 1) {
+    const ux = dx / dist;
+    const uy = dy / dist;
+    const clearDist = clipRayAgainstObstacles(p, ux, uy, dist, obstacles, 2);
+    if (clearDist + Math.max(4, h.radius) < dist - 4) continue;
+   }
+   if (this.weaponMode === 'focus') {
+    const bossWeight = h.isStageBoss ? -8000 : 0;
+    const armoredWeight =
+     session.zombieBrain(h.id)?.kind === 'armored' || h.type === 'RUNAWAY_CART' ? -3000 : 0;
+    const markWeight = (this.marks.get(h.id) ?? 0) > 0 ? -900 : 0;
+    const score = bossWeight + armoredWeight + markWeight + dist;
+    if (score < bestScore) {
+     bestScore = score;
+     best = h;
+    }
+   } else {
+    if (dist < bestScore) {
+     bestScore = dist;
+     best = h;
+    }
+   }
+  }
+  return best;
+ }
+
+ fireRailBurst(
+  session: OmegaProtocolCombatSession,
+  aimWorld?: Readonly<{ x: number; y: number }> | null,
+ ): boolean {
+  const state = session.engine.state;
+  if (session.run.phase !== 'battle' || state.phase !== 'playing' || session.gateTransit) {
+   return false;
+  }
+  if (this.railCharge < 50) return false;
+
+  const p = state.player;
+  const hazards = state.hazards;
+  let ux = 1;
+  let uy = 0;
+
+  if (aimWorld && Number.isFinite(aimWorld.x) && Number.isFinite(aimWorld.y)) {
+   const dx = aimWorld.x - p.x;
+   const dy = aimWorld.y - p.y;
+   const d = Math.hypot(dx, dy);
+   if (d > 8) {
+    ux = dx / d;
+    uy = dy / d;
+   }
+  } else {
+   const locked =
+    this.resolveLockedTarget(session) ??
+    hazards
+     .filter((h) => h.hp > 0)
+     .sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0] ??
+    null;
+   if (locked) {
+    const dx = locked.x - p.x;
+    const dy = locked.y - p.y;
+    const d = Math.hypot(dx, dy);
+    if (d > 1e-3) {
+     ux = dx / d;
+     uy = dy / d;
+    }
+   } else {
+    const worldFacing = session.field
+     ? omegaFieldScreenMoveToWorld(session.facing.x, session.facing.y)
+     : session.facing;
+    const flen = Math.hypot(worldFacing.x, worldFacing.y);
+    if (flen > 1e-3) {
+     ux = worldFacing.x / flen;
+     uy = worldFacing.y / flen;
+    }
+   }
+  }
+
+  this.railCharge = Math.max(0, this.railCharge - 50);
+  this.railBurstsFired++;
+  this.weaveActiveRemaining = 2.6;
+
+  const obstacles = session.field?.plan.obstacles ?? [];
+  const maxLen = 490;
+  const beamLen = clipRayAgainstObstacles(p, ux, uy, maxLen, obstacles, 4);
+  const startX = p.x + ux * 14;
+  const startY = p.y + uy * 14;
+  const endX = p.x + ux * beamLen;
+  const endY = p.y + uy * beamLen;
+
+  const struck: { hazard: Hazard; along: number }[] = [];
+  for (const h of hazards) {
+   if (h.hp <= 0) continue;
+   const rx = h.x - p.x;
+   const ry = h.y - p.y;
+   const along = rx * ux + ry * uy;
+   if (along < -h.radius || along > beamLen + h.radius) continue;
+   const perp = Math.abs(rx * -uy + ry * ux);
+   if (perp <= Math.max(22, h.radius + 14)) {
+    struck.push({ hazard: h, along });
+   }
+  }
+  struck.sort((a, b) => a.along - b.along);
+
+  let hitCount = 0;
+  const baseDmg = (this.weaponMode === 'focus' ? 58 : 44) * Math.min(2, p.damageMultiplier);
+  for (let i = 0; i < struck.length; i++) {
+   const h = struck[i]!.hazard;
+   const armored =
+    session.zombieBrain(h.id)?.kind === 'armored' || h.type === 'RUNAWAY_CART';
+   let dmg = Math.round(baseDmg * (armored ? 1.25 : 1.0));
+   if (h.isStageBoss) {
+    dmg = Math.min(dmg, Math.max(18, Math.round(h.maxHp * 0.055)));
+   }
+   const dealt = session.engine.damageProtocolConstruct(h.id, dmg);
+   if (dealt <= 0) continue;
+   hitCount++;
+   if (h.hp > 0) {
+    const addStacks = i === 0 ? 3 : 2;
+    this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + addStacks));
+   }
+  }
+
+  const beamAngle = Math.atan2(uy, ux);
+  const isFocus = this.weaponMode === 'focus';
+  this.beams.push({
+   x1: startX,
+   y1: startY - 30,
+   x2: endX,
+   y2: endY - 26,
+   colorRgb: isFocus ? '251,191,36' : '103,232,249',
+   isPillar: false,
+   age: 0,
+   duration: 0.24,
+  });
+  for (let c = 0; c < 3; c++) {
+   this.spawnCasing(p.x, p.y, beamAngle + (c - 1) * 0.14, isFocus ? '#fde047' : '#7dd3fc');
+  }
+  if (struck[0]) {
+   this.detonations.push({
+    x: struck[0].hazard.x,
+    y: struck[0].hazard.y,
+    radius: 56,
+    stacks: 2,
+    age: 0,
+    duration: 0.24,
+   });
+  }
+
+  this.comboCount += Math.max(1, hitCount);
+  this.maxCombo = Math.max(this.maxCombo, this.comboCount);
+  this.comboTimer = 3.5;
+  this.addStyle(hitCount > 0 ? 85 + hitCount * 35 : 25);
+  this.strikerCharge = Math.min(100, this.strikerCharge + (hitCount > 0 ? 8 + hitCount * 4 : 3));
+  this.triggerHitstop(hitCount > 0 ? 0.044 : 0.018, hitCount > 0 ? 0.34 : 0.14, 11, ux, uy);
+  this.zoomPunch = Math.max(this.zoomPunch, 0.04);
+  if (hitCount > 0) {
+   this.pushCallout(
+    struck[0]!.hazard.x,
+    struck[0]!.hazard.y - 62,
+    hitCount > 1 ? `⚡ RAIL PIERCE ×${hitCount}!` : '⚡ SIGMA RAIL!',
+    isFocus ? '#fbbf24' : '#67e8f9',
+    0.95,
+   );
+  }
+  this.pendingEvents.push({ kind: 'rail_burst', detail: this.weaponMode, numeric: hitCount });
+  return true;
  }
 
  currentOverclockRemaining(): number {
@@ -343,6 +647,7 @@ export class OmegaZeroSignalDirector {
   for (const ev of feedback) {
    if (ev.phase === 'launch') {
     this.pendingEvents.push({ kind: 'gunshot', detail: this.overclockRemaining > 0 ? 'overclock' : 'normal' });
+    this.spawnCasing(ev.x, ev.y, ev.angle, this.weaponMode === 'focus' ? '#fbbf24' : '#67e8f9');
     continue;
    }
    if (ev.phase !== 'impact' || !ev.targetId) continue;
@@ -360,13 +665,28 @@ export class OmegaZeroSignalDirector {
    }
 
    const prev = this.marks.get(ev.targetId) ?? 0;
-   const nextMark = Math.min(3, prev + (this.overclockRemaining > 0 ? 2 : 1));
+   const focusBonusMark = this.weaponMode === 'focus' && material !== 'normal' ? 1 : 0;
+   const nextMark = Math.min(3, prev + (this.overclockRemaining > 0 ? 2 : 1) + focusBonusMark);
    this.marks.set(ev.targetId, nextMark);
    this.comboCount++;
    this.maxCombo = Math.max(this.maxCombo, this.comboCount);
    this.comboTimer = 3.2;
    this.addStyle(22);
    this.strikerCharge = Math.min(100, this.strikerCharge + 3.2 * this.chargeRateMultiplier());
+   this.railCharge = Math.min(
+    100,
+    this.railCharge + (this.weaponMode === 'rapid' ? 13 : 9) * (this.overclockRemaining > 0 ? 1.35 : 1),
+   );
+
+   if (this.weaponMode === 'focus' && struckHazard && struckHazard.hp > 0) {
+    const focusDmg =
+     material === 'boss'
+      ? Math.min(14, Math.max(4, Math.round(struckHazard.maxHp * 0.012)))
+      : material === 'armored'
+        ? 14
+        : 8;
+    session.engine.damageProtocolConstruct(struckHazard.id, focusDmg);
+   }
 
    if (this.overclockRemaining > 0) {
     // Piercing railgun arc to nearest second target behind/near struck enemy.
@@ -455,6 +775,7 @@ export class OmegaZeroSignalDirector {
   this.maxCombo = Math.max(this.maxCombo, this.comboCount);
   this.comboTimer = 3.5;
   this.strikerCharge = Math.min(100, this.strikerCharge + 24);
+  this.railCharge = Math.min(100, this.railCharge + 50);
   session.engine.state.ultimateCharge = Math.min(
    session.engine.state.maxUltimateCharge,
    session.engine.state.ultimateCharge + 18,
@@ -565,6 +886,15 @@ export class OmegaZeroSignalDirector {
    this.pendingEvents.push({ kind: 'detonation', numeric: stacks });
   }
 
+  if (markedTargets.length > 0 && this.weaveActiveRemaining > 0) {
+   this.weaveActiveRemaining = 0;
+   this.railCharge = Math.min(100, this.railCharge + 35);
+   this.shield = Math.min(this.maxShield, this.shield + 8);
+   this.addStyle(120);
+   this.pendingEvents.push({ kind: 'weave_bonus' });
+   this.pushCallout(strike.x, strike.y - 72, '⚡ GUN-BLADE WEAVE!', '#fde047', 1.0);
+  }
+
   // 2. Empowers close strike if Overclocked from Phantom Dodge.
   if (this.overclockRemaining > 0 && strike.hits > 0) {
    for (const h of session.engine.state.hazards) {
@@ -603,6 +933,10 @@ export class OmegaZeroSignalDirector {
    this.comboTimer = 3.4;
    this.addStyle(35 * strike.hits);
    this.strikerCharge = Math.min(100, this.strikerCharge + 5 * strike.hits * this.chargeRateMultiplier());
+   this.railCharge = Math.min(
+    100,
+    this.railCharge + 14 * strike.hits + (strike.combo === 3 ? 18 : 0),
+   );
    if (markedTargets.length === 0) {
     this.triggerHitstop(
      strike.combo === 3 ? 0.048 : 0.028,
@@ -835,6 +1169,7 @@ export class OmegaZeroSignalDirector {
   if (this.impactFlash > 0) this.impactFlash = Math.max(0, this.impactFlash - dt * 3.4);
   if (this.slowMoRemaining > 0) this.slowMoRemaining = Math.max(0, this.slowMoRemaining - dt);
   if (this.overclockRemaining > 0) this.overclockRemaining = Math.max(0, this.overclockRemaining - dt);
+  if (this.weaveActiveRemaining > 0) this.weaveActiveRemaining = Math.max(0, this.weaveActiveRemaining - dt);
   if (this.phantomGuardCooldown > 0) this.phantomGuardCooldown = Math.max(0, this.phantomGuardCooldown - dt);
   if (this.cameraShake > 0) this.cameraShake = Math.max(0, this.cameraShake - dt * 36);
   if (this.zoomPunch > 0) this.zoomPunch = Math.max(0, this.zoomPunch - dt * 0.25);
@@ -849,10 +1184,14 @@ export class OmegaZeroSignalDirector {
    if (this.radioBanner.remaining <= 0) this.radioBanner = null;
   }
 
-  // Gentle passive recharge of shield out-of-combat + combo decay.
+  // Gentle passive recharge of shield out-of-combat, rail capacitor + combo decay.
   if (state.phase === 'playing') {
    this.strikerCharge = Math.min(100, this.strikerCharge + dt * 2.2 * this.chargeRateMultiplier());
    const aliveEnemies = state.hazards.filter((h) => h.hp > 0).length;
+   if (aliveEnemies > 0) {
+    this.railCharge = Math.min(100, this.railCharge + dt * 3.5);
+   }
+   this.lockedTargetId = aliveEnemies > 0 ? (this.resolveLockedTarget(session)?.id ?? null) : null;
    if (aliveEnemies === 0 && this.shield < this.maxShield) {
     this.shield = Math.min(this.maxShield, this.shield + dt * 6);
    }
@@ -1019,6 +1358,21 @@ export class OmegaZeroSignalDirector {
    c.age += dt;
    if (c.age >= c.duration) this.callouts.splice(i, 1);
   }
+  for (let i = this.casings.length - 1; i >= 0; i--) {
+   const c = this.casings[i]!;
+   c.age += dt;
+   c.x += c.vx * dt;
+   c.y += c.vy * dt;
+   c.vz -= 420 * dt;
+   c.z += c.vz * dt;
+   if (c.z < 0) {
+    c.z = 0;
+    c.vz = Math.abs(c.vz) * 0.42;
+    c.vx *= 0.65;
+    c.vy *= 0.65;
+   }
+   if (c.age >= c.duration) this.casings.splice(i, 1);
+  }
 
   const timeScale = this.slowMoRemaining > 0 ? 0.24 : 1.0;
   const events = this.pendingEvents;
@@ -1042,6 +1396,14 @@ export class OmegaZeroSignalDirector {
    peakPoints: this.peakPoints,
    victory,
   });
+  const player = session.engine.state.player;
+  let detonateReadyCount = 0;
+  for (const h of session.engine.state.hazards) {
+   if (h.hp <= 0) continue;
+   if ((this.marks.get(h.id) ?? 0) > 0 && Math.hypot(h.x - player.x, h.y - player.y) <= 178) {
+    detonateReadyCount++;
+   }
+  }
   return {
    loadoutId: this.loadoutId,
    dailyMode: this.dailyMode,
@@ -1077,6 +1439,14 @@ export class OmegaZeroSignalDirector {
       }
     : null,
    activeCalloutsCount: this.callouts.length,
+   weaponMode: this.weaponMode,
+   railCharge: Math.floor(this.railCharge),
+   railChargesReady: Math.floor(this.railCharge / 50),
+   detonateReadyCount,
+   nextBladeCombo: session.nextBladeCombo,
+   weaveActiveRemaining: this.weaveActiveRemaining,
+   lockedTargetId: this.lockedTargetId,
+   railBurstsFired: this.railBurstsFired,
   };
  }
 }

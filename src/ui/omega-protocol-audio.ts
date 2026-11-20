@@ -461,6 +461,20 @@ export class OmegaProceduralAudio {
   }
  }
 
+ playRailBurst(focusMode = false): void {
+  this.playSample('gun_overclock', { gain: 0.56, rate: focusMode ? 0.86 : 1.02 });
+  this.playSample('striker_snipe', { gain: 0.44, rate: focusMode ? 1.05 : 1.18, delay: 0.015 });
+  this.tone(focusMode ? 1480 : 1180, focusMode ? 88 : 112, 0.24, 'sawtooth', 0.15);
+  this.noiseBurst(focusMode ? 3200 : 2600, 1.4, 0.14, 0.14, 0.01);
+ }
+
+ playWeaponSwitch(mode: 'rapid' | 'focus'): void {
+  const start = mode === 'focus' ? 540 : 760;
+  const end = mode === 'focus' ? 980 : 510;
+  this.tone(start, end, 0.075, 'triangle', 0.13);
+  this.tone(end * 1.25, end * 1.25, 0.055, 'sine', 0.08, 0.045);
+ }
+
  playHitImpact(material: OmegaHitMaterial = 'normal'): void {
   const nowMs = Date.now();
   if (material === 'normal' && nowMs - this.lastImpactAt < 48) return;

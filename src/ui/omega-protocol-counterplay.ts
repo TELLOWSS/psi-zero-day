@@ -128,28 +128,114 @@ export function drawOmegaCounterplayCues(
  ctx:CanvasRenderingContext2D,cues:readonly OmegaCounterplayCue[],gameTime:number,
  obstacles:readonly OmegaFieldObstacle[]=[],
 ):void{
- const pulse=.65+.18*Math.sin(gameTime*12);
+ const t=Number.isFinite(gameTime)?gameTime:0;
+ const pulse=.72+.28*Math.sin(t*13);
  for(const cue of cues){
   const active=cue.phase==='charge';
-  const color=cue.kind==='cart'?'#ffc66e':'#ff90d6';
-  ctx.save();
-  ctx.globalAlpha=active?.9:pulse;
-  ctx.strokeStyle=color;ctx.lineWidth=active?6:4;
-  ctx.setLineDash(active?[]:[12,9]);
-  ctx.beginPath();ctx.arc(cue.x,cue.y,Math.max(cue.kind==='cart'?32:25,cue.radius),0,Math.PI*2);ctx.stroke();
-  ctx.setLineDash([]);
+  const rgb=cue.kind==='cart'?'255,176,74':'255,84,126';
+  const hiHex=cue.kind==='cart'?'#ffd58a':'#ff9ebb';
+  const baseRadius=Math.max(cue.kind==='cart'?30:23,cue.radius*0.86);
+  const angle=Math.atan2(cue.directionY,cue.directionX);
   const visibleLength=omegaCounterplayVisibleLength(cue,obstacles);
-  if(visibleLength>=20){
-   // Solid cover ends the cue before the actual physical collision boundary.
-   const ex=cue.x+cue.directionX*visibleLength;
-   const ey=cue.y+cue.directionY*visibleLength;
-   ctx.lineWidth=active?7:4;ctx.setLineDash(active?[]:[12,8]);
-   ctx.beginPath();ctx.moveTo(cue.x,cue.y);ctx.lineTo(ex,ey);ctx.stroke();
-   ctx.setLineDash([]);
-   ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(ex,ey);
-   ctx.lineTo(ex-cue.directionX*18-cue.directionY*10,ey-cue.directionY*18+cue.directionX*10);
-   ctx.lineTo(ex-cue.directionX*18+cue.directionY*10,ey-cue.directionY*18-cue.directionX*10);
-   ctx.closePath();ctx.fill();
+
+  ctx.save();
+  ctx.translate(cue.x,cue.y);
+
+  // 1. Soft floor-projected holographic danger pool around attacker feet.
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  const poolGrad=ctx.createRadialGradient?.(0,0,4,0,0,baseRadius*1.12);
+  if(poolGrad&&typeof poolGrad.addColorStop==='function'){
+   poolGrad.addColorStop(0,`rgba(${rgb},${(active?0.24:0.13*pulse).toFixed(3)})`);
+   poolGrad.addColorStop(0.72,`rgba(${rgb},${(active?0.16:0.09*pulse).toFixed(3)})`);
+   poolGrad.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=poolGrad;
+  }else{
+   ctx.fillStyle=`rgba(${rgb},${(active?0.18:0.10).toFixed(3)})`;
+  }
+  ctx.beginPath();ctx.arc(0,0,baseRadius*1.12,0,Math.PI*2);ctx.fill();
+
+  // Crisp 1.6px outer perimeter ring + converging countdown telegraph ring.
+  ctx.strokeStyle=`rgba(${rgb},${(active?0.78:0.52*pulse).toFixed(3)})`;
+  ctx.lineWidth=active?2.0:1.5;
+  ctx.setLineDash(active?[]:[8,6]);
+  ctx.beginPath();ctx.arc(0,0,baseRadius,0,Math.PI*2);ctx.stroke();
+  ctx.setLineDash([]);
+
+  if(!active&&cue.seconds>0){
+   const shrink=Math.max(0.28,Math.min(1,cue.seconds/0.65));
+   ctx.strokeStyle=`rgba(255,240,224,${(0.55*pulse).toFixed(3)})`;
+   ctx.lineWidth=1.4;
+   ctx.beginPath();
+   ctx.arc(0,0,baseRadius*shrink,angle-0.95,angle+0.95);
+   ctx.stroke();
+  }
+  ctx.restore();
+
+  // 2. Obstacle-clipped tactical charge corridor (replaces raw circle + stick arrow).
+  if(visibleLength>=20&&Number.isFinite(angle)){
+   const halfW=Math.min(20,Math.max(11,cue.bodyRadius*0.68));
+   const farHalfW=halfW*(active?0.84:0.68);
+
+   ctx.save();
+   ctx.rotate(angle);
+   ctx.globalCompositeOperation='lighter';
+
+   // Tapered holographic danger lane fill clipped strictly at cover boundary.
+   ctx.beginPath();
+   ctx.moveTo(0,-halfW);
+   ctx.lineTo(visibleLength,-farHalfW);
+   ctx.lineTo(visibleLength,farHalfW);
+   ctx.lineTo(0,halfW);
+   ctx.closePath();
+
+   const laneGrad=ctx.createLinearGradient?.(0,0,visibleLength,0);
+   if(laneGrad&&typeof laneGrad.addColorStop==='function'){
+    laneGrad.addColorStop(0,`rgba(${rgb},${(active?0.34:0.20*pulse).toFixed(3)})`);
+    laneGrad.addColorStop(0.65,`rgba(${rgb},${(active?0.22:0.12*pulse).toFixed(3)})`);
+    laneGrad.addColorStop(1,`rgba(${rgb},0.03)`);
+    ctx.fillStyle=laneGrad;
+   }else{
+    ctx.fillStyle=`rgba(${rgb},${(active?0.22:0.13).toFixed(3)})`;
+   }
+   ctx.fill();
+
+   // Clip animated scrolling chevrons inside exact lane bounds so cover stops visuals cleanly.
+   ctx.save();
+   ctx.clip();
+   const spacing=30;
+   const scroll=(t*(active?220:120))%spacing;
+   ctx.strokeStyle=`rgba(255,244,232,${(active?0.74:0.48*pulse).toFixed(3)})`;
+   ctx.lineWidth=active?2.0:1.5;
+   ctx.lineCap='round';ctx.lineJoin='round';
+   for(let d=scroll-spacing*0.4;d<visibleLength-4;d+=spacing){
+    if(d<8)continue;
+    const frac=d/Math.max(1,visibleLength);
+    const cw=(halfW+(farHalfW-halfW)*frac)*0.56;
+    ctx.beginPath();
+    ctx.moveTo(d-8,-cw);ctx.lineTo(d+4,0);ctx.lineTo(d-8,cw);
+    ctx.stroke();
+   }
+   ctx.restore();
+
+   // Crisp dual laser boundary rails along lane edges.
+   ctx.strokeStyle=`rgba(${rgb},${(active?0.82:0.54*pulse).toFixed(3)})`;
+   ctx.lineWidth=active?1.8:1.3;
+   ctx.beginPath();
+   ctx.moveTo(0,-halfW);ctx.lineTo(visibleLength,-farHalfW);
+   ctx.moveTo(0,halfW);ctx.lineTo(visibleLength,farHalfW);
+   ctx.stroke();
+
+   // Glowing terminal bracket at clipped endpoint (or arrowhead cap).
+   ctx.strokeStyle=hiHex;
+   ctx.lineWidth=2.0;
+   ctx.beginPath();
+   ctx.moveTo(visibleLength-7,-farHalfW*0.85);
+   ctx.lineTo(visibleLength,0);
+   ctx.lineTo(visibleLength-7,farHalfW*0.85);
+   ctx.stroke();
+
+   ctx.restore();
   }
   ctx.restore();
  }

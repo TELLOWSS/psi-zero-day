@@ -6,6 +6,7 @@ import {OMEGA_FIELD_WIDTH as W,OMEGA_FIELD_HEIGHT as H,omegaFieldCanInteract,ome
 import {omegaFieldNextRoute} from '../domain/omega-protocol-navigation';
 import {drawOmegaSectorOneGround,drawOmegaSectorOneObstacleDetail} from './omega-protocol-sector-one-scene';
 import {omegaDrawAuthoredFloor,omegaDrawAuthoredProp} from './omega-protocol-authored-scene';
+import {traceRoundedRect} from './omega-protocol-navigation-hud';
 
 /**
  * Original technical field art, no borrowed game assets.
@@ -120,6 +121,33 @@ function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:st
  if(sectorOne)drawOmegaSectorOneObstacleDetail(ctx,o);
  ctx.restore();
 }
+function drawHolographicBadge(
+ ctx:CanvasRenderingContext2D,
+ x:number,
+ y:number,
+ text:string,
+ colorHex:string,
+ accentRgb:string,
+ font='800 12px system-ui',
+ minW=34,
+):void{
+ ctx.save();
+ ctx.font=font;
+ ctx.textAlign='center';
+ const measured=ctx.measureText?.(text)?.width;
+ const w=Math.max(minW,(typeof measured==='number'&&Number.isFinite(measured)?measured:text.length*8)+16);
+ const h=21;
+ traceRoundedRect(ctx,x-w*0.5,y-h*0.72,w,h,7);
+ ctx.fillStyle='rgba(6,15,28,0.84)';
+ ctx.fill();
+ ctx.strokeStyle=`rgba(${accentRgb},0.72)`;
+ ctx.lineWidth=1.2;
+ ctx.stroke();
+ ctx.fillStyle=colorHex;
+ ctx.fillText(text,x,y);
+ ctx.restore();
+}
+
 /** Highlight a field objective and the currently locked/open extraction gate. */
 export function drawOmegaFieldMission(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,
@@ -127,78 +155,163 @@ export function drawOmegaFieldMission(
  allowGlow=true,
 ):void{
  const active=omegaFieldCurrentStep(plan,progress);
- const pulse=.65+.35*Math.sin(seconds*3);
+ const pulse=.68+.32*Math.sin(seconds*3.6);
+ const isExit=progress.phase==='exit';
+ const navRgb=isExit?'110,231,183':'103,232,249';
+ const navHex=isExit?'#8effd8':'#8ce9ff';
  ctx.save();
- // Compass-like in-world objective cue. It indicates bearing, NOT a
- // collision-free route through the scaffold/container cover.
- const destination=progress.phase==='exit'?plan.exit:active?.target;
+
+ // 1. Obstacle-aware holographic ground breadcrumb stream & near-hero directional arc.
+ // Note: rotate() is invoked ONLY when an actionable objective/exit is >100 units away.
+ const destination=isExit?plan.exit:active?.target;
  if(destination&&Number.isFinite(actor.x)&&Number.isFinite(actor.y)&&Number.isFinite(seconds)){
   const route=omegaFieldNextRoute(actor,destination,plan.obstacles,W,H);
   if(route&&route.length>100){
-   const dx=route.next.x-actor.x,dy=route.next.y-actor.y;
-   const distance=Math.hypot(dx,dy);
-   const ux=distance>0?dx/distance:0,uy=distance>0?dy/distance:0;
+   const pts=[actor,...route.waypoints];
    ctx.save();
-   ctx.translate(actor.x+ux*65,actor.y+uy*65);
-   ctx.rotate(Math.atan2(uy,ux));
-   ctx.globalAlpha=.73+.22*Math.sin(seconds*5);
-   if(allowGlow){
-    ctx.shadowColor=progress.phase==='exit'?'#7dffd5':'#7ddaf5';
-    ctx.shadowBlur=12;
-   }
-   ctx.strokeStyle=progress.phase==='exit'?'#8effd8':'#b2f3ff';
-   ctx.lineWidth=5;ctx.lineJoin='round';ctx.lineCap='round';
+   ctx.globalCompositeOperation='lighter';
+
+   // Flowing holographic conduit along collision-safe visibility graph route.
+   ctx.strokeStyle=`rgba(${navRgb},${(0.24+0.12*pulse).toFixed(3)})`;
+   ctx.lineWidth=4.5;
+   ctx.lineCap='round';ctx.lineJoin='round';
    ctx.beginPath();
-   ctx.moveTo(-12,-11);ctx.lineTo(8,0);ctx.lineTo(-12,11);
+   ctx.moveTo(pts[0]!.x,pts[0]!.y);
+   for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i]!.x,pts[i]!.y);
    ctx.stroke();
+
+   // Crisp inner bright centerline.
+   ctx.strokeStyle=`rgba(232,253,255,${(0.36+0.14*pulse).toFixed(3)})`;
+   ctx.lineWidth=1.4;
+   ctx.setLineDash([10,12]);
+   ctx.lineDashOffset=-(seconds*64)%22;
+   ctx.beginPath();
+   ctx.moveTo(pts[0]!.x,pts[0]!.y);
+   for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i]!.x,pts[i]!.y);
+   ctx.stroke();
+   ctx.setLineDash([]);
+
+   // Animated forward-scrolling directional chevrons spaced along route segments.
+   const spacing=58;
+   const flowOffset=(seconds*95)%spacing;
+   let carry=0;
+   for(let i=0;i<pts.length-1;i++){
+    const a=pts[i]!,b=pts[i+1]!;
+    const segDx=b.x-a.x,segDy=b.y-a.y;
+    const segLen=Math.hypot(segDx,segDy);
+    if(segLen<12)continue;
+    const ang=Math.atan2(segDy,segDx);
+    for(let dist=flowOffset;dist<segLen-18;dist+=spacing){
+     if(carry+dist<46)continue;
+     const frac=dist/segLen;
+     const cx=a.x+segDx*frac;
+     const cy=a.y+segDy*frac;
+     const fadeFrac=Math.sin(clamp((dist/spacing)%1,0.1,0.9)*Math.PI);
+     ctx.save();
+     ctx.translate(cx,cy);
+     ctx.rotate(ang);
+     ctx.strokeStyle=`rgba(${navRgb},${(0.56+0.34*fadeFrac).toFixed(3)})`;
+     ctx.lineWidth=2.4;
+     ctx.beginPath();
+     ctx.moveTo(-7,-7);ctx.lineTo(5,0);ctx.lineTo(-7,7);
+     ctx.stroke();
+     ctx.restore();
+    }
+    carry+=segLen;
+   }
+
+   // Sleek near-hero directional chevron crest pointing toward next corner/target.
+   const dx=route.next.x-actor.x,dy=route.next.y-actor.y;
+   const dist=Math.hypot(dx,dy);
+   const ux=dist>0?dx/dist:1,uy=dist>0?dy/dist:0;
+   ctx.save();
+   ctx.translate(actor.x+ux*58,actor.y+uy*58);
+   ctx.rotate(Math.atan2(uy,ux));
+   if(allowGlow){
+    ctx.shadowColor=isExit?'#7dffd5':'#7ddaf5';
+    ctx.shadowBlur=10;
+   }
+   ctx.strokeStyle=navHex;
+   ctx.lineWidth=2.6;ctx.lineJoin='round';ctx.lineCap='round';
+   ctx.beginPath();
+   ctx.moveTo(-10,-9);ctx.lineTo(7,0);ctx.lineTo(-10,9);
+   ctx.moveTo(-16,-6);ctx.lineTo(-4,0);ctx.lineTo(-16,6);
+   ctx.stroke();
+   ctx.restore();
+
    ctx.restore();
   }
  }
+
+ // 2. Console holographic floor pads & compact rounded status badges.
  for(const [index,step] of plan.event.steps.entries()){
   const target=step.target;
   const completed=index<progress.completedSteps;
   const activeStep=active?.id===step.id;
-  // The original collidable-world console now renders in depth order.
-  // This pass is ONLY a status glyph and interaction text, not a second
-  // flat square painted over AIRA and every nearby enemy.
-  if(allowGlow){
-   ctx.shadowColor=activeStep?'#6bf9ee':'#4f9dce';
-   ctx.shadowBlur=activeStep?12:0;
-  }
-  ctx.fillStyle=completed?'#8bf4c2':activeStep?'#8bedff':'#aab9c4';
-  ctx.font='bold 12px system-ui';ctx.textAlign='center';
-  ctx.fillText(completed?'✓':String(index+1),target.x,target.y-78);
-  ctx.shadowBlur=0;
+  const badgeColor=completed?'#8bf4c2':activeStep?'#9cf3ff':'#94aec2';
+  const badgeRgb=completed?'110,231,183':activeStep?'103,232,249':'126,162,188';
+
   if(activeStep){
-   ctx.strokeStyle='rgba(104,249,238,'+pulse+')';ctx.lineWidth=4;
-   ctx.beginPath();ctx.arc(target.x,target.y,69,0,Math.PI*2);ctx.stroke();
-   ctx.fillStyle='#b3ffff';ctx.font='bold 13px system-ui';
-   ctx.fillText(step.label,target.x,target.y+49);
+   ctx.save();
+   ctx.globalCompositeOperation='lighter';
+   const halo=ctx.createRadialGradient?.(target.x,target.y,10,target.x,target.y,78);
+   if(halo&&typeof halo.addColorStop==='function'){
+    halo.addColorStop(0,'rgba(103,232,249,0.22)');
+    halo.addColorStop(0.72,'rgba(103,232,249,0.08)');
+    halo.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=halo;
+    ctx.beginPath();ctx.ellipse(target.x,target.y+2,76,28,0,0,Math.PI*2);ctx.fill();
+   }
+   ctx.strokeStyle=`rgba(103,232,249,${(0.45+0.42*pulse).toFixed(3)})`;
+   ctx.lineWidth=2.2;
+   ctx.beginPath();ctx.ellipse(target.x,target.y+2,56+pulse*7,21+pulse*3,0,0,Math.PI*2);ctx.stroke();
+   ctx.setLineDash([8,6]);
+   ctx.lineDashOffset=-(seconds*28)%14;
+   ctx.strokeStyle='rgba(216,251,255,0.58)';
+   ctx.lineWidth=1.3;
+   ctx.beginPath();ctx.ellipse(target.x,target.y+2,42,15.5,0,0,Math.PI*2);ctx.stroke();
+   ctx.setLineDash([]);
+   ctx.restore();
+  }
+
+  drawHolographicBadge(
+   ctx,
+   target.x,
+   target.y-82,
+   completed?'✓':String(index+1),
+   badgeColor,
+   badgeRgb,
+   '800 11px system-ui',
+   24,
+  );
+  if(activeStep){
+   drawHolographicBadge(ctx,target.x,target.y+46,step.label,'#c7fbff','103,232,249','800 11px system-ui',74);
    if(omegaFieldCanInteract(actor,target,plan.obstacles)){
-    ctx.fillText('E / 조작',target.x,target.y+68);
+    drawHolographicBadge(ctx,target.x,target.y+69,'E · 조작','#fde68a','251,191,36','900 11px system-ui',62);
    }
   }
  }
+
+ // 3. Extraction portal holographic gate tag & interaction prompt.
  const exit=plan.exit;
- if(progress.exitUnlocked){
-  ctx.strokeStyle='#a4efd59d';ctx.lineWidth=4;ctx.setLineDash([15,9]);
-  ctx.beginPath();ctx.moveTo(plan.event.steps[plan.event.steps.length-1]!.target.x,plan.event.steps[plan.event.steps.length-1]!.target.y);ctx.lineTo(exit.x,exit.y);ctx.stroke();
-  ctx.setLineDash([]);
- }
- // Extraction portal is now a 3/4 device in the real Y-depth pass.
- ctx.fillStyle=progress.exitUnlocked?'#b3ffdf':'#ffbf8c';
- if(allowGlow){
-  ctx.shadowColor=progress.exitUnlocked?'#77ffc2':'#ffbd81';
-  ctx.shadowBlur=progress.exitUnlocked?8:0;
- }
- ctx.font='900 13px system-ui';
- ctx.fillText(progress.exitUnlocked?'EXIT OPEN':'LOCKED',exit.x,exit.y-126);
- ctx.shadowBlur=0;
+ const exitColor=progress.exitUnlocked?'#9efce0':'#ffc08e';
+ const exitRgb=progress.exitUnlocked?'110,231,183':'251,146,60';
+ drawHolographicBadge(
+  ctx,
+  exit.x,
+  exit.y-126,
+  progress.exitUnlocked?'EXIT OPEN':'LOCKED',
+  exitColor,
+  exitRgb,
+  '900 11px system-ui',
+  68,
+ );
  if(progress.exitUnlocked&&omegaFieldCanInteract(actor,exit,plan.obstacles)){
-  ctx.fillStyle='#b4ffe2';ctx.fillText('E / 진입',exit.x,exit.y+82);
+  drawHolographicBadge(ctx,exit.x,exit.y+74,'E · 구역 진입','#a7ffeb','110,231,183','900 11px system-ui',76);
  }
  ctx.restore();
 }
+
 /** Actor must be visually obscured by props when passing behind structures. */
 export function drawOmegaFieldOcclusion(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,actor:OmegaFieldPoint,
@@ -213,10 +326,13 @@ export function drawOmegaFieldOcclusion(
  }
 }
 
+function clamp(v:number,lo:number,hi:number):number{
+ return v<lo?lo:v>hi?hi:v;
+}
 
 /**
  * Physical boss danger zones: reads the SAME state used to apply HP damage.
- * This is combat UI/technical VFX, not a final cinematic boss character.
+ * Holographic tactical floor projections with animated timing rings & chevrons.
  */
 export function drawOmegaBossTelegraph(
  ctx:CanvasRenderingContext2D,
@@ -225,38 +341,100 @@ export function drawOmegaBossTelegraph(
 ):void{
  const warning=signal.phase==='warning',strike=signal.phase==='strike';
  if(!warning&&!strike)return;
- const pulse=.65+.25*Math.sin(time*11);
+ const t=Number.isFinite(time)?time:0;
+ const pulse=.65+.35*Math.sin(t*12);
+ const rgb=strike?'255,78,122':'255,186,84';
+ const edgeHex=strike?'#ff9bb8':'#ffe0a3';
+
  ctx.save();
- ctx.globalAlpha=warning ? 0.15+pulse*0.14 : 0.5;
- ctx.fillStyle=strike?'#ff4f70':'#ffbc66';
- ctx.strokeStyle=strike?'#ff86a1':'#ffd48e';
- ctx.lineWidth=strike?7:4;
- ctx.setLineDash(warning?[21,11]:[]);
+ ctx.globalCompositeOperation='lighter';
+
  if(signal.attack==='crane_drop'){
-  ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,signal.radius,0,Math.PI*2);
-  ctx.fill();ctx.stroke();
+  const r=Math.max(12,signal.radius);
+  const pool=ctx.createRadialGradient?.(signal.center.x,signal.center.y,4,signal.center.x,signal.center.y,r);
+  if(pool&&typeof pool.addColorStop==='function'){
+   pool.addColorStop(0,`rgba(${rgb},${(strike?0.42:0.14).toFixed(3)})`);
+   pool.addColorStop(0.74,`rgba(${rgb},${(strike?0.26:0.18*pulse).toFixed(3)})`);
+   pool.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=pool;
+  }else{
+   ctx.fillStyle=`rgba(${rgb},${strike?0.36:0.18})`;
+  }
+  ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,r,0,Math.PI*2);ctx.fill();
+
+  // Outer perimeter ring.
+  ctx.strokeStyle=`rgba(${rgb},${(strike?0.94:0.72*pulse).toFixed(3)})`;
+  ctx.lineWidth=strike?3.5:2.2;
+  ctx.setLineDash(warning?[16,9]:[]);
+  ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,r,0,Math.PI*2);ctx.stroke();
   ctx.setLineDash([]);
-  ctx.globalAlpha=warning ? 0.7 : 1;
-  ctx.beginPath();ctx.moveTo(signal.center.x-22,signal.center.y);
-  ctx.lineTo(signal.center.x+22,signal.center.y);
-  ctx.moveTo(signal.center.x,signal.center.y-22);
-  ctx.lineTo(signal.center.x,signal.center.y+22);ctx.stroke();
+
+  // Converging inner countdown ring during warning.
+  const shrink=warning?clamp(signal.timer/1.15,0.18,1):1;
+  ctx.strokeStyle=edgeHex;
+  ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.arc(signal.center.x,signal.center.y,r*shrink,0,Math.PI*2);ctx.stroke();
+
+  // Tactical impact crosshair ticks.
+  ctx.strokeStyle=edgeHex;
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(signal.center.x-18,signal.center.y);ctx.lineTo(signal.center.x-6,signal.center.y);
+  ctx.moveTo(signal.center.x+6,signal.center.y);ctx.lineTo(signal.center.x+18,signal.center.y);
+  ctx.moveTo(signal.center.x,signal.center.y-18);ctx.lineTo(signal.center.x,signal.center.y-6);
+  ctx.moveTo(signal.center.x,signal.center.y+6);ctx.lineTo(signal.center.x,signal.center.y+18);
+  ctx.stroke();
  }else{
   const r=signal.laneHalfWidth;
   const x=signal.lane==='vertical'?signal.center.x-r:0;
   const y=signal.lane==='horizontal'?signal.center.y-r:0;
   const width=signal.lane==='vertical'?r*2:W;
   const height=signal.lane==='horizontal'?r*2:H;
+
+  const corridorGrad=signal.lane==='horizontal'
+   ?ctx.createLinearGradient?.(x,y,x,y+height)
+   :ctx.createLinearGradient?.(x,y,x+width,y);
+  if(corridorGrad&&typeof corridorGrad.addColorStop==='function'){
+   corridorGrad.addColorStop(0,`rgba(${rgb},0.05)`);
+   corridorGrad.addColorStop(0.5,`rgba(${rgb},${(strike?0.42:0.20*pulse).toFixed(3)})`);
+   corridorGrad.addColorStop(1,`rgba(${rgb},0.05)`);
+   ctx.fillStyle=corridorGrad;
+  }else{
+   ctx.fillStyle=`rgba(${rgb},${strike?0.35:0.16})`;
+  }
   ctx.fillRect(x,y,width,height);
-  ctx.strokeRect(x,y,width,height);
+
+  // Twin boundary laser rails.
+  ctx.strokeStyle=`rgba(${rgb},${(strike?0.92:0.70*pulse).toFixed(3)})`;
+  ctx.lineWidth=strike?3:2;
+  ctx.setLineDash(warning?[18,10]:[]);
+  ctx.beginPath();
+  if(signal.lane==='horizontal'){
+   ctx.moveTo(x,y);ctx.lineTo(x+width,y);
+   ctx.moveTo(x,y+height);ctx.lineTo(x+width,y+height);
+  }else{
+   ctx.moveTo(x,y);ctx.lineTo(x,y+height);
+   ctx.moveTo(x+width,y);ctx.lineTo(x+width,y+height);
+  }
+  ctx.stroke();
   ctx.setLineDash([]);
-  ctx.globalAlpha=.8;
-  ctx.fillStyle=strike?'#ff90b0':'#ffe6b7';
-  // Alternating hazard stripes communicate direction without relying on color.
+
+  // Centerline surge beam + directional chevron markers along sweep axis.
+  ctx.strokeStyle=edgeHex;
+  ctx.lineWidth=strike?3.2:1.6;
   const span=signal.lane==='horizontal'?width:height;
-  for(let dist=0;dist<span;dist+=70){
-   if(signal.lane==='horizontal')ctx.fillRect(x+dist,y,8,height);
-   else ctx.fillRect(x,y+dist,width,8);
+  const step=88;
+  const flow=(t*(strike?260:110))%step;
+  for(let dist=flow;dist<span-20;dist+=step){
+   ctx.beginPath();
+   if(signal.lane==='horizontal'){
+    const cx=x+dist,cy=y+height*0.5;
+    ctx.moveTo(cx-10,cy-12);ctx.lineTo(cx+6,cy);ctx.lineTo(cx-10,cy+12);
+   }else{
+    const cx=x+width*0.5,cy=y+dist;
+    ctx.moveTo(cx-12,cy-10);ctx.lineTo(cx,cy+6);ctx.lineTo(cx+12,cy-10);
+   }
+   ctx.stroke();
   }
  }
  ctx.restore();

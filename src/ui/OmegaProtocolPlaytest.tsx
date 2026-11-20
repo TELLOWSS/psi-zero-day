@@ -13,7 +13,7 @@ import {drawOmegaFieldGround,drawOmegaFieldProp,drawOmegaFieldMission,drawOmegaB
 import {omegaFieldDepthOrder} from './omega-protocol-depth-scene';
 import {drawOmegaMissionDevice,drawOmegaExtractionUnit} from './omega-protocol-mission-visuals';
 import {omegaPrepareAuthoredScene} from './omega-protocol-authored-scene';
-import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus} from './omega-protocol-camera';
+import {omegaQuarterViewCamera,applyOmegaQuarterView,omegaCameraTargetZoom,type OmegaCameraFocus,type OmegaCameraState} from './omega-protocol-camera';
 import {drawOmegaProtocolEnemy} from './omega-protocol-enemy-render';
 import {omegaInfectedCandidateReview,omegaInfectedLabRequested,omegaInfectedSoloKind} from './omega-infected-candidate-review';
 import {omegaCounterplayCues,omegaNearestCounterplayCue,omegaDashAvailability,drawOmegaCounterplayCues} from './omega-protocol-counterplay';
@@ -68,6 +68,8 @@ import {
 import {OmegaProceduralAudio,type OmegaHitMaterial} from './omega-protocol-audio';
 import {drawOmegaZeroSignalWorldFx,drawOmegaZeroSignalScreenFx} from './omega-protocol-zero-signal-fx';
 import {OmegaAdaptiveFrameGovernor,readOmegaPerfPreset,resolveOmegaMobileProfile,saveOmegaPerfPreset,type OmegaMobileProfile,type OmegaPerfPreset} from './omega-protocol-mobile-perf';
+import {drawOmegaEdgeNavigationIndicators,drawOmegaTacticalRadar} from './omega-protocol-navigation-hud';
+import {OMEGA_BLADE_COOLDOWN} from '../domain/omega-protocol-blade';
 import './omega-protocol-playtest.css';
 
 const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'] as const;
@@ -118,7 +120,7 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
   else if(ev.kind==='phantom_dodge')audio.playPhantomDodge();
   else if(ev.kind==='striker'&&ev.detail)audio.playStriker(ev.detail as OmegaStrikerId);
   else if(ev.kind==='rank_up'&&ev.detail)audio.playRankUp(ev.detail as OmegaZeroSignalHudSnapshot['styleRank']);
-  else if(ev.kind==='pickup')audio.playPickup();
+  else if(ev.kind==='pickup'||ev.kind==='weave_bonus')audio.playPickup();
   else if(ev.kind==='shield_break')audio.playShieldBreak();
   else if(ev.kind==='evo_unlock')audio.playEvoUnlock();
   else if(ev.kind==='boss_entry')audio.playBossEntry();
@@ -126,6 +128,8 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
   else if(ev.kind==='victory')audio.playVictory();
   else if(ev.kind==='defeat')audio.playDefeat();
   else if(ev.kind==='auto_interact')audio.playPickup();
+  else if(ev.kind==='rail_burst')audio.playRailBurst(ev.detail==='focus');
+  else if(ev.kind==='weapon_mode')audio.playWeaponSwitch(ev.detail==='focus'?'focus':'rapid');
  }
  void session;
 }
@@ -238,13 +242,20 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
 
    ctx.save();ctx.translate(-offset-fieldElevation*skew,fieldElevation);
-   ctx.fillStyle=anyPaintedFloor?'rgba(14,28,42,.52)':'#263c46';
-   ctx.strokeStyle=anyPaintedFloor?'rgba(124,233,255,.32)':'#f5ba6388';
-   ctx.lineWidth=anyPaintedFloor?2:3;ctx.setLineDash([22,16]);
    const drawLane=(start:number,end:number,y:number)=>{
+    ctx.save();
+    ctx.fillStyle=anyPaintedFloor?'rgba(8,20,34,.62)':'rgba(18,34,48,.76)';
     ctx.fillRect(start,y-36,end-start,72);
+    ctx.strokeStyle=anyPaintedFloor?'rgba(103,232,249,.38)':'rgba(124,233,255,.46)';
+    ctx.lineWidth=1.8;
     ctx.beginPath();ctx.moveTo(start,y-36);ctx.lineTo(end,y-36);
     ctx.moveTo(start,y+36);ctx.lineTo(end,y+36);ctx.stroke();
+    ctx.strokeStyle='rgba(251,191,36,.32)';
+    ctx.lineWidth=1.5;
+    for(let x=start+36;x<end-24;x+=68){
+     ctx.beginPath();ctx.moveTo(x-8,y-10);ctx.lineTo(x+4,y);ctx.lineTo(x-8,y+10);ctx.stroke();
+    }
+    ctx.restore();
    };
    for(let index=0;index<passage.length-1;index++){
     const {exit}=passage[index]!;
@@ -483,49 +494,34 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  if(director){
   drawOmegaZeroSignalScreenFx(ctx,director,ctx.canvas.width,ctx.canvas.height);
  }
- // Portrait camera follows the player: preserve off-screen enemy awareness
- // with a cheap, always-visible whole-arena radar in screen coordinates.
- if(!(effProfile.radarCompact&&cleanHud)){
-  const mw=effProfile.radarCompact
-   ?Math.round(54*effProfile.canvasScale)
-   :Math.max(70,Math.min(118,ctx.canvas.width*.155));
-  const mh=mw*WORLD_HEIGHT/WORLD_WIDTH;
-  const pad=effProfile.radarCompact?Math.round(7*effProfile.canvasScale):ctx.canvas.width<600?10:16;
-  const mx=ctx.canvas.width-mw-pad;
-  const my=effProfile.radarCompact
-   ?Math.round(46*effProfile.canvasScale)
-   :ctx.canvas.height<400?58:90;
-  ctx.save();
-  ctx.fillStyle=effProfile.radarCompact?'rgba(8,16,28,.52)':'rgba(10,20,35,.78)';
-  const boxPad=effProfile.radarCompact?Math.round(2.5*effProfile.canvasScale):5;
-  const headerH=effProfile.radarCompact?Math.round(10*effProfile.canvasScale):20;
-  ctx.fillRect(mx-boxPad,my-headerH,mw+boxPad*2,mh+headerH+boxPad);
-  ctx.strokeStyle=effProfile.radarCompact?'rgba(126,205,227,.38)':'rgba(126,205,227,.55)';
-  ctx.lineWidth=1;ctx.strokeRect(mx,my,mw,mh);
-  ctx.font=`bold ${effProfile.radarCompact?Math.max(7,Math.round(7.5*effProfile.canvasScale)):10}px system-ui,sans-serif`;
-  ctx.fillStyle='#92dbe8';ctx.fillText('RADAR',mx,my-(effProfile.radarCompact?Math.round(2.5*effProfile.canvasScale):7));
-  if(field){
-   for(const [loc,shade] of [
-    ...field.plan.event.steps.map((step,i)=>[step.target,
-     i<field.progress.completedSteps?'#6bfaac':i===field.progress.completedSteps?'#87edff':'#578dae'] as const),
-    [field.plan.exit,field.progress.exitUnlocked?'#90ffd4':'#ffb779'] as const,
-   ]){
-    ctx.fillStyle=shade;ctx.fillRect(mx+loc.x/WORLD_WIDTH*mw-2,my+loc.y/WORLD_HEIGHT*mh-2,5,5);
-   }
-  }
-  for(const h of state.hazards.slice(0,32)){
-   if(h.hp<=0)continue;
-   const dotX=mx+Math.max(0,Math.min(1,h.x/WORLD_WIDTH))*mw;
-   const dotY=my+Math.max(0,Math.min(1,h.y/WORLD_HEIGHT))*mh;
-   ctx.beginPath();ctx.arc(dotX,dotY,h.isStageBoss?4:2.2,0,Math.PI*2);
-   ctx.fillStyle=h.isStageBoss?'#ffe18e':'#fb94c6';ctx.fill();
-  }
-  ctx.beginPath();
-  ctx.arc(mx+Math.max(0,Math.min(1,p.x/WORLD_WIDTH))*mw,
-          my+Math.max(0,Math.min(1,p.y/WORLD_HEIGHT))*mh,3.2,0,Math.PI*2);
-  ctx.fillStyle='#91fff0';ctx.fill();
-  ctx.restore();
- }
+ // Screen-space off-screen tactical beacons (objective, exit, boss, off-screen threats).
+ drawOmegaEdgeNavigationIndicators(ctx,{
+  width:ctx.canvas.width,
+  height:ctx.canvas.height,
+  camera,
+  field:field??null,
+  hazards:state.hazards,
+  player:p,
+  fieldElevation,
+  seconds:state.gameTime,
+  cleanHud,
+  compact:effProfile.radarCompact,
+ });
+ // Upgraded translucent tactical scanner radar in top-right safe perimeter.
+ drawOmegaTacticalRadar(ctx,{
+  width:ctx.canvas.width,
+  height:ctx.canvas.height,
+  field:field??null,
+  hazards:state.hazards,
+  player:p,
+  facing:{x:pose.weaponX,y:pose.weaponY},
+  seconds:state.gameTime,
+  compact:effProfile.radarCompact,
+  canvasScale:effProfile.canvasScale,
+  cleanHud,
+  worldWidth:WORLD_WIDTH,
+  worldHeight:WORLD_HEIGHT,
+ });
  return worldCamera;
 }
 function makeOmegaFieldSession(seed:number):OmegaProtocolCombatSession{
@@ -767,6 +763,53 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
  // Multiple finger presses keep their own direction until released.
  const pointerMoves=useRef(new Map<number,{x:number;y:number}>());
  const lastHudAt=useRef(0);
+ const bladeBufferUntilRef=useRef(0);
+ const lastCameraRef=useRef<OmegaCameraState|null>(null);
+ const executeBlade=useCallback(()=>{
+  audioRef.current?.unlock();
+  const dir=directorRef.current;
+  const probe=import.meta.env.DEV?omegaCombatBrowserFixtures.get(session):undefined;
+  const strike=session.blade(probe?undefined:{
+   smartAssist:true,
+   preferredTargetId:dir?.resolveLockedTarget(session)?.id??null,
+   markedIds:dir?.markedHazardIds(),
+  });
+  if(strike){
+   audioRef.current?.playBladeSlash(strike.combo);
+   dir?.onPlayerBlade(session,strike);
+   if(dir)setZeroHud(dir.hudSnapshot(session));
+  }
+  setSnapshot(session.snapshot);
+ },[session]);
+ const requestBlade=useCallback(()=>{
+  audioRef.current?.unlock();
+  const cd=session.snapshot.bladeCooldownRemaining;
+  if(cd<=0){
+   bladeBufferUntilRef.current=0;
+   executeBlade();
+  }else if(cd<=0.22){
+   bladeBufferUntilRef.current=performance.now()+230;
+  }
+ },[session,executeBlade]);
+ const triggerRailBurst=useCallback((aimWorld?:Readonly<{x:number;y:number}>|null)=>{
+  audioRef.current?.unlock();
+  const dir=directorRef.current;
+  if(dir?.fireRailBurst(session,aimWorld)){
+   audioRef.current?.playRailBurst(dir.getWeaponMode()==='focus');
+   setZeroHud(dir.hudSnapshot(session));
+   setSnapshot(session.snapshot);
+  }
+ },[session]);
+ const toggleWeaponMode=useCallback(()=>{
+  audioRef.current?.unlock();
+  const dir=directorRef.current;
+  if(!dir||session.run.phase!=='battle')return;
+  const next=dir.toggleWeaponMode(session);
+  audioRef.current?.playWeaponSwitch(next);
+  setZeroHud(dir.hudSnapshot(session));
+ },[session]);
+ const weaponActionsRef=useRef({executeBlade,requestBlade,triggerRailBurst,toggleWeaponMode});
+ weaponActionsRef.current={executeBlade,requestBlade,triggerRailBurst,toggleWeaponMode};
  const clearMovementInputs=useCallback(()=>{
   floatingOrigin.current=null;
   arenaRef.current?.setAttribute('data-omega-stick-active','false');
@@ -793,6 +836,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   setSnapshot(newSession.snapshot);
   setZeroHud(newDirector.hudSnapshot(newSession));
   setPaused(false);
+  bladeBufferUntilRef.current=0;
   clearMovementInputs();
   audioRef.current?.unlock();
   if(startImmediately)audioRef.current?.playSortieStart();
@@ -984,13 +1028,15 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    if(e.key.toLowerCase()==='q'&&!e.repeat){e.preventDefault();session.ultimate();}
    if(e.key.toLowerCase()==='f'&&!e.repeat){
     e.preventDefault();
-    const strike=session.blade();
-    if(strike){
-     audioRef.current?.playBladeSlash(strike.combo);
-     directorRef.current?.onPlayerBlade(session,strike);
-     setZeroHud(directorRef.current!.hudSnapshot(session));
-    }
-    setSnapshot(session.snapshot);
+    weaponActionsRef.current.requestBlade();
+   }
+   if(e.key.toLowerCase()==='r'&&!e.repeat){
+    e.preventDefault();
+    weaponActionsRef.current.triggerRailBurst();
+   }
+   if((e.key.toLowerCase()==='c'||e.key==='Tab')&&!e.repeat){
+    e.preventDefault();
+    weaponActionsRef.current.toggleWeaponMode();
    }
    if(['1','2','3','4'].includes(e.key)&&!e.repeat&&directorRef.current){
     e.preventDefault();
@@ -1076,6 +1122,10 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const timeScale=dir&&dir.currentSlowMoRemaining()>0?0.24:1.0;
    const hpBeforeUpdate=session.engine.state.player.hp;
    if(dt>0&&sortieStartedRef.current&&!inHitstop)session.update(dt*timeScale,{moveX:mx/length,moveY:my/length,triggerAction:true});
+   if(sortieStartedRef.current&&bladeBufferUntilRef.current>now&&session.snapshot.bladeCooldownRemaining<=0){
+    bladeBufferUntilRef.current=0;
+    weaponActionsRef.current.executeBlade();
+   }
    const engineEvents=session.engine.drainProjectileFeedback();
    if(dir&&sortieStartedRef.current){
     dir.onProjectileFeedback(session,engineEvents);
@@ -1194,6 +1244,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     const passagePose=session.crossingConnectedPassage?{...pose,bodyX:1,bodyY:0,weaponX:1,weaponY:0,shooting:false}:pose;
     const renderedCamera=drawLab(ctx,session,fireCue,impacts,gait,passagePose,
      finishClock.advance(session.run.phase,now/1000),cinematicZoom,dashEchoes,g5hRealHitLab,motion,tracerTracker,directorRef.current??undefined,mobileProfileRef.current,cleanHudRef.current);
+    lastCameraRef.current=renderedCamera;
     if(import.meta.env.DEV&&session.connectedFields&&arenaRef.current){
      const {dataset}=arenaRef.current;
      dataset.omegaSeamPlayerX=String(player.x+session.fieldWorldOffsetX);
@@ -1562,7 +1613,26 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      data-omega-dash-ready={String(dashFeedback.ready)}
      data-omega-near-threats={session.engine.state.hazards.filter(h=>h.hp>0&&
       Math.hypot(h.x-snapshot.playerX,h.y-snapshot.playerY)<=340).length}>
-    <canvas ref={canvasRef} width={1120} height={720} aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
+    <canvas ref={canvasRef} width={1120} height={720}
+     onContextMenu={e=>{
+      if(!sortieStarted||snapshot.run.phase!=='battle'||paused)return;
+      e.preventDefault();
+      const canvas=canvasRef.current,cam=lastCameraRef.current;
+      let aimWorld:{x:number;y:number}|null=null;
+      if(canvas&&cam){
+       const rect=canvas.getBoundingClientRect();
+       if(rect.width>0&&rect.height>0){
+        const cx=((e.clientX-rect.left)/rect.width)*canvas.width;
+        const cy=((e.clientY-rect.top)/rect.height)*canvas.height;
+        const wy=(cy/cam.scale-cam.projectedOffsetY)/cam.groundYScale+session.fieldElevation;
+        const mx=cx/cam.scale-cam.projectedOffsetX;
+        const wx=mx-cam.skewX*wy;
+        if(Number.isFinite(wx)&&Number.isFinite(wy))aimWorld={x:wx,y:wy};
+       }
+      }
+      triggerRailBurst(aimWorld);
+     }}
+     aria-label="실제 시그널 워치 전투 엔진을 사용하는 OMEGA PROTOCOL 내부 전장" />
     <div className="omega-protocol-stage-shade" aria-hidden="true"/>
     {mobileImmersion&&<div className="omega-zs-mobile-top-actions">
      <button type="button" className="omega-zs-mobile-icon-btn" onClick={toggleMute} aria-label={muted?'사운드 켜기':'사운드 끄기'}>{muted?'🔇':'🔊'}</button>
@@ -1704,20 +1774,27 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      </div>
      <div className="omega-protocol-action-pad">
       <button type="button" className="omega-protocol-action omega-protocol-blade"
-       onClick={()=>{
-        audioRef.current?.unlock();
-        const strike=session.blade();
-        if(strike){
-         audioRef.current?.playBladeSlash(strike.combo);
-         directorRef.current?.onPlayerBlade(session,strike);
-         setZeroHud(directorRef.current!.hudSnapshot(session));
-        }
-        setSnapshot(session.snapshot);
-       }}
-       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||snapshot.bladeCooldownRemaining>0}
+       style={{['--ring-pct' as string]:`${Math.round(Math.max(0,Math.min(1,1-snapshot.bladeCooldownRemaining/OMEGA_BLADE_COOLDOWN))*100)}%`} as React.CSSProperties}
+       data-detonate-ready={zeroHud.detonateReadyCount>0?'true':'false'}
+       data-cooldown={snapshot.bladeCooldownRemaining>0?'true':'false'}
+       data-combo={zeroHud.nextBladeCombo}
+       onClick={requestBlade}
+       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'}
        aria-label="공진 검격 · F 키 · 안전모 감염 좀비 및 기계형 적 3단 연속 공격">
-       <span className="omega-protocol-action-glyph" aria-hidden="true">⚔</span><span>검격</span>
-       <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s': 'READY'}</small>
+       <span className="omega-protocol-action-glyph" aria-hidden="true">{zeroHud.detonateReadyCount>0?'💥':'⚔'}</span>
+       <span>{zeroHud.detonateReadyCount>0?`폭파×${zeroHud.detonateReadyCount}`:`검격 ${zeroHud.nextBladeCombo}타`}</span>
+       <small>{snapshot.bladeCooldownRemaining>0?snapshot.bladeCooldownRemaining.toFixed(1)+'s':zeroHud.detonateReadyCount>0?'폭파!':'READY'}</small>
+      </button>
+      <button type="button" className="omega-protocol-action omega-protocol-rail"
+       style={{['--ring-pct' as string]:`${Math.min(100,zeroHud.railCharge)}%`} as React.CSSProperties}
+       data-omega-rail-visible={snapshot.enemiesAlive>0?'true':'false'}
+       data-ready={zeroHud.railChargesReady>0?'true':'false'}
+       data-mode={zeroHud.weaponMode}
+       onClick={()=>triggerRailBurst()}
+       disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||zeroHud.railChargesReady<=0}
+       aria-label="시그마 레일 버스트 · R 키 또는 우클릭 · 관통 전자기 사격">
+       <span className="omega-protocol-action-glyph" aria-hidden="true">⌖</span><span>레일샷</span>
+       <small>{zeroHud.railChargesReady>=2?'MAX ×2':zeroHud.railChargesReady===1?'READY':`${zeroHud.railCharge}%`}</small>
       </button>
       <button type="button" className="omega-protocol-action omega-protocol-interact" onClick={handleInteract}
        data-omega-interact-ready={snapshot.enemiesAlive===0?'true':'false'}
@@ -1725,7 +1802,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        aria-label="현장 상호작용 E">
        <span className="omega-protocol-action-glyph" aria-hidden="true">E</span><span>조작</span>
       </button>
-      <button type="button" className="omega-protocol-action omega-protocol-dash" onClick={()=>{
+      <button type="button" className="omega-protocol-action omega-protocol-dash"
+       style={{['--ring-pct' as string]:`${Math.round((dashFeedback.ready?1:Math.max(0,Math.min(1,1-dashFeedback.remaining/Math.max(1,session.engine.state.player.dashMaxCooldown??3))))*100)}%`} as React.CSSProperties}
+       onClick={()=>{
         audioRef.current?.unlock();
         if(session.dash()&&directorRef.current){
          const {phantomDodge}=directorRef.current.onPlayerDash(session);
@@ -1738,7 +1817,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
        aria-label="회피 · 스페이스 또는 시프트">
        <span className="omega-protocol-action-glyph" aria-hidden="true">↗</span><span>회피</span><small>{dashFeedback.ready?"READY":dashFeedback.remaining>0?dashFeedback.remaining.toFixed(1)+"s":"ACTIVE"}</small>
       </button>
-      <button type="button" className="omega-protocol-action omega-protocol-ultimate" onClick={()=>{audioRef.current?.unlock();session.ultimate();setSnapshot(session.snapshot);}}
+      <button type="button" className="omega-protocol-action omega-protocol-ultimate"
+       style={{['--ring-pct' as string]:`${Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))}%`} as React.CSSProperties}
+       onClick={()=>{audioRef.current?.unlock();session.ultimate();setSnapshot(session.snapshot);}}
        disabled={snapshot.run.phase!=='battle'||snapshot.enginePhase!=='playing'||session.engine.state.ultimateCharge<session.engine.state.maxUltimateCharge}
        aria-label={'궁극기 · 충전 '+Math.floor(100*session.engine.state.ultimateCharge/Math.max(1,session.engine.state.maxUltimateCharge))+'퍼센트'}>
        <span className="omega-protocol-action-glyph" aria-hidden="true">✦</span><span>궁극기</span>
@@ -1747,6 +1828,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
      </div>
     </div>
     {sortieStarted&&<div className="omega-zs-striker-dock" aria-label="시그널 올스타 전술 원호">
+     <button type="button" className="omega-zs-mode-pill" data-mode={zeroHud.weaponMode} onClick={toggleWeaponMode} aria-label="총기 사격 모드 전환 · C 또는 Tab">
+      {zeroHud.weaponMode==='focus'?'🎯 집중':'🔫 연사'}
+     </button>
      <div className="omega-zs-charge-pill">⚡ LINK {zeroHud.strikerCharge}%</div>
      {OMEGA_STRIKERS.map(st=>{
       const unlocked=zeroHud.unlockedStrikers.includes(st.id);
@@ -1769,7 +1853,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
       </button>;
      })}
     </div>}
-    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 저스트회피</span><span>F · 표식폭파</span><span>1~4 · 시그널원호</span><span>E · 조작</span><span>CPU · {fps||'—'} FPS</span></div>
+    <div className="omega-protocol-stage-meta" aria-hidden="true"><span>WASD · 이동</span><span>SPACE · 저스트회피</span><span>F · 표식폭파</span><span>R/우클릭 · 레일샷</span><span>C · 사격모드</span><span>1~4 · 시그널원호</span><span>E · 조작</span><span>CPU · {fps||'—'} FPS</span></div>
     {snapshot.gateTransit&&!(session.connectedFields&&snapshot.gateTransit.link.fromWave<session.connectedFields.length)&&<div className="omega-protocol-gate-transit"
       role="status" aria-live="polite"
       aria-label={'실제 구역 연결 이동 · '+snapshot.gateTransit.link.passageLabel}
@@ -1880,7 +1964,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
         {mobileImmersion&&<button type="button" className="omega-zs-briefing-exit" onClick={onExit} aria-label="허브로 나가기">✕</button>}
         <span className="omega-protocol-modal-kicker">OMEGA PROTOCOL · SPECIAL EDITION // ZERO SIGNAL</span>
         <h2>시그널 올스타 전술 출격</h2>
-        <p>총격(자동)으로 표식을 쌓고, 검격(F)으로 연쇄 폭파하라 · 위기 순간 회피(SPACE)로 불릿타임 &amp; 1~4 시그널 원호 호출</p>
+        <p>총격(자동)으로 표식을 쌓고, 검격(F)으로 연쇄 폭파하라 · R/우클릭 레일 버스트 · C 사격모드(연사↔집중) · 위기 순간 회피(SPACE)로 불릿타임 &amp; 1~4 시그널 원호</p>
         <div className="omega-zs-briefing-tabs">
          <button type="button" className={!blackboxTab?'active':''} onClick={()=>setBlackboxTab(false)}>전술 로드아웃 (3종)</button>
          <button type="button" className={blackboxTab?'active':''} onClick={()=>setBlackboxTab(true)}>블랙박스 기록 ({blackboxes.length}/3)</button>

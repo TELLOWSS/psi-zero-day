@@ -27,14 +27,20 @@ import {
  type OmegaBossTelegraph,
 } from './omega-protocol-boss-pattern';
 import {
- OMEGA_FIELD_WIDTH,omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
+ OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT,OMEGA_QUARTER_VIEW,omegaFieldPlan,omegaFieldInitialProgress,omegaFieldCanInteract,omegaFieldResolveCollision,omegaFieldCurrentStep,omegaFieldScreenMoveToWorld,omegaFieldNativeTerrain,
  type OmegaFieldPlan,type OmegaFieldProgress,
 } from '../domain/omega-protocol-field';
+import {omegaBladeEligible} from '../domain/omega-protocol-blade';
 import {
  omegaProtocolAccess,omegaStartRun,omegaWavePlan,omegaResolveBattle,omegaChooseUpgrade,omegaSeedHash,
  type OmegaProtocolRun,type OmegaUpgradeId,type OmegaWavePlan,
 } from '../domain/omega-protocol-run';
 
+export interface OmegaBladeOptions {
+ readonly smartAssist?:boolean;
+ readonly preferredTargetId?:string|null;
+ readonly markedIds?:ReadonlySet<string>;
+}
 export interface OmegaBladeStrike {
  readonly time:number;
  readonly combo:OmegaBladeComboStep;
@@ -165,6 +171,10 @@ export class OmegaProtocolCombatSession {
  get facing():Readonly<{x:number;y:number}>{return {...this.lastFacing};}
  get moving():boolean{return this.playerMoving;}
  get lastBladeStrike():OmegaBladeStrike|null{return this.bladeResult;}
+ get nextBladeCombo():OmegaBladeComboStep{
+  if(!Number.isFinite(this.bladeLastTime))return 1;
+  return omegaBladeNextCombo(this.bladeStep,this.engine.state.gameTime-this.bladeLastTime);
+ }
  /** Immutable read-only combat diagnostics; NEVER used to modify AI/HP. */
  get damageEvents():readonly OmegaDamageEvent[]{return [...this.damageLog];}
  damageSummary(wave=this.latestPlan.wave):OmegaDamageSummary{
@@ -508,7 +518,7 @@ export class OmegaProtocolCombatSession {
   * Every physical target is tested against the forward arc and solid cover.
   * The basic ranged weapon continues to use the native Watch firing loop.
   */
- blade():OmegaBladeStrike|null{
+ blade(options?:OmegaBladeOptions):OmegaBladeStrike|null{
   const state=this.engine.state;
   if(!this.armed||this.active.phase!=='battle'||state.phase!=='playing'||this.transit)return null;
   const time=state.gameTime;
@@ -516,11 +526,66 @@ export class OmegaProtocolCombatSession {
   const player=state.player;
   if(player.hp<=0||player.isDashing)return null;
   const combo=omegaBladeNextCombo(this.bladeStep,time-this.bladeLastTime);
-  const direction=this.fieldTraversal
+  let direction=this.fieldTraversal
    ?omegaFieldScreenMoveToWorld(this.lastFacing.x,this.lastFacing.y)
    :this.lastFacing;
   const bladeEdge=this.active.owned.blade_edge??0;
   const range=OMEGA_BLADE_RANGE+(this.active.owned.blade_reach??0)*18;
+
+  if(options?.smartAssist){
+   const engageRange=range+68;
+   const obstacles=this.currentField?.obstacles??[];
+   let bestTarget:typeof state.hazards[number]|null=null;
+   let bestScore=Infinity;
+   for(const h of state.hazards){
+    if(!omegaBladeEligible(h))continue;
+    const direct=Math.hypot(h.x-player.x,h.y-player.y);
+    if(direct>engageRange+Math.max(0,h.radius))continue;
+    if(this.currentField){
+     const route=omegaFieldNextRoute(player,h,obstacles);
+     if(!route||route.length>direct+24)continue;
+    }
+    const isMarked=Boolean(options.markedIds?.has(h.id));
+    const isPreferred=options.preferredTargetId===h.id;
+    const score=(isMarked?-10000:isPreferred?-2500:0)+direct;
+    if(score<bestScore){
+     bestScore=score;
+     bestTarget=h;
+    }
+   }
+   if(bestTarget){
+    const dx=bestTarget.x-player.x;
+    const dy=bestTarget.y-player.y;
+    const direct=Math.hypot(dx,dy);
+    if(direct>1e-3){
+     direction={x:dx/direct,y:dy/direct};
+     if(this.fieldTraversal){
+      const sx=direction.x+OMEGA_QUARTER_VIEW.skewX*direction.y;
+      const sy=OMEGA_QUARTER_VIEW.groundYScale*direction.y;
+      const slen=Math.hypot(sx,sy)||1;
+      this.lastFacing={x:sx/slen,y:sy/slen};
+     }else{
+      this.lastFacing={x:direction.x,y:direction.y};
+     }
+     if(direct>range*0.52){
+      const stepDist=Math.min(34,direct-range*0.45);
+      if(stepDist>2){
+       const prior={x:player.x,y:player.y};
+       const proposed={
+        x:Math.max(24,Math.min(OMEGA_FIELD_WIDTH-24,player.x+direction.x*stepDist)),
+        y:Math.max(24,Math.min(OMEGA_FIELD_HEIGHT-24,player.y+direction.y*stepDist)),
+       };
+       const resolved=this.currentField
+        ?omegaFieldResolveCollision(prior,proposed,this.currentField.obstacles,21)
+        :proposed;
+       player.x=resolved.x;
+       player.y=resolved.y;
+      }
+     }
+    }
+   }
+  }
+
   let hits=0,totalDamage=0;
   for(const h of state.hazards){
    if(!omegaBladeTargetInArc(player,h,direction,range))continue;

@@ -74,12 +74,90 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.restore();
  }
 
+ // 2.5 Active Gun Target-Lock Bracket, Laser Rangefinder Sightline & Detonate-Ready Floor Halos.
+ if (state.phase === 'playing') {
+  const locked = director.resolveLockedTarget(session);
+  const px = state.player.x;
+  const py = state.player.y;
+  const isFocus = director.getWeaponMode() === 'focus';
+  const lockRgb = director.currentOverclockRemaining() > 0
+   ? '165,243,252'
+   : isFocus
+     ? '251,191,36'
+     : '103,232,249';
+
+  if (locked) {
+   const pulse = 0.72 + 0.28 * Math.sin(seconds * 9);
+   const startY = py - 42 * invY;
+   const endY = locked.y - (locked.isStageBoss ? 48 : 30) * invY;
+   ctx.save();
+   ctx.globalCompositeOperation = 'lighter';
+   const beamGrad = ctx.createLinearGradient?.(px, startY, locked.x, endY);
+   if (beamGrad && typeof beamGrad.addColorStop === 'function') {
+    beamGrad.addColorStop(0, `rgba(${lockRgb},0.06)`);
+    beamGrad.addColorStop(0.7, `rgba(${lockRgb},${(0.24 * pulse).toFixed(3)})`);
+    beamGrad.addColorStop(1, `rgba(255,255,255,${(0.55 * pulse).toFixed(3)})`);
+    ctx.strokeStyle = beamGrad;
+   } else {
+    ctx.strokeStyle = `rgba(${lockRgb},0.28)`;
+   }
+   ctx.lineWidth = isFocus ? 1.8 : 1.3;
+   ctx.setLineDash([7, 7]);
+   ctx.lineDashOffset = -(seconds * 70) % 14;
+   ctx.beginPath();
+   ctx.moveTo(px, startY);
+   ctx.lineTo(locked.x, endY);
+   ctx.stroke();
+   ctx.setLineDash([]);
+
+   // Rotating tactical target-lock bracket at enemy ground plane.
+   const r = Math.max(22, (locked.radius || 20) + 8);
+   ctx.translate(locked.x, locked.y + 2);
+   ctx.scale(1, OMEGA_QUARTER_VIEW.groundYScale);
+   ctx.rotate(seconds * (isFocus ? 2.4 : 1.5));
+   ctx.strokeStyle = `rgba(${lockRgb},${(0.78 * pulse).toFixed(3)})`;
+   ctx.lineWidth = 1.9;
+   for (let q = 0; q < 4; q++) {
+    const a = (q * Math.PI) / 2 + Math.PI / 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, a - 0.34, a + 0.34);
+    ctx.stroke();
+   }
+   ctx.restore();
+  }
+
+  for (const h of state.hazards) {
+   if (h.hp <= 0) continue;
+   const stacks = director.markCount(h.id);
+   if (stacks <= 0) continue;
+   if (Math.hypot(h.x - px, h.y - py) > 178) continue;
+   const pulse = 0.65 + 0.35 * Math.sin(seconds * 11);
+   const r = Math.max(25, (h.radius || 20) + 12);
+   ctx.save();
+   ctx.globalCompositeOperation = 'lighter';
+   ctx.strokeStyle =
+    stacks >= 3
+     ? `rgba(251,191,36,${(0.78 * pulse).toFixed(3)})`
+     : `rgba(103,232,249,${(0.54 * pulse).toFixed(3)})`;
+   ctx.lineWidth = stacks >= 3 ? 2.2 : 1.6;
+   ctx.beginPath();
+   ctx.ellipse(h.x, h.y + 3, r + pulse * 3, (r + pulse * 3) * OMEGA_QUARTER_VIEW.groundYScale, 0, 0, Math.PI * 2);
+   ctx.stroke();
+   ctx.restore();
+  }
+ }
+
  // 3. Signal Mark Reticles hovering cleanly above every marked enemy.
  for (const h of state.hazards) {
   if (h.hp <= 0) continue;
   const stacks = director.markCount(h.id);
   if (stacks <= 0) continue;
-  const headUprightY = h.isStageBoss ? -128 : h.type === 'UNHELMETED' ? -108 : -78;
+  const hScale = Math.max(0.8, Math.min(1.5, h.radius / 24));
+  const headUprightY = h.isStageBoss
+   ? -222
+   : h.type === 'UNHELMETED'
+     ? -(Math.round(78 * hScale) + 28)
+     : -90;
   const mx = h.x - (skew * invY) * headUprightY;
   const my = h.y + headUprightY * invY;
 
@@ -295,6 +373,19 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.moveTo(b.x1, b.y1);
   ctx.lineTo(b.x2, b.y2);
   ctx.stroke();
+  ctx.restore();
+ }
+
+ // 10.5 Ejected Plasma Weapon Casings.
+ for (const c of director.casings) {
+  const fade = clamp(1 - c.age / c.duration, 0, 1);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = fade * 0.92;
+  ctx.fillStyle = c.colorHex;
+  ctx.beginPath();
+  ctx.arc(c.x, c.y - c.z * invY, 2.2, 0, Math.PI * 2);
+  ctx.fill();
   ctx.restore();
  }
 
