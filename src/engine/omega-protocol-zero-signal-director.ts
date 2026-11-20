@@ -292,6 +292,7 @@ export class OmegaZeroSignalDirector {
   if (this.loadoutId === 'phantom') {
    p.dashMaxCooldown = Math.max(1.0, (p.dashMaxCooldown ?? 3.0) - 0.35);
   }
+  session.syncRunVitality();
   this.prevWave = session.plan.wave;
   this.prevBossAlive = session.engine.state.hazards.some((h) => h.hp > 0 && h.isStageBoss);
   this.prevHazardsLeft = session.engine.state.hazards.some((h) => h.hp > 0);

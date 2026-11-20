@@ -414,9 +414,10 @@ export class OmegaProtocolCombatSession {
    }
   }
   if(state.phase==='defeat'||state.player.hp<=0){
+   const damageTaken=Number.isFinite(state.player.hp)?Math.max(0,this.active.hp-state.player.hp):this.active.hp;
+   const nextActive=omegaResolveBattle(this.active,{won:false,damageTaken,remainingHp:0});
    this.armed=false;
-   this.active=omegaResolveBattle(this.active,{won:false,
-    damageTaken:Math.max(0,this.active.hp-state.player.hp),remainingHp:0});
+   this.active=nextActive;
    return this.snapshot;
   }
   if(state.phase!=='playing')return this.snapshot;
@@ -433,13 +434,29 @@ export class OmegaProtocolCombatSession {
   }
   return this.snapshot;
  }
+ /** Keep run-scoped vitality bounds aligned with in-session loadout/card buffs. */
+ syncRunVitality():void{
+  const p=this.engine.state.player;
+  const maxHp=Number.isFinite(p.maxHp)&&p.maxHp>0?p.maxHp:this.active.maxHp;
+  const hp=Number.isFinite(p.hp)?Math.max(0,Math.min(maxHp,p.hp)):Math.min(maxHp,this.active.hp);
+  this.active=Object.freeze({...this.active,hp,maxHp});
+ }
  /** Finish a defeated encounter only after the actual exit interaction. */
  private settleWave():void{
   if(!this.armed||this.active.phase!=='battle')return;
-  this.armed=false;
   const state=this.engine.state;
-  this.active=omegaResolveBattle(this.active,{won:true,damageTaken:0,
-   remainingHp:Math.max(0,Math.min(state.player.maxHp,state.player.hp))});
+  const liveMaxHp=Number.isFinite(state.player.maxHp)&&state.player.maxHp>0
+   ?Math.max(this.active.maxHp,state.player.maxHp)
+   :this.active.maxHp;
+  const activeForSettle=liveMaxHp===this.active.maxHp
+   ?this.active
+   :Object.freeze({...this.active,maxHp:liveMaxHp,hp:Math.min(liveMaxHp,this.active.hp)});
+  const remainingHp=Number.isFinite(state.player.hp)
+   ?Math.max(0,Math.min(liveMaxHp,state.player.hp))
+   :activeForSettle.hp;
+  const nextActive=omegaResolveBattle(activeForSettle,{won:true,damageTaken:0,remainingHp});
+  this.armed=false;
+  this.active=nextActive;
   if(this.active.phase==='reward'||this.active.phase==='victory'){
    this.engine.setPaused(true);
   }else{

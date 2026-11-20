@@ -220,4 +220,60 @@ describe('OMEGA PROTOCOL: ZERO SIGNAL commercial roguelite systems', () => {
    expect(fs.statSync(abs).size, `Empty audio file for ${key}: ${abs}`).toBeGreaterThan(1024);
   }
  });
+
+ it('completes Wave 1 transition cleanly across all loadouts including Siege (+25 maxHp) and clears 15 waves to victory', () => {
+  for (const loadout of ['valkyrie', 'phantom', 'siege'] as const) {
+   const session = new OmegaProtocolCombatSession(20261108, 50, false, {
+    fieldTraversal: true,
+    gateTransition: true,
+    continuousOpening: true,
+   });
+   const director = new OmegaZeroSignalDirector(loadout, loadout === 'siege');
+   director.applyLoadoutToSession(session);
+
+   if (loadout === 'siege') {
+    expect(session.engine.state.player.maxHp).toBe(125);
+    expect(session.run.maxHp).toBe(125);
+   }
+
+   for (let wave = 1; wave <= 15; wave++) {
+    for (const h of session.engine.state.hazards) {
+     h.hp = 0;
+    }
+    session.update(1 / 60, { moveX: 0, moveY: 0, triggerAction: false });
+    director.step(session, 1 / 60, session.engine.state.player.hp);
+
+    expect(session.field?.progress.phase).toBe('objective');
+    for (const step of session.field!.plan.event.steps) {
+     session.engine.state.player.x = step.target.x;
+     session.engine.state.player.y = step.target.y;
+     director.step(session, 1 / 60, session.engine.state.player.hp);
+    }
+
+    expect(session.field?.progress.phase).toBe('exit');
+    session.engine.state.player.x = session.field!.plan.exit.x;
+    session.engine.state.player.y = session.field!.plan.exit.y;
+    director.step(session, 1 / 60, session.engine.state.player.hp);
+
+    for (let i = 0; i < 120 && (session.gateTransit || session.run.wave === wave) && session.run.phase === 'battle'; i++) {
+     session.update(0.05, { moveX: 0, moveY: 0, triggerAction: false });
+     director.step(session, 0.05, session.engine.state.player.hp);
+    }
+
+    if (session.run.phase === 'reward') {
+     const shieldOffer = session.run.offers.includes('shield_matrix')
+      ? 'shield_matrix'
+      : session.run.offers[0]!;
+     session.selectUpgrade(shieldOffer);
+     for (let i = 0; i < 60 && session.gateTransit; i++) {
+      session.update(0.05, { moveX: 0, moveY: 0, triggerAction: false });
+      director.step(session, 0.05, session.engine.state.player.hp);
+     }
+    }
+   }
+
+   expect(session.run.phase).toBe('victory');
+   expect(session.run.wave).toBe(16);
+  }
+ });
 });

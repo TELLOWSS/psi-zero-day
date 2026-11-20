@@ -139,10 +139,15 @@
 .omega-protocol-stage-meta span:last-child{margin-left:auto;color:#a1dce2}
 .omega-protocol-paused{
  z-index:7;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
- background:rgba(8,14,30,.5);color:white;pointer-events:none;gap:7px
+ background:rgba(8,14,30,.58);color:white;pointer-events:auto;gap:10px;text-align:center;padding:16px
 }
 .omega-protocol-paused strong{font-size:clamp(20px,3vw,34px)}
 .omega-protocol-paused span{font-size:12px;color:#b8cadc}
+.omega-protocol-lab .omega-protocol-resume-btn{
+ min-height:42px;padding:9px 20px;font-weight:900;border-color:#7dd3fc;
+ background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;margin-top:4px;
+ box-shadow:0 8px 24px rgba(14,165,233,.42);
+}
 .omega-protocol-overlay{
  position:absolute;inset:0;z-index:10;display:grid;place-items:center;
  background:rgba(4,9,23,.76);backdrop-filter:blur(8px);padding:12px;overflow:auto
@@ -1668,6 +1673,10 @@
 }
 
 @media(max-width:540px) and (orientation:portrait){
+ .omega-protocol-lab[data-omega-mobile-immersion="true"] .omega-protocol-mission{
+  top:calc(86px + env(safe-area-inset-top))!important;
+  width:min(260px,calc(100% - 24px))!important;
+ }
  .omega-protocol-lab[data-omega-mobile-immersion="true"] .omega-zs-striker-dock{
   bottom:max(6px,env(safe-area-inset-bottom))!important;
   width:calc(100% - 14px);justify-content:space-between!important;
