@@ -198,56 +198,70 @@ function drawSwordHandReflection(
  const sweepNorm=easeOutCubic(clamp(p*1.45,0,1));
  const handX=Math.cos(bladeAngle)*height*0.14;
  const handY=-height*0.52+Math.sin(bladeAngle)*height*0.08;
- const swingArc=combo===3?3.4:combo===2?-2.4:2.3;
+ const swingArc=combo===3?3.55:combo===2?-2.65:2.45;
  const startAngle=bladeAngle-swingArc*0.52;
  const curAngle=startAngle+swingArc*sweepNorm;
- const bladeLen=height*(combo===3?0.68:0.56);
+ const bladeLen=height*(combo===3?0.72:combo===2?0.58:0.56);
  const tipX=handX+Math.cos(curAngle)*bladeLen;
  const tipY=handY+Math.sin(curAngle)*bladeLen*0.72;
  const rgb=combo===3?'251,191,36':combo===2?'192,132,252':'103,232,249';
+ const accentRgb=combo===3?'244,63,94':combo===2?'103,232,249':'186,230,253';
 
  ctx.save();
  ctx.globalCompositeOperation='lighter';
 
- // 1. Sweeping energy katana trail arc from shoulder/hand pivot.
+ // 1. Sweeping energy katana trail arc(s) from shoulder/hand pivot.
  const arcR=bladeLen*0.86;
- const trailStart=swingArc>0?Math.max(startAngle,curAngle-1.25):startAngle;
- const trailEnd=swingArc>0?curAngle:Math.min(startAngle,curAngle+1.25);
+ const trailStart=swingArc>0?Math.max(startAngle,curAngle-1.35):startAngle;
+ const trailEnd=swingArc>0?curAngle:Math.min(startAngle,curAngle+1.35);
  ctx.save();
  ctx.translate(handX,handY);
  ctx.scale(1,0.72);
- ctx.strokeStyle=`rgba(${rgb},${(0.46*fade).toFixed(3)})`;
- ctx.lineWidth=(combo===3?16:12)*fade+2;
+ ctx.strokeStyle=`rgba(${rgb},${(0.48*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?18:combo===2?13:12)*fade+2;
  ctx.lineCap='round';
  ctx.beginPath();
  ctx.arc(0,0,arcR,trailStart,trailEnd,swingArc<0);
  ctx.stroke();
+ if(combo>=2){
+  ctx.strokeStyle=`rgba(${accentRgb},${(0.42*fade).toFixed(3)})`;
+  ctx.lineWidth=(combo===3?7.5:5)*fade+1;
+  ctx.beginPath();
+  ctx.arc(0,0,arcR*(combo===3?0.76:1.08),trailStart,trailEnd,swingArc<0);
+  ctx.stroke();
+ }
  ctx.restore();
 
  // 2. Razor-sharp physical plasma katana blade + hot white edge core.
- ctx.strokeStyle=`rgba(${rgb},${(0.92*fade).toFixed(3)})`;
- ctx.lineWidth=(combo===3?5.8:4.4)*fade+1.5;
+ ctx.strokeStyle=`rgba(${rgb},${(0.94*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?6.4:4.6)*fade+1.5;
  ctx.lineCap='round';
  ctx.beginPath();
  ctx.moveTo(handX,handY);
  ctx.lineTo(tipX,tipY);
  ctx.stroke();
 
- ctx.strokeStyle=`rgba(255,255,255,${(0.96*fade).toFixed(3)})`;
- ctx.lineWidth=(combo===3?2.4:1.8)*fade+0.6;
+ ctx.strokeStyle=`rgba(255,255,255,${(0.97*fade).toFixed(3)})`;
+ ctx.lineWidth=(combo===3?2.6:1.9)*fade+0.6;
  ctx.beginPath();
  ctx.moveTo(handX,handY);
  ctx.lineTo(tipX,tipY);
  ctx.stroke();
 
- // 3. Energy hilt & tip flare.
- const grad=ctx.createRadialGradient(handX,handY,1,handX,handY,height*0.17);
- grad.addColorStop(0,`rgba(255,255,255,${(0.62*fade).toFixed(3)})`);
- grad.addColorStop(0.45,`rgba(${rgb},${(0.42*fade).toFixed(3)})`);
+ // 3. Energy hilt & tip cross-flare.
+ const grad=ctx.createRadialGradient(handX,handY,1,handX,handY,height*0.18);
+ grad.addColorStop(0,`rgba(255,255,255,${(0.66*fade).toFixed(3)})`);
+ grad.addColorStop(0.45,`rgba(${rgb},${(0.44*fade).toFixed(3)})`);
  grad.addColorStop(1,'rgba(0,0,0,0)');
  ctx.fillStyle=grad;
- ctx.beginPath();ctx.arc(handX,handY,height*0.17,0,Math.PI*2);ctx.fill();
- drawFourPointFlare(ctx,tipX,tipY,10*fade,2.5*fade,curAngle,`rgba(255,250,235,${fade.toFixed(2)})`);
+ ctx.beginPath();ctx.arc(handX,handY,height*0.18,0,Math.PI*2);ctx.fill();
+ drawFourPointFlare(
+  ctx,tipX,tipY,
+  (combo===3?14:10)*fade,
+  (combo===3?3.4:2.5)*fade,
+  curAngle,
+  combo===3?`rgba(255,232,165,${fade.toFixed(2)})`:`rgba(255,250,235,${fade.toFixed(2)})`,
+ );
  ctx.restore();
 }
 
@@ -285,22 +299,23 @@ export function drawOmegaSilverKineticActor(
  const speedFactor=clamp(view.speedRatio??(walkActive?0.85:0),0.3,1);
  const stride=STRIDE_FACTOR[heading]*speedFactor;
  const signLeft=(heading==='W'||heading==='NW'||heading==='SW')?-1:1;
- const velLean=Number.isFinite(view.velocityX)?clamp((view.velocityX??0)/260,-1,1)*0.058:0.04*speedFactor*signLeft;
+ const velLean=Number.isFinite(view.velocityX)?clamp((view.velocityX??0)/260,-1,1)*0.062:0.04*speedFactor*signLeft;
+ const velPitchY=Number.isFinite(view.velocityY)?clamp((view.velocityY??0)/260,-1,1)*2.1:0;
 
  // Subtle cohesive boot stride keeping coat & waist 100% seamless.
- let leftLegAngle=walkActive?wave*0.055*stride:0;
- let rightLegAngle=walkActive?-wave*0.055*stride:0;
- let leftFootLift=walkActive?Math.max(0,wave)*6.5*stride:0;
- let rightFootLift=walkActive?Math.max(0,-wave)*6.5*stride:0;
- let leftStrideX=walkActive?wave*4.5*stride:0;
- let rightStrideX=walkActive?-wave*4.5*stride:0;
+ let leftLegAngle=walkActive?wave*0.058*stride:0;
+ let rightLegAngle=walkActive?-wave*0.058*stride:0;
+ let leftFootLift=walkActive?Math.max(0,wave)*7.0*stride:0;
+ let rightFootLift=walkActive?Math.max(0,-wave)*7.0*stride:0;
+ let leftStrideX=walkActive?wave*4.8*stride:0;
+ let rightStrideX=walkActive?-wave*4.8*stride:0;
 
  let offsetX=0;
- let offsetY=walkActive?-Math.abs(wave)*2.8-speedFactor*0.8:-Math.sin(t*2.4)*1.1;
+ let offsetY=walkActive?-Math.abs(wave)*wave*1.1-Math.abs(wave)*2.4-speedFactor*0.8+velPitchY:-Math.sin(t*2.4)*1.15;
  let torsoLean=walkActive?velLean:Math.sin(t*1.8)*0.008;
- const torsoTwistX=walkActive?Math.sin(phase*Math.PI*2)*0.9:0;
- let squashX=walkActive?1+plantPulse*0.022:1;
- let squashY=walkActive?1-plantPulse*0.018:1;
+ const torsoTwistX=walkActive?Math.sin(phase*Math.PI*2)*1.0:0;
+ let squashX=walkActive?1+plantPulse*0.026:1;
+ let squashY=walkActive?1-plantPulse*0.021:1;
 
  if(slashing){
   const p=clamp(bladeAge/BLADE_VISUAL_SECONDS,0,1);
@@ -309,16 +324,16 @@ export function drawOmegaSilverKineticActor(
   const by=Number.isFinite(view.bladeFacingY)?view.bladeFacingY!:view.facingY;
   const bLen=Math.hypot(bx,by)||1;
   const dirSign=(bx/bLen)>=0?1:-1;
-  const lungeDist=(combo===3?22:14)*lungeCurve;
+  const lungeDist=(combo===3?24:combo===2?16:14)*lungeCurve;
   offsetX+=(bx/bLen)*lungeDist;
-  offsetY+=(by/bLen)*lungeDist*0.42-lungeCurve*5;
-  torsoLean=dirSign*(combo===3?0.22:0.16)*lungeCurve;
-  leftStrideX=6*lungeCurve*dirSign;
-  rightStrideX=-7*lungeCurve*dirSign;
-  leftFootLift=3*lungeCurve;
+  offsetY+=(by/bLen)*lungeDist*0.44-lungeCurve*(combo===3?6.5:5);
+  torsoLean=dirSign*(combo===3?0.24:combo===2?-0.14:0.16)*lungeCurve;
+  leftStrideX=6.5*lungeCurve*dirSign;
+  rightStrideX=-7.5*lungeCurve*dirSign;
+  leftFootLift=3.5*lungeCurve;
   rightFootLift=0;
-  squashX=1+0.045*lungeCurve;
-  squashY=1-0.038*lungeCurve;
+  squashX=1+(combo===3?0.055:0.045)*lungeCurve;
+  squashY=1-(combo===3?0.045:0.038)*lungeCurve;
  }else if(view.dashing){
   torsoLean=0.17*signLeft;
   offsetX=-6*signLeft;

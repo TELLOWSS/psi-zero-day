@@ -370,15 +370,59 @@ export function drawOmegaAuthoredHazardOrBoss(
  ctx.save();
 
  let dy = 0;
+ let breathScale = 1;
  if (key === 'hazard-cart') {
-  dy = Math.sin(time * 28 + hazard.x * 0.05) * 1.1;
+  dy = Math.sin(time * 28 + hazard.x * 0.05) * 1.35;
  } else if (key === 'boss-warden') {
   dy = Math.sin(time * 2.4) * 4.5;
+  breathScale = 1 + Math.sin(time * 2.6) * 0.018;
  } else if (key === 'boss-crane') {
   dy = Math.sin(time * 3.1) * 1.6;
+  breathScale = 1 + Math.sin(time * 2.4) * 0.014;
  }
 
+ if (key === 'hazard-cart') {
+  // Sweeping volumetric headlight beam projecting along travel direction.
+  const hv = hazard as { readonly vx?: number; readonly vy?: number };
+  const dirX = Number.isFinite(hv.vx) && Math.abs(hv.vx ?? 0) > 4 ? (hv.vx! >= 0 ? 1 : -1) : 1;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const beam = ctx.createLinearGradient?.(dirX * 28, -28 + dy, dirX * 145, -10);
+  if (beam && typeof beam.addColorStop === 'function') {
+   beam.addColorStop(0, 'rgba(255,244,180,0.42)');
+   beam.addColorStop(1, 'rgba(255,214,102,0)');
+   ctx.fillStyle = beam;
+   ctx.beginPath();
+   ctx.moveTo(dirX * 26, -32 + dy);
+   ctx.lineTo(dirX * 145, -48);
+   ctx.lineTo(dirX * 145, 8);
+   ctx.lineTo(dirX * 26, -18 + dy);
+   ctx.closePath();
+   ctx.fill();
+  }
+  ctx.restore();
+ }
+
+ ctx.save();
+ if (breathScale !== 1) ctx.scale(breathScale, 2 - breathScale);
  ctx.drawImage(img, -drawW * 0.5, -drawH + footPad + dy, drawW, drawH);
+ ctx.restore();
+
+ if (key === 'hazard-cart') {
+  // Subtle wheel friction sparks at ground contact.
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (let s = 0; s < 3; s++) {
+   const spCycle = (time * 9 + s * 0.33 + hazard.x * 0.01) % 1;
+   const sx = -24 + s * 22 - spCycle * 18;
+   const sy = -2 - Math.sin(spCycle * Math.PI) * 9;
+   ctx.fillStyle = `rgba(255,218,122,${(1 - spCycle).toFixed(2)})`;
+   ctx.beginPath();
+   ctx.arc(sx, sy, 1.8, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ }
 
  // Live atmospheric / phase-2 combat VFX overlays fitted to the authored artwork.
  if (key === 'hazard-gas') {
@@ -535,20 +579,63 @@ export function drawOmegaAuthoredZombie(
   brain && (brain.phase === 'warning' || brain.phase === 'charge') && Math.abs(brain.lockedX) > 0.01
    ? brain.lockedX < 0
    : (targetX ?? hazard.x) < hazard.x;
- const walkBob = (hazard.isStunned ?? 0) > 0 ? 0 : Math.abs(Math.sin(time * 6.2 + seed)) * -2.6;
- const lean = kind === 'sprinter' ? 0.08 : brain?.phase === 'charge' ? 0.11 : 0;
+ const stunned = (hazard.isStunned ?? 0) > 0;
+ const cadence = kind === 'sprinter' ? 9.5 : kind === 'armored' ? 5.2 : kind === 'stalker' ? 7.0 : 5.8;
+ const wave = stunned ? 0 : Math.sin(time * cadence + seed);
+ const stomp = stunned ? 0 : Math.pow(Math.max(0, -Math.cos(time * cadence + seed)), 3);
+
+ // Per-species distinct gait, lean & body squash-stretch kinematics.
+ let walkBob = stunned ? 0 : Math.abs(wave) * (kind === 'armored' ? -1.8 : kind === 'sprinter' ? -3.4 : -2.6);
+ let lean =
+  kind === 'sprinter'
+   ? 0.14
+   : kind === 'drifter'
+     ? wave * 0.055
+     : kind === 'stalker'
+       ? Math.sin(time * 4.4 + seed) * 0.075
+       : wave * 0.032;
+ let sqX = kind === 'armored' ? 1 + stomp * 0.045 : kind === 'sprinter' ? 1.045 : 1 + stomp * 0.025;
+ let sqY = kind === 'armored' ? 1 - stomp * 0.045 : kind === 'sprinter' ? 0.96 : 1 - stomp * 0.022;
+
+ const isWarning = brain?.phase === 'warning';
+ const isCharging = brain?.phase === 'charge';
+ const warnProg = isWarning ? clamp(1 - brain.timer / Math.max(0.01, brain.warningDuration), 0, 1) : 0;
+ if (isWarning) {
+  // Coil-back anticipation crouch before pounce/slam.
+  lean = -0.10 * warnProg;
+  walkBob = 3.5 * warnProg;
+  sqX = 1 + 0.08 * warnProg;
+  sqY = 1 - 0.09 * warnProg;
+ } else if (isCharging) {
+  lean = 0.16;
+  sqX = 1.07;
+  sqY = 0.93;
+ }
 
  ctx.save();
- if (brain?.phase === 'warning') {
+ if (isWarning) {
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
-  const warnAura = ctx.createRadialGradient?.(0, -18, 4, 0, -18, 42);
+  const warnAura = ctx.createRadialGradient?.(0, -18, 4, 0, -18, 44 + warnProg * 8);
   if (warnAura && typeof warnAura.addColorStop === 'function') {
-   warnAura.addColorStop(0, kind === 'armored' ? 'rgba(255,160,91,0.42)' : 'rgba(255,110,207,0.42)');
+   warnAura.addColorStop(0, kind === 'armored' ? 'rgba(255,160,91,0.48)' : 'rgba(255,110,207,0.48)');
    warnAura.addColorStop(1, 'rgba(0,0,0,0)');
    ctx.fillStyle = warnAura;
    ctx.beginPath();
-   ctx.arc(0, -18, 42, 0, Math.PI * 2);
+   ctx.arc(0, -18, 44 + warnProg * 8, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ } else if (isCharging && kind === 'stalker') {
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const phaseAura = ctx.createRadialGradient?.(0, -44, 6, 0, -44, 52);
+  if (phaseAura && typeof phaseAura.addColorStop === 'function') {
+   phaseAura.addColorStop(0, 'rgba(192,132,252,0.45)');
+   phaseAura.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = phaseAura;
+   ctx.beginPath();
+   ctx.arc(0, -44, 52, 0, Math.PI * 2);
    ctx.fill();
   }
   ctx.restore();
@@ -556,8 +643,32 @@ export function drawOmegaAuthoredZombie(
 
  ctx.translate(0, walkBob);
  if (facesLeft) ctx.scale(-1, 1);
- if (lean > 0) ctx.rotate(lean);
+ ctx.scale(sqX, sqY);
+ if (Math.abs(lean) > 0.001) ctx.rotate(lean);
  ctx.drawImage(img, -drawSize * 0.5, -drawSize * 0.945, drawSize, drawSize);
+
+ // Expressive 4-point crimson/amber eye-glint star during warning wind-up!
+ if (isWarning && warnProg > 0.08) {
+  const gx = drawSize * 0.08;
+  const gy = -drawSize * 0.72;
+  const outer = (6 + 9 * warnProg);
+  const inner = outer * 0.24;
+  ctx.save();
+  ctx.translate(gx, gy);
+  ctx.rotate(warnProg * 0.6);
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = kind === 'armored' ? 'rgba(255,212,110,0.95)' : 'rgba(255,132,196,0.95)';
+  ctx.beginPath();
+  for (let i = 0; i < 8; i++) {
+   const r = i % 2 === 0 ? outer : inner;
+   const a = (i * Math.PI) / 4;
+   if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+   else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+ }
  ctx.restore();
  return true;
 }

@@ -136,26 +136,35 @@ export function drawOmegaAuthored3DProp(
 
  ctx.save();
 
- // 1. Grounded soft ambient + directional cast shadow hugging the real Watch footprint.
+ // 1. Grounded soft ambient + linear-faded directional cast shadow hugging the real Watch footprint.
  const sx = obstacle.x;
  const sy = obstacle.y;
  const sw = obstacle.width;
  const sh = obstacle.height;
- const castX = sw * 0.16;
- const castY = sh * 0.14;
+ const castX = sw * 0.22;
+ const castY = sh * 0.18;
 
- ctx.fillStyle = 'rgba(2,6,12,.34)';
+ const shadowGrad = ctx.createLinearGradient?.(sx + sw * 0.3, sy + sh * 0.4, sx + sw + castX, sy + sh + castY);
+ if (shadowGrad && typeof shadowGrad.addColorStop === 'function') {
+  shadowGrad.addColorStop(0, 'rgba(1,5,12,.48)');
+  shadowGrad.addColorStop(0.7, 'rgba(1,5,12,.22)');
+  shadowGrad.addColorStop(1, 'rgba(1,5,12,0)');
+  ctx.fillStyle = shadowGrad;
+ } else {
+  ctx.fillStyle = 'rgba(2,6,12,.34)';
+ }
  ctx.beginPath();
  ctx.moveTo(sx - sw * 0.04, sy + sh * 0.25);
  ctx.lineTo(sx + sw * 0.96, sy + sh * 0.20);
- ctx.lineTo(sx + sw + castX * 1.15, sy + sh + castY * 1.15);
+ ctx.lineTo(sx + sw + castX * 1.18, sy + sh + castY * 1.18);
  ctx.lineTo(sx + castX * 0.45, sy + sh + castY);
  ctx.closePath();
  ctx.fill();
 
- ctx.fillStyle = 'rgba(1,4,10,.48)';
+ // Tight base ambient-occlusion contact ellipse anchoring the structure to wet concrete.
+ ctx.fillStyle = 'rgba(0,2,6,.62)';
  ctx.beginPath();
- ctx.ellipse(sx + sw * 0.52, sy + sh * 0.88, sw * 0.52, Math.max(8, sh * 0.24), 0, 0, Math.PI * 2);
+ ctx.ellipse(sx + sw * 0.52, sy + sh * 0.89, sw * 0.48, Math.max(7, sh * 0.20), 0, 0, Math.PI * 2);
  ctx.fill();
 
  // 2. Stand the 3/4 isometric artwork upright via inverse quarter-view matrix at front-center base.
@@ -168,16 +177,27 @@ export function drawOmegaAuthored3DProp(
  const top = -drawH + sh * spec.footPad;
  ctx.drawImage(img, left, top, drawW, drawH);
 
- // 3. Subtle atmospheric rim integration (zero solid shapes or bars over metal surfaces).
- const pulse = 0.08 + 0.03 * Math.sin(seconds * 2.4 + sx * 0.02);
- const rimGrad = ctx.createRadialGradient(-drawW * 0.12, top + drawH * 0.25, 4, 0, top + drawH * 0.42, drawW * 0.58);
- rimGrad.addColorStop(0, `rgba(${theme.keyRgb},${pulse.toFixed(3)})`);
- rimGrad.addColorStop(1, 'rgba(0,0,0,0)');
+ // 3. Subtle top-left directional sector key rim + bottom wet-deck bounce reflection (zero bars).
+ const pulse = 0.09 + 0.035 * Math.sin(seconds * 2.4 + sx * 0.02);
+ const rimGrad = ctx.createRadialGradient?.(-drawW * 0.18, top + drawH * 0.22, 4, -drawW * 0.06, top + drawH * 0.36, drawW * 0.56);
  ctx.globalCompositeOperation = 'lighter';
- ctx.fillStyle = rimGrad;
- ctx.beginPath();
- ctx.ellipse(0, top + drawH * 0.38, drawW * 0.48, drawH * 0.38, 0, 0, Math.PI * 2);
- ctx.fill();
+ if (rimGrad && typeof rimGrad.addColorStop === 'function') {
+  rimGrad.addColorStop(0, `rgba(${theme.keyRgb},${pulse.toFixed(3)})`);
+  rimGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rimGrad;
+  ctx.beginPath();
+  ctx.ellipse(-drawW * 0.06, top + drawH * 0.34, drawW * 0.44, drawH * 0.34, 0, 0, Math.PI * 2);
+  ctx.fill();
+ }
+ const floorBounce = ctx.createRadialGradient?.(0, top + drawH * 0.88, 2, 0, top + drawH * 0.84, drawW * 0.42);
+ if (floorBounce && typeof floorBounce.addColorStop === 'function') {
+  floorBounce.addColorStop(0, `rgba(${theme.fillRgb},${(pulse * 0.65).toFixed(3)})`);
+  floorBounce.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = floorBounce;
+  ctx.beginPath();
+  ctx.ellipse(0, top + drawH * 0.84, drawW * 0.38, drawH * 0.16, 0, 0, Math.PI * 2);
+  ctx.fill();
+ }
 
  ctx.restore();
  return true;
@@ -280,18 +300,26 @@ export function drawOmegaPaintedBladeSlash(
 
  ctx.save();
 
- // 1. Wet-floor specular plasma reflection pool under hero feet.
+ // 1. Wet-floor specular plasma reflection pool + finisher shockwave ring under hero feet.
  ctx.save();
  ctx.translate(footWorldX + Math.cos(facingAngle) * 26, footWorldY + 6);
  ctx.scale(1, 0.38);
  ctx.globalCompositeOperation = 'lighter';
  const floorGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, 96);
- floorGrad.addColorStop(0, `rgba(${colorRgb},${(0.36 * fadeAlpha).toFixed(3)})`);
+ floorGrad.addColorStop(0, `rgba(${colorRgb},${(0.42 * fadeAlpha).toFixed(3)})`);
  floorGrad.addColorStop(1, 'rgba(0,0,0,0)');
  ctx.fillStyle = floorGrad;
  ctx.beginPath();
  ctx.arc(0, 0, 96, 0, Math.PI * 2);
  ctx.fill();
+ if (combo === 3) {
+  const ringR = 54 + sweepT * 62;
+  ctx.strokeStyle = `rgba(255,212,128,${(0.68 * fadeAlpha).toFixed(3)})`;
+  ctx.lineWidth = 3.8 * fadeAlpha + 1;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, ringR, ringR * 0.85, 0, -Math.PI * 0.72 + facingAngle, Math.PI * 0.72 + facingAngle);
+  ctx.stroke();
+ }
  ctx.restore();
 
  // 2. 3/4 tilted progressive sweeping liquid-plasma slash reaching forward into targets.
@@ -344,6 +372,24 @@ export function drawOmegaPaintedBladeSlash(
   ctx.beginPath();
   ctx.arc(0, 0, arcR, 0, Math.PI * 2);
   ctx.fill();
+ }
+
+ // Razor-sharp hot leading-edge plasma arc inside the clipped sweep sector.
+ if (endArc > startArc + 0.12) {
+  const leadR = slashSize * 0.41;
+  const leadStart = Math.max(startArc, endArc - 0.62);
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = `rgba(${colorRgb},${(0.75 * fadeAlpha).toFixed(3)})`;
+  ctx.lineWidth = (combo === 3 ? 10 : 7.5) * fadeAlpha + 1.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, leadR, leadStart, endArc);
+  ctx.stroke();
+
+  ctx.strokeStyle = `rgba(255,255,255,${(0.95 * fadeAlpha).toFixed(3)})`;
+  ctx.lineWidth = (combo === 3 ? 3.4 : 2.5) * fadeAlpha + 0.6;
+  ctx.beginPath();
+  ctx.arc(0, 0, leadR, Math.max(startArc, endArc - 0.42), endArc);
+  ctx.stroke();
  }
  ctx.restore();
 

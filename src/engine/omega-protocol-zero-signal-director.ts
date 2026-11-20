@@ -57,7 +57,8 @@ export type OmegaDirectorEventKind =
  | 'auto_interact'
  | 'rail_burst'
  | 'weapon_mode'
- | 'weave_bonus';
+ | 'weave_bonus'
+ | 'enemy_kill';
 
 export interface OmegaDirectorEvent {
  readonly kind: OmegaDirectorEventKind;
@@ -179,6 +180,28 @@ export interface OmegaActiveKillBurst {
  readonly x: number;
  readonly y: number;
  readonly boss: boolean;
+ age: number;
+ readonly duration: number;
+}
+
+export interface OmegaActiveSpark {
+ x: number;
+ y: number;
+ vx: number;
+ vy: number;
+ z: number;
+ vz: number;
+ readonly colorRgb: string;
+ readonly size: number;
+ age: number;
+ readonly duration: number;
+}
+
+export interface OmegaActiveScorch {
+ readonly x: number;
+ readonly y: number;
+ readonly radius: number;
+ readonly colorRgb: string;
  age: number;
  readonly duration: number;
 }
@@ -325,6 +348,7 @@ export class OmegaZeroSignalDirector {
  shakeDirY = 0;
  cameraShake = 0;
  zoomPunch = 0;
+ cameraRoll = 0;
 
  readonly detonations: OmegaActiveDetonation[] = [];
  readonly waves: OmegaActiveWave[] = [];
@@ -339,6 +363,8 @@ export class OmegaZeroSignalDirector {
  readonly slashCuts: OmegaActiveSlashCut[] = [];
  readonly damageNumbers: OmegaFloatingDamageNumber[] = [];
  readonly killBursts: OmegaActiveKillBurst[] = [];
+ readonly sparks: OmegaActiveSpark[] = [];
+ readonly scorches: OmegaActiveScorch[] = [];
 
  private waveIdSeq = 1;
  private pendingEvents: OmegaDirectorEvent[] = [];
@@ -384,6 +410,58 @@ export class OmegaZeroSignalDirector {
    duration: 0.42,
   });
   if (this.casings.length > 18) this.casings.shift();
+ }
+
+ private spawnSparkBurst(
+  x: number,
+  y: number,
+  count: number,
+  baseAngle: number,
+  spreadRad: number,
+  colorRgb: string,
+  speedScale = 1,
+ ): void {
+  const total = Math.max(1, Math.round(count));
+  for (let i = 0; i < total; i++) {
+   const s = this.casingSeed++;
+   const frac = Math.sin(s * 19.37 + i * 7.13) * 43758.5453;
+   const r1 = frac - Math.floor(frac);
+   const frac2 = Math.cos(s * 11.73 + i * 3.91) * 28411.17;
+   const r2 = frac2 - Math.floor(frac2);
+   const ang = baseAngle + (r1 - 0.5) * spreadRad;
+   const spd = (150 + r2 * 220) * speedScale;
+   this.sparks.push({
+    x,
+    y,
+    vx: Math.cos(ang) * spd,
+    vy: Math.sin(ang) * spd * 0.72,
+    z: 18 + (s % 5) * 3.5,
+    vz: 95 + r2 * 135,
+    colorRgb,
+    size: 1.4 + (s % 3) * 0.45,
+    age: 0,
+    duration: 0.24 + r1 * 0.14,
+   });
+  }
+  while (this.sparks.length > 40) this.sparks.shift();
+ }
+
+ private spawnScorch(x: number, y: number, radius: number, colorRgb: string, duration = 3.4): void {
+  this.scorches.push({
+   x,
+   y,
+   radius: Math.max(24, radius),
+   colorRgb,
+   age: 0,
+   duration,
+  });
+  if (this.scorches.length > 14) this.scorches.shift();
+ }
+
+ private addCameraRoll(radians: number): void {
+  const sign = this.shakeDirX >= 0 ? 1 : -1;
+  const next = this.cameraRoll + Math.abs(radians) * sign;
+  this.cameraRoll = next < -0.014 ? -0.014 : next > 0.014 ? 0.014 : next;
  }
 
  toggleWeaponMode(session?: OmegaProtocolCombatSession): OmegaWeaponMode {
@@ -532,6 +610,15 @@ export class OmegaZeroSignalDirector {
    hitCount++;
    this.pushDamageNumber(h.x, h.y - 26, dealt, 'rail');
    this.pushSlashCut(h.x, h.y, Math.atan2(uy, ux), this.weaponMode === 'focus' ? '251,191,36' : '103,232,249', true);
+   this.spawnSparkBurst(
+    h.x,
+    h.y,
+    7,
+    Math.atan2(uy, ux),
+    1.1,
+    this.weaponMode === 'focus' ? '251,191,36' : '103,232,249',
+    1.25,
+   );
    if (h.hp > 0) {
     const addStacks = i === 0 ? 3 : 2;
     this.marks.set(h.id, Math.min(3, (this.marks.get(h.id) ?? 0) + addStacks));
@@ -562,6 +649,13 @@ export class OmegaZeroSignalDirector {
     age: 0,
     duration: 0.24,
    });
+   this.spawnScorch(
+    struck[0].hazard.x,
+    struck[0].hazard.y,
+    54,
+    isFocus ? '251,191,36' : '103,232,249',
+    3.2,
+   );
   }
 
   this.comboCount += Math.max(1, hitCount);
@@ -570,6 +664,7 @@ export class OmegaZeroSignalDirector {
   this.addStyle(hitCount > 0 ? 85 + hitCount * 35 : 25);
   this.strikerCharge = Math.min(100, this.strikerCharge + (hitCount > 0 ? 8 + hitCount * 4 : 3));
   this.triggerHitstop(hitCount > 0 ? 0.044 : 0.018, hitCount > 0 ? 0.34 : 0.14, 11, ux, uy);
+  this.addCameraRoll(0.009);
   this.zoomPunch = Math.max(this.zoomPunch, 0.04);
   if (hitCount > 0) {
    this.pushCallout(
@@ -612,12 +707,20 @@ export class OmegaZeroSignalDirector {
   return this.hpDamageFlash;
  }
 
+ currentRailCharge(): number {
+  return this.railCharge;
+ }
+
  tickHitstop(rawRealDt: number): boolean {
   if (this.hitstopRemaining <= 0) return false;
   const dt = Number.isFinite(rawRealDt) && rawRealDt > 0 ? Math.min(0.05, rawRealDt) : 0;
   this.hitstopRemaining = Math.max(0, this.hitstopRemaining - dt);
   if (this.impactFlash > 0) this.impactFlash = Math.max(0, this.impactFlash - dt * 2.8);
   if (this.cameraShake > 0) this.cameraShake = Math.max(0, this.cameraShake - dt * 20);
+  if (Math.abs(this.cameraRoll) > 0.0001) {
+   this.cameraRoll *= Math.exp(-dt * 16);
+   if (Math.abs(this.cameraRoll) < 0.0001) this.cameraRoll = 0;
+  }
   return this.hitstopRemaining > 0;
  }
 
@@ -761,6 +864,15 @@ export class OmegaZeroSignalDirector {
     this.lastImpactAudioTime = gameNow;
     this.pendingEvents.push({ kind: 'hit_impact', detail: material });
    }
+   this.spawnSparkBurst(
+    ev.x,
+    ev.y,
+    material === 'normal' ? 3 : 5,
+    ev.angle + Math.PI,
+    1.15,
+    material === 'armored' ? '251,191,36' : material === 'boss' ? '244,114,182' : '125,211,252',
+    0.85,
+   );
 
    const prev = this.marks.get(ev.targetId) ?? 0;
    const focusBonusMark = this.weaponMode === 'focus' && material !== 'normal' ? 1 : 0;
@@ -885,6 +997,8 @@ export class OmegaZeroSignalDirector {
   this.addStyle(180);
   this.zoomPunch = 0.085;
   this.cameraShake = Math.max(this.cameraShake, 9);
+  this.addCameraRoll(0.0075);
+  this.spawnSparkBurst(player.x, player.y, 8, Math.atan2(session.facing.y, session.facing.x) + Math.PI, Math.PI * 1.4, '103,232,249', 1.1);
   this.pushCallout(player.x, player.y - 72, '⚡ PHANTOM DODGE!', '#67e8f9', 1.15);
   this.pendingEvents.push({ kind: 'phantom_dodge' });
   return { phantomDodge: true };
@@ -909,7 +1023,20 @@ export class OmegaZeroSignalDirector {
    for (const hit of strike.hitTargets) {
     this.pushSlashCut(hit.x, hit.y, angle, slashColorRgb, strike.combo === 3);
     this.pushDamageNumber(hit.x, hit.y, hit.damage, strike.combo === 3 ? 'blade_crit' : 'blade');
+    this.spawnSparkBurst(
+     hit.x,
+     hit.y,
+     strike.combo === 3 ? 10 : 6,
+     angle,
+     strike.combo === 3 ? 1.7 : 1.25,
+     slashColorRgb,
+     strike.combo === 3 ? 1.3 : 1.0,
+    );
    }
+  }
+  if (strike.combo === 3 && strike.hits > 0) {
+   this.spawnScorch(reachCenterX, reachCenterY, 64, '251,191,36', 2.8);
+   this.addCameraRoll(0.0085);
   }
 
   // Snapshot alive before extra detonation/moonwave so we can award kill refunds accurately.
@@ -981,6 +1108,22 @@ export class OmegaZeroSignalDirector {
     age: 0,
     duration: 0.36,
    });
+   this.spawnSparkBurst(
+    target.x,
+    target.y,
+    12,
+    angle,
+    Math.PI * 2,
+    stacks >= 3 ? '251,191,36' : '103,232,249',
+    stacks >= 3 ? 1.35 : 1.1,
+   );
+   this.spawnScorch(
+    target.x,
+    target.y,
+    radius * 0.72,
+    stacks >= 3 ? '251,191,36' : '103,232,249',
+    3.8,
+   );
    this.shield = Math.min(this.maxShield, this.shield + stacks * 5);
    this.strikerCharge = Math.min(100, this.strikerCharge + stacks * 10 * this.chargeRateMultiplier());
    this.comboCount += stacks;
@@ -994,6 +1137,7 @@ export class OmegaZeroSignalDirector {
     Math.cos(angle),
     Math.sin(angle),
    );
+   this.addCameraRoll(stacks >= 3 ? 0.011 : 0.007);
    this.zoomPunch = Math.max(this.zoomPunch, 0.045);
    this.pushCallout(target.x, target.y - 54, `💥 DETONATE ×${stacks}!`, stacks >= 3 ? '#fbbf24' : '#67e8f9', 0.9);
    this.pendingEvents.push({ kind: 'detonation', numeric: stacks });
@@ -1135,6 +1279,9 @@ export class OmegaZeroSignalDirector {
     duration: 0.45,
    });
    this.triggerHitstop(0.056, 0.42, 12, 0.7, 0.4);
+   this.addCameraRoll(0.009);
+   this.spawnSparkBurst(tx, ty, 10, 0.5, Math.PI * 1.8, '56,189,248', 1.25);
+   this.spawnScorch(tx, ty, 56, '56,189,248', 3.4);
    this.pushCallout(tx, ty - 68, '🎯 M01 OVERWATCH!', '#38bdf8', 1.1);
   } else if (id === 'guard_sentry') {
    this.turrets.push({
@@ -1169,6 +1316,9 @@ export class OmegaZeroSignalDirector {
    });
    this.detonations.push({ x: center.x, y: center.y, radius: 235, stacks: 3, age: 0, duration: 0.42 });
    this.triggerHitstop(0.056, 0.45, 14, 0, -1);
+   this.addCameraRoll(0.012);
+   this.spawnSparkBurst(center.x, center.y, 16, 0, Math.PI * 2, '192,132,252', 1.35);
+   this.spawnScorch(center.x, center.y, 118, '192,132,252', 4.5);
    this.pushCallout(center.x, center.y - 72, '⚡ BREAKER ORBITAL EMP!', '#c084fc', 1.15);
   } else if (id === 'site_aegis') {
    player.hp = Math.min(player.maxHp, player.hp + 22);
@@ -1296,6 +1446,19 @@ export class OmegaZeroSignalDirector {
      duration: info.boss ? 0.55 : 0.34,
     });
     if (this.killBursts.length > 24) this.killBursts.shift();
+    this.spawnSparkBurst(
+     info.x,
+     info.y,
+     info.boss ? 18 : 8,
+     0,
+     Math.PI * 2,
+     info.boss ? '244,114,182' : '103,232,249',
+     info.boss ? 1.45 : 1.05,
+    );
+    if (info.boss) {
+     this.spawnScorch(info.x, info.y, 90, '244,114,182', 4.5);
+    }
+    this.pendingEvents.push({ kind: 'enemy_kill', detail: info.boss ? 'boss' : 'normal' });
     if (evos.includes('signal_swarm') && this.drones.length < 5) {
      this.drones.push({ x: player.x, y: player.y - 24, vx: 110, vy: -90, remaining: 4.5 });
     }
@@ -1314,6 +1477,10 @@ export class OmegaZeroSignalDirector {
   if (this.phantomGuardCooldown > 0) this.phantomGuardCooldown = Math.max(0, this.phantomGuardCooldown - dt);
   if (this.cameraShake > 0) this.cameraShake = Math.max(0, this.cameraShake - dt * 36);
   if (this.zoomPunch > 0) this.zoomPunch = Math.max(0, this.zoomPunch - dt * 0.25);
+  if (Math.abs(this.cameraRoll) > 0.0001) {
+   this.cameraRoll *= Math.exp(-dt * 16);
+   if (Math.abs(this.cameraRoll) < 0.0001) this.cameraRoll = 0;
+  }
 
   for (const key of Object.keys(this.strikerCooldowns) as OmegaStrikerId[]) {
    if (this.strikerCooldowns[key] > 0) {
@@ -1536,6 +1703,26 @@ export class OmegaZeroSignalDirector {
    const kb = this.killBursts[i]!;
    kb.age += dt;
    if (kb.age >= kb.duration) this.killBursts.splice(i, 1);
+  }
+  for (let i = this.sparks.length - 1; i >= 0; i--) {
+   const sp = this.sparks[i]!;
+   sp.age += dt;
+   sp.x += sp.vx * dt;
+   sp.y += sp.vy * dt;
+   sp.vz -= 540 * dt;
+   sp.z += sp.vz * dt;
+   if (sp.z < 0) {
+    sp.z = 0;
+    sp.vz = Math.abs(sp.vz) * 0.44;
+    sp.vx *= 0.72;
+    sp.vy *= 0.72;
+   }
+   if (sp.age >= sp.duration) this.sparks.splice(i, 1);
+  }
+  for (let i = this.scorches.length - 1; i >= 0; i--) {
+   const sc = this.scorches[i]!;
+   sc.age += dt;
+   if (sc.age >= sc.duration) this.scorches.splice(i, 1);
   }
 
   const timeScale = this.slowMoRemaining > 0 ? 0.24 : 1.0;

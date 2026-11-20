@@ -66,6 +66,22 @@ export function drawOmegaDashEnergy(
   ctx.strokeStyle=`rgba(141,230,255,${(opacity*1.35).toFixed(3)})`;
   ctx.lineWidth=1.8;
   ctx.beginPath();ctx.ellipse(2,0,28,7,0,0,Math.PI*2);ctx.stroke();
+
+  // Holographic directional warp chevrons + sleek slipstream streaks along dash vector.
+  ctx.strokeStyle=`rgba(216,250,255,${(opacity*1.45).toFixed(3)})`;
+  ctx.lineWidth=2.0;
+  ctx.lineCap='round';
+  for(const cx of [-22,-6]){
+   ctx.beginPath();
+   ctx.moveTo(cx-6,-9);ctx.lineTo(cx+4,0);ctx.lineTo(cx-6,9);
+   ctx.stroke();
+  }
+  ctx.strokeStyle=`rgba(192,132,252,${(opacity*1.15).toFixed(3)})`;
+  ctx.lineWidth=1.4;
+  ctx.beginPath();
+  ctx.moveTo(-40,-5);ctx.lineTo(-10,-5);
+  ctx.moveTo(-36,5);ctx.lineTo(-8,5);
+  ctx.stroke();
   ctx.restore();
  }
 }
@@ -92,6 +108,9 @@ export function drawOmegaGroundedSplash(
    ctx.stroke();
    ctx.beginPath();ctx.arc(side*20,-5,1.2,0,Math.PI*2);ctx.fill();
   }
+  ctx.beginPath();
+  ctx.moveTo(0,-2);ctx.lineTo(0,-8);ctx.stroke();
+  ctx.beginPath();ctx.arc(0,-10,1.1,0,Math.PI*2);ctx.fill();
   ctx.restore();
  }
 }

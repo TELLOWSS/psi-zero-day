@@ -24,6 +24,139 @@ function seededOffset(seed: number, idx: number): number {
  return (x - Math.floor(x)) * 2 - 1;
 }
 
+/**
+ * Renders floor-level combat scorch craters, cooling ember fractures, and real-time
+ * wet-deck bounce lighting from explosions, plasma moonwaves, and railgun/orbital beams.
+ * Drawn directly after ground surfaces and BEFORE depth-sorted props and actors.
+ */
+export function drawOmegaZeroSignalGroundFx(
+ ctx: CanvasRenderingContext2D,
+ director: OmegaZeroSignalDirector,
+ seconds: number,
+): void {
+ const hasScorches = director.scorches.length > 0;
+ const hasLights =
+  director.detonations.length > 0 || director.beams.length > 0 || director.waves.length > 0;
+ if (!hasScorches && !hasLights) return;
+
+ const invY = 1 / OMEGA_QUARTER_VIEW.groundYScale;
+ const gY = OMEGA_QUARTER_VIEW.groundYScale;
+
+ ctx.save();
+
+ // 1. Persistent carbonized scorch decals & cooling fracture lines on the deck.
+ for (const sc of director.scorches) {
+  const p = clamp(sc.age / Math.max(0.01, sc.duration), 0, 1);
+  const fade = Math.pow(1 - p, 1.35);
+  const heatFade = p < 0.45 ? Math.pow(1 - p / 0.45, 1.2) : 0;
+  ctx.save();
+  ctx.translate(sc.x, sc.y + 4);
+  ctx.scale(1, gY);
+
+  const crater = ctx.createRadialGradient?.(0, 0, sc.radius * 0.1, 0, 0, sc.radius);
+  if (crater && typeof crater.addColorStop === 'function') {
+   crater.addColorStop(0, `rgba(3,7,14,${(0.56 * fade).toFixed(3)})`);
+   crater.addColorStop(0.65, `rgba(6,12,22,${(0.34 * fade).toFixed(3)})`);
+   crater.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = crater;
+  } else {
+   ctx.fillStyle = `rgba(3,7,14,${(0.45 * fade).toFixed(3)})`;
+  }
+  ctx.beginPath();
+  ctx.arc(0, 0, sc.radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Four radiating surface crack fractures inside crater.
+  ctx.strokeStyle = `rgba(4,9,18,${(0.55 * fade).toFixed(3)})`;
+  ctx.lineWidth = 1.6;
+  for (let i = 0; i < 4; i++) {
+   const a = seededOffset(sc.x + sc.y, i) * Math.PI + (i * Math.PI) / 2;
+   ctx.beginPath();
+   ctx.moveTo(Math.cos(a) * sc.radius * 0.14, Math.sin(a) * sc.radius * 0.14);
+   ctx.lineTo(Math.cos(a) * sc.radius * 0.78, Math.sin(a) * sc.radius * 0.78);
+   ctx.stroke();
+  }
+
+  if (heatFade > 0.02) {
+   ctx.globalCompositeOperation = 'lighter';
+   ctx.strokeStyle = `rgba(${sc.colorRgb},${(0.34 * heatFade).toFixed(3)})`;
+   ctx.lineWidth = 2.4;
+   ctx.beginPath();
+   ctx.arc(0, 0, sc.radius * (0.48 + (1 - heatFade) * 0.14), 0, Math.PI * 2);
+   ctx.stroke();
+  }
+  ctx.restore();
+ }
+
+ // 2. Real-time wet-floor bounce lighting under active detonations, beams & waves.
+ ctx.globalCompositeOperation = 'lighter';
+
+ for (const d of director.detonations) {
+  const p = clamp(d.age / Math.max(0.01, d.duration), 0, 1);
+  const fade = Math.pow(1 - p, 1.3);
+  const r = d.radius * (0.75 + 0.45 * p);
+  const col = d.stacks >= 3 ? '251,191,36' : '103,232,249';
+  ctx.save();
+  ctx.translate(d.x, d.y + 4);
+  ctx.scale(1, gY);
+  const glow = ctx.createRadialGradient?.(0, 0, 4, 0, 0, r);
+  if (glow && typeof glow.addColorStop === 'function') {
+   glow.addColorStop(0, `rgba(255,255,255,${(0.32 * fade).toFixed(3)})`);
+   glow.addColorStop(0.45, `rgba(${col},${(0.28 * fade).toFixed(3)})`);
+   glow.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = glow;
+   ctx.beginPath();
+   ctx.arc(0, 0, r, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ }
+
+ for (const b of director.beams) {
+  const fade = clamp(1 - b.age / Math.max(0.01, b.duration), 0, 1);
+  const gx1 = b.x1;
+  const gy1 = b.y1 + 24 * invY;
+  const gx2 = b.x2;
+  const gy2 = b.y2 + (b.isPillar ? 0 : 22 * invY);
+  const beamGlow = ctx.createLinearGradient?.(gx1, gy1, gx2, gy2);
+  if (beamGlow && typeof beamGlow.addColorStop === 'function') {
+   beamGlow.addColorStop(0, `rgba(${b.colorRgb},${(0.18 * fade).toFixed(3)})`);
+   beamGlow.addColorStop(0.5, `rgba(${b.colorRgb},${(0.24 * fade).toFixed(3)})`);
+   beamGlow.addColorStop(1, `rgba(255,255,255,${(0.34 * fade).toFixed(3)})`);
+   ctx.strokeStyle = beamGlow;
+  } else {
+   ctx.strokeStyle = `rgba(${b.colorRgb},${(0.22 * fade).toFixed(3)})`;
+  }
+  ctx.lineWidth = (b.isPillar ? 68 : 44) * fade;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(gx1, gy1);
+  ctx.lineTo(gx2, gy2);
+  ctx.stroke();
+ }
+
+ for (const wv of director.waves) {
+  const fade = clamp(1 - wv.age / Math.max(0.01, wv.duration), 0, 1);
+  const col = wv.crimson ? '244,114,182' : '103,232,249';
+  const shimmer = 0.85 + 0.15 * Math.sin(seconds * 18);
+  ctx.save();
+  ctx.translate(wv.x, wv.y + 4);
+  ctx.scale(1, gY);
+  const wg = ctx.createRadialGradient?.(0, 0, 2, 0, 0, wv.radius * 0.95);
+  if (wg && typeof wg.addColorStop === 'function') {
+   wg.addColorStop(0, `rgba(${col},${(0.26 * fade * shimmer).toFixed(3)})`);
+   wg.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = wg;
+   ctx.beginPath();
+   ctx.arc(0, 0, wv.radius * 0.95, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ }
+
+ ctx.restore();
+}
+
 export function drawOmegaZeroSignalWorldFx(
  ctx: CanvasRenderingContext2D,
  director: OmegaZeroSignalDirector,
@@ -91,6 +224,42 @@ export function drawOmegaZeroSignalWorldFx(
    ctx.beginPath();
    ctx.ellipse(px, py + 7, 44, 15, 0, Math.PI * 0.12, Math.PI * (0.12 + 0.76 * hpRatio));
    ctx.stroke();
+  }
+  ctx.restore();
+ }
+
+ // 2.2 Empowered Combat Aura on AIRA when Overclocked or Rail Burst Ready.
+ const overRem = director.currentOverclockRemaining();
+ const railReady = director.currentRailCharge() >= 50;
+ if (state.phase === 'playing' && (overRem > 0 || railReady)) {
+  const px = state.player.x;
+  const py = state.player.y - 34 * invY;
+  const isFocus = director.getWeaponMode() === 'focus';
+  const auraRgb =
+   overRem > 0
+    ? '103,232,249'
+    : isFocus
+      ? '251,191,36'
+      : '224,249,255';
+  const moteCount = overRem > 0 ? 3 : 2;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (let m = 0; m < moteCount; m++) {
+   const ang = seconds * (overRem > 0 ? 5.2 : 3.4) + (m * Math.PI * 2) / moteCount;
+   const mx = px + Math.cos(ang) * 28;
+   const my = py + Math.sin(ang) * 11 - Math.sin(seconds * 4 + m) * 4;
+   const mg = ctx.createRadialGradient?.(mx, my, 0.5, mx, my, 9);
+   if (mg && typeof mg.addColorStop === 'function') {
+    mg.addColorStop(0, 'rgba(255,255,255,0.92)');
+    mg.addColorStop(0.45, `rgba(${auraRgb},0.55)`);
+    mg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = mg;
+   } else {
+    ctx.fillStyle = `rgba(${auraRgb},0.65)`;
+   }
+   ctx.beginPath();
+   ctx.arc(mx, my, 9, 0, Math.PI * 2);
+   ctx.fill();
   }
   ctx.restore();
  }
@@ -397,7 +566,7 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.restore();
  }
 
- // 10.5 Ejected Plasma Weapon Casings.
+ // 10.5 Ejected Plasma Weapon Casings + Physics Ballistic Impact Sparks.
  for (const c of director.casings) {
   const fade = clamp(1 - c.age / c.duration, 0, 1);
   ctx.save();
@@ -407,6 +576,31 @@ export function drawOmegaZeroSignalWorldFx(
   ctx.beginPath();
   ctx.arc(c.x, c.y - c.z * invY, 2.2, 0, Math.PI * 2);
   ctx.fill();
+  ctx.restore();
+ }
+
+ for (const sp of director.sparks) {
+  const fade = clamp(1 - sp.age / Math.max(0.01, sp.duration), 0, 1);
+  const headX = sp.x;
+  const headY = sp.y - sp.z * invY;
+  const tailX = headX - sp.vx * 0.028;
+  const tailY = headY - (sp.vy - sp.vz * invY) * 0.028;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = `rgba(${sp.colorRgb},${(0.86 * fade).toFixed(3)})`;
+  ctx.lineWidth = sp.size * 2.1 * (0.4 + 0.6 * fade);
+  ctx.beginPath();
+  ctx.moveTo(tailX, tailY);
+  ctx.lineTo(headX, headY);
+  ctx.stroke();
+
+  ctx.strokeStyle = `rgba(255,255,255,${(0.95 * fade).toFixed(3)})`;
+  ctx.lineWidth = sp.size * 0.85;
+  ctx.beginPath();
+  ctx.moveTo(tailX * 0.35 + headX * 0.65, tailY * 0.35 + headY * 0.65);
+  ctx.lineTo(headX, headY);
+  ctx.stroke();
   ctx.restore();
  }
 
@@ -446,21 +640,51 @@ export function drawOmegaZeroSignalWorldFx(
   const p = clamp(kb.age / kb.duration, 0, 1);
   const fade = Math.pow(1 - p, 1.5);
   const cy = kb.y - 24 * invY;
-  const r = (kb.boss ? 92 : 44) * (0.3 + 0.85 * p);
+  const r = (kb.boss ? 98 : 48) * (0.3 + 0.88 * p);
+  const col = kb.boss ? '244,114,182' : '103,232,249';
   ctx.save();
   ctx.translate(kb.x, cy);
   ctx.globalCompositeOperation = 'lighter';
-  ctx.strokeStyle = `rgba(103,232,249,${(0.75 * fade).toFixed(3)})`;
-  ctx.lineWidth = (kb.boss ? 5 : 3) * fade + 0.8;
+
+  // Expanding outer shockwave + crisp white inner dissolve ring.
+  ctx.strokeStyle = `rgba(${col},${(0.8 * fade).toFixed(3)})`;
+  ctx.lineWidth = (kb.boss ? 5.2 : 3.2) * fade + 0.8;
   ctx.beginPath();
   ctx.ellipse(0, 0, r, r * 0.56, 0, 0, Math.PI * 2);
   ctx.stroke();
-  for (let s = 0; s < 6; s++) {
-   const sa = (s * Math.PI) / 3 + p * 0.5;
-   const dist = r * (0.75 + p * 0.45);
-   ctx.fillStyle = `rgba(255,244,214,${(0.9 * fade).toFixed(3)})`;
+
+  if (fade > 0.35) {
+   const innerFade = (fade - 0.35) / 0.65;
+   ctx.strokeStyle = `rgba(255,255,255,${(0.75 * innerFade).toFixed(3)})`;
+   ctx.lineWidth = 2.0 * innerFade;
    ctx.beginPath();
-   ctx.arc(Math.cos(sa) * dist, Math.sin(sa) * dist * 0.68, 2.4 * fade + 0.8, 0, Math.PI * 2);
+   ctx.ellipse(0, 0, r * 0.62, r * 0.34, 0, 0, Math.PI * 2);
+   ctx.stroke();
+
+   // Brief central cyber-vaporization flash beam rising from neutralized host.
+   ctx.strokeStyle = `rgba(${col},${(0.62 * innerFade).toFixed(3)})`;
+   ctx.lineWidth = (kb.boss ? 12 : 6) * innerFade;
+   ctx.beginPath();
+   ctx.moveTo(0, 14);
+   ctx.lineTo(0, -(kb.boss ? 92 : 52) * (0.5 + p));
+   ctx.stroke();
+  }
+
+  for (let s = 0; s < 8; s++) {
+   const sa = (s * Math.PI) / 4 + p * 0.65;
+   const dist = r * (0.68 + p * 0.55);
+   const inner = dist * 0.62;
+   const ex = Math.cos(sa) * dist;
+   const ey = Math.sin(sa) * dist * 0.68;
+   ctx.strokeStyle = `rgba(255,244,214,${(0.88 * fade).toFixed(3)})`;
+   ctx.lineWidth = 2.2 * fade + 0.6;
+   ctx.beginPath();
+   ctx.moveTo(Math.cos(sa) * inner, Math.sin(sa) * inner * 0.68);
+   ctx.lineTo(ex, ey);
+   ctx.stroke();
+   ctx.fillStyle = `rgba(255,255,255,${(0.95 * fade).toFixed(3)})`;
+   ctx.beginPath();
+   ctx.arc(ex, ey, 2.2 * fade + 0.6, 0, Math.PI * 2);
    ctx.fill();
   }
   ctx.restore();
@@ -572,6 +796,43 @@ export function drawOmegaZeroSignalScreenFx(
    ctx.fillStyle = grad;
    ctx.fillRect(0, 0, width, height);
   }
+  // Subtle dual-tone holographic edge trim during Phantom Dodge bullet-time.
+  const trimA = clamp(slow / 0.4, 0, 1) * 0.22;
+  ctx.strokeStyle = `rgba(103,232,249,${trimA.toFixed(3)})`;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(2, height - 2);
+  ctx.lineTo(2, 2);
+  ctx.lineTo(width - 2, 2);
+  ctx.stroke();
+  ctx.strokeStyle = `rgba(192,132,252,${trimA.toFixed(3)})`;
+  ctx.beginPath();
+  ctx.moveTo(width - 2, 2);
+  ctx.lineTo(width - 2, height - 2);
+  ctx.lineTo(2, height - 2);
+  ctx.stroke();
+ }
+ if (flash > 0.22 || slow > 0) {
+  // 16 crisp radial edge speedlines anchored strictly inside the outer 15% screen perimeter.
+  const lineAlpha = Math.max(flash > 0.22 ? (flash - 0.22) * 0.48 : 0, slow > 0 ? clamp(slow / 0.4, 0, 1) * 0.26 : 0);
+  const cx = width * 0.5;
+  const cy = height * 0.5;
+  const rx = width * 0.5;
+  const ry = height * 0.5;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.strokeStyle = slow > 0 ? `rgba(186,230,253,${lineAlpha.toFixed(3)})` : `rgba(224,250,255,${lineAlpha.toFixed(3)})`;
+  ctx.lineWidth = 1.6;
+  ctx.lineCap = 'round';
+  for (let i = 0; i < 16; i++) {
+   const a = (i * Math.PI * 2) / 16 + (i % 2 === 0 ? 0.08 : -0.06);
+   const innerScale = i % 2 === 0 ? 0.72 : 0.78;
+   ctx.beginPath();
+   ctx.moveTo(cx + Math.cos(a) * rx * innerScale, cy + Math.sin(a) * ry * innerScale);
+   ctx.lineTo(cx + Math.cos(a) * rx * 0.99, cy + Math.sin(a) * ry * 0.99);
+   ctx.stroke();
+  }
+  ctx.restore();
  }
  if (over > 0) {
   ctx.strokeStyle = `rgba(103,232,249,${(0.28 * Math.min(1, over)).toFixed(3)})`;

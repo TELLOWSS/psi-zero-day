@@ -67,7 +67,7 @@ import {
  OmegaZeroSignalDirector,type OmegaDirectorEvent,type OmegaZeroSignalHudSnapshot,
 } from '../engine/omega-protocol-zero-signal-director';
 import {OmegaProceduralAudio,type OmegaHitMaterial} from './omega-protocol-audio';
-import {drawOmegaZeroSignalWorldFx,drawOmegaZeroSignalScreenFx} from './omega-protocol-zero-signal-fx';
+import {drawOmegaZeroSignalGroundFx,drawOmegaZeroSignalWorldFx,drawOmegaZeroSignalScreenFx} from './omega-protocol-zero-signal-fx';
 import {OmegaAdaptiveFrameGovernor,readOmegaPerfPreset,resolveOmegaMobileProfile,saveOmegaPerfPreset,type OmegaMobileProfile,type OmegaPerfPreset} from './omega-protocol-mobile-perf';
 import {drawOmegaEdgeNavigationIndicators,drawOmegaTacticalRadar} from './omega-protocol-navigation-hud';
 import {OMEGA_BLADE_COOLDOWN} from '../domain/omega-protocol-blade';
@@ -133,6 +133,7 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
   else if(ev.kind==='auto_interact')audio.playPickup();
   else if(ev.kind==='rail_burst')audio.playRailBurst(ev.detail==='focus');
   else if(ev.kind==='weapon_mode')audio.playWeaponSwitch(ev.detail==='focus'?'focus':'rapid');
+  else if(ev.kind==='enemy_kill')audio.playKillConfirm(ev.detail==='boss');
  }
  void session;
 }
@@ -165,6 +166,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    drawOmegaLivingBackdrop(ctx,field.plan,worldCamera,ctx.canvas.width,ctx.canvas.height,state.gameTime,atm3DBudget);
   }
  }
+ if(director&&Math.abs(director.cameraRoll)>0.0003){ctx.translate(ctx.canvas.width*.5,ctx.canvas.height*.5);ctx.rotate(director.cameraRoll);ctx.translate(-ctx.canvas.width*.5,-ctx.canvas.height*.5);}
  applyOmegaQuarterView(ctx,camera);
  if(director&&director.cameraShake>0.1){
   const sx=Math.sin(state.gameTime*73)*director.cameraShake*0.5+director.shakeDirX*director.cameraShake*0.35;
@@ -306,6 +308,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   if(curDock&&['scaffold_lift','crane_elevator','service_tunnel'].includes(curDock.kind))
    drawOmegaConnectedBoardingPad(ctx,curDock,state.gameTime);
   else drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
+  if(director)drawOmegaZeroSignalGroundFx(ctx,director,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
   // All original actor contact reflections sit on the floor BEFORE real
   // boss warnings, enemy AI indicators, walls, players and weapons.

@@ -178,9 +178,9 @@ export function drawOmegaProtocolEnemy(
  let spriteTopY=boss?-118:-68;
  const hitFlash=h.hitFlashTimer??0;
  const pushSign=options.targetX!==undefined?(h.x>=options.targetX?1:-1):1;
- const recoilX=hitFlash>0?pushSign*Math.sin(hitFlash*68)*3.8:0;
- const recoilSqX=hitFlash>0&&!boss?1.045:1;
- const recoilSqY=hitFlash>0&&!boss?0.955:1;
+ const recoilX=hitFlash>0?pushSign*Math.sin(hitFlash*68)*4.8:0;
+ const recoilSqX=hitFlash>0&&!boss?1.06:1;
+ const recoilSqY=hitFlash>0&&!boss?0.94:1;
  ctx.save();
  ctx.scale(scale,scale);
  // Contact shadow remains planted cleanly at ground origin.
@@ -192,17 +192,22 @@ export function drawOmegaProtocolEnemy(
   if(options.zombie){
    const brain=options.zombie;
    if(brain.phase==='warning'){
-    const progress=Math.max(0,Math.min(1,brain.timer/Math.max(0.01,brain.warningDuration)));
+    const progress=Math.max(0,Math.min(1,1-brain.timer/Math.max(0.01,brain.warningDuration)));
     const pulse=.55+.45*Math.sin(time*15);
     const lockAngle=Math.atan2(brain.lockedY,brain.lockedX);
+    const warnRgb=brain.kind==='armored'?'255,176,82':'255,96,142';
     ctx.save();
     ctx.globalCompositeOperation='lighter';
-    ctx.strokeStyle=brain.kind==='armored'
-     ?`rgba(255,176,82,${(0.55*pulse).toFixed(3)})`
-     :`rgba(255,96,142,${(0.55*pulse).toFixed(3)})`;
-    ctx.lineWidth=1.8;
+    ctx.fillStyle=`rgba(${warnRgb},${(0.14+0.24*progress).toFixed(3)})`;
     ctx.beginPath();
-    ctx.ellipse(0,2,20+progress*6,7+progress*2,0,lockAngle-0.85,lockAngle+0.85);
+    ctx.moveTo(0,2);
+    ctx.ellipse(0,2,18+progress*12,6+progress*4,0,lockAngle-0.85,lockAngle+0.85);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle=`rgba(${warnRgb},${(0.55*pulse+0.3*progress).toFixed(3)})`;
+    ctx.lineWidth=1.8+progress*0.8;
+    ctx.beginPath();
+    ctx.ellipse(0,2,20+progress*10,7+progress*3.5,0,lockAngle-0.85,lockAngle+0.85);
     ctx.stroke();
     ctx.restore();
    }else if(brain.phase==='charge'){
@@ -300,12 +305,12 @@ export function drawOmegaProtocolEnemy(
   const flashR=boss?56:28;
   const flashGrad=ctx.createRadialGradient?.(0,flashY,4,0,flashY,flashR);
   if(flashGrad&&typeof flashGrad.addColorStop==='function'){
-   flashGrad.addColorStop(0,'rgba(255,250,232,0.52)');
-   flashGrad.addColorStop(0.5,'rgba(136,236,255,0.28)');
+   flashGrad.addColorStop(0,'rgba(255,254,244,0.68)');
+   flashGrad.addColorStop(0.42,'rgba(125,244,255,0.40)');
    flashGrad.addColorStop(1,'rgba(0,0,0,0)');
    ctx.fillStyle=flashGrad;
   }else{
-   ctx.globalAlpha=.34;
+   ctx.globalAlpha=.42;
    ctx.fillStyle='#fff8df';
   }
   ctx.beginPath();ctx.arc(0,flashY,flashR,0,Math.PI*2);ctx.fill();

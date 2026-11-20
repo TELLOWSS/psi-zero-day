@@ -141,6 +141,7 @@ export class OmegaProceduralAudio {
  private lastShotAt = 0;
  private lastImpactAt = 0;
  private lastFootstepAt = 0;
+ private lastKillAt = 0;
  private steelIndex = 0;
  private stepFlip = false;
 
@@ -464,6 +465,7 @@ export class OmegaProceduralAudio {
  playRailBurst(focusMode = false): void {
   this.playSample('gun_overclock', { gain: 0.56, rate: focusMode ? 0.86 : 1.02 });
   this.playSample('striker_snipe', { gain: 0.44, rate: focusMode ? 1.05 : 1.18, delay: 0.015 });
+  this.tone(92, 32, 0.22, 'sine', 0.16);
   this.tone(focusMode ? 1480 : 1180, focusMode ? 88 : 112, 0.24, 'sawtooth', 0.15);
   this.noiseBurst(focusMode ? 3200 : 2600, 1.4, 0.14, 0.14, 0.01);
  }
@@ -508,9 +510,21 @@ export class OmegaProceduralAudio {
 
   if (combo === 3) {
    this.playSample(finKeys[idx]!, { gain: 0.54, rate: 1.0, jitter: 0.04 });
+   this.tone(74, 28, 0.18, 'sine', 0.16);
    this.tone(1320, 380, 0.20, 'sine', 0.08, 0.01);
   } else {
    this.playSample(steelKeys[idx]!, { gain: combo === 2 ? 0.44 : 0.38, rate: combo === 2 ? 1.08 : 0.98, jitter: 0.05 });
+  }
+ }
+
+ playKillConfirm(boss = false): void {
+  const nowMs = Date.now();
+  if (!boss && nowMs - this.lastKillAt < 55) return;
+  this.lastKillAt = nowMs;
+  this.tone(1046.5, 1567.98, boss ? 0.16 : 0.085, 'sine', boss ? 0.095 : 0.065);
+  if (boss) {
+   this.playSample('impact_finisher_a', { gain: 0.56, rate: 0.86 });
+   this.tone(82, 28, 0.28, 'sine', 0.18);
   }
  }
 

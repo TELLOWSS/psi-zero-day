@@ -161,6 +161,11 @@ export function drawOmegaLivingGround(
    const cx=px+Math.sin(i*3.1)*rx*0.25;
    const cy=py+Math.cos(i*2.3)*ry*0.2;
    const ringR=3+Math.min(11,rx*0.18)*cycle;
+   const shimmerAlpha=0.055+0.03*Math.sin(seconds*2.1+i*1.4);
+   ctx.fillStyle=`rgba(${theme.fillRgb},${shimmerAlpha.toFixed(3)})`;
+   ctx.beginPath();
+   ctx.ellipse(px,py,rx*0.58,ry*0.52,0,0,Math.PI*2);
+   ctx.fill();
    ctx.strokeStyle=`rgba(218,236,252,${alpha.toFixed(3)})`;
    ctx.lineWidth=0.85;
    ctx.beginPath();
