@@ -20,9 +20,15 @@ export function omegaCameraTargetZoom(
 ):number{
  if(!Number.isFinite(width)||!Number.isFinite(height)||width<=0||height<=0)
   throw new RangeError('Invalid camera viewport');
- const landscapeTouch=width/height>=1.8&&height<=540;
- const base=focus==='battle'?1.78:focus==='boss'?1.58:1.38;
- return base+(landscapeTouch ? 0.09 : 0);
+ const portraitPhone=height>width&&width<=540;
+ if(portraitPhone){
+  return focus==='battle'?1.48:focus==='boss'?1.32:1.18;
+ }
+ const landscapePhone=width/height>=1.8&&height<=540;
+ if(landscapePhone){
+  return focus==='battle'?1.66:focus==='boss'?1.48:1.30;
+ }
+ return focus==='battle'?1.78:focus==='boss'?1.58:1.38;
 }
 
 export interface OmegaCameraState{

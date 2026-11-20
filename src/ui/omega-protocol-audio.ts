@@ -56,17 +56,25 @@ export const OMEGA_AUDIO_MANIFEST = {
 
 export type OmegaAudioCueKey = keyof typeof OMEGA_AUDIO_MANIFEST;
 
-const PRELOAD_COMBAT_KEYS: readonly OmegaAudioCueKey[] = [
+const CRITICAL_PRELOAD_KEYS: readonly OmegaAudioCueKey[] = [
  'gun_normal',
- 'gun_overclock',
  'impact_normal',
+ 'impact_steel_a',
+ 'impact_finisher_a',
+ 'detonation_burst',
+ 'pickup',
+ 'footstep_a',
+ 'voice_start',
+];
+
+const SECONDARY_PRELOAD_KEYS: readonly OmegaAudioCueKey[] = [
+ 'gun_overclock',
  'impact_armored',
  'impact_boss',
- 'impact_steel_a',
  'impact_steel_b',
- 'impact_finisher_a',
+ 'impact_steel_c',
  'impact_finisher_b',
- 'detonation_burst',
+ 'impact_finisher_c',
  'phantom_drop',
  'striker_snipe',
  'striker_sentry',
@@ -77,11 +85,8 @@ const PRELOAD_COMBAT_KEYS: readonly OmegaAudioCueKey[] = [
  'evo_unlock',
  'boss_entry',
  'shield_break',
- 'pickup',
  'secured',
- 'footstep_a',
  'footstep_b',
- 'voice_start',
  'voice_m01',
  'voice_guard',
  'voice_breaker',
@@ -115,6 +120,8 @@ export class OmegaProceduralAudio {
  private noiseBuffer: AudioBuffer | null = null;
  private readonly buffers = new Map<OmegaAudioCueKey, AudioBuffer>();
  private readonly loading = new Set<OmegaAudioCueKey>();
+ private preloadQueue: OmegaAudioCueKey[] = [];
+ private activeLoads = 0;
 
  private muted = false;
  private bulletTimeActive = false;
@@ -229,7 +236,7 @@ export class OmegaProceduralAudio {
    void this.ctx.resume().catch(() => {});
   }
 
-  this.preloadKeys(PRELOAD_COMBAT_KEYS);
+  this.preloadKeys([...CRITICAL_PRELOAD_KEYS, ...SECONDARY_PRELOAD_KEYS]);
   if (this.bgmActive && !this.muted) {
    this.ensureBgmPlaying();
   }
@@ -260,7 +267,21 @@ export class OmegaProceduralAudio {
 
  private preloadKeys(keys: readonly OmegaAudioCueKey[]): void {
   for (const key of keys) {
-   this.ensureSampleLoaded(key);
+   if (!this.buffers.has(key) && !this.loading.has(key) && !this.preloadQueue.includes(key)) {
+    this.preloadQueue.push(key);
+   }
+  }
+  this.pumpPreloadQueue();
+ }
+
+ private pumpPreloadQueue(): void {
+  if (!this.ctx || typeof fetch !== 'function' || typeof this.ctx.decodeAudioData !== 'function') {
+   return;
+  }
+  while (this.activeLoads < 2 && this.preloadQueue.length > 0) {
+   const nextKey = this.preloadQueue.shift()!;
+   if (this.buffers.has(nextKey) || this.loading.has(nextKey)) continue;
+   this.fetchAndDecodeKey(nextKey);
   }
  }
 
@@ -275,7 +296,14 @@ export class OmegaProceduralAudio {
   ) {
    return null;
   }
+  this.fetchAndDecodeKey(key);
+  return null;
+ }
+
+ private fetchAndDecodeKey(key: OmegaAudioCueKey): void {
+  if (!this.ctx || this.loading.has(key) || this.buffers.has(key)) return;
   this.loading.add(key);
+  this.activeLoads++;
   const url = OMEGA_AUDIO_MANIFEST[key];
   const targetCtx = this.ctx;
   void fetch(url)
@@ -289,8 +317,9 @@ export class OmegaProceduralAudio {
    .catch(() => {})
    .finally(() => {
     this.loading.delete(key);
+    this.activeLoads = Math.max(0, this.activeLoads - 1);
+    this.pumpPreloadQueue();
    });
-  return null;
  }
 
  private playSample(
@@ -709,6 +738,8 @@ export class OmegaProceduralAudio {
    tr.el.src = '';
   }
   this.bgmTracks.clear();
+  this.preloadQueue = [];
+  this.activeLoads = 0;
   this.buffers.clear();
   if (this.ctx) {
    void this.ctx.close().catch(() => {});

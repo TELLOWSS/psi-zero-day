@@ -124,6 +124,7 @@ function drawObstacle(ctx:CanvasRenderingContext2D,o:OmegaFieldObstacle,color:st
 export function drawOmegaFieldMission(
  ctx:CanvasRenderingContext2D,plan:OmegaFieldPlan,
  progress:OmegaFieldProgress,actor:OmegaFieldPoint,seconds:number,
+ allowGlow=true,
 ):void{
  const active=omegaFieldCurrentStep(plan,progress);
  const pulse=.65+.35*Math.sin(seconds*3);
@@ -141,8 +142,10 @@ export function drawOmegaFieldMission(
    ctx.translate(actor.x+ux*65,actor.y+uy*65);
    ctx.rotate(Math.atan2(uy,ux));
    ctx.globalAlpha=.73+.22*Math.sin(seconds*5);
-   ctx.shadowColor=progress.phase==='exit'?'#7dffd5':'#7ddaf5';
-   ctx.shadowBlur=12;
+   if(allowGlow){
+    ctx.shadowColor=progress.phase==='exit'?'#7dffd5':'#7ddaf5';
+    ctx.shadowBlur=12;
+   }
    ctx.strokeStyle=progress.phase==='exit'?'#8effd8':'#b2f3ff';
    ctx.lineWidth=5;ctx.lineJoin='round';ctx.lineCap='round';
    ctx.beginPath();
@@ -158,8 +161,10 @@ export function drawOmegaFieldMission(
   // The original collidable-world console now renders in depth order.
   // This pass is ONLY a status glyph and interaction text, not a second
   // flat square painted over AIRA and every nearby enemy.
-  ctx.shadowColor=activeStep?'#6bf9ee':'#4f9dce';
-  ctx.shadowBlur=activeStep?12:0;
+  if(allowGlow){
+   ctx.shadowColor=activeStep?'#6bf9ee':'#4f9dce';
+   ctx.shadowBlur=activeStep?12:0;
+  }
   ctx.fillStyle=completed?'#8bf4c2':activeStep?'#8bedff':'#aab9c4';
   ctx.font='bold 12px system-ui';ctx.textAlign='center';
   ctx.fillText(completed?'✓':String(index+1),target.x,target.y-78);
@@ -182,8 +187,10 @@ export function drawOmegaFieldMission(
  }
  // Extraction portal is now a 3/4 device in the real Y-depth pass.
  ctx.fillStyle=progress.exitUnlocked?'#b3ffdf':'#ffbf8c';
- ctx.shadowColor=progress.exitUnlocked?'#77ffc2':'#ffbd81';
- ctx.shadowBlur=progress.exitUnlocked?8:0;
+ if(allowGlow){
+  ctx.shadowColor=progress.exitUnlocked?'#77ffc2':'#ffbd81';
+  ctx.shadowBlur=progress.exitUnlocked?8:0;
+ }
  ctx.font='900 13px system-ui';
  ctx.fillText(progress.exitUnlocked?'EXIT OPEN':'LOCKED',exit.x,exit.y-126);
  ctx.shadowBlur=0;
