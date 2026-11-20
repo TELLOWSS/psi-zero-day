@@ -65,7 +65,7 @@ import {
 import {
  OmegaZeroSignalDirector,type OmegaDirectorEvent,type OmegaZeroSignalHudSnapshot,
 } from '../engine/omega-protocol-zero-signal-director';
-import {OmegaProceduralAudio} from './omega-protocol-audio';
+import {OmegaProceduralAudio,type OmegaHitMaterial} from './omega-protocol-audio';
 import {drawOmegaZeroSignalWorldFx,drawOmegaZeroSignalScreenFx} from './omega-protocol-zero-signal-fx';
 import './omega-protocol-playtest.css';
 
@@ -101,6 +101,7 @@ function shouldBypassBriefingOnLaunch():boolean{
 function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirectorEvent[],session:OmegaProtocolCombatSession):void{
  for(const ev of events){
   if(ev.kind==='gunshot')audio.playGunshot(ev.detail==='overclock');
+  else if(ev.kind==='hit_impact')audio.playHitImpact((ev.detail as OmegaHitMaterial|undefined)??'normal');
   else if(ev.kind==='detonation')audio.playDetonation(ev.numeric??1);
   else if(ev.kind==='phantom_dodge')audio.playPhantomDodge();
   else if(ev.kind==='striker'&&ev.detail)audio.playStriker(ev.detail as OmegaStrikerId);
@@ -108,6 +109,10 @@ function playDirectorAudio(audio:OmegaProceduralAudio,events:readonly OmegaDirec
   else if(ev.kind==='pickup')audio.playPickup();
   else if(ev.kind==='shield_break')audio.playShieldBreak();
   else if(ev.kind==='evo_unlock')audio.playEvoUnlock();
+  else if(ev.kind==='boss_entry')audio.playBossEntry();
+  else if(ev.kind==='wave_clear')audio.playWaveClear();
+  else if(ev.kind==='victory')audio.playVictory();
+  else if(ev.kind==='defeat')audio.playDefeat();
   else if(ev.kind==='auto_interact')audio.playPickup();
  }
  void session;
@@ -140,8 +145,8 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  }
  applyOmegaQuarterView(ctx,camera);
  if(director&&director.cameraShake>0.1){
-  const sx=Math.sin(state.gameTime*73)*director.cameraShake*0.5;
-  const sy=Math.cos(state.gameTime*61)*director.cameraShake*0.38;
+  const sx=Math.sin(state.gameTime*73)*director.cameraShake*0.5+director.shakeDirX*director.cameraShake*0.35;
+  const sy=Math.cos(state.gameTime*61)*director.cameraShake*0.38+director.shakeDirY*director.cameraShake*0.35;
   ctx.translate(sx,sy);
  }
  ctx.translate(fieldElevation*skew,-fieldElevation);
@@ -149,18 +154,25 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
  const m12G2Quality=omegaG2Quality(ctx.canvas.width,ctx.canvas.height);
  const m12G3Budget=omegaG3Budget(ctx.canvas.width,ctx.canvas.height);
  const m12G4Budget=omegaG4Budget(ctx.canvas.width,ctx.canvas.height);
+ let anyPaintedFloor=false;
  const drawGround=(plan:OmegaFieldPlan)=>{
   drawOmegaFieldGround(ctx,plan,false);
-  drawOmegaPaintedFloor(ctx,plan);
-  drawOmegaG2EntrySurface(ctx,plan,state.gameTime,m12G2Quality);
-  drawOmegaG4CenterStageMaterial(ctx,plan,m12G4Budget);
-  drawOmegaG2RearEnvironment(ctx,plan,state.gameTime,m12G2Quality);
+  const paintedFloor=drawOmegaPaintedFloor(ctx,plan);
+  if(paintedFloor)anyPaintedFloor=true;
+  if(!paintedFloor){
+   drawOmegaG2EntrySurface(ctx,plan,state.gameTime,m12G2Quality);
+   drawOmegaG4CenterStageMaterial(ctx,plan,m12G4Budget);
+   drawOmegaG2RearEnvironment(ctx,plan,state.gameTime,m12G2Quality);
+  }else{
+   drawOmegaG4CenterStageMaterial(ctx,plan,m12G4Budget);
+  }
   drawOmegaM12TerrainShadows(ctx,plan,m12Budget);
   drawOmegaM12DistanceHaze(ctx,plan,state.gameTime,m12Budget);
   drawOmega3DGroundSurface(ctx,plan,state.gameTime,atm3DBudget);
   drawOmegaLivingGround(ctx,plan,state.gameTime,atm3DBudget);
   if(passage){
-   ctx.strokeStyle='#446377';ctx.lineWidth=14;
+   ctx.strokeStyle=paintedFloor?'rgba(116,204,228,.22)':'#446377';
+   ctx.lineWidth=paintedFloor?3:14;
    ctx.beginPath();
    ctx.moveTo(0,14);ctx.lineTo(WORLD_WIDTH,14);
    ctx.moveTo(0,WORLD_HEIGHT-14);ctx.lineTo(WORLD_WIDTH,WORLD_HEIGHT-14);
@@ -209,8 +221,9 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
 
    ctx.save();ctx.translate(-offset-fieldElevation*skew,fieldElevation);
-   ctx.fillStyle='#263c46';
-   ctx.strokeStyle='#f5ba6388';ctx.lineWidth=3;ctx.setLineDash([22,16]);
+   ctx.fillStyle=anyPaintedFloor?'rgba(14,28,42,.52)':'#263c46';
+   ctx.strokeStyle=anyPaintedFloor?'rgba(124,233,255,.32)':'#f5ba6388';
+   ctx.lineWidth=anyPaintedFloor?2:3;ctx.setLineDash([22,16]);
    const drawLane=(start:number,end:number,y:number)=>{
     ctx.fillRect(start,y-36,end-start,72);
     ctx.beginPath();ctx.moveTo(start,y-36);ctx.lineTo(end,y-36);
@@ -251,8 +264,10 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
    }
    ctx.restore();
   }
-  drawOmegaG3ParallaxArchitecture(ctx,passage?.[0]??field.plan,worldCamera,
-   ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
+  if(!anyPaintedFloor){
+   drawOmegaG3ParallaxArchitecture(ctx,passage?.[0]??field.plan,worldCamera,
+    ctx.canvas.width,ctx.canvas.height,cameraZoom,m12G3Budget);
+  }
   drawOmegaActBoundaryDock(ctx,field.plan,state.gameTime);
   drawOmegaSectorOneActorLight(ctx,field.plan,state.player,state.gameTime);
   // All original actor contact reflections sit on the floor BEFORE real
@@ -423,7 +438,7 @@ function drawLab(ctx:CanvasRenderingContext2D,session:OmegaProtocolCombatSession
   drawOmegaSectorOneAir(ctx,field.plan,state.gameTime,
    omegaSceneBudget(ctx.canvas.width,ctx.canvas.height));
   drawOmegaFieldMission(ctx,field.plan,field.progress,p,state.gameTime);
-  drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
+  if(!anyPaintedFloor)drawOmegaG2BoundaryRail(ctx,field.plan,m12G2Quality);
  }
  // Modifier fog is presentation-only; crosswind and unstable ground also
  // affect the actual enemy motion or movement input in the run-scoped engine.
@@ -710,6 +725,7 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
   keysRef.current.clear();pointerMoves.current.clear();mobileDir.current={x:0,y:0};
   if(stickThumbRef.current)stickThumbRef.current.style.transform='translate3d(0,0,0)';
   audioRef.current?.unlock();
+  if(startImmediately)audioRef.current?.playSortieStart();
  },[seedValue]);
  const restart=useCallback(()=>{
   launchSortie(loadoutId,dailyMode,true);
@@ -978,18 +994,24 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
    const my=(Number(k.has('s')||k.has('S')||k.has('ArrowDown'))-Number(k.has('w')||k.has('W')||k.has('ArrowUp')))+mobileDir.current.y;
    const length=Math.hypot(mx,my)||1;
    const dir=directorRef.current;
+   const inHitstop=Boolean(dir&&sortieStartedRef.current&&dir.tickHitstop(dt));
    const timeScale=dir&&dir.currentSlowMoRemaining()>0?0.24:1.0;
    const hpBeforeUpdate=session.engine.state.player.hp;
-   if(dt>0&&sortieStartedRef.current)session.update(dt*timeScale,{moveX:mx/length,moveY:my/length,triggerAction:true});
+   if(dt>0&&sortieStartedRef.current&&!inHitstop)session.update(dt*timeScale,{moveX:mx/length,moveY:my/length,triggerAction:true});
    const engineEvents=session.engine.drainProjectileFeedback();
    if(dir&&sortieStartedRef.current){
     dir.onProjectileFeedback(session,engineEvents);
-    const stepResult=dir.step(session,dt,hpBeforeUpdate);
-    if(audioRef.current)playDirectorAudio(audioRef.current,stepResult.events,session);
+    const stepResult=dir.step(session,inHitstop?0:dt,hpBeforeUpdate);
+    if(audioRef.current){
+     audioRef.current.setBulletTime(dir.currentSlowMoRemaining()>0);
+     playDirectorAudio(audioRef.current,stepResult.events,session);
+    }
    }
+   const rankIdx=dir?['D','C','B','A','S','SS','OMEGA'].indexOf(dir.hudSnapshot(session).styleRank):0;
+   const bgmIntensity=session.snapshot.bossHp!==null?'boss':session.engine.state.hazards.some(h=>h.hp>0)?(rankIdx>=4?'surge':'battle'):'calm';
    audioRef.current?.setBgmState(
     sortieStartedRef.current&&session.run.phase==='battle'&&session.engine.state.phase==='playing'&&!reviewBlocked,
-    session.snapshot.bossHp!==null?'boss':session.engine.state.hazards.some(h=>h.hp>0)?'battle':'calm',
+    bgmIntensity,
    );
    if(cartWarningQa&&arenaRef.current){
     // Real engine state, observed once per animation frame; not injected.
@@ -1062,6 +1084,9 @@ export function OmegaProtocolPlaytest({onExit}:{onExit:()=>void}){
     {x:player.x+session.fieldWorldOffsetX,y:player.y},now/1000,
     session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave,
     Boolean(player.isDashing)||session.run.phase!=='battle');
+   if((gait.left.landed||gait.right.landed)&&!player.isDashing&&session.run.phase==='battle'&&sortieStartedRef.current){
+    audioRef.current?.playFootstep();
+   }
    const motion=motionSmoother.advance(
     player.x+session.fieldWorldOffsetX,player.y,
     dt,session.connectedFields?.[session.plan.wave-1]?1:session.plan.wave);

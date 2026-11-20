@@ -5,10 +5,16 @@ import { omegaFieldInitialProgress, omegaFieldPlan } from '../src/domain/omega-p
 import type { Hazard } from '../src/domain/patrol-survivors';
 import { drawOmegaProtocolEnemy } from '../src/ui/omega-protocol-enemy-render';
 import {
+ drawOmegaAuthoredActDock,
  drawOmegaAuthoredExtractionGate,
  drawOmegaAuthoredHazardOrBoss,
  drawOmegaAuthoredImpactBurst,
  drawOmegaAuthoredMissionConsole,
+ drawOmegaAuthoredSentryTurret,
+ drawOmegaAuthoredSignalCore,
+ drawOmegaAuthoredSignalReticle,
+ drawOmegaAuthoredSwarmDrone,
+ drawOmegaAuthoredZombie,
  omegaAuthoredEntityPaths,
 } from '../src/ui/omega-protocol-entity-art';
 
@@ -39,9 +45,9 @@ function createRecorder() {
 }
 
 describe('Wave-2 authored 3/4 isometric entity & impact VFX artwork', () => {
- it('ships all 9 valid WebPs with transparent corners, open extraction doorway, solid Warden boss, and black impact mattes', async () => {
+ it('ships all 31 valid WebPs with transparent corners, open extraction doorway, solid Warden boss, and black impact mattes', async () => {
   const paths = omegaAuthoredEntityPaths();
-  expect(paths).toHaveLength(9);
+  expect(paths).toHaveLength(31);
 
   const entitySpecs: Readonly<Record<string, readonly [number, number]>> = {
    '/assets/omega/entities/mission-console.webp': [320, 384],
@@ -51,7 +57,26 @@ describe('Wave-2 authored 3/4 isometric entity & impact VFX artwork', () => {
    '/assets/omega/entities/hazard-debris.webp': [320, 288],
    '/assets/omega/entities/boss-crane.webp': [512, 512],
    '/assets/omega/entities/boss-warden.webp': [512, 512],
+   '/assets/omega/entities/striker-sentry.webp': [256, 256],
+   '/assets/omega/entities/swarm-drone.webp': [160, 160],
+   '/assets/omega/entities/act-lift.webp': [320, 420],
+   '/assets/omega/entities/act-airlock.webp': [360, 320],
+   '/assets/omega/vfx/signal-core.webp': [256, 256],
+   '/assets/omega/vfx/signal-reticle.webp': [256, 256],
   };
+
+  for (const kind of ['drifter', 'sprinter', 'armored', 'stalker']) {
+   const size = kind === 'armored' || kind === 'stalker' ? 280 : 256;
+   for (const idx of [0, 1, 2, 3]) {
+    const rel = `/assets/omega/entities/zombie-${kind}-${idx}.webp`;
+    const abs = path.join(PUBLIC_ROOT, rel.replace(/^\//, ''));
+    const { data, info } = await sharp(abs).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    expect(info.width).toBe(size);
+    expect(info.height).toBe(size);
+    expect(data[3]).toBe(0);
+    expect(data[(info.width - 1) * 4 + 3]).toBe(0);
+   }
+  }
 
   for (const [relPath, [expW, expH]] of Object.entries(entitySpecs)) {
    const abs = path.join(PUBLIC_ROOT, relPath.replace(/^\//, ''));
@@ -166,5 +191,28 @@ describe('Wave-2 authored 3/4 isometric entity & impact VFX artwork', () => {
    (e) => e.name === 'fillRect' && Number(e.args[2]) >= 50 && Number(e.args[3]) >= 45,
   );
   expect(hugeFlashRects).toHaveLength(0);
+ });
+
+ it('renders Wave-4 authored zombies, tactical sentry turret, swarm drone, signal VFX, and ACT docks fail-closed and cleanly when decoded', () => {
+  const undecoded = { complete: false, naturalWidth: 0, naturalHeight: 0 } as unknown as HTMLImageElement;
+  const decoded = { complete: true, naturalWidth: 256, naturalHeight: 256 } as unknown as HTMLImageElement;
+  const z = { id: 'z-1', type: 'UNHELMETED', hp: 50, maxHp: 50, x: 400, y: 300, radius: 22 } as Hazard;
+
+  const uRec = createRecorder();
+  expect(drawOmegaAuthoredZombie(uRec.ctx, z, 1.0, undefined, 320, undecoded)).toBe(false);
+  expect(drawOmegaAuthoredSentryTurret(uRec.ctx, 200, 300, 0.5, 0.8, 1.0, undecoded)).toBe(false);
+  expect(drawOmegaAuthoredSwarmDrone(uRec.ctx, 200, 300, 120, -40, 1.0, undecoded)).toBe(false);
+  expect(drawOmegaAuthoredSignalCore(uRec.ctx, 200, 300, 1.0, undecoded)).toBe(false);
+  expect(drawOmegaAuthoredSignalReticle(uRec.ctx, 200, 300, 3, 1.0, undecoded)).toBe(false);
+  expect(drawOmegaAuthoredActDock(uRec.ctx, 'lift', 200, 300, 'LIFT', 'TO 04', '#ffca7a', 1.0, undecoded)).toBe(false);
+
+  const dRec = createRecorder();
+  expect(drawOmegaAuthoredZombie(dRec.ctx, z, 1.0, undefined, 320, decoded)).toBe(true);
+  expect(drawOmegaAuthoredSentryTurret(dRec.ctx, 200, 300, 0.5, 0.8, 1.0, decoded)).toBe(true);
+  expect(drawOmegaAuthoredSwarmDrone(dRec.ctx, 200, 300, 120, -40, 1.0, decoded)).toBe(true);
+  expect(drawOmegaAuthoredSignalCore(dRec.ctx, 200, 300, 1.0, decoded)).toBe(true);
+  expect(drawOmegaAuthoredSignalReticle(dRec.ctx, 200, 300, 3, 1.0, decoded)).toBe(true);
+  expect(drawOmegaAuthoredActDock(dRec.ctx, 'airlock', 200, 300, 'AIRLOCK', 'SEALED', '#f5a8ce', 1.0, decoded)).toBe(true);
+  expect(dRec.events.filter((e) => e.name === 'drawImage').length).toBe(6);
  });
 });

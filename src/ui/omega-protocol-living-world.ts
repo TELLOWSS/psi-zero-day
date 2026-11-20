@@ -82,7 +82,7 @@ export function drawOmegaLivingBackdrop(
   ]);
  }
 
- // 2. Patrolling distant skyline micro-drones / aerial tram silhouettes.
+ // 2. Patrolling distant skyline atmospheric beacon trails (soft radial lights, zero boxy geometry).
  const drones=budget.tier==='mobile'?2:4;
  for(let i=0;i<drones;i++){
   const dir=i%2===0?1:-1;
@@ -90,12 +90,21 @@ export function drawOmegaLivingBackdrop(
   const rawX=(seconds*speed*dir+i*310)%(width+160);
   const dx=((rawX%(width+160))+(width+160))%(width+160)-80;
   const dy=height*(0.11+i*0.055)+Math.sin(seconds*1.6+i*2.1)*5;
-  ctx.fillStyle=theme.structureMid;
-  ctx.fillRect(dx-11,dy-2,22,4);
-  ctx.fillRect(dx-5,dy-5,10,3);
+  const rgb=i%2===0?theme.keyRgb:theme.fillRgb;
   const blink=0.45+0.55*Math.sin(seconds*6.5+i*1.7);
-  ctx.fillStyle=`rgba(${i%2===0?theme.keyRgb:theme.fillRgb},${blink.toFixed(2)})`;
-  ctx.beginPath();ctx.arc(dx+dir*11,dy,2.3,0,Math.PI*2);ctx.fill();
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  const aura=ctx.createRadialGradient?.(dx,dy,0.5,dx,dy,11);
+  if(aura&&typeof aura.addColorStop==='function'){
+   aura.addColorStop(0,`rgba(${rgb},${(0.65*blink).toFixed(2)})`);
+   aura.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=aura;
+   ctx.beginPath();ctx.arc(dx,dy,11,0,Math.PI*2);ctx.fill();
+  }
+  ctx.strokeStyle=`rgba(${rgb},${(0.28*blink).toFixed(2)})`;
+  ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.moveTo(dx,dy);ctx.lineTo(dx-dir*24,dy);ctx.stroke();
+  ctx.restore();
  }
 
  // 3. Sector-specific living architectural backdrop motion.

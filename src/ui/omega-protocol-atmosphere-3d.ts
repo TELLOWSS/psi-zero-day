@@ -225,55 +225,57 @@ export function drawOmega3DBackdrop(
  ctx.fillStyle=abyss;
  ctx.fillRect(0,0,width,height);
 
- // 3. Far Parallax Plane (0.14x): Monumental industrial / reactor silhouettes.
- const farStride=220;
- const farShiftX=wrapMod(camPxX*.14,farStride);
- const farShiftY=clamp(camPxY*.07,-height*.06,height*.06);
- ctx.save();
- ctx.translate(farShiftX,farShiftY);
- const farCount=Math.ceil(width/farStride)+3;
- if(theme.sector===5){
-  // Omega Core concentric rotating reactor halo in the upper center horizon.
-  const cx=width*.5-farShiftX*.35;
-  const cy=height*.24;
-  const baseR=Math.min(width,height)*.26;
-  ctx.lineWidth=4;
-  for(let ring=0;ring<3;ring++){
-   const radius=baseR*(.65+ring*.24);
-   const start=seconds*(ring%2===0?.24:-.18)+ring*1.1;
-   ctx.strokeStyle=ring===1?'rgba(255,155,198,.24)':'rgba(255,110,156,.16)';
-   ctx.beginPath();ctx.arc(cx,cy,radius,start,start+Math.PI*1.35);ctx.stroke();
+ // 3. Far Parallax Plane (0.14x): Monumental industrial / reactor silhouettes (skipped when painted vista supplies authentic skyline).
+ if(!hasPaintedVista){
+  const farStride=220;
+  const farShiftX=wrapMod(camPxX*.14,farStride);
+  const farShiftY=clamp(camPxY*.07,-height*.06,height*.06);
+  ctx.save();
+  ctx.translate(farShiftX,farShiftY);
+  const farCount=Math.ceil(width/farStride)+3;
+  if(theme.sector===5){
+   // Omega Core concentric rotating reactor halo in the upper center horizon.
+   const cx=width*.5-farShiftX*.35;
+   const cy=height*.24;
+   const baseR=Math.min(width,height)*.26;
+   ctx.lineWidth=4;
+   for(let ring=0;ring<3;ring++){
+    const radius=baseR*(.65+ring*.24);
+    const start=seconds*(ring%2===0?.24:-.18)+ring*1.1;
+    ctx.strokeStyle=ring===1?'rgba(255,155,198,.24)':'rgba(255,110,156,.16)';
+    ctx.beginPath();ctx.arc(cx,cy,radius,start,start+Math.PI*1.35);ctx.stroke();
+   }
   }
+  for(let i=-1;i<farCount;i++){
+   const bx=i*farStride;
+   const seedMod=(i*37+plan.sector*13)%5;
+   const bw=118+(Math.abs(seedMod)*22);
+   const bh=height*(.28+Math.abs((i*19+plan.sector*7)%4)*.08);
+   const by=height*.36-bh*.55;
+   ctx.fillStyle=theme.structureFar;
+   ctx.fillRect(bx,by,bw,bh+height*.55);
+   ctx.strokeStyle=`rgba(${theme.fillRgb},.15)`;
+   ctx.lineWidth=1.2;
+   ctx.strokeRect(bx+1,by+1,bw-2,bh);
+   if(theme.sector===4){
+    // Vaulted subterranean tunnel ribs.
+    ctx.beginPath();
+    ctx.arc(bx+bw*.5,by+30,bw*.48,Math.PI,0);
+    ctx.stroke();
+   }else if(theme.sector===3){
+    // High-altitude crane jibs & counterweight silhouettes.
+    ctx.strokeStyle=`rgba(${theme.keyRgb},.18)`;
+    ctx.lineWidth=3;
+    drawLine(ctx,bx+bw*.5,by,bx+bw*1.25,by-26);
+   }
+   if(i%2===0&&budget.tier!=='mobile'){
+    const beaconAlpha=.25+.22*Math.sin(seconds*2.3+i);
+    ctx.fillStyle=`rgba(${theme.keyRgb},${beaconAlpha.toFixed(2)})`;
+    ctx.fillRect(bx+bw*.45,by+10,6,6);
+   }
+  }
+  ctx.restore();
  }
- for(let i=-1;i<farCount;i++){
-  const bx=i*farStride;
-  const seedMod=(i*37+plan.sector*13)%5;
-  const bw=118+(Math.abs(seedMod)*22);
-  const bh=height*(.28+Math.abs((i*19+plan.sector*7)%4)*.08);
-  const by=height*.36-bh*.55;
-  ctx.fillStyle=theme.structureFar;
-  ctx.fillRect(bx,by,bw,bh+height*.55);
-  ctx.strokeStyle=`rgba(${theme.fillRgb},.15)`;
-  ctx.lineWidth=1.2;
-  ctx.strokeRect(bx+1,by+1,bw-2,bh);
-  if(theme.sector===4){
-   // Vaulted subterranean tunnel ribs.
-   ctx.beginPath();
-   ctx.arc(bx+bw*.5,by+30,bw*.48,Math.PI,0);
-   ctx.stroke();
-  }else if(theme.sector===3){
-   // High-altitude crane jibs & counterweight silhouettes.
-   ctx.strokeStyle=`rgba(${theme.keyRgb},.18)`;
-   ctx.lineWidth=3;
-   drawLine(ctx,bx+bw*.5,by,bx+bw*1.25,by-26);
-  }
-  if(i%2===0&&budget.tier!=='mobile'){
-   const beaconAlpha=.25+.22*Math.sin(seconds*2.3+i);
-   ctx.fillStyle=`rgba(${theme.keyRgb},${beaconAlpha.toFixed(2)})`;
-   ctx.fillRect(bx+bw*.45,by+10,6,6);
-  }
- }
- ctx.restore();
 
  // 4. Mid Parallax Plane (0.34x): Diagonal structural trusses & searchlight beams.
  const midStride=Math.max(160,width/Math.max(3,budget.parallaxBeams));
@@ -293,18 +295,20 @@ export function drawOmega3DBackdrop(
    mx,0,mx+midStride*.34,0,
    mx+midStride*1.05,height*.85,mx+midStride*.42,height*.85,
   ]);
-  // Structural girder column.
-  ctx.fillStyle=theme.structureMid;
-  ctx.fillRect(mx,0,18,height);
-  ctx.strokeStyle=`rgba(${theme.fillRgb},.20)`;
-  ctx.lineWidth=1.4;
-  drawLine(ctx,mx+18,0,mx+midStride*.35,height*.42);
-  drawLine(ctx,mx+midStride*.35,0,mx+18,height*.42);
+  if(!hasPaintedVista){
+   // Structural girder column.
+   ctx.fillStyle=theme.structureMid;
+   ctx.fillRect(mx,0,18,height);
+   ctx.strokeStyle=`rgba(${theme.fillRgb},.20)`;
+   ctx.lineWidth=1.4;
+   drawLine(ctx,mx+18,0,mx+midStride*.35,height*.42);
+   drawLine(ctx,mx+midStride*.35,0,mx+18,height*.42);
+  }
  }
  ctx.restore();
 
- // 5. Chasm Perspective Layer (0.56x) beneath elevated Sector 2-5 platforms.
- if(elevated){
+ // 5. Chasm Perspective Layer (0.56x) beneath elevated Sector 2-5 platforms (only without painted vista).
+ if(elevated&&!hasPaintedVista){
   const chasmShift=wrapMod(camPxX*.56,280);
   ctx.save();
   ctx.translate(chasmShift,0);

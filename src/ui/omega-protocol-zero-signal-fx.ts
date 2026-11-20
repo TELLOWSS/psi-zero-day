@@ -1,6 +1,12 @@
 import { OMEGA_QUARTER_VIEW } from '../domain/omega-protocol-field';
 import type { OmegaProtocolCombatSession } from '../engine/omega-protocol-combat';
 import type { OmegaZeroSignalDirector } from '../engine/omega-protocol-zero-signal-director';
+import {
+ drawOmegaAuthoredSentryTurret,
+ drawOmegaAuthoredSignalCore,
+ drawOmegaAuthoredSignalReticle,
+ drawOmegaAuthoredSwarmDrone,
+} from './omega-protocol-entity-art';
 
 /**
  * World-space and screen-space canvas VFX layers for 『OMEGA PROTOCOL: ZERO SIGNAL』:
@@ -73,9 +79,13 @@ export function drawOmegaZeroSignalWorldFx(
   if (h.hp <= 0) continue;
   const stacks = director.markCount(h.id);
   if (stacks <= 0) continue;
-  const headUprightY = h.isStageBoss ? -125 : -78;
+  const headUprightY = h.isStageBoss ? -128 : h.type === 'UNHELMETED' ? -108 : -78;
   const mx = h.x - (skew * invY) * headUprightY;
   const my = h.y + headUprightY * invY;
+
+  if (drawOmegaAuthoredSignalReticle(ctx, mx, my, stacks, seconds)) {
+   continue;
+  }
 
   ctx.save();
   ctx.translate(mx, my);
@@ -113,6 +123,9 @@ export function drawOmegaZeroSignalWorldFx(
 
  // 4. Magnetized Signal Core Loot Orbs.
  for (const orb of director.orbs) {
+  if (drawOmegaAuthoredSignalCore(ctx, orb.x, orb.y, seconds)) {
+   continue;
+  }
   const bob = Math.sin(seconds * 7 + orb.x) * 3;
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
@@ -132,6 +145,9 @@ export function drawOmegaZeroSignalWorldFx(
  // 5. Signal Guard Deployed Sentry Turrets.
  for (const t of director.turrets) {
   const lifeRatio = clamp(t.remaining / t.duration, 0, 1);
+  if (drawOmegaAuthoredSentryTurret(ctx, t.x, t.y, t.aimAngle, lifeRatio, seconds)) {
+   continue;
+  }
   ctx.save();
   ctx.translate(t.x, t.y);
   ctx.fillStyle = 'rgba(0,8,16,0.48)';
@@ -172,6 +188,9 @@ export function drawOmegaZeroSignalWorldFx(
 
  // 6. Homing Swarm Micro-Drones.
  for (const dr of director.drones) {
+  if (drawOmegaAuthoredSwarmDrone(ctx, dr.x, dr.y, dr.vx, dr.vy, seconds)) {
+   continue;
+  }
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
   const g = ctx.createRadialGradient?.(dr.x, dr.y, 1, dr.x, dr.y, 14);
@@ -307,10 +326,30 @@ export function drawOmegaZeroSignalScreenFx(
 ): void {
  const slow = director.currentSlowMoRemaining();
  const over = director.currentOverclockRemaining();
- if (slow <= 0 && over <= 0) return;
+ const flash = director.currentImpactFlash();
+ if (slow <= 0 && over <= 0 && flash <= 0) return;
 
  ctx.save();
  ctx.setTransform(1, 0, 0, 1, 0, 0);
+ if (flash > 0) {
+  const impactGrad = ctx.createRadialGradient?.(
+   width * 0.5,
+   height * 0.5,
+   Math.min(width, height) * 0.22,
+   width * 0.5,
+   height * 0.5,
+   Math.max(width, height) * 0.72,
+  );
+  if (impactGrad && typeof impactGrad.addColorStop === 'function') {
+   ctx.globalCompositeOperation = 'lighter';
+   impactGrad.addColorStop(0, `rgba(255,255,255,${(flash * 0.12).toFixed(3)})`);
+   impactGrad.addColorStop(0.55, `rgba(103,232,249,${(flash * 0.16).toFixed(3)})`);
+   impactGrad.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = impactGrad;
+   ctx.fillRect(0, 0, width, height);
+   ctx.globalCompositeOperation = 'source-over';
+  }
+ }
  if (slow > 0) {
   const alpha = clamp(slow / 0.4, 0, 1) * 0.24;
   const grad = ctx.createRadialGradient?.(

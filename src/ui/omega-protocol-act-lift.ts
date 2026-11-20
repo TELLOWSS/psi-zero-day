@@ -1,5 +1,6 @@
 import type {OmegaFieldPlan} from '../domain/omega-protocol-field';
 import {omegaActBoundaryDock,type OmegaActBoundaryDock,type OmegaFieldTransit} from '../domain/omega-protocol-field-transit';
+import {drawOmegaAuthoredActDock} from './omega-protocol-entity-art';
 
 /**
  * Original in-world 2.5D lift/airlock study, painted at the actual native
@@ -17,8 +18,11 @@ export function drawOmegaActBoundaryDock(
   drawOmegaSpecialActDock(ctx,dock,seconds);
   return;
  }
- const first=dock.kind==='scaffold_lift';
  const orange=dock.role==='departure'?'#ffca7a':'#8af4e1';
+ const title=dock.role==='departure'?'LIFT ↑ 18M':'LIFT ↓ 18M';
+ const sub=dock.role==='departure'?'TO '+String(dock.toWave).padStart(2,'0'):'FROM '+String(dock.fromWave).padStart(2,'0');
+ if(drawOmegaAuthoredActDock(ctx,'lift',dock.point.x,dock.point.y,title,sub,orange,seconds))return;
+ const first=dock.kind==='scaffold_lift';
  const dark=first?'#163648':'#263b49';
  ctx.save();ctx.translate(dock.point.x,dock.point.y);
  // A real aligned platform at the same world coordinates used by exit E
@@ -89,6 +93,7 @@ export function drawOmegaActBoundaryDock(
 export function drawOmegaConnectedLift(
  ctx:CanvasRenderingContext2D,x:number,y:number,rise:number,cageRise:number,skew:number,crane:boolean,
 ):void{
+ if(drawOmegaAuthoredActDock(ctx,'lift',x,y-cageRise*0.45,crane?'CRANE ↑ 24M':'LIFT ↑ 18M','TRANSIT',crane?'#efb06c':'#7ee8ff',0))return;
  ctx.save();ctx.translate(x,y);
  ctx.transform(1,0,-skew,1,0,0);
  ctx.lineWidth=6;ctx.strokeStyle='#8caab7';
@@ -144,6 +149,7 @@ export function drawOmegaConnectedAirlock(
  ctx:CanvasRenderingContext2D,x:number,y:number,skew:number,
  transit:OmegaFieldTransit|null,atSupply:boolean,passed:boolean,
 ):void{
+ if(drawOmegaAuthoredActDock(ctx,'airlock',x,y,atSupply?'PRESSURE EQUALIZING':passed?'PRESSURE OK':'CONTROL AIRLOCK','',atSupply?'#ffba75':'#b3f3d9',transit?.elapsed??0))return;
  const progress=transit?transit.elapsed/transit.duration:0;
  const open=atSupply?0:transit?.phase==='depart'?1-progress:transit?progress:1;
  ctx.save();ctx.translate(x,y);ctx.transform(1,0,-skew,1,0,0);
@@ -163,6 +169,10 @@ function drawOmegaSpecialActDock(
  const color=dock.kind==='crane_elevator'?'#f8bb75':
   dock.kind==='service_tunnel'?'#81cce2':'#f5a8ce';
  const entering=dock.role==='arrival';
+ const dockArtKind=dock.kind==='crane_elevator'?'lift':'airlock';
+ const title=dock.kind==='crane_elevator'?'CRANE ↑ 24M':dock.kind==='service_tunnel'?(entering?'LOWER TUNNEL':'TUNNEL ↓ 12M'):(entering?'PRESSURE OK':'AIRLOCK SEALED');
+ const sub=entering?'ARRIVAL '+dock.toWave:'SECTOR '+dock.fromWave+' EXIT';
+ if(drawOmegaAuthoredActDock(ctx,dockArtKind,dock.point.x,dock.point.y,title,sub,color,seconds))return;
  ctx.save();ctx.translate(dock.point.x,dock.point.y);
  ctx.fillStyle='#09151ec9';
  ctx.beginPath();ctx.ellipse(0,10,91,27,0,0,Math.PI*2);ctx.fill();

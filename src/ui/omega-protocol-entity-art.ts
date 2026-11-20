@@ -1,4 +1,5 @@
 import { OMEGA_QUARTER_VIEW, type OmegaFieldPlan, type OmegaFieldPoint, type OmegaFieldProgress } from '../domain/omega-protocol-field';
+import type { OmegaZombieBrain, OmegaZombieKind } from '../domain/omega-protocol-zombie-ai';
 import type { Hazard } from '../domain/patrol-survivors';
 import type { OmegaImpactFx } from './omega-protocol-impact-vfx';
 
@@ -14,7 +15,29 @@ export type OmegaEntityArtKey =
  | 'boss-crane'
  | 'boss-warden'
  | 'impact-hit'
- | 'impact-crit';
+ | 'impact-crit'
+ | 'zombie-drifter-0'
+ | 'zombie-drifter-1'
+ | 'zombie-drifter-2'
+ | 'zombie-drifter-3'
+ | 'zombie-sprinter-0'
+ | 'zombie-sprinter-1'
+ | 'zombie-sprinter-2'
+ | 'zombie-sprinter-3'
+ | 'zombie-armored-0'
+ | 'zombie-armored-1'
+ | 'zombie-armored-2'
+ | 'zombie-armored-3'
+ | 'zombie-stalker-0'
+ | 'zombie-stalker-1'
+ | 'zombie-stalker-2'
+ | 'zombie-stalker-3'
+ | 'striker-sentry'
+ | 'swarm-drone'
+ | 'act-lift'
+ | 'act-airlock'
+ | 'signal-core'
+ | 'signal-reticle';
 
 const ENTITY_PATH_BY_KEY: Readonly<Record<OmegaEntityArtKey, string>> = {
  'mission-console': `${OMEGA_ENTITY_ART_ROOT}/mission-console.webp`,
@@ -26,6 +49,28 @@ const ENTITY_PATH_BY_KEY: Readonly<Record<OmegaEntityArtKey, string>> = {
  'boss-warden': `${OMEGA_ENTITY_ART_ROOT}/boss-warden.webp`,
  'impact-hit': `${OMEGA_IMPACT_ART_ROOT}/impact-hit.webp`,
  'impact-crit': `${OMEGA_IMPACT_ART_ROOT}/impact-crit.webp`,
+ 'zombie-drifter-0': `${OMEGA_ENTITY_ART_ROOT}/zombie-drifter-0.webp`,
+ 'zombie-drifter-1': `${OMEGA_ENTITY_ART_ROOT}/zombie-drifter-1.webp`,
+ 'zombie-drifter-2': `${OMEGA_ENTITY_ART_ROOT}/zombie-drifter-2.webp`,
+ 'zombie-drifter-3': `${OMEGA_ENTITY_ART_ROOT}/zombie-drifter-3.webp`,
+ 'zombie-sprinter-0': `${OMEGA_ENTITY_ART_ROOT}/zombie-sprinter-0.webp`,
+ 'zombie-sprinter-1': `${OMEGA_ENTITY_ART_ROOT}/zombie-sprinter-1.webp`,
+ 'zombie-sprinter-2': `${OMEGA_ENTITY_ART_ROOT}/zombie-sprinter-2.webp`,
+ 'zombie-sprinter-3': `${OMEGA_ENTITY_ART_ROOT}/zombie-sprinter-3.webp`,
+ 'zombie-armored-0': `${OMEGA_ENTITY_ART_ROOT}/zombie-armored-0.webp`,
+ 'zombie-armored-1': `${OMEGA_ENTITY_ART_ROOT}/zombie-armored-1.webp`,
+ 'zombie-armored-2': `${OMEGA_ENTITY_ART_ROOT}/zombie-armored-2.webp`,
+ 'zombie-armored-3': `${OMEGA_ENTITY_ART_ROOT}/zombie-armored-3.webp`,
+ 'zombie-stalker-0': `${OMEGA_ENTITY_ART_ROOT}/zombie-stalker-0.webp`,
+ 'zombie-stalker-1': `${OMEGA_ENTITY_ART_ROOT}/zombie-stalker-1.webp`,
+ 'zombie-stalker-2': `${OMEGA_ENTITY_ART_ROOT}/zombie-stalker-2.webp`,
+ 'zombie-stalker-3': `${OMEGA_ENTITY_ART_ROOT}/zombie-stalker-3.webp`,
+ 'striker-sentry': `${OMEGA_ENTITY_ART_ROOT}/striker-sentry.webp`,
+ 'swarm-drone': `${OMEGA_ENTITY_ART_ROOT}/swarm-drone.webp`,
+ 'act-lift': `${OMEGA_ENTITY_ART_ROOT}/act-lift.webp`,
+ 'act-airlock': `${OMEGA_ENTITY_ART_ROOT}/act-airlock.webp`,
+ 'signal-core': `${OMEGA_IMPACT_ART_ROOT}/signal-core.webp`,
+ 'signal-reticle': `${OMEGA_IMPACT_ART_ROOT}/signal-reticle.webp`,
 };
 
 const cachedImages: Partial<Record<OmegaEntityArtKey, HTMLImageElement>> = {};
@@ -60,17 +105,7 @@ function resolveEntityImage(key: OmegaEntityArtKey, imageOverride?: CanvasImageS
  * Returns every authored WebP entity & impact VFX asset path under `/assets/omega/{entities|vfx}`.
  */
 export function omegaAuthoredEntityPaths(): readonly string[] {
- return [
-  ENTITY_PATH_BY_KEY['mission-console'],
-  ENTITY_PATH_BY_KEY['extraction-gate'],
-  ENTITY_PATH_BY_KEY['hazard-cart'],
-  ENTITY_PATH_BY_KEY['hazard-gas'],
-  ENTITY_PATH_BY_KEY['hazard-debris'],
-  ENTITY_PATH_BY_KEY['boss-crane'],
-  ENTITY_PATH_BY_KEY['boss-warden'],
-  ENTITY_PATH_BY_KEY['impact-hit'],
-  ENTITY_PATH_BY_KEY['impact-crit'],
- ];
+ return (Object.keys(ENTITY_PATH_BY_KEY) as OmegaEntityArtKey[]).map((key) => ENTITY_PATH_BY_KEY[key]);
 }
 
 /**
@@ -446,6 +481,315 @@ export function drawOmegaAuthoredImpactBurst(
   ctx.strokeText(text, 0, numY);
   ctx.fillStyle = effect.critical ? '#ffea9c' : effect.blocked ? '#ffad76' : '#a8f8ff';
   ctx.fillText(text, 0, numY);
+ }
+
+ ctx.restore();
+ return true;
+}
+
+const ZOMBIE_SIZE_BY_KIND: Readonly<Record<OmegaZombieKind, number>> = {
+ drifter: 108,
+ sprinter: 104,
+ armored: 124,
+ stalker: 120,
+};
+
+function idHash(id: string): number {
+ let v = 0;
+ for (let i = 0; i < id.length; i++) v = (v * 31 + id.charCodeAt(i)) | 0;
+ return Math.abs(v);
+}
+
+/**
+ * Renders an animated AAA hand-painted 3/4 isometric infected zombie sprite (4 poses per kind),
+ * grounded at world foot `(0, 0)` with velocity/target facing and zero flat vector geometry.
+ * Fails closed (`false`) if the frame WebP has not finished decoding.
+ */
+export function drawOmegaAuthoredZombie(
+ ctx: CanvasRenderingContext2D,
+ hazard: Hazard,
+ time: number,
+ brain?: OmegaZombieBrain,
+ targetX?: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(time) || hazard.hp <= 0) return false;
+ const kind: OmegaZombieKind = brain?.kind ?? 'drifter';
+ const seed = idHash(hazard.id ?? 'zombie');
+
+ let frame: 0 | 1 | 2 | 3 = 0;
+ if (brain?.phase === 'warning' || brain?.phase === 'charge') {
+  frame = 3;
+ } else if ((hazard.isStunned ?? 0) <= 0) {
+  const cadence = kind === 'sprinter' ? 9.5 : kind === 'armored' ? 5.2 : 6.4;
+  const cycle = Math.floor(time * cadence + (seed % 7)) % 4;
+  frame = ([0, 1, 2, 1][cycle] ?? 0) as 0 | 1 | 2 | 3;
+ }
+
+ const key = `zombie-${kind}-${frame}` as OmegaEntityArtKey;
+ const img = resolveEntityImage(key, imageOverride);
+ if (!img) return false;
+
+ const drawSize = ZOMBIE_SIZE_BY_KIND[kind];
+ const facesLeft =
+  brain && (brain.phase === 'warning' || brain.phase === 'charge') && Math.abs(brain.lockedX) > 0.01
+   ? brain.lockedX < 0
+   : (targetX ?? hazard.x) < hazard.x;
+ const walkBob = (hazard.isStunned ?? 0) > 0 ? 0 : Math.abs(Math.sin(time * 6.2 + seed)) * -2.6;
+ const lean = kind === 'sprinter' ? 0.08 : brain?.phase === 'charge' ? 0.11 : 0;
+
+ ctx.save();
+ if (brain?.phase === 'warning') {
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const warnAura = ctx.createRadialGradient?.(0, -18, 4, 0, -18, 42);
+  if (warnAura && typeof warnAura.addColorStop === 'function') {
+   warnAura.addColorStop(0, kind === 'armored' ? 'rgba(255,160,91,0.42)' : 'rgba(255,110,207,0.42)');
+   warnAura.addColorStop(1, 'rgba(0,0,0,0)');
+   ctx.fillStyle = warnAura;
+   ctx.beginPath();
+   ctx.arc(0, -18, 42, 0, Math.PI * 2);
+   ctx.fill();
+  }
+  ctx.restore();
+ }
+
+ ctx.translate(0, walkBob);
+ if (facesLeft) ctx.scale(-1, 1);
+ if (lean > 0) ctx.rotate(lean);
+ ctx.drawImage(img, -drawSize * 0.5, -drawSize * 0.945, drawSize, drawSize);
+ ctx.restore();
+ return true;
+}
+
+/**
+ * Renders the painted Signal Guard crossover Sentry Turret sprite with subtle targeting optic
+ * beam and slim lifetime arc. Fails closed (`false`) before image decode.
+ */
+export function drawOmegaAuthoredSentryTurret(
+ ctx: CanvasRenderingContext2D,
+ x: number,
+ y: number,
+ aimAngle: number,
+ lifeRatio: number,
+ seconds: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(seconds)) return false;
+ const img = resolveEntityImage('striker-sentry', imageOverride);
+ if (!img) return false;
+
+ const invY = 1 / OMEGA_QUARTER_VIEW.groundYScale;
+ const skew = OMEGA_QUARTER_VIEW.skewX;
+ const facesLeft = Math.cos(aimAngle) < 0;
+
+ ctx.save();
+ ctx.translate(x, y);
+ ctx.fillStyle = 'rgba(0,8,16,0.52)';
+ ctx.beginPath();
+ ctx.ellipse(0, 4, 34, 11, 0, 0, Math.PI * 2);
+ ctx.fill();
+
+ ctx.transform(1, 0, -skew * invY, invY, 0, 0);
+
+ // Soft emerald targeting optic flare & laser sight line.
+ ctx.save();
+ ctx.globalCompositeOperation = 'lighter';
+ ctx.strokeStyle = 'rgba(110,231,183,0.42)';
+ ctx.lineWidth = 1.6;
+ ctx.beginPath();
+ ctx.moveTo(facesLeft ? -16 : 16, -34);
+ ctx.lineTo(Math.cos(aimAngle) * 76, -34 + Math.sin(aimAngle) * 52);
+ ctx.stroke();
+ ctx.restore();
+
+ // Drawn upright turret artwork.
+ ctx.save();
+ if (facesLeft) ctx.scale(-1, 1);
+ ctx.drawImage(img, -40, -76, 80, 80);
+ ctx.restore();
+
+ // Slim holographic duration arc at base.
+ ctx.strokeStyle = 'rgba(52,211,153,0.72)';
+ ctx.lineWidth = 2;
+ ctx.beginPath();
+ ctx.ellipse(0, 2, 29, 10, 0, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * clamp(lifeRatio, 0, 1));
+ ctx.stroke();
+
+ ctx.restore();
+ return true;
+}
+
+/**
+ * Renders the painted autonomous Signal Swarm Hunter Micro-Drone hovering with gentle bank
+ * and additive engine bloom.
+ */
+export function drawOmegaAuthoredSwarmDrone(
+ ctx: CanvasRenderingContext2D,
+ x: number,
+ y: number,
+ vx: number,
+ vy: number,
+ seconds: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(seconds)) return false;
+ const img = resolveEntityImage('swarm-drone', imageOverride);
+ if (!img) return false;
+
+ const bob = Math.sin(seconds * 8 + x * 0.04) * 3;
+ const tilt = clamp((vx || 0) * 0.0006, -0.22, 0.22);
+
+ ctx.save();
+ ctx.translate(x, y - 16 + bob);
+ ctx.rotate(tilt);
+
+ ctx.save();
+ ctx.globalCompositeOperation = 'lighter';
+ const g = ctx.createRadialGradient?.(0, 0, 2, 0, 0, 24);
+ if (g && typeof g.addColorStop === 'function') {
+  g.addColorStop(0, 'rgba(255,216,128,0.34)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(0, 0, 24, 0, Math.PI * 2);
+  ctx.fill();
+ }
+ ctx.restore();
+
+ ctx.drawImage(img, -23, -23, 46, 46);
+ void vy;
+ ctx.restore();
+ return true;
+}
+
+/**
+ * Renders the holographic glowing Signal Core loot orb via additive blending.
+ */
+export function drawOmegaAuthoredSignalCore(
+ ctx: CanvasRenderingContext2D,
+ x: number,
+ y: number,
+ seconds: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(seconds)) return false;
+ const img = resolveEntityImage('signal-core', imageOverride);
+ if (!img) return false;
+
+ const bob = Math.sin(seconds * 6.5 + x * 0.05) * 3.5;
+ ctx.save();
+ ctx.translate(x, y - 16 + bob);
+ ctx.rotate(Math.sin(seconds * 2.2) * 0.14);
+ ctx.globalCompositeOperation = 'lighter';
+ ctx.drawImage(img, -20, -20, 40, 40);
+ ctx.restore();
+ return true;
+}
+
+/**
+ * Renders the holographic Signal Mark Target Lock-On reticle emblem above marked targets.
+ */
+export function drawOmegaAuthoredSignalReticle(
+ ctx: CanvasRenderingContext2D,
+ x: number,
+ y: number,
+ stacks: number,
+ seconds: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(x) || !Number.isFinite(y) || stacks <= 0 || !Number.isFinite(seconds)) return false;
+ const img = resolveEntityImage('signal-reticle', imageOverride);
+ if (!img) return false;
+
+ const size = stacks >= 3 ? 40 : stacks === 2 ? 32 : 25;
+ ctx.save();
+ ctx.translate(x, y);
+ ctx.save();
+ ctx.rotate(stacks >= 3 ? seconds * 2.4 : seconds * 0.7);
+ ctx.globalCompositeOperation = 'lighter';
+ ctx.globalAlpha = stacks >= 3 ? 0.98 : stacks === 2 ? 0.78 : 0.6;
+ ctx.drawImage(img, -size * 0.5, -size * 0.5, size, size);
+ ctx.restore();
+
+ // Crisp stack pip diamonds at bottom rim of reticle.
+ for (let i = 0; i < stacks; i++) {
+  const ox = (i - (stacks - 1) * 0.5) * 9;
+  ctx.fillStyle = stacks >= 3 ? '#fde047' : stacks === 2 ? '#e879f9' : '#67e8f9';
+  ctx.beginPath();
+  ctx.moveTo(ox, 12);
+  ctx.lineTo(ox + 3.5, 16);
+  ctx.lineTo(ox, 20);
+  ctx.lineTo(ox - 3.5, 16);
+  ctx.closePath();
+  ctx.fill();
+ }
+ ctx.restore();
+ return true;
+}
+
+/**
+ * Renders the 3/4 isometric ACT boundary industrial cargo lift (`act-lift.webp`) or heavy sealed
+ * pressure airlock (`act-airlock.webp`) cleanly at real world coordinates.
+ */
+export function drawOmegaAuthoredActDock(
+ ctx: CanvasRenderingContext2D,
+ kind: 'lift' | 'airlock',
+ x: number,
+ y: number,
+ title: string,
+ sublabel: string,
+ accentHex: string,
+ seconds: number,
+ imageOverride?: CanvasImageSource | null,
+): boolean {
+ if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(seconds)) return false;
+ const key: OmegaEntityArtKey = kind === 'lift' ? 'act-lift' : 'act-airlock';
+ const img = resolveEntityImage(key, imageOverride);
+ if (!img) return false;
+
+ const pulse = 0.6 + 0.4 * Math.sin(seconds * 3.1);
+ const drawW = kind === 'lift' ? 164 : 186;
+ const drawH = kind === 'lift' ? 216 : 166;
+ const footY = kind === 'lift' ? 20 : 14;
+
+ ctx.save();
+ ctx.translate(x, y);
+
+ // Floor contact shadow + accessible beacon ring.
+ ctx.fillStyle = 'rgba(1,6,17,0.62)';
+ ctx.beginPath();
+ ctx.ellipse(4, 12, 88, 25, 0, 0, Math.PI * 2);
+ ctx.fill();
+
+ ctx.save();
+ ctx.globalCompositeOperation = 'lighter';
+ ctx.strokeStyle = accentHex;
+ ctx.globalAlpha = 0.25 + 0.32 * pulse;
+ ctx.lineWidth = 3.2;
+ ctx.beginPath();
+ ctx.ellipse(0, 9, 82 + 5 * pulse, 22 + 2.5 * pulse, 0, 0, Math.PI * 2);
+ ctx.stroke();
+ ctx.restore();
+
+ // Draw painted 3D industrial lift / airlock structure.
+ ctx.drawImage(img, -drawW * 0.5, -drawH + footY, drawW, drawH);
+
+ // Sleek compact floating holo-plate tag at lintel.
+ const plateY = kind === 'lift' ? -188 : -154;
+ ctx.fillStyle = 'rgba(9,19,32,0.84)';
+ ctx.fillRect(-62, plateY - 12, 124, 24);
+ ctx.strokeStyle = accentHex;
+ ctx.lineWidth = 1.6;
+ ctx.strokeRect(-62, plateY - 12, 124, 24);
+ ctx.font = '800 11px system-ui';
+ ctx.textAlign = 'center';
+ ctx.fillStyle = accentHex;
+ ctx.fillText(title, 0, plateY + 3, 116);
+ if (sublabel) {
+  ctx.font = '700 10px system-ui';
+  ctx.fillStyle = '#e2f4f8';
+  ctx.fillText(sublabel, 0, plateY + 23, 116);
  }
 
  ctx.restore();

@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { Hazard } from '../src/domain/patrol-survivors';
 import {
@@ -11,7 +13,7 @@ import {
 } from '../src/domain/omega-protocol-zero-signal';
 import { OmegaProtocolCombatSession } from '../src/engine/omega-protocol-combat';
 import { OmegaZeroSignalDirector } from '../src/engine/omega-protocol-zero-signal-director';
-import { OmegaProceduralAudio } from '../src/ui/omega-protocol-audio';
+import { OMEGA_AUDIO_MANIFEST, OmegaProceduralAudio } from '../src/ui/omega-protocol-audio';
 import {
  drawOmegaZeroSignalScreenFx,
  drawOmegaZeroSignalWorldFx,
@@ -117,6 +119,11 @@ describe('OMEGA PROTOCOL: ZERO SIGNAL commercial roguelite systems', () => {
 
   expect(target.hp).toBeLessThan(hpBeforeBlade);
   expect(director.markCount(target.id)).toBe(0);
+  expect(director.currentHitstopRemaining()).toBeGreaterThan(0);
+  expect(director.currentImpactFlash()).toBeGreaterThan(0);
+  expect(director.tickHitstop(0.08)).toBe(false);
+  expect(director.currentHitstopRemaining()).toBe(0);
+
   const hud = director.hudSnapshot(session);
   expect(hud.detonations).toBeGreaterThanOrEqual(1);
   expect(hud.stylePoints).toBeGreaterThan(0);
@@ -184,13 +191,33 @@ describe('OMEGA PROTOCOL: ZERO SIGNAL commercial roguelite systems', () => {
   audio.unlock();
   audio.setMuted(true);
   expect(audio.isMuted()).toBe(true);
+  audio.setBulletTime(true);
+  audio.playSortieStart();
   audio.playGunshot(true);
+  audio.playHitImpact('boss');
   audio.playBladeSlash(3);
   audio.playDetonation(3);
   audio.playPhantomDodge();
   audio.playStriker('m01_snipe');
   audio.playRankUp('OMEGA');
-  audio.setBgmState(true, 'boss');
+  audio.playBossEntry();
+  audio.playWaveClear();
+  audio.playFootstep();
+  audio.playVictory();
+  audio.playDefeat();
+  audio.setBgmState(true, 'surge');
+  audio.setBulletTime(false);
   audio.dispose();
+ });
+
+ it('ships every Track-B studio BGM, SFX, and Korean radio voiceover asset under public/', () => {
+  const publicRoot = path.resolve(process.cwd(), 'public');
+  const entries = Object.entries(OMEGA_AUDIO_MANIFEST);
+  expect(entries.length).toBeGreaterThanOrEqual(35);
+  for (const [key, relUrl] of entries) {
+   const abs = path.join(publicRoot, relUrl.replace(/^\//, ''));
+   expect(fs.existsSync(abs), `Missing studio audio asset for ${key}: ${abs}`).toBe(true);
+   expect(fs.statSync(abs).size, `Empty audio file for ${key}: ${abs}`).toBeGreaterThan(1024);
+  }
  });
 });

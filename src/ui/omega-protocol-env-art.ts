@@ -103,7 +103,7 @@ export function drawOmegaPaintedFloor(
  const img=readyEnvImage(`${OMEGA_ENV_ART_ROOT}sector-${plan.sector}-floor.webp`);
  if(!img)return false;
  ctx.save();
- ctx.globalAlpha=0.78;
+ ctx.globalAlpha=0.95;
  ctx.drawImage(img,0,0,OMEGA_FIELD_WIDTH,OMEGA_FIELD_HEIGHT);
  ctx.restore();
  return true;

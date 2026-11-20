@@ -21,6 +21,7 @@ import type { OmegaBladeStrike, OmegaProtocolCombatSession } from './omega-proto
 
 export type OmegaDirectorEventKind =
  | 'gunshot'
+ | 'hit_impact'
  | 'detonation'
  | 'phantom_dodge'
  | 'striker'
@@ -30,6 +31,10 @@ export type OmegaDirectorEventKind =
  | 'pickup'
  | 'shield_break'
  | 'evo_unlock'
+ | 'boss_entry'
+ | 'wave_clear'
+ | 'victory'
+ | 'defeat'
  | 'auto_interact';
 
 export interface OmegaDirectorEvent {
@@ -195,10 +200,18 @@ export class OmegaZeroSignalDirector {
 
  private radioBanner: { text: string; accentHex: string; seriesTag: string; remaining: number } | null = null;
  private prevWave = 1;
+ private prevBossAlive = false;
+ private prevHazardsLeft = true;
+ private prevTerminalEmitted: 'victory' | 'defeat' | null = null;
+ private lastImpactAudioTime = -1;
  private readonly knownEvos = new Set<OmegaEvolutionId>();
  private readonly marks = new Map<string, number>();
  private prevAliveById = new Map<string, { x: number; y: number; boss: boolean }>();
 
+ private hitstopRemaining = 0;
+ private impactFlash = 0;
+ shakeDirX = 0;
+ shakeDirY = 0;
  cameraShake = 0;
  zoomPunch = 0;
 
@@ -240,6 +253,34 @@ export class OmegaZeroSignalDirector {
   return this.shield;
  }
 
+ currentHitstopRemaining(): number {
+  return this.hitstopRemaining;
+ }
+
+ currentImpactFlash(): number {
+  return this.impactFlash;
+ }
+
+ tickHitstop(rawRealDt: number): boolean {
+  if (this.hitstopRemaining <= 0) return false;
+  const dt = Number.isFinite(rawRealDt) && rawRealDt > 0 ? Math.min(0.05, rawRealDt) : 0;
+  this.hitstopRemaining = Math.max(0, this.hitstopRemaining - dt);
+  if (this.impactFlash > 0) this.impactFlash = Math.max(0, this.impactFlash - dt * 2.8);
+  if (this.cameraShake > 0) this.cameraShake = Math.max(0, this.cameraShake - dt * 20);
+  return this.hitstopRemaining > 0;
+ }
+
+ private triggerHitstop(seconds: number, flash = 0, shake = 0, dirX = 0, dirY = 0): void {
+  this.hitstopRemaining = Math.min(0.072, Math.max(this.hitstopRemaining, seconds));
+  if (flash > 0) this.impactFlash = Math.min(1, Math.max(this.impactFlash, flash));
+  if (shake > 0) this.cameraShake = Math.max(this.cameraShake, shake);
+  const len = Math.hypot(dirX, dirY);
+  if (len > 1e-4) {
+   this.shakeDirX = dirX / len;
+   this.shakeDirY = dirY / len;
+  }
+ }
+
  applyLoadoutToSession(session: OmegaProtocolCombatSession): void {
   if (this.loadoutApplied) return;
   this.loadoutApplied = true;
@@ -252,6 +293,8 @@ export class OmegaZeroSignalDirector {
    p.dashMaxCooldown = Math.max(1.0, (p.dashMaxCooldown ?? 3.0) - 0.35);
   }
   this.prevWave = session.plan.wave;
+  this.prevBossAlive = session.engine.state.hazards.some((h) => h.hp > 0 && h.isStageBoss);
+  this.prevHazardsLeft = session.engine.state.hazards.some((h) => h.hp > 0);
   this.snapshotAlive(session);
  }
 
@@ -302,6 +345,18 @@ export class OmegaZeroSignalDirector {
     continue;
    }
    if (ev.phase !== 'impact' || !ev.targetId) continue;
+
+   const struckHazard = hazards.find((h) => h.id === ev.targetId);
+   const material: 'boss' | 'armored' | 'normal' = struckHazard?.isStageBoss
+    ? 'boss'
+    : session.zombieBrain(ev.targetId)?.kind === 'armored' || struckHazard?.variant === 'reinforced_cart'
+      ? 'armored'
+      : 'normal';
+   const gameNow = session.engine.state.gameTime;
+   if (material !== 'normal' || this.lastImpactAudioTime < 0 || gameNow - this.lastImpactAudioTime >= 0.045) {
+    this.lastImpactAudioTime = gameNow;
+    this.pendingEvents.push({ kind: 'hit_impact', detail: material });
+   }
 
    const prev = this.marks.get(ev.targetId) ?? 0;
    const nextMark = Math.min(3, prev + (this.overclockRemaining > 0 ? 2 : 1));
@@ -497,7 +552,13 @@ export class OmegaZeroSignalDirector {
    this.maxCombo = Math.max(this.maxCombo, this.comboCount);
    this.comboTimer = 3.5;
    this.addStyle(110 * stacks);
-   this.cameraShake = Math.max(this.cameraShake, 9 + stacks * 4);
+   this.triggerHitstop(
+    stacks >= 3 ? 0.068 : 0.042,
+    stacks >= 3 ? 0.55 : 0.30,
+    9 + stacks * 4,
+    Math.cos(angle),
+    Math.sin(angle),
+   );
    this.zoomPunch = Math.max(this.zoomPunch, 0.045);
    this.pushCallout(target.x, target.y - 54, `💥 DETONATE ×${stacks}!`, stacks >= 3 ? '#fbbf24' : '#67e8f9', 0.9);
    this.pendingEvents.push({ kind: 'detonation', numeric: stacks });
@@ -541,6 +602,31 @@ export class OmegaZeroSignalDirector {
    this.comboTimer = 3.4;
    this.addStyle(35 * strike.hits);
    this.strikerCharge = Math.min(100, this.strikerCharge + 5 * strike.hits * this.chargeRateMultiplier());
+   if (markedTargets.length === 0) {
+    this.triggerHitstop(
+     strike.combo === 3 ? 0.048 : 0.028,
+     strike.combo === 3 ? 0.28 : 0,
+     strike.combo === 3 ? 9 : 4,
+     strike.facingX,
+     strike.facingY,
+    );
+    if (strike.combo === 3) this.zoomPunch = Math.max(this.zoomPunch, 0.036);
+   }
+   let bladeMat: 'boss' | 'armored' | 'normal' = 'normal';
+   for (const h of session.engine.state.hazards) {
+    const nearBlade =
+     Math.hypot(h.x - strike.x, h.y - strike.y) <= 136 ||
+     Math.hypot(h.x - reachCenterX, h.y - reachCenterY) <= 118;
+    if (!nearBlade) continue;
+    if (h.isStageBoss) {
+     bladeMat = 'boss';
+     break;
+    }
+    if (session.zombieBrain(h.id)?.kind === 'armored' || h.variant === 'reinforced_cart') {
+     bladeMat = 'armored';
+    }
+   }
+   this.pendingEvents.push({ kind: 'hit_impact', detail: bladeMat });
   }
 
   // Check if sword strike / detonation killed any enemy -> cooldown refund!
@@ -598,7 +684,7 @@ export class OmegaZeroSignalDirector {
     age: 0,
     duration: 0.45,
    });
-   this.cameraShake = Math.max(this.cameraShake, 12);
+   this.triggerHitstop(0.056, 0.42, 12, 0.7, 0.4);
    this.pushCallout(tx, ty - 68, '🎯 M01 OVERWATCH!', '#38bdf8', 1.1);
   } else if (id === 'guard_sentry') {
    this.turrets.push({
@@ -631,7 +717,7 @@ export class OmegaZeroSignalDirector {
     duration: 0.55,
    });
    this.detonations.push({ x: center.x, y: center.y, radius: 235, stacks: 3, age: 0, duration: 0.42 });
-   this.cameraShake = Math.max(this.cameraShake, 14);
+   this.triggerHitstop(0.056, 0.45, 14, 0, -1);
    this.pushCallout(center.x, center.y - 72, '⚡ BREAKER ORBITAL EMP!', '#c084fc', 1.15);
   } else if (id === 'site_aegis') {
    player.hp = Math.min(player.maxHp, player.hp + 22);
@@ -676,11 +762,32 @@ export class OmegaZeroSignalDirector {
    }
   }
 
-  // 2. Wave transition & progressive striker/evo unlock tracking.
+  // 2. Wave transition, boss entry, clear & terminal state transitions.
   if (session.plan.wave !== this.prevWave) {
    this.prevWave = session.plan.wave;
+   this.prevBossAlive = state.hazards.some((h) => h.hp > 0 && h.isStageBoss);
+   this.prevHazardsLeft = state.hazards.some((h) => h.hp > 0);
    this.shield = Math.min(this.maxShield, Math.max(this.shield, this.maxShield * 0.75));
    this.snapshotAlive(session);
+  }
+  const bossNow = state.hazards.some((h) => h.hp > 0 && h.isStageBoss);
+  if (!this.prevBossAlive && bossNow) {
+   this.pendingEvents.push({ kind: 'boss_entry' });
+  }
+  this.prevBossAlive = bossNow;
+
+  const hazardsNow = state.hazards.some((h) => h.hp > 0);
+  if (this.prevHazardsLeft && !hazardsNow && session.run.phase === 'battle' && session.plan.wave === this.prevWave) {
+   this.pendingEvents.push({ kind: 'wave_clear' });
+  }
+  this.prevHazardsLeft = hazardsNow;
+
+  if (session.run.phase === 'victory' && this.prevTerminalEmitted !== 'victory') {
+   this.prevTerminalEmitted = 'victory';
+   this.pendingEvents.push({ kind: 'victory' });
+  } else if ((session.run.phase === 'defeat' || state.phase === 'defeat') && this.prevTerminalEmitted !== 'defeat') {
+   this.prevTerminalEmitted = 'defeat';
+   this.pendingEvents.push({ kind: 'defeat' });
   }
   for (const s of OMEGA_STRIKERS) {
    if (session.plan.wave >= s.unlockWave || this.kills >= s.unlockWave * 4) {
@@ -723,6 +830,8 @@ export class OmegaZeroSignalDirector {
   this.snapshotAlive(session);
 
   // 4. Advance timers (using real unscaled dt so slow-mo feels crisp).
+  if (this.hitstopRemaining > 0) this.hitstopRemaining = Math.max(0, this.hitstopRemaining - dt);
+  if (this.impactFlash > 0) this.impactFlash = Math.max(0, this.impactFlash - dt * 3.4);
   if (this.slowMoRemaining > 0) this.slowMoRemaining = Math.max(0, this.slowMoRemaining - dt);
   if (this.overclockRemaining > 0) this.overclockRemaining = Math.max(0, this.overclockRemaining - dt);
   if (this.phantomGuardCooldown > 0) this.phantomGuardCooldown = Math.max(0, this.phantomGuardCooldown - dt);

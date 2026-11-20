@@ -2,7 +2,7 @@ import type {Hazard} from '../domain/patrol-survivors';
 import type {OmegaZombieBrain} from '../domain/omega-protocol-zombie-ai';
 import {omegaG5VectorStudyRequested,omegaG5Art} from './omega-protocol-m12-g5-art';
 import {omegaInfectedCandidateReview} from './omega-infected-candidate-review';
-import {drawOmegaAuthoredHazardOrBoss} from './omega-protocol-entity-art';
+import {drawOmegaAuthoredHazardOrBoss,drawOmegaAuthoredZombie} from './omega-protocol-entity-art';
 
 /**
  * Wave-15-only original POWER WARDEN silhouette. This is authored technical
@@ -133,6 +133,7 @@ export function drawOmegaProtocolEnemy(
  const boss=Boolean(h.isStageBoss);
  const scale=boss?1.7:Math.max(.8,Math.min(1.5,h.radius/24));
  const sway=Math.sin(time*3+h.x*.019+h.y*.003);
+ let authoredZombieRendered=false;
  ctx.save();
  ctx.scale(scale,scale);
  // Contact shadow and direction-independent feet.
@@ -161,8 +162,15 @@ export function drawOmegaProtocolEnemy(
    import.meta.env.DEV||import.meta.env.VITE_OMEGA_PROTOCOL_LAB==='1');
   // Dev-only two independently posed original drifter sources; preserve the
   // native telegraph above, all real health bars, and original other species.
-  if(!(options.infectedReview&&options.zombie&&omegaInfectedCandidateReview.draw(ctx,h,options.zombie,time,options.targetX??h.x))&&!(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)))
+  if(options.infectedReview&&options.zombie&&omegaInfectedCandidateReview.draw(ctx,h,options.zombie,time,options.targetX??h.x)){
+   authoredZombieRendered=true;
+  }else if(g5&&omegaG5Art.drawDrifter(ctx,h,options.zombie)){
+   authoredZombieRendered=false;
+  }else if(drawOmegaAuthoredZombie(ctx,h,time,options.zombie,options.targetX)){
+   authoredZombieRendered=true;
+  }else{
    drawOmegaHelmetZombie(ctx,h,time,options.zombie);
+  }
  }else if(drawOmegaAuthoredHazardOrBoss(ctx,h,time,Boolean(options.finalBoss))){
   // Authored 3/4 isometric entity or boss sprite drawn above.
  }else if(h.type==='RUNAWAY_CART'){
@@ -234,8 +242,9 @@ export function drawOmegaProtocolEnemy(
   ctx.beginPath();ctx.arc(0,flashY,flashR,0,Math.PI*2);ctx.fill();
   ctx.restore();
  }
- ctx.fillStyle='#0b1423';ctx.fillRect(boss?-45:-27,boss?-125:-55,boss?90:54,6);
+ const hpBarY=boss?-125:authoredZombieRendered?-112:-55;
+ ctx.fillStyle='#0b1423';ctx.fillRect(boss?-45:-27,hpBarY,boss?90:54,6);
  ctx.fillStyle=boss?'#ffa2c7':'#8df5d4';
- ctx.fillRect(boss?-45:-27,boss?-125:-55,(boss?90:54)*Math.max(0,h.hp/Math.max(1,h.maxHp)),6);
+ ctx.fillRect(boss?-45:-27,hpBarY,(boss?90:54)*Math.max(0,h.hp/Math.max(1,h.maxHp)),6);
  ctx.restore();
 }
